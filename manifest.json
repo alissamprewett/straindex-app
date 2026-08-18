@@ -1,0 +1,14 @@
+{
+  "name": "StrainDex",
+  "short_name": "StrainDex",
+  "description": "Check in, collect strain cards, and keep a personal cannabis journal.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f6f5f1",
+  "theme_color": "#123a24",
+  "orientation": "portrait",
+  "icons": [
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
