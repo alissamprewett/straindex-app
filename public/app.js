@@ -32,6 +32,32 @@ async function likeGrowTip(id, btn) {
   }
 }
 
+// ------------------------------------------------------------ dispensaries
+// "Use my location" button on /dispensaries — asks the browser for GPS
+// coordinates, then reloads the page with ?lat=&lon= so the server can look
+// up real nearby dispensaries (see lib/geodispensaries.js).
+(function initLocateDispensaries() {
+  const btn = document.getElementById('use-location-btn');
+  if (!btn) return;
+  btn.addEventListener('click', () => {
+    if (!navigator.geolocation) { toast('Location is not supported on this device'); return; }
+    btn.disabled = true;
+    btn.textContent = 'Finding you…';
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const { latitude, longitude } = pos.coords;
+        window.location.href = `/dispensaries?lat=${latitude}&lon=${longitude}`;
+      },
+      (err) => {
+        toast(err && err.code === 1 ? 'Location permission denied' : 'Could not get your location');
+        btn.disabled = false;
+        btn.textContent = 'Use my location';
+      },
+      { enableHighAccuracy: false, timeout: 10000, maximumAge: 300000 }
+    );
+  });
+})();
+
 // Register the service worker for installability (PWA "Add to Home Screen").
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
