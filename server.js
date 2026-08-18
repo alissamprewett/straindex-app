@@ -50,6 +50,22 @@ function requireAdmin(req, res) {
   if (!auth.isAdmin(req)) { redirect(res, '/admin/login'); return false; }
   return true;
 }
+// Returns the logged-in user's id, or redirects to /login and returns null.
+function requireUser(req, res) {
+  const id = auth.currentUserId(req);
+  if (id == null) { redirect(res, '/login'); return null; }
+  return id;
+}
+const MIN_AGE = 21;
+function isOldEnough(birthDateStr) {
+  const dob = new Date(birthDateStr);
+  if (isNaN(dob.getTime())) return false;
+  const now = new Date();
+  let age = now.getFullYear() - dob.getFullYear();
+  const hadBirthdayThisYear = (now.getMonth() > dob.getMonth()) || (now.getMonth() === dob.getMonth() && now.getDate() >= dob.getDate());
+  if (!hadBirthdayThisYear) age -= 1;
+  return age >= MIN_AGE;
+}
 function starString(n) { n = Number(n) || 0; return '★'.repeat(n) + '☆'.repeat(5 - n); }
 function rarityLabel(r) { return { common: 'Common', uncommon: 'Uncommon', rare: 'Rare', legendary: 'Legendary' }[r] || r; }
 
@@ -57,8 +73,8 @@ function rarityLabel(r) { return { common: 'Common', uncommon: 'Uncommon', rare:
 // unowned strain by how much its terpene profile echoes what you already
 // own. With no check-ins yet, fall back to surfacing rare/legendary strains
 // so the carousel isn't empty on a fresh install.
-function getRecommendations(limit = 4) {
-  const owned = db.getCollection();
+function getRecommendations(userId, limit = 4) {
+  const owned = db.getCollection(userId);
   const ownedIds = new Set(owned.map(o => o.strain.id));
   const terpWeight = {};
   owned.forEach(o => o.strain.terps.forEach(t => { terpWeight[t.n] = (terpWeight[t.n] || 0) + t.p; }));
@@ -81,26 +97,26 @@ function getRecommendations(limit = 4) {
 
 // Badges, computed live from real app state (check-ins, trades, follows,
 // RSVPs, submitted recipes/grow-tips, cart) rather than hardcoded flags.
-function computeBadges() {
-  const owned = db.getCollection().map(o => o.strain);
+function computeBadges(userId) {
+  const owned = db.getCollection(userId).map(o => o.strain);
   const types = new Set(owned.map(s => s.type));
-  const checkinCount = db.listCheckins({ limit: 1 }).length;
-  const anyPhoto = db.listCheckins({ limit: 1000 }).some(c => c.photo);
+  const checkinCount = db.listCheckins({ userId, limit: 1 }).length;
+  const anyPhoto = db.listCheckins({ userId, limit: 1000 }).some(c => c.photo);
   const communityRecipe = db.listRecipes({ status: null }).some(r => r.source === 'community');
   const favoriteRecipe = db.listRecipes({ status: null }).some(r => r.kudos >= 10);
   const extraGrowTips = db.listGrowTips().length > 8; // more than the seeded starter set
   return [
     { id: 'b1', label: 'First Check-In', icon: '🌱', done: checkinCount >= 1 },
-    { id: 'b2', label: 'Explorer (5 cards)', icon: '🧭', done: db.getUniqueOwnedCount() >= 5 },
+    { id: 'b2', label: 'Explorer (5 cards)', icon: '🧭', done: db.getUniqueOwnedCount(userId) >= 5 },
     { id: 'b3', label: 'Type Trifecta', icon: '🎯', done: types.has('Indica') && types.has('Sativa') && types.has('Hybrid') },
     { id: 'b4', label: 'Landrace Hunter', icon: '🗺️', done: owned.some(s => s.rarity === 'rare' || s.rarity === 'legendary') },
     { id: 'b5', label: 'Legendary Collector', icon: '👑', done: owned.some(s => s.rarity === 'legendary') },
     { id: 'b6', label: 'First Trade', icon: '🔁', done: db.countTrades() >= 1 },
-    { id: 'b7', label: 'Dispensary Scout', icon: '📍', done: db.anyDispensaryFollowed() },
-    { id: 'b8', label: 'Event Goer', icon: '🎉', done: db.anyRsvped() },
+    { id: 'b7', label: 'Dispensary Scout', icon: '📍', done: db.anyDispensaryFollowed(userId) },
+    { id: 'b8', label: 'Event Goer', icon: '🎉', done: db.anyRsvped(userId) },
     { id: 'b9', label: 'Recipe Contributor', icon: '✏️', done: communityRecipe },
     { id: 'b10', label: 'Community Favorite', icon: '🌟', done: favoriteRecipe },
-    { id: 'b11', label: 'Shopper', icon: '🛍️', done: db.getCartCount() >= 1 },
+    { id: 'b11', label: 'Shopper', icon: '🛍️', done: db.getCartCount(userId) >= 1 },
     { id: 'b12', label: 'Home Grower', icon: '🌱', done: extraGrowTips },
     { id: 'b13', label: 'Photographer', icon: '📸', done: anyPhoto },
   ];
@@ -113,8 +129,9 @@ function pageHome(req, res) {
   const recipeCount = db.listRecipes().length;
   const strainCount = db.countStrains();
   const growCount = db.listGrowTips().length;
-  const recentCheckins = db.listCheckins({ limit: 5 });
-  const recs = getRecommendations(4);
+  const userId = auth.currentUserId(req);
+  const recentCheckins = db.listCheckins({ userId, limit: 5 });
+  const recs = getRecommendations(userId, 4);
   const dispTeaser = mock.dispensaries.slice(0, 3);
 
   const body = `
@@ -138,7 +155,7 @@ function pageHome(req, res) {
         <a class="disp-chip" href="/dispensaries">
           <div class="dn">${esc(d.name)}</div>
           <div class="dm">${d.distance} · ★${d.rating}</div>
-          ${db.isFollowingDispensary(d.id) ? `<span class="dbadge">Following</span>` : ''}
+          ${db.isFollowingDispensary(userId, d.id) ? `<span class="dbadge">Following</span>` : ''}
         </a>`).join('')}
     </div>
 
@@ -202,7 +219,8 @@ function pageStrains(req, res, query) {
 function pageStrainDetail(req, res, id) {
   const s = db.getStrain(id);
   if (!s) return notFound(res);
-  const history = db.listCheckins({ strain_id: id, limit: 10 });
+  const userId = auth.currentUserId(req);
+  const history = db.listCheckins({ userId, strain_id: id, limit: 10 });
   const body = `
     <a href="/strains" class="empty-note">← Back to library</a>
     <div class="card" style="margin-top:10px;">
@@ -269,11 +287,15 @@ function pageCheckinForm(req, res, query) {
     <h1 class="screen-title">Check In</h1>
     <form method="POST" action="/checkin" id="checkin-form">
       <label class="field-label">Strain</label>
-      ${s
-        ? `<div class="card">${s.icon} <b>${esc(s.name)}</b><input type="hidden" name="strain_id" value="${s.id}"></div>`
-        : `<input type="text" name="strain_name_search" placeholder="Type a strain name..." list="strain-list">
-           <datalist id="strain-list">${db.listStrains({ limit: 300 }).map(x => `<option value="${esc(x.name)}" data-id="${x.id}">`).join('')}</datalist>
-           <p class="empty-note">Tip: search from <a href="/strains">the Strain Library</a> and tap "Check in" on the strain page for a pre-filled form.</p>`}
+      <div id="strain-picker" ${s ? 'style="display:none;"' : ''}>
+        <input type="text" id="strain-picker-search" placeholder="Type a strain name..." autocomplete="off">
+        <div class="effect-results" id="strain-picker-results"></div>
+      </div>
+      <div id="strain-picker-selected" class="card" ${s ? '' : 'style="display:none;"'}>
+        ${s ? `${s.icon} <b>${esc(s.name)}</b> <button type="button" id="strain-picker-change" class="btn secondary" style="float:right;padding:2px 10px;">Change</button>` : ''}
+      </div>
+      <input type="hidden" name="strain_id" id="strain-picker-hidden" value="${s ? s.id : ''}">
+      <p class="empty-note" id="strain-picker-hint" ${s ? 'style="display:none;"' : ''}>Tip: search from <a href="/strains">the Strain Library</a> and tap "Check in" on the strain page for a pre-filled form.</p>
 
       <label class="field-label">Method</label>
       <select name="method">${METHOD_GROUPS.map(g => `<optgroup label="${esc(g.group)}">${g.items.map(m => `<option>${esc(m)}</option>`).join('')}</optgroup>`).join('')}</select>
@@ -310,12 +332,10 @@ function pageCheckinForm(req, res, query) {
 }
 
 async function handleCheckinSubmit(req, res) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
   const fields = await parseForm(req);
-  let strainId = fields.strain_id;
-  if (!strainId && fields.strain_name_search) {
-    const match = db.listStrains({ q: fields.strain_name_search, limit: 1 })[0];
-    strainId = match && match.id;
-  }
+  const strainId = fields.strain_id;
   if (!strainId) { sendHtml(res, layout({ title: 'Check In', body: `<p>Please pick a valid strain. <a href="/checkin">Try again</a></p>` }), 400); return; }
   let effects = Array.isArray(fields.effects) ? fields.effects : (fields.effects ? [fields.effects] : []);
   effects = effects.filter(Boolean).slice(0, 5);
@@ -324,7 +344,7 @@ async function handleCheckinSubmit(req, res) {
     return;
   }
   await db.createCheckin({
-    strain_id: strainId, method: fields.method, rating: Number(fields.rating) || 0,
+    user_id: userId, strain_id: strainId, method: fields.method, rating: Number(fields.rating) || 0,
     note: fields.note || '', effects, photo: fields.photo || null,
   });
   redirect(res, `/strains/${strainId}`);
@@ -344,16 +364,19 @@ function pageFaq(req, res) {
   sendHtml(res, layout({ title: 'FAQ', active: 'faq', body, isAdmin: auth.isAdmin(req) }));
 }
 
-function pageRecipes(req, res) {
-  const recipes = db.listRecipes({ status: 'approved' });
+function pageRecipes(req, res, query) {
+  const category = (query && query.get('category')) || 'All';
+  const recipes = db.listRecipes({ status: 'approved', category });
+  const categories = ['All', 'Infusion Base', 'Baked Goods', 'Gummies & Candy', 'Drinks', 'Topicals', 'Savory & Snacks'];
   const body = `
     <h1 class="screen-title">Infused Recipes</h1>
     <a class="btn block lilac" href="/recipes/new" style="margin-bottom:14px;">✏️ Submit a Recipe</a>
+    <div style="margin-bottom:14px;">${categories.map(c => `<a class="filter-pill ${category === c ? 'active' : ''}" href="/recipes?category=${encodeURIComponent(c)}">${c}</a>`).join('')}</div>
     ${recipes.map(r => `
       <div class="card">
         <b>${r.icon || '🍽️'} ${esc(r.title)}</b>
         <span class="recipe-source-tag ${r.source}">${r.source === 'official' ? 'Official' : 'Community'}</span>
-        <div class="empty-note">${esc(r.time || '')}${r.author ? ' · by ' + esc(r.author) : ''}</div>
+        <div class="empty-note">${esc(r.category || '')}${r.time ? ' · ' + esc(r.time) : ''}${r.author ? ' · by ' + esc(r.author) : ''}</div>
         <p>${esc(r.desc)}</p>
         <details>
           <summary style="cursor:pointer;font-size:12.5px;font-weight:700;color:var(--brand-green-dark);">Ingredients &amp; steps</summary>
@@ -367,7 +390,7 @@ function pageRecipes(req, res) {
           <span class="empty-note" style="padding:0;">${r.kudos} people found this helpful</span>
           <button class="kudos-btn" onclick="giveKudos(${r.id}, this)">👏 Kudos</button>
         </div>
-      </div>`).join('') || `<div class="empty-note">No recipes yet.</div>`}
+      </div>`).join('') || `<div class="empty-note">No recipes in this category yet.</div>`}
   `;
   sendHtml(res, layout({ title: 'Recipes', active: 'recipes', body, isAdmin: auth.isAdmin(req) }));
 }
@@ -423,6 +446,7 @@ function pageGrowing(req, res, query) {
         <b>${esc(g.title)}</b>
         <div class="gcat">${esc(g.category)}</div>
         <p>${esc(g.body)}</p>
+        ${g.source_url ? `<p class="empty-note" style="padding:2px 0 0;">Source: <a href="${esc(g.source_url)}" target="_blank" rel="noopener noreferrer">${esc(g.source_name || g.source_url)}</a></p>` : ''}
         <div style="display:flex;justify-content:space-between;align-items:center;">
           <span class="empty-note" style="padding:0;">by ${esc(g.author || 'Anonymous')}</span>
           <button class="kudos-btn" onclick="likeGrowTip(${g.id}, this)">👍 Helpful (${g.likes})</button>
@@ -523,6 +547,77 @@ async function handleAdminLoginSubmit(req, res) {
 function handleAdminLogout(req, res) {
   res.setHeader('Set-Cookie', `admin_session=; Path=/; HttpOnly; Max-Age=0`);
   redirect(res, '/');
+}
+
+// ---------------------------------------------------------------- user accounts (signup / login / logout)
+function pageSignup(req, res, query) {
+  const err = query.get('err');
+  const errMessages = {
+    taken: 'That username is already taken.',
+    age: `You must be ${MIN_AGE} or older to create an account.`,
+    mismatch: 'Passwords did not match.',
+    short: 'Password must be at least 8 characters.',
+    invalid: 'Please fill in every field.',
+  };
+  const body = `
+    <h1 class="screen-title">Create an Account</h1>
+    <p class="screen-sub">You must be ${MIN_AGE}+ to use StrainDex.</p>
+    ${err && errMessages[err] ? `<p style="color:#a13a3a;">${esc(errMessages[err])}</p>` : ''}
+    <form method="POST" action="/signup">
+      <label class="field-label" style="margin-top:0;">Username</label>
+      <input type="text" name="username" required minlength="3" maxlength="24" autocomplete="username">
+      <label class="field-label">Date of birth</label>
+      <input type="date" name="birth_date" required>
+      <label class="field-label">Password</label>
+      <input type="password" name="password" required minlength="8" autocomplete="new-password">
+      <label class="field-label">Confirm password</label>
+      <input type="password" name="password2" required minlength="8" autocomplete="new-password">
+      <button class="btn block" type="submit" style="margin-top:14px;">Create Account</button>
+    </form>
+    <p class="empty-note" style="margin-top:12px;">Already have an account? <a href="/login">Log in</a></p>
+  `;
+  sendHtml(res, layout({ title: 'Sign Up', body }));
+}
+async function handleSignupSubmit(req, res) {
+  const f = await parseForm(req);
+  const username = String(f.username || '').trim();
+  if (!username || !f.birth_date || !f.password || !f.password2) return redirect(res, '/signup?err=invalid');
+  if (!isOldEnough(f.birth_date)) return redirect(res, '/signup?err=age');
+  if (f.password !== f.password2) return redirect(res, '/signup?err=mismatch');
+  if (f.password.length < 8) return redirect(res, '/signup?err=short');
+  if (db.getUserByUsername(username)) return redirect(res, '/signup?err=taken');
+  const user = await db.createUser({ username, password: f.password, birth_date: f.birth_date });
+  const token = auth.signUserSessionValue(user.id);
+  res.setHeader('Set-Cookie', `user_session=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000`);
+  redirect(res, '/');
+}
+function pageLogin(req, res, query) {
+  const err = query.get('err');
+  const body = `
+    <h1 class="screen-title">Log In</h1>
+    ${err ? `<p style="color:#a13a3a;">Wrong username or password.</p>` : ''}
+    <form method="POST" action="/login">
+      <label class="field-label" style="margin-top:0;">Username</label>
+      <input type="text" name="username" required autocomplete="username">
+      <label class="field-label">Password</label>
+      <input type="password" name="password" required autocomplete="current-password">
+      <button class="btn block" type="submit" style="margin-top:14px;">Log In</button>
+    </form>
+    <p class="empty-note" style="margin-top:12px;">New here? <a href="/signup">Create an account</a></p>
+  `;
+  sendHtml(res, layout({ title: 'Log In', body }));
+}
+async function handleLoginSubmit(req, res) {
+  const f = await parseForm(req);
+  const user = db.verifyLogin(String(f.username || '').trim(), f.password || '');
+  if (!user) return redirect(res, '/login?err=1');
+  const token = auth.signUserSessionValue(user.id);
+  res.setHeader('Set-Cookie', `user_session=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000`);
+  redirect(res, '/');
+}
+function handleLogout(req, res) {
+  res.setHeader('Set-Cookie', `user_session=; Path=/; HttpOnly; Max-Age=0`);
+  redirect(res, '/login');
 }
 
 function pageAdminHome(req, res) {
@@ -730,6 +825,8 @@ function pageAdminRecipes(req, res) {
         <input type="text" name="title" required>
         <label class="field-label">Description</label>
         <input type="text" name="desc" required>
+        <label class="field-label">Category</label>
+        <select name="category">${['Infusion Base', 'Baked Goods', 'Gummies & Candy', 'Drinks', 'Topicals', 'Savory & Snacks'].map(c => `<option value="${c}">${c}</option>`).join('')}</select>
         <label class="field-label">Ingredients (one per line)</label>
         <textarea name="ingredients" required></textarea>
         <label class="field-label">Steps (one per line)</label>
@@ -751,7 +848,7 @@ function pageAdminRecipes(req, res) {
     <h2 class="screen-title">All recipes</h2>
     ${all.map(r => `
       <div class="admin-row">
-        <span>${esc(r.title)} <span class="recipe-source-tag ${r.source}">${r.status}</span></span>
+        <span>${esc(r.title)} <span class="recipe-source-tag ${r.source}">${r.status}</span> <span class="empty-note">${esc(r.category || '')}</span></span>
         <div class="actions">
           <form method="POST" action="/admin/recipes/${r.id}/delete" style="display:inline;" onsubmit="return confirm('Delete this recipe?')">
             <button class="btn danger" style="color:#fff;" type="submit">Delete</button>
@@ -765,7 +862,7 @@ async function handleAdminRecipeNew(req, res) {
   if (!requireAdmin(req, res)) return;
   const f = await parseForm(req);
   await db.createRecipe({
-    title: f.title, desc: f.desc, dosing: f.dosing, source: 'official', status: 'approved', author: null,
+    title: f.title, desc: f.desc, dosing: f.dosing, category: f.category || 'Baked Goods', source: 'official', status: 'approved', author: null,
     ingredients: String(f.ingredients || '').split('\n').map(s => s.trim()).filter(Boolean),
     steps: String(f.steps || '').split('\n').map(s => s.trim()).filter(Boolean),
   });
@@ -807,6 +904,8 @@ async function apiGrowLike(req, res, id) {
 // ---------------------------------------------------------------- more hub
 
 function pageMore(req, res) {
+  const userId = auth.currentUserId(req);
+  const user = userId != null ? db.getUserById(userId) : null;
   const tiles = [
     { href: '/collection', icon: '🃏', t: 'My Collection', s: 'Binder, badges & progress' },
     { href: '/trade', icon: '🔁', t: 'Trade', s: 'Swap dupes with friends (demo)' },
@@ -823,6 +922,11 @@ function pageMore(req, res) {
   ];
   const body = `
     <h1 class="screen-title">More</h1>
+    ${user ? `
+      <div class="card" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+        <span>👤 Logged in as <b>${esc(user.username)}</b></span>
+        <form method="POST" action="/logout"><button class="btn secondary" type="submit">Log out</button></form>
+      </div>` : ''}
     <div class="more-grid">
       ${tiles.map(t => `<a class="more-tile" href="${t.href}"><span class="ic">${t.icon}</span><div class="t">${esc(t.t)}</div><div class="s">${esc(t.s)}</div></a>`).join('')}
     </div>
@@ -833,10 +937,12 @@ function pageMore(req, res) {
 // ---------------------------------------------------------------- collection / binder
 
 function pageCollection(req, res) {
-  const owned = db.getCollection().sort((a, b) => a.strain.name.localeCompare(b.strain.name));
-  const uniqueCount = db.getUniqueOwnedCount();
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const owned = db.getCollection(userId).sort((a, b) => a.strain.name.localeCompare(b.strain.name));
+  const uniqueCount = db.getUniqueOwnedCount(userId);
   const totalStrains = db.countStrains();
-  const badges = computeBadges();
+  const badges = computeBadges(userId);
   const doneBadges = badges.filter(b => b.done).length;
   const pct = totalStrains ? Math.round((100 * uniqueCount) / totalStrains) : 0;
 
@@ -848,7 +954,7 @@ function pageCollection(req, res) {
     </div>
     <div class="collection-stats">
       <div class="stat-tile"><div class="num">${uniqueCount}/${totalStrains.toLocaleString()}</div><div class="lbl">Cards caught</div></div>
-      <div class="stat-tile"><div class="num">${db.getTotalDupes()}</div><div class="lbl">Tradeable dupes</div></div>
+      <div class="stat-tile"><div class="num">${db.getTotalDupes(userId)}</div><div class="lbl">Tradeable dupes</div></div>
       <div class="stat-tile"><div class="num">${doneBadges}/${badges.length}</div><div class="lbl">Badges</div></div>
     </div>
     <div class="progress-bar"><div class="fill" style="width:${pct}%;"></div></div>
@@ -869,7 +975,9 @@ function pageCollection(req, res) {
 }
 
 function pageHistory(req, res) {
-  const history = db.listCheckins({ limit: 200 });
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const history = db.listCheckins({ userId, limit: 200 });
   const body = `
     <h1 class="screen-title">Check-In History</h1>
     <p class="screen-sub">Your full timeline, newest first.</p>
@@ -890,12 +998,14 @@ function pageHistory(req, res) {
 // ---------------------------------------------------------------- trading (demo)
 
 function pageTrade(req, res, query) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
   const friendId = query.get('friend') || mock.friends[0].id;
   const friend = mock.friends.find(f => f.id === friendId) || mock.friends[0];
   const yourPick = query.get('your') || '';
   const theirPick = query.get('their') || '';
 
-  const collection = db.getCollection();
+  const collection = db.getCollection(userId);
   const yourDupes = collection.filter(o => o.copies > 1 && !friend.collection[o.strain.id]);
   const theirDupeIds = Object.entries(friend.collection).filter(([id, c]) => c > 1 && !collection.some(o => o.strain.id === id));
 
@@ -950,6 +1060,8 @@ async function handleTradePropose(req, res) {
 // ---------------------------------------------------------------- dispensaries
 
 async function pageDispensaries(req, res, searchParams) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
   const zipParam = (searchParams.get('zip') || '').trim();
   let lat = Number(searchParams.get('lat'));
   let lon = Number(searchParams.get('lon'));
@@ -982,7 +1094,7 @@ async function pageDispensaries(req, res, searchParams) {
       <h1 class="screen-title">Dispensaries</h1>
       <p class="screen-sub geo-live"><span class="dot"></span> Showing ${realResults.length} real dispensar${realResults.length === 1 ? 'y' : 'ies'} near ${esc(locationLabel)}, via OpenStreetMap. <a href="/dispensaries">Use sample listings instead</a></p>
       ${realResults.map(d => {
-        const following = db.isFollowingDispensary(d.id);
+        const following = db.isFollowingDispensary(userId, d.id);
         const mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${d.lat},${d.lon}`;
         return `<div class="dispensary-card">
           <div class="dtop">
@@ -1020,9 +1132,9 @@ async function pageDispensaries(req, res, searchParams) {
       </div>
       <p class="screen-sub">Sample listings below for the demo — swap in a real dispensary feed when you're ready.</p>
       ${mock.dispensaries.map(d => {
-        const following = db.isFollowingDispensary(d.id);
+        const following = db.isFollowingDispensary(userId, d.id);
         const exclusiveStrain = d.exclusiveCard ? db.getStrain(d.exclusiveCard) : null;
-        const hasExclusive = exclusiveStrain && !db.getCollection().some(o => o.strain.id === exclusiveStrain.id);
+        const hasExclusive = exclusiveStrain && !db.getCollection(userId).some(o => o.strain.id === exclusiveStrain.id);
         return `<div class="dispensary-card">
           <div class="dtop">
             <div>
@@ -1050,7 +1162,9 @@ async function pageDispensaries(req, res, searchParams) {
 }
 
 async function handleDispensaryFollow(req, res, id, searchParams) {
-  await db.toggleFollowDispensary(id);
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  await db.toggleFollowDispensary(userId, id);
   const lat = searchParams.get('lat');
   const lon = searchParams.get('lon');
   redirect(res, lat && lon ? `/dispensaries?lat=${encodeURIComponent(lat)}&lon=${encodeURIComponent(lon)}` : '/dispensaries');
@@ -1059,12 +1173,14 @@ async function handleDispensaryFollow(req, res, id, searchParams) {
 // ---------------------------------------------------------------- events
 
 function pageEvents(req, res) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
   const body = `
     <h1 class="screen-title">Events</h1>
     <p class="screen-sub">Sample local events for the demo.</p>
     ${mock.events.map(e => {
       const venue = mock.dispensaries.find(d => d.id === e.venueId);
-      const going = db.isRsvped(e.id);
+      const going = db.isRsvped(userId, e.id);
       return `<div class="event-card">
         <div class="event-date">${e.month}<br>${e.day}</div>
         <div>
@@ -1082,7 +1198,9 @@ function pageEvents(req, res) {
 }
 
 async function handleEventRsvp(req, res, id) {
-  await db.toggleRsvp(id);
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  await db.toggleRsvp(userId, id);
   redirect(res, '/events');
 }
 
@@ -1111,7 +1229,9 @@ function pageBusiness(req, res) {
 // ---------------------------------------------------------------- shop
 
 function pageShop(req, res) {
-  const cartCount = db.getCartCount();
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const cartCount = db.getCartCount(userId);
   const body = `
     <h1 class="screen-title">Shop</h1>
     <p class="screen-sub">Sample merch for the demo — not a real store yet.</p>
@@ -1130,14 +1250,18 @@ function pageShop(req, res) {
 }
 
 async function handleShopAdd(req, res, id) {
-  await db.addToCart(id);
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  await db.addToCart(userId, id);
   redirect(res, '/shop');
 }
 
 // ---------------------------------------------------------------- badges directory
 
 function pageBadges(req, res) {
-  const badges = computeBadges();
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const badges = computeBadges(userId);
   const body = `
     <h1 class="screen-title">Badges</h1>
     <p class="screen-sub">${badges.filter(b => b.done).length} of ${badges.length} earned.</p>
@@ -1185,6 +1309,16 @@ const server = http.createServer(async (req, res) => {
       return serveStatic(req, res, pathname);
     }
 
+    // Global login wall: almost every page here is personal (check-ins,
+    // collection, recommendations, follows...), so rather than gate each one
+    // individually, everything requires a logged-in user except the
+    // signup/login/logout routes themselves and the separate admin panel
+    // (which has its own, unrelated password gate below).
+    const PUBLIC_PATHS = new Set(['/signup', '/login', '/logout']);
+    if (!PUBLIC_PATHS.has(pathname) && !pathname.startsWith('/admin') && auth.currentUserId(req) == null) {
+      return redirect(res, '/login');
+    }
+
     let m;
     if (method === 'GET' && pathname === '/') return pageHome(req, res);
     if (method === 'GET' && pathname === '/strains') return pageStrains(req, res, url.searchParams);
@@ -1192,7 +1326,7 @@ const server = http.createServer(async (req, res) => {
     if (method === 'GET' && pathname === '/checkin') return pageCheckinForm(req, res, url.searchParams);
     if (method === 'POST' && pathname === '/checkin') return await handleCheckinSubmit(req, res);
     if (method === 'GET' && pathname === '/faq') return pageFaq(req, res);
-    if (method === 'GET' && pathname === '/recipes') return pageRecipes(req, res);
+    if (method === 'GET' && pathname === '/recipes') return pageRecipes(req, res, url.searchParams);
     if (method === 'GET' && pathname === '/recipes/new') return pageRecipeNew(req, res);
     if (method === 'POST' && pathname === '/recipes/new') return await handleRecipeNewSubmit(req, res);
     if (method === 'GET' && pathname === '/growing') return pageGrowing(req, res, url.searchParams);
@@ -1203,6 +1337,11 @@ const server = http.createServer(async (req, res) => {
 
     if (method === 'GET' && pathname === '/admin/login') return pageAdminLogin(req, res, url.searchParams);
     if (method === 'POST' && pathname === '/admin/login') return await handleAdminLoginSubmit(req, res);
+    if (method === 'GET' && pathname === '/signup') return pageSignup(req, res, url.searchParams);
+    if (method === 'POST' && pathname === '/signup') return await handleSignupSubmit(req, res);
+    if (method === 'GET' && pathname === '/login') return pageLogin(req, res, url.searchParams);
+    if (method === 'POST' && pathname === '/login') return await handleLoginSubmit(req, res);
+    if (method === 'POST' && pathname === '/logout') return handleLogout(req, res);
     if (method === 'GET' && pathname === '/admin/logout') return handleAdminLogout(req, res);
     if (method === 'GET' && pathname === '/admin') return pageAdminHome(req, res);
     if (method === 'GET' && pathname === '/admin/faqs') return pageAdminFaqs(req, res);
