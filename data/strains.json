@@ -50522,5 +50522,36 @@
     ],
     "flavor": "Sweet pineapple and coconut, tropical and bright.",
     "icon": "🍹"
+  },
+  {
+    "id": "s1648",
+    "name": "Hash Burger",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "legendary",
+    "thc": "22–30%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.25
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Sleepy",
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "Pungent ammonia and funky cheese with a peppery, garlicky finish — one of the boldest, savoriest profiles around.",
+    "icon": "🍔"
   }
 ]
