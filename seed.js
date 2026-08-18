@@ -33,26 +33,34 @@ async function main() {
     console.log('FAQs already present, skipping (edit them via /admin instead).');
   }
 
-  if (db.listRecipes({ status: null }).length === 0) {
-    console.log(`Seeding ${recipes.length} recipes...`);
-    for (const r of recipes) {
-      await db.createRecipe({
-        title: r.title, time: r.time, icon: r.icon, source: r.source || 'official',
-        author: r.author, desc: r.desc, ingredients: r.ingredients, steps: r.steps,
-        dosing: r.dosing, status: 'approved', kudos: r.kudos || 0,
-      });
+  {
+    const existingTitles = new Set(db.listRecipes({ status: null }).map(r => r.title));
+    const toAdd = recipes.filter(r => !existingTitles.has(r.title));
+    if (toAdd.length) {
+      console.log(`Seeding ${toAdd.length} new recipe(s) (${existingTitles.size} already in DB)...`);
+      for (const r of toAdd) {
+        await db.createRecipe({
+          title: r.title, time: r.time, icon: r.icon, source: r.source || 'official',
+          author: r.author, desc: r.desc, ingredients: r.ingredients, steps: r.steps,
+          dosing: r.dosing, category: r.category || 'Baked Goods', status: 'approved', kudos: r.kudos || 0,
+        });
+      }
+    } else {
+      console.log('No new recipes to add.');
     }
-  } else {
-    console.log('Recipes already present, skipping (edit them via /admin instead).');
   }
 
-  if (db.listGrowTips().length === 0) {
-    console.log(`Seeding ${growTips.length} grow tips...`);
-    for (const g of growTips) {
-      await db.createGrowTip({ title: g.title, category: g.category, author: g.author, body: g.body });
+  {
+    const existingTipTitles = new Set(db.listGrowTips().map(g => g.title));
+    const tipsToAdd = growTips.filter(g => !existingTipTitles.has(g.title));
+    if (tipsToAdd.length) {
+      console.log(`Seeding ${tipsToAdd.length} new grow tip(s) (${existingTipTitles.size} already in DB)...`);
+      for (const g of tipsToAdd) {
+        await db.createGrowTip({ title: g.title, category: g.category, author: g.author, body: g.body });
+      }
+    } else {
+      console.log('No new grow tips to add.');
     }
-  } else {
-    console.log('Grow tips already present, skipping.');
   }
 
   console.log('Seed complete.');
