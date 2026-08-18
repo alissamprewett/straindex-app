@@ -178,15 +178,15 @@ function pageStrains(req, res, query) {
   const body = `
     <h1 class="screen-title">Strain Library</h1>
     <p class="screen-sub">${total.toLocaleString()} strains — search the full database.</p>
-    <form method="GET" action="/strains" style="margin-bottom:12px;">
-      <input type="search" name="q" value="${esc(q)}" placeholder="Search by name..." oninput="this.form.requestSubmit()">
-      <input type="hidden" name="type" value="${esc(type)}">
-      <input type="hidden" name="rarity" value="${esc(rarity)}">
+    <form method="GET" action="/strains" id="strain-search-form" style="margin-bottom:12px;">
+      <input type="search" name="q" id="strain-search-input" value="${esc(q)}" placeholder="Search by name..." autocomplete="off">
+      <input type="hidden" name="type" id="strain-search-type" value="${esc(type)}">
+      <input type="hidden" name="rarity" id="strain-search-rarity" value="${esc(rarity)}">
     </form>
     <div>${typeOpts.map(t => `<a class="filter-pill ${type === t ? 'active' : ''}" href="${mk({ type: t })}">${t}</a>`).join('')}</div>
     <div style="margin-bottom:10px;">${rarityOpts.map(r => `<a class="filter-pill ${rarity === r ? 'active' : ''}" href="${mk({ rarity: r })}">${r === 'All' ? 'All rarities' : rarityLabel(r)}</a>`).join('')}</div>
-    <p class="empty-note">${total > 60 ? `Showing 60 of ${total.toLocaleString()} — refine your search to narrow it down.` : `${total} strain${total === 1 ? '' : 's'}`}</p>
-    ${results.map(s => `
+    <p class="empty-note" id="strain-search-count">${total > 60 ? `Showing 60 of ${total.toLocaleString()} — refine your search to narrow it down.` : `${total} strain${total === 1 ? '' : 's'}`}</p>
+    <div id="strain-search-results">${results.map(s => `
       <a class="library-row" href="/strains/${s.id}" style="text-decoration:none;color:inherit;">
         <span class="icon">${s.icon}</span>
         <div class="info">
@@ -194,7 +194,7 @@ function pageStrains(req, res, query) {
           <div class="sub">${esc(s.type)} · ${rarityLabel(s.rarity)} · THC ${esc(s.thc)}</div>
         </div>
         <span class="rarity-tag rarity-${s.rarity}">${rarityLabel(s.rarity)}</span>
-      </a>`).join('') || `<div class="empty-note">No strains match your filters.</div>`}
+      </a>`).join('') || `<div class="empty-note">No strains match your filters.</div>`}</div>
   `;
   sendHtml(res, layout({ title: 'Strains', active: 'strains', body, isAdmin: auth.isAdmin(req) }));
 }
@@ -532,7 +532,7 @@ function pageAdminHome(req, res) {
     <h1 class="screen-title">Admin</h1>
     <div class="card"><a href="/admin/faqs">📋 Manage FAQ (${db.listFaqs().length})</a></div>
     <div class="card"><a href="/admin/recipes">🍽️ Manage Recipes (${db.listRecipes({ status: null }).length}${pendingCount ? `, ${pendingCount} pending` : ''})</a></div>
-    <div class="card"><a href="/strains">🃏 Strain Library (${db.countStrains().toLocaleString()}, read-only for now)</a></div>
+    <div class="card"><a href="/admin/strains">🃏 Manage Strains (${db.countStrains().toLocaleString()})</a></div>
     <div class="card"><a href="/admin/logout">🚪 Log out</a></div>
   `;
   sendHtml(res, layout({ title: 'Admin', body, isAdmin: true }));
@@ -599,6 +599,123 @@ async function handleAdminFaqDelete(req, res, id) {
   if (!requireAdmin(req, res)) return;
   await db.deleteFaq(id);
   redirect(res, '/admin/faqs');
+}
+
+// ---------------------------------------------------------------- admin: strains
+// Simple text inputs for effects/terpenes rather than dynamic add/remove rows —
+// easiest to fill in by hand: "Relaxed, Happy, Euphoric" and "Myrcene:30, Limonene:25".
+function parseEffectsInput(str) {
+  return String(str || '').split(',').map(s => s.trim()).filter(Boolean);
+}
+function parseTerpsInput(str) {
+  return String(str || '').split(',').map(s => s.trim()).filter(Boolean).map(pair => {
+    const [n, p] = pair.split(':').map(x => (x || '').trim());
+    return { n: n || '', p: p ? Number(p) / 100 : 0 };
+  }).filter(t => t.n);
+}
+function effectsToInput(effects) { return (effects || []).join(', '); }
+function terpsToInput(terps) { return (terps || []).map(t => `${t.n}:${Math.round((t.p || 0) * 100)}`).join(', '); }
+
+function strainFormFields(s) {
+  const v = (val) => esc(val ?? '');
+  const opt = (val, label) => `<option value="${v(val)}" ${s && s.type === val ? 'selected' : ''}>${label}</option>`;
+  const ropt = (val, label) => `<option value="${v(val)}" ${s && s.rarity === val ? 'selected' : ''}>${label}</option>`;
+  return `
+    <label class="field-label" style="margin-top:0;">Name</label>
+    <input type="text" name="name" value="${v(s && s.name)}" required>
+    <label class="field-label">Type</label>
+    <select name="type">${opt('Indica', 'Indica')}${opt('Sativa', 'Sativa')}${opt('Hybrid', 'Hybrid')}</select>
+    <label class="field-label">Lean (optional, e.g. "Sativa-leaning")</label>
+    <input type="text" name="lean" value="${v(s && s.lean)}">
+    <label class="field-label">Rarity</label>
+    <select name="rarity">${ropt('common', 'Common')}${ropt('uncommon', 'Uncommon')}${ropt('rare', 'Rare')}${ropt('legendary', 'Legendary')}</select>
+    <label class="field-label">THC range (e.g. "19–29%")</label>
+    <input type="text" name="thc" value="${v(s && s.thc)}">
+    <label class="field-label">CBD range (e.g. "<1%")</label>
+    <input type="text" name="cbd" value="${v(s && s.cbd)}">
+    <label class="field-label">Flavor description</label>
+    <input type="text" name="flavor" value="${v(s && s.flavor)}">
+    <label class="field-label">Icon (a single emoji)</label>
+    <input type="text" name="icon" value="${v(s ? s.icon : '🌿')}" maxlength="4">
+    <label class="field-label">Effects (comma-separated, e.g. "Relaxed, Happy, Euphoric")</label>
+    <input type="text" name="effects" value="${v(effectsToInput(s && s.effects))}">
+    <label class="field-label">Top terpenes (comma-separated "Name:Percent", e.g. "Myrcene:30, Limonene:25")</label>
+    <input type="text" name="terps" value="${v(terpsToInput(s && s.terps))}">
+  `;
+}
+
+function pageAdminStrains(req, res, query) {
+  if (!requireAdmin(req, res)) return;
+  const q = (query && query.get('q')) || '';
+  const results = q ? db.listStrains({ q, limit: 50 }) : db.listStrains({ limit: 50 });
+  const total = db.countStrains();
+  const body = `
+    <h1 class="screen-title">Manage Strains</h1>
+    <p class="screen-sub">${total.toLocaleString()} strains in the library.</p>
+    <div class="card">
+      <h2 style="margin-top:0;font-size:16px;">Add a strain</h2>
+      <form method="POST" action="/admin/strains/new">
+        ${strainFormFields(null)}
+        <button class="btn block" type="submit">Add Strain</button>
+      </form>
+    </div>
+    <form method="GET" action="/admin/strains" style="margin:16px 0 8px;">
+      <input type="search" name="q" value="${esc(q)}" placeholder="Search strains to edit or delete...">
+    </form>
+    <p class="empty-note">${q ? `${results.length} match${results.length === 1 ? '' : 'es'}` : `Showing 50 of ${total.toLocaleString()} — search to find a specific one`}</p>
+    ${results.map(s => `
+      <div class="admin-row">
+        <span class="icon">${s.icon}</span>
+        <div style="flex:1;min-width:0;">
+          <b>${esc(s.name)}</b>
+          <div class="empty-note" style="padding:0;">${esc(s.type)} · ${rarityLabel(s.rarity)}</div>
+        </div>
+        <div class="actions">
+          <a href="/admin/strains/${s.id}/edit" class="btn secondary" style="text-decoration:none;">Edit</a>
+          <form method="POST" action="/admin/strains/${s.id}/delete" style="display:inline;" onsubmit="return confirm('Delete this strain? This cannot be undone.')">
+            <button class="btn danger" type="submit" style="color:#fff;">Delete</button>
+          </form>
+        </div>
+      </div>`).join('')}
+  `;
+  sendHtml(res, layout({ title: 'Manage Strains', body, isAdmin: true }));
+}
+async function handleAdminStrainNew(req, res) {
+  if (!requireAdmin(req, res)) return;
+  const f = await parseForm(req);
+  const id = db.nextStrainId();
+  await db.insertStrain({
+    id, name: f.name, type: f.type, lean: f.lean, rarity: f.rarity, thc: f.thc, cbd: f.cbd,
+    flavor: f.flavor, icon: f.icon || '🌿', effects: parseEffectsInput(f.effects), terps: parseTerpsInput(f.terps),
+  });
+  redirect(res, '/admin/strains');
+}
+function pageAdminStrainEdit(req, res, id) {
+  if (!requireAdmin(req, res)) return;
+  const s = db.getStrain(id);
+  if (!s) return notFound(res);
+  const body = `
+    <h1 class="screen-title">Edit Strain</h1>
+    <form method="POST" action="/admin/strains/${s.id}/edit">
+      ${strainFormFields(s)}
+      <button class="btn block" type="submit">Save</button>
+    </form>
+  `;
+  sendHtml(res, layout({ title: 'Edit Strain', body, isAdmin: true }));
+}
+async function handleAdminStrainEditSubmit(req, res, id) {
+  if (!requireAdmin(req, res)) return;
+  const f = await parseForm(req);
+  await db.insertStrain({
+    id, name: f.name, type: f.type, lean: f.lean, rarity: f.rarity, thc: f.thc, cbd: f.cbd,
+    flavor: f.flavor, icon: f.icon || '🌿', effects: parseEffectsInput(f.effects), terps: parseTerpsInput(f.terps),
+  });
+  redirect(res, '/admin/strains');
+}
+async function handleAdminStrainDelete(req, res, id) {
+  if (!requireAdmin(req, res)) return;
+  await db.deleteStrain(id);
+  redirect(res, '/admin/strains');
 }
 
 function pageAdminRecipes(req, res) {
@@ -1093,6 +1210,11 @@ const server = http.createServer(async (req, res) => {
     if (method === 'GET' && (m = pathname.match(/^\/admin\/faqs\/(\d+)\/edit$/))) return pageAdminFaqEdit(req, res, Number(m[1]));
     if (method === 'POST' && (m = pathname.match(/^\/admin\/faqs\/(\d+)\/edit$/))) return await handleAdminFaqEditSubmit(req, res, Number(m[1]));
     if (method === 'POST' && (m = pathname.match(/^\/admin\/faqs\/(\d+)\/delete$/))) return await handleAdminFaqDelete(req, res, Number(m[1]));
+    if (method === 'GET' && pathname === '/admin/strains') return pageAdminStrains(req, res, url.searchParams);
+    if (method === 'POST' && pathname === '/admin/strains/new') return await handleAdminStrainNew(req, res);
+    if (method === 'GET' && (m = pathname.match(/^\/admin\/strains\/([^/]+)\/edit$/))) return pageAdminStrainEdit(req, res, m[1]);
+    if (method === 'POST' && (m = pathname.match(/^\/admin\/strains\/([^/]+)\/edit$/))) return await handleAdminStrainEditSubmit(req, res, m[1]);
+    if (method === 'POST' && (m = pathname.match(/^\/admin\/strains\/([^/]+)\/delete$/))) return await handleAdminStrainDelete(req, res, m[1]);
     if (method === 'GET' && pathname === '/admin/recipes') return pageAdminRecipes(req, res);
     if (method === 'POST' && pathname === '/admin/recipes/new') return await handleAdminRecipeNew(req, res);
     if (method === 'POST' && (m = pathname.match(/^\/admin\/recipes\/(\d+)\/approve$/))) return await handleAdminRecipeApprove(req, res, Number(m[1]));
