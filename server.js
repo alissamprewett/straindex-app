@@ -102,22 +102,19 @@ function computeBadges(userId) {
   const types = new Set(owned.map(s => s.type));
   const checkinCount = db.listCheckins({ userId, limit: 1 }).length;
   const anyPhoto = db.listCheckins({ userId, limit: 1000 }).some(c => c.photo);
-  const communityRecipe = db.listRecipes({ status: null }).some(r => r.source === 'community');
-  const favoriteRecipe = db.listRecipes({ status: null }).some(r => r.kudos >= 10);
-  const extraGrowTips = db.listGrowTips().length > 8; // more than the seeded starter set
   return [
     { id: 'b1', label: 'First Check-In', icon: '🌱', done: checkinCount >= 1 },
     { id: 'b2', label: 'Explorer (5 cards)', icon: '🧭', done: db.getUniqueOwnedCount(userId) >= 5 },
     { id: 'b3', label: 'Type Trifecta', icon: '🎯', done: types.has('Indica') && types.has('Sativa') && types.has('Hybrid') },
     { id: 'b4', label: 'Landrace Hunter', icon: '🗺️', done: owned.some(s => s.rarity === 'rare' || s.rarity === 'legendary') },
     { id: 'b5', label: 'Legendary Collector', icon: '👑', done: owned.some(s => s.rarity === 'legendary') },
-    { id: 'b6', label: 'First Trade', icon: '🔁', done: db.countTrades() >= 1 },
+    { id: 'b6', label: 'First Trade', icon: '🔁', done: db.countTrades(userId) >= 1 },
     { id: 'b7', label: 'Dispensary Scout', icon: '📍', done: db.anyDispensaryFollowed(userId) },
     { id: 'b8', label: 'Event Goer', icon: '🎉', done: db.anyRsvped(userId) },
-    { id: 'b9', label: 'Recipe Contributor', icon: '✏️', done: communityRecipe },
-    { id: 'b10', label: 'Community Favorite', icon: '🌟', done: favoriteRecipe },
+    { id: 'b9', label: 'Recipe Contributor', icon: '✏️', done: db.hasUserApprovedRecipe(userId) },
+    { id: 'b10', label: 'Community Favorite', icon: '🌟', done: db.hasUserFavoriteRecipe(userId) },
     { id: 'b11', label: 'Shopper', icon: '🛍️', done: db.getCartCount(userId) >= 1 },
-    { id: 'b12', label: 'Home Grower', icon: '🌱', done: extraGrowTips },
+    { id: 'b12', label: 'Home Grower', icon: '🌱', done: db.hasUserSubmittedGrowTip(userId) },
     { id: 'b13', label: 'Photographer', icon: '📸', done: anyPhoto },
   ];
 }
@@ -419,9 +416,11 @@ function pageRecipeNew(req, res) {
 }
 
 async function handleRecipeNewSubmit(req, res) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
   const f = await parseForm(req);
   await db.createRecipe({
-    title: f.title, desc: f.desc, author: f.author, source: 'community', status: 'pending',
+    title: f.title, desc: f.desc, author: f.author, user_id: userId, source: 'community', status: 'pending',
     ingredients: String(f.ingredients || '').split('\n').map(s => s.trim()).filter(Boolean),
     steps: String(f.steps || '').split('\n').map(s => s.trim()).filter(Boolean),
     dosing: f.dosing || '',
@@ -476,8 +475,10 @@ function pageGrowingNew(req, res) {
 }
 
 async function handleGrowingNewSubmit(req, res) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
   const f = await parseForm(req);
-  await db.createGrowTip({ title: f.title, category: f.category, author: f.author, body: f.body });
+  await db.createGrowTip({ title: f.title, category: f.category, author: f.author, user_id: userId, body: f.body });
   redirect(res, '/growing');
 }
 
@@ -1049,10 +1050,12 @@ function pageTrade(req, res, query) {
 }
 
 async function handleTradePropose(req, res) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
   const fields = await parseForm(req);
   const friend = mock.friends.find(f => f.id === fields.friend);
   if (friend && fields.your && fields.their) {
-    await db.createTrade({ friend_name: friend.name, gave_strain_id: fields.your, got_strain_id: fields.their });
+    await db.createTrade({ user_id: userId, friend_name: friend.name, gave_strain_id: fields.your, got_strain_id: fields.their });
   }
   redirect(res, '/trade?friend=' + encodeURIComponent(fields.friend || ''));
 }
@@ -1090,18 +1093,19 @@ async function pageDispensaries(req, res, searchParams) {
 
   let body;
   if (realResults) {
+    const sourceLabel = process.env.GOOGLE_PLACES_API_KEY ? 'Google Places' : 'OpenStreetMap';
     body = `
       <h1 class="screen-title">Dispensaries</h1>
-      <p class="screen-sub geo-live"><span class="dot"></span> Showing ${realResults.length} real dispensar${realResults.length === 1 ? 'y' : 'ies'} near ${esc(locationLabel)}, via OpenStreetMap. <a href="/dispensaries">Use sample listings instead</a></p>
+      <p class="screen-sub geo-live"><span class="dot"></span> Showing ${realResults.length} real dispensar${realResults.length === 1 ? 'y' : 'ies'} near ${esc(locationLabel)}, via ${esc(sourceLabel)}. <a href="/dispensaries">Use sample listings instead</a></p>
       ${realResults.map(d => {
         const following = db.isFollowingDispensary(userId, d.id);
         const mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${d.lat},${d.lon}`;
         return `<div class="dispensary-card">
           <div class="dtop">
             <div>
-              <div class="dname">${esc(d.name)}</div>
+              <div class="dname">${esc(d.name)}${d.rating ? ` <span class="empty-note" style="padding:0;">★${d.rating}</span>` : ''}</div>
               <div class="dsub">${d.distanceLabel ? esc(d.distanceLabel) + ' · ' : ''}${esc(d.address || 'Address not listed')}</div>
-              ${d.hours ? `<div class="dsub">Hours: ${esc(d.hours)}</div>` : ''}
+              ${d.hours ? `<div class="dsub">${sourceLabel === 'Google Places' ? esc(d.hours) : 'Hours: ' + esc(d.hours)}</div>` : ''}
               ${d.phone ? `<div class="dsub">${esc(d.phone)}</div>` : ''}
             </div>
             <form method="POST" action="/dispensaries/${encodeURIComponent(d.id)}/follow?lat=${lat}&lon=${lon}">
