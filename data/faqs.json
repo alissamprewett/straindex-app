@@ -138,5 +138,101 @@
     "a": "A Certificate of Analysis, or COA, is an independent lab's report on what's actually in a product. The most important numbers are usually THC and CBD percentages (how potent it is), but a thorough COA also screens for contaminants — pesticides, heavy metals, residual solvents (important for concentrates), and microbial contamination like mold. A terpene panel, if included, breaks down the aromatic compounds that shape flavor and may influence effects. If a product doesn't come with a COA at all, or the COA is from the producer's own in-house lab rather than an independent third party, that's worth treating as a red flag rather than reassurance.",
     "source_name": "General regulatory/testing industry knowledge, cross-referenced across multiple state cannabis regulator guidance pages",
     "source_url": ""
+  },
+  {
+    "q": "What is cannabinoid hyperemesis syndrome (CHS)?",
+    "a": "CHS is a real, recognized condition that can develop after long-term, heavy cannabis use — cycles of severe nausea, vomiting, and abdominal pain that can require emergency care. Oddly, many people with CHS report temporary relief from hot showers or baths, which is actually a useful diagnostic clue for doctors. The key detail: CHS only fully resolves when a person stops using cannabis entirely — it doesn't respond to standard anti-nausea treatment the way other causes of vomiting do, since cannabis itself is the underlying cause.",
+    "source_name": "National Institute on Drug Abuse — \"Cannabis (Marijuana) Research Report\"",
+    "source_url": "https://nida.nih.gov/research-topics/cannabis-marijuana"
+  },
+  {
+    "q": "Can secondhand cannabis smoke get you high or make you fail a drug test?",
+    "a": "It's possible, though it takes fairly extreme conditions. Secondhand cannabis smoke contains many of the same compounds as secondhand tobacco smoke. One study in a well-ventilated coffee shop found only low THC levels in the blood of non-smoking bystanders — not enough to cause meaningful intoxication in most cases. But secondhand exposure has been documented to cause positive drug tests, including in children exposed to smoke in homes, which has also been linked to respiratory infections in kids. Ventilation matters a lot here — poorly ventilated, smoke-heavy spaces carry meaningfully more risk than a quick walk past someone smoking outside.",
+    "source_name": "National Institute on Drug Abuse — \"Cannabis (Marijuana) Research Report\"",
+    "source_url": "https://nida.nih.gov/research-topics/cannabis-marijuana"
+  },
+  {
+    "q": "What does cannabis withdrawal actually feel like?",
+    "a": "It's a real, documented phenomenon — you don't need to have Cannabis Use Disorder to experience it, just a pattern of heavy or long-term use. One study estimated about 1 in 8 frequent cannabis users experience withdrawal when they stop or cut back significantly. Reported symptoms include irritability, anxiety, restlessness, trouble sleeping (including strange or vivid dreams), decreased appetite, headaches, sweating, and stomach pain. It's generally not medically dangerous the way alcohol or benzodiazepine withdrawal can be, but it's genuinely uncomfortable enough that it's one of the real reasons people struggle to cut back.",
+    "source_name": "National Institute on Drug Abuse — \"Cannabis (Marijuana) Research Report\"",
+    "source_url": "https://nida.nih.gov/research-topics/cannabis-marijuana"
+  },
+  {
+    "q": "Is cannabis really a \"gateway drug\"?",
+    "a": "The honest answer is nuanced. Cannabis is often one of the first substances people try, alongside alcohol and tobacco — but the large majority of people who use cannabis never go on to use other drugs. What research does show is that the same underlying risk factors that make someone more likely to try cannabis (genetics, environment, age of first use) also raise their risk of using other substances — so it's more that cannabis use and other substance use often share root causes, rather than cannabis directly \"causing\" someone to seek out harder drugs. That said, starting cannabis use at a younger age is genuinely associated with higher risk of developing problematic use later, of cannabis or otherwise.",
+    "source_name": "National Institute on Drug Abuse — \"Cannabis (Marijuana) Research Report\"",
+    "source_url": "https://nida.nih.gov/research-topics/cannabis-marijuana"
+  },
+  {
+    "q": "Are there FDA-approved medications made from cannabis?",
+    "a": "Yes, a small number — but this is different from whole-plant cannabis, which the FDA has not approved for any medical use. Three specific products are FDA-approved: a CBD oral solution (brand name Epidiolex) for seizures linked to two rare, severe forms of childhood epilepsy; dronabinol (Marinol, Syndros), a synthetic THC used for chemotherapy-related nausea and for appetite loss in AIDS patients; and nabilone (Cesamet), another synthetic cannabinoid used for chemotherapy-related nausea that hasn't responded to other treatments. These are precisely dosed pharmaceutical products, not the same as flower, edibles, or vape products sold at dispensaries.",
+    "source_name": "StatPearls (NCBI Bookshelf) — \"Cannabis (Marijuana) Overview\"",
+    "source_url": "https://www.ncbi.nlm.nih.gov/books/NBK430801/"
+  },
+  {
+    "q": "Does using cannabis increase cancer risk?",
+    "a": "Research has linked cannabis use — particularly smoking it — with an increased likelihood of developing head, neck, or throat cancer. This is a genuinely active area of research rather than a fully settled question, partly because so many people who smoke cannabis also smoke tobacco, which makes it hard to isolate cannabis's individual contribution. Unlike tobacco, cannabis has not been as definitively linked to lung cancer specifically, though smoke of any kind introduces carcinogens into the lungs.",
+    "source_name": "National Institute on Drug Abuse — \"Cannabis (Marijuana) Research Report\"",
+    "source_url": "https://nida.nih.gov/research-topics/cannabis-marijuana"
+  },
+  {
+    "q": "What's the connection between cannabis and mental health conditions like psychosis?",
+    "a": "This is one of the more serious, well-documented risk areas. In people who already carry genetic risk factors for psychotic disorders like schizophrenia, cannabis use has been linked to earlier onset of psychosis and worse symptoms — this association is especially strong in young men. High doses can also trigger a temporary psychotic episode even in people without an underlying disorder, and having such an episode is associated with higher risk of developing a psychotic disorder later. Cannabis use during adolescence has also been linked to higher rates of depression and, in some studies, suicidal thoughts. Importantly, researchers note this is genuinely complex to untangle — people already dealing with mental health struggles are also more likely to use cannabis in the first place, so cause-and-effect isn't fully settled, but the associations are consistent enough to take seriously.",
+    "source_name": "National Institute on Drug Abuse — \"Cannabis (Marijuana) Research Report\"",
+    "source_url": "https://nida.nih.gov/research-topics/cannabis-marijuana"
+  },
+  {
+    "q": "How does cannabis affect a still-developing teenage brain?",
+    "a": "Adolescence is a critical window for brain development, and regular, heavy cannabis use during this period has been linked to measurable effects on working memory, processing speed, verbal memory, and academic performance — plus longer-term associations with lower educational attainment and income in young adulthood. It's also linked to higher risk of developing both psychosis and Cannabis Use Disorder later in life. Federally funded long-term studies (like the ABCD Study, following nearly 12,000 kids from ages 9-10 into adulthood) exist specifically to better understand these effects, since adolescent brains respond differently to cannabis than adult brains do.",
+    "source_name": "National Institute on Drug Abuse — \"Cannabis (Marijuana) Research Report\"",
+    "source_url": "https://nida.nih.gov/research-topics/cannabis-marijuana"
+  },
+  {
+    "q": "Do older adults use cannabis differently, or face different risks?",
+    "a": "Adults 50 and older — especially those 65+ — have seen the biggest increase in cannabis use of any age group in recent years, mostly to self-treat chronic conditions like pain, sleep issues, anxiety, and conditions like arthritis or Parkinson's. But older adults may respond differently to cannabis than younger users do, and are more likely to be taking other medications — including blood thinners, opioids, and benzodiazepines — that cannabis can interact with. If you're an older adult using cannabis regularly, this is a particularly good case for looping in your doctor.",
+    "source_name": "National Institute on Drug Abuse — \"Cannabis (Marijuana) Research Report\"",
+    "source_url": "https://nida.nih.gov/research-topics/cannabis-marijuana"
+  },
+  {
+    "q": "Could cannabis be reclassified at the federal level?",
+    "a": "It's an active, ongoing process, though not finalized. Cannabis is currently Schedule I — the most restrictive category, reserved for substances the federal government says have no accepted medical use. In 2023, the Department of Health and Human Services formally recommended moving cannabis to Schedule III, a much less restrictive category for substances with recognized medical use and lower potential for dependence. In 2024, the Department of Justice began the formal rulemaking process toward that change. As of this writing, no final decision has been made — but this is worth watching, since a real reclassification would meaningfully change banking, taxation, and research rules for the entire industry.",
+    "source_name": "NIAAA / Alcohol Policy Information System — \"About Cannabis Policy\"",
+    "source_url": "https://alcoholpolicy.niaaa.nih.gov/about/about-cannabis-policy"
+  },
+  {
+    "q": "What's the actual difference between \"decriminalized\" and \"legalized\"?",
+    "a": "These get used interchangeably, but they mean different things. \"Decriminalized\" means criminal penalties are removed for certain activities (like possessing a small amount), but civil penalties — like a fine — can still apply, and it's often still not truly lawful to sell or grow it. \"Legalized\" means no civil or criminal penalties apply at all for a legal adult's use. Some states have decriminalized cannabis without fully legalizing it, which is a meaningfully different legal status even though both sound similar in casual conversation.",
+    "source_name": "NIAAA / Alcohol Policy Information System — \"About Cannabis Policy\"",
+    "source_url": "https://alcoholpolicy.niaaa.nih.gov/about/about-cannabis-policy"
+  },
+  {
+    "q": "Has cannabis actually gotten stronger over the decades?",
+    "a": "Significantly, yes. Between 1995 and 2022, the average THC potency in cannabis seized by law enforcement roughly quadrupled — from about 4% to about 16%. Flower and concentrates sold in legal dispensaries today can test above 40% THC. This matters beyond just \"getting higher\" — higher-potency products have been associated with a greater likelihood of developing Cannabis Use Disorder, which is part of why older, more casual assumptions about cannabis risk (based on much weaker product) don't fully apply to today's market.",
+    "source_name": "National Institute on Drug Abuse — \"Cannabis (Marijuana) Research Report\"",
+    "source_url": "https://nida.nih.gov/research-topics/cannabis-marijuana"
+  },
+  {
+    "q": "What is Delta-8 THC, and is it actually safe?",
+    "a": "Delta-8 THC is another intoxicating cannabinoid found in the cannabis plant, distinct from the more common Delta-9 THC. It's often sold as a \"legal\" alternative in places where regular cannabis isn't, largely due to a regulatory gray area around hemp-derived products. Importantly, Delta-8 products have not been FDA-approved for safe use, and there's much less research on it and related newer compounds (like Delta-10, THCP, or HHC) compared to Delta-9 THC or CBD. Eating large amounts of Delta-8 products has led to real medical emergencies, including breathing problems, in both adults and children.",
+    "source_name": "National Institute on Drug Abuse — \"Cannabis (Marijuana) Research Report\"",
+    "source_url": "https://nida.nih.gov/research-topics/cannabis-marijuana"
+  },
+  {
+    "q": "Does smoking cannabis damage your lungs the way cigarettes do?",
+    "a": "Cannabis smoke contains many of the same toxins, irritants, and even carcinogens found in tobacco smoke, and long-term smoking is associated with real respiratory issues — airway inflammation, increased airway resistance, and chronic bronchitis among them. That said, the research picture is muddier than with tobacco, largely because so many people who smoke cannabis also smoke tobacco, making it hard to cleanly separate the two. If lung health is a concern, methods that avoid combustion entirely — vaporizing at lower temperatures, edibles, or tinctures — sidestep this risk category altogether.",
+    "source_name": "National Institute on Drug Abuse — \"Cannabis (Marijuana) Research Report\"",
+    "source_url": "https://nida.nih.gov/research-topics/cannabis-marijuana"
+  },
+  {
+    "q": "How many Americans actually use or support legalizing cannabis?",
+    "a": "According to Pew Research Center's most recent national survey, a large majority of Americans support legalization in some form: 55% say it should be legal for both medical and recreational use, another 33% say medical use only, and just 11% say it shouldn't be legal at all. On usage: about half of U.S. adults say they've used cannabis at some point in their life, though far fewer are current users — about 1 in 4 used it in the past year, and roughly 1 in 6 in the past month. For comparison, lifetime use is lower than for alcohol (85%) or tobacco/nicotine vaping (65%).",
+    "source_name": "Pew Research Center — \"10 Facts About Americans and Marijuana\"",
+    "source_url": "https://www.pewresearch.org/short-reads/2026/05/26/facts-about-marijuana/"
+  },
+  {
+    "q": "How did cannabis become illegal in the US in the first place?",
+    "a": "It's a longer history than most people realize. Cannabis was legal and used medicinally in the US through the late 1800s. The shift began in the early 1900s: California banned possession in 1915, the Marijuana Tax Act effectively criminalized it nationally in 1937, and it was removed from the US pharmacopeia (the official list of recognized medicines) in 1942. The Controlled Substances Act of 1970 then classified it as Schedule I — the most restrictive category — a classification that still stands today at the federal level, even as more than half of US states have since legalized it for medical or recreational use.",
+    "source_name": "NIAAA / Alcohol Policy Information System — \"About Cannabis Policy\"",
+    "source_url": "https://alcoholpolicy.niaaa.nih.gov/about/about-cannabis-policy"
   }
 ]
