@@ -183,11 +183,13 @@ function pageStrains(req, res, query) {
   const q = query.get('q') || '';
   const type = query.get('type') || 'All';
   const rarity = query.get('rarity') || 'All';
-  const total = db.countStrains({ q, type, rarity });
-  const results = db.listStrains({ q, type, rarity, limit: 60 });
+  const effect = query.get('effect') || 'All';
+  const total = db.countStrains({ q, type, rarity, effect });
+  const results = db.listStrains({ q, type, rarity, effect, limit: 60 });
   const typeOpts = ['All', 'Indica', 'Sativa', 'Hybrid'];
   const rarityOpts = ['All', 'common', 'uncommon', 'rare', 'legendary'];
-  const mk = (params) => '/strains?' + new URLSearchParams({ q, type, rarity, ...params }).toString();
+  const effectOpts = ['All', 'Happy', 'Relaxed', 'Euphoric', 'Uplifted', 'Sleepy', 'Energetic', 'Creative', 'Focused', 'Hungry', 'Talkative', 'Calm', 'Social'];
+  const mk = (params) => '/strains?' + new URLSearchParams({ q, type, rarity, effect, ...params }).toString();
 
   const body = `
     <h1 class="screen-title">Strain Library</h1>
@@ -196,9 +198,12 @@ function pageStrains(req, res, query) {
       <input type="search" name="q" id="strain-search-input" value="${esc(q)}" placeholder="Search by name..." autocomplete="off">
       <input type="hidden" name="type" id="strain-search-type" value="${esc(type)}">
       <input type="hidden" name="rarity" id="strain-search-rarity" value="${esc(rarity)}">
+      <input type="hidden" name="effect" id="strain-search-effect" value="${esc(effect)}">
     </form>
     <div>${typeOpts.map(t => `<a class="filter-pill ${type === t ? 'active' : ''}" href="${mk({ type: t })}">${t}</a>`).join('')}</div>
     <div style="margin-bottom:10px;">${rarityOpts.map(r => `<a class="filter-pill ${rarity === r ? 'active' : ''}" href="${mk({ rarity: r })}">${r === 'All' ? 'All rarities' : rarityLabel(r)}</a>`).join('')}</div>
+    <div class="section-label" style="margin-bottom:4px;">Feeling like...</div>
+    <div style="margin-bottom:10px;">${effectOpts.map(e => `<a class="filter-pill ${effect === e ? 'active' : ''}" href="${mk({ effect: e })}">${e === 'All' ? 'Any effect' : e}</a>`).join('')}</div>
     <p class="empty-note" id="strain-search-count">${total > 60 ? `Showing 60 of ${total.toLocaleString()} — refine your search to narrow it down.` : `${total} strain${total === 1 ? '' : 's'}`}</p>
     <div id="strain-search-results">${results.map(s => `
       <a class="library-row" href="/strains/${s.id}" style="text-decoration:none;color:inherit;">
@@ -895,8 +900,9 @@ function apiListStrains(req, res, query) {
   const q = query.get('q') || '';
   const type = query.get('type') || 'All';
   const rarity = query.get('rarity') || 'All';
+  const effect = query.get('effect') || 'All';
   const limit = Math.min(Number(query.get('limit')) || 60, 200);
-  sendJson(res, { total: db.countStrains({ q, type, rarity }), results: db.listStrains({ q, type, rarity, limit }) });
+  sendJson(res, { total: db.countStrains({ q, type, rarity, effect }), results: db.listStrains({ q, type, rarity, effect, limit }) });
 }
 async function apiKudos(req, res, id) {
   const r = await db.addKudos(id);
