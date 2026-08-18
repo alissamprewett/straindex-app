@@ -32,6 +32,55 @@ async function likeGrowTip(id, btn) {
   }
 }
 
+// ------------------------------------------------------------ strain search
+// Live search on /strains — fetches /api/strains as you type instead of
+// resubmitting the whole page on every keystroke (which used to reload the
+// page and kick focus out of the search box after each letter).
+(function initStrainSearch() {
+  const input = document.getElementById('strain-search-input');
+  const resultsEl = document.getElementById('strain-search-results');
+  const countEl = document.getElementById('strain-search-count');
+  if (!input || !resultsEl || !countEl) return;
+
+  const typeVal = document.getElementById('strain-search-type').value;
+  const rarityVal = document.getElementById('strain-search-rarity').value;
+
+  function escHtml(str) {
+    return String(str ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  }
+  const rarityLabels = { common: 'Common', uncommon: 'Uncommon', rare: 'Rare', legendary: 'Legendary' };
+  function rarityLabel(r) { return rarityLabels[r] || r; }
+
+  function render(data) {
+    countEl.textContent = data.total > 60
+      ? `Showing 60 of ${data.total.toLocaleString()} — refine your search to narrow it down.`
+      : `${data.total} strain${data.total === 1 ? '' : 's'}`;
+    resultsEl.innerHTML = data.results.map(s => `
+      <a class="library-row" href="/strains/${s.id}" style="text-decoration:none;color:inherit;">
+        <span class="icon">${s.icon}</span>
+        <div class="info">
+          <div class="nm">${escHtml(s.name)}</div>
+          <div class="sub">${escHtml(s.type)} · ${rarityLabel(s.rarity)} · THC ${escHtml(s.thc)}</div>
+        </div>
+        <span class="rarity-tag rarity-${s.rarity}">${rarityLabel(s.rarity)}</span>
+      </a>`).join('') || `<div class="empty-note">No strains match your filters.</div>`;
+  }
+
+  let debounceTimer;
+  input.addEventListener('input', () => {
+    clearTimeout(debounceTimer);
+    const q = input.value;
+    debounceTimer = setTimeout(async () => {
+      const params = new URLSearchParams({ q, type: typeVal, rarity: rarityVal, limit: '60' });
+      const res = await fetch(`/api/strains?${params}`);
+      if (!res.ok) return;
+      render(await res.json());
+      // Keep the URL in sync (so refresh/back/share still works) without navigating.
+      history.replaceState(null, '', `/strains?${params}`);
+    }, 200);
+  });
+})();
+
 // ------------------------------------------------------------ dispensaries
 // "Use my location" button on /dispensaries — asks the browser for GPS
 // coordinates, then reloads the page with ?lat=&lon= so the server can look
