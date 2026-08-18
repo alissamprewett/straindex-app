@@ -473,5 +473,1093 @@
       "Store in a sealed jar in the fridge for up to a week."
     ],
     "dosing": "Since the infused oil is only part of the total oil in the recipe, calculate the dose based on the infused-oil portion only, divided by the total jar volume."
+  },
+  {
+    "id": "r20",
+    "title": "Cannabis-Infused Ghee",
+    "time": "≈3.5 hrs",
+    "icon": "🧈",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "Clarified butter infusion — nuttier flavor than regular cannabutter and keeps longer at room temperature.",
+    "ingredients": [
+      "1 cup (7–10g) ground cannabis flower, decarboxylated",
+      "2 cups unsalted butter"
+    ],
+    "steps": [
+      "Decarb the flower at 240°F for 30–40 minutes.",
+      "Melt butter in a saucepan over low heat until it separates into milk solids and clear liquid.",
+      "Skim off the white foam on top, then carefully pour off the clear golden ghee, leaving the milky solids at the bottom.",
+      "Return the ghee to low heat, stir in the decarbed flower, and simmer 2–3 hours, stirring occasionally.",
+      "Strain through cheesecloth into a jar and let cool."
+    ],
+    "dosing": "Ghee behaves like a more concentrated version of cannabutter — start with slightly less than you'd use of a regular infusion.",
+    "category": "Infusion Base",
+    "status": "approved"
+  },
+  {
+    "id": "r21",
+    "title": "Cannabis-Infused Avocado Oil",
+    "time": "≈3 hrs",
+    "icon": "🥑",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "A neutral, high-smoke-point oil good for searing or roasting without burning off the infusion.",
+    "ingredients": [
+      "1 cup (7–10g) ground cannabis flower, decarboxylated",
+      "2 cups avocado oil"
+    ],
+    "steps": [
+      "Decarb the flower at 240°F for 30–40 minutes.",
+      "Combine oil and flower in a saucepan or slow cooker on low.",
+      "Simmer at 160–200°F for 2–3 hours, stirring occasionally.",
+      "Strain through cheesecloth into a sealed jar."
+    ],
+    "dosing": "Label with total THC and batch size — avocado oil's high smoke point makes it easy to forget it's infused when cooking hot.",
+    "category": "Infusion Base",
+    "status": "approved"
+  },
+  {
+    "id": "r22",
+    "title": "Cannabis Simple Syrup",
+    "time": "≈15 min",
+    "icon": "🍯",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "A pourable sweetener made from your tincture — the fastest way to dose a drink.",
+    "ingredients": [
+      "1 cup sugar",
+      "1 cup water",
+      "2 tbsp cannabis tincture"
+    ],
+    "steps": [
+      "Combine sugar and water in a saucepan over medium heat, stirring until sugar dissolves.",
+      "Simmer 2–3 minutes, then remove from heat and let cool to room temperature.",
+      "Stir in the tincture once cooled (heat can evaporate the alcohol and reduce potency).",
+      "Store in a sealed bottle in the fridge."
+    ],
+    "dosing": "Divide the tincture's total THC by the syrup's volume to know the dose per tablespoon.",
+    "category": "Infusion Base",
+    "status": "approved"
+  },
+  {
+    "id": "r23",
+    "title": "Quick Instant Pot Cannabutter",
+    "time": "≈1.5 hrs",
+    "icon": "⏱️",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "A pressure-cooker shortcut that cuts the usual 2–3 hour simmer down significantly.",
+    "ingredients": [
+      "1 cup (7–10g) ground cannabis flower, decarboxylated",
+      "1 cup unsalted butter",
+      "1 cup water"
+    ],
+    "steps": [
+      "Decarb the flower at 240°F for 30–40 minutes.",
+      "Add butter, water, and decarbed flower to the Instant Pot.",
+      "Seal and cook on high pressure for 60 minutes, then let pressure release naturally.",
+      "Strain through cheesecloth into a container, pressing gently.",
+      "Refrigerate until solid, then drain off the water layer underneath."
+    ],
+    "dosing": "Same 1:1 ratio as stovetop cannabutter — just faster. Test with a small amount first.",
+    "category": "Infusion Base",
+    "status": "approved"
+  },
+  {
+    "id": "r24",
+    "title": "Cannabis Rosin (Solventless)",
+    "time": "≈20 min + press",
+    "icon": "🗜️",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "A solvent-free concentrate made by pressing flower with heat — more advanced, but avoids alcohol or oil entirely.",
+    "ingredients": [
+      "3.5g cannabis flower, un-decarbed",
+      "Parchment paper",
+      "A hair straightener or rosin press"
+    ],
+    "steps": [
+      "Place a small bud between two folded pieces of parchment paper.",
+      "Press with a heated hair straightener (around 200°F) for 3–10 seconds with firm, even pressure.",
+      "Peel back the parchment to reveal the pressed rosin — scrape it into a jar.",
+      "Repeat with remaining flower in small batches."
+    ],
+    "dosing": "Rosin is far more concentrated than flower by volume — a rice-grain-sized amount is already a substantial dose. Start extremely small if using it in edibles.",
+    "category": "Infusion Base",
+    "status": "approved"
+  },
+  {
+    "id": "r25",
+    "title": "Cannabis Banana Bread",
+    "time": "≈1 hr 10 min",
+    "icon": "🍌",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "A moist, comforting loaf built on cannabutter — a great way to use up overripe bananas.",
+    "ingredients": [
+      "½ cup cannabutter, melted",
+      "1 cup sugar",
+      "2 eggs",
+      "3 ripe bananas, mashed",
+      "1 tsp vanilla extract",
+      "1½ cups flour",
+      "1 tsp baking soda",
+      "½ tsp salt"
+    ],
+    "steps": [
+      "Preheat oven to 350°F. Grease a loaf pan.",
+      "Whisk melted cannabutter and sugar together, then beat in eggs, mashed bananas, and vanilla.",
+      "In a separate bowl, whisk flour, baking soda, and salt, then fold into the wet mixture.",
+      "Pour into the pan and bake 55–65 minutes, until a toothpick comes out clean.",
+      "Cool completely before slicing into a set number of even pieces."
+    ],
+    "dosing": "Weigh the baked loaf and divide by the weight of one slice to know exactly how many slices it makes, then divide total THC evenly.",
+    "category": "Baked Goods",
+    "status": "approved"
+  },
+  {
+    "id": "r26",
+    "title": "Cannabis Blondies",
+    "time": "≈45 min",
+    "icon": "🍯",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "A butterscotch-flavored cousin of the brownie, built on cannabutter.",
+    "ingredients": [
+      "1 cup cannabutter, melted",
+      "1½ cups brown sugar",
+      "2 eggs",
+      "1 tsp vanilla extract",
+      "1¾ cups flour",
+      "1 tsp baking powder",
+      "½ tsp salt",
+      "1 cup white chocolate chips"
+    ],
+    "steps": [
+      "Preheat oven to 350°F. Line an 8×8\" pan with parchment.",
+      "Whisk melted cannabutter and brown sugar together, then beat in eggs and vanilla.",
+      "Fold in flour, baking powder, and salt until just combined, then stir in chocolate chips.",
+      "Spread into the pan and bake 25–30 minutes, until edges are golden.",
+      "Cool completely before cutting into a set number of even squares."
+    ],
+    "dosing": "Cut into a specific grid (e.g. 4×4 = 16 squares) before eating so every piece is a known, even dose.",
+    "category": "Baked Goods",
+    "status": "approved"
+  },
+  {
+    "id": "r27",
+    "title": "Cannabis Cinnamon Rolls",
+    "time": "≈2 hrs",
+    "icon": "🥐",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "A weekend project — soft, spiced rolls with a cannabutter-based dough and glaze.",
+    "ingredients": [
+      "¾ cup warm milk",
+      "2¼ tsp active dry yeast",
+      "¼ cup sugar",
+      "1 egg",
+      "4 tbsp cannabutter, melted",
+      "3 cups flour",
+      "½ tsp salt",
+      "¼ cup regular butter, softened (for filling)",
+      "⅔ cup brown sugar (for filling)",
+      "2 tbsp cinnamon (for filling)",
+      "1 cup powdered sugar (for glaze)",
+      "2–3 tbsp milk (for glaze)"
+    ],
+    "steps": [
+      "Combine warm milk, yeast, and a pinch of sugar; let sit 5–10 minutes until foamy.",
+      "Mix in remaining sugar, egg, and melted cannabutter, then gradually add flour and salt to form a dough.",
+      "Knead 5–7 minutes, then let rise in a covered bowl for 1 hour, until doubled.",
+      "Roll dough into a rectangle, spread with softened butter, then sprinkle with brown sugar and cinnamon.",
+      "Roll into a log, slice into a set number of rolls, and place in a greased pan. Let rise 30 minutes.",
+      "Bake at 350°F for 20–25 minutes until golden.",
+      "Whisk powdered sugar and milk into a glaze, drizzle over warm rolls."
+    ],
+    "dosing": "The cannabutter is only in the dough, not the filling or glaze — divide total THC by the number of rolls the dough made.",
+    "category": "Baked Goods",
+    "status": "approved"
+  },
+  {
+    "id": "r28",
+    "title": "Cannabis Banana Muffins",
+    "time": "≈35 min",
+    "icon": "🧁",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "A quicker, individually-portioned alternative to banana bread — easier to dose evenly.",
+    "ingredients": [
+      "½ cup cannabutter, melted",
+      "¾ cup sugar",
+      "2 eggs",
+      "2 ripe bananas, mashed",
+      "1½ cups flour",
+      "1 tsp baking soda",
+      "½ tsp salt",
+      "1 tsp cinnamon"
+    ],
+    "steps": [
+      "Preheat oven to 350°F. Line a 12-cup muffin tin.",
+      "Whisk melted cannabutter and sugar, then beat in eggs and mashed banana.",
+      "Fold in flour, baking soda, salt, and cinnamon until just combined.",
+      "Divide evenly among the 12 muffin cups.",
+      "Bake 18–22 minutes until a toothpick comes out clean."
+    ],
+    "dosing": "Since this makes exactly 12 muffins, dosing is simple: divide the total THC in the batch by 12.",
+    "category": "Baked Goods",
+    "status": "approved"
+  },
+  {
+    "id": "r29",
+    "title": "Cannabis Pumpkin Bread",
+    "time": "≈1 hr 15 min",
+    "icon": "🎃",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "A spiced, moist loaf built on cannabutter — a seasonal favorite that keeps well.",
+    "ingredients": [
+      "½ cup cannabutter, melted",
+      "1 cup sugar",
+      "2 eggs",
+      "1 cup canned pumpkin puree",
+      "1½ cups flour",
+      "1 tsp baking soda",
+      "½ tsp salt",
+      "1 tsp cinnamon",
+      "½ tsp nutmeg",
+      "¼ tsp cloves"
+    ],
+    "steps": [
+      "Preheat oven to 350°F. Grease a loaf pan.",
+      "Whisk melted cannabutter and sugar, then beat in eggs and pumpkin puree.",
+      "Fold in flour, baking soda, salt, and spices until just combined.",
+      "Pour into the pan and bake 55–65 minutes, until a toothpick comes out clean.",
+      "Cool completely before slicing into a set number of even pieces."
+    ],
+    "dosing": "Same approach as banana bread — weigh the loaf, decide on a slice count, and divide total THC evenly.",
+    "category": "Baked Goods",
+    "status": "approved"
+  },
+  {
+    "id": "r30",
+    "title": "Cannabis Shortbread Cookies",
+    "time": "≈35 min + chill",
+    "icon": "🍪",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "A simple, buttery cookie that lets the cannabutter flavor come through clearly.",
+    "ingredients": [
+      "1 cup cannabutter, softened",
+      "½ cup powdered sugar",
+      "2 cups flour",
+      "¼ tsp salt",
+      "1 tsp vanilla extract"
+    ],
+    "steps": [
+      "Cream cannabutter and powdered sugar until light and fluffy.",
+      "Mix in vanilla, then gradually add flour and salt until a soft dough forms.",
+      "Shape into a log, wrap in plastic, and chill for 30 minutes.",
+      "Preheat oven to 325°F. Slice the log into a set number of even rounds.",
+      "Bake 12–15 minutes until edges are just barely golden. Cool completely before handling."
+    ],
+    "dosing": "Slicing the log into a known number of even rounds before baking is the easiest way to keep every cookie's dose consistent.",
+    "category": "Baked Goods",
+    "status": "approved"
+  },
+  {
+    "id": "r31",
+    "title": "Cannabis Snickerdoodles",
+    "time": "≈35 min",
+    "icon": "🍪",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "A cinnamon-sugar classic, built on cannabutter for an easy, evenly-dosed treat.",
+    "ingredients": [
+      "1 cup cannabutter, softened",
+      "1½ cups sugar",
+      "2 eggs",
+      "2¾ cups flour",
+      "2 tsp cream of tartar",
+      "1 tsp baking soda",
+      "¼ tsp salt",
+      "3 tbsp sugar + 1 tbsp cinnamon (for rolling)"
+    ],
+    "steps": [
+      "Preheat oven to 375°F. Line baking sheets with parchment.",
+      "Cream cannabutter and sugar, then beat in eggs.",
+      "Fold in flour, cream of tartar, baking soda, and salt until combined.",
+      "Scoop dough into a set number of even balls, roll each in the cinnamon-sugar mix.",
+      "Place on sheets and bake 8–10 minutes until edges are set. Cool before eating."
+    ],
+    "dosing": "Scoop dough with a consistent-size cookie scoop so every ball — and every finished cookie — is close to the same dose.",
+    "category": "Baked Goods",
+    "status": "approved"
+  },
+  {
+    "id": "r32",
+    "title": "Cannabis Peanut Butter Cups",
+    "time": "≈30 min + chill",
+    "icon": "🥜",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "A homemade take on the classic candy, using infused peanut butter and melted chocolate.",
+    "ingredients": [
+      "12 oz chocolate chips, melted",
+      "1 cup cannabis-infused peanut butter",
+      "2 tbsp powdered sugar",
+      "Cupcake liners"
+    ],
+    "steps": [
+      "Line a muffin tin with small cupcake liners.",
+      "Spoon a thin layer of melted chocolate into each liner and chill 10 minutes until set.",
+      "Mix infused peanut butter with powdered sugar until it holds together, then flatten a small disc onto each chocolate layer.",
+      "Top with more melted chocolate, covering the peanut butter completely.",
+      "Chill for at least 1 hour until fully set."
+    ],
+    "dosing": "Since the peanut butter is the only infused ingredient, divide its total THC by the number of cups made.",
+    "category": "Gummies & Candy",
+    "status": "approved"
+  },
+  {
+    "id": "r33",
+    "title": "Cannabis Hard Candy",
+    "time": "≈30 min",
+    "icon": "🍭",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "Classic hard candy lollipops made with tincture — long shelf life and easy to dose individually.",
+    "ingredients": [
+      "1 cup sugar",
+      "⅓ cup light corn syrup",
+      "¾ cup water",
+      "1 tsp flavoring extract (e.g. cherry, lemon)",
+      "1 tbsp cannabis tincture",
+      "Lollipop sticks and molds"
+    ],
+    "steps": [
+      "Combine sugar, corn syrup, and water in a saucepan over medium heat.",
+      "Cook without stirring until a candy thermometer reads 300°F (hard-crack stage).",
+      "Remove from heat and let cool slightly (to below 200°F) before stirring in the tincture and flavoring — high heat can evaporate the alcohol.",
+      "Pour into lollipop molds with sticks and let cool completely until hard."
+    ],
+    "dosing": "Divide the tincture's total THC by the number of lollipops poured. Hard candy is easy to nibble slowly to control dosing.",
+    "category": "Gummies & Candy",
+    "status": "approved"
+  },
+  {
+    "id": "r34",
+    "title": "Cannabis Fudge",
+    "time": "≈20 min + chill",
+    "icon": "🍫",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "Rich, dense chocolate fudge built on cannabutter — a small piece goes a long way.",
+    "ingredients": [
+      "1 cup cannabutter",
+      "4 cups powdered sugar",
+      "½ cup cocoa powder",
+      "¼ cup milk",
+      "1 tsp vanilla extract",
+      "Pinch of salt"
+    ],
+    "steps": [
+      "Line an 8×8\" pan with parchment paper.",
+      "Melt cannabutter in a saucepan over low heat.",
+      "Whisk in powdered sugar, cocoa powder, and milk until smooth.",
+      "Remove from heat and stir in vanilla and salt.",
+      "Pour into the pan and refrigerate at least 2 hours until firm.",
+      "Cut into a set number of small squares."
+    ],
+    "dosing": "Fudge is rich and calorie-dense on top of being infused — cut pieces smaller than you think you need.",
+    "category": "Gummies & Candy",
+    "status": "approved"
+  },
+  {
+    "id": "r35",
+    "title": "Cannabis Rice Krispie Treats",
+    "time": "≈20 min + set",
+    "icon": "🍚",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "The classic no-bake treat, made with cannabutter instead of regular butter.",
+    "ingredients": [
+      "3 tbsp cannabutter",
+      "1 bag (10oz) mini marshmallows",
+      "6 cups rice cereal"
+    ],
+    "steps": [
+      "Melt cannabutter in a large pot over low heat.",
+      "Add marshmallows and stir until completely melted and smooth.",
+      "Remove from heat and fold in rice cereal until evenly coated.",
+      "Press into a greased 9×13\" pan while still warm.",
+      "Let cool completely before cutting into a set number of even squares."
+    ],
+    "dosing": "Press the mixture into an even layer before cutting a consistent grid, so every square gets roughly the same dose.",
+    "category": "Gummies & Candy",
+    "status": "approved"
+  },
+  {
+    "id": "r36",
+    "title": "Cannabis Marshmallows",
+    "time": "≈40 min + set",
+    "icon": "☁️",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "Homemade marshmallows infused with tincture — soft, sweet, and easy to dose per piece.",
+    "ingredients": [
+      "3 packets unflavored gelatin",
+      "1 cup cold water, divided",
+      "1½ cups sugar",
+      "1 cup corn syrup",
+      "¼ tsp salt",
+      "1 tsp vanilla extract",
+      "2 tbsp cannabis tincture",
+      "Powdered sugar for dusting"
+    ],
+    "steps": [
+      "Sprinkle gelatin over ½ cup cold water in a stand mixer bowl; let bloom 10 minutes.",
+      "Heat sugar, corn syrup, remaining ½ cup water, and salt in a saucepan until it reaches 240°F.",
+      "With the mixer running on low, slowly pour the hot syrup into the bloomed gelatin.",
+      "Increase speed to high and whip 10–12 minutes until thick, glossy, and tripled in volume.",
+      "Stir in vanilla and tincture, then spread into a pan dusted with powdered sugar.",
+      "Let set uncovered for at least 4 hours, then cut into squares and dust with more powdered sugar."
+    ],
+    "dosing": "Cut into a known number of even squares and divide the tincture's total THC accordingly.",
+    "category": "Gummies & Candy",
+    "status": "approved"
+  },
+  {
+    "id": "r37",
+    "title": "Cannabis Toffee",
+    "time": "≈30 min + chill",
+    "icon": "🍬",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "A buttery, crunchy toffee made with cannabutter and topped with chocolate.",
+    "ingredients": [
+      "1 cup cannabutter",
+      "1 cup sugar",
+      "2 tbsp water",
+      "1 cup chocolate chips",
+      "½ cup chopped nuts (optional)"
+    ],
+    "steps": [
+      "Line a baking sheet with parchment paper.",
+      "Combine cannabutter, sugar, and water in a saucepan over medium heat.",
+      "Cook, stirring constantly, until a candy thermometer reads 300°F (hard-crack stage) and the mixture turns amber.",
+      "Pour immediately onto the lined baking sheet, spreading into an even layer.",
+      "Sprinkle chocolate chips on top; let sit 2 minutes to soften, then spread into a smooth layer. Top with nuts if using.",
+      "Chill until fully hardened, then break into pieces."
+    ],
+    "dosing": "Toffee is easy to break unevenly — try scoring it into a grid before it fully hardens so pieces come out more consistent.",
+    "category": "Gummies & Candy",
+    "status": "approved"
+  },
+  {
+    "id": "r38",
+    "title": "Cannabis Hot Chocolate",
+    "time": "≈10 min",
+    "icon": "☕",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "A warm, comforting drink using infused milk or cream — the fat helps carry the effects.",
+    "ingredients": [
+      "1 cup whole milk",
+      "2 tbsp cocoa powder",
+      "2 tbsp sugar",
+      "1 tsp cannabis-infused coconut oil",
+      "Pinch of salt",
+      "Marshmallows for topping (optional)"
+    ],
+    "steps": [
+      "Warm the milk in a saucepan over medium-low heat.",
+      "Whisk in cocoa powder, sugar, and salt until dissolved.",
+      "Once steaming, remove from heat and whisk in the infused coconut oil until fully blended.",
+      "Pour into a mug and top with marshmallows if desired."
+    ],
+    "dosing": "Whisk thoroughly right before drinking, since the oil can separate and settle if the mug sits.",
+    "category": "Drinks",
+    "status": "approved"
+  },
+  {
+    "id": "r39",
+    "title": "Cannabis Iced Tea",
+    "time": "≈15 min + chill",
+    "icon": "🧊",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "A refreshing warm-weather drink using tincture — easy to dose glass by glass.",
+    "ingredients": [
+      "4 cups brewed black tea, cooled",
+      "¼ cup sugar or honey",
+      "1 tbsp cannabis tincture",
+      "Lemon slices and ice for serving"
+    ],
+    "steps": [
+      "Brew tea as usual and let it cool to room temperature.",
+      "Stir in sugar or honey while the tea is still slightly warm so it dissolves easily.",
+      "Once fully cooled, stir in the tincture just before serving (or add it glass by glass).",
+      "Serve over ice with lemon slices."
+    ],
+    "dosing": "Dosing glass-by-glass, rather than the whole pitcher, keeps track of exactly how much each person gets.",
+    "category": "Drinks",
+    "status": "approved"
+  },
+  {
+    "id": "r40",
+    "title": "Cannabis Mocktail Mojito",
+    "time": "≈10 min",
+    "icon": "🌿",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "A non-alcoholic mojito using tincture instead of rum for the effects.",
+    "ingredients": [
+      "8–10 mint leaves",
+      "1 tbsp lime juice",
+      "1 tbsp cannabis simple syrup",
+      "Club soda",
+      "Ice",
+      "Lime wedge for garnish"
+    ],
+    "steps": [
+      "Muddle mint leaves and lime juice in the bottom of a glass.",
+      "Add ice and pour in the cannabis simple syrup.",
+      "Top with club soda and stir gently.",
+      "Garnish with a lime wedge and a mint sprig."
+    ],
+    "dosing": "The simple syrup carries the dose — check its label for THC per tablespoon before pouring.",
+    "category": "Drinks",
+    "status": "approved"
+  },
+  {
+    "id": "r41",
+    "title": "Cannabis-Infused Coffee",
+    "time": "≈10 min",
+    "icon": "☕",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "A cannabis twist on your morning cup, using infused coconut oil or creamer.",
+    "ingredients": [
+      "1 cup brewed coffee",
+      "1 tsp cannabis-infused coconut oil",
+      "Milk or creamer, to taste",
+      "Sugar, to taste"
+    ],
+    "steps": [
+      "Brew coffee as usual.",
+      "While still hot, stir in the infused coconut oil until fully blended (a milk frother helps it emulsify).",
+      "Add milk, creamer, and sugar to taste."
+    ],
+    "dosing": "Coconut oil doesn't fully dissolve in coffee — stir well right before drinking so the dose doesn't settle at the bottom of the cup.",
+    "category": "Drinks",
+    "status": "approved"
+  },
+  {
+    "id": "r42",
+    "title": "Cannabis Sparkling Soda",
+    "time": "≈5 min",
+    "icon": "🥤",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "A quick, fizzy drink using tincture — one of the fastest ways to dose without cooking anything.",
+    "ingredients": [
+      "1 can or glass of sparkling water or soda",
+      "1 tbsp cannabis tincture",
+      "Fresh fruit or citrus slices, optional"
+    ],
+    "steps": [
+      "Pour the sparkling water or soda into a glass.",
+      "Stir in the tincture.",
+      "Add fruit or citrus slices if desired and serve immediately."
+    ],
+    "dosing": "Since tincture doesn't fully dissolve in carbonated water, stir just before each sip to keep the dose evenly distributed.",
+    "category": "Drinks",
+    "status": "approved"
+  },
+  {
+    "id": "r43",
+    "title": "Cannabis Smoothie",
+    "time": "≈10 min",
+    "icon": "🥤",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "A fruit smoothie using infused coconut oil — blending helps distribute the dose more evenly than most drinks.",
+    "ingredients": [
+      "1 cup frozen mixed berries",
+      "1 banana",
+      "1 cup milk or non-dairy milk",
+      "1 tsp cannabis-infused coconut oil",
+      "1 tbsp honey (optional)"
+    ],
+    "steps": [
+      "Add all ingredients to a blender.",
+      "Blend on high until smooth, about 30–60 seconds.",
+      "Pour into a glass and serve immediately."
+    ],
+    "dosing": "Blending distributes the infused oil more evenly than stirring alone, making this one of the more consistent drink options for dosing.",
+    "category": "Drinks",
+    "status": "approved"
+  },
+  {
+    "id": "r44",
+    "title": "Cannabis Spiced Apple Cider",
+    "time": "≈20 min",
+    "icon": "🍎",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "A warm, spiced drink for cooler weather, using infused coconut oil for the effects.",
+    "ingredients": [
+      "4 cups apple cider",
+      "1 cinnamon stick",
+      "2 whole cloves",
+      "1 tsp cannabis-infused coconut oil",
+      "Orange slices for garnish"
+    ],
+    "steps": [
+      "Warm the apple cider with the cinnamon stick and cloves in a saucepan over medium-low heat for 10–15 minutes.",
+      "Remove from heat and discard the whole spices.",
+      "Whisk in the infused coconut oil until fully blended.",
+      "Serve warm, garnished with an orange slice."
+    ],
+    "dosing": "Whisk thoroughly right before serving each cup, since the oil can separate as the cider sits.",
+    "category": "Drinks",
+    "status": "approved"
+  },
+  {
+    "id": "r45",
+    "title": "Cannabis Horchata",
+    "time": "≈20 min + chill",
+    "icon": "🥛",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "A creamy, cinnamon rice-milk drink using infused coconut oil.",
+    "ingredients": [
+      "1 cup white rice",
+      "4 cups water, divided",
+      "1 cinnamon stick",
+      "1 can (14oz) sweetened condensed milk",
+      "1 tsp vanilla extract",
+      "1 tsp cannabis-infused coconut oil"
+    ],
+    "steps": [
+      "Combine rice, 2 cups water, and the cinnamon stick in a bowl. Let soak overnight (or at least 4 hours).",
+      "Blend the soaked rice mixture until smooth, then strain through a fine mesh strainer or cheesecloth into a pitcher.",
+      "Stir in the remaining 2 cups water, condensed milk, and vanilla.",
+      "Whisk in the infused coconut oil until blended.",
+      "Chill and stir well before serving over ice."
+    ],
+    "dosing": "Stir the pitcher thoroughly before pouring each glass, since the oil can rise and separate while chilling.",
+    "category": "Drinks",
+    "status": "approved"
+  },
+  {
+    "id": "r46",
+    "title": "Cannabis Lip Balm",
+    "time": "≈20 min",
+    "icon": "💋",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "A simple, non-intoxicating balm for dry lips using infused coconut oil.",
+    "ingredients": [
+      "2 tbsp cannabis-infused coconut oil",
+      "1 tbsp beeswax pellets",
+      "1 tsp honey",
+      "Few drops of vanilla or peppermint extract (optional)"
+    ],
+    "steps": [
+      "Combine infused coconut oil and beeswax in a double boiler over low heat.",
+      "Stir until fully melted and combined.",
+      "Remove from heat and stir in honey and flavoring if using.",
+      "Pour into small lip balm tins or tubes while still liquid.",
+      "Let cool and solidify before capping."
+    ],
+    "dosing": "This is a topical, non-intoxicating product — not meant to be ingested in meaningful amounts.",
+    "category": "Topicals",
+    "status": "approved"
+  },
+  {
+    "id": "r47",
+    "title": "Cannabis Massage Oil",
+    "time": "≈15 min",
+    "icon": "💆",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "A soothing massage oil using infused coconut or olive oil, for localized muscle relief.",
+    "ingredients": [
+      "½ cup cannabis-infused coconut oil, melted (or infused olive oil)",
+      "2 tbsp sweet almond oil",
+      "10 drops lavender or eucalyptus essential oil"
+    ],
+    "steps": [
+      "Combine the infused oil and almond oil in a bottle or jar.",
+      "Add essential oil drops and shake or stir to combine.",
+      "Warm slightly before use if the coconut oil has solidified."
+    ],
+    "dosing": "Topical and non-intoxicating — absorbed through the skin for localized relief, not meant to produce a high.",
+    "category": "Topicals",
+    "status": "approved"
+  },
+  {
+    "id": "r48",
+    "title": "Cannabis Muscle Rub",
+    "time": "≈15 min",
+    "icon": "💪",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "A stronger, more concentrated salve for sore muscles and joints after activity.",
+    "ingredients": [
+      "1 cup cannabis-infused coconut oil",
+      "¼ cup beeswax pellets",
+      "1 tbsp menthol crystals or peppermint essential oil",
+      "1 tsp cayenne extract (optional, for warming effect)"
+    ],
+    "steps": [
+      "Combine infused coconut oil and beeswax in a double boiler over low heat.",
+      "Stir until beeswax is fully melted.",
+      "Remove from heat and stir in menthol or peppermint, and cayenne extract if using.",
+      "Pour into tins and let cool and solidify before capping."
+    ],
+    "dosing": "Non-intoxicating and topical. Wash hands after applying, and avoid contact with eyes if using the cayenne variation.",
+    "category": "Topicals",
+    "status": "approved"
+  },
+  {
+    "id": "r49",
+    "title": "Cannabis Foot Soak",
+    "time": "≈10 min",
+    "icon": "🦶",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "A relaxing Epsom salt soak using infused oil, for tired feet after a long day.",
+    "ingredients": [
+      "2 cups Epsom salt",
+      "2 tbsp cannabis-infused coconut oil, melted",
+      "10 drops peppermint or eucalyptus essential oil"
+    ],
+    "steps": [
+      "Combine Epsom salt, melted infused oil, and essential oil in a bowl, stirring until evenly distributed.",
+      "Store in a sealed jar until ready to use.",
+      "Add a generous scoop to a basin of warm water and soak feet for 15–20 minutes."
+    ],
+    "dosing": "Topical and non-intoxicating — this is about the warm soak plus localized relief, not a high.",
+    "category": "Topicals",
+    "status": "approved"
+  },
+  {
+    "id": "r50",
+    "title": "Cannabis Clay Face Mask",
+    "time": "≈15 min",
+    "icon": "🧖",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "A calming clay mask using infused coconut oil — a spa-night treat, not an edible.",
+    "ingredients": [
+      "2 tbsp bentonite or kaolin clay",
+      "1 tbsp cannabis-infused coconut oil, melted",
+      "1–2 tbsp water or rosewater, as needed"
+    ],
+    "steps": [
+      "Mix the clay and melted infused oil in a small bowl.",
+      "Add water or rosewater a little at a time until you reach a smooth, spreadable paste.",
+      "Apply to clean skin, avoiding the eye area, and let sit 10–15 minutes until mostly dry.",
+      "Rinse off with warm water."
+    ],
+    "dosing": "Topical only, not for ingestion — no THC will meaningfully absorb into the bloodstream from a face mask.",
+    "category": "Topicals",
+    "status": "approved"
+  },
+  {
+    "id": "r51",
+    "title": "Cannabis Hair Oil Treatment",
+    "time": "≈10 min + soak",
+    "icon": "💇",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "A nourishing pre-shampoo treatment using infused coconut oil for shine and scalp care.",
+    "ingredients": [
+      "3 tbsp cannabis-infused coconut oil, melted",
+      "1 tbsp argan oil (optional)"
+    ],
+    "steps": [
+      "Combine infused coconut oil and argan oil if using.",
+      "Massage into the scalp and through the length of dry hair.",
+      "Cover with a shower cap and let sit for 20–30 minutes (or overnight for a deeper treatment).",
+      "Shampoo out thoroughly."
+    ],
+    "dosing": "Topical and non-intoxicating — this stays on the scalp and hair, not absorbed into the bloodstream in any meaningful amount.",
+    "category": "Topicals",
+    "status": "approved"
+  },
+  {
+    "id": "r52",
+    "title": "Cannabis Cooling Aloe Gel",
+    "time": "≈10 min",
+    "icon": "🌵",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "A soothing gel for sunburns or irritated skin, using infused coconut oil and aloe.",
+    "ingredients": [
+      "½ cup pure aloe vera gel",
+      "1 tbsp cannabis-infused coconut oil, melted",
+      "5 drops lavender essential oil (optional)"
+    ],
+    "steps": [
+      "Whisk the melted infused coconut oil into the aloe vera gel until well combined.",
+      "Add lavender essential oil if using.",
+      "Transfer to a clean jar or squeeze bottle.",
+      "Store in the refrigerator for an extra-cooling effect."
+    ],
+    "dosing": "Topical and non-intoxicating — this is meant for skin-soothing, not for any systemic effect.",
+    "category": "Topicals",
+    "status": "approved"
+  },
+  {
+    "id": "r53",
+    "title": "Cannabis Body Butter",
+    "time": "≈20 min",
+    "icon": "🧴",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "A rich, whipped moisturizer using infused coconut oil and shea butter.",
+    "ingredients": [
+      "½ cup shea butter",
+      "¼ cup cannabis-infused coconut oil",
+      "2 tbsp sweet almond oil",
+      "5–10 drops essential oil of choice"
+    ],
+    "steps": [
+      "Melt shea butter and infused coconut oil together in a double boiler over low heat.",
+      "Remove from heat, stir in almond oil and essential oil, then let cool until just beginning to solidify at the edges.",
+      "Whip with a hand mixer for 5–8 minutes until light and fluffy.",
+      "Transfer to a jar and store at room temperature."
+    ],
+    "dosing": "Topical and non-intoxicating — intended for moisturizing, not for producing a high.",
+    "category": "Topicals",
+    "status": "approved"
+  },
+  {
+    "id": "r54",
+    "title": "Cannabis Hummus",
+    "time": "≈10 min",
+    "icon": "🫘",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "A savory dip using infused olive oil — a great way to work cannabis into a snack spread.",
+    "ingredients": [
+      "1 can (15oz) chickpeas, drained",
+      "¼ cup tahini",
+      "2 tbsp lemon juice",
+      "1 clove garlic",
+      "¼ cup cannabis-infused olive oil",
+      "Salt to taste",
+      "Water as needed"
+    ],
+    "steps": [
+      "Combine chickpeas, tahini, lemon juice, and garlic in a food processor.",
+      "Blend while slowly streaming in the infused olive oil.",
+      "Add water a tablespoon at a time until you reach a smooth, dippable consistency.",
+      "Season with salt to taste."
+    ],
+    "dosing": "Divide the infused oil's total THC by the number of servings the batch makes — hummus is easy to snack on more than intended.",
+    "category": "Savory & Snacks",
+    "status": "approved"
+  },
+  {
+    "id": "r55",
+    "title": "Cannabis Vinaigrette",
+    "time": "≈5 min",
+    "icon": "🥗",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "A simple salad dressing using infused olive oil — an easy way to add cannabis to a meal without cooking.",
+    "ingredients": [
+      "¼ cup cannabis-infused olive oil",
+      "2 tbsp balsamic or red wine vinegar",
+      "1 tsp Dijon mustard",
+      "1 tsp honey",
+      "Salt and pepper to taste"
+    ],
+    "steps": [
+      "Whisk all ingredients together in a small bowl or shake in a sealed jar.",
+      "Taste and adjust seasoning as needed.",
+      "Drizzle over salad just before serving."
+    ],
+    "dosing": "Divide the infused oil's total THC by the number of servings of dressing — easy to underestimate how much ends up on a salad.",
+    "category": "Savory & Snacks",
+    "status": "approved"
+  },
+  {
+    "id": "r56",
+    "title": "Cannabis Guacamole",
+    "time": "≈10 min",
+    "icon": "🥑",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "Classic guacamole with infused olive oil stirred in for a savory way to dose.",
+    "ingredients": [
+      "3 ripe avocados",
+      "1 lime, juiced",
+      "2 tbsp cannabis-infused olive oil",
+      "¼ cup diced onion",
+      "1 clove garlic, minced",
+      "Salt to taste",
+      "Diced tomato and cilantro, optional"
+    ],
+    "steps": [
+      "Mash the avocados in a bowl to your preferred consistency.",
+      "Stir in lime juice and infused olive oil.",
+      "Fold in onion, garlic, and salt, plus tomato and cilantro if using.",
+      "Serve immediately with chips or vegetables."
+    ],
+    "dosing": "Divide the infused oil's total THC by the number of servings — guac disappears fast, so portion it out ahead of time if sharing.",
+    "category": "Savory & Snacks",
+    "status": "approved"
+  },
+  {
+    "id": "r57",
+    "title": "Cannabis Mac and Cheese",
+    "time": "≈30 min",
+    "icon": "🧀",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "A comforting classic made with cannabutter in the cheese sauce.",
+    "ingredients": [
+      "8oz elbow macaroni",
+      "3 tbsp cannabutter",
+      "3 tbsp flour",
+      "2 cups milk",
+      "2 cups shredded cheddar cheese",
+      "Salt and pepper to taste"
+    ],
+    "steps": [
+      "Cook macaroni according to package directions; drain.",
+      "In a saucepan, melt cannabutter over medium heat, then whisk in flour and cook 1 minute.",
+      "Gradually whisk in milk, cooking until thickened, about 5 minutes.",
+      "Remove from heat and stir in cheese until melted and smooth.",
+      "Combine sauce with cooked macaroni, season with salt and pepper."
+    ],
+    "dosing": "Divide the cannabutter's total THC by the number of servings the whole pot makes.",
+    "category": "Savory & Snacks",
+    "status": "approved"
+  },
+  {
+    "id": "r58",
+    "title": "Cannabis Deviled Eggs",
+    "time": "≈25 min",
+    "icon": "🥚",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "A party classic with infused mayo or oil folded into the yolk filling.",
+    "ingredients": [
+      "6 hard-boiled eggs, halved",
+      "3 tbsp mayonnaise",
+      "1 tbsp cannabis-infused olive oil",
+      "1 tsp mustard",
+      "Paprika for garnish",
+      "Salt to taste"
+    ],
+    "steps": [
+      "Scoop the yolks into a bowl, keeping the whites intact.",
+      "Mash yolks with mayonnaise, infused olive oil, mustard, and salt until smooth.",
+      "Spoon or pipe the filling back into the egg white halves.",
+      "Sprinkle with paprika before serving."
+    ],
+    "dosing": "Divide the infused oil's total THC by the number of egg halves made — easy to eat several without noticing.",
+    "category": "Savory & Snacks",
+    "status": "approved"
+  },
+  {
+    "id": "r59",
+    "title": "Cannabis Trail Mix",
+    "time": "≈10 min",
+    "icon": "🥜",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "A portable snack mix with infused nuts as the dosing vehicle.",
+    "ingredients": [
+      "2 cups mixed raw nuts",
+      "2 tbsp cannabis-infused coconut oil, melted",
+      "1 cup dried fruit",
+      "½ cup chocolate chips or candy pieces",
+      "Pinch of salt"
+    ],
+    "steps": [
+      "Preheat oven to 300°F.",
+      "Toss the nuts with melted infused coconut oil and salt until evenly coated.",
+      "Spread on a baking sheet and roast for 12–15 minutes, stirring once.",
+      "Let cool completely, then mix with dried fruit and chocolate chips."
+    ],
+    "dosing": "Only the nuts carry the dose — divide the oil's total THC by the weight of nuts used, then estimate by handful size.",
+    "category": "Savory & Snacks",
+    "status": "approved"
+  },
+  {
+    "id": "r60",
+    "title": "Cannabis Salsa",
+    "time": "≈15 min",
+    "icon": "🍅",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "A fresh, savory dip using infused olive oil — mild heat, easy to pair with chips.",
+    "ingredients": [
+      "4 ripe tomatoes, diced",
+      "¼ cup diced onion",
+      "1 jalapeño, minced",
+      "2 tbsp cannabis-infused olive oil",
+      "2 tbsp lime juice",
+      "¼ cup chopped cilantro",
+      "Salt to taste"
+    ],
+    "steps": [
+      "Combine all ingredients in a bowl.",
+      "Stir well and let sit for at least 15 minutes for the flavors to meld.",
+      "Serve with tortilla chips or as a topping."
+    ],
+    "dosing": "Divide the infused oil's total THC by the number of servings — salsa is easy to eat more of than planned.",
+    "category": "Savory & Snacks",
+    "status": "approved"
   }
 ]
