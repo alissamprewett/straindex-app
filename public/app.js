@@ -114,6 +114,66 @@ if ('serviceWorker' in navigator) {
   });
 }
 
+// ---------------------------------------------------------------- check-in: strain picker
+// Live strain search for /checkin — same idea as the effect picker above,
+// but fetches real matches from /api/strains instead of a fixed vocab list,
+// so it scales past whatever a <datalist> can reasonably hold.
+(function initStrainPicker() {
+  const picker = document.getElementById('strain-picker');
+  const searchInput = document.getElementById('strain-picker-search');
+  const resultsBox = document.getElementById('strain-picker-results');
+  const selectedBox = document.getElementById('strain-picker-selected');
+  const hiddenInput = document.getElementById('strain-picker-hidden');
+  const hintBox = document.getElementById('strain-picker-hint');
+  const changeBtn = document.getElementById('strain-picker-change');
+  if (!picker || !searchInput) return;
+
+  function escHtml(str) {
+    return String(str ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  }
+
+  function selectStrain(s) {
+    hiddenInput.value = s.id;
+    selectedBox.innerHTML = `${s.icon} <b>${escHtml(s.name)}</b> <button type="button" id="strain-picker-change" class="btn secondary" style="float:right;padding:2px 10px;">Change</button>`;
+    selectedBox.style.display = '';
+    picker.style.display = 'none';
+    hintBox.style.display = 'none';
+    document.getElementById('strain-picker-change').onclick = clearSelection;
+  }
+  function clearSelection() {
+    hiddenInput.value = '';
+    selectedBox.style.display = 'none';
+    picker.style.display = '';
+    hintBox.style.display = '';
+    searchInput.value = '';
+    searchInput.focus();
+  }
+  if (changeBtn) changeBtn.onclick = clearSelection;
+
+  let debounceTimer;
+  searchInput.addEventListener('input', () => {
+    clearTimeout(debounceTimer);
+    const q = searchInput.value.trim();
+    if (!q) { resultsBox.classList.remove('open'); resultsBox.innerHTML = ''; return; }
+    debounceTimer = setTimeout(async () => {
+      const res = await fetch(`/api/strains?${new URLSearchParams({ q, limit: '8' })}`);
+      if (!res.ok) return;
+      const data = await res.json();
+      resultsBox.innerHTML = data.results.length
+        ? data.results.map(s => `<div class="search-result-row" data-id="${s.id}">${s.icon} ${escHtml(s.name)} <span class="empty-note" style="padding:0;">— ${escHtml(s.type)}</span></div>`).join('')
+        : `<div class="search-no-results">No matches — try a different spelling, or <a href="/strains">browse the library</a>.</div>`;
+      resultsBox.classList.add('open');
+      resultsBox.querySelectorAll('[data-id]').forEach(row => {
+        row.onclick = () => {
+          const match = data.results.find(s => s.id === row.dataset.id);
+          if (match) selectStrain(match);
+          resultsBox.classList.remove('open');
+        };
+      });
+    }, 200);
+  });
+})();
+
 // ---------------------------------------------------------------- check-in
 // Mood/effects search picker (pick 1-5) and photo capture, used on /checkin.
 // window.EFFECT_VOCAB is inlined by the server on that page only.
