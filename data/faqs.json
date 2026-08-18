@@ -1,1 +1,142 @@
-[{"q":"Is indica vs. sativa vs. hybrid actually meaningful?","a":"It's a rough starting point, not a guarantee. Two plants labeled the same way can affect people differently — a strain's terpene and cannabinoid profile predicts the experience better than the indica/sativa label alone. Use the label as a first filter, then check the terpene chart on the card."},{"q":"Why do edibles feel so different from smoking or vaping?","a":"Inhaled cannabis reaches your bloodstream in minutes. Edibles travel through your gut and liver first, where THC is converted into 11-hydroxy-THC — a metabolite that hits harder and lasts longer. Onset is typically 30–120 minutes, with effects peaking 2–4 hours in and lasting 6–8+ hours. Never take a second dose during that waiting window — that's the single most common cause of overconsumption."},{"q":"What are terpenes, and why do strain cards show them?","a":"Terpenes are the aromatic oils that give each strain its scent and flavor, and many people find they also shape the character of the effects alongside THC/CBD. StrainDex shows the top terpenes on every card so you can start noticing your own patterns."},{"q":"Terpene color key","a":"__TERPLEGEND__"},{"q":"Does a higher THC % always mean a stronger or better high?","a":"Not necessarily. THC percentage is one input among several — terpene profile, CBD content, your tolerance, and consumption method all shape the experience. Many people report a more balanced feel from a well-rounded, lower-THC strain than an unbalanced high-THC one."},{"q":"How should I store my stash?","a":"Cool, dark, and airtight is the rule of thumb — a sealed glass jar in a drawer or cabinet away from heat and direct light. Avoid the freezer, which can degrade trichomes over time, and try to control humidity to prevent mold."},{"q":"What's a tolerance break, and do I need one?","a":"Regular use can dull your sensitivity to THC over time. A short break (a few days to a few weeks) lets your body's cannabinoid receptors reset, so effects feel stronger again afterward. It's a personal choice, not a requirement."},{"q":"Is this legal where I live?","a":"Cannabis laws vary widely by country, state, and even city — always check your local regulations before purchasing or consuming, and never travel across borders with it. This app is a concept design and doesn't sell or facilitate access to any product."}]
+[
+  {
+    "q": "Is indica vs. sativa vs. hybrid actually meaningful?",
+    "a": "It's a rough starting point, not a guarantee. Two plants labeled the same way can affect people differently — a strain's terpene and cannabinoid profile predicts the experience better than the indica/sativa label alone. Use the label as a first filter, then check the terpene chart on the card."
+  },
+  {
+    "q": "Why do edibles feel so different from smoking or vaping?",
+    "a": "Inhaled cannabis reaches your bloodstream in minutes. Edibles travel through your gut and liver first, where THC is converted into 11-hydroxy-THC — a metabolite that hits harder and lasts longer. Onset is typically 30–120 minutes, with effects peaking 2–4 hours in and lasting 6–8+ hours. Never take a second dose during that waiting window — that's the single most common cause of overconsumption."
+  },
+  {
+    "q": "What are terpenes, and why do strain cards show them?",
+    "a": "Terpenes are the aromatic oils that give each strain its scent and flavor, and many people find they also shape the character of the effects alongside THC/CBD. StrainDex shows the top terpenes on every card so you can start noticing your own patterns."
+  },
+  {
+    "q": "Terpene color key",
+    "a": "__TERPLEGEND__"
+  },
+  {
+    "q": "Does a higher THC % always mean a stronger or better high?",
+    "a": "Not necessarily. THC percentage is one input among several — terpene profile, CBD content, your tolerance, and consumption method all shape the experience. Many people report a more balanced feel from a well-rounded, lower-THC strain than an unbalanced high-THC one."
+  },
+  {
+    "q": "How should I store my stash?",
+    "a": "Cool, dark, and airtight is the rule of thumb — a sealed glass jar in a drawer or cabinet away from heat and direct light. Avoid the freezer, which can degrade trichomes over time, and try to control humidity to prevent mold."
+  },
+  {
+    "q": "What's a tolerance break, and do I need one?",
+    "a": "Regular use can dull your sensitivity to THC over time. A short break (a few days to a few weeks) lets your body's cannabinoid receptors reset, so effects feel stronger again afterward. It's a personal choice, not a requirement."
+  },
+  {
+    "q": "Is this legal where I live?",
+    "a": "Cannabis laws vary widely by country, state, and even city — always check your local regulations before purchasing or consuming, and never travel across borders with it. This app is a concept design and doesn't sell or facilitate access to any product."
+  },
+  {
+    "q": "What is the endocannabinoid system, and why does it matter?",
+    "a": "Your body already makes its own cannabis-like molecules, called endocannabinoids, and has two main receptor types — CB1 (mostly in the brain and nervous system) and CB2 (mostly in immune tissue) — that they bind to. This system helps regulate things like mood, appetite, pain, sleep, and inflammation, working as a kind of background thermostat that keeps other body systems in balance. THC works partly because it fits into these same receptors, essentially borrowing machinery your body already had.",
+    "source_name": "Harvard Health — \"The Endocannabinoid System: Essential and Mysterious\"",
+    "source_url": "https://www.health.harvard.edu/blog/the-endocannabinoid-system-essential-and-mysterious-202108112569"
+  },
+  {
+    "q": "What's the difference between CBD, CBG, CBN, and CBC?",
+    "a": "These are all cannabinoids, but they behave differently. CBD is non-intoxicating and is the most studied for calming, anti-inflammatory effects. CBG is called the \"mother cannabinoid\" because young plants make it first, before it converts into other cannabinoids — it's also non-intoxicating and is being studied for focus and gut health. CBN forms as THC breaks down over time (which is part of why older cannabis can feel more sedating) and is mildly psychoactive, much weaker than THC. CBC is non-intoxicating and is being studied mainly for anti-inflammatory effects. None of the three minor ones (CBG, CBN, CBC) are anywhere near as well-researched as THC or CBD yet.",
+    "source_name": "Highline Wellness — \"CBD vs. CBG vs. CBN vs. CBC: What's the Difference?\"",
+    "source_url": "https://www.highlinewellness.com/post/cbd-vs-cbg-vs-cbn-vs-cbc-whats-the-difference"
+  },
+  {
+    "q": "Can cannabis interact with my medications?",
+    "a": "Yes, and this is genuinely worth knowing about. THC and CBD are both processed by the same liver enzymes (the cytochrome P450 system) that break down a huge range of prescription drugs, so cannabis can make some medications build up to higher levels than intended, or clear out faster than intended. The best-documented interaction is with warfarin, a blood thinner — cannabis can raise warfarin levels and increase bleeding risk. Other medications flagged for potential interactions include some antidepressants, anti-seizure drugs, and blood thinners generally. If you take any prescription medication regularly, it's worth telling your doctor or pharmacist you use cannabis so they can check for interactions specific to your situation.",
+    "source_name": "The Well by Northwell — \"Yes, Cannabis Can Interact With Other Meds\"",
+    "source_url": "https://thewell.northwell.edu/chronic-diseases-condition/cannabis-drug-interactions"
+  },
+  {
+    "q": "Is it actually risky to drive after using cannabis?",
+    "a": "Yes. Research consistently shows cannabis impairs reaction time, lane tracking, and the ability to multitask — all things driving depends on. Unlike alcohol, there isn't a clean, universally agreed-upon dose-response curve for impairment, which makes it harder to set a single legal limit the way BAC works for alcohol. But the direction of the evidence is clear: driving under the influence of cannabis increases crash risk, and combining cannabis with alcohol is significantly more dangerous than either alone. It's illegal everywhere in the US to drive while impaired by cannabis, regardless of how legal it is to possess.",
+    "source_name": "NHTSA — \"Drug-Impaired Driving\"",
+    "source_url": "https://www.nhtsa.gov/risky-driving/drug-impaired-driving"
+  },
+  {
+    "q": "What's the \"entourage effect\"?",
+    "a": "It's the idea that cannabinoids and terpenes work better together than any single compound does alone — that a full-spectrum product (with a mix of THC, CBD, minor cannabinoids, and terpenes) can produce a different, often more balanced effect than an isolated THC or CBD product at the same dose. It's a widely discussed concept in the cannabis world, but still an active area of research rather than a settled scientific fact — the mechanisms are plausible and some studies support it, but it isn't as rigorously proven as, say, how THC binds to CB1 receptors.",
+    "source_name": "Royal CBD — \"Cannabinoids: Differences Between CBD, CBG, CBDA, CBN, CBC\"",
+    "source_url": "https://royalcbd.com/cbg-cbda-cbn-cbc-cbdv/"
+  },
+  {
+    "q": "Why do some products list THCA instead of THC?",
+    "a": "Raw cannabis flower doesn't actually contain much THC — it mostly contains THCA, a non-intoxicating acidic precursor. Heat converts THCA into THC through a process called decarboxylation, which is why smoking or vaping gets you high instantly (the flame decarboxylates it on the spot) but eating raw flower does almost nothing. Legally, THCA is often measured separately from THC on lab labels because some regulations define \"THC content\" narrowly — but from a practical standpoint, THCA becomes THC the moment you apply heat.",
+    "source_name": "Root Sciences — \"What Is the Ideal Cannabis Decarboxylation Temperature and Time?\"",
+    "source_url": "https://www.rootsciences.com/blog/cannabis-decarboxylation-temperature-and-time/"
+  },
+  {
+    "q": "Is cannabis legal at the federal level in the US?",
+    "a": "No — cannabis remains a Schedule I controlled substance under federal law, the same category as drugs the federal government considers to have no accepted medical use and a high potential for abuse. This creates a real conflict: a state can fully legalize cannabis for medical or recreational use, and it's still technically illegal under federal law. In practice, federal enforcement against individuals in legal states has been limited, but this gap explains a lot of the industry's quirks — like why cannabis businesses struggle to use normal banks, and why research has historically been harder to conduct than for legal substances.",
+    "source_name": "Congressional Research Service, via Congress.gov — \"Marijuana Use and Highway Safety\"",
+    "source_url": "https://www.congress.gov/crs-product/R45719"
+  },
+  {
+    "q": "Can I travel with cannabis, especially by air?",
+    "a": "This is a common point of confusion. Airports and the airspace above them fall under federal jurisdiction, and cannabis remains federally illegal — so flying with it is legally risky even between two states where it's fully legal, and the TSA's official policy is to refer any cannabis they find to law enforcement. In practice, enforcement varies a lot by airport and amount, but there's no guarantee, and crossing international borders with cannabis is a much bigger risk (including into Canada, despite its own legalization). If you're unsure, the safest move is simply not to travel with it.",
+    "source_name": "Congressional Research Service, via Congress.gov — \"Marijuana Use and Highway Safety\"",
+    "source_url": "https://www.congress.gov/crs-product/R45719"
+  },
+  {
+    "q": "Is cannabis addictive?",
+    "a": "It can be, for some people, though the picture is more nuanced than with substances like opioids or alcohol. Clinicians use the term Cannabis Use Disorder to describe a pattern of use that causes real problems in someone's life but continues anyway — things like needing more to get the same effect, unsuccessful attempts to cut back, or cannabis interfering with work or relationships. Research suggests roughly 1 in 10 people who use cannabis will develop some degree of dependence, with that risk rising for people who start as teenagers or use heavily and frequently. It's a real risk to take seriously, even though cannabis dependence generally looks different from opioid or alcohol dependence.",
+    "source_name": "National Institute on Drug Abuse — \"Cannabis (Marijuana) Research Report\"",
+    "source_url": "https://nida.nih.gov/publications/research-reports/marijuana/what-marijuana"
+  },
+  {
+    "q": "Is cannabis safe during pregnancy or breastfeeding?",
+    "a": "No — this is one of the clearer areas of consensus in cannabis research. THC crosses the placenta and is also present in breast milk, and studies have linked prenatal cannabis exposure to changes in fetal brain development and increased risk of neurocognitive and neuropsychiatric issues later in childhood. Major health organizations, including the CDC and ACOG, recommend avoiding cannabis entirely during pregnancy and while breastfeeding. If you're pregnant, trying to become pregnant, or breastfeeding, talk to your doctor about this directly rather than relying on general information like this.",
+    "source_name": "Peer-reviewed research on prenatal cannabis exposure (bioRxiv)",
+    "source_url": "https://www.biorxiv.org/content/10.64898/2025.12.10.693544.full.pdf"
+  },
+  {
+    "q": "What is \"greening out,\" and what should I do if it happens?",
+    "a": "\"Greening out\" is the common term for taking in more THC than your body can comfortably handle — usually from edibles, since the delayed onset makes it easy to accidentally double up before the first dose has kicked in. Symptoms can include nausea, dizziness, rapid heartbeat, sweating, paranoia, or vomiting. It's intensely unpleasant but not typically medically dangerous on its own — the standard advice is to sit or lie down somewhere safe, sip water, try to stay calm (anxiety makes it feel worse), and let it pass, which usually takes a few hours. CBD is sometimes reported to help take the edge off a THC-heavy experience, though evidence for this is still informal. If symptoms are severe or you're worried, it's always okay to seek medical help.",
+    "source_name": "Leafly — \"Edible Dosing Guide\"",
+    "source_url": "https://www.leafly.com/learn/consume/edibles/edible-dosing"
+  },
+  {
+    "q": "How long does THC stay in your system, and can I test positive after just one use?",
+    "a": "THC is stored in body fat and released slowly, which is why detection windows vary so much by individual and by test type. Roughly speaking: a urine test (the most common workplace test) can detect THC for a few days after occasional use, but for daily or heavy users, it can be detectable for a month or longer, since it keeps accumulating in fat tissue. Blood tests generally have a shorter window (hours to a couple of days), while hair tests can detect use for months. A single use can absolutely show up on a sensitive test, especially urine — there's no universal \"safe\" number of days.",
+    "source_name": "Huestis MA, \"Human Cannabinoid Pharmacokinetics,\" cited via PubMed",
+    "source_url": "https://pubmed.ncbi.nlm.nih.gov/37740600/"
+  },
+  {
+    "q": "What's the actual difference between hemp and marijuana?",
+    "a": "Botanically, they're the same plant species (Cannabis sativa) — the difference is legal and chemical, not biological. In the US, \"hemp\" is legally defined as cannabis containing 0.3% THC or less by dry weight; anything above that threshold is legally \"marijuana.\" Hemp was federally legalized by the 2018 Farm Bill specifically because of that low-THC cutoff, which is also why hemp-derived CBD products are more widely available than THC products, even in states where recreational cannabis isn't legal.",
+    "source_name": "Dad Grass — \"CBD vs CBG vs CBN vs THC\"",
+    "source_url": "https://dadgrass.com/blogs/dad-grass-blog/cbd-vs-cbg-vs-cbn-vs-thc"
+  },
+  {
+    "q": "Can CBD products actually contain THC even if the label says they don't?",
+    "a": "Yes, and this is a real, documented problem in the industry. Because CBD products (especially hemp-derived ones) are inconsistently regulated, independent lab testing has repeatedly found products with significantly more THC than labeled, or products with barely any CBD at all. If drug testing or THC exposure is a concern for you, look for products with a Certificate of Analysis (COA) from an independent lab — not just the manufacturer's own testing — and check that the actual THC content shown is genuinely at or below what you expect.",
+    "source_name": "Royal CBD — \"Cannabinoids: Differences Between CBD, CBG, CBDA, CBN, CBC\"",
+    "source_url": "https://royalcbd.com/cbg-cbda-cbn-cbc-cbdv/"
+  },
+  {
+    "q": "What is \"microdosing\" cannabis?",
+    "a": "Microdosing means taking a very small amount — often 1–2.5mg of THC, well below what most people would consider a full recreational dose — with the goal of getting subtle benefits (like mild mood lift or reduced anxiety) without significant intoxication. It's popular with people who want to function normally while getting some effect, or who are especially sensitive to THC. Because the dose is so low, it's much easier to microdose accurately with edibles, tinctures, or low-dose products than with smoking or vaping, where dose control is inherently rougher.",
+    "source_name": "Tahoe Green — \"Edibles for Beginners: A Guide to Dosing and Effects\"",
+    "source_url": "https://tahoegreen.com/edibles-for-beginners-a-guide-to-dosing-and-effects/"
+  },
+  {
+    "q": "How does tolerance actually build, and do tolerance breaks really work?",
+    "a": "With regular use, your CB1 receptors gradually become less responsive to THC — your body essentially turns down the volume on a signal it's hearing constantly, so the same amount produces less effect over time. This is a real, measurable biological adaptation, not just a feeling. Taking a break (commonly 2–4 weeks, though even a few days helps some) allows CB1 receptor density and sensitivity to recover, which is why tolerance breaks genuinely work — they're not just a placebo or folk wisdom, they're giving your receptors time to reset.",
+    "source_name": "Psychology Today — \"The Science of the Endocannabinoid System\"",
+    "source_url": "https://www.psychologytoday.com/us/blog/an-interpersonal-lens/202510/the-science-of-the-endocannabinoid-system"
+  },
+  {
+    "q": "What's the difference between indoor, greenhouse, and outdoor-grown cannabis?",
+    "a": "Indoor growing gives the most control over light, temperature, and humidity, which is why it's associated with the most consistent, visually \"perfect\" bud — but it's also the most expensive and energy-intensive method. Outdoor growing relies on the sun and natural seasons, is the cheapest and most sustainable, but gives growers less control and more exposure to pests, weather, and inconsistent results year to year. Greenhouse growing is a middle ground — using natural sunlight (cheaper than indoor lighting) while still offering some environmental control and protection from the elements. None of the three methods is inherently \"better\" cannabis — they're different tradeoffs between cost, consistency, and environmental impact.",
+    "source_name": "General cultivation industry knowledge, cross-referenced across multiple grower guides",
+    "source_url": ""
+  },
+  {
+    "q": "What do the numbers on a lab test (Certificate of Analysis) actually mean?",
+    "a": "A Certificate of Analysis, or COA, is an independent lab's report on what's actually in a product. The most important numbers are usually THC and CBD percentages (how potent it is), but a thorough COA also screens for contaminants — pesticides, heavy metals, residual solvents (important for concentrates), and microbial contamination like mold. A terpene panel, if included, breaks down the aromatic compounds that shape flavor and may influence effects. If a product doesn't come with a COA at all, or the COA is from the producer's own in-house lab rather than an independent third party, that's worth treating as a red flag rather than reassurance.",
+    "source_name": "General regulatory/testing industry knowledge, cross-referenced across multiple state cannabis regulator guidance pages",
+    "source_url": ""
+  }
+]
