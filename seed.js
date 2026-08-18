@@ -22,15 +22,18 @@ async function main() {
   console.log(`Seeding ${strains.length} strains (this takes a minute or two)...`);
   for (const s of strains) await db.insertStrain(s);
 
-  if (db.listFaqs().length === 0) {
-    console.log(`Seeding ${faqs.length} FAQ entries...`);
-    for (let i = 0; i < faqs.length; i++) {
-      const f = faqs[i];
-      if (f.a === '__TERPLEGEND__') continue; // that entry was a UI hook in the old prototype, not real content
-      await db.createFaq({ question: f.q, answer: f.a, sort_order: i });
+  {
+    const existingQuestions = new Set(db.listFaqs().map(f => f.question));
+    const toAdd = faqs.filter(f => f.a !== '__TERPLEGEND__' && !existingQuestions.has(f.q));
+    if (toAdd.length) {
+      console.log(`Seeding ${toAdd.length} new FAQ entr${toAdd.length === 1 ? 'y' : 'ies'} (${existingQuestions.size} already in DB)...`);
+      let nextSort = db.listFaqs().length;
+      for (const f of toAdd) {
+        await db.createFaq({ question: f.q, answer: f.a, sort_order: nextSort++, source_name: f.source_name, source_url: f.source_url });
+      }
+    } else {
+      console.log('No new FAQ entries to add.');
     }
-  } else {
-    console.log('FAQs already present, skipping (edit them via /admin instead).');
   }
 
   {

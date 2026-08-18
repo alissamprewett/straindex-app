@@ -354,7 +354,7 @@ function pageFaq(req, res) {
     ${faqs.map(f => `
       <div class="faq-item">
         <div class="faq-q" onclick="toggleFaq(this)"><span>${esc(f.question)}</span><span>⌄</span></div>
-        <div class="faq-a">${esc(f.answer)}</div>
+        <div class="faq-a">${esc(f.answer)}${f.source_url ? `<div class="empty-note" style="padding:6px 0 0;">Source: <a href="${esc(f.source_url)}" target="_blank" rel="noopener noreferrer">${esc(f.source_name || f.source_url)}</a></div>` : ''}</div>
       </div>`).join('') || `<div class="empty-note">No FAQ entries yet.</div>`}
     <p class="empty-note" style="margin-top:16px;">Have a question you don't see here? Ask the assistant on the <a href="/chat">Ask</a> tab.</p>
   `;
@@ -645,6 +645,10 @@ function pageAdminFaqs(req, res) {
         <input type="text" name="question" required>
         <label class="field-label">Answer</label>
         <textarea name="answer" required></textarea>
+        <label class="field-label">Source name (optional)</label>
+        <input type="text" name="source_name" placeholder="e.g. Harvard Health">
+        <label class="field-label">Source URL (optional)</label>
+        <input type="text" name="source_url" placeholder="https://...">
         <button class="btn block" type="submit">Add FAQ</button>
       </form>
     </div>
@@ -652,6 +656,7 @@ function pageAdminFaqs(req, res) {
       <div class="admin-row" style="flex-direction:column;align-items:stretch;">
         <b>${esc(f.question)}</b>
         <p class="empty-note">${esc(f.answer)}</p>
+        ${f.source_url ? `<p class="empty-note">Source: ${esc(f.source_name || f.source_url)}</p>` : ''}
         <div class="actions">
           <a href="/admin/faqs/${f.id}/edit" class="btn secondary" style="text-decoration:none;">Edit</a>
           <form method="POST" action="/admin/faqs/${f.id}/delete" style="display:inline;" onsubmit="return confirm('Delete this FAQ entry?')">
@@ -665,7 +670,7 @@ function pageAdminFaqs(req, res) {
 async function handleAdminFaqNew(req, res) {
   if (!requireAdmin(req, res)) return;
   const f = await parseForm(req);
-  await db.createFaq({ question: f.question, answer: f.answer, sort_order: db.listFaqs().length });
+  await db.createFaq({ question: f.question, answer: f.answer, sort_order: db.listFaqs().length, source_name: f.source_name, source_url: f.source_url });
   redirect(res, '/admin/faqs');
 }
 function pageAdminFaqEdit(req, res, id) {
@@ -679,6 +684,10 @@ function pageAdminFaqEdit(req, res, id) {
       <input type="text" name="question" value="${esc(f.question)}" required>
       <label class="field-label">Answer</label>
       <textarea name="answer" required>${esc(f.answer)}</textarea>
+      <label class="field-label">Source name (optional)</label>
+      <input type="text" name="source_name" value="${esc(f.source_name)}" placeholder="e.g. Harvard Health">
+      <label class="field-label">Source URL (optional)</label>
+      <input type="text" name="source_url" value="${esc(f.source_url)}" placeholder="https://...">
       <button class="btn block" type="submit">Save</button>
     </form>
   `;
@@ -688,7 +697,7 @@ async function handleAdminFaqEditSubmit(req, res, id) {
   if (!requireAdmin(req, res)) return;
   const f = await parseForm(req);
   const current = db.getFaq(id);
-  await db.updateFaq(id, { question: f.question, answer: f.answer, sort_order: current ? current.sort_order : 0 });
+  await db.updateFaq(id, { question: f.question, answer: f.answer, sort_order: current ? current.sort_order : 0, source_name: f.source_name, source_url: f.source_url });
   redirect(res, '/admin/faqs');
 }
 async function handleAdminFaqDelete(req, res, id) {
