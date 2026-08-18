@@ -909,7 +909,8 @@ function pageMore(req, res) {
   const user = userId != null ? db.getUserById(userId) : null;
   const tiles = [
     { href: '/collection', icon: '🃏', t: 'My Collection', s: 'Binder, badges & progress' },
-    { href: '/trade', icon: '🔁', t: 'Trade', s: 'Swap dupes with friends (demo)' },
+    { href: '/friends', icon: '🧑\u200d🤝\u200d🧑', t: 'Friends', s: 'Find people & manage requests' },
+    { href: '/trade', icon: '🔁', t: 'Trade', s: 'Swap dupes with real friends' },
     { href: '/history', icon: '🕐', t: 'Check-In History', s: 'Your full timeline' },
     { href: '/dispensaries', icon: '📍', t: 'Dispensaries', s: 'Locator & live menus' },
     { href: '/events', icon: '🎉', t: 'Events', s: 'Local drops & meetups' },
@@ -996,13 +997,115 @@ function pageHistory(req, res) {
   sendHtml(res, layout({ title: 'Check-In History', active: 'more', body, isAdmin: auth.isAdmin(req) }));
 }
 
-// ---------------------------------------------------------------- trading (demo)
+// ---------------------------------------------------------------- friends
+function pageFriends(req, res, query) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const q = (query.get('q') || '').trim();
+  const results = q ? db.searchUsers(q, userId) : [];
+  const friends = db.listFriends(userId);
+  const incoming = db.listIncomingRequests(userId);
+  const outgoing = db.listOutgoingRequests(userId);
+
+  const body = `
+    <h1 class="screen-title">Friends</h1>
+    <p class="screen-sub">Find people by username, then trade dupes once you're connected.</p>
+    <form method="GET" action="/friends" style="margin-bottom:14px;display:flex;gap:8px;">
+      <input type="text" name="q" value="${esc(q)}" placeholder="Search by username..." autocomplete="off" style="flex:1;">
+      <button class="btn" type="submit">Search</button>
+    </form>
+    ${q ? `
+      <div class="section-label">Search results</div>
+      ${results.length ? results.map(u => {
+        const status = db.getFriendshipStatus(userId, u.id);
+        return `<div class="admin-row">
+          <span>👤 ${esc(u.username)}</span>
+          <div class="actions">
+            ${status === 'none' ? `<form method="POST" action="/friends/${u.id}/request"><button class="btn" type="submit">Add Friend</button></form>` : ''}
+            ${status === 'pending_sent' ? `<span class="empty-note">Request sent</span>` : ''}
+            ${status === 'pending_received' ? `<span class="empty-note">Check your requests below</span>` : ''}
+            ${status === 'friends' ? `<span class="empty-note">Already friends</span>` : ''}
+          </div>
+        </div>`;
+      }).join('') : `<div class="empty-note">No users found matching "${esc(q)}".</div>`}
+    ` : ''}
+
+    ${incoming.length ? `
+      <div class="section-label" style="margin-top:20px;">Friend requests (${incoming.length})</div>
+      ${incoming.map(u => `
+        <div class="admin-row">
+          <span>👤 ${esc(u.username)}</span>
+          <div class="actions">
+            <form method="POST" action="/friends/${u.id}/accept" style="display:inline;"><button class="btn" type="submit">Accept</button></form>
+            <form method="POST" action="/friends/${u.id}/decline" style="display:inline;"><button class="btn danger" style="color:#fff;" type="submit">Decline</button></form>
+          </div>
+        </div>`).join('')}
+    ` : ''}
+
+    ${outgoing.length ? `
+      <div class="section-label" style="margin-top:20px;">Pending sent (${outgoing.length})</div>
+      ${outgoing.map(u => `<div class="admin-row"><span>👤 ${esc(u.username)}</span><span class="empty-note">Waiting for response</span></div>`).join('')}
+    ` : ''}
+
+    <div class="section-label" style="margin-top:20px;">Your friends (${friends.length})</div>
+    ${friends.length ? friends.map(u => `
+      <div class="admin-row">
+        <span>👤 ${esc(u.username)}</span>
+        <div class="actions">
+          <a href="/trade?friend=${u.id}" class="btn secondary" style="text-decoration:none;">Trade</a>
+          <form method="POST" action="/friends/${u.id}/remove" style="display:inline;" onsubmit="return confirm('Remove this friend?')">
+            <button class="btn danger" style="color:#fff;" type="submit">Remove</button>
+          </form>
+        </div>
+      </div>`).join('') : `<div class="empty-note">No friends yet — search for a username above to get started.</div>`}
+  `;
+  sendHtml(res, layout({ title: 'Friends', active: 'more', body, isAdmin: auth.isAdmin(req) }));
+}
+async function handleFriendRequest(req, res, otherId) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  await db.sendFriendRequest(userId, otherId);
+  redirect(res, '/friends');
+}
+async function handleFriendAccept(req, res, otherId) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  await db.respondToFriendRequest(userId, otherId, true);
+  redirect(res, '/friends');
+}
+async function handleFriendDecline(req, res, otherId) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  await db.respondToFriendRequest(userId, otherId, false);
+  redirect(res, '/friends');
+}
+async function handleFriendRemove(req, res, otherId) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  await db.removeFriendship(userId, otherId);
+  redirect(res, '/friends');
+}
+
+// ---------------------------------------------------------------- trading (real friends, or demo)
 
 function pageTrade(req, res, query) {
   const userId = requireUser(req, res);
   if (userId == null) return;
-  const friendId = query.get('friend') || mock.friends[0].id;
-  const friend = mock.friends.find(f => f.id === friendId) || mock.friends[0];
+  const realFriends = db.listFriends(userId);
+  const usingReal = realFriends.length > 0;
+
+  // Normalize both real and demo friends to the same shape: { id, name, collection }
+  // where collection is { strainId: copiesOwned }, so the rest of this function
+  // doesn't need two separate code paths.
+  const friendOptions = usingReal
+    ? realFriends.map(u => ({
+        id: String(u.id), name: u.username,
+        collection: Object.fromEntries(db.getCollection(u.id).map(o => [o.strain.id, o.copies])),
+      }))
+    : mock.friends.map(f => ({ id: f.id, name: f.name, collection: f.collection }));
+
+  const friendId = query.get('friend') || friendOptions[0].id;
+  const friend = friendOptions.find(f => f.id === friendId) || friendOptions[0];
   const yourPick = query.get('your') || '';
   const theirPick = query.get('their') || '';
 
@@ -1014,9 +1117,11 @@ function pageTrade(req, res, query) {
 
   const body = `
     <h1 class="screen-title">Trade</h1>
-    <div class="trade-caveat">Demo feature: StrainDex doesn't have real friend accounts yet, so this trades against sample collections rather than an actual person's. Real friend-to-friend trading is on the roadmap.</div>
+    ${usingReal
+      ? `<div class="trade-caveat">Trading against ${esc(friend.name)}'s real collection.</div>`
+      : `<div class="trade-caveat">Demo feature: you don't have any real friends added yet, so this trades against sample collections. <a href="/friends">Add a real friend</a> to trade for real.</div>`}
     <div class="friend-strip">
-      ${mock.friends.map(f => `<a class="friend-chip ${f.id === friendId ? 'selected' : ''}" href="${'/trade?friend=' + f.id}"><div class="avatar">${f.name[0]}</div><div class="fname">${esc(f.name)}</div></a>`).join('')}
+      ${friendOptions.map(f => `<a class="friend-chip ${f.id === friendId ? 'selected' : ''}" href="${'/trade?friend=' + f.id}"><div class="avatar">${f.name[0]}</div><div class="fname">${esc(f.name)}</div></a>`).join('')}
     </div>
     <div class="trade-cols">
       <div class="trade-col">
@@ -1053,9 +1158,11 @@ async function handleTradePropose(req, res) {
   const userId = requireUser(req, res);
   if (userId == null) return;
   const fields = await parseForm(req);
-  const friend = mock.friends.find(f => f.id === fields.friend);
-  if (friend && fields.your && fields.their) {
-    await db.createTrade({ user_id: userId, friend_name: friend.name, gave_strain_id: fields.your, got_strain_id: fields.their });
+  const mockFriend = mock.friends.find(f => f.id === fields.friend);
+  const realFriend = /^\d+$/.test(fields.friend || '') ? db.getUserById(Number(fields.friend)) : null;
+  const friendName = mockFriend ? mockFriend.name : (realFriend ? realFriend.username : null);
+  if (friendName && fields.your && fields.their) {
+    await db.createTrade({ user_id: userId, friend_name: friendName, gave_strain_id: fields.your, got_strain_id: fields.their });
   }
   redirect(res, '/trade?friend=' + encodeURIComponent(fields.friend || ''));
 }
@@ -1118,7 +1225,7 @@ async function pageDispensaries(req, res, searchParams) {
           </div>
         </div>`;
       }).join('')}
-      <p class="screen-sub" style="margin-top:16px;">Real name, address, and location — pulled live from OpenStreetMap. No live menu or pricing data exists for these yet (that lives inside each dispensary's own point-of-sale system), so menus aren't shown here.</p>
+      <p class="screen-sub" style="margin-top:16px;">Real name, address, and location — pulled live from ${esc(sourceLabel)}. No live menu or pricing data exists for these yet (that lives inside each dispensary's own point-of-sale system), so menus aren't shown here.</p>
     `;
   } else {
     body = `
@@ -1371,6 +1478,11 @@ const server = http.createServer(async (req, res) => {
     if (method === 'GET' && pathname === '/collection') return pageCollection(req, res);
     if (method === 'GET' && pathname === '/history') return pageHistory(req, res);
     if (method === 'GET' && pathname === '/trade') return pageTrade(req, res, url.searchParams);
+    if (method === 'GET' && pathname === '/friends') return pageFriends(req, res, url.searchParams);
+    if (method === 'POST' && (m = pathname.match(/^\/friends\/(\d+)\/request$/))) return await handleFriendRequest(req, res, Number(m[1]));
+    if (method === 'POST' && (m = pathname.match(/^\/friends\/(\d+)\/accept$/))) return await handleFriendAccept(req, res, Number(m[1]));
+    if (method === 'POST' && (m = pathname.match(/^\/friends\/(\d+)\/decline$/))) return await handleFriendDecline(req, res, Number(m[1]));
+    if (method === 'POST' && (m = pathname.match(/^\/friends\/(\d+)\/remove$/))) return await handleFriendRemove(req, res, Number(m[1]));
     if (method === 'POST' && pathname === '/trade/propose') return await handleTradePropose(req, res);
     if (method === 'GET' && pathname === '/dispensaries') return await pageDispensaries(req, res, url.searchParams);
     if (method === 'POST' && (m = pathname.match(/^\/dispensaries\/([^/]+)\/follow$/))) return await handleDispensaryFollow(req, res, m[1], url.searchParams);
