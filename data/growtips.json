@@ -1,1 +1,116 @@
-[{"id":"g1","title":"Start seedlings under gentler light","category":"Lighting","author":"Maya","likes":34,"body":"Seedlings burn easily under full-strength LED or HPS. Run lower intensity (or raise the light higher) for the first 1–2 weeks, then step up as true leaves develop. Photoperiod plants generally want 18/6 light during veg and 12/12 to trigger flowering."},{"id":"g2","title":"Watch for nutrient burn before you chase deficiencies","category":"Nutrients & Feeding","author":"Chris","likes":41,"body":"Start new nutrient lines at half the bottle's recommended strength and work up. Dark, crispy leaf tips usually mean too much nitrogen, not too little — it's easy to overcorrect in the wrong direction."},{"id":"g3","title":"Check the underside of leaves weekly","category":"Pests & Disease","author":"Jordan","likes":52,"body":"Spider mites and aphids show up on the underside of leaves long before you notice damage up top. Catch them early with neem oil, and keep airflow moving through the canopy to head off powdery mildew."},{"id":"g4","title":"Low-stress training builds an even canopy","category":"Training","author":"Priya","likes":29,"body":"Gently bending and tying down branches early in veg (instead of topping) spreads the canopy out so more bud sites get direct light — usually a bigger yield bump than people expect from such a low-effort technique."},{"id":"g5","title":"Trichomes tell you when to harvest — not pistil hairs","category":"Harvest & Curing","author":"Sam","likes":63,"body":"Use a jeweler's loupe on the trichomes, not the color of the hairs. Mostly cloudy trichomes with a few amber ones is peak THC; more amber shifts the effect milder and sleepier. Cure in glass jars afterward, burping daily for the first week or two."},{"id":"g6","title":"Feminized vs. autoflower seeds for beginners","category":"Genetics & Seeds","author":"Maya","likes":22,"body":"Feminized photoperiod seeds give you control over veg length and usually a bigger final yield. Autoflowers finish faster on their own schedule and are more forgiving of light-schedule mistakes — a solid pick for a first grow."},{"id":"g7","title":"Dial in airflow and odor control before you plant","category":"Indoor Setup","author":"Chris","likes":38,"body":"An oscillating fan, a carbon filter, and slight negative pressure in the tent solve most mold and smell problems before they start — much easier than fixing them mid-grow."},{"id":"g8","title":"Time outdoor planting to your local frost date","category":"Outdoor Growing","author":"Jordan","likes":19,"body":"Photoperiod plants outdoors start flowering as days shorten in late summer, so know your area's first frost date before you commit to a strain's flowering time. In humid climates, mold-resistant strains save a lot of heartbreak late in the season."}]
+[
+  {
+    "id": "g1",
+    "title": "Start seedlings under gentler light",
+    "category": "Lighting",
+    "author": "Maya",
+    "likes": 34,
+    "body": "Seedlings burn easily under full-strength LED or HPS. Run lower intensity (or raise the light higher) for the first 1–2 weeks, then step up as true leaves develop. Photoperiod plants generally want 18/6 light during veg and 12/12 to trigger flowering."
+  },
+  {
+    "id": "g2",
+    "title": "Watch for nutrient burn before you chase deficiencies",
+    "category": "Nutrients & Feeding",
+    "author": "Chris",
+    "likes": 41,
+    "body": "Start new nutrient lines at half the bottle's recommended strength and work up. Dark, crispy leaf tips usually mean too much nitrogen, not too little — it's easy to overcorrect in the wrong direction."
+  },
+  {
+    "id": "g3",
+    "title": "Check the underside of leaves weekly",
+    "category": "Pests & Disease",
+    "author": "Jordan",
+    "likes": 52,
+    "body": "Spider mites and aphids show up on the underside of leaves long before you notice damage up top. Catch them early with neem oil, and keep airflow moving through the canopy to head off powdery mildew."
+  },
+  {
+    "id": "g4",
+    "title": "Low-stress training builds an even canopy",
+    "category": "Training",
+    "author": "Priya",
+    "likes": 29,
+    "body": "Gently bending and tying down branches early in veg (instead of topping) spreads the canopy out so more bud sites get direct light — usually a bigger yield bump than people expect from such a low-effort technique."
+  },
+  {
+    "id": "g5",
+    "title": "Trichomes tell you when to harvest — not pistil hairs",
+    "category": "Harvest & Curing",
+    "author": "Sam",
+    "likes": 63,
+    "body": "Use a jeweler's loupe on the trichomes, not the color of the hairs. Mostly cloudy trichomes with a few amber ones is peak THC; more amber shifts the effect milder and sleepier. Cure in glass jars afterward, burping daily for the first week or two."
+  },
+  {
+    "id": "g6",
+    "title": "Feminized vs. autoflower seeds for beginners",
+    "category": "Genetics & Seeds",
+    "author": "Maya",
+    "likes": 22,
+    "body": "Feminized photoperiod seeds give you control over veg length and usually a bigger final yield. Autoflowers finish faster on their own schedule and are more forgiving of light-schedule mistakes — a solid pick for a first grow."
+  },
+  {
+    "id": "g7",
+    "title": "Dial in airflow and odor control before you plant",
+    "category": "Indoor Setup",
+    "author": "Chris",
+    "likes": 38,
+    "body": "An oscillating fan, a carbon filter, and slight negative pressure in the tent solve most mold and smell problems before they start — much easier than fixing them mid-grow."
+  },
+  {
+    "id": "g8",
+    "title": "Time outdoor planting to your local frost date",
+    "category": "Outdoor Growing",
+    "author": "Jordan",
+    "likes": 19,
+    "body": "Photoperiod plants outdoors start flowering as days shorten in late summer, so know your area's first frost date before you commit to a strain's flowering time. In humid climates, mold-resistant strains save a lot of heartbreak late in the season."
+  },
+  {
+    "id": "g9",
+    "title": "Vapor pressure deficit matters more than humidity alone",
+    "category": "Indoor Setup",
+    "author": "Jordan",
+    "likes": 29,
+    "body": "Watching humidity percentage by itself misses half the picture. What actually drives how well your plant transpires and takes up nutrients is vapor pressure deficit (VPD) — the gap between the moisture already in the air and how much more it could hold. The same relative humidity reading can mean a totally different VPD depending on temperature, which is why two tents at '55% humidity' can behave completely differently. Young plants want a lower VPD (roughly 0.4–0.8 kPa); plants in flower want it higher (closer to 1.0–1.5 kPa). A cheap VPD chart next to your thermometer/hygrometer combo does more for plant health than chasing a humidity number in isolation.",
+    "source_name": "Royal Queen Seeds — \"How Can Vapour Pressure Deficit (VPD) Boost Cannabis Yields?\"",
+    "source_url": "https://www.royalqueenseeds.com/blog-vpd-how-can-vapour-pressure-deficit-boost-cannabis-yields-n893"
+  },
+  {
+    "id": "g10",
+    "title": "Nitrogen, phosphorus, and potassium deficiencies each show up in a different place",
+    "category": "Nutrients & Feeding",
+    "author": "Chris",
+    "likes": 25,
+    "body": "The fastest way to narrow down a deficiency is to check WHERE the damage starts, not just what it looks like. Nitrogen is mobile in the plant, so it gets pulled from older, lower leaves first — they turn uniformly pale yellow while new growth stays green. Phosphorus deficiency tends to darken older leaves toward a blue-green or purple tint and slows growth overall, especially during flowering when demand is highest. Potassium deficiency shows up as yellowing or browning that starts at the edges of older leaves and works inward. As a rule of thumb: damage on old, lower leaves usually points to a mobile nutrient (N, P, K); damage on new top growth usually points to something immobile like calcium or iron — and always rule out a pH problem first, since off pH can mimic a deficiency that isn't really there.",
+    "source_name": "Homegrown Cannabis Co. — \"Cannabis Nutrient Deficiencies [Full Chart & Symptom Guide]\"",
+    "source_url": "https://homegrowncannabis.com/grow-your-own/article/cannabis-deficiencies-a-complete-visual-guide-to-symptoms-and-fixes"
+  },
+  {
+    "id": "g11",
+    "title": "Curing isn't just extra drying — it's real chemistry happening in the jar",
+    "category": "Harvest & Curing",
+    "author": "Maya",
+    "likes": 31,
+    "body": "It's tempting to think 'dry' and 'cured' are the same thing with different names. They're not. Drying pulls out the bulk of the water. Curing is a slower, sealed-jar process that lets the remaining chlorophyll break down (which is what kills the grassy, hay-like smell and taste) while terpenes stabilize instead of evaporating into open air. That's why properly cured bud smells and smokes noticeably smoother than bud that was just dried hard and left in a bag. The target during curing is 58–62% relative humidity inside the jar — burping (opening the jar briefly once or twice a day at first, then less often) releases built-up moisture and CO2 without letting all the humidity escape at once.",
+    "source_name": "Royal Queen Seeds — \"How and Why to Burp Your Weed\"",
+    "source_url": "https://www.royalqueenseeds.com/us/blog-how-and-why-to-burp-your-weed-n1492"
+  },
+  {
+    "id": "g12",
+    "title": "Topping and low-stress training solve the same problem two different ways",
+    "category": "Training",
+    "author": "Jordan",
+    "likes": 22,
+    "body": "Both techniques exist to break \"apical dominance\" — a plant's natural tendency to put most of its energy into one central top cola instead of spreading growth out. Topping does this by cutting off the main growing tip, which is fast and creates multiple strong colas, but it stresses the plant and needs real recovery time (most growers stop topping at least 2 weeks before flipping to flower). Low-stress training (LST) does the same job more gently — bending and tying down branches instead of cutting — which takes longer and needs more frequent small adjustments, but the plant barely notices it happened. LST alone is the easier starting point if you're newer to training; topping is worth learning once you're comfortable, especially if you're working with a fixed number of plants and want more colas per plant rather than more plants.",
+    "source_name": "RQS Blog — \"How To Perform Low Stress Training On Cannabis For Better Yields\"",
+    "source_url": "https://www.royalqueenseeds.com/blog-low-stress-training-n100"
+  },
+  {
+    "id": "g13",
+    "title": "Spider mite damage is easy to mistake for a nutrient deficiency — check the underside of leaves",
+    "category": "Pests & Disease",
+    "author": "Chris",
+    "likes": 27,
+    "body": "By the time you see fine webbing, spider mites have already been established for a week or more — webbing is a late sign, not an early one. The actual early warning is stippling: tiny, scattered pale yellow or white dots on the top of a leaf where a mite has punctured a cell from underneath. Because it's scattered and irregular rather than a uniform color change, it's genuinely easy to confuse with early nutrient stress at a glance. The fastest way to tell them apart: flip a leaf over. If you see tiny moving specks (mites are only about 0.3–0.5mm) or fine webbing on the underside, it's mites, not a feed issue. A simple confirmation trick many growers use: hold a white sheet of paper under a suspect leaf and tap it gently — if tiny specks fall and start moving, that's your answer.",
+    "source_name": "Happy Hydro — \"Spider Mites on Cannabis: How to Identify, Treat & Prevent Them\"",
+    "source_url": "https://happyhydro.com/blogs/growing-cannabis/spider-mites-on-weed-plants-treatment-and-prevention"
+  }
+]

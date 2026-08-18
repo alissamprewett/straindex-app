@@ -1,1 +1,477 @@
-[{"id":"r1","title":"Classic Cannabutter","time":"≈3 hrs","icon":"🧈","source":"official","author":null,"kudos":41,"desc":"The foundational infusion most cannabis-cooking recipes build on.","ingredients":["1 cup (7–10g) ground cannabis flower, decarboxylated","1 cup unsalted butter","1 cup water"],"steps":["Decarb: spread ground flower on a lined baking sheet, bake at 245°F (118°C) for 30–40 min, stirring occasionally, until light brown.","Melt butter with water in a saucepan over low heat.","Stir in the decarbed flower and simmer gently at 160–200°F for 2–3 hours, stirring occasionally — do not boil.","Strain through cheesecloth into a heatproof container, pressing gently to release the butter.","Refrigerate until solid, then drain off any water underneath."],"dosing":"A 1:1 cannabis-to-butter ratio gives a standard-strength batch. Always test with ¼–½ tsp first and wait a full 2 hours before taking more — edibles hit slower and stronger than smoking."},{"id":"r2","title":"Canna-Infused Olive Oil","time":"≈3 hrs","icon":"🫒","source":"official","author":null,"kudos":27,"desc":"A neutral, savory infusion great for dressings, sautéing, or drizzling.","ingredients":["1 cup (7–10g) ground cannabis flower, decarboxylated","2 cups olive oil"],"steps":["Decarboxylate the flower the same way as for cannabutter.","Combine oil and flower in a saucepan or slow cooker on the lowest setting.","Gently heat at 160–200°F for 2–3 hours, stirring occasionally.","Strain through cheesecloth, pressing lightly, then store in a sealed jar away from light."],"dosing":"Label the jar with total THC and the batch size so every recipe you use it in has a known dose per tablespoon."},{"id":"r3","title":"No-Bake Cannabutter Bites","time":"20 min + chill","icon":"🍬","source":"official","author":null,"kudos":33,"desc":"A quick, low-effort edible using your cannabutter — no oven required.","ingredients":["½ cup cannabutter (melted)","1 cup peanut butter","2 cups rolled oats","⅓ cup honey","Pinch of salt"],"steps":["Warm the cannabutter, peanut butter, and honey together until smooth (low heat only).","Stir in oats and salt until fully combined.","Press into a lined pan and chill for at least 2 hours.","Cut into a set number of equal squares and label the batch with dose per square."],"dosing":"Cut into more, smaller squares than you think you need — it's much easier to eat a second piece than to undo one that's too strong."},{"id":"r4","title":"Classic Weed Brownies","time":"≈50 min","icon":"🍫","source":"official","author":null,"kudos":58,"desc":"The all-time favorite edible — dense, fudgy, and built on cannabutter.","ingredients":["1 cup cannabutter, room temperature","1 cup sugar","¼ cup brown sugar","2 eggs","1 tsp vanilla extract","½ cup cocoa powder","¾ cup flour","½ tsp salt","¼ tsp baking powder"],"steps":["Preheat oven to 350°F. Grease an 8×8\" pan.","Whisk dry ingredients (flour, cocoa, salt, baking powder, sugars) in one bowl.","In another bowl, whisk the cannabutter, eggs, and vanilla together.","Fold the wet mixture into the dry ingredients gently — don't overmix.","Pour into the pan and bake 25–30 minutes, until a toothpick comes out mostly clean.","Cool at least 30 minutes before cutting into a set number of equal squares."],"dosing":"Dose per brownie ≈ (grams of cannabis × THC% × 1000) ÷ number of brownies. Example: 1g flower at 20% THC across 10 brownies ≈ 20mg each. Start with a light square (2–5mg) and wait 2 hours before eating more."},{"id":"r5","title":"DIY Cannabis Tincture","time":"4 weeks (mostly hands-off)","icon":"💧","source":"official","author":null,"kudos":19,"desc":"A discreet, fast-acting sublingual option — a few drops under the tongue.","ingredients":["⅛–½ oz (3.5–14g) cannabis flower, decarboxylated","3–12 fl oz food-grade alcohol or a carrier oil (e.g. MCT/coconut oil)"],"steps":["Decarb the flower at 220–240°F for 30–60 minutes until lightly toasted.","Combine decarbed flower and your chosen solvent in a sealed mason jar, fully submerging the flower.","Store in a cool, dark place for at least 4 weeks, shaking once a day.","Strain through a coffee filter or cheesecloth into a dropper bottle."],"dosing":"Start low: a quarter dropper (~0.25mL) held under the tongue for 30 seconds before swallowing. Effects arrive faster than edibles — usually 15–30 minutes."},{"id":"r6","title":"Cannabis Fruit Gummies","time":"≈20 min + 2 hrs chill","icon":"🧡","source":"official","author":null,"kudos":44,"desc":"Chewy, dosable candies made with your own tincture — no cannabis smell or taste.","ingredients":["½ cup water","1 tbsp unflavored gelatin","1 packet flavored gelatin mix","2 tbsp superfine sugar","½ tsp citric acid (optional, for tartness)","1 tbsp cannabis tincture","Silicone candy molds"],"steps":["Lightly grease silicone molds.","Warm water on low heat until barely simmering.","Whisk in the unflavored gelatin and flavored gelatin mix until fully dissolved.","Whisk in sugar and citric acid, then remove from heat.","Stir in the tincture once the mixture has cooled slightly.","Fill molds with a dropper, tapping out air bubbles, and refrigerate 2–3 hours until firm."],"dosing":"Calculate total mg THC in your tincture batch and divide evenly across all gummies made — write the date and dose on the container so it's never a guess later."}]
+[
+  {
+    "id": "r1",
+    "title": "Classic Cannabutter",
+    "time": "≈3 hrs",
+    "icon": "🧈",
+    "source": "official",
+    "author": null,
+    "kudos": 41,
+    "desc": "The foundational infusion most cannabis-cooking recipes build on.",
+    "ingredients": [
+      "1 cup (7–10g) ground cannabis flower, decarboxylated",
+      "1 cup unsalted butter",
+      "1 cup water"
+    ],
+    "steps": [
+      "Decarb: spread ground flower on a lined baking sheet, bake at 245°F (118°C) for 30–40 min, stirring occasionally, until light brown.",
+      "Melt butter with water in a saucepan over low heat.",
+      "Stir in the decarbed flower and simmer gently at 160–200°F for 2–3 hours, stirring occasionally — do not boil.",
+      "Strain through cheesecloth into a heatproof container, pressing gently to release the butter.",
+      "Refrigerate until solid, then drain off any water underneath."
+    ],
+    "dosing": "A 1:1 cannabis-to-butter ratio gives a standard-strength batch. Always test with ¼–½ tsp first and wait a full 2 hours before taking more — edibles hit slower and stronger than smoking.",
+    "category": "Infusion Base"
+  },
+  {
+    "id": "r2",
+    "title": "Canna-Infused Olive Oil",
+    "time": "≈3 hrs",
+    "icon": "🫒",
+    "source": "official",
+    "author": null,
+    "kudos": 27,
+    "desc": "A neutral, savory infusion great for dressings, sautéing, or drizzling.",
+    "ingredients": [
+      "1 cup (7–10g) ground cannabis flower, decarboxylated",
+      "2 cups olive oil"
+    ],
+    "steps": [
+      "Decarboxylate the flower the same way as for cannabutter.",
+      "Combine oil and flower in a saucepan or slow cooker on the lowest setting.",
+      "Gently heat at 160–200°F for 2–3 hours, stirring occasionally.",
+      "Strain through cheesecloth, pressing lightly, then store in a sealed jar away from light."
+    ],
+    "dosing": "Label the jar with total THC and the batch size so every recipe you use it in has a known dose per tablespoon.",
+    "category": "Infusion Base"
+  },
+  {
+    "id": "r3",
+    "title": "No-Bake Cannabutter Bites",
+    "time": "20 min + chill",
+    "icon": "🍬",
+    "source": "official",
+    "author": null,
+    "kudos": 33,
+    "desc": "A quick, low-effort edible using your cannabutter — no oven required.",
+    "ingredients": [
+      "½ cup cannabutter (melted)",
+      "1 cup peanut butter",
+      "2 cups rolled oats",
+      "⅓ cup honey",
+      "Pinch of salt"
+    ],
+    "steps": [
+      "Warm the cannabutter, peanut butter, and honey together until smooth (low heat only).",
+      "Stir in oats and salt until fully combined.",
+      "Press into a lined pan and chill for at least 2 hours.",
+      "Cut into a set number of equal squares and label the batch with dose per square."
+    ],
+    "dosing": "Cut into more, smaller squares than you think you need — it's much easier to eat a second piece than to undo one that's too strong.",
+    "category": "Gummies & Candy"
+  },
+  {
+    "id": "r4",
+    "title": "Classic Weed Brownies",
+    "time": "≈50 min",
+    "icon": "🍫",
+    "source": "official",
+    "author": null,
+    "kudos": 58,
+    "desc": "The all-time favorite edible — dense, fudgy, and built on cannabutter.",
+    "ingredients": [
+      "1 cup cannabutter, room temperature",
+      "1 cup sugar",
+      "¼ cup brown sugar",
+      "2 eggs",
+      "1 tsp vanilla extract",
+      "½ cup cocoa powder",
+      "¾ cup flour",
+      "½ tsp salt",
+      "¼ tsp baking powder"
+    ],
+    "steps": [
+      "Preheat oven to 350°F. Grease an 8×8\" pan.",
+      "Whisk dry ingredients (flour, cocoa, salt, baking powder, sugars) in one bowl.",
+      "In another bowl, whisk the cannabutter, eggs, and vanilla together.",
+      "Fold the wet mixture into the dry ingredients gently — don't overmix.",
+      "Pour into the pan and bake 25–30 minutes, until a toothpick comes out mostly clean.",
+      "Cool at least 30 minutes before cutting into a set number of equal squares."
+    ],
+    "dosing": "Dose per brownie ≈ (grams of cannabis × THC% × 1000) ÷ number of brownies. Example: 1g flower at 20% THC across 10 brownies ≈ 20mg each. Start with a light square (2–5mg) and wait 2 hours before eating more.",
+    "category": "Baked Goods"
+  },
+  {
+    "id": "r5",
+    "title": "DIY Cannabis Tincture",
+    "time": "4 weeks (mostly hands-off)",
+    "icon": "💧",
+    "source": "official",
+    "author": null,
+    "kudos": 19,
+    "desc": "A discreet, fast-acting sublingual option — a few drops under the tongue.",
+    "ingredients": [
+      "⅛–½ oz (3.5–14g) cannabis flower, decarboxylated",
+      "3–12 fl oz food-grade alcohol or a carrier oil (e.g. MCT/coconut oil)"
+    ],
+    "steps": [
+      "Decarb the flower at 220–240°F for 30–60 minutes until lightly toasted.",
+      "Combine decarbed flower and your chosen solvent in a sealed mason jar, fully submerging the flower.",
+      "Store in a cool, dark place for at least 4 weeks, shaking once a day.",
+      "Strain through a coffee filter or cheesecloth into a dropper bottle."
+    ],
+    "dosing": "Start low: a quarter dropper (~0.25mL) held under the tongue for 30 seconds before swallowing. Effects arrive faster than edibles — usually 15–30 minutes.",
+    "category": "Infusion Base"
+  },
+  {
+    "id": "r6",
+    "title": "Cannabis Fruit Gummies",
+    "time": "≈20 min + 2 hrs chill",
+    "icon": "🧡",
+    "source": "official",
+    "author": null,
+    "kudos": 44,
+    "desc": "Chewy, dosable candies made with your own tincture — no cannabis smell or taste.",
+    "ingredients": [
+      "½ cup water",
+      "1 tbsp unflavored gelatin",
+      "1 packet flavored gelatin mix",
+      "2 tbsp superfine sugar",
+      "½ tsp citric acid (optional, for tartness)",
+      "1 tbsp cannabis tincture",
+      "Silicone candy molds"
+    ],
+    "steps": [
+      "Lightly grease silicone molds.",
+      "Warm water on low heat until barely simmering.",
+      "Whisk in the unflavored gelatin and flavored gelatin mix until fully dissolved.",
+      "Whisk in sugar and citric acid, then remove from heat.",
+      "Stir in the tincture once the mixture has cooled slightly.",
+      "Fill molds with a dropper, tapping out air bubbles, and refrigerate 2–3 hours until firm."
+    ],
+    "dosing": "Calculate total mg THC in your tincture batch and divide evenly across all gummies made — write the date and dose on the container so it's never a guess later.",
+    "category": "Gummies & Candy"
+  },
+  {
+    "id": "r7",
+    "title": "Cannabis-Infused Coconut Oil",
+    "time": "≈3 hrs",
+    "icon": "🥥",
+    "source": "official",
+    "author": null,
+    "kudos": 22,
+    "category": "Infusion Base",
+    "desc": "A dairy-free alternative to cannabutter — solid at room temp, great for baking or capsules.",
+    "ingredients": [
+      "1 cup (7–10g) ground cannabis flower, decarboxylated",
+      "1 cup coconut oil",
+      "1 cup water"
+    ],
+    "steps": [
+      "Decarb the flower at 240°F (115°C) for 30–40 minutes until light brown.",
+      "Melt coconut oil with water in a saucepan over low heat.",
+      "Stir in the decarbed flower and simmer at 160–200°F for 2–3 hours, stirring occasionally.",
+      "Strain through cheesecloth into a heatproof jar, pressing gently.",
+      "Refrigerate until solid, then drain off the water layer underneath."
+    ],
+    "dosing": "Behaves just like cannabutter — swap it in 1:1 for butter or oil in any recipe. Label the jar with total THC per batch."
+  },
+  {
+    "id": "r8",
+    "title": "Cannabis-Infused Honey",
+    "time": "≈2 hrs",
+    "icon": "🍯",
+    "source": "official",
+    "author": null,
+    "kudos": 15,
+    "category": "Infusion Base",
+    "desc": "A pourable, low-effort infusion for tea, toast, or drizzling over anything.",
+    "ingredients": [
+      "1 cup honey",
+      "3–5g decarboxylated cannabis flower (finely ground)"
+    ],
+    "steps": [
+      "Decarb the flower at 240°F for 30–40 minutes.",
+      "Combine honey and decarbed flower in a double boiler or a heatproof bowl over simmering water.",
+      "Heat gently at 150–180°F for 1–2 hours, stirring occasionally — honey scorches easily, so keep the heat low.",
+      "Strain through a fine mesh strainer or cheesecloth while still warm.",
+      "Store in a sealed jar; it will thicken slightly as it cools."
+    ],
+    "dosing": "Divide your flower's estimated total THC by the number of teaspoons in the batch to get mg per teaspoon."
+  },
+  {
+    "id": "r9",
+    "title": "Firecrackers",
+    "time": "≈45 min",
+    "icon": "🍘",
+    "source": "official",
+    "author": null,
+    "kudos": 26,
+    "category": "Baked Goods",
+    "desc": "The original no-infusion-needed edible — ground flower baked directly between crackers.",
+    "ingredients": [
+      "2 graham crackers or saltines per firecracker",
+      "1–1.5g ground cannabis flower per firecracker",
+      "1 tsp peanut butter or nutella per firecracker",
+      "Aluminum foil"
+    ],
+    "steps": [
+      "Preheat oven to 320°F (160°C).",
+      "Spread peanut butter on one cracker, sprinkle the ground flower evenly over it, then top with the second cracker to make a sandwich.",
+      "Wrap each sandwich tightly in foil.",
+      "Bake for 20–25 minutes — the foil lets the cannabis decarb and infuse into the peanut butter at the same time.",
+      "Let cool completely before unwrapping and eating."
+    ],
+    "dosing": "Each firecracker typically delivers most of the THC in that 1–1.5g of flower — treat one full firecracker as a strong dose and consider splitting it, especially the first time."
+  },
+  {
+    "id": "r10",
+    "title": "Cannabis Chocolate Bark",
+    "time": "≈20 min + chill",
+    "icon": "🍫",
+    "source": "official",
+    "author": null,
+    "kudos": 31,
+    "category": "Gummies & Candy",
+    "desc": "Melt, stir, chill — one of the simplest ways to turn infused oil into a treat.",
+    "ingredients": [
+      "12 oz chocolate chips or melting wafers",
+      "2–3 tbsp cannabis-infused coconut oil, melted",
+      "Optional: sea salt, crushed nuts, or dried fruit for topping"
+    ],
+    "steps": [
+      "Melt the chocolate in a double boiler or 20-second microwave bursts, stirring between each.",
+      "Once fully melted and smooth, stir in the infused coconut oil until evenly combined.",
+      "Pour onto a parchment-lined baking sheet and spread to an even thickness.",
+      "Sprinkle toppings over the top while still soft.",
+      "Chill for 1–2 hours until fully set, then break into pieces."
+    ],
+    "dosing": "Break into a consistent number of pieces from the start (score the bark before it fully sets) so every piece is a known, even dose."
+  },
+  {
+    "id": "r11",
+    "title": "Cannabis-Infused Peanut Butter",
+    "time": "≈15 min",
+    "icon": "🥜",
+    "source": "official",
+    "author": null,
+    "kudos": 18,
+    "category": "Savory & Snacks",
+    "desc": "A savory spread for toast, sandwiches, or eating straight off the spoon.",
+    "ingredients": [
+      "1 cup natural peanut butter",
+      "2–3 tbsp cannabis-infused coconut oil or cannabutter, melted"
+    ],
+    "steps": [
+      "Warm the peanut butter slightly to loosen it (10–15 seconds in the microwave, stirred).",
+      "Stir in the melted infused oil or butter until fully and evenly combined.",
+      "Transfer to a jar and let cool to room temperature before sealing.",
+      "Stir again before each use, since natural peanut butter can separate."
+    ],
+    "dosing": "Divide the total THC in your infused oil by the number of tablespoons in the finished jar to know the dose per serving."
+  },
+  {
+    "id": "r12",
+    "title": "Cannabis Golden Milk Tea",
+    "time": "≈15 min",
+    "icon": "🍵",
+    "source": "official",
+    "author": null,
+    "kudos": 21,
+    "category": "Drinks",
+    "desc": "A warm, spiced drink — the fat in the milk helps carry the infused oil's effects.",
+    "ingredients": [
+      "1 cup milk or a full-fat non-dairy milk (oat or coconut works well)",
+      "1 tsp cannabis-infused coconut oil",
+      "½ tsp turmeric",
+      "¼ tsp cinnamon",
+      "Pinch of black pepper",
+      "Honey to taste"
+    ],
+    "steps": [
+      "Warm the milk in a small saucepan over medium-low heat — don't let it boil.",
+      "Whisk in the turmeric, cinnamon, and black pepper.",
+      "Once steaming, remove from heat and whisk in the infused coconut oil until fully blended (a milk frother or blender helps it emulsify).",
+      "Sweeten with honey to taste and serve warm."
+    ],
+    "dosing": "Since the oil doesn't fully dissolve into milk on its own, whisk or blend thoroughly right before drinking so the dose doesn't settle at the bottom of the cup."
+  },
+  {
+    "id": "r13",
+    "title": "Cannabis Tincture Lemonade",
+    "time": "≈10 min",
+    "icon": "🍋",
+    "source": "official",
+    "author": null,
+    "kudos": 24,
+    "category": "Drinks",
+    "desc": "A refreshing, fast-acting drink using your tincture — easy to dose by the glass.",
+    "ingredients": [
+      "4 cups lemonade (fresh-squeezed or store-bought)",
+      "1 tbsp cannabis tincture (or to taste/dose)",
+      "Ice, mint, or lemon slices for serving"
+    ],
+    "steps": [
+      "Stir the tincture directly into the pitcher of lemonade, or add it glass-by-glass if you want to dose each serving individually.",
+      "Stir well before pouring, since tincture can separate from water-based drinks.",
+      "Serve over ice with a mint sprig or lemon slice."
+    ],
+    "dosing": "Dosing by the glass (rather than the whole pitcher) makes it much easier to keep track of exactly how much each person is getting."
+  },
+  {
+    "id": "r14",
+    "title": "Cannabis Chocolate Chip Cookies",
+    "time": "≈40 min",
+    "icon": "🍪",
+    "source": "official",
+    "author": null,
+    "kudos": 37,
+    "category": "Baked Goods",
+    "desc": "A classic cookie base built on cannabutter — chewy in the middle, crisp at the edges.",
+    "ingredients": [
+      "1 cup cannabutter, softened",
+      "¾ cup brown sugar",
+      "½ cup white sugar",
+      "2 eggs",
+      "1 tsp vanilla extract",
+      "2¼ cups flour",
+      "1 tsp baking soda",
+      "½ tsp salt",
+      "2 cups chocolate chips"
+    ],
+    "steps": [
+      "Preheat oven to 350°F. Line baking sheets with parchment.",
+      "Cream the cannabutter with both sugars until light and fluffy.",
+      "Beat in eggs and vanilla.",
+      "In a separate bowl, whisk flour, baking soda, and salt, then fold into the wet mixture.",
+      "Stir in chocolate chips.",
+      "Scoop a set number of even-sized dough balls onto the sheets, spaced apart.",
+      "Bake 10–12 minutes until edges are golden. Cool before eating."
+    ],
+    "dosing": "Weigh the total dough and divide by the weight of one scooped cookie to know exactly how many cookies the batch makes — then divide total THC evenly across that count."
+  },
+  {
+    "id": "r15",
+    "title": "Cannabis Caramels",
+    "time": "≈40 min + set",
+    "icon": "🍬",
+    "source": "official",
+    "author": null,
+    "kudos": 20,
+    "category": "Gummies & Candy",
+    "desc": "Chewy, buttery candies — a slower-cooking project but a crowd favorite.",
+    "ingredients": [
+      "1 cup cannabutter",
+      "1 cup brown sugar",
+      "1 cup corn syrup",
+      "1 can (14oz) sweetened condensed milk",
+      "1 tsp vanilla extract",
+      "Pinch of salt"
+    ],
+    "steps": [
+      "Line an 8×8\" pan with parchment paper.",
+      "Combine cannabutter, brown sugar, and corn syrup in a saucepan over medium-low heat, stirring until melted together.",
+      "Stir in the condensed milk and bring to a gentle simmer, stirring constantly to prevent scorching.",
+      "Cook until a candy thermometer reads 245°F (firm-ball stage), about 15–20 minutes.",
+      "Remove from heat, stir in vanilla and salt, then pour into the pan.",
+      "Cool completely, then cut into a set number of even squares and wrap individually in wax paper."
+    ],
+    "dosing": "Because this recipe simmers longer than most, some potency loss is normal — test one piece first even if you've made cannabutter edibles before."
+  },
+  {
+    "id": "r16",
+    "title": "Cannabis Topical Salve",
+    "time": "≈2.5 hrs",
+    "icon": "🧴",
+    "source": "official",
+    "author": null,
+    "kudos": 16,
+    "category": "Topicals",
+    "desc": "A non-intoxicating balm for sore muscles and joints — absorbed through the skin, not the bloodstream.",
+    "ingredients": [
+      "1 cup cannabis-infused coconut oil",
+      "¼ cup beeswax pellets",
+      "Optional: a few drops of essential oil (lavender, peppermint) for scent"
+    ],
+    "steps": [
+      "Combine infused coconut oil and beeswax in a double boiler over low heat.",
+      "Stir until the beeswax is fully melted and combined.",
+      "Remove from heat and stir in essential oil, if using.",
+      "Pour into small tins or jars while still liquid.",
+      "Let cool and solidify at room temperature (a few hours), then cap."
+    ],
+    "dosing": "Because THC absorbed through skin generally doesn't reach the bloodstream the way edibles do, this is considered non-intoxicating — a good option for localized relief without a high."
+  },
+  {
+    "id": "r17",
+    "title": "Cannabis Bath Soak",
+    "time": "≈15 min",
+    "icon": "🛁",
+    "source": "official",
+    "author": null,
+    "kudos": 13,
+    "category": "Topicals",
+    "desc": "A relaxing, non-intoxicating soak using infused oil and Epsom salt.",
+    "ingredients": [
+      "2 cups Epsom salt",
+      "2 tbsp cannabis-infused coconut oil, melted",
+      "10–15 drops essential oil (lavender or eucalyptus work well)"
+    ],
+    "steps": [
+      "Combine Epsom salt, melted infused oil, and essential oil in a bowl, stirring until evenly distributed.",
+      "Store in a sealed jar until ready to use.",
+      "Add a generous scoop to running bath water and soak for at least 20 minutes."
+    ],
+    "dosing": "Like the salve, this is topical and not intended to produce a high — it's about the warm-soak relaxation plus localized skin contact."
+  },
+  {
+    "id": "r18",
+    "title": "Cannabis-Infused Popcorn",
+    "time": "≈10 min",
+    "icon": "🍿",
+    "source": "official",
+    "author": null,
+    "kudos": 28,
+    "category": "Savory & Snacks",
+    "desc": "A savory snack made by tossing freshly popped popcorn in infused butter.",
+    "ingredients": [
+      "8 cups popped popcorn (air-popped or stovetop)",
+      "3–4 tbsp cannabutter, melted",
+      "Salt to taste"
+    ],
+    "steps": [
+      "Pop the popcorn using your usual method, leaving out any butter or oil during popping.",
+      "Drizzle the melted cannabutter evenly over the warm popcorn.",
+      "Toss thoroughly so the butter coats as many pieces as possible.",
+      "Salt to taste and serve immediately."
+    ],
+    "dosing": "Coating is naturally uneven with this method — some kernels get more butter than others — so treat a first handful as a mild test dose rather than assuming an even spread."
+  },
+  {
+    "id": "r19",
+    "title": "Cannabis-Infused Pesto",
+    "time": "≈15 min",
+    "icon": "🌿",
+    "source": "official",
+    "author": null,
+    "kudos": 17,
+    "category": "Savory & Snacks",
+    "desc": "A savory way to use infused olive oil — toss with pasta, spread on bread, or use as a dip.",
+    "ingredients": [
+      "2 cups fresh basil leaves",
+      "⅓ cup pine nuts or walnuts",
+      "2 cloves garlic",
+      "½ cup grated parmesan",
+      "¼ cup cannabis-infused olive oil",
+      "¼ cup regular olive oil",
+      "Salt and pepper to taste"
+    ],
+    "steps": [
+      "Combine basil, nuts, garlic, and parmesan in a food processor and pulse until finely chopped.",
+      "With the processor running, slowly stream in both oils until a smooth paste forms.",
+      "Season with salt and pepper to taste.",
+      "Store in a sealed jar in the fridge for up to a week."
+    ],
+    "dosing": "Since the infused oil is only part of the total oil in the recipe, calculate the dose based on the infused-oil portion only, divided by the total jar volume."
+  }
+]
