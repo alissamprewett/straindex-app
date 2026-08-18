@@ -1,14 +1,17 @@
 {
   "name": "straindex",
   "version": "1.0.0",
-  "description": "StrainDex — a social check-in, strain library, and recipe app. Zero-dependency Node.js app (no npm packages required).",
+  "description": "StrainDex — a social check-in, strain library, and recipe app. Uses only Node's built-ins plus one dependency (@libsql/client) to talk to its Turso database.",
   "private": true,
   "main": "server.js",
   "scripts": {
     "start": "node --no-warnings server.js",
     "seed": "node --no-warnings seed.js"
   },
+  "dependencies": {
+    "@libsql/client": "^0.17.0"
+  },
   "engines": {
-    "node": ">=22.5.0"
+    "node": ">=18.0.0"
   }
 }

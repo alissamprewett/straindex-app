@@ -2,7 +2,7 @@
 
 A social check-in, strain library, recipe box, and grow-tips community — built as a real, self-updating web app so you (or eventually your team) can keep adding content without needing me to hand-edit files.
 
-This is a deliberately **zero-dependency** Node.js app — no `npm install` required, ever. It uses only what ships inside Node itself (a built-in web server and a built-in SQLite database). That was a constraint of the environment I built it in, but it's actually a feature for you: fewer moving parts, nothing to go out of date, and it'll run anywhere Node runs.
+This started as a **zero-dependency** Node.js app (no `npm install` required) using only what ships inside Node itself. As of August 2026 it has exactly **one** dependency, `@libsql/client`, so it can talk to a free hosted database — see "Why this app now needs the internet to store data" below for the full story on that tradeoff. Everything else about the "no framework, no build step, no bundler" philosophy is unchanged.
 
 ## What's inside
 
@@ -10,7 +10,7 @@ This is a deliberately **zero-dependency** Node.js app — no `npm install` requ
 straindex-app/
   server.js          the whole app — routes, pages, admin panel, API
   lib/
-    db.js             ALL database code lives here (see "Moving to a bigger database" below)
+    db.js             ALL database code lives here — talks to Turso, keeps an in-memory cache (see below)
     auth.js           admin login (cookie-based sessions)
     render.js          page layout/shell
     body.js            request body parsing
@@ -21,21 +21,36 @@ straindex-app/
     app.css, app.js    styling + browser-side behavior
     manifest.json, sw.js, icons/    makes it installable to a phone home screen (PWA)
   data/
-    *.json              the original starter content (strains/FAQ/recipes/grow tips)
-    straindex.db         the live SQLite database — this is where everything you add actually lives
-  seed.js               one-time importer that loads data/*.json into straindex.db
+    *.json              the original starter content (strains/FAQ/recipes/grow tips) — loaded into Turso once, by seed.js
+  seed.js               one-time importer that loads data/*.json into your Turso database
 ```
+
+## Why this app now needs the internet to store data
+
+The app used to store everything in a SQLite file sitting next to the code (`data/straindex.db`), read and written synchronously with zero setup. That worked great locally, but broke on Render's free hosting tier: free web services there have no persistent disk, so that file — and anything you added to it (check-ins, FAQ edits, new recipes) — got wiped every time the app spun down from inactivity (roughly every 15 minutes of no traffic).
+
+The fix that costs nothing is [**Turso**](https://turso.tech), a free hosted database that speaks the same SQL dialect as SQLite. The tradeoff: talking to it happens over the network, so every database call is now asynchronous, and the app needs one small library (`@libsql/client`) to make those calls. To avoid rewriting the ~40 page-building functions in `server.js` to handle that, `lib/db.js` keeps an in-memory copy of everything, loaded once when the app starts (`db.init()`) — so all the *read* functions (`listStrains`, `getFaq`, etc.) are still instant and synchronous, same as before. Only the *write* functions (`createCheckin`, `toggleRsvp`, and so on) are now `async`, because they wait for Turso to confirm the write actually happened before telling the cache — and the rest of the app — that it succeeded.
 
 ## Running it yourself
 
-You need Node.js 22.5 or newer (for the built-in SQLite support). Check with `node -v`.
+You need Node.js 18 or newer. Check with `node -v`.
 
-```
-npm run seed     # only needed once, or after deleting data/straindex.db
-npm start
-```
+1. Create a free database at [turso.tech](https://turso.tech) (see "Setting up Turso" below) and note its URL and auth token.
+2. `npm install` (fetches the one dependency).
+3. Set the two environment variables it needs:
+   ```
+   TURSO_DATABASE_URL="libsql://your-db-name.turso.io"
+   TURSO_AUTH_TOKEN="your-token-here"
+   ```
+4. `npm run seed` — only needed once, to load the starter strains/FAQ/recipes into your new database. Loading ~1,500 strains one at a time over the network takes a couple of minutes; that's normal.
+5. `npm start`, then open `http://localhost:3000`.
 
-Then open `http://localhost:3000`. That's it — no build step, no compiling.
+### Setting up Turso (one-time, ~5 minutes)
+
+1. Go to [turso.tech](https://turso.tech) and sign up (free — GitHub login is the fastest way in).
+2. Create a database from the dashboard — any name and region are fine; pick a region close to wherever you deploy (e.g. closest to Render's default Oregon region if that's where `straindex` lives).
+3. On the database's page, find the **connection URL** (starts with `libsql://`) and create an **auth token** — the dashboard has buttons for both. Copy them somewhere safe; the token especially, since it won't be shown again.
+4. **Don't paste the token into any AI chat, code file, or public place.** Set it directly as an environment variable wherever the app runs (see below for Render specifically).
 
 ## How you update content
 
@@ -49,26 +64,28 @@ Whenever you find a new recipe out in the wild, just log in and add it — same 
 
 ## Deploying it somewhere real (so it's not just on your computer)
 
-Right now this only runs on whatever machine you start it on. To get a real URL you and others can open from a phone, you need to put it on a host that keeps a Node process running continuously with a persistent disk (for the SQLite file). Good, cheap options:
+Right now this only runs on whatever machine you start it on. To get a real URL you and others can open from a phone, put it on a host that keeps a Node process running continuously. Since the database now lives on Turso rather than a local file, you no longer need a host with a *persistent disk* — any of these work, including free tiers:
 
-- **[Render](https://render.com)** — "Web Service," free/low tier, supports persistent disks. Point it at this folder, set the start command to `npm start`, add a disk mounted at `/data`, and set `DB_PATH=/data/straindex.db` as an environment variable so your data survives redeploys.
-- **[Railway](https://railway.app)** — similar model, also supports persistent volumes.
-- **[Fly.io](https://fly.io)** — a bit more technical but has a generous free tier and persistent volumes too.
+- **[Render](https://render.com)** — "Web Service," free tier is fine now (no disk needed). Point it at this repo, start command `npm start`, and set the environment variables below in the service's Environment tab.
+- **[Railway](https://railway.app)**, **[Fly.io](https://fly.io)** — similar model.
 
-Avoid purely "serverless" hosts (Vercel, Netlify functions) for now — they don't keep a process or a local file alive between requests, which this app currently relies on for its database.
+The one caveat that still applies on Render's free tier: the instance spins down after ~15 minutes of no traffic and takes ~50 seconds to wake back up on the next request. That's just a speed bump now, though — no data is lost, since it all lives in Turso, not on the instance itself.
 
 ### Environment variables to set on whatever host you pick
 
 | Variable | Purpose | Example |
 |---|---|---|
+| `TURSO_DATABASE_URL` | your Turso database's connection URL | `libsql://straindex-yourname.turso.io` |
+| `TURSO_AUTH_TOKEN` | your Turso auth token | (from the Turso dashboard — treat it like a password) |
 | `PORT` | which port to listen on | usually set automatically by the host |
-| `DB_PATH` | where the SQLite file lives | `/data/straindex.db` (point it at your persistent disk) |
 | `SESSION_SECRET` | signs admin login cookies — set this to something random | `openssl rand -hex 32` |
 | `ADMIN_PASSWORD` | your real admin password | pick something only you know |
 
-## Moving to a bigger database later (optional, only if you outgrow SQLite)
+**Set `TURSO_DATABASE_URL` and `TURSO_AUTH_TOKEN` directly in your host's dashboard** (Render: Service → Environment) — never in a file that gets committed to GitHub, since the repo is public.
 
-If this ever needs to support lots of simultaneous users, the one file to touch is `lib/db.js`. It's written so every other file in the app calls functions like `db.listStrains()` or `db.createRecipe()` — none of them know or care whether that's backed by SQLite or something else. To move to a hosted Postgres database (e.g. [Supabase](https://supabase.com), which has a generous free tier and is a common next step), you'd rewrite the internals of `lib/db.js` to run Postgres queries instead of SQLite ones, keeping the same function names. Nothing else in the app changes.
+## Moving to a bigger database later (optional, only if you outgrow Turso's free tier)
+
+Turso's free tier covers a lot of room to grow (5GB storage, 500 million row reads a month, as of mid-2026 — worth double-checking their current pricing page if usage grows a lot). If you ever do outgrow it, the one file to touch is still `lib/db.js` — every other file in the app calls functions like `db.listStrains()` or `db.createRecipe()` and doesn't know or care what's backing them. Moving to Turso's paid tier, or to a different hosted database entirely, means rewriting the internals of `lib/db.js` while keeping the same function names. Nothing else in the app changes.
 
 ## Upgrading the "Ask" tab into a real chatbot
 

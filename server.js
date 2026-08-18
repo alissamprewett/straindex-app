@@ -323,7 +323,7 @@ async function handleCheckinSubmit(req, res) {
     sendHtml(res, layout({ title: 'Check In', body: `<p>Please pick at least 1 mood/effect. <a href="javascript:history.back()">Go back</a></p>` }), 400);
     return;
   }
-  db.createCheckin({
+  await db.createCheckin({
     strain_id: strainId, method: fields.method, rating: Number(fields.rating) || 0,
     note: fields.note || '', effects, photo: fields.photo || null,
   });
@@ -397,7 +397,7 @@ function pageRecipeNew(req, res) {
 
 async function handleRecipeNewSubmit(req, res) {
   const f = await parseForm(req);
-  db.createRecipe({
+  await db.createRecipe({
     title: f.title, desc: f.desc, author: f.author, source: 'community', status: 'pending',
     ingredients: String(f.ingredients || '').split('\n').map(s => s.trim()).filter(Boolean),
     steps: String(f.steps || '').split('\n').map(s => s.trim()).filter(Boolean),
@@ -453,7 +453,7 @@ function pageGrowingNew(req, res) {
 
 async function handleGrowingNewSubmit(req, res) {
   const f = await parseForm(req);
-  db.createGrowTip({ title: f.title, category: f.category, author: f.author, body: f.body });
+  await db.createGrowTip({ title: f.title, category: f.category, author: f.author, body: f.body });
   redirect(res, '/growing');
 }
 
@@ -569,7 +569,7 @@ function pageAdminFaqs(req, res) {
 async function handleAdminFaqNew(req, res) {
   if (!requireAdmin(req, res)) return;
   const f = await parseForm(req);
-  db.createFaq({ question: f.question, answer: f.answer, sort_order: db.listFaqs().length });
+  await db.createFaq({ question: f.question, answer: f.answer, sort_order: db.listFaqs().length });
   redirect(res, '/admin/faqs');
 }
 function pageAdminFaqEdit(req, res, id) {
@@ -592,12 +592,12 @@ async function handleAdminFaqEditSubmit(req, res, id) {
   if (!requireAdmin(req, res)) return;
   const f = await parseForm(req);
   const current = db.getFaq(id);
-  db.updateFaq(id, { question: f.question, answer: f.answer, sort_order: current ? current.sort_order : 0 });
+  await db.updateFaq(id, { question: f.question, answer: f.answer, sort_order: current ? current.sort_order : 0 });
   redirect(res, '/admin/faqs');
 }
 async function handleAdminFaqDelete(req, res, id) {
   if (!requireAdmin(req, res)) return;
-  db.deleteFaq(id);
+  await db.deleteFaq(id);
   redirect(res, '/admin/faqs');
 }
 
@@ -647,7 +647,7 @@ function pageAdminRecipes(req, res) {
 async function handleAdminRecipeNew(req, res) {
   if (!requireAdmin(req, res)) return;
   const f = await parseForm(req);
-  db.createRecipe({
+  await db.createRecipe({
     title: f.title, desc: f.desc, dosing: f.dosing, source: 'official', status: 'approved', author: null,
     ingredients: String(f.ingredients || '').split('\n').map(s => s.trim()).filter(Boolean),
     steps: String(f.steps || '').split('\n').map(s => s.trim()).filter(Boolean),
@@ -656,12 +656,12 @@ async function handleAdminRecipeNew(req, res) {
 }
 async function handleAdminRecipeApprove(req, res, id) {
   if (!requireAdmin(req, res)) return;
-  db.updateRecipe(id, { status: 'approved' });
+  await db.updateRecipe(id, { status: 'approved' });
   redirect(res, '/admin/recipes');
 }
 async function handleAdminRecipeDelete(req, res, id) {
   if (!requireAdmin(req, res)) return;
-  db.deleteRecipe(id);
+  await db.deleteRecipe(id);
   redirect(res, '/admin/recipes');
 }
 
@@ -674,13 +674,13 @@ function apiListStrains(req, res, query) {
   const limit = Math.min(Number(query.get('limit')) || 60, 200);
   sendJson(res, { total: db.countStrains({ q, type, rarity }), results: db.listStrains({ q, type, rarity, limit }) });
 }
-function apiKudos(req, res, id) {
-  const r = db.addKudos(id);
+async function apiKudos(req, res, id) {
+  const r = await db.addKudos(id);
   if (!r) return sendJson(res, { error: 'not found' }, 404);
   sendJson(res, { kudos: r.kudos });
 }
-function apiGrowLike(req, res, id) {
-  db.likeGrowTip(id);
+async function apiGrowLike(req, res, id) {
+  await db.likeGrowTip(id);
   const tip = db.listGrowTips().find(t => t.id === id);
   sendJson(res, { likes: tip ? tip.likes : 0 });
 }
@@ -825,7 +825,7 @@ async function handleTradePropose(req, res) {
   const fields = await parseForm(req);
   const friend = mock.friends.find(f => f.id === fields.friend);
   if (friend && fields.your && fields.their) {
-    db.createTrade({ friend_name: friend.name, gave_strain_id: fields.your, got_strain_id: fields.their });
+    await db.createTrade({ friend_name: friend.name, gave_strain_id: fields.your, got_strain_id: fields.their });
   }
   redirect(res, '/trade?friend=' + encodeURIComponent(fields.friend || ''));
 }
@@ -933,7 +933,7 @@ async function pageDispensaries(req, res, searchParams) {
 }
 
 async function handleDispensaryFollow(req, res, id, searchParams) {
-  db.toggleFollowDispensary(id);
+  await db.toggleFollowDispensary(id);
   const lat = searchParams.get('lat');
   const lon = searchParams.get('lon');
   redirect(res, lat && lon ? `/dispensaries?lat=${encodeURIComponent(lat)}&lon=${encodeURIComponent(lon)}` : '/dispensaries');
@@ -965,7 +965,7 @@ function pageEvents(req, res) {
 }
 
 async function handleEventRsvp(req, res, id) {
-  db.toggleRsvp(id);
+  await db.toggleRsvp(id);
   redirect(res, '/events');
 }
 
@@ -1013,7 +1013,7 @@ function pageShop(req, res) {
 }
 
 async function handleShopAdd(req, res, id) {
-  db.addToCart(id);
+  await db.addToCart(id);
   redirect(res, '/shop');
 }
 
@@ -1099,8 +1099,8 @@ const server = http.createServer(async (req, res) => {
     if (method === 'POST' && (m = pathname.match(/^\/admin\/recipes\/(\d+)\/delete$/))) return await handleAdminRecipeDelete(req, res, Number(m[1]));
 
     if (method === 'GET' && pathname === '/api/strains') return apiListStrains(req, res, url.searchParams);
-    if (method === 'POST' && (m = pathname.match(/^\/api\/recipes\/(\d+)\/kudos$/))) return apiKudos(req, res, Number(m[1]));
-    if (method === 'POST' && (m = pathname.match(/^\/api\/growtips\/(\d+)\/like$/))) return apiGrowLike(req, res, Number(m[1]));
+    if (method === 'POST' && (m = pathname.match(/^\/api\/recipes\/(\d+)\/kudos$/))) return await apiKudos(req, res, Number(m[1]));
+    if (method === 'POST' && (m = pathname.match(/^\/api\/growtips\/(\d+)\/like$/))) return await apiGrowLike(req, res, Number(m[1]));
 
     if (method === 'GET' && pathname === '/more') return pageMore(req, res);
     if (method === 'GET' && pathname === '/collection') return pageCollection(req, res);
@@ -1125,6 +1125,14 @@ const server = http.createServer(async (req, res) => {
   }
 });
 
-server.listen(PORT, () => {
-  console.log(`StrainDex running at http://localhost:${PORT}`);
-});
+db.init()
+  .then(() => {
+    server.listen(PORT, () => {
+      console.log(`StrainDex running at http://localhost:${PORT}`);
+    });
+  })
+  .catch(err => {
+    console.error('Failed to connect to the database — check TURSO_DATABASE_URL and TURSO_AUTH_TOKEN.');
+    console.error(err);
+    process.exit(1);
+  });
