@@ -833,12 +833,26 @@ async function handleTradePropose(req, res) {
 // ---------------------------------------------------------------- dispensaries
 
 async function pageDispensaries(req, res, searchParams) {
-  const lat = Number(searchParams.get('lat'));
-  const lon = Number(searchParams.get('lon'));
-  const hasLocation = searchParams.has('lat') && searchParams.has('lon') && !Number.isNaN(lat) && !Number.isNaN(lon);
+  const zipParam = (searchParams.get('zip') || '').trim();
+  let lat = Number(searchParams.get('lat'));
+  let lon = Number(searchParams.get('lon'));
+  let hasLocation = searchParams.has('lat') && searchParams.has('lon') && !Number.isNaN(lat) && !Number.isNaN(lon);
+  let locationLabel = 'you';
+  let realError = null;
+
+  if (zipParam) {
+    const geocoded = await geo.geocodeZip(zipParam);
+    if (geocoded.ok) {
+      lat = geocoded.lat;
+      lon = geocoded.lon;
+      hasLocation = true;
+      locationLabel = geocoded.label;
+    } else {
+      realError = geocoded.reason;
+    }
+  }
 
   let realResults = null;
-  let realError = null;
   if (hasLocation) {
     const outcome = await geo.findNearbyDispensaries(lat, lon);
     if (outcome.ok) realResults = outcome.results;
@@ -849,7 +863,7 @@ async function pageDispensaries(req, res, searchParams) {
   if (realResults) {
     body = `
       <h1 class="screen-title">Dispensaries</h1>
-      <p class="screen-sub geo-live"><span class="dot"></span> Showing ${realResults.length} real dispensar${realResults.length === 1 ? 'y' : 'ies'} near you, via OpenStreetMap. <a href="/dispensaries">Use sample listings instead</a></p>
+      <p class="screen-sub geo-live"><span class="dot"></span> Showing ${realResults.length} real dispensar${realResults.length === 1 ? 'y' : 'ies'} near ${esc(locationLabel)}, via OpenStreetMap. <a href="/dispensaries">Use sample listings instead</a></p>
       ${realResults.map(d => {
         const following = db.isFollowingDispensary(d.id);
         const mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${d.lat},${d.lon}`;
@@ -877,11 +891,15 @@ async function pageDispensaries(req, res, searchParams) {
     body = `
       <h1 class="screen-title">Dispensaries</h1>
       <div class="locate-banner">
-        <div>
-          <div style="font-weight:700;font-size:13px;">📍 Find real dispensaries near you</div>
-          <div class="dsub" style="margin-top:3px;">${realError ? esc(realError) + ' Showing sample listings below instead.' : "We'll ask your browser for your location, then look up real dispensaries nearby via OpenStreetMap — nothing is sent anywhere else."}</div>
+        <div style="font-weight:700;font-size:13px;">📍 Find real dispensaries near you</div>
+        <div class="dsub" style="margin:3px 0 10px;">${realError ? esc(realError) + ' Showing sample listings below instead.' : "Search by ZIP code, or share your location — nothing is sent anywhere else."}</div>
+        <div class="locate-row">
+          <form method="GET" action="/dispensaries" class="zip-form">
+            <input type="text" name="zip" placeholder="ZIP code" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" value="${esc(zipParam)}">
+            <button type="submit" class="follow-btn">Search</button>
+          </form>
+          <button type="button" id="use-location-btn" class="follow-btn">Use my location</button>
         </div>
-        <button type="button" id="use-location-btn" class="follow-btn">Use my location</button>
       </div>
       <p class="screen-sub">Sample listings below for the demo — swap in a real dispensary feed when you're ready.</p>
       ${mock.dispensaries.map(d => {
