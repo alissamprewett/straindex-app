@@ -56,11 +56,28 @@ async function main() {
     if (tipsToAdd.length) {
       console.log(`Seeding ${tipsToAdd.length} new grow tip(s) (${existingTipTitles.size} already in DB)...`);
       for (const g of tipsToAdd) {
-        await db.createGrowTip({ title: g.title, category: g.category, author: g.author, body: g.body });
+        await db.createGrowTip({
+          title: g.title, category: g.category, author: g.author, body: g.body,
+          source_name: g.source_name, source_url: g.source_url,
+        });
       }
     } else {
       console.log('No new grow tips to add.');
     }
+    // Backfill: tips created before source_name/source_url existed (or before
+    // seed.js actually passed them through — an earlier bug here) won't have
+    // a source yet even though the JSON file has one. Fix those in place.
+    const byTitle = new Map(db.listGrowTips().map(t => [t.title, t]));
+    let backfilled = 0;
+    for (const g of growTips) {
+      if (!g.source_url) continue;
+      const existing = byTitle.get(g.title);
+      if (existing && !existing.source_url) {
+        await db.setGrowTipSource(existing.id, g.source_name, g.source_url);
+        backfilled++;
+      }
+    }
+    if (backfilled) console.log(`Backfilled sources on ${backfilled} existing grow tip(s).`);
   }
 
   console.log('Seed complete.');
