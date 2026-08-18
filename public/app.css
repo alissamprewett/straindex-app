@@ -63,6 +63,7 @@ form .btn{margin-top:14px;}
 
 /* ---------------------------------------------------------------- check-in: effect picker */
 .effect-picker{position:relative;}
+#strain-picker{position:relative;}
 .effect-results{position:absolute;left:0;right:0;top:calc(100% + 2px);background:#fff;border:1px solid var(--border);border-radius:10px;box-shadow:var(--shadow-lg);z-index:40;display:none;max-height:220px;overflow-y:auto;}
 .effect-results.open{display:block;}
 .search-result-row{padding:9px 12px;font-size:13px;cursor:pointer;border-bottom:1px solid var(--border);}
