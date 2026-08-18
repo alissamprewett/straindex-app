@@ -15,6 +15,7 @@ straindex-app/
     render.js          page layout/shell
     body.js            request body parsing
     chat.js            the "Ask" tab's answer engine (see "Upgrading the chatbot" below)
+    mockdata.js         demo content for dispensaries/events/shop/trading (see below)
   public/
     app.css, app.js    styling + browser-side behavior
     manifest.json, sw.js, icons/    makes it installable to a phone home screen (PWA)
@@ -89,8 +90,23 @@ The path you and I discussed: get this running well as a web app first (done), t
 
 Until then, the app is already installable as a **home-screen PWA** from Safari on an iPhone (Share → Add to Home Screen) — it gets its own icon and opens full-screen without browser chrome, which covers a lot of the "feels like an app" experience in the meantime.
 
+## The "More" tab — collection, trading, dispensaries, events, shop, badges, business
+
+Tap **More** in the bottom nav for everything beyond the core check-in/recipes/FAQ flow:
+
+- **My Collection** — every strain you've checked in shows up as a card in your binder, with rarity-colored borders and a shimmer effect on Legendary pulls. Stats (cards caught, tradeable duplicates, badges earned) and a progress bar sit up top.
+- **Trade** — pick a sample friend and propose swapping a spare duplicate for one of theirs.
+- **Check-In History** — your full timeline, newest first.
+- **Dispensaries**, **Events**, **Shop** — sample listings (`lib/mockdata.js`) so these screens have something to show. Following a dispensary, RSVPing to an event, and adding to cart all persist to the database — they're just not backed by a real dispensary/events/commerce feed yet.
+- **Badges** — 13 badges computed live from your actual activity (check-ins, trades, follows, RSVPs, recipes, grow tips).
+- **StrainDex for Business** — a partner-dashboard preview showing *real* trending strains pulled from your actual check-in data.
+- **Ways to Enjoy It** — every ingestion method with onset/duration info.
+
+**On trading specifically**: there's no real multi-user account system in this app yet — it's just you, with an admin password. So "Trade" swaps against sample fictional friends (Jordan, Maya, Chris) rather than a real second person, and says so on the page itself. Real friend-to-friend trading would need real user accounts first — a bigger step than this round covered, and worth a dedicated conversation if you want to prioritize it.
+
 ## Known gaps / honest limitations right now
 
 - **Photos** are stored directly in the database as embedded image data — fine for personal use, but if lots of people start uploading photos this should move to a proper file storage service (e.g. Supabase Storage or AWS S3) rather than growing the database file. Flag this to me if usage grows.
-- **Admin is single-password**, not per-user accounts — fine for you managing it solo, but would need real accounts if you bring on other admins.
+- **Admin is single-password**, not per-user accounts — fine for you managing it solo, but would need real accounts if you bring on other admins (and would need to exist before trading can be real).
+- **Dispensaries, events, shop, and trading use sample data**, not a live feed — see above.
 - This is a **concept/prototype build** — the strain data's THC/CBD/terpene numbers are illustratively generated where the source dataset didn't have reliable real values (documented in the project notes), not lab-verified figures. Worth knowing before treating any specific number as fact.

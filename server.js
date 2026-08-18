@@ -18,6 +18,7 @@ const auth = require('./lib/auth');
 const { layout, esc } = require('./lib/render');
 const { parseForm, parseJson } = require('./lib/body');
 const { answerFromKnowledgeBase } = require('./lib/chat');
+const mock = require('./lib/mockdata');
 
 const PORT = process.env.PORT || 3000;
 const PUBLIC_DIR = path.join(__dirname, 'public');
@@ -51,6 +52,59 @@ function requireAdmin(req, res) {
 function starString(n) { n = Number(n) || 0; return '★'.repeat(n) + '☆'.repeat(5 - n); }
 function rarityLabel(r) { return { common: 'Common', uncommon: 'Uncommon', rare: 'Rare', legendary: 'Legendary' }[r] || r; }
 
+// Terpene-overlap recommendations, ported from the prototype: score every
+// unowned strain by how much its terpene profile echoes what you already
+// own. With no check-ins yet, fall back to surfacing rare/legendary strains
+// so the carousel isn't empty on a fresh install.
+function getRecommendations(limit = 4) {
+  const owned = db.getCollection();
+  const ownedIds = new Set(owned.map(o => o.strain.id));
+  const terpWeight = {};
+  owned.forEach(o => o.strain.terps.forEach(t => { terpWeight[t.n] = (terpWeight[t.n] || 0) + t.p; }));
+  const candidates = db.listStrains({ limit: 2000 }).filter(s => !ownedIds.has(s.id));
+  const scored = candidates.map(s => {
+    let score = 0, topShared = null, topShareVal = 0;
+    s.terps.forEach(t => {
+      const w = (terpWeight[t.n] || 0) * t.p;
+      score += w;
+      if (terpWeight[t.n] && w > topShareVal) { topShareVal = w; topShared = t.n; }
+    });
+    return { s, why: topShared, score };
+  }).sort((a, b) => b.score - a.score);
+  if (!scored.length || scored[0].score === 0) {
+    const highlight = candidates.filter(s => s.rarity === 'legendary' || s.rarity === 'rare').slice(0, limit);
+    if (highlight.length) return highlight.map(s => ({ s, why: null }));
+  }
+  return scored.slice(0, limit);
+}
+
+// Badges, computed live from real app state (check-ins, trades, follows,
+// RSVPs, submitted recipes/grow-tips, cart) rather than hardcoded flags.
+function computeBadges() {
+  const owned = db.getCollection().map(o => o.strain);
+  const types = new Set(owned.map(s => s.type));
+  const checkinCount = db.listCheckins({ limit: 1 }).length;
+  const anyPhoto = db.listCheckins({ limit: 1000 }).some(c => c.photo);
+  const communityRecipe = db.listRecipes({ status: null }).some(r => r.source === 'community');
+  const favoriteRecipe = db.listRecipes({ status: null }).some(r => r.kudos >= 10);
+  const extraGrowTips = db.listGrowTips().length > 8; // more than the seeded starter set
+  return [
+    { id: 'b1', label: 'First Check-In', icon: '🌱', done: checkinCount >= 1 },
+    { id: 'b2', label: 'Explorer (5 cards)', icon: '🧭', done: db.getUniqueOwnedCount() >= 5 },
+    { id: 'b3', label: 'Type Trifecta', icon: '🎯', done: types.has('Indica') && types.has('Sativa') && types.has('Hybrid') },
+    { id: 'b4', label: 'Landrace Hunter', icon: '🗺️', done: owned.some(s => s.rarity === 'rare' || s.rarity === 'legendary') },
+    { id: 'b5', label: 'Legendary Collector', icon: '👑', done: owned.some(s => s.rarity === 'legendary') },
+    { id: 'b6', label: 'First Trade', icon: '🔁', done: db.countTrades() >= 1 },
+    { id: 'b7', label: 'Dispensary Scout', icon: '📍', done: db.anyDispensaryFollowed() },
+    { id: 'b8', label: 'Event Goer', icon: '🎉', done: db.anyRsvped() },
+    { id: 'b9', label: 'Recipe Contributor', icon: '✏️', done: communityRecipe },
+    { id: 'b10', label: 'Community Favorite', icon: '🌟', done: favoriteRecipe },
+    { id: 'b11', label: 'Shopper', icon: '🛍️', done: db.getCartCount() >= 1 },
+    { id: 'b12', label: 'Home Grower', icon: '🌱', done: extraGrowTips },
+    { id: 'b13', label: 'Photographer', icon: '📸', done: anyPhoto },
+  ];
+}
+
 // ---------------------------------------------------------------- pages
 
 function pageHome(req, res) {
@@ -59,18 +113,52 @@ function pageHome(req, res) {
   const strainCount = db.countStrains();
   const growCount = db.listGrowTips().length;
   const recentCheckins = db.listCheckins({ limit: 5 });
+  const recs = getRecommendations(4);
+  const dispTeaser = mock.dispensaries.slice(0, 3);
+
   const body = `
     <h1 class="screen-title">Welcome back 🌿</h1>
     <p class="screen-sub">Your personal cannabis journal — strains, recipes, and growing knowledge, all in one place.</p>
+    <a class="btn block" href="/checkin" style="margin-bottom:18px;">＋ Log a Check-In</a>
+
+    <div class="section-label">Recommended for you</div>
+    <div class="hcarousel">
+      ${recs.map(r => `
+        <a class="rec-card rarity-${r.s.rarity}" href="/strains/${r.s.id}">
+          <span class="icon">${r.s.icon}</span>
+          <span class="n">${esc(r.s.name)}</span>
+          <span class="why">${r.why ? 'Because you like ' + esc(r.why) : 'New for you'}</span>
+        </a>`).join('')}
+    </div>
+
+    <div class="section-label">Nearby dispensaries <a class="link" href="/dispensaries">See all →</a></div>
+    <div class="disp-strip">
+      ${dispTeaser.map(d => `
+        <a class="disp-chip" href="/dispensaries">
+          <div class="dn">${esc(d.name)}</div>
+          <div class="dm">${d.distance} · ★${d.rating}</div>
+          ${db.isFollowingDispensary(d.id) ? `<span class="dbadge">Following</span>` : ''}
+        </a>`).join('')}
+    </div>
+
     <div class="card"><b>${strainCount.toLocaleString()}</b> strains in the library · <a href="/strains">browse them →</a></div>
     <div class="card"><b>${recipeCount}</b> infused recipes · <a href="/recipes">see recipes →</a></div>
     <div class="card"><b>${growCount}</b> growing tips from the community · <a href="/growing">read them →</a></div>
     <div class="card"><b>${faqCount}</b> FAQ entries · <a href="/faq">strain school →</a></div>
+
     <h2 class="screen-title" style="margin-top:20px;">Recent check-ins</h2>
     ${recentCheckins.length ? recentCheckins.map(c => {
       const s = db.getStrain(c.strain_id);
-      return `<div class="card"><b>${esc(s ? s.name : c.strain_id)}</b> — ${esc(c.method)} · ${starString(c.rating)}<br>
-        <span class="empty-note">${esc(c.note || '')}</span></div>`;
+      return `<div class="feed-post">
+        <a class="strain-chip" href="/strains/${c.strain_id}">
+          <span style="font-size:18px;">${s ? s.icon : '🌿'}</span>
+          <span><b>${esc(s ? s.name : c.strain_id)}</b> ${s ? `<span class="rarity-tag rarity-${s.rarity}">${rarityLabel(s.rarity)}</span>` : ''}</span>
+        </a>
+        <div class="sub" style="margin-top:8px;">${esc(c.method)} · ${starString(c.rating)}</div>
+        ${c.photo ? `<img class="photo-thumb" src="${esc(c.photo)}" alt="photo">` : `<div class="photo-placeholder">${s ? s.icon : '🌿'}</div>`}
+        ${(c.effects || []).length ? `<div class="effect-tags">${c.effects.map(e => `<span>${esc(e)}</span>`).join('')}</div>` : ''}
+        ${c.note ? `<div class="note">"${esc(c.note)}"</div>` : ''}
+      </div>`;
     }).join('') : `<div class="empty-note">No check-ins logged yet.</div>`}
   `;
   sendHtml(res, layout({ title: 'Home', active: 'home', body, isAdmin: auth.isAdmin(req) }));
@@ -598,6 +686,295 @@ function apiGrowLike(req, res, id) {
 
 // ---------------------------------------------------------------- static
 
+// ---------------------------------------------------------------- more hub
+
+function pageMore(req, res) {
+  const tiles = [
+    { href: '/collection', icon: '🃏', t: 'My Collection', s: 'Binder, badges & progress' },
+    { href: '/trade', icon: '🔁', t: 'Trade', s: 'Swap dupes with friends (demo)' },
+    { href: '/history', icon: '🕐', t: 'Check-In History', s: 'Your full timeline' },
+    { href: '/dispensaries', icon: '📍', t: 'Dispensaries', s: 'Locator & live menus' },
+    { href: '/events', icon: '🎉', t: 'Events', s: 'Local drops & meetups' },
+    { href: '/badges', icon: '🏅', t: 'Badges', s: 'Full directory' },
+    { href: '/shop', icon: '🛍️', t: 'Shop', s: 'Merch & gear' },
+    { href: '/business', icon: '📊', t: 'StrainDex for Business', s: 'Partner preview' },
+    { href: '/methods', icon: '💨', t: 'Ways to Enjoy It', s: 'Every method, explained' },
+    { href: '/strains', icon: '📇', t: 'Strain Library', s: `${db.countStrains().toLocaleString()}-strain rolodex` },
+    { href: '/growing', icon: '🌱', t: 'Growing', s: 'Home-grow tips' },
+    { href: '/faq', icon: '❓', t: 'FAQ', s: 'Strain school' },
+  ];
+  const body = `
+    <h1 class="screen-title">More</h1>
+    <div class="more-grid">
+      ${tiles.map(t => `<a class="more-tile" href="${t.href}"><span class="ic">${t.icon}</span><div class="t">${esc(t.t)}</div><div class="s">${esc(t.s)}</div></a>`).join('')}
+    </div>
+  `;
+  sendHtml(res, layout({ title: 'More', active: 'more', body, isAdmin: auth.isAdmin(req) }));
+}
+
+// ---------------------------------------------------------------- collection / binder
+
+function pageCollection(req, res) {
+  const owned = db.getCollection().sort((a, b) => a.strain.name.localeCompare(b.strain.name));
+  const uniqueCount = db.getUniqueOwnedCount();
+  const totalStrains = db.countStrains();
+  const badges = computeBadges();
+  const doneBadges = badges.filter(b => b.done).length;
+  const pct = totalStrains ? Math.round((100 * uniqueCount) / totalStrains) : 0;
+
+  const body = `
+    <h1 class="screen-title">My Collection</h1>
+    <div style="display:flex;gap:8px;margin-bottom:14px;">
+      <a class="follow-btn" style="flex:1;text-align:center;" href="/strains">🔍 Browse Strain Library</a>
+      <a class="follow-btn" style="flex:1;text-align:center;" href="/history">🕐 Check-In History</a>
+    </div>
+    <div class="collection-stats">
+      <div class="stat-tile"><div class="num">${uniqueCount}/${totalStrains.toLocaleString()}</div><div class="lbl">Cards caught</div></div>
+      <div class="stat-tile"><div class="num">${db.getTotalDupes()}</div><div class="lbl">Tradeable dupes</div></div>
+      <div class="stat-tile"><div class="num">${doneBadges}/${badges.length}</div><div class="lbl">Badges</div></div>
+    </div>
+    <div class="progress-bar"><div class="fill" style="width:${pct}%;"></div></div>
+
+    ${owned.length ? `<div class="binder-grid">
+      ${owned.map(o => `
+        <a class="card-slot rarity-${o.strain.rarity}" href="/strains/${o.strain.id}">
+          ${o.copies > 1 ? `<div class="copies">×${o.copies}</div>` : ''}
+          <div class="icon">${o.strain.icon}</div>
+          <div class="name">${esc(o.strain.name)}</div>
+        </a>`).join('')}
+    </div>` : `<div class="empty-note">No cards caught yet — <a href="/checkin">log a check-in</a> to unlock your first one.</div>`}
+
+    <h2 class="screen-title" style="margin-top:20px;">Badges</h2>
+    <div class="badge-row">${badges.map(b => `<div class="badge-chip ${b.done ? '' : 'locked'}">${b.icon} ${esc(b.label)}</div>`).join('')}</div>
+  `;
+  sendHtml(res, layout({ title: 'My Collection', active: 'more', body, isAdmin: auth.isAdmin(req) }));
+}
+
+function pageHistory(req, res) {
+  const history = db.listCheckins({ limit: 200 });
+  const body = `
+    <h1 class="screen-title">Check-In History</h1>
+    <p class="screen-sub">Your full timeline, newest first.</p>
+    ${history.length ? history.map(c => {
+      const s = db.getStrain(c.strain_id);
+      return `<a class="library-row" href="/strains/${c.strain_id}" style="text-decoration:none;color:inherit;">
+        <span class="icon">${s ? s.icon : '🌿'}</span>
+        <div class="info">
+          <div class="nm">${esc(s ? s.name : c.strain_id)}</div>
+          <div class="sub">${esc(c.method)} · ${starString(c.rating)} · ${new Date(c.created_at + 'Z').toLocaleString()}</div>
+        </div>
+      </a>`;
+    }).join('') : `<div class="empty-note">No check-ins logged yet — <a href="/checkin">log your first one</a>.</div>`}
+  `;
+  sendHtml(res, layout({ title: 'Check-In History', active: 'more', body, isAdmin: auth.isAdmin(req) }));
+}
+
+// ---------------------------------------------------------------- trading (demo)
+
+function pageTrade(req, res, query) {
+  const friendId = query.get('friend') || mock.friends[0].id;
+  const friend = mock.friends.find(f => f.id === friendId) || mock.friends[0];
+  const yourPick = query.get('your') || '';
+  const theirPick = query.get('their') || '';
+
+  const collection = db.getCollection();
+  const yourDupes = collection.filter(o => o.copies > 1 && !friend.collection[o.strain.id]);
+  const theirDupeIds = Object.entries(friend.collection).filter(([id, c]) => c > 1 && !collection.some(o => o.strain.id === id));
+
+  const mk = (params) => '/trade?' + new URLSearchParams({ friend: friendId, your: yourPick, their: theirPick, ...params }).toString();
+
+  const body = `
+    <h1 class="screen-title">Trade</h1>
+    <div class="trade-caveat">Demo feature: StrainDex doesn't have real friend accounts yet, so this trades against sample collections rather than an actual person's. Real friend-to-friend trading is on the roadmap.</div>
+    <div class="friend-strip">
+      ${mock.friends.map(f => `<a class="friend-chip ${f.id === friendId ? 'selected' : ''}" href="${'/trade?friend=' + f.id}"><div class="avatar">${f.name[0]}</div><div class="fname">${esc(f.name)}</div></a>`).join('')}
+    </div>
+    <div class="trade-cols">
+      <div class="trade-col">
+        <h4>Your offer</h4>
+        ${yourDupes.length ? yourDupes.map(o => `
+          <a class="trade-item ${yourPick === o.strain.id ? 'selected' : ''}" href="${mk({ your: o.strain.id })}">
+            <span class="icon">${o.strain.icon}</span>
+            <div class="info"><span class="n">${esc(o.strain.name)}</span><span class="c">×${o.copies} owned</span></div>
+          </a>`).join('') : `<div class="empty-note">No spare duplicates ${esc(friend.name)} needs right now.</div>`}
+      </div>
+      <div class="trade-col">
+        <h4>${esc(friend.name)}'s offer</h4>
+        ${theirDupeIds.length ? theirDupeIds.map(([id, c]) => {
+          const s = db.getStrain(id);
+          if (!s) return '';
+          return `<a class="trade-item ${theirPick === id ? 'selected' : ''}" href="${mk({ their: id })}">
+            <span class="icon">${s.icon}</span>
+            <div class="info"><span class="n">${esc(s.name)}</span><span class="c">×${c} owned</span></div>
+          </a>`;
+        }).join('') : `<div class="empty-note">${esc(friend.name)} has nothing spare you're missing.</div>`}
+      </div>
+    </div>
+    <form method="POST" action="/trade/propose">
+      <input type="hidden" name="friend" value="${esc(friendId)}">
+      <input type="hidden" name="your" value="${esc(yourPick)}">
+      <input type="hidden" name="their" value="${esc(theirPick)}">
+      <button class="propose-btn" type="submit" ${(!yourPick || !theirPick) ? 'disabled' : ''}>Propose Trade</button>
+    </form>
+  `;
+  sendHtml(res, layout({ title: 'Trade', active: 'more', body, isAdmin: auth.isAdmin(req) }));
+}
+
+async function handleTradePropose(req, res) {
+  const fields = await parseForm(req);
+  const friend = mock.friends.find(f => f.id === fields.friend);
+  if (friend && fields.your && fields.their) {
+    db.createTrade({ friend_name: friend.name, gave_strain_id: fields.your, got_strain_id: fields.their });
+  }
+  redirect(res, '/trade?friend=' + encodeURIComponent(fields.friend || ''));
+}
+
+// ---------------------------------------------------------------- dispensaries
+
+function pageDispensaries(req, res) {
+  const body = `
+    <h1 class="screen-title">Dispensaries</h1>
+    <p class="screen-sub">Sample listings for the demo — swap in a real dispensary feed when you're ready.</p>
+    ${mock.dispensaries.map(d => {
+      const following = db.isFollowingDispensary(d.id);
+      const exclusiveStrain = d.exclusiveCard ? db.getStrain(d.exclusiveCard) : null;
+      const hasExclusive = exclusiveStrain && !db.getCollection().some(o => o.strain.id === exclusiveStrain.id);
+      return `<div class="dispensary-card">
+        <div class="dtop">
+          <div>
+            <div class="dname">${esc(d.name)}</div>
+            <div class="dsub">${d.distance} · ★${d.rating} · ${esc(d.address)}</div>
+            <div class="dsub">Hours: ${esc(d.hours)}</div>
+          </div>
+          <form method="POST" action="/dispensaries/${d.id}/follow">
+            <button class="follow-btn ${following ? 'following' : ''}" type="submit">${following ? 'Following' : 'Follow'}</button>
+          </form>
+        </div>
+        <div class="live-menu-tag"><span class="dot"></span> Live menu updated ${d.updated}</div>
+        <div style="margin-top:10px;">
+          ${d.menu.map(m => { const s = db.getStrain(m.strainId); return s ? `<div class="menu-row"><span>${s.icon} ${esc(s.name)}</span><span>${esc(m.price)}</span></div>` : ''; }).join('')}
+        </div>
+        ${hasExclusive ? `<div class="exclusive-banner">
+          <span>📍 Location-exclusive card: <b>${esc(exclusiveStrain.name)}</b></span>
+          <a href="/checkin?strain=${exclusiveStrain.id}">Check In Here</a>
+        </div>` : ''}
+      </div>`;
+    }).join('')}
+  `;
+  sendHtml(res, layout({ title: 'Dispensaries', active: 'more', body, isAdmin: auth.isAdmin(req) }));
+}
+
+async function handleDispensaryFollow(req, res, id) {
+  db.toggleFollowDispensary(id);
+  redirect(res, '/dispensaries');
+}
+
+// ---------------------------------------------------------------- events
+
+function pageEvents(req, res) {
+  const body = `
+    <h1 class="screen-title">Events</h1>
+    <p class="screen-sub">Sample local events for the demo.</p>
+    ${mock.events.map(e => {
+      const venue = mock.dispensaries.find(d => d.id === e.venueId);
+      const going = db.isRsvped(e.id);
+      return `<div class="event-card">
+        <div class="event-date">${e.month}<br>${e.day}</div>
+        <div>
+          <div class="event-title">${esc(e.title)}</div>
+          <div class="event-venue">${venue ? esc(venue.name) : ''}</div>
+          <div class="event-desc">${esc(e.desc)}</div>
+          <form method="POST" action="/events/${e.id}/rsvp">
+            <button class="rsvp-btn ${going ? 'going' : ''}" type="submit">${going ? "✓ You're going" : 'RSVP'}</button>
+          </form>
+        </div>
+      </div>`;
+    }).join('')}
+  `;
+  sendHtml(res, layout({ title: 'Events', active: 'more', body, isAdmin: auth.isAdmin(req) }));
+}
+
+async function handleEventRsvp(req, res, id) {
+  db.toggleRsvp(id);
+  redirect(res, '/events');
+}
+
+// ---------------------------------------------------------------- business dashboard
+
+function pageBusiness(req, res) {
+  const trending = db.getMostCheckedInStrains(5);
+  const max = trending.length ? Math.max(...trending.map(t => t.count)) : 1;
+  const body = `
+    <h1 class="screen-title">StrainDex for Business</h1>
+    <div class="biz-banner">
+      <div class="bt">Partner dashboard preview</div>
+      <div class="bs">A look at what a dispensary partner would see: what's trending with your actual check-in data, in real time.</div>
+    </div>
+    <h2 class="screen-title">Trending strains (from real check-ins)</h2>
+    ${trending.length ? trending.map(t => `
+      <div class="trend-row">
+        <div class="trend-label">${esc(t.strain.name)}</div>
+        <div class="trend-track"><div class="trend-fill" style="width:${Math.round((100 * t.count) / max)}%;"></div></div>
+        <div class="trend-val">${t.count}</div>
+      </div>`).join('') : `<div class="empty-note">No check-in data yet — trends will appear here once check-ins start coming in.</div>`}
+  `;
+  sendHtml(res, layout({ title: 'Business', active: 'more', body, isAdmin: auth.isAdmin(req) }));
+}
+
+// ---------------------------------------------------------------- shop
+
+function pageShop(req, res) {
+  const cartCount = db.getCartCount();
+  const body = `
+    <h1 class="screen-title">Shop</h1>
+    <p class="screen-sub">Sample merch for the demo — not a real store yet.</p>
+    <div class="shop-grid">
+      ${mock.shopItems.map(i => `
+        <div class="shop-item">
+          <div class="ic">${i.icon}</div>
+          <div class="sn">${esc(i.name)}</div>
+          <div class="sp">${esc(i.price)}</div>
+          <form method="POST" action="/shop/${i.id}/add"><button type="submit">Add to Cart</button></form>
+        </div>`).join('')}
+    </div>
+    <div class="cart-note">Cart: ${cartCount} item${cartCount === 1 ? '' : 's'}</div>
+  `;
+  sendHtml(res, layout({ title: 'Shop', active: 'more', body, isAdmin: auth.isAdmin(req) }));
+}
+
+async function handleShopAdd(req, res, id) {
+  db.addToCart(id);
+  redirect(res, '/shop');
+}
+
+// ---------------------------------------------------------------- badges directory
+
+function pageBadges(req, res) {
+  const badges = computeBadges();
+  const body = `
+    <h1 class="screen-title">Badges</h1>
+    <p class="screen-sub">${badges.filter(b => b.done).length} of ${badges.length} earned.</p>
+    <div class="badge-row">${badges.map(b => `<div class="badge-chip ${b.done ? '' : 'locked'}">${b.icon} ${esc(b.label)}</div>`).join('')}</div>
+  `;
+  sendHtml(res, layout({ title: 'Badges', active: 'more', body, isAdmin: auth.isAdmin(req) }));
+}
+
+// ---------------------------------------------------------------- consumption methods guide
+
+function pageMethods(req, res) {
+  const body = `
+    <h1 class="screen-title">Ways to Enjoy It</h1>
+    <p class="screen-sub">Every ingestion method, with realistic onset and duration windows.</p>
+    ${mock.methodGuide.map(m => `
+      <div class="method-guide-card">
+        <div class="mgtitle">${m.icon} ${esc(m.name)}</div>
+        <div class="mgstats"><span>Onset: ${esc(m.onset)}</span><span>Lasts: ${esc(m.duration)}</span></div>
+        <div class="mgdesc">${esc(m.desc)}</div>
+      </div>`).join('')}
+  `;
+  sendHtml(res, layout({ title: 'Ways to Enjoy It', active: 'more', body, isAdmin: auth.isAdmin(req) }));
+}
+
 function serveStatic(req, res, pathname) {
   const filePath = path.join(PUBLIC_DIR, pathname);
   if (!filePath.startsWith(PUBLIC_DIR)) return notFound(res);
@@ -654,6 +1031,21 @@ const server = http.createServer(async (req, res) => {
     if (method === 'GET' && pathname === '/api/strains') return apiListStrains(req, res, url.searchParams);
     if (method === 'POST' && (m = pathname.match(/^\/api\/recipes\/(\d+)\/kudos$/))) return apiKudos(req, res, Number(m[1]));
     if (method === 'POST' && (m = pathname.match(/^\/api\/growtips\/(\d+)\/like$/))) return apiGrowLike(req, res, Number(m[1]));
+
+    if (method === 'GET' && pathname === '/more') return pageMore(req, res);
+    if (method === 'GET' && pathname === '/collection') return pageCollection(req, res);
+    if (method === 'GET' && pathname === '/history') return pageHistory(req, res);
+    if (method === 'GET' && pathname === '/trade') return pageTrade(req, res, url.searchParams);
+    if (method === 'POST' && pathname === '/trade/propose') return await handleTradePropose(req, res);
+    if (method === 'GET' && pathname === '/dispensaries') return pageDispensaries(req, res);
+    if (method === 'POST' && (m = pathname.match(/^\/dispensaries\/([^/]+)\/follow$/))) return await handleDispensaryFollow(req, res, m[1]);
+    if (method === 'GET' && pathname === '/events') return pageEvents(req, res);
+    if (method === 'POST' && (m = pathname.match(/^\/events\/([^/]+)\/rsvp$/))) return await handleEventRsvp(req, res, m[1]);
+    if (method === 'GET' && pathname === '/business') return pageBusiness(req, res);
+    if (method === 'GET' && pathname === '/shop') return pageShop(req, res);
+    if (method === 'POST' && (m = pathname.match(/^\/shop\/([^/]+)\/add$/))) return await handleShopAdd(req, res, m[1]);
+    if (method === 'GET' && pathname === '/badges') return pageBadges(req, res);
+    if (method === 'GET' && pathname === '/methods') return pageMethods(req, res);
 
     return notFound(res);
   } catch (err) {
