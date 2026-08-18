@@ -46988,5 +46988,3539 @@
     ],
     "flavor": "Sweet and earthy with a cooling, minty edge.",
     "icon": "💍"
+  },
+  {
+    "id": "s1534",
+    "name": "Cookie Glue",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "18–22%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.25
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Happy",
+      "Uplifted"
+    ],
+    "flavor": "Fruity and sour with a spicy, skunky finish.",
+    "icon": "🍪"
+  },
+  {
+    "id": "s1535",
+    "name": "GMO",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "legendary",
+    "thc": "24–28%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.35
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Euphoric",
+      "Sleepy",
+      "Happy"
+    ],
+    "flavor": "Pungent garlic and diesel over an earthy, savory base.",
+    "icon": "🧄"
+  },
+  {
+    "id": "s1536",
+    "name": "Slurricane",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "20–26%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.25
+      },
+      {
+        "n": "Linalool",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Sleepy",
+      "Happy",
+      "Euphoric"
+    ],
+    "flavor": "Sweet grape and vanilla with a gassy undertone.",
+    "icon": "🌀"
+  },
+  {
+    "id": "s1537",
+    "name": "Durban Z",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "20–25%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Terpinolene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.25
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Energetic",
+      "Uplifted",
+      "Happy",
+      "Focused"
+    ],
+    "flavor": "Citrus and anise with a tropical, candy-like sweetness.",
+    "icon": "🌍"
+  },
+  {
+    "id": "s1538",
+    "name": "Oreoz",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "legendary",
+    "thc": "24–30%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      },
+      {
+        "n": "Humulene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Euphoric",
+      "Sleepy",
+      "Happy"
+    ],
+    "flavor": "Dark chocolate cookie and vanilla with a diesel twang.",
+    "icon": "🍫"
+  },
+  {
+    "id": "s1539",
+    "name": "Permanent Marker",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "legendary",
+    "thc": "25–30%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.25
+      },
+      {
+        "n": "Linalool",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Euphoric",
+      "Happy",
+      "Uplifted"
+    ],
+    "flavor": "Candy-sweet gas with an inky, funky edge.",
+    "icon": "🖊️"
+  },
+  {
+    "id": "s1540",
+    "name": "Peanut Butter Breath",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "20–25%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Humulene",
+        "p": 0.2
+      },
+      {
+        "n": "Limonene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Sleepy",
+      "Happy",
+      "Euphoric"
+    ],
+    "flavor": "Genuinely nutty and earthy, closer to real peanut butter than most food-named strains.",
+    "icon": "🥜"
+  },
+  {
+    "id": "s1541",
+    "name": "London Pound Cake",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "20–28%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.25
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Sleepy",
+      "Happy",
+      "Euphoric"
+    ],
+    "flavor": "Sweet berries and lemon over an earthy pine base.",
+    "icon": "🍰"
+  },
+  {
+    "id": "s1542",
+    "name": "Lemon Cherry Gelato",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "20–25%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.35
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Happy",
+      "Euphoric",
+      "Relaxed",
+      "Uplifted"
+    ],
+    "flavor": "Bright lemon and sweet cherry with a creamy gelato finish.",
+    "icon": "🍒"
+  },
+  {
+    "id": "s1543",
+    "name": "Jet Fuel Gelato",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "20–25%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      },
+      {
+        "n": "Pinene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Uplifted",
+      "Energetic",
+      "Happy",
+      "Relaxed"
+    ],
+    "flavor": "Sharp diesel fuel softened by sweet citrus and cream.",
+    "icon": "⛽"
+  },
+  {
+    "id": "s1544",
+    "name": "Strawberry Banana",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "20–27%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Euphoric",
+      "Happy",
+      "Sleepy"
+    ],
+    "flavor": "Sweet strawberry and ripe banana with a tropical finish.",
+    "icon": "🍓"
+  },
+  {
+    "id": "s1545",
+    "name": "Runtz Cake",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "legendary",
+    "thc": "22–28%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.25
+      },
+      {
+        "n": "Linalool",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Happy",
+      "Uplifted"
+    ],
+    "flavor": "Sweet cake batter and candy over a gassy base.",
+    "icon": "🎂"
+  },
+  {
+    "id": "s1546",
+    "name": "Candy Rain",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18–24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "Candy-sweet with ripe berry notes and a smooth finish.",
+    "icon": "🍬"
+  },
+  {
+    "id": "s1547",
+    "name": "Melted Strawberries",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "18–24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "Sweet, jammy strawberry with a creamy undertone.",
+    "icon": "🍓"
+  },
+  {
+    "id": "s1548",
+    "name": "Jelly Rancher",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "18–24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.35
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Happy",
+      "Uplifted",
+      "Relaxed",
+      "Euphoric"
+    ],
+    "flavor": "Sweet, candied fruit reminiscent of the classic hard candy.",
+    "icon": "🍬"
+  },
+  {
+    "id": "s1549",
+    "name": "Larry OG",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "19–24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Sleepy"
+    ],
+    "flavor": "Lemon and pine over an earthy OG base.",
+    "icon": "🍋"
+  },
+  {
+    "id": "s1550",
+    "name": "Ghost OG",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "20–25%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Sleepy"
+    ],
+    "flavor": "Sweet lemon and pine with a heavy diesel finish.",
+    "icon": "👻"
+  },
+  {
+    "id": "s1551",
+    "name": "Alien OG",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "20–24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Sleepy"
+    ],
+    "flavor": "Earthy citrus with a spicy, gassy edge.",
+    "icon": "👽"
+  },
+  {
+    "id": "s1552",
+    "name": "Karma OG",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18–22%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Sleepy"
+    ],
+    "flavor": "Pungent pine and lemon over a woody base.",
+    "icon": "🌲"
+  },
+  {
+    "id": "s1553",
+    "name": "Elephant OG",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18–23%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Sleepy"
+    ],
+    "flavor": "Earthy and sour with a heavy, musky finish.",
+    "icon": "🐘"
+  },
+  {
+    "id": "s1554",
+    "name": "Thin Mint GSC",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "19–25%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.25
+      },
+      {
+        "n": "Linalool",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "Sweet mint and chocolate over an earthy cookie base.",
+    "icon": "🍬"
+  },
+  {
+    "id": "s1555",
+    "name": "Gelato 33",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "20–25%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.25
+      },
+      {
+        "n": "Linalool",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "Sweet cream and berry with a subtle gas finish.",
+    "icon": "🍨"
+  },
+  {
+    "id": "s1556",
+    "name": "Gelato 41",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "legendary",
+    "thc": "20–26%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.25
+      },
+      {
+        "n": "Linalool",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "Creamy dessert sweetness with a citrus, gassy edge.",
+    "icon": "🍨"
+  },
+  {
+    "id": "s1557",
+    "name": "Sunset Gelato",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18–24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.25
+      },
+      {
+        "n": "Linalool",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "Sweet berry and cream with an earthy finish.",
+    "icon": "🌇"
+  },
+  {
+    "id": "s1558",
+    "name": "Dolato",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "20–25%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.25
+      },
+      {
+        "n": "Linalool",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "Creamy dessert sweetness layered with earthy gas.",
+    "icon": "🍮"
+  },
+  {
+    "id": "s1559",
+    "name": "Cake Batter",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18–24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.25
+      },
+      {
+        "n": "Linalool",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "Sweet vanilla cake with a doughy, earthy finish.",
+    "icon": "🎂"
+  },
+  {
+    "id": "s1560",
+    "name": "Birthday Cake",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "20–25%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.25
+      },
+      {
+        "n": "Linalool",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "Sweet vanilla frosting with a peppery, earthy base.",
+    "icon": "🎂"
+  },
+  {
+    "id": "s1561",
+    "name": "Cookies N Chem",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "19–24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.25
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Euphoric",
+      "Happy",
+      "Uplifted"
+    ],
+    "flavor": "Sweet cookie dough with a sharp, chemical diesel edge.",
+    "icon": "🍪"
+  },
+  {
+    "id": "s1562",
+    "name": "Animal Mints",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "20–26%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.25
+      },
+      {
+        "n": "Linalool",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "Minty cookie sweetness with a gassy, earthy finish.",
+    "icon": "🐾"
+  },
+  {
+    "id": "s1563",
+    "name": "Mint Chocolate Chip",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18–24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.25
+      },
+      {
+        "n": "Linalool",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "Cool mint and chocolate with a creamy finish.",
+    "icon": "🍫"
+  },
+  {
+    "id": "s1564",
+    "name": "Gelonade",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "18–23%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.25
+      },
+      {
+        "n": "Linalool",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "Tart lemonade sweetness over a creamy gelato base.",
+    "icon": "🍋"
+  },
+  {
+    "id": "s1565",
+    "name": "White Gelato",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "19–24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.25
+      },
+      {
+        "n": "Linalool",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "Sweet cream and citrus with a light, frosty finish.",
+    "icon": "🍨"
+  },
+  {
+    "id": "s1566",
+    "name": "Acai Berry Gelato",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "18–24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.25
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "Sweet berry and cream with a tart, fruity edge.",
+    "icon": "🫐"
+  },
+  {
+    "id": "s1567",
+    "name": "Gelato Cake",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "20–25%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.25
+      },
+      {
+        "n": "Linalool",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "Sweet vanilla cake with a creamy gelato finish.",
+    "icon": "🍰"
+  },
+  {
+    "id": "s1568",
+    "name": "White Runtz",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "legendary",
+    "thc": "21–28%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.35
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Euphoric",
+      "Happy",
+      "Relaxed",
+      "Uplifted"
+    ],
+    "flavor": "Sweet candy and cream with a smooth, gassy finish.",
+    "icon": "🍬"
+  },
+  {
+    "id": "s1569",
+    "name": "Pink Runtz",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "legendary",
+    "thc": "19–25%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.35
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Euphoric",
+      "Happy",
+      "Relaxed",
+      "Uplifted"
+    ],
+    "flavor": "Sweet berry candy with a creamy, tropical finish.",
+    "icon": "🍬"
+  },
+  {
+    "id": "s1570",
+    "name": "Purple Runtz",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "19–24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.35
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Euphoric",
+      "Happy",
+      "Relaxed",
+      "Uplifted"
+    ],
+    "flavor": "Sweet grape candy with a gassy, earthy finish.",
+    "icon": "🍇"
+  },
+  {
+    "id": "s1571",
+    "name": "Watermelon Zkittlez",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "18–23%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.35
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Euphoric",
+      "Happy",
+      "Relaxed",
+      "Uplifted"
+    ],
+    "flavor": "Sweet watermelon candy with a tropical finish.",
+    "icon": "🍉"
+  },
+  {
+    "id": "s1572",
+    "name": "Rainbow Sherbert",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "17–22%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.25
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "Sweet berry sherbet with a creamy, citrus finish.",
+    "icon": "🌈"
+  },
+  {
+    "id": "s1573",
+    "name": "Bacio Gelato",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "20–25%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.25
+      },
+      {
+        "n": "Linalool",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "Sweet hazelnut and cream with an earthy gas finish.",
+    "icon": "🍫"
+  },
+  {
+    "id": "s1574",
+    "name": "Grape Gelato",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18–24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.25
+      },
+      {
+        "n": "Linalool",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "Sweet grape and cream with a gassy undertone.",
+    "icon": "🍇"
+  },
+  {
+    "id": "s1575",
+    "name": "Sour Tsunami",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "rare",
+    "thc": "<7% THC, 10–13% CBD",
+    "cbd": "10–13%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Terpinolene",
+        "p": 0.25
+      },
+      {
+        "n": "Pinene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Focused",
+      "Clear-headed",
+      "Calm"
+    ],
+    "flavor": "Musky diesel with a sweet, citrus undertone — bred specifically for high CBD rather than a strong high.",
+    "icon": "🌊"
+  },
+  {
+    "id": "s1576",
+    "name": "Ghost Train Haze",
+    "type": "Sativa",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "19–25%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Terpinolene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.25
+      },
+      {
+        "n": "Pinene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Energetic",
+      "Uplifted",
+      "Happy",
+      "Focused"
+    ],
+    "flavor": "Sweet citrus and floral notes with a sharp, spicy finish.",
+    "icon": "👻"
+  },
+  {
+    "id": "s1577",
+    "name": "Super Lemon OG",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "18–23%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Terpinolene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.25
+      },
+      {
+        "n": "Pinene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Energetic",
+      "Uplifted",
+      "Happy",
+      "Focused"
+    ],
+    "flavor": "Bright lemon citrus over an earthy OG base.",
+    "icon": "🍋"
+  },
+  {
+    "id": "s1578",
+    "name": "Orange Creamsicle",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "17–22%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.25
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "Sweet orange and cream, just like the frozen treat.",
+    "icon": "🍊"
+  },
+  {
+    "id": "s1579",
+    "name": "Orange Cookies",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "18–23%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.25
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "Sweet citrus and cookie dough with an earthy finish.",
+    "icon": "🍊"
+  },
+  {
+    "id": "s1580",
+    "name": "Blueberry Muffin",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "17–22%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.25
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "Sweet blueberry and baked dough with a creamy finish.",
+    "icon": "🫐"
+  },
+  {
+    "id": "s1581",
+    "name": "Lemon Tree",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "20–25%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Terpinolene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.25
+      },
+      {
+        "n": "Pinene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Energetic",
+      "Uplifted",
+      "Happy",
+      "Focused"
+    ],
+    "flavor": "Bright lemon zest over a sweet, earthy base.",
+    "icon": "🍋"
+  },
+  {
+    "id": "s1582",
+    "name": "Banana OG",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18–24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.25
+      },
+      {
+        "n": "Limonene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Sleepy",
+      "Happy",
+      "Euphoric"
+    ],
+    "flavor": "Sweet banana over an earthy, diesel OG base.",
+    "icon": "🍌"
+  },
+  {
+    "id": "s1583",
+    "name": "Tropicana",
+    "type": "Sativa",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "17–22%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Terpinolene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.25
+      },
+      {
+        "n": "Pinene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Energetic",
+      "Uplifted",
+      "Happy",
+      "Focused"
+    ],
+    "flavor": "Bright tropical citrus with an energizing sativa lift.",
+    "icon": "🍹"
+  },
+  {
+    "id": "s1584",
+    "name": "Key Lime Pie",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18–23%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.25
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "Tart lime and sweet cream over an earthy crust-like base.",
+    "icon": "🥧"
+  },
+  {
+    "id": "s1585",
+    "name": "Key Lime OG",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18–23%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Sleepy"
+    ],
+    "flavor": "Tart lime citrus over a pungent, earthy OG base.",
+    "icon": "🥧"
+  },
+  {
+    "id": "s1586",
+    "name": "Wedding Pie",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "19–24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.25
+      },
+      {
+        "n": "Linalool",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "Sweet vanilla cake with a fruity, earthy finish.",
+    "icon": "🥧"
+  },
+  {
+    "id": "s1587",
+    "name": "WiFi OG",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "20–25%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Sleepy"
+    ],
+    "flavor": "Earthy pine and lemon with a heavy, relaxing gas finish.",
+    "icon": "📶"
+  },
+  {
+    "id": "s1588",
+    "name": "White Fire OG",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "20–26%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Sleepy"
+    ],
+    "flavor": "Sharp lemon and pine over a heavy diesel base.",
+    "icon": "🔥"
+  },
+  {
+    "id": "s1589",
+    "name": "9lb Hammer",
+    "type": "Indica",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "18–24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.25
+      },
+      {
+        "n": "Limonene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Sleepy",
+      "Happy",
+      "Euphoric"
+    ],
+    "flavor": "Earthy grape and berry with a heavy, sedating finish.",
+    "icon": "🔨"
+  },
+  {
+    "id": "s1590",
+    "name": "Purple Punch OG",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18–23%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.25
+      },
+      {
+        "n": "Limonene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Sleepy",
+      "Happy",
+      "Euphoric"
+    ],
+    "flavor": "Sweet grape and berry over a pungent OG base.",
+    "icon": "🍇"
+  },
+  {
+    "id": "s1591",
+    "name": "OG 18",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "19–24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Sleepy"
+    ],
+    "flavor": "Earthy pine and citrus with a classic OG gas finish.",
+    "icon": "🌲"
+  },
+  {
+    "id": "s1592",
+    "name": "Stardawg",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "20–25%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.25
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Euphoric",
+      "Happy",
+      "Uplifted"
+    ],
+    "flavor": "Pungent diesel and garlic with a sharp, chemical edge.",
+    "icon": "⭐"
+  },
+  {
+    "id": "s1593",
+    "name": "Chem 4",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "19–24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.25
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Euphoric",
+      "Happy",
+      "Uplifted"
+    ],
+    "flavor": "Sharp diesel and lemon with a chemical, earthy finish.",
+    "icon": "⚗️"
+  },
+  {
+    "id": "s1594",
+    "name": "Chemdog 91",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "18–23%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.25
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Euphoric",
+      "Happy",
+      "Uplifted"
+    ],
+    "flavor": "Pungent diesel and earth, a foundational chem-line cut.",
+    "icon": "⚗️"
+  },
+  {
+    "id": "s1595",
+    "name": "Bubblegum",
+    "type": "Indica",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "15–20%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      },
+      {
+        "n": "Limonene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Calm"
+    ],
+    "flavor": "Sweet, chewy bubblegum with a subtle floral finish.",
+    "icon": "🍬"
+  },
+  {
+    "id": "s1596",
+    "name": "Blueberry OG",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18–23%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.25
+      },
+      {
+        "n": "Limonene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Sleepy",
+      "Happy",
+      "Euphoric"
+    ],
+    "flavor": "Sweet blueberry over an earthy, pungent OG base.",
+    "icon": "🫐"
+  },
+  {
+    "id": "s1597",
+    "name": "Blue Gelato",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "19–24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.25
+      },
+      {
+        "n": "Linalool",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "Sweet blueberry cream with a gassy undertone.",
+    "icon": "🫐"
+  },
+  {
+    "id": "s1598",
+    "name": "Wedding Gelato",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "19–25%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.25
+      },
+      {
+        "n": "Linalool",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "Sweet vanilla cake and cream with an earthy finish.",
+    "icon": "💍"
+  },
+  {
+    "id": "s1599",
+    "name": "Gelato #45",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "20–25%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.25
+      },
+      {
+        "n": "Linalool",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "Sweet cream and citrus with a smooth, gassy finish.",
+    "icon": "🍨"
+  },
+  {
+    "id": "s1600",
+    "name": "Black Cherry Gelato",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18–24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.25
+      },
+      {
+        "n": "Linalool",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "Sweet dark cherry with a creamy, gassy finish.",
+    "icon": "🍒"
+  },
+  {
+    "id": "s1601",
+    "name": "Sunset Runtz",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "20–26%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.35
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Euphoric",
+      "Happy",
+      "Relaxed",
+      "Uplifted"
+    ],
+    "flavor": "Sweet candy and citrus with a smooth, creamy finish.",
+    "icon": "🌇"
+  },
+  {
+    "id": "s1602",
+    "name": "Apple Jacks",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "17–22%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.25
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "Sweet apple and cinnamon-like spice, reminiscent of the cereal.",
+    "icon": "🍎"
+  },
+  {
+    "id": "s1603",
+    "name": "Apple Gelato",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "18–23%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.25
+      },
+      {
+        "n": "Linalool",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "Sweet apple and cream with a gassy undertone.",
+    "icon": "🍎"
+  },
+  {
+    "id": "s1604",
+    "name": "Pancakes",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18–24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.25
+      },
+      {
+        "n": "Linalool",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "Sweet maple and vanilla with a doughy, earthy finish.",
+    "icon": "🥞"
+  },
+  {
+    "id": "s1605",
+    "name": "Banana Pancakes",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18–23%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.25
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "Sweet banana and vanilla with a creamy, earthy finish.",
+    "icon": "🥞"
+  },
+  {
+    "id": "s1606",
+    "name": "Wedding Cookies",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "19–24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.25
+      },
+      {
+        "n": "Linalool",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "Sweet vanilla cookie with an earthy, gassy finish.",
+    "icon": "🍪"
+  },
+  {
+    "id": "s1607",
+    "name": "Purple Gelato",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "19–24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.25
+      },
+      {
+        "n": "Linalool",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "Sweet grape and cream with a smooth, earthy finish.",
+    "icon": "🍇"
+  },
+  {
+    "id": "s1608",
+    "name": "Kush Cake",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "19–25%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.25
+      },
+      {
+        "n": "Limonene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Sleepy",
+      "Happy",
+      "Euphoric"
+    ],
+    "flavor": "Sweet vanilla cake over a pungent kush base.",
+    "icon": "🎂"
+  },
+  {
+    "id": "s1609",
+    "name": "Triple OG",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "19–24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Sleepy"
+    ],
+    "flavor": "Earthy pine and lemon with a heavy, classic OG finish.",
+    "icon": "🌲"
+  },
+  {
+    "id": "s1610",
+    "name": "Fire Alien OG",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "19–24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Sleepy"
+    ],
+    "flavor": "Sharp citrus and pine with a spicy, gassy edge.",
+    "icon": "👽"
+  },
+  {
+    "id": "s1611",
+    "name": "Blue Dream CBD",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "4–10% THC, 6–10% CBD",
+    "cbd": "6–10%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Pinene",
+        "p": 0.2
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Focused",
+      "Calm",
+      "Happy"
+    ],
+    "flavor": "Sweet berry aroma with a gentler, more balanced experience than standard Blue Dream.",
+    "icon": "🫐"
+  },
+  {
+    "id": "s1612",
+    "name": "Cannatonic",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "6–12% THC, 6–12% CBD",
+    "cbd": "6–12%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Pinene",
+        "p": 0.2
+      },
+      {
+        "n": "Limonene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Focused",
+      "Calm",
+      "Clear-headed"
+    ],
+    "flavor": "Earthy citrus with a mild, clear-headed effect thanks to its balanced CBD:THC ratio.",
+    "icon": "⚖️"
+  },
+  {
+    "id": "s1613",
+    "name": "Sour Patch Kids",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "19–24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.35
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Euphoric",
+      "Happy",
+      "Relaxed",
+      "Uplifted"
+    ],
+    "flavor": "Sour citrus candy with a sweet, tangy finish.",
+    "icon": "🍬"
+  },
+  {
+    "id": "s1614",
+    "name": "MAC",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "legendary",
+    "thc": "20–25%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.25
+      },
+      {
+        "n": "Linalool",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "Sweet citrus and diesel with a creamy, floral undertone.",
+    "icon": "🇺🇸"
+  },
+  {
+    "id": "s1615",
+    "name": "Miracle Mints",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "19–24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.25
+      },
+      {
+        "n": "Linalool",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "Cool mint and cookie sweetness with an earthy finish.",
+    "icon": "🌿"
+  },
+  {
+    "id": "s1616",
+    "name": "Sunshine #4",
+    "type": "Sativa",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "15–20%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Terpinolene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.25
+      },
+      {
+        "n": "Pinene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Energetic",
+      "Uplifted",
+      "Happy",
+      "Focused"
+    ],
+    "flavor": "Bright citrus and pine with an uplifting sativa energy.",
+    "icon": "☀️"
+  },
+  {
+    "id": "s1617",
+    "name": "Snowman",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "20–25%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.25
+      },
+      {
+        "n": "Linalool",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "Sweet cream and citrus with a smooth, gassy finish.",
+    "icon": "⛄"
+  },
+  {
+    "id": "s1618",
+    "name": "White Truffle",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "20–26%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      },
+      {
+        "n": "Humulene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Euphoric",
+      "Happy",
+      "Sleepy"
+    ],
+    "flavor": "Garlicky, earthy funk with a creamy, gassy undertone.",
+    "icon": "🍄"
+  },
+  {
+    "id": "s1619",
+    "name": "Triangle Mints",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "20–25%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.25
+      },
+      {
+        "n": "Linalool",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "Cool mint and cookie dough with an earthy, gassy finish.",
+    "icon": "🔺"
+  },
+  {
+    "id": "s1620",
+    "name": "Cheesecake",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "17–22%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.25
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "Sweet, tangy cheesecake with a creamy, earthy finish.",
+    "icon": "🍰"
+  },
+  {
+    "id": "s1621",
+    "name": "Cherry Cheesecake",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18–23%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.25
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "Sweet cherry and creamy cheesecake with an earthy base.",
+    "icon": "🍒"
+  },
+  {
+    "id": "s1622",
+    "name": "Ice Cream Man",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18–24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.25
+      },
+      {
+        "n": "Linalool",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "Sweet cream and berry with a smooth, gassy finish.",
+    "icon": "🍦"
+  },
+  {
+    "id": "s1623",
+    "name": "Gelatti",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "20–25%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.25
+      },
+      {
+        "n": "Linalool",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "Sweet cream and citrus with a gassy, earthy undertone.",
+    "icon": "🍨"
+  },
+  {
+    "id": "s1624",
+    "name": "Rainbow Belts",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "18–24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.35
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Euphoric",
+      "Happy",
+      "Relaxed",
+      "Uplifted"
+    ],
+    "flavor": "Sweet candy and berry with a tropical, tangy finish.",
+    "icon": "🌈"
+  },
+  {
+    "id": "s1625",
+    "name": "White Wedding",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18–23%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.25
+      },
+      {
+        "n": "Linalool",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "Sweet vanilla cake with an earthy, gassy finish.",
+    "icon": "💍"
+  },
+  {
+    "id": "s1626",
+    "name": "Grease Monkey",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "19–24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.25
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Euphoric",
+      "Happy",
+      "Uplifted"
+    ],
+    "flavor": "Sweet cookie dough with a sharp, fuely diesel edge.",
+    "icon": "🔧"
+  },
+  {
+    "id": "s1627",
+    "name": "Tiger's Blood",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "18–23%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.25
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "Sweet tropical fruit with a creamy, candy-like finish.",
+    "icon": "🐯"
+  },
+  {
+    "id": "s1628",
+    "name": "Blue Zkittlez",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "17–22%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.35
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Euphoric",
+      "Happy",
+      "Relaxed",
+      "Uplifted"
+    ],
+    "flavor": "Sweet blueberry candy with a tropical, fruity finish.",
+    "icon": "🫐"
+  },
+  {
+    "id": "s1629",
+    "name": "Purple Zkittlez",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "17–22%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.35
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Euphoric",
+      "Happy",
+      "Relaxed",
+      "Uplifted"
+    ],
+    "flavor": "Sweet grape candy with a tropical, fruity finish.",
+    "icon": "🍇"
+  },
+  {
+    "id": "s1630",
+    "name": "Georgia Pie",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "19–25%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.25
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "Sweet peach cobbler aroma with a creamy, earthy finish.",
+    "icon": "🍑"
+  },
+  {
+    "id": "s1631",
+    "name": "Alien Cookies",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "19–24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.25
+      },
+      {
+        "n": "Linalool",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "Sweet cookie dough with a sharp, spicy gas finish.",
+    "icon": "👽"
+  },
+  {
+    "id": "s1632",
+    "name": "Alien Rock Candy",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "18–23%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.35
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Euphoric",
+      "Happy",
+      "Relaxed",
+      "Uplifted"
+    ],
+    "flavor": "Sweet candy with a sharp, gassy, spicy undertone.",
+    "icon": "🍬"
+  },
+  {
+    "id": "s1633",
+    "name": "Rainbow Kush",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18–23%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.25
+      },
+      {
+        "n": "Limonene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Sleepy",
+      "Happy",
+      "Euphoric"
+    ],
+    "flavor": "Sweet fruit and candy over an earthy kush base.",
+    "icon": "🌈"
+  },
+  {
+    "id": "s1634",
+    "name": "Purple Push Pop",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "18–24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.35
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Euphoric",
+      "Happy",
+      "Relaxed",
+      "Uplifted"
+    ],
+    "flavor": "Sweet grape candy with a smooth, creamy finish.",
+    "icon": "🍬"
+  },
+  {
+    "id": "s1635",
+    "name": "Watermelon OG",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18–23%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.25
+      },
+      {
+        "n": "Limonene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Sleepy",
+      "Happy",
+      "Euphoric"
+    ],
+    "flavor": "Sweet watermelon over an earthy, pungent OG base.",
+    "icon": "🍉"
+  },
+  {
+    "id": "s1636",
+    "name": "Watermelon Gushers",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "18–24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.35
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Euphoric",
+      "Happy",
+      "Relaxed",
+      "Uplifted"
+    ],
+    "flavor": "Sweet watermelon candy with a tropical, tangy finish.",
+    "icon": "🍉"
+  },
+  {
+    "id": "s1637",
+    "name": "Gushers",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "20–25%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.35
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Euphoric",
+      "Happy",
+      "Relaxed",
+      "Uplifted"
+    ],
+    "flavor": "Sweet tropical fruit candy with a creamy finish.",
+    "icon": "🍬"
+  },
+  {
+    "id": "s1638",
+    "name": "Ice Cream Gelato",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18–24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.25
+      },
+      {
+        "n": "Linalool",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "Sweet cream and berry with a smooth, gassy finish.",
+    "icon": "🍨"
+  },
+  {
+    "id": "s1639",
+    "name": "Trainwreck OG",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "19–24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Sleepy"
+    ],
+    "flavor": "Spicy pine and lemon with a sharp, earthy OG finish.",
+    "icon": "🚂"
+  },
+  {
+    "id": "s1640",
+    "name": "Grandma's Batch",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18–23%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.25
+      },
+      {
+        "n": "Linalool",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "Sweet baked dough and vanilla with an earthy finish.",
+    "icon": "👵"
+  },
+  {
+    "id": "s1641",
+    "name": "Tiger Cake",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "19–24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.25
+      },
+      {
+        "n": "Linalool",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "Sweet vanilla cake with a fruity, tropical undertone.",
+    "icon": "🐯"
+  },
+  {
+    "id": "s1642",
+    "name": "Afghani #1",
+    "type": "Indica",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "15–20%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.25
+      },
+      {
+        "n": "Limonene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Sleepy",
+      "Happy",
+      "Euphoric"
+    ],
+    "flavor": "Earthy hash and spice, a classic indica landrace-derived cut.",
+    "icon": "🏔️"
+  },
+  {
+    "id": "s1643",
+    "name": "G6",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "18–23%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.25
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Euphoric",
+      "Happy",
+      "Uplifted"
+    ],
+    "flavor": "Sweet citrus and gas with an earthy, spicy finish.",
+    "icon": "✈️"
+  },
+  {
+    "id": "s1644",
+    "name": "SFV Kush",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18–23%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.25
+      },
+      {
+        "n": "Limonene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Sleepy",
+      "Happy",
+      "Euphoric"
+    ],
+    "flavor": "Earthy pine and lemon with a classic kush gas finish.",
+    "icon": "🌲"
+  },
+  {
+    "id": "s1645",
+    "name": "Gorilla Cookies",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "20–26%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.25
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Euphoric",
+      "Happy",
+      "Uplifted"
+    ],
+    "flavor": "Sweet cookie dough with a sharp, sticky diesel finish.",
+    "icon": "🦍"
+  },
+  {
+    "id": "s1646",
+    "name": "Wookies",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "19–24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.25
+      },
+      {
+        "n": "Linalool",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "Sweet cookie dough with a sharp, gassy, earthy finish.",
+    "icon": "🧸"
+  },
+  {
+    "id": "s1647",
+    "name": "Pina Colada",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "16–21%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.25
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "Sweet pineapple and coconut, tropical and bright.",
+    "icon": "🍹"
   }
 ]
