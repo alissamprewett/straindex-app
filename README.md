@@ -15,7 +15,8 @@ straindex-app/
     render.js          page layout/shell
     body.js            request body parsing
     chat.js            the "Ask" tab's answer engine (see "Upgrading the chatbot" below)
-    mockdata.js         demo content for dispensaries/events/shop/trading (see below)
+    mockdata.js         demo content for events/shop/trading (see below)
+    geodispensaries.js   real, live nearby-dispensary lookup via OpenStreetMap (see below)
   public/
     app.css, app.js    styling + browser-side behavior
     manifest.json, sw.js, icons/    makes it installable to a phone home screen (PWA)
@@ -97,12 +98,21 @@ Tap **More** in the bottom nav for everything beyond the core check-in/recipes/F
 - **My Collection** — every strain you've checked in shows up as a card in your binder, with rarity-colored borders and a shimmer effect on Legendary pulls. Stats (cards caught, tradeable duplicates, badges earned) and a progress bar sit up top.
 - **Trade** — pick a sample friend and propose swapping a spare duplicate for one of theirs.
 - **Check-In History** — your full timeline, newest first.
-- **Dispensaries**, **Events**, **Shop** — sample listings (`lib/mockdata.js`) so these screens have something to show. Following a dispensary, RSVPing to an event, and adding to cart all persist to the database — they're just not backed by a real dispensary/events/commerce feed yet.
+- **Dispensaries** — tap "Use my location" and it looks up **real** nearby dispensaries (name, address, hours where listed, directions) via OpenStreetMap's free Overpass API — no signup or API key needed. Coverage is crowdsourced, so it can be spotty in some areas; if nothing turns up nearby, it falls back to the sample listings below with a note explaining why. No real live menu/pricing data is shown, since that lives inside each dispensary's own point-of-sale system, not a public feed. See "Upgrading dispensary data" below to swap in Google Places for better coverage.
+- **Events**, **Shop** — sample listings (`lib/mockdata.js`) so these screens have something to show. Following a dispensary, RSVPing to an event, and adding to cart all persist to the database — they're just not backed by a real events/commerce feed yet.
 - **Badges** — 13 badges computed live from your actual activity (check-ins, trades, follows, RSVPs, recipes, grow tips).
 - **StrainDex for Business** — a partner-dashboard preview showing *real* trending strains pulled from your actual check-in data.
 - **Ways to Enjoy It** — every ingestion method with onset/duration info.
 
 **On trading specifically**: there's no real multi-user account system in this app yet — it's just you, with an admin password. So "Trade" swaps against sample fictional friends (Jordan, Maya, Chris) rather than a real second person, and says so on the page itself. Real friend-to-friend trading would need real user accounts first — a bigger step than this round covered, and worth a dedicated conversation if you want to prioritize it.
+
+### Upgrading dispensary data to Google Places (optional, better coverage)
+
+The free OpenStreetMap lookup (`lib/geodispensaries.js`) works with zero setup, but its coverage depends on volunteers having mapped dispensaries in your area. For more complete, verified coverage (plus real ratings, photos, and hours), you can swap in Google's Places API instead:
+
+1. Create a Google Cloud account and enable the Places API (Google gives a recurring monthly free credit; at low traffic this may stay free, but it's a paid API past that, so keep an eye on usage).
+2. Get an API key and set it as an environment variable, e.g. `GOOGLE_PLACES_API_KEY`.
+3. In `lib/geodispensaries.js`, replace the body of `findNearbyDispensaries()` with a call to Places Nearby Search (`type=dispensary` or a keyword search for "dispensary"/"cannabis"), keeping the same return shape (`{ ok, results, reason }` with the same fields per result) — nothing else in the app needs to change.
 
 ## Known gaps / honest limitations right now
 

@@ -19,6 +19,7 @@ const { layout, esc } = require('./lib/render');
 const { parseForm, parseJson } = require('./lib/body');
 const { answerFromKnowledgeBase } = require('./lib/chat');
 const mock = require('./lib/mockdata');
+const geo = require('./lib/geodispensaries');
 
 const PORT = process.env.PORT || 3000;
 const PUBLIC_DIR = path.join(__dirname, 'public');
@@ -831,42 +832,93 @@ async function handleTradePropose(req, res) {
 
 // ---------------------------------------------------------------- dispensaries
 
-function pageDispensaries(req, res) {
-  const body = `
-    <h1 class="screen-title">Dispensaries</h1>
-    <p class="screen-sub">Sample listings for the demo — swap in a real dispensary feed when you're ready.</p>
-    ${mock.dispensaries.map(d => {
-      const following = db.isFollowingDispensary(d.id);
-      const exclusiveStrain = d.exclusiveCard ? db.getStrain(d.exclusiveCard) : null;
-      const hasExclusive = exclusiveStrain && !db.getCollection().some(o => o.strain.id === exclusiveStrain.id);
-      return `<div class="dispensary-card">
-        <div class="dtop">
-          <div>
-            <div class="dname">${esc(d.name)}</div>
-            <div class="dsub">${d.distance} · ★${d.rating} · ${esc(d.address)}</div>
-            <div class="dsub">Hours: ${esc(d.hours)}</div>
+async function pageDispensaries(req, res, searchParams) {
+  const lat = Number(searchParams.get('lat'));
+  const lon = Number(searchParams.get('lon'));
+  const hasLocation = searchParams.has('lat') && searchParams.has('lon') && !Number.isNaN(lat) && !Number.isNaN(lon);
+
+  let realResults = null;
+  let realError = null;
+  if (hasLocation) {
+    const outcome = await geo.findNearbyDispensaries(lat, lon);
+    if (outcome.ok) realResults = outcome.results;
+    else realError = outcome.reason;
+  }
+
+  let body;
+  if (realResults) {
+    body = `
+      <h1 class="screen-title">Dispensaries</h1>
+      <p class="screen-sub geo-live"><span class="dot"></span> Showing ${realResults.length} real dispensar${realResults.length === 1 ? 'y' : 'ies'} near you, via OpenStreetMap. <a href="/dispensaries">Use sample listings instead</a></p>
+      ${realResults.map(d => {
+        const following = db.isFollowingDispensary(d.id);
+        const mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${d.lat},${d.lon}`;
+        return `<div class="dispensary-card">
+          <div class="dtop">
+            <div>
+              <div class="dname">${esc(d.name)}</div>
+              <div class="dsub">${d.distanceLabel ? esc(d.distanceLabel) + ' · ' : ''}${esc(d.address || 'Address not listed')}</div>
+              ${d.hours ? `<div class="dsub">Hours: ${esc(d.hours)}</div>` : ''}
+              ${d.phone ? `<div class="dsub">${esc(d.phone)}</div>` : ''}
+            </div>
+            <form method="POST" action="/dispensaries/${encodeURIComponent(d.id)}/follow?lat=${lat}&lon=${lon}">
+              <button class="follow-btn ${following ? 'following' : ''}" type="submit">${following ? 'Following' : 'Follow'}</button>
+            </form>
           </div>
-          <form method="POST" action="/dispensaries/${d.id}/follow">
-            <button class="follow-btn ${following ? 'following' : ''}" type="submit">${following ? 'Following' : 'Follow'}</button>
-          </form>
+          <div style="margin-top:10px;display:flex;gap:14px;">
+            <a href="${mapsUrl}" target="_blank" rel="noopener">Get directions →</a>
+            ${d.website ? `<a href="${esc(d.website)}" target="_blank" rel="noopener">Website →</a>` : ''}
+          </div>
+        </div>`;
+      }).join('')}
+      <p class="screen-sub" style="margin-top:16px;">Real name, address, and location — pulled live from OpenStreetMap. No live menu or pricing data exists for these yet (that lives inside each dispensary's own point-of-sale system), so menus aren't shown here.</p>
+    `;
+  } else {
+    body = `
+      <h1 class="screen-title">Dispensaries</h1>
+      <div class="locate-banner">
+        <div>
+          <div style="font-weight:700;font-size:13px;">📍 Find real dispensaries near you</div>
+          <div class="dsub" style="margin-top:3px;">${realError ? esc(realError) + ' Showing sample listings below instead.' : "We'll ask your browser for your location, then look up real dispensaries nearby via OpenStreetMap — nothing is sent anywhere else."}</div>
         </div>
-        <div class="live-menu-tag"><span class="dot"></span> Live menu updated ${d.updated}</div>
-        <div style="margin-top:10px;">
-          ${d.menu.map(m => { const s = db.getStrain(m.strainId); return s ? `<div class="menu-row"><span>${s.icon} ${esc(s.name)}</span><span>${esc(m.price)}</span></div>` : ''; }).join('')}
-        </div>
-        ${hasExclusive ? `<div class="exclusive-banner">
-          <span>📍 Location-exclusive card: <b>${esc(exclusiveStrain.name)}</b></span>
-          <a href="/checkin?strain=${exclusiveStrain.id}">Check In Here</a>
-        </div>` : ''}
-      </div>`;
-    }).join('')}
-  `;
+        <button type="button" id="use-location-btn" class="follow-btn">Use my location</button>
+      </div>
+      <p class="screen-sub">Sample listings below for the demo — swap in a real dispensary feed when you're ready.</p>
+      ${mock.dispensaries.map(d => {
+        const following = db.isFollowingDispensary(d.id);
+        const exclusiveStrain = d.exclusiveCard ? db.getStrain(d.exclusiveCard) : null;
+        const hasExclusive = exclusiveStrain && !db.getCollection().some(o => o.strain.id === exclusiveStrain.id);
+        return `<div class="dispensary-card">
+          <div class="dtop">
+            <div>
+              <div class="dname">${esc(d.name)}</div>
+              <div class="dsub">${d.distance} · ★${d.rating} · ${esc(d.address)}</div>
+              <div class="dsub">Hours: ${esc(d.hours)}</div>
+            </div>
+            <form method="POST" action="/dispensaries/${d.id}/follow">
+              <button class="follow-btn ${following ? 'following' : ''}" type="submit">${following ? 'Following' : 'Follow'}</button>
+            </form>
+          </div>
+          <div class="live-menu-tag"><span class="dot"></span> Live menu updated ${d.updated}</div>
+          <div style="margin-top:10px;">
+            ${d.menu.map(m => { const s = db.getStrain(m.strainId); return s ? `<div class="menu-row"><span>${s.icon} ${esc(s.name)}</span><span>${esc(m.price)}</span></div>` : ''; }).join('')}
+          </div>
+          ${hasExclusive ? `<div class="exclusive-banner">
+            <span>📍 Location-exclusive card: <b>${esc(exclusiveStrain.name)}</b></span>
+            <a href="/checkin?strain=${exclusiveStrain.id}">Check In Here</a>
+          </div>` : ''}
+        </div>`;
+      }).join('')}
+    `;
+  }
   sendHtml(res, layout({ title: 'Dispensaries', active: 'more', body, isAdmin: auth.isAdmin(req) }));
 }
 
-async function handleDispensaryFollow(req, res, id) {
+async function handleDispensaryFollow(req, res, id, searchParams) {
   db.toggleFollowDispensary(id);
-  redirect(res, '/dispensaries');
+  const lat = searchParams.get('lat');
+  const lon = searchParams.get('lon');
+  redirect(res, lat && lon ? `/dispensaries?lat=${encodeURIComponent(lat)}&lon=${encodeURIComponent(lon)}` : '/dispensaries');
 }
 
 // ---------------------------------------------------------------- events
@@ -1037,8 +1089,8 @@ const server = http.createServer(async (req, res) => {
     if (method === 'GET' && pathname === '/history') return pageHistory(req, res);
     if (method === 'GET' && pathname === '/trade') return pageTrade(req, res, url.searchParams);
     if (method === 'POST' && pathname === '/trade/propose') return await handleTradePropose(req, res);
-    if (method === 'GET' && pathname === '/dispensaries') return pageDispensaries(req, res);
-    if (method === 'POST' && (m = pathname.match(/^\/dispensaries\/([^/]+)\/follow$/))) return await handleDispensaryFollow(req, res, m[1]);
+    if (method === 'GET' && pathname === '/dispensaries') return await pageDispensaries(req, res, url.searchParams);
+    if (method === 'POST' && (m = pathname.match(/^\/dispensaries\/([^/]+)\/follow$/))) return await handleDispensaryFollow(req, res, m[1], url.searchParams);
     if (method === 'GET' && pathname === '/events') return pageEvents(req, res);
     if (method === 'POST' && (m = pathname.match(/^\/events\/([^/]+)\/rsvp$/))) return await handleEventRsvp(req, res, m[1]);
     if (method === 'GET' && pathname === '/business') return pageBusiness(req, res);
