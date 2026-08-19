@@ -42,6 +42,11 @@ form .btn{margin-top:14px;}
 .kudos-btn{border:1.5px solid var(--border);background:#fff;color:var(--ink-secondary);padding:6px 12px;border-radius:999px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;}
 .library-row{display:flex;align-items:center;gap:10px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:10px 12px;margin-bottom:8px;}
 .library-row .icon{font-size:22px;flex-shrink:0;}
+.strain-thumb{object-fit:cover;border-radius:8px;flex-shrink:0;background:#e5e0d5;}
+.strain-thumb-xs{width:28px;height:28px;border-radius:6px;}
+.strain-thumb-sm{width:40px;height:40px;}
+.strain-thumb-md{width:56px;height:56px;border-radius:10px;}
+.strain-thumb-lg{width:64px;height:64px;border-radius:12px;}
 .library-row .info{flex:1;min-width:0;}
 .library-row .nm{font-weight:700;font-size:13px;}
 .library-row .sub{font-size:10.5px;color:var(--ink-muted);margin-top:2px;}
