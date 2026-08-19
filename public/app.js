@@ -191,7 +191,7 @@ if ('serviceWorker' in navigator) {
   const noteBox = document.getElementById('effect-note');
   const hiddenBox = document.getElementById('effect-hidden-inputs');
   const submitBtn = document.getElementById('checkin-submit');
-  let selected = [];
+  let selected = Array.isArray(window.INITIAL_EFFECTS) ? window.INITIAL_EFFECTS.slice(0, 5) : [];
 
   function renderEffects() {
     const atMax = selected.length >= 5;
@@ -201,7 +201,7 @@ if ('serviceWorker' in navigator) {
       `<span class="tag-chip">${e} <button type="button" data-remove="${e}">✕</button></span>`
     ).join('');
     hiddenBox.innerHTML = selected.map(e => `<input type="hidden" name="effects" value="${e}">`).join('');
-    noteBox.textContent = `${selected.length} of 5 selected — pick at least 1`;
+    noteBox.textContent = `${selected.length} of 5 selected`;
     noteBox.classList.toggle('full', atMax);
     chipsBox.querySelectorAll('button[data-remove]').forEach(btn => {
       btn.onclick = () => { selected = selected.filter(x => x !== btn.dataset.remove); renderEffects(); };
@@ -233,17 +233,6 @@ if ('serviceWorker' in navigator) {
     if (!picker.contains(e.target)) resultsBox.classList.remove('open');
   });
 
-  const form = document.getElementById('checkin-form');
-  if (form) {
-    form.addEventListener('submit', (evt) => {
-      if (selected.length < 1) {
-        evt.preventDefault();
-        toast('Pick at least 1 mood/effect');
-        searchInput.focus();
-      }
-    });
-  }
-
   renderEffects();
 
   // Photo capture — read the file as a data URL and stash it in a hidden
@@ -251,6 +240,15 @@ if ('serviceWorker' in navigator) {
   const fileInput = document.getElementById('photo-file-input');
   const photoData = document.getElementById('photo-data-input');
   const uploadBox = document.getElementById('photo-upload-box');
+  if (photoData && window.INITIAL_PHOTO) {
+    photoData.value = window.INITIAL_PHOTO;
+    uploadBox.innerHTML = `<div class="photo-preview-wrap"><img src="${window.INITIAL_PHOTO}" alt="Your photo"><button type="button" id="clear-photo-btn">✕</button></div>`;
+    document.getElementById('clear-photo-btn').onclick = (e) => {
+      e.stopPropagation();
+      photoData.value = '';
+      uploadBox.innerHTML = `<div class="up-ic">📷</div><div class="up-txt">Tap to snap or upload a photo of your bud<br>(optional — we'll show a placeholder if you skip it)</div>`;
+    };
+  }
   if (fileInput) {
     fileInput.addEventListener('change', () => {
       const file = fileInput.files && fileInput.files[0];
