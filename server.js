@@ -298,7 +298,11 @@ function pageStrainDetail(req, res, id) {
       ${history.map(c => `<div class="card checkin-history-row">
         ${c.photo ? `<div class="checkin-photo-thumb"><img src="${esc(c.photo)}" alt="Your photo"></div>` : ''}
         <div style="flex:1;min-width:0;">
-          <b>${esc(c.method)}</b> · ${starString(c.rating)}
+          <div style="display:flex;justify-content:space-between;align-items:baseline;">
+            <b>${esc(c.method)}</b>
+            <a href="/checkin/${c.id}/edit" class="empty-note" style="padding:0;">Edit</a>
+          </div>
+          ${starString(c.rating)}
           <div class="empty-note" style="padding:2px 0 0;">${new Date(c.created_at + 'Z').toLocaleString()}</div>
           ${(c.effects || []).length ? `<p style="margin:6px 0 0;">${c.effects.map(e => `<span class="filter-pill">${esc(e)}</span>`).join('')}</p>` : ''}
           ${c.note ? `<span class="empty-note" style="display:block;padding:4px 0 0;">${esc(c.note)}</span>` : ''}
@@ -335,35 +339,37 @@ const METHOD_GROUPS = [
   { group: 'Topicals & Other', items: ['Topical Cream / Balm', 'Transdermal Patch', 'Suppository', 'RSO (Rick Simpson Oil)', 'Cannabis Bath Soak'] },
 ];
 
-function pageCheckinForm(req, res, query) {
-  const strainId = query.get('strain') || '';
+function pageCheckinForm(req, res, query, existing) {
+  const strainId = existing ? existing.strain_id : (query.get('strain') || '');
   const s = strainId ? db.getStrain(strainId) : null;
+  const isEdit = !!existing;
   const body = `
-    <h1 class="screen-title">Check In</h1>
-    <form method="POST" action="/checkin" id="checkin-form">
+    <h1 class="screen-title">${isEdit ? 'Edit Check-In' : 'Check In'}</h1>
+    ${isEdit ? `<p class="empty-note">Thoughts changed after the fact? That's normal, especially with edibles — update it below.</p>` : ''}
+    <form method="POST" action="${isEdit ? `/checkin/${existing.id}/edit` : '/checkin'}" id="checkin-form">
       <label class="field-label">Strain</label>
       <div id="strain-picker" ${s ? 'style="display:none;"' : ''}>
-        <input type="text" id="strain-picker-search" placeholder="Type a strain name..." autocomplete="off">
+        <input type="text" id="strain-picker-search" placeholder="Type a strain name..." autocomplete="off" ${isEdit ? 'disabled' : ''}>
         <div class="effect-results" id="strain-picker-results"></div>
       </div>
       <div id="strain-picker-selected" class="card" ${s ? '' : 'style="display:none;"'}>
-        ${s ? `${s.icon} <b>${esc(s.name)}</b> <button type="button" id="strain-picker-change" class="btn secondary" style="float:right;padding:2px 10px;">Change</button>` : ''}
+        ${s ? `${s.icon} <b>${esc(s.name)}</b> ${isEdit ? '' : `<button type="button" id="strain-picker-change" class="btn secondary" style="float:right;padding:2px 10px;">Change</button>`}` : ''}
       </div>
       <input type="hidden" name="strain_id" id="strain-picker-hidden" value="${s ? s.id : ''}">
-      <p class="empty-note" id="strain-picker-hint" ${s ? 'style="display:none;"' : ''}>Tip: search from <a href="/strains">the Strain Library</a> and tap "Check in" on the strain page for a pre-filled form.</p>
+      ${isEdit ? '' : `<p class="empty-note" id="strain-picker-hint" ${s ? 'style="display:none;"' : ''}>Tip: search from <a href="/strains">the Strain Library</a> and tap "Check in" on the strain page for a pre-filled form.</p>`}
 
       <label class="field-label">Method</label>
-      <select name="method">${METHOD_GROUPS.map(g => `<optgroup label="${esc(g.group)}">${g.items.map(m => `<option>${esc(m)}</option>`).join('')}</optgroup>`).join('')}</select>
+      <select name="method">${METHOD_GROUPS.map(g => `<optgroup label="${esc(g.group)}">${g.items.map(m => `<option ${existing && existing.method === m ? 'selected' : ''}>${esc(m)}</option>`).join('')}</optgroup>`).join('')}</select>
 
       <label class="field-label">Rating</label>
-      <select name="rating">${[5, 4, 3, 2, 1].map(n => `<option value="${n}">${starString(n)}</option>`).join('')}</select>
+      <select name="rating">${[5, 4, 3, 2, 1].map(n => `<option value="${n}" ${existing && existing.rating === n ? 'selected' : ''}>${starString(n)}</option>`).join('')}</select>
 
-      <label class="field-label">Mood / Effects (pick 1–5, at least 1 required)</label>
+      <label class="field-label">Mood / Effects (pick up to 5, optional)</label>
       <div class="effect-picker" id="effect-picker">
         <input type="text" id="effect-search" placeholder="Search 85+ moods, feelings &amp; relief tags..." autocomplete="off">
         <div class="effect-results" id="effect-results"></div>
         <div class="effect-chips" id="effect-chips"></div>
-        <div class="empty-note" id="effect-note" style="padding:4px 0 0;">0 of 5 selected — pick at least 1</div>
+        <div class="empty-note" id="effect-note" style="padding:4px 0 0;">0 of 5 selected</div>
       </div>
       <div id="effect-hidden-inputs"></div>
 
@@ -378,12 +384,24 @@ function pageCheckinForm(req, res, query) {
       </div>
 
       <label class="field-label">Notes</label>
-      <textarea name="note" placeholder="How was it?"></textarea>
-      <button class="btn block" type="submit" id="checkin-submit">Log It</button>
+      <textarea name="note" placeholder="How was it?">${existing ? esc(existing.note || '') : ''}</textarea>
+      <button class="btn block" type="submit" id="checkin-submit">${isEdit ? 'Save Changes' : 'Log It'}</button>
     </form>
-    <script>window.EFFECT_VOCAB = ${JSON.stringify(EFFECT_VOCAB)};</script>
+    <script>
+      window.EFFECT_VOCAB = ${JSON.stringify(EFFECT_VOCAB)};
+      window.INITIAL_EFFECTS = ${JSON.stringify(existing ? existing.effects || [] : [])};
+      window.INITIAL_PHOTO = ${JSON.stringify(existing ? existing.photo || '' : '')};
+    </script>
   `;
-  sendHtml(res, layout({ title: 'Check In', active: 'strains', body, isAdmin: auth.isAdmin(req) }));
+  sendHtml(res, layout({ title: isEdit ? 'Edit Check-In' : 'Check In', active: 'strains', body, isAdmin: auth.isAdmin(req) }));
+}
+
+function pageCheckinEditForm(req, res, id) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const existing = db.getCheckin(id);
+  if (!existing || existing.user_id !== userId) return notFound(res);
+  pageCheckinForm(req, res, new URLSearchParams(), existing);
 }
 
 async function handleCheckinSubmit(req, res) {
@@ -394,15 +412,25 @@ async function handleCheckinSubmit(req, res) {
   if (!strainId) { sendHtml(res, layout({ title: 'Check In', body: `<p>Please pick a valid strain. <a href="/checkin">Try again</a></p>` }), 400); return; }
   let effects = Array.isArray(fields.effects) ? fields.effects : (fields.effects ? [fields.effects] : []);
   effects = effects.filter(Boolean).slice(0, 5);
-  if (effects.length < 1) {
-    sendHtml(res, layout({ title: 'Check In', body: `<p>Please pick at least 1 mood/effect. <a href="javascript:history.back()">Go back</a></p>` }), 400);
-    return;
-  }
   await db.createCheckin({
     user_id: userId, strain_id: strainId, method: fields.method, rating: Number(fields.rating) || 0,
     note: fields.note || '', effects, photo: fields.photo || null,
   });
   redirect(res, `/strains/${strainId}`);
+}
+async function handleCheckinEditSubmit(req, res, id) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const existing = db.getCheckin(id);
+  if (!existing || existing.user_id !== userId) return notFound(res);
+  const fields = await parseForm(req);
+  let effects = Array.isArray(fields.effects) ? fields.effects : (fields.effects ? [fields.effects] : []);
+  effects = effects.filter(Boolean).slice(0, 5);
+  await db.updateCheckin(id, {
+    method: fields.method, rating: Number(fields.rating) || 0,
+    note: fields.note || '', effects, photo: fields.photo || null,
+  });
+  redirect(res, `/strains/${existing.strain_id}`);
 }
 
 function pageFaq(req, res) {
@@ -1075,13 +1103,16 @@ function pageHistory(req, res) {
     <p class="screen-sub">Your full timeline, newest first.</p>
     ${history.length ? history.map(c => {
       const s = db.getStrain(c.strain_id);
-      return `<a class="library-row" href="/strains/${c.strain_id}" style="text-decoration:none;color:inherit;">
-        ${strainPhotoTag(s, 'sm')}
-        <div class="info">
-          <div class="nm">${esc(s ? s.name : c.strain_id)}</div>
-          <div class="sub">${esc(c.method)} · ${starString(c.rating)} · ${new Date(c.created_at + 'Z').toLocaleString()}</div>
-        </div>
-      </a>`;
+      return `<div class="library-row">
+        <a href="/strains/${c.strain_id}" style="text-decoration:none;color:inherit;display:flex;align-items:center;gap:10px;flex:1;min-width:0;">
+          ${strainPhotoTag(s, 'sm')}
+          <div class="info">
+            <div class="nm">${esc(s ? s.name : c.strain_id)}</div>
+            <div class="sub">${esc(c.method)} · ${starString(c.rating)} · ${new Date(c.created_at + 'Z').toLocaleString()}</div>
+          </div>
+        </a>
+        <a href="/checkin/${c.id}/edit" class="empty-note" style="padding:0 4px;">Edit</a>
+      </div>`;
     }).join('') : `<div class="empty-note">No check-ins logged yet — <a href="/checkin">log your first one</a>.</div>`}
   `;
   sendHtml(res, layout({ title: 'Check-In History', active: 'more', body, isAdmin: auth.isAdmin(req) }));
@@ -1140,7 +1171,7 @@ function pageFriends(req, res, query) {
     <div class="section-label" style="margin-top:20px;">Your friends (${friends.length})</div>
     ${friends.length ? friends.map(u => `
       <div class="admin-row">
-        <span>👤 ${esc(u.username)}</span>
+        <a href="/friends/${u.id}" style="text-decoration:none;color:inherit;">👤 ${esc(u.username)}</a>
         <div class="actions">
           <a href="/trade?friend=${u.id}" class="btn secondary" style="text-decoration:none;">Trade</a>
           <form method="POST" action="/friends/${u.id}/remove" style="display:inline;" onsubmit="return confirm('Remove this friend?')">
@@ -1150,6 +1181,46 @@ function pageFriends(req, res, query) {
       </div>`).join('') : `<div class="empty-note">No friends yet — search for a username above to get started.</div>`}
   `;
   sendHtml(res, layout({ title: 'Friends', active: 'more', body, isAdmin: auth.isAdmin(req) }));
+}
+function pageFriendProfile(req, res, friendId) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const friend = db.getUserById(friendId);
+  if (!friend) return notFound(res);
+  const status = db.getFriendshipStatus(userId, friendId);
+  if (status !== 'friends' && friendId !== userId) {
+    const body = `<h1 class="screen-title">Not connected yet</h1><p class="empty-note">You can only see a profile once you're friends with them. <a href="/friends">Back to Friends</a></p>`;
+    return sendHtml(res, layout({ title: 'Profile', active: 'more', body, isAdmin: auth.isAdmin(req) }));
+  }
+  const collection = db.getCollection(friendId);
+  const badges = computeBadges(friendId);
+  const earnedCount = badges.filter(b => b.done).length;
+  const recentCheckins = db.listCheckins({ userId: friendId, limit: 10 });
+  const body = `
+    <a href="/friends" class="empty-note">← Back to Friends</a>
+    <h1 class="screen-title" style="margin-top:8px;">👤 ${esc(friend.username)}</h1>
+    <div class="card" style="display:flex;justify-content:space-around;text-align:center;margin-bottom:16px;">
+      <div><div style="font-size:20px;font-weight:700;">${collection.length}</div><div class="empty-note">Strains</div></div>
+      <div><div style="font-size:20px;font-weight:700;">${earnedCount}/${badges.length}</div><div class="empty-note">Badges</div></div>
+      <div><div style="font-size:20px;font-weight:700;">${recentCheckins.length}</div><div class="empty-note">Recent check-ins</div></div>
+    </div>
+    ${friendId !== userId ? `<a class="btn block secondary" href="/trade?friend=${friendId}" style="margin-bottom:16px;">🔁 Trade with ${esc(friend.username)}</a>` : ''}
+    <div class="section-label">Recent check-ins</div>
+    ${recentCheckins.length ? recentCheckins.map(c => {
+      const s = db.getStrain(c.strain_id);
+      return `<div class="feed-post">
+        <a class="strain-chip" href="/strains/${c.strain_id}">
+          ${strainPhotoTag(s, 'xs')}
+          <span><b>${esc(s ? s.name : c.strain_id)}</b> ${s ? `<span class="rarity-tag rarity-${s.rarity}">${rarityLabel(s.rarity)}</span>` : ''}</span>
+        </a>
+        <div class="sub" style="margin-top:8px;">${esc(c.method)} · ${starString(c.rating)}</div>
+        ${c.photo ? `<img class="photo-thumb" src="${esc(c.photo)}" alt="photo">` : ''}
+        ${(c.effects || []).length ? `<div class="effect-tags">${c.effects.map(e => `<span>${esc(e)}</span>`).join('')}</div>` : ''}
+        ${c.note ? `<div class="note">"${esc(c.note)}"</div>` : ''}
+      </div>`;
+    }).join('') : `<div class="empty-note">No check-ins yet.</div>`}
+  `;
+  sendHtml(res, layout({ title: friend.username, active: 'more', body, isAdmin: auth.isAdmin(req) }));
 }
 async function handleFriendRequest(req, res, otherId) {
   const userId = requireUser(req, res);
@@ -1533,6 +1604,8 @@ const server = http.createServer(async (req, res) => {
     if (method === 'GET' && (m = pathname.match(/^\/strains\/([^/]+)$/))) return pageStrainDetail(req, res, m[1]);
     if (method === 'GET' && pathname === '/checkin') return pageCheckinForm(req, res, url.searchParams);
     if (method === 'POST' && pathname === '/checkin') return await handleCheckinSubmit(req, res);
+    if (method === 'GET' && (m = pathname.match(/^\/checkin\/(\d+)\/edit$/))) return pageCheckinEditForm(req, res, Number(m[1]));
+    if (method === 'POST' && (m = pathname.match(/^\/checkin\/(\d+)\/edit$/))) return await handleCheckinEditSubmit(req, res, Number(m[1]));
     if (method === 'GET' && pathname === '/faq') return pageFaq(req, res);
     if (method === 'GET' && pathname === '/recipes') return pageRecipes(req, res, url.searchParams);
     if (method === 'GET' && pathname === '/recipes/new') return pageRecipeNew(req, res);
@@ -1576,6 +1649,7 @@ const server = http.createServer(async (req, res) => {
     if (method === 'GET' && pathname === '/history') return pageHistory(req, res);
     if (method === 'GET' && pathname === '/trade') return pageTrade(req, res, url.searchParams);
     if (method === 'GET' && pathname === '/friends') return pageFriends(req, res, url.searchParams);
+    if (method === 'GET' && (m = pathname.match(/^\/friends\/(\d+)$/))) return pageFriendProfile(req, res, Number(m[1]));
     if (method === 'POST' && (m = pathname.match(/^\/friends\/(\d+)\/request$/))) return await handleFriendRequest(req, res, Number(m[1]));
     if (method === 'POST' && (m = pathname.match(/^\/friends\/(\d+)\/accept$/))) return await handleFriendAccept(req, res, Number(m[1]));
     if (method === 'POST' && (m = pathname.match(/^\/friends\/(\d+)\/decline$/))) return await handleFriendDecline(req, res, Number(m[1]));
