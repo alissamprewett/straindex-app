@@ -1136,13 +1136,84 @@ function pageMore(req, res) {
     ${user ? `
       <div class="card" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
         <span>👤 Logged in as <b>${esc(user.username)}</b></span>
-        <form method="POST" action="/logout"><button class="btn secondary" type="submit">Log out</button></form>
+        <div style="display:flex;gap:8px;">
+          <a href="/account" class="btn secondary" style="text-decoration:none;">Settings</a>
+          <form method="POST" action="/logout"><button class="btn secondary" type="submit">Log out</button></form>
+        </div>
       </div>` : ''}
     <div class="more-grid">
       ${tiles.map(t => `<a class="more-tile" href="${t.href}"><span class="ic">${t.icon}</span><div class="t">${esc(t.t)}</div><div class="s">${esc(t.s)}</div></a>`).join('')}
     </div>
   `;
   sendHtml(res, layout({ title: 'More', active: 'more', body, isAdmin: auth.isAdmin(req) }));
+}
+
+function pageAccount(req, res, query) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const user = db.getUserById(userId);
+  const error = query.get('error') || '';
+  const success = query.get('ok') || '';
+  const body = `
+    <a href="/more" class="empty-note">← Back to More</a>
+    <h1 class="screen-title" style="margin-top:8px;">Account Settings</h1>
+
+    <div class="card">
+      <h2 style="margin:0 0 10px;font-size:15px;">Username</h2>
+      ${error === 'username_taken' ? `<p class="dosing-note">That username is already taken — try another.</p>` : ''}
+      ${success === 'username' ? `<p class="empty-note" style="color:var(--brand-green-dark);">Username updated.</p>` : ''}
+      <form method="POST" action="/account/username">
+        <label class="field-label" style="margin-top:0;">Username</label>
+        <input type="text" name="username" value="${esc(user.username)}" required minlength="2" maxlength="30">
+        <button class="btn block" type="submit" style="margin-top:10px;">Update Username</button>
+      </form>
+    </div>
+
+    <div class="card" style="margin-top:14px;">
+      <h2 style="margin:0 0 10px;font-size:15px;">Password</h2>
+      ${error === 'wrong_password' ? `<p class="dosing-note">Current password is incorrect.</p>` : ''}
+      ${error === 'password_mismatch' ? `<p class="dosing-note">New password and confirmation don't match.</p>` : ''}
+      ${error === 'password_short' ? `<p class="dosing-note">New password needs to be at least 8 characters.</p>` : ''}
+      ${success === 'password' ? `<p class="empty-note" style="color:var(--brand-green-dark);">Password updated.</p>` : ''}
+      <form method="POST" action="/account/password">
+        <label class="field-label" style="margin-top:0;">Current password</label>
+        <input type="password" name="current_password" required>
+        <label class="field-label">New password</label>
+        <input type="password" name="new_password" required minlength="8">
+        <label class="field-label">Confirm new password</label>
+        <input type="password" name="confirm_password" required minlength="8">
+        <button class="btn block" type="submit" style="margin-top:10px;">Update Password</button>
+      </form>
+    </div>
+  `;
+  sendHtml(res, layout({ title: 'Account Settings', active: 'more', body, isAdmin: auth.isAdmin(req) }));
+}
+async function handleAccountUsername(req, res) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const fields = await parseForm(req);
+  const newUsername = (fields.username || '').trim();
+  if (!newUsername) return redirect(res, '/account');
+  try {
+    await db.updateUsername(userId, newUsername);
+    redirect(res, '/account?ok=username');
+  } catch (err) {
+    redirect(res, '/account?error=username_taken');
+  }
+}
+async function handleAccountPassword(req, res) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const fields = await parseForm(req);
+  const { current_password, new_password, confirm_password } = fields;
+  if ((new_password || '').length < 8) return redirect(res, '/account?error=password_short');
+  if (new_password !== confirm_password) return redirect(res, '/account?error=password_mismatch');
+  try {
+    await db.updatePassword(userId, current_password || '', new_password);
+    redirect(res, '/account?ok=password');
+  } catch (err) {
+    redirect(res, '/account?error=wrong_password');
+  }
 }
 
 // ---------------------------------------------------------------- collection / binder
@@ -1715,6 +1786,9 @@ const server = http.createServer(async (req, res) => {
     if (method === 'GET' && pathname === '/login') return pageLogin(req, res, url.searchParams);
     if (method === 'POST' && pathname === '/login') return await handleLoginSubmit(req, res);
     if (method === 'POST' && pathname === '/logout') return handleLogout(req, res);
+    if (method === 'GET' && pathname === '/account') return pageAccount(req, res, url.searchParams);
+    if (method === 'POST' && pathname === '/account/username') return await handleAccountUsername(req, res);
+    if (method === 'POST' && pathname === '/account/password') return await handleAccountPassword(req, res);
     if (method === 'GET' && pathname === '/admin/logout') return handleAdminLogout(req, res);
     if (method === 'GET' && pathname === '/admin') return pageAdminHome(req, res);
     if (method === 'GET' && pathname === '/admin/faqs') return pageAdminFaqs(req, res);
