@@ -45,12 +45,24 @@ async function giveKudos(id, btn) {
   }
 }
 
+async function giveCheckinKudos(id, btn) {
+  const res = await fetch(`/api/checkins/${id}/kudos`, { method: 'POST' });
+  if (res.ok) {
+    const data = await res.json();
+    const icon = btn.querySelector('img, svg');
+    btn.innerHTML = (icon ? icon.outerHTML : '') + `Kudos (${data.kudos})`;
+    btn.disabled = true;
+    toast('Kudos given!');
+  }
+}
 async function likeGrowTip(id, btn) {
   const res = await fetch(`/api/growtips/${id}/like`, { method: 'POST' });
   if (res.ok) {
     const data = await res.json();
-    btn.textContent = `👍 Helpful (${data.likes})`;
+    const icon = btn.querySelector('img, svg');
+    btn.innerHTML = (icon ? icon.outerHTML : '') + `Kudos (${data.likes})`;
     btn.disabled = true;
+    toast('Kudos given!');
   }
 }
 
