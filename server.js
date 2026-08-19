@@ -445,15 +445,35 @@ async function handleCheckinEditSubmit(req, res, id) {
   redirect(res, `/strains/${existing.strain_id}`);
 }
 
-function pageFaq(req, res) {
-  const faqs = db.listFaqs();
+function pageFaq(req, res, query) {
+  const q = (query && query.get('q') || '').trim();
+  const allFaqs = db.listFaqs();
+  const topFaqs = allFaqs.slice(0, 8);
+  const topIds = new Set(topFaqs.map(f => f.id));
+  const searchResults = q ? db.listFaqs(q).filter(f => !topIds.has(f.id)) : [];
+
+  const renderFaq = (f) => `
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)"><span>${esc(f.question)}</span><span>⌄</span></div>
+      <div class="faq-a">${esc(f.answer)}${f.source_url ? `<div class="empty-note" style="padding:6px 0 0;">Source: <a href="${esc(f.source_url)}" target="_blank" rel="noopener noreferrer">${esc(f.source_name || f.source_url)}</a></div>` : ''}</div>
+    </div>`;
+
   const body = `
     <h1 class="screen-title">FAQ &amp; Strain School</h1>
-    ${faqs.map(f => `
-      <div class="faq-item">
-        <div class="faq-q" onclick="toggleFaq(this)"><span>${esc(f.question)}</span><span>⌄</span></div>
-        <div class="faq-a">${esc(f.answer)}${f.source_url ? `<div class="empty-note" style="padding:6px 0 0;">Source: <a href="${esc(f.source_url)}" target="_blank" rel="noopener noreferrer">${esc(f.source_name || f.source_url)}</a></div>` : ''}</div>
-      </div>`).join('') || `<div class="empty-note">No FAQ entries yet.</div>`}
+    <div class="section-label">Most asked</div>
+    ${topFaqs.map(renderFaq).join('') || `<div class="empty-note">No FAQ entries yet.</div>`}
+
+    <div class="section-label" style="margin-top:20px;">Search everything else (${allFaqs.length - topFaqs.length} more)</div>
+    <form method="GET" action="/faq" style="margin-bottom:12px;display:flex;gap:8px;">
+      <input type="search" name="q" value="${esc(q)}" placeholder="Search all FAQ topics..." autocomplete="off" style="flex:1;">
+      <button class="btn" type="submit">Search</button>
+    </form>
+    ${q ? (
+      searchResults.length
+        ? searchResults.map(renderFaq).join('')
+        : `<div class="empty-note">No results for "${esc(q)}" — try the <a href="/chat">Ask</a> tab instead, it can answer from all the same content.</div>`
+    ) : `<p class="empty-note">Type a question or keyword above to search the rest of the FAQ library.</p>`}
+
     <p class="empty-note" style="margin-top:16px;">Have a question you don't see here? Ask the assistant on the <a href="/chat">Ask</a> tab.</p>
   `;
   sendHtml(res, layout({ title: 'FAQ', active: 'faq', body, isAdmin: auth.isAdmin(req) }));
@@ -1677,7 +1697,7 @@ const server = http.createServer(async (req, res) => {
     if (method === 'POST' && pathname === '/checkin') return await handleCheckinSubmit(req, res);
     if (method === 'GET' && (m = pathname.match(/^\/checkin\/(\d+)\/edit$/))) return pageCheckinEditForm(req, res, Number(m[1]));
     if (method === 'POST' && (m = pathname.match(/^\/checkin\/(\d+)\/edit$/))) return await handleCheckinEditSubmit(req, res, Number(m[1]));
-    if (method === 'GET' && pathname === '/faq') return pageFaq(req, res);
+    if (method === 'GET' && pathname === '/faq') return pageFaq(req, res, url.searchParams);
     if (method === 'GET' && pathname === '/recipes') return pageRecipes(req, res, url.searchParams);
     if (method === 'GET' && (m = pathname.match(/^\/recipes\/(\d+)$/))) return pageRecipeDetail(req, res, Number(m[1]));
     if (method === 'GET' && pathname === '/recipes/new') return pageRecipeNew(req, res);
