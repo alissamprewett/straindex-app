@@ -108,3 +108,58 @@ a time, verifying each individually (real research or more Cannlytics
 state pulls) before correcting. Also worth pulling a bigger state next
 (e.g. `ca` or `wa`) now that the direct-CSV-download approach is
 confirmed working, for a larger validation sample.
+
+---
+
+## Real lab-data validation (Cannlytics CA results, second batch)
+
+Alissa pulled `data/ca/ca-results-latest.csv` (71,000+ real lab-tested
+products) directly from the repo — file was 1.59GB, too large to
+upload, so we wrote a script to strip out the heavy per-compound
+`results` column and keep just the summary fields, bringing it down to
+~9MB (85,487 rows) as `ca-results-slim.csv`.
+
+**Method:** same as the NY batch — flower/preroll product types only,
+excluding concentrates/infused/resin (which test 3-4x higher for the
+same strain since they're extracted). Also filtered out physically
+impossible THC values (some rows showed 100%+, even 300%+ — clearly a
+data quality issue in the source file itself, not real measurements).
+Required at least 8 real samples per strain before drawing any
+conclusion.
+
+**Results, out of 128 strains with enough samples to check:**
+- **96 confirmed accurate** — real median THC fell right within what
+  we already had. Good validation of the earlier research work.
+- **32 strains updated** to real current-market ranges (25th-75th
+  percentile of actual lab results), since Alissa's call was to reflect
+  current real data rather than older "classic" reference ranges. This
+  mostly pushed ranges up by 8-15 points (e.g. Diesel 15–21% → 25–28%,
+  Headband 12–20% → 32–35%) — consistent with the well-documented
+  industry-wide potency increase over the past decade, not a sign the
+  old numbers were "wrong," just dated.
+- **1 real outlier investigated individually: Space Queen.** Real CA
+  data showed a suspiciously low 8.1% median (n=12), while every
+  independent published source (Strainpedia, Leafly, Hytiva, StrainHub)
+  consistently cites 15-22%. Traced the anomaly to hemp-derived
+  "Space Queen" products (<0.3% THC by law) being sold under the same
+  name and polluting the product-name match. Adjusted our own figure
+  slightly (23–27% → 16–22%) to align with the well-corroborated
+  published consensus — did not use either the real-data anomaly or
+  the original figure as-is.
+
+**Also fixed from the earlier NY batch:** Green Crack (1–6% → 15–25%)
+and Diesel (1–6% → then further updated to 25–28% with the larger CA
+sample above).
+
+**Lesson for future batches:** raw "real lab data" isn't automatically
+more trustworthy than researched estimates — it still needs the same
+scrutiny (physically impossible values, product-type mismatches,
+mislabeled/hemp variants polluting name matches). Real data is best
+used to *cross-check* research, not replace judgment.
+
+## Up next
+- 74 of the original 75 "1–6% THC" suspects are still unverified
+  (Green Crack and Diesel are now fixed). Continue working through that
+  list a batch at a time.
+- Consider pulling one more state (WA has the largest sample at
+  202,812 records) for a broader validation pass once useful.
