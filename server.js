@@ -294,7 +294,7 @@ function pageStrainDetail(req, res, id) {
     <a class="btn block" href="/checkin?strain=${s.id}">＋ Check in this strain</a>
     <h2 class="screen-title" style="margin-top:20px;">Your history with this strain</h2>
     ${history.length ? `
-      <p class="empty-note">Last had: ${new Date(history[0].created_at + 'Z').toLocaleString()}</p>
+      <p class="empty-note">Last had: <span class="local-time" data-utc="${history[0].created_at}Z">${esc(history[0].created_at)} UTC</span></p>
       ${history.map(c => `<div class="card checkin-history-row">
         ${c.photo ? `<div class="checkin-photo-thumb"><img src="${esc(c.photo)}" alt="Your photo"></div>` : ''}
         <div style="flex:1;min-width:0;">
@@ -303,7 +303,7 @@ function pageStrainDetail(req, res, id) {
             <a href="/checkin/${c.id}/edit" class="empty-note" style="padding:0;">Edit</a>
           </div>
           ${starString(c.rating)}
-          <div class="empty-note" style="padding:2px 0 0;">${new Date(c.created_at + 'Z').toLocaleString()}</div>
+          <div class="empty-note" style="padding:2px 0 0;"><span class="local-time" data-utc="${c.created_at}Z">${esc(c.created_at)} UTC</span></div>
           ${(c.effects || []).length ? `<p style="margin:6px 0 0;">${c.effects.map(e => `<span class="filter-pill">${esc(e)}</span>`).join('')}</p>` : ''}
           ${c.note ? `<span class="empty-note" style="display:block;padding:4px 0 0;">${esc(c.note)}</span>` : ''}
         </div>
@@ -447,6 +447,62 @@ function pageFaq(req, res) {
   sendHtml(res, layout({ title: 'FAQ', active: 'faq', body, isAdmin: auth.isAdmin(req) }));
 }
 
+// Maps a usesBase keyword to the title of the one "core" recipe that
+// should be treated as *the* reference for that base — so a link that
+// says "how to make cannabutter" goes to one specific, canonical recipe
+// (Classic Cannabutter) rather than a search page showing every variant
+// (Instant Pot, Slow Cooker, Sous Vide...) mixed together.
+const CANONICAL_BASE_RECIPE = {
+  'coconut oil': 'Cannabis-Infused Coconut Oil',
+  'olive oil': 'Canna-Infused Olive Oil',
+  'avocado oil': 'Cannabis-Infused Avocado Oil',
+  'ghee': 'Cannabis-Infused Ghee',
+  'infused milk': 'Cannabis-Infused Milk',
+  'infused sugar': 'Cannabis-Infused Sugar',
+  'infused flour': 'Cannabis-Infused Flour',
+  'honey': 'Cannabis-Infused Honey',
+  'finishing salt': 'Cannabis Finishing Salt',
+  'simple syrup': 'Cannabis Simple Syrup',
+  'glycerin tincture': 'Cannabis Glycerin Tincture (Alcohol-Free)',
+  'tincture': 'DIY Cannabis Tincture',
+  'cannabutter': 'Classic Cannabutter',
+  'rso': 'RSO (Rick Simpson Oil)',
+};
+function canonicalBaseRecipeId(keyword) {
+  const title = CANONICAL_BASE_RECIPE[keyword];
+  if (!title) return null;
+  const r = db.listRecipes({ status: null }).find(x => x.title === title);
+  return r ? r.id : null;
+}
+
+function pageRecipeDetail(req, res, id) {
+  const r = db.getRecipe(id);
+  if (!r || r.status !== 'approved') return notFound(res);
+  const body = `
+    <a href="/recipes" class="empty-note">← Back to recipes</a>
+    <div class="card" style="margin-top:10px;">
+      <b style="font-size:16px;">${r.icon || '🍽️'} ${esc(r.title)}</b>
+      <span class="recipe-source-tag ${r.source}">${r.source === 'official' ? 'Official' : 'Community'}</span>
+      <div class="empty-note">${esc(r.category || '')}${r.time ? ' · ' + esc(r.time) : ''}${r.author ? ' · by ' + esc(r.author) : ''}</div>
+      <p>${esc(r.desc)}</p>
+      ${Array.isArray(r.usesBase) && r.usesBase.length ? `<p class="empty-note" style="padding:0 0 6px;">Uses: ${r.usesBase.map(b => {
+        const targetId = canonicalBaseRecipeId(b);
+        return targetId ? `<a href="/recipes/${targetId}">${esc(b)}</a>` : esc(b);
+      }).join(', ')} <span style="opacity:.7;">(tap to see how to make it)</span></p>` : ''}
+      <p><b>Ingredients:</b></p>
+      <ul>${r.ingredients.map(i => `<li>${esc(i)}</li>`).join('')}</ul>
+      <p><b>Steps:</b></p>
+      <ol>${r.steps.map(i => `<li>${esc(i)}</li>`).join('')}</ol>
+      ${r.dosing ? `<div class="dosing-note">⚠️ ${esc(r.dosing)}</div>` : ''}
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;">
+        <span class="empty-note" style="padding:0;">${r.kudos} people found this helpful</span>
+        <button class="kudos-btn" onclick="giveKudos(${r.id}, this)">👏 Kudos</button>
+      </div>
+    </div>
+  `;
+  sendHtml(res, layout({ title: r.title, active: 'recipes', body, isAdmin: auth.isAdmin(req) }));
+}
+
 function pageRecipes(req, res, query) {
   const category = (query && query.get('category')) || 'All';
   const q = (query && query.get('q')) || '';
@@ -465,11 +521,14 @@ function pageRecipes(req, res, query) {
     ${q ? `<p class="empty-note">${recipes.length} result${recipes.length === 1 ? '' : 's'} for "${esc(q)}"${category !== 'All' ? ' in ' + esc(category) : ''}</p>` : ''}
     ${recipes.map(r => `
       <div class="card">
-        <b>${r.icon || '🍽️'} ${esc(r.title)}</b>
+        <a href="/recipes/${r.id}" style="text-decoration:none;color:inherit;"><b>${r.icon || '🍽️'} ${esc(r.title)}</b></a>
         <span class="recipe-source-tag ${r.source}">${r.source === 'official' ? 'Official' : 'Community'}</span>
         <div class="empty-note">${esc(r.category || '')}${r.time ? ' · ' + esc(r.time) : ''}${r.author ? ' · by ' + esc(r.author) : ''}</div>
         <p>${esc(r.desc)}</p>
-        ${Array.isArray(r.usesBase) && r.usesBase.length ? `<p class="empty-note" style="padding:0 0 6px;">Uses: ${r.usesBase.map(b => `<a href="/recipes?q=${encodeURIComponent(b)}&category=Infusion+Base">${esc(b)}</a>`).join(', ')} <span style="opacity:.7;">(tap to see how to make it)</span></p>` : ''}
+        ${Array.isArray(r.usesBase) && r.usesBase.length ? `<p class="empty-note" style="padding:0 0 6px;">Uses: ${r.usesBase.map(b => {
+          const targetId = canonicalBaseRecipeId(b);
+          return targetId ? `<a href="/recipes/${targetId}">${esc(b)}</a>` : esc(b);
+        }).join(', ')} <span style="opacity:.7;">(tap to see how to make it)</span></p>` : ''}
         <details>
           <summary style="cursor:pointer;font-size:12.5px;font-weight:700;color:var(--brand-green-dark);">Ingredients &amp; steps</summary>
           <p><b>Ingredients:</b></p>
@@ -1108,7 +1167,7 @@ function pageHistory(req, res) {
           ${strainPhotoTag(s, 'sm')}
           <div class="info">
             <div class="nm">${esc(s ? s.name : c.strain_id)}</div>
-            <div class="sub">${esc(c.method)} · ${starString(c.rating)} · ${new Date(c.created_at + 'Z').toLocaleString()}</div>
+            <div class="sub">${esc(c.method)} · ${starString(c.rating)} · <span class="local-time" data-utc="${c.created_at}Z">${esc(c.created_at)} UTC</span></div>
           </div>
         </a>
         <a href="/checkin/${c.id}/edit" class="empty-note" style="padding:0 4px;">Edit</a>
@@ -1608,6 +1667,7 @@ const server = http.createServer(async (req, res) => {
     if (method === 'POST' && (m = pathname.match(/^\/checkin\/(\d+)\/edit$/))) return await handleCheckinEditSubmit(req, res, Number(m[1]));
     if (method === 'GET' && pathname === '/faq') return pageFaq(req, res);
     if (method === 'GET' && pathname === '/recipes') return pageRecipes(req, res, url.searchParams);
+    if (method === 'GET' && (m = pathname.match(/^\/recipes\/(\d+)$/))) return pageRecipeDetail(req, res, Number(m[1]));
     if (method === 'GET' && pathname === '/recipes/new') return pageRecipeNew(req, res);
     if (method === 'POST' && pathname === '/recipes/new') return await handleRecipeNewSubmit(req, res);
     if (method === 'GET' && pathname === '/growing') return pageGrowing(req, res, url.searchParams);
