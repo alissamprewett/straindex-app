@@ -47,6 +47,7 @@ async function likeGrowTip(id, btn) {
   const effectVal = document.getElementById('strain-search-effect').value;
   const thcVal = document.getElementById('strain-search-thc').value;
   const terpeneVal = document.getElementById('strain-search-terpene').value;
+  const ailmentVal = document.getElementById('strain-search-ailment').value;
 
   function escHtml(str) {
     return String(str ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -74,7 +75,7 @@ async function likeGrowTip(id, btn) {
     clearTimeout(debounceTimer);
     const q = input.value;
     debounceTimer = setTimeout(async () => {
-      const params = new URLSearchParams({ q, type: typeVal, rarity: rarityVal, effect: effectVal, thc: thcVal, terpene: terpeneVal, limit: '60' });
+      const params = new URLSearchParams({ q, type: typeVal, rarity: rarityVal, effect: effectVal, thc: thcVal, terpene: terpeneVal, ailment: ailmentVal, limit: '60' });
       const res = await fetch(`/api/strains?${params}`);
       if (!res.ok) return;
       render(await res.json());
