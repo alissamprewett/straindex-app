@@ -2009,5 +2009,265 @@
     "dosing": "Divide the infused flour's total THC by the number of slices you cut the finished pizza into — cutting it into a consistent number of slices (e.g. always 8) makes this easy to repeat.",
     "category": "Savory & Snacks",
     "status": "approved"
+  },
+  {
+    "id": "r79",
+    "title": "Cannabis Lollipops",
+    "time": "≈25 min",
+    "icon": "🍭",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "Hard candy on a stick — slow to eat by nature, which makes it easier to pace your dose.",
+    "ingredients": [
+      "1 cup sugar",
+      "⅓ cup light corn syrup",
+      "¾ cup water",
+      "1 tsp flavoring extract",
+      "1 tbsp cannabis tincture",
+      "Lollipop sticks and candy molds"
+    ],
+    "steps": [
+      "Combine sugar, corn syrup, and water in a saucepan over medium heat.",
+      "Cook without stirring until a candy thermometer reads 300°F (hard-crack stage).",
+      "Remove from heat and let cool slightly (below 200°F) before stirring in the tincture and flavoring.",
+      "Pour into lollipop molds with sticks positioned, and let cool completely until hard."
+    ],
+    "dosing": "Divide the tincture's total THC by the number of lollipops poured — since they're meant to be sucked on slowly, it's easy to naturally under-dose per sitting if you don't finish the whole thing.",
+    "category": "Gummies & Candy",
+    "status": "approved"
+  },
+  {
+    "id": "r80",
+    "title": "Cannabis Chocolate Truffles",
+    "time": "≈30 min + chill",
+    "icon": "🍫",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "Rich, rollable chocolate truffles made with cannabutter — an elegant way to serve an edible.",
+    "ingredients": [
+      "8 oz dark chocolate, chopped",
+      "¼ cup heavy cream",
+      "2 tbsp cannabutter",
+      "Cocoa powder, for rolling"
+    ],
+    "steps": [
+      "Heat the cream in a small saucepan until just simmering, then pour over the chopped chocolate in a bowl.",
+      "Let sit 2 minutes, then stir until smooth. Stir in the cannabutter until fully melted and combined.",
+      "Refrigerate the mixture for at least 2 hours, until firm enough to scoop.",
+      "Scoop small portions and roll into balls with your hands, then roll each in cocoa powder.",
+      "Keep refrigerated until serving."
+    ],
+    "dosing": "Divide the cannabutter's total THC by the number of truffles rolled — rolling them a consistent size (e.g. a tablespoon each) keeps doses even.",
+    "category": "Gummies & Candy",
+    "status": "approved"
+  },
+  {
+    "id": "r81",
+    "title": "Cannabis Taffy",
+    "time": "≈30 min",
+    "icon": "🍬",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "A chewy, old-fashioned candy made with cannabutter — takes a bit of arm strength to pull, but it's a fun one to make with others.",
+    "ingredients": [
+      "1 cup sugar",
+      "1 cup light corn syrup",
+      "2 tbsp cannabutter",
+      "1 tsp vanilla extract",
+      "¼ tsp salt"
+    ],
+    "steps": [
+      "Combine sugar, corn syrup, and cannabutter in a saucepan over medium heat, stirring until melted together.",
+      "Cook, stirring occasionally, until a candy thermometer reads 265°F (hard-ball stage).",
+      "Remove from heat, stir in vanilla and salt, then pour onto a greased baking sheet to cool slightly.",
+      "Once cool enough to handle but still warm, butter your hands and pull the taffy repeatedly until it lightens in color and firms up, about 5–10 minutes.",
+      "Roll into a long rope, cut into pieces, and wrap each in wax paper."
+    ],
+    "dosing": "Divide the cannabutter's total THC by the number of pieces cut — cutting the rope into a consistent number of pieces (e.g. always 20) makes this repeatable.",
+    "category": "Gummies & Candy",
+    "status": "approved"
+  },
+  {
+    "id": "r82",
+    "title": "Cannabis Peppermint Bark",
+    "time": "≈20 min + chill",
+    "icon": "🍬",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "A layered holiday-style bark — dark chocolate infused on the bottom, white chocolate and crushed peppermint on top.",
+    "ingredients": [
+      "8 oz dark chocolate, melted",
+      "2 tbsp cannabutter, melted and stirred into the dark chocolate",
+      "8 oz white chocolate, melted",
+      "¼ cup crushed candy canes or peppermint candies"
+    ],
+    "steps": [
+      "Stir the melted cannabutter into the melted dark chocolate until fully combined.",
+      "Spread the infused dark chocolate in an even layer on a parchment-lined baking sheet. Chill 15 minutes until set.",
+      "Spread the melted white chocolate over the set dark chocolate layer.",
+      "Immediately sprinkle crushed peppermint over the white chocolate before it sets.",
+      "Chill until fully firm, then break into irregular pieces."
+    ],
+    "dosing": "Only the dark chocolate layer is infused — divide its total THC by the number of pieces the whole batch breaks into, keeping in mind pieces won't be perfectly even in size.",
+    "category": "Gummies & Candy",
+    "status": "approved"
+  },
+  {
+    "id": "r83",
+    "title": "Cannabis Gumdrops",
+    "time": "≈20 min + set overnight",
+    "icon": "🍬",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "Classic sugar-coated gumdrops made with gelatin and tincture — a softer, chewier candy than hard candy or lollipops.",
+    "ingredients": [
+      "4 packets unflavored gelatin",
+      "1 cup cold water, divided",
+      "1 cup sugar, plus extra for coating",
+      "1 tbsp cannabis tincture",
+      "Flavoring extract and food coloring, to taste"
+    ],
+    "steps": [
+      "Sprinkle gelatin over ½ cup cold water in a bowl; let bloom 5 minutes.",
+      "Heat the sugar and remaining ½ cup water in a saucepan until the sugar dissolves, then remove from heat.",
+      "Stir the bloomed gelatin into the hot sugar syrup until fully dissolved.",
+      "Let cool slightly, then stir in the tincture, flavoring, and food coloring.",
+      "Pour into a small parchment-lined pan and let set at room temperature overnight.",
+      "Cut into small cubes and roll each in sugar to coat."
+    ],
+    "dosing": "Divide the tincture's total THC by the number of cubes cut — cutting a consistent grid (e.g. 5×5) keeps the math simple.",
+    "category": "Gummies & Candy",
+    "status": "approved"
+  },
+  {
+    "id": "r84",
+    "title": "Cannabis Bath Bombs",
+    "time": "≈20 min + dry overnight",
+    "icon": "🛁",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "Fizzy, fragrant bath bombs using infused coconut oil — a spa-night treat, not an edible.",
+    "ingredients": [
+      "1 cup baking soda",
+      "½ cup citric acid",
+      "½ cup Epsom salt",
+      "3 tbsp cannabis-infused coconut oil, melted",
+      "10 drops essential oil of choice",
+      "Witch hazel in a spray bottle",
+      "Bath bomb molds"
+    ],
+    "steps": [
+      "Whisk the baking soda, citric acid, and Epsom salt together in a large bowl, breaking up any clumps.",
+      "Stir in the melted infused coconut oil and essential oil until evenly distributed.",
+      "Lightly spritz the mixture with witch hazel a little at a time, mixing between spritzes, until it holds together when squeezed (like damp sand).",
+      "Firmly pack the mixture into bath bomb molds, press the two halves together, and let dry for 24 hours before unmolding.",
+      "Store in an airtight container until ready to use."
+    ],
+    "dosing": "Topical and non-intoxicating — this dissolves in bathwater for a relaxing soak, not for ingestion.",
+    "category": "Topicals",
+    "status": "approved"
+  },
+  {
+    "id": "r85",
+    "title": "Cannabis Sleep Balm",
+    "time": "≈15 min",
+    "icon": "😴",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "A calming balm for temples and pulse points before bed, using infused coconut oil and sleep-associated essential oils.",
+    "ingredients": [
+      "3 tbsp cannabis-infused coconut oil",
+      "1 tbsp beeswax pellets",
+      "10 drops lavender essential oil",
+      "5 drops chamomile essential oil (optional)"
+    ],
+    "steps": [
+      "Combine infused coconut oil and beeswax in a double boiler over low heat until melted.",
+      "Remove from heat and stir in the essential oils.",
+      "Pour into a small tin and let cool and solidify.",
+      "Massage a small amount onto temples, wrists, or the back of the neck as part of a wind-down routine."
+    ],
+    "dosing": "Topical and non-intoxicating — this is about the massage and aromatherapy routine, not a systemic effect.",
+    "category": "Topicals",
+    "status": "approved"
+  },
+  {
+    "id": "r86",
+    "title": "Cannabis Cuticle Oil",
+    "time": "≈10 min",
+    "icon": "💅",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "A nourishing oil for dry cuticles and nail beds, using infused jojoba or coconut oil.",
+    "ingredients": [
+      "3 tbsp cannabis-infused jojoba oil (or coconut oil, melted)",
+      "5 drops vitamin E oil (optional)"
+    ],
+    "steps": [
+      "Combine the infused oil and vitamin E oil (if using) in a small dropper bottle or rollerball container.",
+      "Massage a small amount into cuticles and nail beds as needed, ideally after washing hands or showering when skin is slightly damp."
+    ],
+    "dosing": "Topical and non-intoxicating — absorbed locally into skin and nail beds, not the bloodstream in any meaningful way.",
+    "category": "Topicals",
+    "status": "approved"
+  },
+  {
+    "id": "r87",
+    "title": "Cannabis Cooling Headache Balm",
+    "time": "≈15 min",
+    "icon": "🧊",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "A menthol-forward balm for temples and the back of the neck — distinct from a general muscle salve, formulated specifically for tension relief.",
+    "ingredients": [
+      "3 tbsp cannabis-infused coconut oil",
+      "1 tbsp beeswax pellets",
+      "1 tsp menthol crystals",
+      "5 drops peppermint essential oil"
+    ],
+    "steps": [
+      "Combine infused coconut oil and beeswax in a double boiler over low heat until melted.",
+      "Remove from heat and stir in the menthol crystals until dissolved, then add the peppermint essential oil.",
+      "Pour into a small tin and let cool and solidify.",
+      "Massage a small amount onto temples and the back of the neck, avoiding the eyes."
+    ],
+    "dosing": "Topical and non-intoxicating — wash hands after applying and keep away from eyes given the menthol content.",
+    "category": "Topicals",
+    "status": "approved"
+  },
+  {
+    "id": "r88",
+    "title": "Cannabis Deodorant",
+    "time": "≈15 min",
+    "icon": "🧴",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "A simple natural deodorant base using infused coconut oil, baking soda, and arrowroot powder.",
+    "ingredients": [
+      "3 tbsp cannabis-infused coconut oil",
+      "2 tbsp baking soda",
+      "2 tbsp arrowroot powder or cornstarch",
+      "5 drops essential oil of choice"
+    ],
+    "steps": [
+      "Melt the infused coconut oil gently if solid.",
+      "Whisk in the baking soda and arrowroot powder until a smooth paste forms.",
+      "Stir in the essential oil.",
+      "Pour into a small jar or empty deodorant tube and let solidify at room temperature.",
+      "Apply a small amount to underarms as needed."
+    ],
+    "dosing": "Topical and non-intoxicating — intended for skin application, not for any systemic effect.",
+    "category": "Topicals",
+    "status": "approved"
   }
 ]
