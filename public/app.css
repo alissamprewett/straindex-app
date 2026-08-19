@@ -8,9 +8,22 @@
 *{box-sizing:border-box;}
 body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg-page);color:var(--ink);-webkit-font-smoothing:antialiased;}
 .app{max-width:520px;margin:0 auto;min-height:100vh;background:var(--bg-page);box-shadow:0 0 40px rgba(0,0,0,0.08);}
+/* On phones (the default above), the app already fills the actual screen
+   width since max-width only caps it. On tablets/desktop there's a lot of
+   unused space at a fixed 520px, so widen the content well in stages
+   rather than leaving it stranded as a tiny centered island. */
+@media (min-width: 700px) {
+  .app{max-width:640px;}
+  nav.tabbar{max-width:640px;}
+}
+@media (min-width: 1000px) {
+  .app{max-width:760px;}
+  nav.tabbar{max-width:760px;}
+}
 a{color:inherit;}
 header.topbar{background:linear-gradient(135deg,var(--brand-green-dark),var(--brand-green));color:#fff;padding:16px 18px 14px;display:flex;align-items:center;justify-content:space-between;}
 header.topbar .brand{display:flex;align-items:center;gap:8px;font-weight:800;font-size:19px;text-decoration:none;color:#fff;}
+header.topbar .brand-logo{width:28px;height:28px;border-radius:6px;object-fit:cover;}
 .disclaimer{background:#fff6e0;color:#5c4a12;font-size:11px;padding:6px 18px;text-align:center;border-bottom:1px solid #eddba4;}
 main{padding:16px 16px 90px;}
 h1.screen-title, h2.screen-title{font-size:18px;margin:2px 0 12px;}
@@ -18,6 +31,7 @@ p.screen-sub{color:var(--ink-secondary);font-size:13px;margin:-8px 0 14px;}
 nav.tabbar{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--border);display:flex;max-width:520px;margin:0 auto;}
 nav.tabbar a{flex:1;text-align:center;padding:10px 2px 8px;display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--ink-muted);font-size:10.5px;text-decoration:none;}
 nav.tabbar a .ic{font-size:19px;}
+nav.tabbar a .ic-img{width:19px;height:19px;object-fit:contain;display:block;}
 nav.tabbar a.active{color:var(--brand-green);}
 .card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:12px;box-shadow:var(--shadow);}
 .btn{display:inline-block;background:var(--brand-green);color:#fff;border:none;padding:11px 16px;border-radius:12px;font-weight:700;font-size:13.5px;cursor:pointer;font-family:inherit;text-decoration:none;text-align:center;}
@@ -139,6 +153,7 @@ form .btn{margin-top:14px;}
 .more-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;}
 .more-tile{background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:18px 12px;text-align:center;box-shadow:var(--shadow);text-decoration:none;color:inherit;display:block;}
 .more-tile .ic{font-size:26px;margin-bottom:8px;display:block;}
+.more-tile .ic-img-lg{width:26px;height:26px;object-fit:contain;display:inline-block;}
 .more-tile .t{font-weight:700;font-size:13px;}
 .more-tile .s{font-size:10.5px;color:var(--ink-muted);margin-top:3px;}
 
