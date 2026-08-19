@@ -74,7 +74,7 @@ function starString(n) { n = Number(n) || 0; return '★'.repeat(n) + '☆'.repe
 function rarityLabel(r) { return { common: 'Common', uncommon: 'Uncommon', rare: 'Rare', legendary: 'Legendary' }[r] || r; }
 // A small original cartoon-bud icon used on kudos buttons — hand-drawn SVG,
 // not a stock asset, so there's no licensing question about using it.
-const KUDOS_BUD_ICON = `<svg width="15" height="15" viewBox="0 0 24 24" style="vertical-align:-3px;margin-right:3px;"><ellipse cx="12" cy="14" rx="7" ry="8.5" fill="#7CB342"/><ellipse cx="12" cy="14" rx="7" ry="8.5" fill="none" stroke="#558B2F" stroke-width="0.6"/><path d="M7 9 Q9 12 7.5 16 Q7 18 9 20" stroke="#558B2F" stroke-width="1" fill="none" stroke-linecap="round"/><path d="M12 6 Q13.5 10 12.5 15 Q12 18 13.5 21" stroke="#558B2F" stroke-width="1" fill="none" stroke-linecap="round"/><path d="M17 9 Q15 12 16.5 16 Q17 18 15 20" stroke="#558B2F" stroke-width="1" fill="none" stroke-linecap="round"/><circle cx="9" cy="10" r="0.7" fill="#F9A825"/><circle cx="14" cy="8.5" r="0.7" fill="#F9A825"/><circle cx="16" cy="13" r="0.7" fill="#F9A825"/><circle cx="8.5" cy="15" r="0.7" fill="#F9A825"/><circle cx="12" cy="17.5" r="0.7" fill="#F9A825"/><path d="M12 5.5 Q11 4 12 3 Q13 4 12 5.5Z" fill="#558B2F"/></svg>`;
+const KUDOS_BUD_ICON = `<img src="/docs/leaf-kudos.png" alt="" width="15" height="15" style="vertical-align:-3px;margin-right:4px;">`;
 
 // Real cannabis bud photos, all free-for-commercial-use / no-attribution-required
 // under the Unsplash License (https://unsplash.com/license). These are generic
