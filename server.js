@@ -217,19 +217,21 @@ function pageStrains(req, res, query) {
   const effect = query.get('effect') || 'All';
   const thc = query.get('thc') || 'All';
   const terpene = query.get('terpene') || 'All';
-  const total = db.countStrains({ q, type, rarity, effect, thc, terpene });
-  const results = db.listStrains({ q, type, rarity, effect, thc, terpene, limit: 60 });
+  const ailment = query.get('ailment') || 'All';
+  const total = db.countStrains({ q, type, rarity, effect, thc, terpene, ailment });
+  const results = db.listStrains({ q, type, rarity, effect, thc, terpene, ailment, limit: 60 });
   const typeOpts = ['All', 'Indica', 'Sativa', 'Hybrid'];
   const rarityOpts = ['All', 'common', 'uncommon', 'rare', 'legendary'];
   const effectOpts = ['All', 'Happy', 'Relaxed', 'Euphoric', 'Uplifted', 'Sleepy', 'Energetic', 'Creative', 'Focused', 'Hungry', 'Talkative', 'Calm', 'Social'];
   const thcOpts = ['All', 'Low', 'Medium', 'High'];
   const terpeneOpts = ['All', 'Myrcene', 'Limonene', 'Caryophyllene', 'Pinene', 'Linalool', 'Terpinolene', 'Humulene', 'Ocimene'];
+  const ailmentOpts = ['All', 'Stress', 'Pain', 'Depression', 'Insomnia', 'Lack of Appetite', 'Nausea', 'Inflammation', 'Muscle Spasms', 'Seizures'];
   const thcLabel = { All: 'Any THC', Low: 'Low (≤15%)', Medium: 'Medium (15–25%)', High: 'High (25%+)' };
-  const mk = (params) => '/strains?' + new URLSearchParams({ q, type, rarity, effect, thc, terpene, ...params }).toString();
+  const mk = (params) => '/strains?' + new URLSearchParams({ q, type, rarity, effect, thc, terpene, ailment, ...params }).toString();
 
   const body = `
     <h1 class="screen-title">Strain Library</h1>
-    <p class="screen-sub">${total.toLocaleString()} strains — search by name, flavor, effect, THC level, or terpene.</p>
+    <p class="screen-sub">${total.toLocaleString()} strains — search by name, flavor, effect, THC level, terpene, or relief.</p>
     <form method="GET" action="/strains" id="strain-search-form" style="margin-bottom:12px;">
       <input type="search" name="q" id="strain-search-input" value="${esc(q)}" placeholder="Search by name or flavor..." autocomplete="off">
       <input type="hidden" name="type" id="strain-search-type" value="${esc(type)}">
@@ -237,6 +239,7 @@ function pageStrains(req, res, query) {
       <input type="hidden" name="effect" id="strain-search-effect" value="${esc(effect)}">
       <input type="hidden" name="thc" id="strain-search-thc" value="${esc(thc)}">
       <input type="hidden" name="terpene" id="strain-search-terpene" value="${esc(terpene)}">
+      <input type="hidden" name="ailment" id="strain-search-ailment" value="${esc(ailment)}">
     </form>
     <div>${typeOpts.map(t => `<a class="filter-pill ${type === t ? 'active' : ''}" href="${mk({ type: t })}">${t}</a>`).join('')}</div>
     <div style="margin-bottom:10px;">${rarityOpts.map(r => `<a class="filter-pill ${rarity === r ? 'active' : ''}" href="${mk({ rarity: r })}">${r === 'All' ? 'All rarities' : rarityLabel(r)}</a>`).join('')}</div>
@@ -246,6 +249,9 @@ function pageStrains(req, res, query) {
     <div style="margin-bottom:10px;">${effectOpts.map(e => `<a class="filter-pill ${effect === e ? 'active' : ''}" href="${mk({ effect: e })}">${e === 'All' ? 'Any effect' : e}</a>`).join('')}</div>
     <div class="section-label" style="margin-bottom:4px;">Dominant terpene</div>
     <div style="margin-bottom:10px;">${terpeneOpts.map(t => `<a class="filter-pill ${terpene === t ? 'active' : ''}" href="${mk({ terpene: t })}">${t === 'All' ? 'Any terpene' : t}</a>`).join('')}</div>
+    <div class="section-label" style="margin-bottom:4px;">Looking for relief from...</div>
+    <div style="margin-bottom:6px;">${ailmentOpts.map(a => `<a class="filter-pill ${ailment === a ? 'active' : ''}" href="${mk({ ailment: a })}">${a === 'All' ? 'Anything' : a}</a>`).join('')}</div>
+    <p class="empty-note" style="margin-bottom:10px;">User-reported associations, not medical advice — see a doctor for real guidance.</p>
     <p class="empty-note" id="strain-search-count">${total > 60 ? `Showing 60 of ${total.toLocaleString()} — refine your search to narrow it down.` : `${total} strain${total === 1 ? '' : 's'}`}</p>
     <div id="strain-search-results">${results.map(s => `
       <a class="library-row" href="/strains/${s.id}" style="text-decoration:none;color:inherit;">
@@ -276,9 +282,14 @@ function pageStrainDetail(req, res, id) {
         </div>
       </div>
       <p style="margin:12px 0 4px;"><b>THC:</b> ${esc(s.thc)} &nbsp; <b>CBD:</b> ${esc(s.cbd)}</p>
+      ${s.breeder ? `<p class="empty-note" style="padding:0;"><b>Bred by:</b> ${esc(s.breeder)}</p>` : ''}
       <p style="font-style:italic;color:var(--ink-secondary);">"${esc(s.flavor)}"</p>
       <p>${s.effects.map(e => `<span class="filter-pill">${esc(e)}</span>`).join('')}</p>
       <p><b>Top terpenes:</b> ${s.terps.map(t => `${esc(t.n)} (${Math.round(t.p * 100)}%)`).join(', ')}</p>
+      ${Array.isArray(s.ailments) && s.ailments.length ? `
+        <p style="margin:10px 0 2px;"><b>Users report relief from:</b> ${s.ailments.map(a => `<span class="filter-pill">${esc(a)}</span>`).join(' ')}</p>
+        <p class="empty-note" style="padding:0;">User-reported, not medical advice — see a doctor for real guidance.</p>
+      ` : ''}
     </div>
     <a class="btn block" href="/checkin?strain=${s.id}">＋ Check in this strain</a>
     <h2 class="screen-title" style="margin-top:20px;">Your history with this strain</h2>
@@ -954,10 +965,11 @@ function apiListStrains(req, res, query) {
   const effect = query.get('effect') || 'All';
   const thc = query.get('thc') || 'All';
   const terpene = query.get('terpene') || 'All';
+  const ailment = query.get('ailment') || 'All';
   const limit = Math.min(Number(query.get('limit')) || 60, 200);
   sendJson(res, {
-    total: db.countStrains({ q, type, rarity, effect, thc, terpene }),
-    results: db.listStrains({ q, type, rarity, effect, thc, terpene, limit }),
+    total: db.countStrains({ q, type, rarity, effect, thc, terpene, ailment }),
+    results: db.listStrains({ q, type, rarity, effect, thc, terpene, ailment, limit }),
   });
 }
 async function apiKudos(req, res, id) {
