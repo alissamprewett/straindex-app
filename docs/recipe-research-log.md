@@ -46,28 +46,38 @@ Infused Milk, Infused Sugar, Infused Salt, Infused Flour, RSO.
   on a private site, not under an open license; skipped for the same
   reason Leafly/SeedFinder strain data was skipped earlier.
 
+## Batch 4 — Food recipes built on the new bases (10 recipes)
+Added: Cannabis Oil Capsules, Chai Latte, Matcha Latte, Milkshake,
+Lemonade (infused-sugar version, distinct from the earlier tincture
+version), Paloma Mocktail, Popcorn, Roasted Nuts, Pancakes (infused
+flour), Pizza Dough (infused flour).
+
+**Sources checked this batch:**
+- Capsule-filling technique — cross-verified across 6 sources (Leafly,
+  GrowDiaries, Zamnesia, Weedmaps, Emily Kyle Nutrition, RQS Blog): key
+  detail confirmed everywhere — oil needs *oil-resistant* capsules, not
+  standard gelatin ones (standard gelatin dissolves/leaks with an oil
+  filling), and oil should stay under 100°F while filling so it doesn't
+  melt the capsule shell.
+
+Category counts after this batch: Infusion Base 19, Drinks 15,
+Savory & Snacks 13, Baked Goods 11, Gummies & Candy 10, Topicals 10.
+Gummies & Candy and Topicals haven't been touched since Batch 2 — good
+candidates for the next round if we want to keep categories roughly even.
+
 ---
 
 ## Up next (not yet done)
 
-**More food recipes using the expanded infusion base list** — the 6 food
-categories are all sitting at 10 recipes each (a floor, not a ceiling).
-Good candidates using the newer bases:
-- Recipes built around **infused milk** (chai, matcha latte, milkshake)
-- Recipes using **infused sugar** (lemonade, cocktails/mocktails,
-  sprinkled on fruit)
-- Recipes using **infused salt** (popcorn, roasted nuts, margarita rim)
-- Recipes using **infused flour** (pancakes, pizza dough, pasta)
-- A dedicated **RSO capsule** entry (gel capsules for people who want
-  the concentrate without a syringe) — needs its own safety-forward
-  write-up, not just folded into existing recipes
+**Gummies & Candy and Topicals** are the two categories that haven't
+grown since the initial fill — worth a batch of their own next, since
+every other category has had at least one follow-up round.
 
 **Other infusion techniques not yet covered:**
 - Cannabis-infused honey variations (already have one, could add
   a cold-infusion no-heat version)
 - Nitrous oxide whipped cream infusion (cream charger method — quick,
   popular, not yet researched)
-- Cannabis capsules (oil + gelatin/vegetable capsules at home)
 
 **Still true from the strain-library side (unrelated to recipes, noting
 here since it's the same "batches + log" pattern):** the openthc/vdb
