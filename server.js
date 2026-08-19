@@ -410,12 +410,20 @@ function pageFaq(req, res) {
 
 function pageRecipes(req, res, query) {
   const category = (query && query.get('category')) || 'All';
-  const recipes = db.listRecipes({ status: 'approved', category });
+  const q = (query && query.get('q')) || '';
+  const recipes = db.listRecipes({ status: 'approved', category, q });
   const categories = ['All', 'Infusion Base', 'Baked Goods', 'Gummies & Candy', 'Drinks', 'Topicals', 'Savory & Snacks'];
+  const mk = (params) => '/recipes?' + new URLSearchParams({ category, q, ...params }).toString();
   const body = `
     <h1 class="screen-title">Infused Recipes</h1>
     <a class="btn block lilac" href="/recipes/new" style="margin-bottom:14px;">✏️ Submit a Recipe</a>
-    <div style="margin-bottom:14px;">${categories.map(c => `<a class="filter-pill ${category === c ? 'active' : ''}" href="/recipes?category=${encodeURIComponent(c)}">${c}</a>`).join('')}</div>
+    <form method="GET" action="/recipes" style="margin-bottom:12px;display:flex;gap:8px;">
+      <input type="hidden" name="category" value="${esc(category)}">
+      <input type="search" name="q" value="${esc(q)}" placeholder="Search by name, ingredient, or description..." autocomplete="off" style="flex:1;">
+      <button class="btn" type="submit">Search</button>
+    </form>
+    <div style="margin-bottom:14px;">${categories.map(c => `<a class="filter-pill ${category === c ? 'active' : ''}" href="${mk({ category: c })}">${c}</a>`).join('')}</div>
+    ${q ? `<p class="empty-note">${recipes.length} result${recipes.length === 1 ? '' : 's'} for "${esc(q)}"${category !== 'All' ? ' in ' + esc(category) : ''}</p>` : ''}
     ${recipes.map(r => `
       <div class="card">
         <b>${r.icon || '🍽️'} ${esc(r.title)}</b>
@@ -434,7 +442,7 @@ function pageRecipes(req, res, query) {
           <span class="empty-note" style="padding:0;">${r.kudos} people found this helpful</span>
           <button class="kudos-btn" onclick="giveKudos(${r.id}, this)">👏 Kudos</button>
         </div>
-      </div>`).join('') || `<div class="empty-note">No recipes in this category yet.</div>`}
+      </div>`).join('') || `<div class="empty-note">${q ? 'No recipes match your search.' : 'No recipes in this category yet.'}</div>`}
   `;
   sendHtml(res, layout({ title: 'Recipes', active: 'recipes', body, isAdmin: auth.isAdmin(req) }));
 }
