@@ -23,10 +23,12 @@ const geo = require('./lib/geodispensaries');
 
 const PORT = process.env.PORT || 3000;
 const PUBLIC_DIR = path.join(__dirname, 'public');
+const DOCS_DIR = path.join(__dirname, 'docs');
 
 const MIME = {
   '.css': 'text/css', '.js': 'application/javascript', '.json': 'application/json',
   '.png': 'image/png', '.svg': 'image/svg+xml', '.ico': 'image/x-icon',
+  '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.webp': 'image/webp',
 };
 
 // ---------------------------------------------------------------- helpers
@@ -78,13 +80,13 @@ function rarityLabel(r) { return { common: 'Common', uncommon: 'Uncommon', rare:
 // strains using a CSS filter, so the library has real photographic variety
 // instead of one single repeated stock photo everywhere.
 const STRAIN_PHOTOS = [
-  'https://images.unsplash.com/photo-1634902349007-cfc9c61dff79?w=400&q=70&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1518465444133-93542d08fdd9?w=400&q=70&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1559558260-dfa522cfd57c?w=400&q=70&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1617101814633-c8a6cfd159cc?w=400&q=70&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1518469669531-9b8c528f909d?w=400&q=70&auto=format&fit=crop',
-  'https://cdn.pixabay.com/photo/2017/08/24/16/56/cannabis-2677505_640.jpg',
-  'https://cdn.pixabay.com/photo/2017/03/25/19/57/marijuana-2174302_640.jpg',
+  '/docs/spencer-gray-N9w237MCZxU-unsplash.jpg',
+  '/docs/ndispensable-7-VhhCfFtzk-unsplash.jpg',
+  '/docs/hakuna-matata-oYgXPGZui98-unsplash.jpg',
+  '/docs/crystalweed-cannabis-papBPuF484I-unsplash.jpg',
+  '/docs/ndispensable-zwc6BD4_RDE-unsplash.jpg',
+  '/docs/rexmedlen-flower-2677505_640.jpg',
+  '/docs/gjbmiller-weed-2174302_640.jpg',
 ];
 function hashStr(str) {
   let h = 0;
@@ -104,7 +106,7 @@ function strainPhotoStyle(strain) {
 // sizeClass controls the CSS box size; see .strain-thumb-* rules in app.css.
 function strainPhotoTag(strain, sizeClass = 'md') {
   if (!strain) return `<div class="strain-thumb strain-thumb-${sizeClass}" style="display:flex;align-items:center;justify-content:center;font-size:20px;">🌿</div>`;
-  return `<img class="strain-thumb strain-thumb-${sizeClass}" src="${strainPhotoUrl(strain)}" style="${strainPhotoStyle(strain)}" alt="${esc(strain.name)} bud" loading="lazy">`;
+  return `<img class="strain-thumb strain-thumb-${sizeClass}" src="${strainPhotoUrl(strain)}" style="${strainPhotoStyle(strain)}" alt="${esc(strain.name)} bud" loading="lazy" onerror="this.onerror=null;this.replaceWith(Object.assign(document.createElement('div'),{className:this.className,textContent:'🌿',style:'display:flex;align-items:center;justify-content:center;font-size:20px;background:#e5e0d5;'}))">`;
 }
 
 // Terpene-overlap recommendations, ported from the prototype: score every
@@ -1465,8 +1467,15 @@ function pageMethods(req, res) {
 }
 
 function serveStatic(req, res, pathname) {
-  const filePath = path.join(PUBLIC_DIR, pathname);
-  if (!filePath.startsWith(PUBLIC_DIR)) return notFound(res);
+  // The strain bud photos ended up committed under /docs (repo root) rather
+  // than /public/images — rather than requiring a re-upload, serve requests
+  // for /docs/* directly from that folder. Everything else still serves from
+  // /public as before.
+  const isDocsRequest = pathname.startsWith('/docs/');
+  const baseDir = isDocsRequest ? DOCS_DIR : PUBLIC_DIR;
+  const relativePath = isDocsRequest ? pathname.slice('/docs'.length) : pathname;
+  const filePath = path.join(baseDir, relativePath);
+  if (!filePath.startsWith(baseDir)) return notFound(res);
   fs.readFile(filePath, (err, data) => {
     if (err) return notFound(res);
     const ext = path.extname(filePath);
@@ -1483,7 +1492,7 @@ const server = http.createServer(async (req, res) => {
     const { pathname } = url;
     const method = req.method;
 
-    if (method === 'GET' && (pathname.startsWith('/icons/') || ['/app.css', '/app.js', '/manifest.json', '/sw.js'].includes(pathname))) {
+    if (method === 'GET' && (pathname.startsWith('/icons/') || pathname.startsWith('/docs/') || ['/app.css', '/app.js', '/manifest.json', '/sw.js'].includes(pathname))) {
       return serveStatic(req, res, pathname);
     }
 
