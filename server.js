@@ -242,23 +242,33 @@ function pageStrains(req, res, query) {
     <p class="screen-sub">${total.toLocaleString()} strains — search by name, flavor, effect, THC level, terpene, or relief.</p>
     <form method="GET" action="/strains" id="strain-search-form" style="margin-bottom:12px;">
       <input type="search" name="q" id="strain-search-input" value="${esc(q)}" placeholder="Search by name or flavor..." autocomplete="off">
-      <input type="hidden" name="type" id="strain-search-type" value="${esc(type)}">
-      <input type="hidden" name="rarity" id="strain-search-rarity" value="${esc(rarity)}">
-      <input type="hidden" name="effect" id="strain-search-effect" value="${esc(effect)}">
-      <input type="hidden" name="thc" id="strain-search-thc" value="${esc(thc)}">
-      <input type="hidden" name="terpene" id="strain-search-terpene" value="${esc(terpene)}">
-      <input type="hidden" name="ailment" id="strain-search-ailment" value="${esc(ailment)}">
     </form>
-    <div>${typeOpts.map(t => `<a class="filter-pill ${type === t ? 'active' : ''}" href="${mk({ type: t })}">${t}</a>`).join('')}</div>
-    <div style="margin-bottom:10px;">${rarityOpts.map(r => `<a class="filter-pill ${rarity === r ? 'active' : ''}" href="${mk({ rarity: r })}">${r === 'All' ? 'All rarities' : rarityLabel(r)}</a>`).join('')}</div>
-    <div class="section-label" style="margin-bottom:4px;">THC level</div>
-    <div style="margin-bottom:10px;">${thcOpts.map(t => `<a class="filter-pill ${thc === t ? 'active' : ''}" href="${mk({ thc: t })}">${thcLabel[t]}</a>`).join('')}</div>
-    <div class="section-label" style="margin-bottom:4px;">Feeling like...</div>
-    <div style="margin-bottom:10px;">${effectOpts.map(e => `<a class="filter-pill ${effect === e ? 'active' : ''}" href="${mk({ effect: e })}">${e === 'All' ? 'Any effect' : e}</a>`).join('')}</div>
-    <div class="section-label" style="margin-bottom:4px;">Dominant terpene</div>
-    <div style="margin-bottom:10px;">${terpeneOpts.map(t => `<a class="filter-pill ${terpene === t ? 'active' : ''}" href="${mk({ terpene: t })}">${t === 'All' ? 'Any terpene' : t}</a>`).join('')}</div>
-    <div class="section-label" style="margin-bottom:4px;">Looking for relief from...</div>
-    <div style="margin-bottom:6px;">${ailmentOpts.map(a => `<a class="filter-pill ${ailment === a ? 'active' : ''}" href="${mk({ ailment: a })}">${a === 'All' ? 'Anything' : a}</a>`).join('')}</div>
+    <div class="filter-grid">
+      <div class="filter-group">
+        <div class="section-label" style="margin-bottom:4px;">Type</div>
+        <select id="strain-search-type" name="type" form="strain-search-form">${typeOpts.map(t => `<option value="${esc(t)}" ${type === t ? 'selected' : ''}>${t}</option>`).join('')}</select>
+      </div>
+      <div class="filter-group">
+        <div class="section-label" style="margin-bottom:4px;">Rarity</div>
+        <select id="strain-search-rarity" name="rarity" form="strain-search-form">${rarityOpts.map(r => `<option value="${esc(r)}" ${rarity === r ? 'selected' : ''}>${r === 'All' ? 'All rarities' : rarityLabel(r)}</option>`).join('')}</select>
+      </div>
+      <div class="filter-group">
+        <div class="section-label" style="margin-bottom:4px;">THC level</div>
+        <select id="strain-search-thc" name="thc" form="strain-search-form">${thcOpts.map(t => `<option value="${esc(t)}" ${thc === t ? 'selected' : ''}>${thcLabel[t]}</option>`).join('')}</select>
+      </div>
+      <div class="filter-group">
+        <div class="section-label" style="margin-bottom:4px;">Feeling like...</div>
+        <select id="strain-search-effect" name="effect" form="strain-search-form">${effectOpts.map(e => `<option value="${esc(e)}" ${effect === e ? 'selected' : ''}>${e === 'All' ? 'Any effect' : e}</option>`).join('')}</select>
+      </div>
+      <div class="filter-group">
+        <div class="section-label" style="margin-bottom:4px;">Dominant terpene</div>
+        <select id="strain-search-terpene" name="terpene" form="strain-search-form">${terpeneOpts.map(t => `<option value="${esc(t)}" ${terpene === t ? 'selected' : ''}>${t === 'All' ? 'Any terpene' : t}</option>`).join('')}</select>
+      </div>
+      <div class="filter-group">
+        <div class="section-label" style="margin-bottom:4px;">Relief from...</div>
+        <select id="strain-search-ailment" name="ailment" form="strain-search-form">${ailmentOpts.map(a => `<option value="${esc(a)}" ${ailment === a ? 'selected' : ''}>${a === 'All' ? 'Anything' : a}</option>`).join('')}</select>
+      </div>
+    </div>
     <p class="empty-note" style="margin-bottom:10px;">User-reported associations, not medical advice — see a doctor for real guidance.</p>
     <p class="empty-note" id="strain-search-count">${total > 60 ? `Showing 60 of ${total.toLocaleString()} — refine your search to narrow it down.` : `${total} strain${total === 1 ? '' : 's'}`}</p>
     <div id="strain-search-results">${results.map(s => `
