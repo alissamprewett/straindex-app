@@ -65,13 +65,27 @@ Savory & Snacks 13, Baked Goods 11, Gummies & Candy 10, Topicals 10.
 Gummies & Candy and Topicals haven't been touched since Batch 2 — good
 candidates for the next round if we want to keep categories roughly even.
 
+## Batch 5 — Gummies & Candy and Topicals catch-up (10 recipes)
+Added 5 to each category, bringing every category to 11+ recipes.
+Gummies & Candy: Lollipops, Chocolate Truffles, Taffy, Peppermint Bark,
+Gumdrops. Topicals: Bath Bombs, Sleep Balm, Cuticle Oil, Cooling
+Headache Balm, Deodorant.
+
+No major new technique research needed this batch — these built on
+candy-making and topical-balm fundamentals already verified in earlier
+batches (hard-crack/hard-ball sugar stages, double-boiler balm method).
+
+Category counts after this batch: Infusion Base 19, Gummies & Candy 15,
+Drinks 15, Topicals 15, Savory & Snacks 13, Baked Goods 11. All
+categories now reasonably balanced.
+
 ---
 
 ## Up next (not yet done)
 
-**Gummies & Candy and Topicals** are the two categories that haven't
-grown since the initial fill — worth a batch of their own next, since
-every other category has had at least one follow-up round.
+**Baked Goods** is now the smallest category (11) — a good next target
+if we want to keep things even, though nothing is urgent since every
+category has real depth now.
 
 **Other infusion techniques not yet covered:**
 - Cannabis-infused honey variations (already have one, could add
