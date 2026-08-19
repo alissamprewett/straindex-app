@@ -64,3 +64,47 @@ lab-tested COA (Certificate of Analysis) data across 14 states, with a
   that matches something already in the library, as a first real-data
   accuracy check.
 
+---
+
+## Real lab-data validation (Cannlytics NY results, first batch)
+
+Alissa successfully pulled `data/ny/ny-results-latest.csv` directly from
+the Cannlytics dataset repo (330 real lab-tested cannabis products in
+New York). Note: this file does **not** have a clean `strain_name`
+column despite the dataset card describing one — strain names have to
+be matched by searching within `product_name` text instead (e.g.
+"Apple Fritter - .5g Disposable Vape").
+
+**Method:** cross-referenced our strain library's names against
+`product_name`, restricted to flower/preroll product types only
+(concentrates and vape carts test 3-4x higher than flower for the same
+strain, since they're extracted/concentrated — comparing those against
+our flower-based THC ranges would be misleading).
+
+**Result: found and fixed 2 confirmed bad entries.**
+- Green Crack was listed as 1–6% THC. Real lab tests: 17.07–23.06%.
+  Fixed to 15–25%.
+- Diesel was listed as 1–6% THC. Real lab tests: 19.39–21.62%.
+  Fixed to 15–21%.
+
+**Most other matches confirmed our existing estimates were accurate**
+(Gelato, Gary Payton, Hash Burger, Tropicana Cookies, Slurricane,
+Jealousy, Durban Poison, Apple Fritter all landed within or very close
+to our stated ranges).
+
+**Bigger finding: 75 strains in the library (mostly from the original
+pre-existing starter dataset, not from any batch added during this
+project) share the exact same "1–6%" THC value.** This is almost
+certainly a leftover placeholder/default from however the original
+1,500-strain seed data was built, the same bug pattern caught in Green
+Crack and Diesel above. Important caveat: **not all 75 are necessarily
+wrong** — a few (like ACDC) are genuinely real high-CBD, low-THC
+strains where 1–6% is accurate. Each one needs individual verification
+before changing it, the same way Green Crack and Diesel were confirmed
+with real lab data before fixing. Full list saved for future batches.
+
+**Up next:** work through the 75-strain "1–6%" suspect list a batch at
+a time, verifying each individually (real research or more Cannlytics
+state pulls) before correcting. Also worth pulling a bigger state next
+(e.g. `ca` or `wa`) now that the direct-CSV-download approach is
+confirmed working, for a larger validation sample.
