@@ -68,7 +68,10 @@
       "Cut into a set number of equal squares and label the batch with dose per square."
     ],
     "dosing": "Cut into more, smaller squares than you think you need — it's much easier to eat a second piece than to undo one that's too strong.",
-    "category": "Gummies & Candy"
+    "category": "Gummies & Candy",
+    "usesBase": [
+      "cannabutter"
+    ]
   },
   {
     "id": "r4",
@@ -99,7 +102,10 @@
       "Cool at least 30 minutes before cutting into a set number of equal squares."
     ],
     "dosing": "Dose per brownie ≈ (grams of cannabis × THC% × 1000) ÷ number of brownies. Example: 1g flower at 20% THC across 10 brownies ≈ 20mg each. Start with a light square (2–5mg) and wait 2 hours before eating more.",
-    "category": "Baked Goods"
+    "category": "Baked Goods",
+    "usesBase": [
+      "cannabutter"
+    ]
   },
   {
     "id": "r5",
@@ -150,7 +156,10 @@
       "Fill molds with a dropper, tapping out air bubbles, and refrigerate 2–3 hours until firm."
     ],
     "dosing": "Calculate total mg THC in your tincture batch and divide evenly across all gummies made — write the date and dose on the container so it's never a guess later.",
-    "category": "Gummies & Candy"
+    "category": "Gummies & Candy",
+    "usesBase": [
+      "tincture"
+    ]
   },
   {
     "id": "r7",
@@ -246,7 +255,10 @@
       "Sprinkle toppings over the top while still soft.",
       "Chill for 1–2 hours until fully set, then break into pieces."
     ],
-    "dosing": "Break into a consistent number of pieces from the start (score the bark before it fully sets) so every piece is a known, even dose."
+    "dosing": "Break into a consistent number of pieces from the start (score the bark before it fully sets) so every piece is a known, even dose.",
+    "usesBase": [
+      "coconut oil"
+    ]
   },
   {
     "id": "r11",
@@ -268,7 +280,11 @@
       "Transfer to a jar and let cool to room temperature before sealing.",
       "Stir again before each use, since natural peanut butter can separate."
     ],
-    "dosing": "Divide the total THC in your infused oil by the number of tablespoons in the finished jar to know the dose per serving."
+    "dosing": "Divide the total THC in your infused oil by the number of tablespoons in the finished jar to know the dose per serving.",
+    "usesBase": [
+      "coconut oil",
+      "cannabutter"
+    ]
   },
   {
     "id": "r12",
@@ -294,7 +310,10 @@
       "Once steaming, remove from heat and whisk in the infused coconut oil until fully blended (a milk frother or blender helps it emulsify).",
       "Sweeten with honey to taste and serve warm."
     ],
-    "dosing": "Since the oil doesn't fully dissolve into milk on its own, whisk or blend thoroughly right before drinking so the dose doesn't settle at the bottom of the cup."
+    "dosing": "Since the oil doesn't fully dissolve into milk on its own, whisk or blend thoroughly right before drinking so the dose doesn't settle at the bottom of the cup.",
+    "usesBase": [
+      "coconut oil"
+    ]
   },
   {
     "id": "r13",
@@ -316,7 +335,10 @@
       "Stir well before pouring, since tincture can separate from water-based drinks.",
       "Serve over ice with a mint sprig or lemon slice."
     ],
-    "dosing": "Dosing by the glass (rather than the whole pitcher) makes it much easier to keep track of exactly how much each person is getting."
+    "dosing": "Dosing by the glass (rather than the whole pitcher) makes it much easier to keep track of exactly how much each person is getting.",
+    "usesBase": [
+      "tincture"
+    ]
   },
   {
     "id": "r14",
@@ -348,7 +370,10 @@
       "Scoop a set number of even-sized dough balls onto the sheets, spaced apart.",
       "Bake 10–12 minutes until edges are golden. Cool before eating."
     ],
-    "dosing": "Weigh the total dough and divide by the weight of one scooped cookie to know exactly how many cookies the batch makes — then divide total THC evenly across that count."
+    "dosing": "Weigh the total dough and divide by the weight of one scooped cookie to know exactly how many cookies the batch makes — then divide total THC evenly across that count.",
+    "usesBase": [
+      "cannabutter"
+    ]
   },
   {
     "id": "r15",
@@ -376,7 +401,10 @@
       "Remove from heat, stir in vanilla and salt, then pour into the pan.",
       "Cool completely, then cut into a set number of even squares and wrap individually in wax paper."
     ],
-    "dosing": "Because this recipe simmers longer than most, some potency loss is normal — test one piece first even if you've made cannabutter edibles before."
+    "dosing": "Because this recipe simmers longer than most, some potency loss is normal — test one piece first even if you've made cannabutter edibles before.",
+    "usesBase": [
+      "cannabutter"
+    ]
   },
   {
     "id": "r16",
@@ -400,7 +428,10 @@
       "Pour into small tins or jars while still liquid.",
       "Let cool and solidify at room temperature (a few hours), then cap."
     ],
-    "dosing": "Because THC absorbed through skin generally doesn't reach the bloodstream the way edibles do, this is considered non-intoxicating — a good option for localized relief without a high."
+    "dosing": "Because THC absorbed through skin generally doesn't reach the bloodstream the way edibles do, this is considered non-intoxicating — a good option for localized relief without a high.",
+    "usesBase": [
+      "coconut oil"
+    ]
   },
   {
     "id": "r17",
@@ -422,7 +453,10 @@
       "Store in a sealed jar until ready to use.",
       "Add a generous scoop to running bath water and soak for at least 20 minutes."
     ],
-    "dosing": "Like the salve, this is topical and not intended to produce a high — it's about the warm-soak relaxation plus localized skin contact."
+    "dosing": "Like the salve, this is topical and not intended to produce a high — it's about the warm-soak relaxation plus localized skin contact.",
+    "usesBase": [
+      "coconut oil"
+    ]
   },
   {
     "id": "r18",
@@ -445,7 +479,10 @@
       "Toss thoroughly so the butter coats as many pieces as possible.",
       "Salt to taste and serve immediately."
     ],
-    "dosing": "Coating is naturally uneven with this method — some kernels get more butter than others — so treat a first handful as a mild test dose rather than assuming an even spread."
+    "dosing": "Coating is naturally uneven with this method — some kernels get more butter than others — so treat a first handful as a mild test dose rather than assuming an even spread.",
+    "usesBase": [
+      "cannabutter"
+    ]
   },
   {
     "id": "r19",
@@ -472,7 +509,10 @@
       "Season with salt and pepper to taste.",
       "Store in a sealed jar in the fridge for up to a week."
     ],
-    "dosing": "Since the infused oil is only part of the total oil in the recipe, calculate the dose based on the infused-oil portion only, divided by the total jar volume."
+    "dosing": "Since the infused oil is only part of the total oil in the recipe, calculate the dose based on the infused-oil portion only, divided by the total jar volume.",
+    "usesBase": [
+      "olive oil"
+    ]
   },
   {
     "id": "r20",
@@ -622,7 +662,10 @@
     ],
     "dosing": "Weigh the baked loaf and divide by the weight of one slice to know exactly how many slices it makes, then divide total THC evenly.",
     "category": "Baked Goods",
-    "status": "approved"
+    "status": "approved",
+    "usesBase": [
+      "cannabutter"
+    ]
   },
   {
     "id": "r26",
@@ -652,7 +695,10 @@
     ],
     "dosing": "Cut into a specific grid (e.g. 4×4 = 16 squares) before eating so every piece is a known, even dose.",
     "category": "Baked Goods",
-    "status": "approved"
+    "status": "approved",
+    "usesBase": [
+      "cannabutter"
+    ]
   },
   {
     "id": "r27",
@@ -688,7 +734,10 @@
     ],
     "dosing": "The cannabutter is only in the dough, not the filling or glaze — divide total THC by the number of rolls the dough made.",
     "category": "Baked Goods",
-    "status": "approved"
+    "status": "approved",
+    "usesBase": [
+      "cannabutter"
+    ]
   },
   {
     "id": "r28",
@@ -718,7 +767,10 @@
     ],
     "dosing": "Since this makes exactly 12 muffins, dosing is simple: divide the total THC in the batch by 12.",
     "category": "Baked Goods",
-    "status": "approved"
+    "status": "approved",
+    "usesBase": [
+      "cannabutter"
+    ]
   },
   {
     "id": "r29",
@@ -750,7 +802,10 @@
     ],
     "dosing": "Same approach as banana bread — weigh the loaf, decide on a slice count, and divide total THC evenly.",
     "category": "Baked Goods",
-    "status": "approved"
+    "status": "approved",
+    "usesBase": [
+      "cannabutter"
+    ]
   },
   {
     "id": "r30",
@@ -777,7 +832,10 @@
     ],
     "dosing": "Slicing the log into a known number of even rounds before baking is the easiest way to keep every cookie's dose consistent.",
     "category": "Baked Goods",
-    "status": "approved"
+    "status": "approved",
+    "usesBase": [
+      "cannabutter"
+    ]
   },
   {
     "id": "r31",
@@ -807,7 +865,10 @@
     ],
     "dosing": "Scoop dough with a consistent-size cookie scoop so every ball — and every finished cookie — is close to the same dose.",
     "category": "Baked Goods",
-    "status": "approved"
+    "status": "approved",
+    "usesBase": [
+      "cannabutter"
+    ]
   },
   {
     "id": "r32",
@@ -833,7 +894,10 @@
     ],
     "dosing": "Since the peanut butter is the only infused ingredient, divide its total THC by the number of cups made.",
     "category": "Gummies & Candy",
-    "status": "approved"
+    "status": "approved",
+    "usesBase": [
+      "coconut oil"
+    ]
   },
   {
     "id": "r33",
@@ -860,7 +924,10 @@
     ],
     "dosing": "Divide the tincture's total THC by the number of lollipops poured. Hard candy is easy to nibble slowly to control dosing.",
     "category": "Gummies & Candy",
-    "status": "approved"
+    "status": "approved",
+    "usesBase": [
+      "tincture"
+    ]
   },
   {
     "id": "r34",
@@ -889,7 +956,10 @@
     ],
     "dosing": "Fudge is rich and calorie-dense on top of being infused — cut pieces smaller than you think you need.",
     "category": "Gummies & Candy",
-    "status": "approved"
+    "status": "approved",
+    "usesBase": [
+      "cannabutter"
+    ]
   },
   {
     "id": "r35",
@@ -914,7 +984,10 @@
     ],
     "dosing": "Press the mixture into an even layer before cutting a consistent grid, so every square gets roughly the same dose.",
     "category": "Gummies & Candy",
-    "status": "approved"
+    "status": "approved",
+    "usesBase": [
+      "cannabutter"
+    ]
   },
   {
     "id": "r36",
@@ -945,7 +1018,10 @@
     ],
     "dosing": "Cut into a known number of even squares and divide the tincture's total THC accordingly.",
     "category": "Gummies & Candy",
-    "status": "approved"
+    "status": "approved",
+    "usesBase": [
+      "tincture"
+    ]
   },
   {
     "id": "r37",
@@ -973,7 +1049,10 @@
     ],
     "dosing": "Toffee is easy to break unevenly — try scoring it into a grid before it fully hardens so pieces come out more consistent.",
     "category": "Gummies & Candy",
-    "status": "approved"
+    "status": "approved",
+    "usesBase": [
+      "cannabutter"
+    ]
   },
   {
     "id": "r38",
@@ -1000,7 +1079,10 @@
     ],
     "dosing": "Whisk thoroughly right before drinking, since the oil can separate and settle if the mug sits.",
     "category": "Drinks",
-    "status": "approved"
+    "status": "approved",
+    "usesBase": [
+      "coconut oil"
+    ]
   },
   {
     "id": "r39",
@@ -1025,7 +1107,10 @@
     ],
     "dosing": "Dosing glass-by-glass, rather than the whole pitcher, keeps track of exactly how much each person gets.",
     "category": "Drinks",
-    "status": "approved"
+    "status": "approved",
+    "usesBase": [
+      "tincture"
+    ]
   },
   {
     "id": "r40",
@@ -1052,7 +1137,10 @@
     ],
     "dosing": "The simple syrup carries the dose — check its label for THC per tablespoon before pouring.",
     "category": "Drinks",
-    "status": "approved"
+    "status": "approved",
+    "usesBase": [
+      "simple syrup"
+    ]
   },
   {
     "id": "r41",
@@ -1076,7 +1164,10 @@
     ],
     "dosing": "Coconut oil doesn't fully dissolve in coffee — stir well right before drinking so the dose doesn't settle at the bottom of the cup.",
     "category": "Drinks",
-    "status": "approved"
+    "status": "approved",
+    "usesBase": [
+      "coconut oil"
+    ]
   },
   {
     "id": "r42",
@@ -1099,7 +1190,10 @@
     ],
     "dosing": "Since tincture doesn't fully dissolve in carbonated water, stir just before each sip to keep the dose evenly distributed.",
     "category": "Drinks",
-    "status": "approved"
+    "status": "approved",
+    "usesBase": [
+      "tincture"
+    ]
   },
   {
     "id": "r43",
@@ -1124,7 +1218,10 @@
     ],
     "dosing": "Blending distributes the infused oil more evenly than stirring alone, making this one of the more consistent drink options for dosing.",
     "category": "Drinks",
-    "status": "approved"
+    "status": "approved",
+    "usesBase": [
+      "coconut oil"
+    ]
   },
   {
     "id": "r44",
@@ -1150,7 +1247,10 @@
     ],
     "dosing": "Whisk thoroughly right before serving each cup, since the oil can separate as the cider sits.",
     "category": "Drinks",
-    "status": "approved"
+    "status": "approved",
+    "usesBase": [
+      "coconut oil"
+    ]
   },
   {
     "id": "r45",
@@ -1178,7 +1278,10 @@
     ],
     "dosing": "Stir the pitcher thoroughly before pouring each glass, since the oil can rise and separate while chilling.",
     "category": "Drinks",
-    "status": "approved"
+    "status": "approved",
+    "usesBase": [
+      "coconut oil"
+    ]
   },
   {
     "id": "r46",
@@ -1204,7 +1307,10 @@
     ],
     "dosing": "This is a topical, non-intoxicating product — not meant to be ingested in meaningful amounts.",
     "category": "Topicals",
-    "status": "approved"
+    "status": "approved",
+    "usesBase": [
+      "coconut oil"
+    ]
   },
   {
     "id": "r47",
@@ -1227,7 +1333,10 @@
     ],
     "dosing": "Topical and non-intoxicating — absorbed through the skin for localized relief, not meant to produce a high.",
     "category": "Topicals",
-    "status": "approved"
+    "status": "approved",
+    "usesBase": [
+      "coconut oil"
+    ]
   },
   {
     "id": "r48",
@@ -1252,7 +1361,10 @@
     ],
     "dosing": "Non-intoxicating and topical. Wash hands after applying, and avoid contact with eyes if using the cayenne variation.",
     "category": "Topicals",
-    "status": "approved"
+    "status": "approved",
+    "usesBase": [
+      "coconut oil"
+    ]
   },
   {
     "id": "r49",
@@ -1275,7 +1387,10 @@
     ],
     "dosing": "Topical and non-intoxicating — this is about the warm soak plus localized relief, not a high.",
     "category": "Topicals",
-    "status": "approved"
+    "status": "approved",
+    "usesBase": [
+      "coconut oil"
+    ]
   },
   {
     "id": "r50",
@@ -1299,7 +1414,10 @@
     ],
     "dosing": "Topical only, not for ingestion — no THC will meaningfully absorb into the bloodstream from a face mask.",
     "category": "Topicals",
-    "status": "approved"
+    "status": "approved",
+    "usesBase": [
+      "coconut oil"
+    ]
   },
   {
     "id": "r51",
@@ -1322,7 +1440,10 @@
     ],
     "dosing": "Topical and non-intoxicating — this stays on the scalp and hair, not absorbed into the bloodstream in any meaningful amount.",
     "category": "Topicals",
-    "status": "approved"
+    "status": "approved",
+    "usesBase": [
+      "coconut oil"
+    ]
   },
   {
     "id": "r52",
@@ -1346,7 +1467,10 @@
     ],
     "dosing": "Topical and non-intoxicating — this is meant for skin-soothing, not for any systemic effect.",
     "category": "Topicals",
-    "status": "approved"
+    "status": "approved",
+    "usesBase": [
+      "coconut oil"
+    ]
   },
   {
     "id": "r53",
@@ -1371,7 +1495,10 @@
     ],
     "dosing": "Topical and non-intoxicating — intended for moisturizing, not for producing a high.",
     "category": "Topicals",
-    "status": "approved"
+    "status": "approved",
+    "usesBase": [
+      "coconut oil"
+    ]
   },
   {
     "id": "r54",
@@ -1399,7 +1526,10 @@
     ],
     "dosing": "Divide the infused oil's total THC by the number of servings the batch makes — hummus is easy to snack on more than intended.",
     "category": "Savory & Snacks",
-    "status": "approved"
+    "status": "approved",
+    "usesBase": [
+      "olive oil"
+    ]
   },
   {
     "id": "r55",
@@ -1424,7 +1554,10 @@
     ],
     "dosing": "Divide the infused oil's total THC by the number of servings of dressing — easy to underestimate how much ends up on a salad.",
     "category": "Savory & Snacks",
-    "status": "approved"
+    "status": "approved",
+    "usesBase": [
+      "olive oil"
+    ]
   },
   {
     "id": "r56",
@@ -1452,7 +1585,10 @@
     ],
     "dosing": "Divide the infused oil's total THC by the number of servings — guac disappears fast, so portion it out ahead of time if sharing.",
     "category": "Savory & Snacks",
-    "status": "approved"
+    "status": "approved",
+    "usesBase": [
+      "olive oil"
+    ]
   },
   {
     "id": "r57",
@@ -1480,7 +1616,10 @@
     ],
     "dosing": "Divide the cannabutter's total THC by the number of servings the whole pot makes.",
     "category": "Savory & Snacks",
-    "status": "approved"
+    "status": "approved",
+    "usesBase": [
+      "cannabutter"
+    ]
   },
   {
     "id": "r58",
@@ -1507,7 +1646,10 @@
     ],
     "dosing": "Divide the infused oil's total THC by the number of egg halves made — easy to eat several without noticing.",
     "category": "Savory & Snacks",
-    "status": "approved"
+    "status": "approved",
+    "usesBase": [
+      "olive oil"
+    ]
   },
   {
     "id": "r59",
@@ -1533,7 +1675,10 @@
     ],
     "dosing": "Only the nuts carry the dose — divide the oil's total THC by the weight of nuts used, then estimate by handful size.",
     "category": "Savory & Snacks",
-    "status": "approved"
+    "status": "approved",
+    "usesBase": [
+      "coconut oil"
+    ]
   },
   {
     "id": "r60",
@@ -1560,7 +1705,10 @@
     ],
     "dosing": "Divide the infused oil's total THC by the number of servings — salsa is easy to eat more of than planned.",
     "category": "Savory & Snacks",
-    "status": "approved"
+    "status": "approved",
+    "usesBase": [
+      "olive oil"
+    ]
   },
   {
     "id": "r61",
@@ -1803,7 +1951,10 @@
     ],
     "dosing": "The milk is the only infused ingredient — this drink carries whatever dose the milk itself was made with.",
     "category": "Drinks",
-    "status": "approved"
+    "status": "approved",
+    "usesBase": [
+      "infused milk"
+    ]
   },
   {
     "id": "r71",
@@ -1828,7 +1979,10 @@
     ],
     "dosing": "Carries the dose of whatever the infused milk was made with — stir well before drinking since the milk can settle.",
     "category": "Drinks",
-    "status": "approved"
+    "status": "approved",
+    "usesBase": [
+      "infused milk"
+    ]
   },
   {
     "id": "r72",
@@ -1851,7 +2005,10 @@
     ],
     "dosing": "Blending distributes the infused milk's dose fairly evenly throughout — still, drink the whole thing to get the full dose, not just a few sips.",
     "category": "Drinks",
-    "status": "approved"
+    "status": "approved",
+    "usesBase": [
+      "infused milk"
+    ]
   },
   {
     "id": "r73",
@@ -1875,7 +2032,10 @@
     ],
     "dosing": "Divide the infused sugar's total THC by the volume of lemonade made, then by however many glasses you pour, for a per-glass estimate.",
     "category": "Drinks",
-    "status": "approved"
+    "status": "approved",
+    "usesBase": [
+      "infused sugar"
+    ]
   },
   {
     "id": "r74",
@@ -1900,7 +2060,10 @@
     ],
     "dosing": "Dosing here is inherently imprecise since it depends how much salt actually touches your lips while drinking — treat this as a light, social dose rather than a primary one.",
     "category": "Drinks",
-    "status": "approved"
+    "status": "approved",
+    "usesBase": [
+      "finishing salt"
+    ]
   },
   {
     "id": "r75",
@@ -1925,7 +2088,11 @@
     ],
     "dosing": "Both the butter and the salt are infused here — track the total THC of each and divide by the batch size, since this one can add up faster than a single-ingredient recipe.",
     "category": "Savory & Snacks",
-    "status": "approved"
+    "status": "approved",
+    "usesBase": [
+      "finishing salt",
+      "cannabutter"
+    ]
   },
   {
     "id": "r76",
@@ -1951,7 +2118,11 @@
     ],
     "dosing": "Both the oil and salt are infused — add up the THC from each before dividing by the batch weight.",
     "category": "Savory & Snacks",
-    "status": "approved"
+    "status": "approved",
+    "usesBase": [
+      "olive oil",
+      "finishing salt"
+    ]
   },
   {
     "id": "r77",
@@ -1980,7 +2151,10 @@
     ],
     "dosing": "Divide the infused flour's total THC by the number of pancakes the batter makes — count them as you cook so the math is easy.",
     "category": "Baked Goods",
-    "status": "approved"
+    "status": "approved",
+    "usesBase": [
+      "infused flour"
+    ]
   },
   {
     "id": "r78",
@@ -2008,7 +2182,10 @@
     ],
     "dosing": "Divide the infused flour's total THC by the number of slices you cut the finished pizza into — cutting it into a consistent number of slices (e.g. always 8) makes this easy to repeat.",
     "category": "Savory & Snacks",
-    "status": "approved"
+    "status": "approved",
+    "usesBase": [
+      "infused flour"
+    ]
   },
   {
     "id": "r79",
@@ -2035,7 +2212,10 @@
     ],
     "dosing": "Divide the tincture's total THC by the number of lollipops poured — since they're meant to be sucked on slowly, it's easy to naturally under-dose per sitting if you don't finish the whole thing.",
     "category": "Gummies & Candy",
-    "status": "approved"
+    "status": "approved",
+    "usesBase": [
+      "tincture"
+    ]
   },
   {
     "id": "r80",
@@ -2061,7 +2241,10 @@
     ],
     "dosing": "Divide the cannabutter's total THC by the number of truffles rolled — rolling them a consistent size (e.g. a tablespoon each) keeps doses even.",
     "category": "Gummies & Candy",
-    "status": "approved"
+    "status": "approved",
+    "usesBase": [
+      "cannabutter"
+    ]
   },
   {
     "id": "r81",
@@ -2088,7 +2271,10 @@
     ],
     "dosing": "Divide the cannabutter's total THC by the number of pieces cut — cutting the rope into a consistent number of pieces (e.g. always 20) makes this repeatable.",
     "category": "Gummies & Candy",
-    "status": "approved"
+    "status": "approved",
+    "usesBase": [
+      "cannabutter"
+    ]
   },
   {
     "id": "r82",
@@ -2114,7 +2300,10 @@
     ],
     "dosing": "Only the dark chocolate layer is infused — divide its total THC by the number of pieces the whole batch breaks into, keeping in mind pieces won't be perfectly even in size.",
     "category": "Gummies & Candy",
-    "status": "approved"
+    "status": "approved",
+    "usesBase": [
+      "cannabutter"
+    ]
   },
   {
     "id": "r83",
@@ -2142,7 +2331,10 @@
     ],
     "dosing": "Divide the tincture's total THC by the number of cubes cut — cutting a consistent grid (e.g. 5×5) keeps the math simple.",
     "category": "Gummies & Candy",
-    "status": "approved"
+    "status": "approved",
+    "usesBase": [
+      "tincture"
+    ]
   },
   {
     "id": "r84",
@@ -2171,7 +2363,10 @@
     ],
     "dosing": "Topical and non-intoxicating — this dissolves in bathwater for a relaxing soak, not for ingestion.",
     "category": "Topicals",
-    "status": "approved"
+    "status": "approved",
+    "usesBase": [
+      "coconut oil"
+    ]
   },
   {
     "id": "r85",
@@ -2196,7 +2391,10 @@
     ],
     "dosing": "Topical and non-intoxicating — this is about the massage and aromatherapy routine, not a systemic effect.",
     "category": "Topicals",
-    "status": "approved"
+    "status": "approved",
+    "usesBase": [
+      "coconut oil"
+    ]
   },
   {
     "id": "r86",
@@ -2217,7 +2415,10 @@
     ],
     "dosing": "Topical and non-intoxicating — absorbed locally into skin and nail beds, not the bloodstream in any meaningful way.",
     "category": "Topicals",
-    "status": "approved"
+    "status": "approved",
+    "usesBase": [
+      "coconut oil"
+    ]
   },
   {
     "id": "r87",
@@ -2242,7 +2443,10 @@
     ],
     "dosing": "Topical and non-intoxicating — wash hands after applying and keep away from eyes given the menthol content.",
     "category": "Topicals",
-    "status": "approved"
+    "status": "approved",
+    "usesBase": [
+      "coconut oil"
+    ]
   },
   {
     "id": "r88",
@@ -2268,6 +2472,9 @@
     ],
     "dosing": "Topical and non-intoxicating — intended for skin application, not for any systemic effect.",
     "category": "Topicals",
-    "status": "approved"
+    "status": "approved",
+    "usesBase": [
+      "coconut oil"
+    ]
   }
 ]
