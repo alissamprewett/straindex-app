@@ -482,7 +482,7 @@ function pageFaq(req, res, query) {
 
     <p class="empty-note" style="margin-top:16px;">Have a question you don't see here? Ask the assistant on the <a href="/chat">Ask</a> tab.</p>
   `;
-  sendHtml(res, layout({ title: 'FAQ', active: 'faq', body, isAdmin: auth.isAdmin(req) }));
+  sendHtml(res, layout({ title: 'FAQ', active: 'more', body, isAdmin: auth.isAdmin(req) }));
 }
 
 // Maps a usesBase keyword to the title of the one "core" recipe that
@@ -1130,7 +1130,6 @@ function pageMore(req, res) {
   // To bring one back: move its entry from comingSoonTiles into tiles below.
   const tiles = [
     { href: '/collection', icon: '🃏', t: 'My Collection', s: 'Binder, badges & progress' },
-    { href: '/friends', icon: '🧑\u200d🤝\u200d🧑', t: 'Friends', s: 'Find people & manage requests' },
     { href: '/trade', icon: '🔁', t: 'Trade', s: 'Swap dupes with real friends' },
     { href: '/history', icon: '🕐', t: 'Check-In History', s: 'Your full timeline' },
     { href: '/dispensaries', icon: '📍', t: 'Dispensaries', s: 'Locator & live menus' },
@@ -1355,7 +1354,7 @@ function pageFriends(req, res, query) {
         </div>
       </div>`).join('') : `<div class="empty-note">No friends yet — search for a username above to get started.</div>`}
   `;
-  sendHtml(res, layout({ title: 'Friends', active: 'more', body, isAdmin: auth.isAdmin(req) }));
+  sendHtml(res, layout({ title: 'Friends', active: 'friends', body, isAdmin: auth.isAdmin(req) }));
 }
 function pageFriendProfile(req, res, friendId) {
   const userId = requireUser(req, res);
@@ -1365,7 +1364,7 @@ function pageFriendProfile(req, res, friendId) {
   const status = db.getFriendshipStatus(userId, friendId);
   if (status !== 'friends' && friendId !== userId) {
     const body = `<h1 class="screen-title">Not connected yet</h1><p class="empty-note">You can only see a profile once you're friends with them. <a href="/friends">Back to Friends</a></p>`;
-    return sendHtml(res, layout({ title: 'Profile', active: 'more', body, isAdmin: auth.isAdmin(req) }));
+    return sendHtml(res, layout({ title: 'Profile', active: 'friends', body, isAdmin: auth.isAdmin(req) }));
   }
   const collection = db.getCollection(friendId);
   const badges = computeBadges(friendId);
@@ -1398,7 +1397,7 @@ function pageFriendProfile(req, res, friendId) {
       </div>`;
     }).join('') : `<div class="empty-note">No check-ins yet.</div>`}
   `;
-  sendHtml(res, layout({ title: friend.username, active: 'more', body, isAdmin: auth.isAdmin(req) }));
+  sendHtml(res, layout({ title: friend.username, active: 'friends', body, isAdmin: auth.isAdmin(req) }));
 }
 async function handleFriendRequest(req, res, otherId) {
   const userId = requireUser(req, res);
