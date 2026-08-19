@@ -430,6 +430,7 @@ function pageRecipes(req, res, query) {
         <span class="recipe-source-tag ${r.source}">${r.source === 'official' ? 'Official' : 'Community'}</span>
         <div class="empty-note">${esc(r.category || '')}${r.time ? ' · ' + esc(r.time) : ''}${r.author ? ' · by ' + esc(r.author) : ''}</div>
         <p>${esc(r.desc)}</p>
+        ${Array.isArray(r.usesBase) && r.usesBase.length ? `<p class="empty-note" style="padding:0 0 6px;">Uses: ${r.usesBase.map(b => `<a href="/recipes?q=${encodeURIComponent(b)}&category=Infusion+Base">${esc(b)}</a>`).join(', ')} <span style="opacity:.7;">(tap to see how to make it)</span></p>` : ''}
         <details>
           <summary style="cursor:pointer;font-size:12.5px;font-weight:700;color:var(--brand-green-dark);">Ingredients &amp; steps</summary>
           <p><b>Ingredients:</b></p>

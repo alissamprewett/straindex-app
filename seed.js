@@ -46,11 +46,25 @@ async function main() {
           title: r.title, time: r.time, icon: r.icon, source: r.source || 'official',
           author: r.author, desc: r.desc, ingredients: r.ingredients, steps: r.steps,
           dosing: r.dosing, category: r.category || 'Baked Goods', status: 'approved', kudos: r.kudos || 0,
+          usesBase: r.usesBase,
         });
       }
     } else {
       console.log('No new recipes to add.');
     }
+    // Backfill: recipes seeded before the usesBase field existed won't have
+    // it yet even though the JSON file does — bring them up to date in place.
+    const byTitle = new Map(db.listRecipes({ status: null }).map(r => [r.title, r]));
+    let backfilled = 0;
+    for (const r of recipes) {
+      if (!r.usesBase || !r.usesBase.length) continue;
+      const existing = byTitle.get(r.title);
+      if (existing && !existing.usesBase) {
+        await db.setRecipeUsesBase(existing.id, r.usesBase);
+        backfilled++;
+      }
+    }
+    if (backfilled) console.log(`Backfilled usesBase on ${backfilled} existing recipe(s).`);
   }
 
   {
