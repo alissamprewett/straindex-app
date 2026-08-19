@@ -1755,5 +1755,259 @@
     "dosing": "RSO is extremely concentrated — the standard starting dose is a grain-of-rice-sized amount, taken orally, no more than a few times a day, increasing very gradually over days or weeks. This is not a casual edible ingredient; treat it with real medical-grade caution and talk to a doctor if using it for a health condition.",
     "category": "Infusion Base",
     "status": "approved"
+  },
+  {
+    "id": "r69",
+    "title": "Cannabis Oil Capsules",
+    "time": "≈40 min",
+    "icon": "💊",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "A tasteless, pre-measured way to dose — good for anyone who doesn't want to taste cannabis at all.",
+    "ingredients": [
+      "½ cup cannabis-infused coconut oil, melted",
+      "Size 00 oil-resistant capsules (not standard gelatin — those dissolve in oil)",
+      "A capsule-filling syringe or oral irrigator with a tapered tip"
+    ],
+    "steps": [
+      "Warm the infused coconut oil gently until fully liquid but not hot — under 100°F, so it doesn't damage the capsule shells.",
+      "Separate the capsule tops and bottoms and set the bottoms upright in a capsule holder or a piece of cardboard with holes poked in it.",
+      "Use the syringe to fill each capsule bottom with oil, leaving a little room at the top.",
+      "Press the capsule tops back on firmly until they click shut.",
+      "Wipe away any oil residue, then store the finished capsules in the refrigerator or another cool, dark place."
+    ],
+    "dosing": "Before filling, calculate the total THC in your batch of infused oil and divide by the number of capsules you plan to make, so each one is a known, even dose — write it on the storage container.",
+    "category": "Infusion Base",
+    "status": "approved"
+  },
+  {
+    "id": "r70",
+    "title": "Cannabis Chai Latte",
+    "time": "≈15 min",
+    "icon": "🍵",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "A warmly spiced latte built on infused milk — a cozy way to dose on a cold day.",
+    "ingredients": [
+      "1 cup cannabis-infused milk",
+      "1 chai tea bag (or 1 tsp loose chai spice blend)",
+      "1 tbsp honey or sugar, to taste"
+    ],
+    "steps": [
+      "Warm the infused milk in a small saucepan over low heat until steaming, but not boiling.",
+      "Add the chai tea bag or loose spice blend and let steep for 5 minutes.",
+      "Remove the tea bag (or strain if using loose spice), stir in honey or sugar to taste.",
+      "Pour into a mug and serve warm."
+    ],
+    "dosing": "The milk is the only infused ingredient — this drink carries whatever dose the milk itself was made with.",
+    "category": "Drinks",
+    "status": "approved"
+  },
+  {
+    "id": "r71",
+    "title": "Cannabis Matcha Latte",
+    "time": "≈10 min",
+    "icon": "🍵",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "A bright green, gently caffeinated latte using infused milk instead of regular.",
+    "ingredients": [
+      "1 cup cannabis-infused milk",
+      "1 tsp matcha powder",
+      "1 tbsp hot water",
+      "1 tbsp honey or sweetener, to taste"
+    ],
+    "steps": [
+      "Whisk the matcha powder with the hot water in a mug until smooth and frothy, breaking up any clumps.",
+      "Warm the infused milk in a saucepan until steaming, then froth if desired.",
+      "Pour the warm milk into the matcha mixture and stir to combine.",
+      "Sweeten to taste and serve."
+    ],
+    "dosing": "Carries the dose of whatever the infused milk was made with — stir well before drinking since the milk can settle.",
+    "category": "Drinks",
+    "status": "approved"
+  },
+  {
+    "id": "r72",
+    "title": "Cannabis Milkshake",
+    "time": "≈10 min",
+    "icon": "🥤",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "A thick, cold treat using infused milk, blended smooth with ice cream.",
+    "ingredients": [
+      "1 cup cannabis-infused milk",
+      "2 cups vanilla ice cream",
+      "1 tsp vanilla extract (optional)"
+    ],
+    "steps": [
+      "Add the infused milk, ice cream, and vanilla extract (if using) to a blender.",
+      "Blend on high until smooth and thick, about 30–45 seconds.",
+      "Pour into a glass and serve immediately."
+    ],
+    "dosing": "Blending distributes the infused milk's dose fairly evenly throughout — still, drink the whole thing to get the full dose, not just a few sips.",
+    "category": "Drinks",
+    "status": "approved"
+  },
+  {
+    "id": "r73",
+    "title": "Cannabis Lemonade (Infused Sugar)",
+    "time": "≈10 min",
+    "icon": "🍋",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "A classic summer drink, sweetened with infused sugar instead of a tincture — a good option if you'd rather avoid alcohol-based tinctures entirely.",
+    "ingredients": [
+      "4 cups water",
+      "¾ cup cannabis-infused sugar",
+      "1 cup fresh lemon juice (about 4-6 lemons)",
+      "Ice, to serve"
+    ],
+    "steps": [
+      "Combine the water and infused sugar in a pitcher, stirring until the sugar fully dissolves.",
+      "Stir in the lemon juice.",
+      "Chill and serve over ice."
+    ],
+    "dosing": "Divide the infused sugar's total THC by the volume of lemonade made, then by however many glasses you pour, for a per-glass estimate.",
+    "category": "Drinks",
+    "status": "approved"
+  },
+  {
+    "id": "r74",
+    "title": "Cannabis Paloma Mocktail",
+    "time": "≈10 min",
+    "icon": "🍹",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "A grapefruit-forward mocktail with a cannabis-salted rim — dosed through the salt, not the drink itself.",
+    "ingredients": [
+      "1 cup grapefruit soda or fresh grapefruit juice + club soda",
+      "1 tbsp lime juice",
+      "Cannabis finishing salt, for the rim",
+      "Lime wedge, for garnish"
+    ],
+    "steps": [
+      "Run a lime wedge around the rim of a glass, then dip the rim in cannabis finishing salt to coat.",
+      "Fill the glass with ice.",
+      "Pour in the grapefruit soda or juice mixture and lime juice.",
+      "Garnish with a lime wedge and serve."
+    ],
+    "dosing": "Dosing here is inherently imprecise since it depends how much salt actually touches your lips while drinking — treat this as a light, social dose rather than a primary one.",
+    "category": "Drinks",
+    "status": "approved"
+  },
+  {
+    "id": "r75",
+    "title": "Cannabis Popcorn",
+    "time": "≈15 min",
+    "icon": "🍿",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "Movie-night popcorn tossed in cannabis finishing salt and melted infused butter.",
+    "ingredients": [
+      "½ cup popcorn kernels",
+      "2 tbsp neutral oil (for popping)",
+      "2 tbsp cannabutter, melted",
+      "Cannabis finishing salt, to taste"
+    ],
+    "steps": [
+      "Pop the popcorn kernels in the oil using your usual stovetop or air-popper method.",
+      "Drizzle the melted cannabutter evenly over the popped popcorn, tossing to coat.",
+      "Sprinkle with cannabis finishing salt to taste and toss again.",
+      "Serve immediately."
+    ],
+    "dosing": "Both the butter and the salt are infused here — track the total THC of each and divide by the batch size, since this one can add up faster than a single-ingredient recipe.",
+    "category": "Savory & Snacks",
+    "status": "approved"
+  },
+  {
+    "id": "r76",
+    "title": "Cannabis Roasted Nuts",
+    "time": "≈20 min",
+    "icon": "🥜",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "A savory snack using infused salt and a touch of infused oil, roasted until fragrant.",
+    "ingredients": [
+      "2 cups raw mixed nuts",
+      "1 tbsp cannabis-infused olive oil",
+      "Cannabis finishing salt, to taste",
+      "½ tsp smoked paprika (optional)"
+    ],
+    "steps": [
+      "Preheat oven to 300°F.",
+      "Toss the nuts with the infused olive oil and paprika (if using) until evenly coated.",
+      "Spread on a baking sheet in a single layer and roast for 12–15 minutes, stirring once, until fragrant.",
+      "Remove from the oven, sprinkle with cannabis finishing salt while still warm, and toss once more.",
+      "Let cool before serving."
+    ],
+    "dosing": "Both the oil and salt are infused — add up the THC from each before dividing by the batch weight.",
+    "category": "Savory & Snacks",
+    "status": "approved"
+  },
+  {
+    "id": "r77",
+    "title": "Cannabis Pancakes (Infused Flour)",
+    "time": "≈25 min",
+    "icon": "🥞",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "Weekend pancakes made with cannabis-infused flour — a good way to use that base if you'd rather not deal with melted butter in the batter.",
+    "ingredients": [
+      "1½ cups cannabis-infused flour",
+      "2 tbsp sugar",
+      "2 tsp baking powder",
+      "½ tsp salt",
+      "1¼ cups milk",
+      "1 egg",
+      "2 tbsp melted regular butter"
+    ],
+    "steps": [
+      "Whisk the infused flour, sugar, baking powder, and salt together in a bowl.",
+      "In a separate bowl, whisk the milk, egg, and melted butter.",
+      "Pour the wet ingredients into the dry and stir just until combined — a few lumps are fine.",
+      "Heat a lightly greased skillet or griddle over medium heat and pour ¼-cup portions of batter.",
+      "Cook until bubbles form on the surface, then flip and cook until golden on the other side."
+    ],
+    "dosing": "Divide the infused flour's total THC by the number of pancakes the batter makes — count them as you cook so the math is easy.",
+    "category": "Baked Goods",
+    "status": "approved"
+  },
+  {
+    "id": "r78",
+    "title": "Cannabis Pizza Dough (Infused Flour)",
+    "time": "≈2 hrs (mostly rising)",
+    "icon": "🍕",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "A homemade pizza dough using cannabis-infused flour as the base — dose is baked right into the crust.",
+    "ingredients": [
+      "2 cups cannabis-infused flour",
+      "¾ cup warm water",
+      "1 packet (2¼ tsp) active dry yeast",
+      "1 tsp sugar",
+      "1 tbsp olive oil",
+      "1 tsp salt"
+    ],
+    "steps": [
+      "Combine warm water, yeast, and sugar in a bowl; let sit 5–10 minutes until foamy.",
+      "Add the infused flour, olive oil, and salt, mixing until a shaggy dough forms.",
+      "Knead on a floured surface for 5–7 minutes until smooth and elastic.",
+      "Place in a greased bowl, cover, and let rise in a warm spot for 1–1.5 hours, until doubled.",
+      "Punch down, shape into a pizza crust, top as desired, and bake at 475°F for 12–15 minutes until golden."
+    ],
+    "dosing": "Divide the infused flour's total THC by the number of slices you cut the finished pizza into — cutting it into a consistent number of slices (e.g. always 8) makes this easy to repeat.",
+    "category": "Savory & Snacks",
+    "status": "approved"
   }
 ]
