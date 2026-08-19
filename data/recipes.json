@@ -1561,5 +1561,199 @@
     "dosing": "Divide the infused oil's total THC by the number of servings — salsa is easy to eat more of than planned.",
     "category": "Savory & Snacks",
     "status": "approved"
+  },
+  {
+    "id": "r61",
+    "title": "Sous Vide Cannabutter (or Oil)",
+    "time": "≈5.5 hrs",
+    "icon": "🌡️",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "A precise, modern technique — decarbs and infuses in one sealed bag, with no smell and very consistent results.",
+    "ingredients": [
+      "1 cup (7–10g) ground cannabis flower",
+      "1 cup butter or coconut oil",
+      "1 sous vide immersion circulator",
+      "1 vacuum-seal or heavy zip-top bag"
+    ],
+    "steps": [
+      "Place the ground flower in the bag by itself and seal (or use the water displacement method with a zip-top bag).",
+      "Set the immersion circulator to 200–203°F and submerge the bag for 1.5–2 hours to decarb.",
+      "Let cool slightly, then open the bag and add the butter or oil directly to the decarbed flower. Reseal.",
+      "Lower the circulator to 185°F and submerge the resealed bag for 4 hours.",
+      "Remove, let cool slightly, then strain through cheesecloth into a jar."
+    ],
+    "dosing": "Same 1:1 ratio math as stovetop cannabutter — the sous vide method changes the process, not the potency math.",
+    "category": "Infusion Base",
+    "status": "approved"
+  },
+  {
+    "id": "r62",
+    "title": "Slow Cooker Cannabutter",
+    "time": "≈8 hrs",
+    "icon": "🍲",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "The lowest-effort method — a crockpot holds a steady low temperature for hours with almost no attention needed.",
+    "ingredients": [
+      "1 cup (7–10g) ground cannabis flower, decarboxylated",
+      "2 cups butter",
+      "1 cup water"
+    ],
+    "steps": [
+      "Decarb the flower at 240°F for 30–40 minutes first (a slow cooker alone usually doesn't get hot enough to decarb reliably).",
+      "Add butter, water, and decarbed flower to the slow cooker.",
+      "Cook on LOW for 6–8 hours, stirring occasionally, keeping the lid mostly on.",
+      "Strain through cheesecloth into a heatproof container.",
+      "Refrigerate until solid, then drain off the water layer underneath."
+    ],
+    "dosing": "Same 1:1 ratio as stovetop cannabutter — this method just trades stovetop attention for a longer, hands-off cook.",
+    "category": "Infusion Base",
+    "status": "approved"
+  },
+  {
+    "id": "r63",
+    "title": "Cannabis Glycerin Tincture (Alcohol-Free)",
+    "time": "≈3 hrs",
+    "icon": "🧴",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "A tincture made with vegetable glycerin instead of alcohol — milder tasting and a good option for anyone avoiding alcohol.",
+    "ingredients": [
+      "1 cup (7–10g) ground cannabis flower, decarboxylated",
+      "2 cups food-grade vegetable glycerin"
+    ],
+    "steps": [
+      "Decarb the flower at 240°F for 30–40 minutes.",
+      "Combine glycerin and decarbed flower in a double boiler or slow cooker on low heat (under 250°F).",
+      "Simmer gently for 2–3 hours, stirring occasionally — glycerin is more heat-sensitive than alcohol, so keep it low and slow.",
+      "Strain through cheesecloth into a dropper bottle."
+    ],
+    "dosing": "Glycerin tinctures generally extract cannabinoids less efficiently than alcohol-based ones, so effects can be milder per drop — start low and see how it feels before increasing.",
+    "category": "Infusion Base",
+    "status": "approved"
+  },
+  {
+    "id": "r64",
+    "title": "Cannabis-Infused Milk",
+    "time": "≈25 min",
+    "icon": "🥛",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "A dairy or plant-milk base for lattes, hot chocolate, or anything you'd normally make with regular milk — the fat content helps carry the effects.",
+    "ingredients": [
+      "2 cups whole milk or full-fat oat/coconut milk",
+      "1 tbsp butter or coconut oil",
+      "1g decarboxylated cannabis flower, finely ground"
+    ],
+    "steps": [
+      "Decarb the flower at 240°F for 30–40 minutes if not already done.",
+      "Warm the milk and butter/oil together in a saucepan over low heat, whisking to combine.",
+      "Add the decarbed flower and simmer gently (do not boil) for 15–20 minutes, stirring often.",
+      "Strain through a fine cheesecloth into a jar, pressing gently to extract the liquid.",
+      "Refrigerate and use within 3–4 days."
+    ],
+    "dosing": "Shake or stir well before each use, since the fat and plant particles can separate as it sits.",
+    "category": "Infusion Base",
+    "status": "approved"
+  },
+  {
+    "id": "r65",
+    "title": "Cannabis-Infused Sugar",
+    "time": "≈15 min + dry",
+    "icon": "🍬",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "A simple way to add cannabis to baking or drinks by the spoonful — infuse plain sugar with tincture and let it dry.",
+    "ingredients": [
+      "1 cup granulated sugar",
+      "2 tbsp cannabis tincture"
+    ],
+    "steps": [
+      "Spread the sugar in a thin, even layer on a parchment-lined baking sheet.",
+      "Drizzle the tincture evenly over the sugar and mix thoroughly with a fork, breaking up any clumps.",
+      "Let it air-dry at room temperature for several hours, or in an oven on the lowest setting with the door cracked, stirring occasionally, until fully dry.",
+      "Store in an airtight container."
+    ],
+    "dosing": "Divide the tincture's total THC by the total cups of sugar made, then measure by the tablespoon or teaspoon in recipes.",
+    "category": "Infusion Base",
+    "status": "approved"
+  },
+  {
+    "id": "r66",
+    "title": "Cannabis Finishing Salt",
+    "time": "≈15 min + dry",
+    "icon": "🧂",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "A savory way to dose — a pinch on finished dishes, avoiding any cooking that could degrade potency.",
+    "ingredients": [
+      "1 cup coarse sea salt",
+      "2 tbsp cannabis tincture"
+    ],
+    "steps": [
+      "Spread the salt in a thin, even layer on a parchment-lined baking sheet.",
+      "Drizzle the tincture evenly over the salt and mix thoroughly.",
+      "Let air-dry at room temperature for several hours, stirring occasionally, until completely dry.",
+      "Store in an airtight container, away from direct heat."
+    ],
+    "dosing": "Because this is meant to be sprinkled on finished food rather than cooked, dosing is naturally imprecise — treat it as a light garnish, not a primary dose, until you know how strong your batch is.",
+    "category": "Infusion Base",
+    "status": "approved"
+  },
+  {
+    "id": "r67",
+    "title": "Cannabis-Infused Flour",
+    "time": "≈45 min",
+    "icon": "🌾",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "A less common but real technique — infusing flour directly, for bakers who want the cannabis built into the dry ingredients rather than the butter.",
+    "ingredients": [
+      "2 cups all-purpose flour",
+      "1 cup finely ground, decarboxylated cannabis flower"
+    ],
+    "steps": [
+      "Decarb the flower at 240°F for 30–40 minutes, then grind it as finely as possible.",
+      "Combine the ground, decarbed flower with the flour in a bowl and whisk thoroughly to distribute it evenly.",
+      "Sift the mixture twice more to break up clumps and ensure even distribution.",
+      "Use in place of regular flour in baking recipes, keeping in mind the plant matter will add a slightly herbal flavor and green flecks."
+    ],
+    "dosing": "This method distributes potency less evenly than an infused fat, since the ground plant material itself is mixed in rather than extracted — expect more variation between servings than with cannabutter.",
+    "category": "Infusion Base",
+    "status": "approved"
+  },
+  {
+    "id": "r68",
+    "title": "RSO (Rick Simpson Oil)",
+    "time": "≈4–8 hrs",
+    "icon": "⚠️",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "A very concentrated, full-spectrum extract — genuinely useful to know about, but involves real fire risk. Read the safety notes before attempting this one.",
+    "ingredients": [
+      "1 oz (28g) dried cannabis flower, ground",
+      "750ml food-grade 190-proof ethanol (e.g. Everclear)"
+    ],
+    "steps": [
+      "Work outdoors or in a very well-ventilated area, away from any open flame, pilot light, or spark. Use only an electric heat source.",
+      "Place the ground cannabis in a large glass or stainless steel container and cover with the ethanol.",
+      "Stir vigorously for 2–3 minutes, then strain the liquid through cheesecloth into a separate container, gently pressing the plant material.",
+      "Repeat the soak once more with fresh ethanol on the same plant material, then combine both strained batches.",
+      "Using an electric rice cooker or double boiler (never a direct flame or stovetop burner), gently heat the liquid to evaporate the ethanol, keeping the temperature below 240°F.",
+      "Once most of the liquid has evaporated and it's thick and syrupy, transfer to a small container to finish curing at low heat until bubbling stops completely.",
+      "Store the finished oil in a small syringe or dark glass jar."
+    ],
+    "dosing": "RSO is extremely concentrated — the standard starting dose is a grain-of-rice-sized amount, taken orally, no more than a few times a day, increasing very gradually over days or weeks. This is not a casual edible ingredient; treat it with real medical-grade caution and talk to a doctor if using it for a health condition.",
+    "category": "Infusion Base",
+    "status": "approved"
   }
 ]
