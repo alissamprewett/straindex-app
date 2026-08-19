@@ -50553,5 +50553,36 @@
     ],
     "flavor": "Pungent ammonia and funky cheese with a peppery, garlicky finish — one of the boldest, savoriest profiles around.",
     "icon": "🍔"
+  },
+  {
+    "name": "Blackwater OG",
+    "type": "Indica",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "17–20%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.25
+      },
+      {
+        "n": "Limonene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Sleepy",
+      "Hungry",
+      "Euphoric"
+    ],
+    "flavor": "Earthy and sweet with a distinct grape and berry finish.",
+    "icon": "🍇",
+    "id": "s1649"
   }
 ]
