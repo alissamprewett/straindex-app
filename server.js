@@ -69,6 +69,44 @@ function isOldEnough(birthDateStr) {
 function starString(n) { n = Number(n) || 0; return '★'.repeat(n) + '☆'.repeat(5 - n); }
 function rarityLabel(r) { return { common: 'Common', uncommon: 'Uncommon', rare: 'Rare', legendary: 'Legendary' }[r] || r; }
 
+// Real cannabis bud photos, all free-for-commercial-use / no-attribution-required
+// under the Unsplash License (https://unsplash.com/license). These are generic
+// stock photos, not photos of the specific named strain — getting a genuine,
+// licensed photo of every individual strain isn't something free stock photography
+// can offer, so instead we pick a real photo deterministically per strain (same
+// strain always shows the same photo) and shift the color for grape/purple-named
+// strains using a CSS filter, so the library has real photographic variety
+// instead of one single repeated stock photo everywhere.
+const STRAIN_PHOTOS = [
+  'https://images.unsplash.com/photo-1634902349007-cfc9c61dff79?w=400&q=70&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1518465444133-93542d08fdd9?w=400&q=70&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1559558260-dfa522cfd57c?w=400&q=70&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1617101814633-c8a6cfd159cc?w=400&q=70&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1518469669531-9b8c528f909d?w=400&q=70&auto=format&fit=crop',
+  'https://cdn.pixabay.com/photo/2017/08/24/16/56/cannabis-2677505_640.jpg',
+  'https://cdn.pixabay.com/photo/2017/03/25/19/57/marijuana-2174302_640.jpg',
+];
+function hashStr(str) {
+  let h = 0;
+  for (let i = 0; i < str.length; i++) { h = (h * 31 + str.charCodeAt(i)) | 0; }
+  return Math.abs(h);
+}
+function strainPhotoUrl(strain) {
+  return STRAIN_PHOTOS[hashStr(strain.id || strain.name || '') % STRAIN_PHOTOS.length];
+}
+function strainPhotoStyle(strain) {
+  // A purple/violet color shift for grape- or purple-associated strains, so
+  // real color variety exists without needing a separately licensed photo.
+  return /purple|grape|grap|violet|urkle/i.test(strain.name || '')
+    ? 'filter:hue-rotate(220deg) saturate(1.4);'
+    : '';
+}
+// sizeClass controls the CSS box size; see .strain-thumb-* rules in app.css.
+function strainPhotoTag(strain, sizeClass = 'md') {
+  if (!strain) return `<div class="strain-thumb strain-thumb-${sizeClass}" style="display:flex;align-items:center;justify-content:center;font-size:20px;">🌿</div>`;
+  return `<img class="strain-thumb strain-thumb-${sizeClass}" src="${strainPhotoUrl(strain)}" style="${strainPhotoStyle(strain)}" alt="${esc(strain.name)} bud" loading="lazy">`;
+}
+
 // Terpene-overlap recommendations, ported from the prototype: score every
 // unowned strain by how much its terpene profile echoes what you already
 // own. With no check-ins yet, fall back to surfacing rare/legendary strains
@@ -122,10 +160,6 @@ function computeBadges(userId) {
 // ---------------------------------------------------------------- pages
 
 function pageHome(req, res) {
-  const faqCount = db.listFaqs().length;
-  const recipeCount = db.listRecipes().length;
-  const strainCount = db.countStrains();
-  const growCount = db.listGrowTips().length;
   const userId = auth.currentUserId(req);
   const recentCheckins = db.listCheckins({ userId, limit: 5 });
   const recs = getRecommendations(userId, 4);
@@ -140,7 +174,7 @@ function pageHome(req, res) {
     <div class="hcarousel">
       ${recs.map(r => `
         <a class="rec-card rarity-${r.s.rarity}" href="/strains/${r.s.id}">
-          <span class="icon">${r.s.icon}</span>
+          ${strainPhotoTag(r.s, 'sm')}
           <span class="n">${esc(r.s.name)}</span>
           <span class="why">${r.why ? 'Because you like ' + esc(r.why) : 'New for you'}</span>
         </a>`).join('')}
@@ -156,21 +190,16 @@ function pageHome(req, res) {
         </a>`).join('')}
     </div>
 
-    <div class="card"><b>${strainCount.toLocaleString()}</b> strains in the library · <a href="/strains">browse them →</a></div>
-    <div class="card"><b>${recipeCount}</b> infused recipes · <a href="/recipes">see recipes →</a></div>
-    <div class="card"><b>${growCount}</b> growing tips from the community · <a href="/growing">read them →</a></div>
-    <div class="card"><b>${faqCount}</b> FAQ entries · <a href="/faq">strain school →</a></div>
-
     <h2 class="screen-title" style="margin-top:20px;">Recent check-ins</h2>
     ${recentCheckins.length ? recentCheckins.map(c => {
       const s = db.getStrain(c.strain_id);
       return `<div class="feed-post">
         <a class="strain-chip" href="/strains/${c.strain_id}">
-          <span style="font-size:18px;">${s ? s.icon : '🌿'}</span>
+          ${strainPhotoTag(s, 'xs')}
           <span><b>${esc(s ? s.name : c.strain_id)}</b> ${s ? `<span class="rarity-tag rarity-${s.rarity}">${rarityLabel(s.rarity)}</span>` : ''}</span>
         </a>
         <div class="sub" style="margin-top:8px;">${esc(c.method)} · ${starString(c.rating)}</div>
-        ${c.photo ? `<img class="photo-thumb" src="${esc(c.photo)}" alt="photo">` : `<div class="photo-placeholder">${s ? s.icon : '🌿'}</div>`}
+        ${c.photo ? `<img class="photo-thumb" src="${esc(c.photo)}" alt="photo">` : ''}
         ${(c.effects || []).length ? `<div class="effect-tags">${c.effects.map(e => `<span>${esc(e)}</span>`).join('')}</div>` : ''}
         ${c.note ? `<div class="note">"${esc(c.note)}"</div>` : ''}
       </div>`;
@@ -218,7 +247,7 @@ function pageStrains(req, res, query) {
     <p class="empty-note" id="strain-search-count">${total > 60 ? `Showing 60 of ${total.toLocaleString()} — refine your search to narrow it down.` : `${total} strain${total === 1 ? '' : 's'}`}</p>
     <div id="strain-search-results">${results.map(s => `
       <a class="library-row" href="/strains/${s.id}" style="text-decoration:none;color:inherit;">
-        <span class="icon">${s.icon}</span>
+        ${strainPhotoTag(s, 'sm')}
         <div class="info">
           <div class="nm">${esc(s.name)}</div>
           <div class="sub">${esc(s.type)} · ${rarityLabel(s.rarity)} · THC ${esc(s.thc)}</div>
@@ -238,7 +267,7 @@ function pageStrainDetail(req, res, id) {
     <a href="/strains" class="empty-note">← Back to library</a>
     <div class="card" style="margin-top:10px;">
       <div style="display:flex;align-items:center;gap:12px;">
-        <span style="font-size:34px;">${s.icon}</span>
+        ${strainPhotoTag(s, 'lg')}
         <div>
           <h1 style="margin:0;font-size:19px;">${esc(s.name)}</h1>
           <div class="empty-note" style="padding:0;">${esc(s.type)}${s.lean ? ' · ' + esc(s.lean) : ''} · <span class="rarity-tag rarity-${s.rarity}">${rarityLabel(s.rarity)}</span></div>
@@ -254,7 +283,7 @@ function pageStrainDetail(req, res, id) {
     ${history.length ? `
       <p class="empty-note">Last had: ${new Date(history[0].created_at + 'Z').toLocaleString()}</p>
       ${history.map(c => `<div class="card checkin-history-row">
-        <div class="checkin-photo-thumb">${c.photo ? `<img src="${esc(c.photo)}" alt="Your photo">` : `<span class="photo-placeholder">${s.icon}</span>`}</div>
+        ${c.photo ? `<div class="checkin-photo-thumb"><img src="${esc(c.photo)}" alt="Your photo"></div>` : ''}
         <div style="flex:1;min-width:0;">
           <b>${esc(c.method)}</b> · ${starString(c.rating)}
           <div class="empty-note" style="padding:2px 0 0;">${new Date(c.created_at + 'Z').toLocaleString()}</div>
@@ -786,7 +815,7 @@ function pageAdminStrains(req, res, query) {
     <p class="empty-note">${q ? `${results.length} match${results.length === 1 ? '' : 'es'}` : `Showing 50 of ${total.toLocaleString()} — search to find a specific one`}</p>
     ${results.map(s => `
       <div class="admin-row">
-        <span class="icon">${s.icon}</span>
+        ${strainPhotoTag(s, 'sm')}
         <div style="flex:1;min-width:0;">
           <b>${esc(s.name)}</b>
           <div class="empty-note" style="padding:0;">${esc(s.type)} · ${rarityLabel(s.rarity)}</div>
@@ -938,21 +967,28 @@ async function apiGrowLike(req, res, id) {
 function pageMore(req, res) {
   const userId = auth.currentUserId(req);
   const user = userId != null ? db.getUserById(userId) : null;
+  // Only genuinely working features show up here. Features still using demo/
+  // mock data (Events, Shop, the Business preview) are intentionally left out
+  // of this list so people don't think they can do something real there —
+  // their routes/handlers still work if linked to directly, so nothing is
+  // deleted, just hidden from the main menu until they're actually built out.
+  // To bring one back: move its entry from comingSoonTiles into tiles below.
   const tiles = [
     { href: '/collection', icon: '🃏', t: 'My Collection', s: 'Binder, badges & progress' },
     { href: '/friends', icon: '🧑\u200d🤝\u200d🧑', t: 'Friends', s: 'Find people & manage requests' },
     { href: '/trade', icon: '🔁', t: 'Trade', s: 'Swap dupes with real friends' },
     { href: '/history', icon: '🕐', t: 'Check-In History', s: 'Your full timeline' },
     { href: '/dispensaries', icon: '📍', t: 'Dispensaries', s: 'Locator & live menus' },
-    { href: '/events', icon: '🎉', t: 'Events', s: 'Local drops & meetups' },
     { href: '/badges', icon: '🏅', t: 'Badges', s: 'Full directory' },
-    { href: '/shop', icon: '🛍️', t: 'Shop', s: 'Merch & gear' },
-    { href: '/business', icon: '📊', t: 'StrainDex for Business', s: 'Partner preview' },
-    { href: '/methods', icon: '💨', t: 'Ways to Enjoy It', s: 'Every method, explained' },
     { href: '/strains', icon: '📇', t: 'Strain Library', s: `${db.countStrains().toLocaleString()}-strain rolodex` },
     { href: '/growing', icon: '🌱', t: 'Growing', s: 'Home-grow tips' },
     { href: '/faq', icon: '❓', t: 'FAQ', s: 'Strain school' },
+    { href: '/methods', icon: '💨', t: 'Ways to Enjoy It', s: 'Every method, explained' },
   ];
+  // Hidden from this menu for now (not deleted — routes below still work if
+  // linked to directly): /events, /shop, /business. All three still run on
+  // demo/mock data rather than anything real yet. To bring one back, add its
+  // tile object to the array above.
   const body = `
     <h1 class="screen-title">More</h1>
     ${user ? `
@@ -996,7 +1032,7 @@ function pageCollection(req, res) {
       ${owned.map(o => `
         <a class="card-slot rarity-${o.strain.rarity}" href="/strains/${o.strain.id}">
           ${o.copies > 1 ? `<div class="copies">×${o.copies}</div>` : ''}
-          <div class="icon">${o.strain.icon}</div>
+          ${strainPhotoTag(o.strain, 'md')}
           <div class="name">${esc(o.strain.name)}</div>
         </a>`).join('')}
     </div>` : `<div class="empty-note">No cards caught yet — <a href="/checkin">log a check-in</a> to unlock your first one.</div>`}
@@ -1017,7 +1053,7 @@ function pageHistory(req, res) {
     ${history.length ? history.map(c => {
       const s = db.getStrain(c.strain_id);
       return `<a class="library-row" href="/strains/${c.strain_id}" style="text-decoration:none;color:inherit;">
-        <span class="icon">${s ? s.icon : '🌿'}</span>
+        ${strainPhotoTag(s, 'sm')}
         <div class="info">
           <div class="nm">${esc(s ? s.name : c.strain_id)}</div>
           <div class="sub">${esc(c.method)} · ${starString(c.rating)} · ${new Date(c.created_at + 'Z').toLocaleString()}</div>
@@ -1159,7 +1195,7 @@ function pageTrade(req, res, query) {
         <h4>Your offer</h4>
         ${yourDupes.length ? yourDupes.map(o => `
           <a class="trade-item ${yourPick === o.strain.id ? 'selected' : ''}" href="${mk({ your: o.strain.id })}">
-            <span class="icon">${o.strain.icon}</span>
+            ${strainPhotoTag(o.strain, 'sm')}
             <div class="info"><span class="n">${esc(o.strain.name)}</span><span class="c">×${o.copies} owned</span></div>
           </a>`).join('') : `<div class="empty-note">No spare duplicates ${esc(friend.name)} needs right now.</div>`}
       </div>
@@ -1169,7 +1205,7 @@ function pageTrade(req, res, query) {
           const s = db.getStrain(id);
           if (!s) return '';
           return `<a class="trade-item ${theirPick === id ? 'selected' : ''}" href="${mk({ their: id })}">
-            <span class="icon">${s.icon}</span>
+            ${strainPhotoTag(s, 'sm')}
             <div class="info"><span class="n">${esc(s.name)}</span><span class="c">×${c} owned</span></div>
           </a>`;
         }).join('') : `<div class="empty-note">${esc(friend.name)} has nothing spare you're missing.</div>`}
