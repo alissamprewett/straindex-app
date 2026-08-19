@@ -1,5 +1,26 @@
 // app.js — shared client-side behavior. No framework, no build step.
 
+// Timestamps are stored and sent as UTC. Formatting them server-side would
+// bake in the *server's* timezone for every viewer, which isn't what anyone
+// wants — each person should see the time converted to their own device's
+// local timezone. So the server only sends the raw UTC value (in a data
+// attribute) and this runs in the viewer's own browser to fill in the
+// human-readable local version.
+(function renderLocalTimes() {
+  function apply() {
+    document.querySelectorAll('.local-time[data-utc]').forEach(el => {
+      const d = new Date(el.dataset.utc);
+      if (isNaN(d.getTime())) return;
+      el.textContent = d.toLocaleString();
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', apply);
+  } else {
+    apply();
+  }
+})();
+
 function toast(msg) {
   const t = document.getElementById('toast');
   if (!t) return;
