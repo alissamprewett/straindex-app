@@ -178,7 +178,7 @@ function pageHome(req, res) {
   const body = `
     <h1 class="screen-title">Welcome back 🌿</h1>
     <p class="screen-sub">Your personal cannabis journal — strains, recipes, and growing knowledge, all in one place.</p>
-    <a class="btn block" href="/checkin" style="margin-bottom:18px;">＋ Log a Check-In</a>
+    <a class="btn block" href="/checkin" style="margin-bottom:18px;">🌿 Light Up</a>
 
     <div class="section-label">Recommended for you</div>
     <div class="hcarousel">
@@ -397,7 +397,7 @@ function pageCheckinForm(req, res, query, existing) {
 
       <label class="field-label">Notes</label>
       <textarea name="note" placeholder="How was it?">${existing ? esc(existing.note || '') : ''}</textarea>
-      <button class="btn block" type="submit" id="checkin-submit">${isEdit ? 'Save Changes' : 'Log It'}</button>
+      <button class="btn block" type="submit" id="checkin-submit">${isEdit ? 'Save Changes' : '🔥 Light It Up'}</button>
     </form>
     <script>
       window.EFFECT_VOCAB = ${JSON.stringify(EFFECT_VOCAB)};
