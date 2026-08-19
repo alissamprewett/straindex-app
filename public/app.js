@@ -38,7 +38,8 @@ async function giveKudos(id, btn) {
   const res = await fetch(`/api/recipes/${id}/kudos`, { method: 'POST' });
   if (res.ok) {
     const data = await res.json();
-    btn.textContent = `👏 Kudos (${data.kudos})`;
+    const icon = btn.querySelector('svg');
+    btn.innerHTML = (icon ? icon.outerHTML : '') + `Kudos (${data.kudos})`;
     btn.disabled = true;
     toast('Kudos given!');
   }
