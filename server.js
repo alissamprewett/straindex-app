@@ -216,6 +216,9 @@ function pageHome(req, res) {
         ${c.photo ? `<img class="photo-thumb" src="${esc(c.photo)}" alt="photo">` : ''}
         ${(c.effects || []).length ? `<div class="effect-tags">${c.effects.map(e => `<span>${esc(e)}</span>`).join('')}</div>` : ''}
         ${c.note ? `<div class="note">"${esc(c.note)}"</div>` : ''}
+        <div style="display:flex;justify-content:flex-end;margin-top:8px;">
+          <button class="kudos-btn" onclick="giveCheckinKudos(${c.id}, this)">${KUDOS_BUD_ICON}Kudos${c.kudos ? ` (${c.kudos})` : ''}</button>
+        </div>
       </div>`;
     }).join('') : `<div class="empty-note">No check-ins logged yet.</div>`}
   `;
@@ -318,6 +321,9 @@ function pageStrainDetail(req, res, id) {
           <div class="empty-note" style="padding:2px 0 0;"><span class="local-time" data-utc="${c.created_at}Z">${esc(c.created_at)} UTC</span></div>
           ${(c.effects || []).length ? `<p style="margin:6px 0 0;">${c.effects.map(e => `<span class="filter-pill">${esc(e)}</span>`).join('')}</p>` : ''}
           ${c.note ? `<span class="empty-note" style="display:block;padding:4px 0 0;">${esc(c.note)}</span>` : ''}
+          <div style="display:flex;justify-content:flex-end;margin-top:6px;">
+            <button class="kudos-btn" onclick="giveCheckinKudos(${c.id}, this)">${KUDOS_BUD_ICON}Kudos${c.kudos ? ` (${c.kudos})` : ''}</button>
+          </div>
         </div>
       </div>`).join('')}
     ` : `<div class="empty-note">You haven't checked this one in yet.</div>`}
@@ -634,7 +640,7 @@ function pageGrowing(req, res, query) {
         ${g.source_url ? `<p class="empty-note" style="padding:2px 0 0;">Source: <a href="${esc(g.source_url)}" target="_blank" rel="noopener noreferrer">${esc(g.source_name || g.source_url)}</a></p>` : ''}
         <div style="display:flex;justify-content:space-between;align-items:center;">
           <span class="empty-note" style="padding:0;">by ${esc(g.author || 'Anonymous')}</span>
-          <button class="kudos-btn" onclick="likeGrowTip(${g.id}, this)">👍 Helpful (${g.likes})</button>
+          <button class="kudos-btn" onclick="likeGrowTip(${g.id}, this)">${KUDOS_BUD_ICON}Kudos (${g.likes})</button>
         </div>
       </div>`).join('') || `<div class="empty-note">No tips in this category yet.</div>`}
   `;
@@ -1101,6 +1107,13 @@ async function apiGrowLike(req, res, id) {
   const tip = db.listGrowTips().find(t => t.id === id);
   sendJson(res, { likes: tip ? tip.likes : 0 });
 }
+async function apiCheckinKudos(req, res, id) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const c = await db.giveCheckinKudos(id);
+  if (!c) return sendJson(res, { error: 'not found' }, 404);
+  sendJson(res, { kudos: c.kudos });
+}
 
 // ---------------------------------------------------------------- static
 
@@ -1379,6 +1392,9 @@ function pageFriendProfile(req, res, friendId) {
         ${c.photo ? `<img class="photo-thumb" src="${esc(c.photo)}" alt="photo">` : ''}
         ${(c.effects || []).length ? `<div class="effect-tags">${c.effects.map(e => `<span>${esc(e)}</span>`).join('')}</div>` : ''}
         ${c.note ? `<div class="note">"${esc(c.note)}"</div>` : ''}
+        <div style="display:flex;justify-content:flex-end;margin-top:8px;">
+          <button class="kudos-btn" onclick="giveCheckinKudos(${c.id}, this)">${KUDOS_BUD_ICON}Kudos${c.kudos ? ` (${c.kudos})` : ''}</button>
+        </div>
       </div>`;
     }).join('') : `<div class="empty-note">No check-ins yet.</div>`}
   `;
@@ -1809,6 +1825,7 @@ const server = http.createServer(async (req, res) => {
     if (method === 'GET' && pathname === '/api/strains') return apiListStrains(req, res, url.searchParams);
     if (method === 'POST' && (m = pathname.match(/^\/api\/recipes\/(\d+)\/kudos$/))) return await apiKudos(req, res, Number(m[1]));
     if (method === 'POST' && (m = pathname.match(/^\/api\/growtips\/(\d+)\/like$/))) return await apiGrowLike(req, res, Number(m[1]));
+    if (method === 'POST' && (m = pathname.match(/^\/api\/checkins\/(\d+)\/kudos$/))) return await apiCheckinKudos(req, res, Number(m[1]));
 
     if (method === 'GET' && pathname === '/more') return pageMore(req, res);
     if (method === 'GET' && pathname === '/collection') return pageCollection(req, res);
