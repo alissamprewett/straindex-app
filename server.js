@@ -173,7 +173,7 @@ function pageHome(req, res) {
   const userNames = new Map([[userId, 'You'], ...friends.map(f => [f.id, f.username])]);
   const recentCheckins = db.listCheckins({ userIds: feedUserIds, limit: 15 });
   const recs = getRecommendations(userId, 4);
-  const dispTeaser = mock.dispensaries.slice(0, 3);
+  const hasFollowedDispensaries = db.anyDispensaryFollowed(userId);
 
   const body = `
     <h1 class="screen-title">Welcome back 🌿</h1>
@@ -190,15 +190,8 @@ function pageHome(req, res) {
         </a>`).join('')}
     </div>
 
-    <div class="section-label">Nearby dispensaries <a class="link" href="/dispensaries">See all →</a></div>
-    <div class="disp-strip">
-      ${dispTeaser.map(d => `
-        <a class="disp-chip" href="/dispensaries">
-          <div class="dn">${esc(d.name)}</div>
-          <div class="dm">${d.distance} · ★${d.rating}</div>
-          ${db.isFollowingDispensary(userId, d.id) ? `<span class="dbadge">Following</span>` : ''}
-        </a>`).join('')}
-    </div>
+    <div class="section-label">Dispensaries</div>
+    <a class="btn secondary block" href="/dispensaries" style="text-decoration:none;margin-bottom:4px;">${hasFollowedDispensaries ? '📍 View your followed dispensaries →' : '📍 Find real dispensaries near you →'}</a>
 
     <h2 class="screen-title" style="margin-top:20px;">${friends.length ? 'Recent activity' : 'Recent check-ins'}</h2>
     ${friends.length && recentCheckins.every(c => c.user_id === userId) ? `<p class="empty-note">None of your friends have checked in yet — once they do, it'll show up here too.</p>` : ''}
@@ -703,7 +696,7 @@ function pageChat(req, res) {
       }
     </script>
   `;
-  sendHtml(res, layout({ title: 'Ask', active: 'chat', body, isAdmin: auth.isAdmin(req) }));
+  sendHtml(res, layout({ title: 'Ask', active: 'more', body, isAdmin: auth.isAdmin(req) }));
 }
 
 async function handleChatApi(req, res) {
@@ -820,7 +813,7 @@ function pageAdminHome(req, res) {
     <h1 class="screen-title">Admin</h1>
     <div class="card"><a href="/admin/faqs">📋 Manage FAQ (${db.listFaqs().length})</a></div>
     <div class="card"><a href="/admin/recipes">🍽️ Manage Recipes (${db.listRecipes({ status: null }).length}${pendingCount ? `, ${pendingCount} pending` : ''})</a></div>
-    <div class="card"><a href="/admin/strains">🃏 Manage Strains (${db.countStrains().toLocaleString()})</a></div>
+    <div class="card"><a href="/admin/strains">🌿 Manage Strains (${db.countStrains().toLocaleString()})</a></div>
     <div class="card"><a href="/admin/logout">🚪 Log out</a></div>
   `;
   sendHtml(res, layout({ title: 'Admin', body, isAdmin: true }));
@@ -1129,7 +1122,7 @@ function pageMore(req, res) {
   // deleted, just hidden from the main menu until they're actually built out.
   // To bring one back: move its entry from comingSoonTiles into tiles below.
   const tiles = [
-    { href: '/collection', icon: '🃏', t: 'My Collection', s: 'Binder, badges & progress' },
+    { href: '/collection', icon: '/docs/leaf-kudos.png', t: 'My Collection', s: 'Binder, badges & progress' },
     { href: '/trade', icon: '🔁', t: 'Trade', s: 'Swap dupes with real friends' },
     { href: '/history', icon: '🕐', t: 'Check-In History', s: 'Your full timeline' },
     { href: '/dispensaries', icon: '📍', t: 'Dispensaries', s: 'Locator & live menus' },
@@ -1137,7 +1130,8 @@ function pageMore(req, res) {
     { href: '/strains', icon: '📇', t: 'Strain Library', s: `${db.countStrains().toLocaleString()}-strain rolodex` },
     { href: '/growing', icon: '🌱', t: 'Growing', s: 'Home-grow tips' },
     { href: '/faq', icon: '❓', t: 'FAQ', s: 'Strain school' },
-    { href: '/methods', icon: '💨', t: 'Ways to Enjoy It', s: 'Every method, explained' },
+    { href: '/chat', icon: '💬', t: 'Ask', s: 'Chat with the assistant' },
+    { href: '/methods', icon: '/docs/joint-icon.png', t: 'Ways to Enjoy It', s: 'Every method, explained' },
   ];
   // Hidden from this menu for now (not deleted — routes below still work if
   // linked to directly): /events, /shop, /business. All three still run on
@@ -1154,7 +1148,7 @@ function pageMore(req, res) {
         </div>
       </div>` : ''}
     <div class="more-grid">
-      ${tiles.map(t => `<a class="more-tile" href="${t.href}"><span class="ic">${t.icon}</span><div class="t">${esc(t.t)}</div><div class="s">${esc(t.s)}</div></a>`).join('')}
+      ${tiles.map(t => `<a class="more-tile" href="${t.href}"><span class="ic">${t.icon.startsWith('/') ? `<img src="${t.icon}" alt="" class="ic-img-lg">` : t.icon}</span><div class="t">${esc(t.t)}</div><div class="s">${esc(t.s)}</div></a>`).join('')}
     </div>
   `;
   sendHtml(res, layout({ title: 'More', active: 'more', body, isAdmin: auth.isAdmin(req) }));
@@ -1570,7 +1564,7 @@ async function pageDispensaries(req, res, searchParams) {
       <h1 class="screen-title">Dispensaries</h1>
       <div class="locate-banner">
         <div style="font-weight:700;font-size:13px;">📍 Find real dispensaries near you</div>
-        <div class="dsub" style="margin:3px 0 10px;">${realError ? esc(realError) + ' Showing sample listings below instead.' : "Search by ZIP code, or share your location — nothing is sent anywhere else."}</div>
+        <div class="dsub" style="margin:3px 0 10px;">${realError ? esc(realError) : "Search by ZIP code, or share your location — nothing is sent anywhere else."}</div>
         <div class="locate-row">
           <form method="GET" action="/dispensaries" class="zip-form">
             <input type="text" name="zip" placeholder="ZIP code" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" value="${esc(zipParam)}">
@@ -1579,32 +1573,7 @@ async function pageDispensaries(req, res, searchParams) {
           <button type="button" id="use-location-btn" class="follow-btn">Use my location</button>
         </div>
       </div>
-      <p class="screen-sub">Sample listings below for the demo — swap in a real dispensary feed when you're ready.</p>
-      ${mock.dispensaries.map(d => {
-        const following = db.isFollowingDispensary(userId, d.id);
-        const exclusiveStrain = d.exclusiveCard ? db.getStrain(d.exclusiveCard) : null;
-        const hasExclusive = exclusiveStrain && !db.getCollection(userId).some(o => o.strain.id === exclusiveStrain.id);
-        return `<div class="dispensary-card">
-          <div class="dtop">
-            <div>
-              <div class="dname">${esc(d.name)}</div>
-              <div class="dsub">${d.distance} · ★${d.rating} · ${esc(d.address)}</div>
-              <div class="dsub">Hours: ${esc(d.hours)}</div>
-            </div>
-            <form method="POST" action="/dispensaries/${d.id}/follow">
-              <button class="follow-btn ${following ? 'following' : ''}" type="submit">${following ? 'Following' : 'Follow'}</button>
-            </form>
-          </div>
-          <div class="live-menu-tag"><span class="dot"></span> Live menu updated ${d.updated}</div>
-          <div style="margin-top:10px;">
-            ${d.menu.map(m => { const s = db.getStrain(m.strainId); return s ? `<div class="menu-row"><span>${s.icon} ${esc(s.name)}</span><span>${esc(m.price)}</span></div>` : ''; }).join('')}
-          </div>
-          ${hasExclusive ? `<div class="exclusive-banner">
-            <span>📍 Location-exclusive card: <b>${esc(exclusiveStrain.name)}</b></span>
-            <a href="/checkin?strain=${exclusiveStrain.id}">Check In Here</a>
-          </div>` : ''}
-        </div>`;
-      }).join('')}
+      ${zipParam || realError ? `<div class="empty-note" style="margin-top:16px;">${realError ? 'Nothing to show right now — try again in a moment, or try a different ZIP code.' : 'No dispensaries found for that ZIP code.'}</div>` : `<div class="empty-note" style="margin-top:16px;">Enter a ZIP code or share your location above to find real dispensaries near you.</div>`}
     `;
   }
   sendHtml(res, layout({ title: 'Dispensaries', active: 'more', body, isAdmin: auth.isAdmin(req) }));
