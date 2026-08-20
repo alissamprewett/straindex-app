@@ -63,6 +63,36 @@ function sendJson(res, obj, status = 200) {
   res.writeHead(status, { 'Content-Type': 'application/json' });
   res.end(JSON.stringify(obj));
 }
+// Sends a plain-text/HTML email via the Resend API (https://resend.com).
+// Uses Node's built-in fetch (no extra dependency). Sends from Resend's
+// no-setup test address until a verified custom domain is added -- swap
+// RESEND_FROM to something like 'StrainDex <noreply@yourdomain.com>'
+// once a domain is verified in the Resend dashboard.
+const RESEND_FROM = process.env.RESEND_FROM || 'StrainDex <onboarding@resend.dev>';
+async function sendEmail({ to, subject, html }) {
+  if (!process.env.RESEND_API_KEY) {
+    console.error('[email] RESEND_API_KEY is not set — cannot send email.');
+    return false;
+  }
+  try {
+    const res = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ from: RESEND_FROM, to, subject, html }),
+    });
+    if (!res.ok) {
+      console.error('[email] Resend API error:', res.status, await res.text());
+      return false;
+    }
+    return true;
+  } catch (err) {
+    console.error('[email] Failed to send:', err);
+    return false;
+  }
+}
 function redirect(res, to) {
   res.writeHead(302, { Location: to });
   res.end();
@@ -777,6 +807,7 @@ function pageSignup(req, res, query) {
     mismatch: 'Passwords did not match.',
     short: 'Password must be at least 8 characters.',
     invalid: 'Please fill in every field.',
+    email_taken: 'That email is already in use.',
     rate_limited: 'Too many signup attempts from this connection. Try again in a few minutes.',
   };
   const body = `
@@ -787,6 +818,8 @@ function pageSignup(req, res, query) {
     <form method="POST" action="/signup">
       <label class="field-label" style="margin-top:0;">Username</label>
       <input type="text" name="username" required minlength="3" maxlength="24" autocomplete="username">
+      <label class="field-label">Email</label>
+      <input type="email" name="email" required autocomplete="email" placeholder="you@example.com">
       <label class="field-label">Date of birth</label>
       <input type="date" name="birth_date" required>
       <label class="field-label">Password</label>
@@ -804,12 +837,14 @@ async function handleSignupSubmit(req, res) {
   if (isSignupRateLimited(req)) return redirect(res, '/signup?err=rate_limited');
   const f = await parseForm(req);
   const username = String(f.username || '').trim();
-  if (!username || !f.birth_date || !f.password || !f.password2) return redirect(res, '/signup?err=invalid');
+  const email = String(f.email || '').trim().toLowerCase();
+  if (!username || !email || !f.birth_date || !f.password || !f.password2) return redirect(res, '/signup?err=invalid');
   if (!isOldEnough(f.birth_date)) return redirect(res, '/signup?err=age');
   if (f.password !== f.password2) return redirect(res, '/signup?err=mismatch');
   if (f.password.length < 8) return redirect(res, '/signup?err=short');
   if (db.getUserByUsername(username)) return redirect(res, '/signup?err=taken');
-  const user = await db.createUser({ username, password: f.password, birth_date: f.birth_date });
+  if (db.getUserByEmail(email)) return redirect(res, '/signup?err=email_taken');
+  const user = await db.createUser({ username, password: f.password, birth_date: f.birth_date, email });
   const token = auth.signUserSessionValue(user.id);
   res.setHeader('Set-Cookie', `user_session=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000`);
   redirect(res, '/');
@@ -826,9 +861,81 @@ function pageLogin(req, res, query) {
       <input type="password" name="password" required autocomplete="current-password">
       <button class="btn block" type="submit" style="margin-top:14px;">Log In</button>
     </form>
-    <p class="empty-note" style="margin-top:12px;">New here? <a href="/signup">Create an account</a></p>
+    <p class="empty-note" style="margin-top:12px;">Forgot your password? <a href="/forgot-password">Reset it</a></p>
+    <p class="empty-note">New here? <a href="/signup">Create an account</a></p>
   `;
   sendHtml(res, layout({ title: 'Log In', body }));
+}
+
+// ---------------------------------------------------------------- forgot / reset password
+function pageForgotPassword(req, res, query) {
+  const sent = query.get('sent');
+  const body = `
+    <h1 class="screen-title">Forgot Password</h1>
+    ${sent
+      ? `<p class="empty-note">If that email is on an account, a reset link is on its way — check your inbox (and spam folder).</p>`
+      : `<p class="screen-sub">Enter the email on your account and we'll send a link to reset your password.</p>
+      <form method="POST" action="/forgot-password">
+        <label class="field-label" style="margin-top:0;">Email</label>
+        <input type="email" name="email" required autocomplete="email">
+        <button class="btn block" type="submit" style="margin-top:14px;">Send Reset Link</button>
+      </form>`}
+    <p class="empty-note" style="margin-top:12px;"><a href="/login">Back to log in</a></p>
+  `;
+  sendHtml(res, layout({ title: 'Forgot Password', body }));
+}
+async function handleForgotPasswordSubmit(req, res) {
+  const f = await parseForm(req);
+  const email = String(f.email || '').trim().toLowerCase();
+  const user = email ? db.getUserByEmail(email) : null;
+  // Always show the same "check your inbox" message whether or not the
+  // email matched an account -- confirming which emails ARE registered
+  // is its own small privacy leak, so this path stays silent either way.
+  if (user) {
+    const token = await db.createPasswordResetToken(user.id);
+    const resetUrl = `${req.headers['x-forwarded-proto'] || 'https'}://${req.headers.host}/reset-password?token=${token}`;
+    await sendEmail({
+      to: email,
+      subject: 'Reset your StrainDex password',
+      html: `<p>Someone requested a password reset for your StrainDex account.</p>
+        <p><a href="${esc(resetUrl)}">Click here to set a new password</a> — this link expires in 1 hour.</p>
+        <p>If you didn't request this, you can safely ignore this email.</p>`,
+    });
+  }
+  redirect(res, '/forgot-password?sent=1');
+}
+function pageResetPassword(req, res, query) {
+  const token = query.get('token') || '';
+  const err = query.get('err');
+  const errMessages = {
+    mismatch: "Passwords didn't match.",
+    short: 'Password must be at least 8 characters.',
+    invalid_token: 'This reset link is invalid or has expired — request a new one.',
+  };
+  const body = `
+    <h1 class="screen-title">Reset Password</h1>
+    ${err && errMessages[err] ? `<p style="color:#a13a3a;">${esc(errMessages[err])}</p>` : ''}
+    ${err === 'invalid_token' ? `<p class="empty-note"><a href="/forgot-password">Request a new reset link</a></p>` : `
+    <form method="POST" action="/reset-password">
+      <input type="hidden" name="token" value="${esc(token)}">
+      <label class="field-label" style="margin-top:0;">New password</label>
+      <input type="password" name="password" required minlength="8" autocomplete="new-password">
+      <label class="field-label">Confirm new password</label>
+      <input type="password" name="password2" required minlength="8" autocomplete="new-password">
+      <button class="btn block" type="submit" style="margin-top:14px;">Set New Password</button>
+    </form>`}
+  `;
+  sendHtml(res, layout({ title: 'Reset Password', body }));
+}
+async function handleResetPasswordSubmit(req, res) {
+  const f = await parseForm(req);
+  const token = String(f.token || '');
+  if (f.password !== f.password2) return redirect(res, `/reset-password?token=${encodeURIComponent(token)}&err=mismatch`);
+  if ((f.password || '').length < 8) return redirect(res, `/reset-password?token=${encodeURIComponent(token)}&err=short`);
+  const userId = await db.consumePasswordResetToken(token);
+  if (userId == null) return redirect(res, '/reset-password?err=invalid_token');
+  await db.resetPasswordWithToken(userId, f.password);
+  redirect(res, '/login');
 }
 async function handleLoginSubmit(req, res) {
   const f = await parseForm(req);
@@ -1254,6 +1361,18 @@ function pageAccount(req, res, query) {
     </div>
 
     <div class="card" style="margin-top:14px;">
+      <h2 style="margin:0 0 10px;font-size:15px;">Email</h2>
+      <p class="empty-note" style="padding:0 0 10px;">Used for password resets.${!user.email ? ' Your account currently has no email on file.' : ''}</p>
+      ${error === 'email_taken' ? `<p class="dosing-note">That email is already in use on another account.</p>` : ''}
+      ${success === 'email' ? `<p class="empty-note" style="color:var(--brand-green-dark);">Email updated.</p>` : ''}
+      <form method="POST" action="/account/email">
+        <label class="field-label" style="margin-top:0;">Email</label>
+        <input type="email" name="email" value="${esc(user.email || '')}" required autocomplete="email">
+        <button class="btn block" type="submit" style="margin-top:10px;">Update Email</button>
+      </form>
+    </div>
+
+    <div class="card" style="margin-top:14px;">
       <h2 style="margin:0 0 10px;font-size:15px;">Password</h2>
       ${error === 'wrong_password' ? `<p class="dosing-note">Current password is incorrect.</p>` : ''}
       ${error === 'password_mismatch' ? `<p class="dosing-note">New password and confirmation don't match.</p>` : ''}
@@ -1311,6 +1430,19 @@ async function handleAccountUsername(req, res) {
     redirect(res, '/account?ok=username');
   } catch (err) {
     redirect(res, '/account?error=username_taken');
+  }
+}
+async function handleAccountEmail(req, res) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const fields = await parseForm(req);
+  const newEmail = (fields.email || '').trim().toLowerCase();
+  if (!newEmail) return redirect(res, '/account');
+  try {
+    await db.updateEmail(userId, newEmail);
+    redirect(res, '/account?ok=email');
+  } catch (err) {
+    redirect(res, '/account?error=email_taken');
   }
 }
 async function handleAccountPassword(req, res) {
@@ -1865,7 +1997,7 @@ const server = http.createServer(async (req, res) => {
     // individually, everything requires a logged-in user except the
     // signup/login/logout routes themselves and the separate admin panel
     // (which has its own, unrelated password gate below).
-    const PUBLIC_PATHS = new Set(['/signup', '/login', '/logout', '/terms', '/privacy']);
+    const PUBLIC_PATHS = new Set(['/signup', '/login', '/logout', '/terms', '/privacy', '/forgot-password', '/reset-password']);
     if (!PUBLIC_PATHS.has(pathname) && !pathname.startsWith('/admin') && auth.currentUserId(req) == null) {
       return redirect(res, '/login');
     }
@@ -1901,7 +2033,12 @@ const server = http.createServer(async (req, res) => {
     if (method === 'POST' && pathname === '/account/delete') return await handleAccountDelete(req, res);
     if (method === 'GET' && pathname === '/terms') return pageTerms(req, res);
     if (method === 'GET' && pathname === '/privacy') return pagePrivacy(req, res);
+    if (method === 'GET' && pathname === '/forgot-password') return pageForgotPassword(req, res, url.searchParams);
+    if (method === 'POST' && pathname === '/forgot-password') return await handleForgotPasswordSubmit(req, res);
+    if (method === 'GET' && pathname === '/reset-password') return pageResetPassword(req, res, url.searchParams);
+    if (method === 'POST' && pathname === '/reset-password') return await handleResetPasswordSubmit(req, res);
     if (method === 'POST' && pathname === '/account/username') return await handleAccountUsername(req, res);
+    if (method === 'POST' && pathname === '/account/email') return await handleAccountEmail(req, res);
     if (method === 'POST' && pathname === '/account/password') return await handleAccountPassword(req, res);
     if (method === 'GET' && pathname === '/admin/logout') return handleAdminLogout(req, res);
     if (method === 'GET' && pathname === '/admin') return pageAdminHome(req, res);
