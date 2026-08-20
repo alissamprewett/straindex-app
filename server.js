@@ -1142,6 +1142,7 @@ function pageMore(req, res) {
     { href: '/faq', icon: '❓', t: 'FAQ', s: 'Strain school' },
     { href: '/chat', icon: '💬', t: 'Ask', s: 'Chat with the assistant' },
     { href: '/methods', icon: '/docs/joint-icon.png', t: 'Ways to Enjoy It', s: 'Every method, explained' },
+    { href: '/concentrates', icon: '💠', t: 'Concentrates & Extracts', s: 'Kief, rosin, live resin & more' },
   ];
   // Hidden from this menu for now (not deleted — routes below still work if
   // linked to directly): /events, /shop, /business. All three still run on
@@ -1714,6 +1715,26 @@ function pageMethods(req, res) {
   sendHtml(res, layout({ title: 'Ways to Enjoy It', active: 'more', body, isAdmin: auth.isAdmin(req) }));
 }
 
+// Concentrates & Extracts guide — a companion to "Ways to Enjoy It" that
+// covers *what* you're consuming (product types, real potency ranges,
+// how each is made) rather than *how* (devices/techniques). THC ranges
+// come from real Washington state lab-testing data, cross-checked
+// against published sources — same standard used for the strain library.
+function pageConcentrates(req, res) {
+  const body = `
+    <h1 class="screen-title">Concentrates &amp; Extracts</h1>
+    <p class="screen-sub">Flower typically runs 15–30% THC — concentrates are a different category entirely. Real lab-testing data, cross-checked against published sources.</p>
+    ${mock.concentrateGuide.map(c => `
+      <div class="method-guide-card">
+        <div class="mgtitle">${c.icon} ${esc(c.name)}</div>
+        <div class="mgstats"><span>THC: ${esc(c.thc)}</span></div>
+        <div class="mgdesc">${esc(c.desc)}</div>
+      </div>`).join('')}
+    <p class="empty-note" style="margin-top:6px;">Not medical advice — potency varies by batch and producer even within these ranges.</p>
+  `;
+  sendHtml(res, layout({ title: 'Concentrates & Extracts', active: 'more', body, isAdmin: auth.isAdmin(req) }));
+}
+
 function serveStatic(req, res, pathname) {
   // The strain bud photos ended up committed under /docs (repo root) rather
   // than /public/images — rather than requiring a re-upload, serve requests
@@ -1825,6 +1846,7 @@ const server = http.createServer(async (req, res) => {
     if (method === 'POST' && (m = pathname.match(/^\/shop\/([^/]+)\/add$/))) return await handleShopAdd(req, res, m[1]);
     if (method === 'GET' && pathname === '/badges') return pageBadges(req, res);
     if (method === 'GET' && pathname === '/methods') return pageMethods(req, res);
+    if (method === 'GET' && pathname === '/concentrates') return pageConcentrates(req, res);
 
     return notFound(res);
   } catch (err) {
