@@ -918,6 +918,50 @@ function pageLogin(req, res, query) {
 }
 
 // ---------------------------------------------------------------- forgot / reset password
+// ---------------------------------------------------------------- feedback
+// Free-text feedback while in beta -- deliberately simple (one textarea,
+// no categories/ratings) so it's low-friction to actually use. Stored in
+// the DB (readable from the admin panel) and, if RESEND_API_KEY and
+// FEEDBACK_NOTIFY_EMAIL are both set, also emailed immediately so it
+// doesn't require remembering to check the admin panel.
+function pageFeedback(req, res, query) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const sent = query.get('sent');
+  const body = `
+    <h1 class="screen-title">Send Feedback</h1>
+    <p class="screen-sub">StrainDex is in beta — bugs, ideas, confusing screens, anything at all. This goes straight to the person building the app.</p>
+    ${sent ? `<p class="empty-note" style="color:var(--brand-green-dark);">Thanks — your feedback was sent.</p>` : ''}
+    <form method="POST" action="/feedback">
+      <label class="field-label" style="margin-top:0;">Your feedback</label>
+      <textarea name="message" required minlength="3" maxlength="4000" placeholder="What's on your mind?" style="min-height:140px;"></textarea>
+      <button class="btn block" type="submit" style="margin-top:14px;">Send</button>
+    </form>
+  `;
+  sendHtml(res, layout({ title: 'Send Feedback', active: 'more', body, isAdmin: auth.isAdmin(req) }));
+}
+async function handleFeedbackSubmit(req, res) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const fields = await parseForm(req);
+  const message = String(fields.message || '').trim();
+  if (!message) return redirect(res, '/feedback');
+  const feedback = await db.createFeedback({ user_id: userId, message });
+
+  if (process.env.FEEDBACK_NOTIFY_EMAIL) {
+    const user = db.getUserById(userId);
+    await sendEmail({
+      to: process.env.FEEDBACK_NOTIFY_EMAIL,
+      subject: `StrainDex feedback from ${user ? user.username : 'a user'}`,
+      html: `<p><b>${esc(user ? user.username : 'Unknown user')}</b> (${user && user.email ? esc(user.email) : 'no email on file'}) sent this feedback:</p>
+        <p style="white-space:pre-wrap;">${esc(message)}</p>
+        <p><a href="https://${req.headers.host}/admin/feedback">View all feedback in the admin panel</a></p>`,
+    });
+  }
+
+  redirect(res, '/feedback?sent=1');
+}
+
 function pageForgotPassword(req, res, query) {
   const sent = query.get('sent');
   const body = `
@@ -1005,12 +1049,30 @@ function pageAdminHome(req, res) {
   const pendingCount = db.listRecipes({ status: 'pending' }).length;
   const body = `
     <h1 class="screen-title">Admin</h1>
+    <div class="card"><a href="/admin/feedback">💬 Feedback (${db.listFeedback().length})</a></div>
     <div class="card"><a href="/admin/faqs">📋 Manage FAQ (${db.listFaqs().length})</a></div>
     <div class="card"><a href="/admin/recipes">🍽️ Manage Recipes (${db.listRecipes({ status: null }).length}${pendingCount ? `, ${pendingCount} pending` : ''})</a></div>
     <div class="card"><a href="/admin/strains">🌿 Manage Strains (${db.countStrains().toLocaleString()})</a></div>
     <div class="card"><a href="/admin/logout">🚪 Log out</a></div>
   `;
   sendHtml(res, layout({ title: 'Admin', body, isAdmin: true }));
+}
+
+function pageAdminFeedback(req, res) {
+  if (!requireAdmin(req, res)) return;
+  const items = db.listFeedback();
+  const body = `
+    <a href="/admin" class="empty-note">← Back to Admin</a>
+    <h1 class="screen-title" style="margin-top:8px;">Feedback (${items.length})</h1>
+    ${items.length === 0 ? `<p class="empty-note">No feedback submitted yet.</p>` : items.map(f => {
+      const user = f.user_id != null ? db.getUserById(f.user_id) : null;
+      return `<div class="admin-row" style="flex-direction:column;align-items:stretch;">
+        <div class="empty-note" style="padding:0;">${user ? esc(user.username) : 'Anonymous'} · <span class="local-time" data-utc="${esc(f.created_at)}Z">${esc(f.created_at)}</span></div>
+        <p style="margin:6px 0 0;white-space:pre-wrap;">${esc(f.message)}</p>
+      </div>`;
+    }).join('')}
+  `;
+  sendHtml(res, layout({ title: 'Feedback', body, isAdmin: true }));
 }
 
 function pageAdminFaqs(req, res) {
@@ -1339,6 +1401,7 @@ function pageMore(req, res) {
     { href: '/chat', icon: '💬', t: 'Ask', s: 'Chat with the assistant' },
     { href: '/methods', icon: '/docs/joint-icon.png', t: 'Ways to Enjoy It', s: 'Every method, explained' },
     { href: '/concentrates', icon: '💠', t: 'Concentrates & Extracts', s: 'Kief, rosin, live resin & more' },
+    { href: '/feedback', icon: '📝', t: 'Send Feedback', s: 'Bugs, ideas — anything' },
   ];
   // Hidden from this menu for now (not deleted — routes below still work if
   // linked to directly): /events, /shop, /business. All three still run on
@@ -1459,6 +1522,8 @@ function pageAccount(req, res, query) {
         <button class="btn danger block" type="submit" style="color:#fff;">Delete my account</button>
       </form>
     </div>
+
+    <p class="empty-note" style="margin-top:18px;text-align:center;"><a href="${auth.isAdmin(req) ? '/admin' : '/admin/login'}">Site administration</a></p>
   `;
   sendHtml(res, layout({ title: 'Account Settings', active: 'more', body, isAdmin: auth.isAdmin(req) }));
 }
@@ -1835,7 +1900,7 @@ async function pageDispensaries(req, res, searchParams) {
     const sourceLabel = process.env.GOOGLE_PLACES_API_KEY ? 'Google Places' : 'OpenStreetMap';
     body = `
       <h1 class="screen-title">Dispensaries</h1>
-      <p class="screen-sub geo-live"><span class="dot"></span> Showing ${realResults.length} real dispensar${realResults.length === 1 ? 'y' : 'ies'} near ${esc(locationLabel)}, via ${esc(sourceLabel)}. <a href="/dispensaries">Use sample listings instead</a></p>
+      <p class="screen-sub geo-live"><span class="dot"></span> Showing ${realResults.length} dispensar${realResults.length === 1 ? 'y' : 'ies'} near ${esc(locationLabel)}.</p>
       ${realResults.map(d => {
         const following = db.isFollowingDispensary(userId, d.id);
         const mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${d.lat},${d.lon}`;
@@ -1857,7 +1922,7 @@ async function pageDispensaries(req, res, searchParams) {
           </div>
         </div>`;
       }).join('')}
-      <p class="screen-sub" style="margin-top:16px;">Real name, address, and location — pulled live from ${esc(sourceLabel)}. No live menu or pricing data exists for these yet (that lives inside each dispensary's own point-of-sale system), so menus aren't shown here.</p>
+      <p class="screen-sub" style="margin-top:16px;">No live menu or pricing data exists for these yet (that lives inside each dispensary's own point-of-sale system), so menus aren't shown here.</p>
     `;
   } else {
     body = `
@@ -2097,6 +2162,8 @@ const server = http.createServer(async (req, res) => {
     if (method === 'GET' && pathname === '/privacy') return pagePrivacy(req, res);
     if (method === 'GET' && pathname === '/forgot-password') return pageForgotPassword(req, res, url.searchParams);
     if (method === 'POST' && pathname === '/forgot-password') return await handleForgotPasswordSubmit(req, res);
+    if (method === 'GET' && pathname === '/feedback') return pageFeedback(req, res, url.searchParams);
+    if (method === 'POST' && pathname === '/feedback') return await handleFeedbackSubmit(req, res);
     if (method === 'GET' && pathname === '/reset-password') return pageResetPassword(req, res, url.searchParams);
     if (method === 'POST' && pathname === '/reset-password') return await handleResetPasswordSubmit(req, res);
     if (method === 'POST' && pathname === '/account/username') return await handleAccountUsername(req, res);
@@ -2104,6 +2171,7 @@ const server = http.createServer(async (req, res) => {
     if (method === 'POST' && pathname === '/account/password') return await handleAccountPassword(req, res);
     if (method === 'GET' && pathname === '/admin/logout') return handleAdminLogout(req, res);
     if (method === 'GET' && pathname === '/admin') return pageAdminHome(req, res);
+    if (method === 'GET' && pathname === '/admin/feedback') return pageAdminFeedback(req, res);
     if (method === 'GET' && pathname === '/admin/faqs') return pageAdminFaqs(req, res);
     if (method === 'POST' && pathname === '/admin/faqs/new') return await handleAdminFaqNew(req, res);
     if (method === 'GET' && (m = pathname.match(/^\/admin\/faqs\/(\d+)\/edit$/))) return pageAdminFaqEdit(req, res, Number(m[1]));
