@@ -306,3 +306,42 @@ if ('serviceWorker' in navigator) {
     });
   }
 })();
+
+// ---------------------------------------------------------------- glossary terms
+// Tap a dotted-underline term (e.g. "decarb") in a recipe or grow tip to
+// see a plain-language definition in a small popover near the word.
+// Tap the term again, or tap anywhere else, to dismiss it.
+(function initGlossary() {
+  let openPopover = null;
+  let openTermEl = null;
+
+  function closePopover() {
+    if (openPopover) { openPopover.remove(); openPopover = null; openTermEl = null; }
+  }
+
+  document.addEventListener('click', (e) => {
+    const term = e.target.closest('.glossary-term');
+    if (term) {
+      if (openTermEl === term) { closePopover(); return; }
+      closePopover();
+      const def = term.dataset.def || '';
+      const bubble = document.createElement('div');
+      bubble.className = 'glossary-popover';
+      bubble.textContent = def;
+      document.body.appendChild(bubble);
+      const rect = term.getBoundingClientRect();
+      const bubbleWidth = Math.min(280, window.innerWidth - 24);
+      bubble.style.width = bubbleWidth + 'px';
+      let left = rect.left;
+      if (left + bubbleWidth > window.innerWidth - 12) left = window.innerWidth - bubbleWidth - 12;
+      if (left < 12) left = 12;
+      bubble.style.left = left + 'px';
+      bubble.style.top = (rect.bottom + 8) + 'px';
+      openPopover = bubble;
+      openTermEl = term;
+      e.stopPropagation();
+    } else if (openPopover && !e.target.closest('.glossary-popover')) {
+      closePopover();
+    }
+  });
+})();
