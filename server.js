@@ -22,6 +22,28 @@ const mock = require('./lib/mockdata');
 const geo = require('./lib/geodispensaries');
 
 const PORT = process.env.PORT || 3000;
+
+// ---------------------------------------------------------------- basic signup rate limiting
+// A simple in-memory per-IP throttle -- not bulletproof (resets on
+// restart, doesn't help behind a shared IP like a school or office), but
+// stops the easy case: a bot or script hammering /signup. Max 5 signup
+// attempts per IP per 15 minutes.
+const signupAttempts = new Map(); // ip -> array of timestamps (ms)
+const SIGNUP_WINDOW_MS = 15 * 60 * 1000;
+const SIGNUP_MAX_ATTEMPTS = 5;
+function clientIp(req) {
+  const fwd = req.headers['x-forwarded-for'];
+  if (fwd) return fwd.split(',')[0].trim();
+  return req.socket.remoteAddress || 'unknown';
+}
+function isSignupRateLimited(req) {
+  const ip = clientIp(req);
+  const now = Date.now();
+  const attempts = (signupAttempts.get(ip) || []).filter(t => now - t < SIGNUP_WINDOW_MS);
+  attempts.push(now);
+  signupAttempts.set(ip, attempts);
+  return attempts.length > SIGNUP_MAX_ATTEMPTS;
+}
 const PUBLIC_DIR = path.join(__dirname, 'public');
 const DOCS_DIR = path.join(__dirname, 'docs');
 
@@ -748,16 +770,19 @@ function handleAdminLogout(req, res) {
 // ---------------------------------------------------------------- user accounts (signup / login / logout)
 function pageSignup(req, res, query) {
   const err = query.get('err');
+  const deleted = query.get('deleted');
   const errMessages = {
     taken: 'That username is already taken.',
     age: `You must be ${MIN_AGE} or older to create an account.`,
     mismatch: 'Passwords did not match.',
     short: 'Password must be at least 8 characters.',
     invalid: 'Please fill in every field.',
+    rate_limited: 'Too many signup attempts from this connection. Try again in a few minutes.',
   };
   const body = `
     <h1 class="screen-title">Create an Account</h1>
     <p class="screen-sub">You must be ${MIN_AGE}+ to use StrainDex.</p>
+    ${deleted ? `<p class="empty-note" style="color:var(--brand-green-dark);">Your account and data have been deleted.</p>` : ''}
     ${err && errMessages[err] ? `<p style="color:#a13a3a;">${esc(errMessages[err])}</p>` : ''}
     <form method="POST" action="/signup">
       <label class="field-label" style="margin-top:0;">Username</label>
@@ -770,11 +795,13 @@ function pageSignup(req, res, query) {
       <input type="password" name="password2" required minlength="8" autocomplete="new-password">
       <button class="btn block" type="submit" style="margin-top:14px;">Create Account</button>
     </form>
-    <p class="empty-note" style="margin-top:12px;">Already have an account? <a href="/login">Log in</a></p>
+    <p class="empty-note" style="margin-top:12px;">By creating an account, you agree to the <a href="/terms">Terms of Service</a> and <a href="/privacy">Privacy Policy</a>.</p>
+    <p class="empty-note">Already have an account? <a href="/login">Log in</a></p>
   `;
   sendHtml(res, layout({ title: 'Sign Up', body }));
 }
 async function handleSignupSubmit(req, res) {
+  if (isSignupRateLimited(req)) return redirect(res, '/signup?err=rate_limited');
   const f = await parseForm(req);
   const username = String(f.username || '').trim();
   if (!username || !f.birth_date || !f.password || !f.password2) return redirect(res, '/signup?err=invalid');
@@ -1165,6 +1192,46 @@ function pageMore(req, res) {
   sendHtml(res, layout({ title: 'More', active: 'more', body, isAdmin: auth.isAdmin(req) }));
 }
 
+// ---------------------------------------------------------------- terms & privacy
+// Plain-language starting points, not a substitute for a lawyer's review --
+// especially given the sensitivity of what this app stores (cannabis use
+// habits, photos) and that requirements vary by state/country. Get these
+// reviewed by an actual attorney before treating them as final.
+function pageTerms(req, res) {
+  const body = `
+    <h1 class="screen-title">Terms of Service</h1>
+    <p class="empty-note">Last updated: ${new Date().toISOString().slice(0, 10)}. This is a plain-language starting point, not legal advice — have an attorney review before relying on it.</p>
+    <div class="card">
+      <p><b>Who can use StrainDex.</b> You must be 21 or older to create an account. Cannabis laws vary by state and country — it's on you to know and follow the laws where you live. Nothing here is legal advice about whether cannabis is legal for you to use.</p>
+      <p><b>Not medical advice.</b> Strain effects, THC/CBD ranges, and relief claims shown in the app are drawn from user reports and published sources, not a medical evaluation of you personally. Talk to a doctor for real medical guidance.</p>
+      <p><b>Your content.</b> Recipes, grow tips, photos, and notes you submit are yours, but by posting them you're giving other users (and, for anything routed through admin approval, StrainDex) permission to display them within the app. Don't post anything you don't have the right to share.</p>
+      <p><b>Community content.</b> Recipes and grow tips submitted by other users are reviewed before publishing, but they're not verified by professionals — use your own judgment, especially around dosing.</p>
+      <p><b>Account responsibility.</b> You're responsible for what happens under your account. Don't share your login. Let us know if you think someone else has access to it.</p>
+      <p><b>No guarantees.</b> This app is provided as-is. Dispensary listings, hours, and strain data can be wrong or out of date — always confirm with the actual dispensary before making a trip.</p>
+      <p><b>Changes.</b> These terms may be updated as the app grows. Continued use after a change means you accept the update.</p>
+    </div>
+    <p class="empty-note">Questions about these terms? Reach out through the <a href="/chat">Ask</a> tab or the app's contact info.</p>
+  `;
+  sendHtml(res, layout({ title: 'Terms of Service', body, isAdmin: auth.isAdmin(req) }));
+}
+
+function pagePrivacy(req, res) {
+  const body = `
+    <h1 class="screen-title">Privacy Policy</h1>
+    <p class="empty-note">Last updated: ${new Date().toISOString().slice(0, 10)}. This is a plain-language starting point, not legal advice — have an attorney review before relying on it, especially for jurisdiction-specific requirements (GDPR, CCPA, etc.).</p>
+    <div class="card">
+      <p><b>What we store.</b> Your username, a securely hashed password (never the password itself), your birth date (to confirm you're 21+), and everything you do in the app — check-ins, notes, photos you upload, friends, trades, dispensary follows, and any recipes or grow tips you submit.</p>
+      <p><b>Why we store it.</b> This data is what makes the app work — your check-in history, your collection, your friends list. It's not sold to advertisers, and there's no ad network running in this app.</p>
+      <p><b>Who can see it.</b> Your check-ins are visible to friends you've connected with. Your username is visible to anyone you interact with (friend requests, trades). Everything else is private to your account, except recipes/grow tips you choose to submit publicly.</p>
+      <p><b>Photos.</b> Photos you attach to a check-in are stored so you (and, if applicable, friends) can see them later. Don't upload a photo of anything you wouldn't want stored.</p>
+      <p><b>Your rights.</b> You can export a copy of everything tied to your account, or delete your account entirely, from <a href="/account">Account Settings</a>. Deleting your account removes your personal data; any recipes or grow tips you shared publicly stay up but are no longer linked to your name.</p>
+      <p><b>Location.</b> If you use "Use my location" on the Dispensaries page, your coordinates are sent to find nearby real dispensaries and are not stored after that search completes.</p>
+      <p><b>Changes.</b> This policy may be updated as the app grows. Meaningful changes will be reflected here with a new "last updated" date.</p>
+    </div>
+  `;
+  sendHtml(res, layout({ title: 'Privacy Policy', body, isAdmin: auth.isAdmin(req) }));
+}
+
 function pageAccount(req, res, query) {
   const userId = requireUser(req, res);
   if (userId == null) return;
@@ -1202,8 +1269,36 @@ function pageAccount(req, res, query) {
         <button class="btn block" type="submit" style="margin-top:10px;">Update Password</button>
       </form>
     </div>
+
+    <div class="card" style="margin-top:14px;">
+      <h2 style="margin:0 0 10px;font-size:15px;">Your Data</h2>
+      <p class="empty-note" style="padding:0 0 10px;">See our <a href="/privacy">Privacy Policy</a> and <a href="/terms">Terms of Service</a> for what this covers.</p>
+      <a class="btn secondary block" href="/account/export" style="text-decoration:none;margin-bottom:10px;">⬇️ Export my data</a>
+      <form method="POST" action="/account/delete" onsubmit="return confirm('This permanently deletes your account, check-ins, friends, and photos. This cannot be undone. Continue?')">
+        <button class="btn danger block" type="submit" style="color:#fff;">Delete my account</button>
+      </form>
+    </div>
   `;
   sendHtml(res, layout({ title: 'Account Settings', active: 'more', body, isAdmin: auth.isAdmin(req) }));
+}
+async function handleAccountExport(req, res) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const data = db.getUserExportData(userId);
+  if (!data) return notFound(res);
+  const json = JSON.stringify(data, null, 2);
+  res.writeHead(200, {
+    'Content-Type': 'application/json',
+    'Content-Disposition': 'attachment; filename="straindex-my-data.json"',
+  });
+  res.end(json);
+}
+async function handleAccountDelete(req, res) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  await db.deleteUserAccount(userId);
+  res.setHeader('Set-Cookie', `user_session=; Path=/; HttpOnly; Max-Age=0`);
+  redirect(res, '/signup?deleted=1');
 }
 async function handleAccountUsername(req, res) {
   const userId = requireUser(req, res);
@@ -1770,7 +1865,7 @@ const server = http.createServer(async (req, res) => {
     // individually, everything requires a logged-in user except the
     // signup/login/logout routes themselves and the separate admin panel
     // (which has its own, unrelated password gate below).
-    const PUBLIC_PATHS = new Set(['/signup', '/login', '/logout']);
+    const PUBLIC_PATHS = new Set(['/signup', '/login', '/logout', '/terms', '/privacy']);
     if (!PUBLIC_PATHS.has(pathname) && !pathname.startsWith('/admin') && auth.currentUserId(req) == null) {
       return redirect(res, '/login');
     }
@@ -1802,6 +1897,10 @@ const server = http.createServer(async (req, res) => {
     if (method === 'POST' && pathname === '/login') return await handleLoginSubmit(req, res);
     if (method === 'POST' && pathname === '/logout') return handleLogout(req, res);
     if (method === 'GET' && pathname === '/account') return pageAccount(req, res, url.searchParams);
+    if (method === 'GET' && pathname === '/account/export') return await handleAccountExport(req, res);
+    if (method === 'POST' && pathname === '/account/delete') return await handleAccountDelete(req, res);
+    if (method === 'GET' && pathname === '/terms') return pageTerms(req, res);
+    if (method === 'GET' && pathname === '/privacy') return pagePrivacy(req, res);
     if (method === 'POST' && pathname === '/account/username') return await handleAccountUsername(req, res);
     if (method === 'POST' && pathname === '/account/password') return await handleAccountPassword(req, res);
     if (method === 'GET' && pathname === '/admin/logout') return handleAdminLogout(req, res);
