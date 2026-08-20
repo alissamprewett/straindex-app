@@ -21,7 +21,7 @@ body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;backgrou
   nav.tabbar{max-width:760px;}
 }
 a{color:inherit;}
-header.topbar{background:linear-gradient(135deg,var(--brand-green-dark),var(--brand-green));color:#fff;padding:16px 18px 14px;display:flex;align-items:center;justify-content:space-between;}
+header.topbar{background:linear-gradient(135deg,var(--brand-green-dark),var(--brand-green));color:#fff;padding:calc(16px + env(safe-area-inset-top)) 18px 14px;display:flex;align-items:center;justify-content:space-between;}
 header.topbar .brand{display:flex;align-items:center;gap:8px;font-weight:800;font-size:19px;text-decoration:none;color:#fff;}
 header.topbar .brand-logo{width:28px;height:28px;border-radius:6px;object-fit:cover;}
 .disclaimer{background:#fff6e0;color:#5c4a12;font-size:11px;padding:6px 18px;text-align:center;border-bottom:1px solid #eddba4;}
