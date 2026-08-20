@@ -1252,6 +1252,18 @@ async function apiCheckinKudos(req, res, id) {
   if (!c) return sendJson(res, { error: 'not found' }, 404);
   sendJson(res, { kudos: c.kudos });
 }
+// Protected analytics endpoint for the Google Sheets automation -- returns
+// real usernames, emails, and birth dates, so it's gated behind a shared
+// secret (ANALYTICS_API_KEY) rather than being a public JSON endpoint like
+// /api/strains. Set ANALYTICS_API_KEY in Render, and use the same value
+// in the Apps Script that calls this.
+function apiAnalyticsSnapshot(req, res, query) {
+  const key = query.get('key') || '';
+  const expected = process.env.ANALYTICS_API_KEY;
+  if (!expected) return sendJson(res, { error: 'ANALYTICS_API_KEY not configured on the server' }, 500);
+  if (key !== expected) return sendJson(res, { error: 'unauthorized' }, 401);
+  sendJson(res, db.getAnalyticsSnapshot());
+}
 
 // ---------------------------------------------------------------- static
 
@@ -1998,7 +2010,7 @@ const server = http.createServer(async (req, res) => {
     // individually, everything requires a logged-in user except the
     // signup/login/logout routes themselves and the separate admin panel
     // (which has its own, unrelated password gate below).
-    const PUBLIC_PATHS = new Set(['/signup', '/login', '/logout', '/terms', '/privacy', '/forgot-password', '/reset-password']);
+    const PUBLIC_PATHS = new Set(['/signup', '/login', '/logout', '/terms', '/privacy', '/forgot-password', '/reset-password', '/api/analytics-snapshot']);
     if (!PUBLIC_PATHS.has(pathname) && !pathname.startsWith('/admin') && auth.currentUserId(req) == null) {
       return redirect(res, '/login');
     }
@@ -2062,6 +2074,7 @@ const server = http.createServer(async (req, res) => {
     if (method === 'POST' && (m = pathname.match(/^\/api\/recipes\/(\d+)\/kudos$/))) return await apiKudos(req, res, Number(m[1]));
     if (method === 'POST' && (m = pathname.match(/^\/api\/growtips\/(\d+)\/like$/))) return await apiGrowLike(req, res, Number(m[1]));
     if (method === 'POST' && (m = pathname.match(/^\/api\/checkins\/(\d+)\/kudos$/))) return await apiCheckinKudos(req, res, Number(m[1]));
+    if (method === 'GET' && pathname === '/api/analytics-snapshot') return apiAnalyticsSnapshot(req, res, url.searchParams);
 
     if (method === 'GET' && pathname === '/more') return pageMore(req, res);
     if (method === 'GET' && pathname === '/collection') return pageCollection(req, res);
