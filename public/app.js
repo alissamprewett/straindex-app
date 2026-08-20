@@ -76,12 +76,12 @@ async function likeGrowTip(id, btn) {
   const countEl = document.getElementById('strain-search-count');
   if (!input || !resultsEl || !countEl) return;
 
-  const typeVal = document.getElementById('strain-search-type').value;
-  const rarityVal = document.getElementById('strain-search-rarity').value;
-  const effectVal = document.getElementById('strain-search-effect').value;
-  const thcVal = document.getElementById('strain-search-thc').value;
-  const terpeneVal = document.getElementById('strain-search-terpene').value;
-  const ailmentVal = document.getElementById('strain-search-ailment').value;
+  const typeSel = document.getElementById('strain-search-type');
+  const raritySel = document.getElementById('strain-search-rarity');
+  const effectSel = document.getElementById('strain-search-effect');
+  const thcSel = document.getElementById('strain-search-thc');
+  const terpeneSel = document.getElementById('strain-search-terpene');
+  const ailmentSel = document.getElementById('strain-search-ailment');
 
   function escHtml(str) {
     return String(str ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -104,19 +104,23 @@ async function likeGrowTip(id, btn) {
       </a>`).join('') || `<div class="empty-note">No strains match your filters.</div>`;
   }
 
+  async function runSearch() {
+    const params = new URLSearchParams({
+      q: input.value, type: typeSel.value, rarity: raritySel.value, effect: effectSel.value,
+      thc: thcSel.value, terpene: terpeneSel.value, ailment: ailmentSel.value, limit: '60',
+    });
+    const res = await fetch(`/api/strains?${params}`);
+    if (!res.ok) return;
+    render(await res.json());
+    // Keep the URL in sync (so refresh/back/share still works) without navigating.
+    history.replaceState(null, '', `/strains?${params}`);
+  }
   let debounceTimer;
   input.addEventListener('input', () => {
     clearTimeout(debounceTimer);
-    const q = input.value;
-    debounceTimer = setTimeout(async () => {
-      const params = new URLSearchParams({ q, type: typeVal, rarity: rarityVal, effect: effectVal, thc: thcVal, terpene: terpeneVal, ailment: ailmentVal, limit: '60' });
-      const res = await fetch(`/api/strains?${params}`);
-      if (!res.ok) return;
-      render(await res.json());
-      // Keep the URL in sync (so refresh/back/share still works) without navigating.
-      history.replaceState(null, '', `/strains?${params}`);
-    }, 200);
+    debounceTimer = setTimeout(runSearch, 200);
   });
+  [typeSel, raritySel, effectSel, thcSel, terpeneSel, ailmentSel].forEach(sel => sel && sel.addEventListener('change', runSearch));
 })();
 
 // ------------------------------------------------------------ dispensaries
