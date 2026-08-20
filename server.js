@@ -145,6 +145,12 @@ const STRAIN_PHOTOS = [
   '/docs/ndispensable-zwc6BD4_RDE-unsplash.jpg',
   '/docs/rexmedlen-flower-2677505_640.jpg',
   '/docs/gjbmiller-weed-2174302_640.jpg',
+  '/docs/avery-meeker.jpg',
+  '/docs/esteban-lopez.jpg',
+  '/docs/esteban-lopez2.jpg',
+  '/docs/tim-foster.jpg',
+  '/docs/jeff-w.jpg',
+  '/docs/testeur-de-cbd.jpg',
 ];
 function hashStr(str) {
   let h = 0;
@@ -569,6 +575,49 @@ function canonicalBaseRecipeId(keyword) {
   return r ? r.id : null;
 }
 
+// ---------------------------------------------------------------- glossary
+// Cannabis/cooking jargon that shows up in recipes and grow tips, made
+// tappable so someone unfamiliar with a term can get a plain-language
+// definition without leaving the page. Applied to already-esc()'d text,
+// so the term words themselves must stay plain (no special HTML chars).
+const GLOSSARY_TERMS = [
+  { key: 'decarb', variants: ['decarboxylation', 'decarboxylated', 'decarboxylate', 'decarbing', 'decarbed', 'decarb'],
+    definition: "Heating raw cannabis converts its non-intoxicating THCA into actual THC — the compound that gets you high. Skip this step and an edible won't work." },
+  { key: 'trichome', variants: ['trichomes', 'trichome'],
+    definition: 'The tiny, crystal-like hairs coating cannabis buds — this is where THC, CBD, and terpenes are actually produced and stored.' },
+  { key: 'terpene', variants: ['terpenes', 'terpene'],
+    definition: "Aromatic oils in cannabis that give each strain its distinct smell and flavor, and may influence how a strain's effects actually feel." },
+  { key: 'cannabinoid', variants: ['cannabinoids', 'cannabinoid'],
+    definition: 'The active compounds in cannabis — THC and CBD are the best known, but there are dozens more, each with different effects.' },
+  { key: 'rso', variants: ['rick simpson oil', 'rso'],
+    definition: 'A thick, dark, very concentrated cannabis oil made by extracting the whole plant with a solvent. Extremely potent — dosed in tiny amounts, not smoked.' },
+  { key: 'kief', variants: ['kief'],
+    definition: 'The loose, powdery trichomes that collect at the bottom of a grinder — concentrated potency sifted straight off the flower.' },
+  { key: 'curing', variants: ['curing', 'cured'],
+    definition: "The slow drying process after harvest (in a jar, opened daily, out of light) that develops flavor and potency and gets rid of a harsh 'fresh grass' taste." },
+  { key: 'flowering', variants: ['flowering'],
+    definition: "The stage of a plant's life cycle when it actually produces buds — triggered by a change in light schedule, or by age for autoflowering strains." },
+  { key: 'photoperiod', variants: ['photoperiod'],
+    definition: "A plant that only starts flowering when its daily light schedule shifts to more darkness (typically 12/12) — as opposed to 'autoflowering' strains, which flower based on age alone." },
+];
+// Builds one combined regex across every term/variant so each position in
+// the text is matched at most once, in a single pass -- this avoids ever
+// re-matching text inside a span this same function just inserted.
+const GLOSSARY_REGEX = new RegExp(
+  '\\b(' + GLOSSARY_TERMS.flatMap(t => t.variants).sort((a, b) => b.length - a.length).join('|') + ')\\b',
+  'gi'
+);
+const GLOSSARY_BY_VARIANT = new Map();
+GLOSSARY_TERMS.forEach(t => t.variants.forEach(v => GLOSSARY_BY_VARIANT.set(v.toLowerCase(), t)));
+function linkGlossaryTerms(escapedText) {
+  if (!escapedText) return escapedText;
+  return escapedText.replace(GLOSSARY_REGEX, (match) => {
+    const term = GLOSSARY_BY_VARIANT.get(match.toLowerCase());
+    if (!term) return match;
+    return `<span class="glossary-term" data-def="${esc(term.definition)}">${match}</span>`;
+  });
+}
+
 function pageRecipeDetail(req, res, id) {
   const r = db.getRecipe(id);
   if (!r || r.status !== 'approved') return notFound(res);
@@ -578,15 +627,15 @@ function pageRecipeDetail(req, res, id) {
       <b style="font-size:16px;">${r.icon || '🍽️'} ${esc(r.title)}</b>
       <span class="recipe-source-tag ${r.source}">${r.source === 'official' ? 'Official' : 'Community'}</span>
       <div class="empty-note">${esc(r.category || '')}${r.time ? ' · ' + esc(r.time) : ''}${r.author ? ' · by ' + esc(r.author) : ''}</div>
-      <p>${esc(r.desc)}</p>
+      <p>${linkGlossaryTerms(esc(r.desc))}</p>
       ${Array.isArray(r.usesBase) && r.usesBase.length ? `<p class="empty-note" style="padding:0 0 6px;">Uses: ${r.usesBase.map(b => {
         const targetId = canonicalBaseRecipeId(b);
         return targetId ? `<a href="/recipes/${targetId}">${esc(b)}</a>` : esc(b);
       }).join(', ')} <span style="opacity:.7;">(tap to see how to make it)</span></p>` : ''}
       <p><b>Ingredients:</b></p>
-      <ul>${r.ingredients.map(i => `<li>${esc(i)}</li>`).join('')}</ul>
+      <ul>${r.ingredients.map(i => `<li>${linkGlossaryTerms(esc(i))}</li>`).join('')}</ul>
       <p><b>Steps:</b></p>
-      <ol>${r.steps.map(i => `<li>${esc(i)}</li>`).join('')}</ol>
+      <ol>${r.steps.map(i => `<li>${linkGlossaryTerms(esc(i))}</li>`).join('')}</ol>
       ${r.dosing ? `<div class="dosing-note">⚠️ ${esc(r.dosing)}</div>` : ''}
       <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;">
         <span class="empty-note" style="padding:0;">${r.kudos} people found this helpful</span>
@@ -618,7 +667,7 @@ function pageRecipes(req, res, query) {
         <a href="/recipes/${r.id}" style="text-decoration:none;color:inherit;"><b>${r.icon || '🍽️'} ${esc(r.title)}</b></a>
         <span class="recipe-source-tag ${r.source}">${r.source === 'official' ? 'Official' : 'Community'}</span>
         <div class="empty-note">${esc(r.category || '')}${r.time ? ' · ' + esc(r.time) : ''}${r.author ? ' · by ' + esc(r.author) : ''}</div>
-        <p>${esc(r.desc)}</p>
+        <p>${linkGlossaryTerms(esc(r.desc))}</p>
         ${Array.isArray(r.usesBase) && r.usesBase.length ? `<p class="empty-note" style="padding:0 0 6px;">Uses: ${r.usesBase.map(b => {
           const targetId = canonicalBaseRecipeId(b);
           return targetId ? `<a href="/recipes/${targetId}">${esc(b)}</a>` : esc(b);
@@ -626,9 +675,9 @@ function pageRecipes(req, res, query) {
         <details>
           <summary style="cursor:pointer;font-size:12.5px;font-weight:700;color:var(--brand-green-dark);">Ingredients &amp; steps</summary>
           <p><b>Ingredients:</b></p>
-          <ul>${r.ingredients.map(i => `<li>${esc(i)}</li>`).join('')}</ul>
+          <ul>${r.ingredients.map(i => `<li>${linkGlossaryTerms(esc(i))}</li>`).join('')}</ul>
           <p><b>Steps:</b></p>
-          <ol>${r.steps.map(i => `<li>${esc(i)}</li>`).join('')}</ol>
+          <ol>${r.steps.map(i => `<li>${linkGlossaryTerms(esc(i))}</li>`).join('')}</ol>
           ${r.dosing ? `<div class="dosing-note">⚠️ ${esc(r.dosing)}</div>` : ''}
         </details>
         <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;">
@@ -692,7 +741,7 @@ function pageGrowing(req, res, query) {
       <div class="card grow-tip-card">
         <b>${esc(g.title)}</b>
         <div class="gcat">${esc(g.category)}</div>
-        <p>${esc(g.body)}</p>
+        <p>${linkGlossaryTerms(esc(g.body))}</p>
         ${g.source_url ? `<p class="empty-note" style="padding:2px 0 0;">Source: <a href="${esc(g.source_url)}" target="_blank" rel="noopener noreferrer">${esc(g.source_name || g.source_url)}</a></p>` : ''}
         <div style="display:flex;justify-content:space-between;align-items:center;">
           <span class="empty-note" style="padding:0;">by ${esc(g.author || 'Anonymous')}</span>
