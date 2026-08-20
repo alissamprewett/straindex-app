@@ -1,15 +1,16 @@
 {
   "name": "straindex",
   "version": "1.0.0",
-  "description": "StrainDex — a social check-in, strain library, and recipe app. Uses only Node's built-ins plus one dependency (@libsql/client) to talk to its Turso database.",
+  "description": "StrainDex — a social check-in, strain library, and recipe app. Uses only Node's built-ins plus a small set of dependencies (@libsql/client for its Turso database, @sentry/node for error reporting).",
   "private": true,
   "main": "server.js",
   "scripts": {
-    "start": "node --no-warnings server.js",
+    "start": "node --no-warnings --require ./instrument.js server.js",
     "seed": "node --no-warnings seed.js"
   },
   "dependencies": {
-    "@libsql/client": "^0.17.0"
+    "@libsql/client": "^0.17.0",
+    "@sentry/node": "^10.70.0"
   },
   "engines": {
     "node": ">=18.0.0"

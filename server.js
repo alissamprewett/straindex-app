@@ -8,6 +8,7 @@
 // HTML) requires staying dependency-free once you deploy somewhere with
 // normal internet access. See README.md for the upgrade path.
 
+const Sentry = require('./instrument');
 const http = require('node:http');
 const fs = require('node:fs');
 const path = require('node:path');
@@ -2087,6 +2088,7 @@ const server = http.createServer(async (req, res) => {
     return notFound(res);
   } catch (err) {
     console.error(err);
+    Sentry.captureException(err);
     res.writeHead(500, { 'Content-Type': 'text/plain' });
     res.end('Internal server error: ' + err.message);
   }
@@ -2101,5 +2103,6 @@ db.init()
   .catch(err => {
     console.error('Failed to connect to the database — check TURSO_DATABASE_URL and TURSO_AUTH_TOKEN.');
     console.error(err);
+    Sentry.captureException(err);
     process.exit(1);
   });
