@@ -2001,7 +2001,7 @@ function pageShop(req, res) {
     <div class="shop-grid">
       ${mock.shopItems.map(i => `
         <div class="shop-item">
-          <div class="ic">${i.icon}</div>
+          <div class="ic">${i.icon.startsWith('/') ? `<img src="${i.icon}" alt="" class="shop-item-photo">` : i.icon}</div>
           <div class="sn">${esc(i.name)}</div>
           <div class="sp">${esc(i.price)}</div>
           <form method="POST" action="/shop/${i.id}/add"><button type="submit">Add to Cart</button></form>
