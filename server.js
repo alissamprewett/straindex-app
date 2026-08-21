@@ -45,6 +45,35 @@ function isSignupRateLimited(req) {
   signupAttempts.set(ip, attempts);
   return attempts.length > SIGNUP_MAX_ATTEMPTS;
 }
+
+// ---------------------------------------------------------------- basic login rate limiting
+// Keyed by IP + username (not just IP) so it specifically slows down
+// brute-forcing one account's password, without penalizing everyone on a
+// shared network (school, office) for one person's typos. Only failed
+// attempts count -- a successful login clears the counter. Max 5 failed
+// attempts per 15 minutes per IP+username combination.
+const loginAttempts = new Map(); // "ip:username" -> array of failed-attempt timestamps
+const LOGIN_WINDOW_MS = 15 * 60 * 1000;
+const LOGIN_MAX_ATTEMPTS = 5;
+function loginAttemptKey(req, username) {
+  return `${clientIp(req)}:${String(username || '').trim().toLowerCase()}`;
+}
+function isLoginRateLimited(req, username) {
+  const key = loginAttemptKey(req, username);
+  const now = Date.now();
+  const attempts = (loginAttempts.get(key) || []).filter(t => now - t < LOGIN_WINDOW_MS);
+  return attempts.length >= LOGIN_MAX_ATTEMPTS;
+}
+function recordFailedLogin(req, username) {
+  const key = loginAttemptKey(req, username);
+  const now = Date.now();
+  const attempts = (loginAttempts.get(key) || []).filter(t => now - t < LOGIN_WINDOW_MS);
+  attempts.push(now);
+  loginAttempts.set(key, attempts);
+}
+function clearLoginAttempts(req, username) {
+  loginAttempts.delete(loginAttemptKey(req, username));
+}
 const PUBLIC_DIR = path.join(__dirname, 'public');
 const DOCS_DIR = path.join(__dirname, 'docs');
 
@@ -908,9 +937,13 @@ async function handleSignupSubmit(req, res) {
 }
 function pageLogin(req, res, query) {
   const err = query.get('err');
+  const errMessages = {
+    '1': 'Wrong username or password.',
+    rate_limited: 'Too many failed attempts for this account. Try again in a few minutes, or reset your password.',
+  };
   const body = `
     <h1 class="screen-title">Log In</h1>
-    ${err ? `<p style="color:#a13a3a;">Wrong username or password.</p>` : ''}
+    ${err && errMessages[err] ? `<p style="color:#a13a3a;">${esc(errMessages[err])}</p>` : ''}
     <form method="POST" action="/login">
       <label class="field-label" style="margin-top:0;">Username</label>
       <input type="text" name="username" required autocomplete="username">
@@ -1040,8 +1073,14 @@ async function handleResetPasswordSubmit(req, res) {
 }
 async function handleLoginSubmit(req, res) {
   const f = await parseForm(req);
-  const user = db.verifyLogin(String(f.username || '').trim(), f.password || '');
-  if (!user) return redirect(res, '/login?err=1');
+  const username = String(f.username || '').trim();
+  if (isLoginRateLimited(req, username)) return redirect(res, '/login?err=rate_limited');
+  const user = db.verifyLogin(username, f.password || '');
+  if (!user) {
+    recordFailedLogin(req, username);
+    return redirect(res, '/login?err=1');
+  }
+  clearLoginAttempts(req, username);
   const token = auth.signUserSessionValue(user.id);
   res.setHeader('Set-Cookie', `user_session=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000`);
   redirect(res, '/');
