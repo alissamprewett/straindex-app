@@ -21,6 +21,7 @@ const { parseForm, parseJson } = require('./lib/body');
 const { answerFromKnowledgeBase } = require('./lib/chat');
 const mock = require('./lib/mockdata');
 const geo = require('./lib/geodispensaries');
+const storage = require('./lib/storage');
 
 const PORT = process.env.PORT || 3000;
 
@@ -524,9 +525,10 @@ async function handleCheckinSubmit(req, res) {
   if (!strainId) { sendHtml(res, layout({ title: 'Check In', body: `<p>Please pick a valid strain. <a href="/checkin">Try again</a></p>` }), 400); return; }
   let effects = Array.isArray(fields.effects) ? fields.effects : (fields.effects ? [fields.effects] : []);
   effects = effects.filter(Boolean).slice(0, 5);
+  const photoUrl = await storage.uploadCheckinPhoto(fields.photo || null);
   await db.createCheckin({
     user_id: userId, strain_id: strainId, method: fields.method, rating: Number(fields.rating) || 0,
-    note: fields.note || '', effects, photo: fields.photo || null,
+    note: fields.note || '', effects, photo: photoUrl,
     tasting_notes: fields.tasting_notes || '', pairing_food: fields.pairing_food || '',
     pairing_entertainment: fields.pairing_entertainment || '', pairing_activity: fields.pairing_activity || '',
   });
@@ -540,9 +542,10 @@ async function handleCheckinEditSubmit(req, res, id) {
   const fields = await parseForm(req);
   let effects = Array.isArray(fields.effects) ? fields.effects : (fields.effects ? [fields.effects] : []);
   effects = effects.filter(Boolean).slice(0, 5);
+  const photoUrl = await storage.uploadCheckinPhoto(fields.photo || null);
   await db.updateCheckin(id, {
     method: fields.method, rating: Number(fields.rating) || 0,
-    note: fields.note || '', effects, photo: fields.photo || null,
+    note: fields.note || '', effects, photo: photoUrl,
     tasting_notes: fields.tasting_notes || '', pairing_food: fields.pairing_food || '',
     pairing_entertainment: fields.pairing_entertainment || '', pairing_activity: fields.pairing_activity || '',
   });
