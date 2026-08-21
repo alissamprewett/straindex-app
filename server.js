@@ -816,7 +816,7 @@ async function handleRecipeNewSubmit(req, res) {
 }
 
 function pageGrowing(req, res, query) {
-  const CATEGORIES = ['Lighting', 'Nutrients & Feeding', 'Pests & Disease', 'Training', 'Harvest & Curing', 'Genetics & Seeds', 'Indoor Setup', 'Outdoor Growing'];
+  const CATEGORIES = ['Watering', 'Lighting', 'Nutrients & Feeding', 'Pests & Disease', 'Training', 'Harvest & Curing', 'Genetics & Seeds', 'Indoor Setup', 'Outdoor Growing'];
   const cat = query.get('cat') || 'All';
   const tips = db.listGrowTips({ category: cat });
   const body = `
@@ -843,7 +843,7 @@ function pageGrowing(req, res, query) {
 }
 
 function pageGrowingNew(req, res) {
-  const CATEGORIES = ['Lighting', 'Nutrients & Feeding', 'Pests & Disease', 'Training', 'Harvest & Curing', 'Genetics & Seeds', 'Indoor Setup', 'Outdoor Growing'];
+  const CATEGORIES = ['Watering', 'Lighting', 'Nutrients & Feeding', 'Pests & Disease', 'Training', 'Harvest & Curing', 'Genetics & Seeds', 'Indoor Setup', 'Outdoor Growing'];
   const body = `
     <h1 class="screen-title">Share a Grow Tip</h1>
     <form method="POST" action="/growing/new">
@@ -1582,17 +1582,28 @@ function pageMore(req, res) {
 function pageTerms(req, res) {
   const body = `
     <h1 class="screen-title">Terms of Service</h1>
-    <p class="empty-note">Last updated: ${new Date().toISOString().slice(0, 10)}. This is a plain-language starting point, not legal advice — have an attorney review before relying on it.</p>
+    <p class="empty-note">Last updated: ${new Date().toISOString().slice(0, 10)}. This expanded draft is currently being reviewed by an attorney and may change before it's finalized.</p>
     <div class="card">
-      <p><b>Who can use StrainDex.</b> You must be 21 or older to create an account. Cannabis laws vary by state and country — it's on you to know and follow the laws where you live. Nothing here is legal advice about whether cannabis is legal for you to use.</p>
-      <p><b>Not medical advice.</b> Strain effects, THC/CBD ranges, and relief claims shown in the app are drawn from user reports and published sources, not a medical evaluation of you personally. Talk to a doctor for real medical guidance.</p>
-      <p><b>Your content.</b> Recipes, grow tips, photos, and notes you submit are yours, but by posting them you're giving other users (and, for anything routed through admin approval, StrainDex) permission to display them within the app. Don't post anything you don't have the right to share.</p>
-      <p><b>Community content.</b> Recipes and grow tips submitted by other users are reviewed before publishing, but they're not verified by professionals — use your own judgment, especially around dosing.</p>
-      <p><b>Account responsibility.</b> You're responsible for what happens under your account. Don't share your login. Let us know if you think someone else has access to it.</p>
-      <p><b>No guarantees.</b> This app is provided as-is. Dispensary listings, hours, and strain data can be wrong or out of date — always confirm with the actual dispensary before making a trip.</p>
-      <p><b>Changes.</b> These terms may be updated as the app grows. Continued use after a change means you accept the update.</p>
+      <p><b>1. Acceptance of terms.</b> By creating an account or otherwise using StrainDex (the "Service"), you agree to be bound by these Terms. If you do not agree, do not use the Service. We may update these Terms from time to time; continued use after an update means you accept the revised Terms.</p>
+      <p><b>2. Eligibility.</b> The Service is intended solely for adults 21 and older. By creating an account, you represent that you're at least 21 and that your use of the Service complies with the laws of your jurisdiction. We don't verify the legal status of cannabis where you live — that's on you.</p>
+      <p><b>3. What StrainDex is.</b> StrainDex is a personal cannabis journal and informational reference app: check-ins, a strain library, community recipes and growing tips, and a dispensary locator. StrainDex does not sell, deliver, broker, or otherwise facilitate the purchase or transfer of cannabis or cannabis products, and nothing in the app is a marketplace or point of sale.</p>
+      <p><b>4. Accounts.</b> You're responsible for keeping your credentials confidential and for all activity under your account. Provide accurate registration information. One account per person — accounts can't be sold, transferred, or shared. We can suspend or terminate accounts that violate these Terms, engage in fraud, or misrepresent age or eligibility.</p>
+      <p><b>5. Your content.</b> You keep ownership of what you submit — check-ins, notes, tasting notes, photos, ratings, pairings. By submitting it, you give StrainDex permission to host, store, and display it within the app. You confirm you have the rights to anything you upload.</p>
+      <p><b>6. Community-submitted content.</b> Recipes and growing tips are reviewed before publishing, but this is a basic appropriateness check, not a professional or medical certification. Dosing suggestions and techniques reflect individual contributors' opinions, not StrainDex's. You take on the risk of following any community-submitted instructions, especially around dosing.</p>
+      <p><b>7. Prohibited conduct.</b> Don't: break applicable law; harass or threaten other users; upload content that infringes someone else's rights; misrepresent your age; scrape or reverse-engineer the Service; or use StrainDex to actually sell, buy, or distribute cannabis or any controlled substance.</p>
+      <p><b>8. Not medical advice.</b> Strain effects, THC/CBD percentages, and terpene info come from user reports and published third-party sources, and may not reflect the actual composition of anything you encounter. Nothing here is medical advice or intended to diagnose, treat, cure, or prevent any condition. Talk to a healthcare provider about your own situation.</p>
+      <p><b>9. Third-party services.</b> Dispensary information comes from third-party data providers and may be incomplete, outdated, or wrong. We don't verify dispensary licensing, inventory, pricing, or hours — always confirm with the dispensary directly.</p>
+      <p><b>10. Intellectual property.</b> The StrainDex name, logo, and underlying software belong to StrainDex and its licensors. Strain photography is used under the Unsplash License and credited to its photographers where applicable.</p>
+      <p><b>11. No warranties.</b> The Service is provided "as is" and "as available," without warranties of any kind — including accuracy of strain data, uninterrupted availability, or fitness for a particular purpose.</p>
+      <p><b>12. Limitation of liability.</b> To the maximum extent permitted by law, StrainDex is not liable for indirect, incidental, special, consequential, or punitive damages, or loss of data, arising from your use of the Service.</p>
+      <p><b>13. Indemnification.</b> You agree to cover StrainDex for claims, damages, or expenses arising from your use of the Service, your content, or your violation of these Terms.</p>
+      <p><b>14. Termination.</b> You can delete your account anytime from Account Settings. We can suspend or terminate your access for violating these Terms, with or without notice.</p>
+      <p><b>15. Changes.</b> We may modify, suspend, or discontinue any part of the Service, and may revise these Terms, at any time.</p>
+      <p><b>16. Governing law.</b> The governing jurisdiction for these Terms is still being finalized with counsel.</p>
+      <p><b>17. Severability.</b> If any part of these Terms is found unenforceable, the rest stays in effect.</p>
+      <p><b>18. Entire agreement.</b> These Terms plus the Privacy Policy make up the whole agreement between you and StrainDex about the Service.</p>
     </div>
-    <p class="empty-note">Questions about these terms? Reach out through the <a href="/chat">Ask</a> tab or the app's contact info.</p>
+    <p class="empty-note">Questions about these terms? Reach out through <a href="/feedback">Send Feedback</a>.</p>
   `;
   sendHtml(res, layout({ title: 'Terms of Service', body, isAdmin: auth.isAdmin(req) }));
 }
@@ -1600,16 +1611,20 @@ function pageTerms(req, res) {
 function pagePrivacy(req, res) {
   const body = `
     <h1 class="screen-title">Privacy Policy</h1>
-    <p class="empty-note">Last updated: ${new Date().toISOString().slice(0, 10)}. This is a plain-language starting point, not legal advice — have an attorney review before relying on it, especially for jurisdiction-specific requirements (GDPR, CCPA, etc.).</p>
+    <p class="empty-note">Last updated: ${new Date().toISOString().slice(0, 10)}. This expanded draft is currently being reviewed by an attorney and may change before it's finalized, particularly around jurisdiction-specific requirements (CCPA, GDPR, etc.).</p>
     <div class="card">
-      <p><b>What we store.</b> Your username, a securely hashed password (never the password itself), your birth date (to confirm you're 21+), and everything you do in the app — check-ins, notes, photos you upload, friends, trades, dispensary follows, and any recipes or grow tips you submit.</p>
-      <p><b>Why we store it.</b> This data is what makes the app work — your check-in history, your collection, your friends list. It's not sold to advertisers, and there's no ad network running in this app.</p>
-      <p><b>Who can see it.</b> Your check-ins are visible to friends you've connected with. Your username is visible to anyone you interact with (friend requests, trades). Everything else is private to your account, except recipes/grow tips you choose to submit publicly.</p>
-      <p><b>Photos.</b> Photos you attach to a check-in are stored so you (and, if applicable, friends) can see them later. Don't upload a photo of anything you wouldn't want stored.</p>
-      <p><b>Your rights.</b> You can export a copy of everything tied to your account, or delete your account entirely, from <a href="/account">Account Settings</a>. Deleting your account removes your personal data; any recipes or grow tips you shared publicly stay up but are no longer linked to your name.</p>
-      <p><b>Location.</b> If you use "Use my location" on the Dispensaries page, your coordinates are sent to find nearby real dispensaries and are not stored after that search completes.</p>
-      <p><b>Changes.</b> This policy may be updated as the app grows. Meaningful changes will be reflected here with a new "last updated" date.</p>
+      <p><b>1. Overview.</b> This explains what StrainDex collects, how it's used, and your choices. We collect only what's needed to run the app and don't sell personal information to advertisers or data brokers.</p>
+      <p><b>2. What we collect.</b> Account info (username, email, a securely hashed password, birth date to confirm age). User content (check-ins, tasting notes, food/drink/entertainment/activity pairings, photos, recipes, grow tips). Location, only when you use "find dispensaries near me" — not stored after the search. Basic technical/error logs. A single first-party session cookie to keep you logged in — no third-party ad-tracking cookies.</p>
+      <p><b>3. How we use it.</b> To run check-ins, the strain library, recipes, growing tips, dispensary search, and friends features; to keep your account secure; to send account emails like password resets; to respond to feedback you submit; to fix bugs through error monitoring; and to generate aggregate, non-identifying usage stats.</p>
+      <p><b>4. Who we share it with.</b> We don't sell your data. We use service providers who each process data only to provide their service to us: our database host, our app host, our photo storage provider, our transactional email provider, our error-monitoring provider, and a dispensary-location lookup service. We may also disclose information if required by law.</p>
+      <p><b>5. How long we keep it.</b> As long as your account is active. If you delete your account, your personal data is removed; any recipe or grow tip you shared publicly stays up but is reattributed to "Former user."</p>
+      <p><b>6. Your rights.</b> Export your data or permanently delete your account anytime from Account Settings. Update your info directly in the app.</p>
+      <p><b>7. Not for minors.</b> The Service is for adults 21+ only and isn't directed at children. We don't knowingly collect data from anyone under 21.</p>
+      <p><b>8. Security.</b> We use industry-standard measures — hashed passwords, encrypted connections — but no method of transmission or storage is perfectly secure.</p>
+      <p><b>9. State/international privacy laws.</b> Specific disclosures required under laws like the CCPA or GDPR are being finalized with counsel and will be added here once confirmed.</p>
+      <p><b>10. Changes.</b> We may update this policy; meaningful changes will be reflected here with a new "last updated" date.</p>
     </div>
+    <p class="empty-note">Questions about this policy? Reach out through <a href="/feedback">Send Feedback</a>.</p>
   `;
   sendHtml(res, layout({ title: 'Privacy Policy', body, isAdmin: auth.isAdmin(req) }));
 }
