@@ -243,8 +243,56 @@ function getRecommendations(userId, limit = 4) {
 
 // ---------------------------------------------------------------- pages
 
+// ---------------------------------------------------------------- public landing page
+// Shown at "/" to anyone not logged in -- previously an unauthenticated
+// visit to "/" just bounced straight to /login with no context on what
+// StrainDex even is. This gives it a real front door.
+function pageLandingPage(req, res) {
+  const totalStrains = db.countStrains();
+  const body = `
+    <div style="text-align:center;padding:20px 4px 8px;">
+      <div style="font-size:44px;margin-bottom:8px;">🌿</div>
+      <h1 style="margin:0 0 8px;font-size:22px;">StrainDex</h1>
+      <p class="screen-sub" style="margin:0 0 20px;">Your personal cannabis journal — strains, recipes, and growing knowledge, all in one place.</p>
+      <a href="/signup" class="btn block" style="text-decoration:none;max-width:280px;margin:0 auto;">Create Free Account</a>
+      <p class="empty-note" style="margin-top:10px;">Already have an account? <a href="/login">Log in</a></p>
+      <p class="empty-note" style="margin-top:4px;">Beta · For adults 21+ where legal · Not medical advice</p>
+    </div>
+
+    <div class="more-grid" style="margin-top:8px;">
+      <div class="more-tile">
+        <span class="ic">📇</span>
+        <div class="t">Strain Library</div>
+        <div class="s">${totalStrains.toLocaleString()}+ strains with real THC data</div>
+      </div>
+      <div class="more-tile">
+        <span class="ic">🔥</span>
+        <div class="t">Check-Ins</div>
+        <div class="s">Tasting notes, pairings &amp; ratings</div>
+      </div>
+      <div class="more-tile">
+        <span class="ic">🍯</span>
+        <div class="t">Recipes</div>
+        <div class="s">Infusions, edibles &amp; dosing</div>
+      </div>
+      <div class="more-tile">
+        <span class="ic">📍</span>
+        <div class="t">Dispensaries</div>
+        <div class="s">Find real dispensaries near you</div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:20px;text-align:center;">
+      <p class="empty-note" style="padding:0 0 10px;">Already checking in with friends? See what StrainDex looks like inside.</p>
+      <a href="/signup" class="btn secondary block" style="text-decoration:none;">Get Started →</a>
+    </div>
+  `;
+  sendHtml(res, layout({ title: 'StrainDex', body, isAdmin: false }));
+}
+
 function pageHome(req, res) {
   const userId = auth.currentUserId(req);
+  if (userId == null) return pageLandingPage(req, res);
   const friends = db.listFriends(userId);
   const feedUserIds = [userId, ...friends.map(f => f.id)];
   const userNames = new Map([[userId, 'You'], ...friends.map(f => [f.id, f.username])]);
@@ -939,7 +987,7 @@ async function handleSignupSubmit(req, res) {
   const user = await db.createUser({ username, password: f.password, birth_date: f.birth_date, email });
   const token = auth.signUserSessionValue(user.id);
   res.setHeader('Set-Cookie', `user_session=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000`);
-  redirect(res, '/');
+  redirect(res, '/onboarding');
 }
 function pageLogin(req, res, query) {
   const err = query.get('err');
@@ -970,6 +1018,57 @@ function pageLogin(req, res, query) {
 // the DB (readable from the admin panel) and, if RESEND_API_KEY and
 // FEEDBACK_NOTIFY_EMAIL are both set, also emailed immediately so it
 // doesn't require remembering to check the admin panel.
+// ---------------------------------------------------------------- onboarding
+// A one-time, 4-step walkthrough shown right after signup so a brand-new
+// user doesn't land on Home with zero context. No persistent "seen" flag
+// needed -- only the signup flow links here, so an existing user would
+// only see it again if they typed the URL directly, which is harmless.
+function pageOnboarding(req, res) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const steps = [
+    { icon: '🌿', title: 'Welcome to StrainDex', body: 'Your personal cannabis journal — strains, recipes, and growing knowledge, all in one place.' },
+    { icon: '🔥', title: 'Log your first check-in', body: 'Tap "Light It Up" any time you try a strain — rate it, add tasting notes, and start your collection.' },
+    { icon: '📇', title: 'Explore the strain library', body: 'Browse real THC data, effects, and terpene profiles for every strain in the library.' },
+    { icon: '🧑\u200d🤝\u200d🧑', title: 'Bring your friends', body: 'Add friends to see their check-ins, trade duplicate strain cards, and compare notes.' },
+  ];
+  const body = `
+    <div class="card" style="text-align:center;padding:32px 20px;">
+      <div id="onboarding-steps">
+        ${steps.map((s, i) => `
+          <div class="onboarding-step" data-step="${i}" style="${i === 0 ? '' : 'display:none;'}">
+            <div style="font-size:44px;margin-bottom:16px;">${s.icon}</div>
+            <h2 style="margin:0 0 8px;font-size:18px;">${esc(s.title)}</h2>
+            <p style="color:var(--ink-secondary);font-size:13.5px;line-height:1.6;margin:0;">${esc(s.body)}</p>
+          </div>`).join('')}
+      </div>
+      <div style="display:flex;justify-content:center;gap:6px;margin:22px 0 6px;">
+        ${steps.map((_, i) => `<span class="onboarding-dot" data-dot="${i}" style="width:6px;height:6px;border-radius:50%;background:${i === 0 ? 'var(--brand-green)' : 'var(--border)'};"></span>`).join('')}
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:14px;">
+      <a href="/" class="btn secondary block" style="flex:1;">Skip</a>
+      <button type="button" id="onboarding-next" class="btn block" style="flex:1;">Next</button>
+    </div>
+    <script>
+      (function() {
+        const total = ${steps.length};
+        let i = 0;
+        const nextBtn = document.getElementById('onboarding-next');
+        function render() {
+          document.querySelectorAll('.onboarding-step').forEach(el => { el.style.display = Number(el.dataset.step) === i ? '' : 'none'; });
+          document.querySelectorAll('.onboarding-dot').forEach(el => { el.style.background = Number(el.dataset.dot) === i ? 'var(--brand-green)' : 'var(--border)'; });
+          nextBtn.textContent = i === total - 1 ? 'Get started' : 'Next';
+        }
+        nextBtn.addEventListener('click', () => {
+          if (i < total - 1) { i++; render(); } else { window.location.href = '/'; }
+        });
+      })();
+    </script>
+  `;
+  sendHtml(res, layout({ title: 'Welcome', body, isAdmin: auth.isAdmin(req) }));
+}
+
 function pageFeedback(req, res, query) {
   const userId = requireUser(req, res);
   if (userId == null) return;
@@ -2169,7 +2268,7 @@ const server = http.createServer(async (req, res) => {
     // individually, everything requires a logged-in user except the
     // signup/login/logout routes themselves and the separate admin panel
     // (which has its own, unrelated password gate below).
-    const PUBLIC_PATHS = new Set(['/signup', '/login', '/logout', '/terms', '/privacy', '/forgot-password', '/reset-password', '/api/analytics-snapshot']);
+    const PUBLIC_PATHS = new Set(['/', '/signup', '/login', '/logout', '/terms', '/privacy', '/forgot-password', '/reset-password', '/api/analytics-snapshot']);
     if (!PUBLIC_PATHS.has(pathname) && !pathname.startsWith('/admin') && auth.currentUserId(req) == null) {
       return redirect(res, '/login');
     }
@@ -2207,6 +2306,7 @@ const server = http.createServer(async (req, res) => {
     if (method === 'GET' && pathname === '/privacy') return pagePrivacy(req, res);
     if (method === 'GET' && pathname === '/forgot-password') return pageForgotPassword(req, res, url.searchParams);
     if (method === 'POST' && pathname === '/forgot-password') return await handleForgotPasswordSubmit(req, res);
+    if (method === 'GET' && pathname === '/onboarding') return pageOnboarding(req, res);
     if (method === 'GET' && pathname === '/feedback') return pageFeedback(req, res, url.searchParams);
     if (method === 'POST' && pathname === '/feedback') return await handleFeedbackSubmit(req, res);
     if (method === 'GET' && pathname === '/reset-password') return pageResetPassword(req, res, url.searchParams);
