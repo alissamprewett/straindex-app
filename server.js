@@ -122,6 +122,18 @@ function isOldEnough(birthDateStr) {
   return age >= MIN_AGE;
 }
 function starString(n) { n = Number(n) || 0; return '★'.repeat(n) + '☆'.repeat(5 - n); }
+// Shared renderer for the optional "pairings" a user can log with a
+// check-in -- tasting notes plus food/drink, music/entertainment, and
+// activity pairings. Each is independently optional, so only show what's
+// actually filled in.
+function renderCheckinPairings(c) {
+  return `
+    ${c.tasting_notes ? `<div class="empty-note" style="padding:4px 0 0;">🍃 Tasting notes: ${esc(c.tasting_notes)}</div>` : ''}
+    ${c.pairing_food ? `<div class="empty-note" style="padding:2px 0 0;">🍽️ Paired with: ${esc(c.pairing_food)}</div>` : ''}
+    ${c.pairing_entertainment ? `<div class="empty-note" style="padding:2px 0 0;">🎵 Listening/watching: ${esc(c.pairing_entertainment)}</div>` : ''}
+    ${c.pairing_activity ? `<div class="empty-note" style="padding:2px 0 0;">🎯 Doing: ${esc(c.pairing_activity)}</div>` : ''}
+  `;
+}
 // A small original cartoon-bud icon used on kudos buttons — hand-drawn SVG,
 // not a stock asset, so there's no licensing question about using it.
 function rarityLabel(r) { return { common: 'Common', uncommon: 'Uncommon', rare: 'Rare', legendary: 'Legendary' }[r] || r; }
@@ -244,6 +256,7 @@ function pageHome(req, res) {
         ${c.photo ? `<img class="photo-thumb" src="${esc(c.photo)}" alt="photo">` : ''}
         ${(c.effects || []).length ? `<div class="effect-tags">${c.effects.map(e => `<span>${esc(e)}</span>`).join('')}</div>` : ''}
         ${c.note ? `<div class="note">"${esc(c.note)}"</div>` : ''}
+        ${renderCheckinPairings(c)}
         <div style="display:flex;justify-content:flex-end;margin-top:8px;">
           <button class="kudos-btn" onclick="giveCheckinKudos(${c.id}, this)">${KUDOS_BUD_ICON}Kudos${c.kudos ? ` (${c.kudos})` : ''}</button>
         </div>
@@ -359,6 +372,7 @@ function pageStrainDetail(req, res, id) {
           <div class="empty-note" style="padding:2px 0 0;"><span class="local-time" data-utc="${c.created_at}Z">${esc(c.created_at)} UTC</span></div>
           ${(c.effects || []).length ? `<p style="margin:6px 0 0;">${c.effects.map(e => `<span class="filter-pill">${esc(e)}</span>`).join('')}</p>` : ''}
           ${c.note ? `<span class="empty-note" style="display:block;padding:4px 0 0;">${esc(c.note)}</span>` : ''}
+        ${renderCheckinPairings(c)}
           <div style="display:flex;justify-content:flex-end;margin-top:6px;">
             <button class="kudos-btn" onclick="giveCheckinKudos(${c.id}, this)">${KUDOS_BUD_ICON}Kudos${c.kudos ? ` (${c.kudos})` : ''}</button>
           </div>
@@ -441,6 +455,19 @@ function pageCheckinForm(req, res, query, existing) {
 
       <label class="field-label">Notes</label>
       <textarea name="note" placeholder="How was it?">${existing ? esc(existing.note || '') : ''}</textarea>
+
+      <label class="field-label">Tasting Notes</label>
+      <textarea name="tasting_notes" placeholder="Flavor, smell, smoothness — what stood out?">${existing ? esc(existing.tasting_notes || '') : ''}</textarea>
+
+      <label class="field-label">Food / Drink Pairing</label>
+      <input type="text" name="pairing_food" placeholder="What went really well with it?" value="${existing ? esc(existing.pairing_food || '') : ''}">
+
+      <label class="field-label">Music / Entertainment Pairing</label>
+      <input type="text" name="pairing_entertainment" placeholder="What you listened to or watched" value="${existing ? esc(existing.pairing_entertainment || '') : ''}">
+
+      <label class="field-label">Activity Pairing</label>
+      <input type="text" name="pairing_activity" placeholder="What you did while enjoying it" value="${existing ? esc(existing.pairing_activity || '') : ''}">
+
       <button class="btn block" type="submit" id="checkin-submit">${isEdit ? 'Save Changes' : '🔥 Light It Up'}</button>
     </form>
     <script>
@@ -471,6 +498,8 @@ async function handleCheckinSubmit(req, res) {
   await db.createCheckin({
     user_id: userId, strain_id: strainId, method: fields.method, rating: Number(fields.rating) || 0,
     note: fields.note || '', effects, photo: fields.photo || null,
+    tasting_notes: fields.tasting_notes || '', pairing_food: fields.pairing_food || '',
+    pairing_entertainment: fields.pairing_entertainment || '', pairing_activity: fields.pairing_activity || '',
   });
   redirect(res, `/strains/${strainId}`);
 }
@@ -485,6 +514,8 @@ async function handleCheckinEditSubmit(req, res, id) {
   await db.updateCheckin(id, {
     method: fields.method, rating: Number(fields.rating) || 0,
     note: fields.note || '', effects, photo: fields.photo || null,
+    tasting_notes: fields.tasting_notes || '', pairing_food: fields.pairing_food || '',
+    pairing_entertainment: fields.pairing_entertainment || '', pairing_activity: fields.pairing_activity || '',
   });
   redirect(res, `/strains/${existing.strain_id}`);
 }
@@ -1730,6 +1761,7 @@ function pageFriendProfile(req, res, friendId) {
         ${c.photo ? `<img class="photo-thumb" src="${esc(c.photo)}" alt="photo">` : ''}
         ${(c.effects || []).length ? `<div class="effect-tags">${c.effects.map(e => `<span>${esc(e)}</span>`).join('')}</div>` : ''}
         ${c.note ? `<div class="note">"${esc(c.note)}"</div>` : ''}
+        ${renderCheckinPairings(c)}
         <div style="display:flex;justify-content:flex-end;margin-top:8px;">
           <button class="kudos-btn" onclick="giveCheckinKudos(${c.id}, this)">${KUDOS_BUD_ICON}Kudos${c.kudos ? ` (${c.kudos})` : ''}</button>
         </div>
