@@ -2476,5 +2476,235 @@
     "usesBase": [
       "coconut oil"
     ]
+  },
+  {
+    "id": "r89",
+    "title": "Cannabis-Infused Pizza",
+    "time": "≈30 min",
+    "icon": "🍕",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "Any pizza you like, finished with a drizzle of infused olive oil right out of the oven so the heat doesn't burn off potency.",
+    "ingredients": [
+      "1 pizza dough (store-bought or homemade), with sauce, cheese, and toppings of choice",
+      "2-3 tbsp cannabis-infused olive oil"
+    ],
+    "steps": [
+      "Assemble and bake the pizza exactly as you normally would.",
+      "As soon as it comes out of the oven, drizzle the infused olive oil evenly over the hot pizza — the residual heat helps it soak in without cooking off further potency.",
+      "Let it rest 2-3 minutes so the oil absorbs, then slice into even pieces to keep dosing predictable."
+    ],
+    "dosing": "Divide the infused oil's total THC by the number of slices.",
+    "category": "Savory & Snacks",
+    "status": "approved",
+    "usesBase": [
+      "cannabis-infused olive oil"
+    ]
+  },
+  {
+    "id": "r90",
+    "title": "Cannabis-Infused Potato Skins",
+    "time": "≈50 min",
+    "icon": "🥔",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "Loaded potato skins finished with a drizzle of warm infused butter after baking, so the potency isn't lost in the oven.",
+    "ingredients": [
+      "4 russet potatoes",
+      "3 tbsp cannabis-infused butter, melted",
+      "1 cup shredded cheddar",
+      "4 strips bacon, cooked and crumbled",
+      "Sour cream and sliced green onion, to serve"
+    ],
+    "steps": [
+      "Bake potatoes until tender, about 45 minutes. Let cool slightly, halve, and scoop out most of the flesh, leaving a shell.",
+      "Brush shells with regular oil and bake at 425°F for 10 minutes until crisp.",
+      "Fill with cheese and bake a few minutes more until melted.",
+      "Remove from the oven, then drizzle the warm infused butter evenly over the filled skins.",
+      "Top with bacon, sour cream, and green onion."
+    ],
+    "dosing": "Divide the infused butter's total THC by the number of potato skin halves.",
+    "category": "Savory & Snacks",
+    "status": "approved",
+    "usesBase": [
+      "cannabutter"
+    ]
+  },
+  {
+    "id": "r91",
+    "title": "Cannabis-Infused Spinach Dip",
+    "time": "≈15 min + chilling",
+    "icon": "🥬",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "A creamy party dip served cold, so the infused oil goes in raw with no risk of cooking off potency.",
+    "ingredients": [
+      "10oz frozen chopped spinach, thawed and squeezed dry",
+      "8oz cream cheese, softened",
+      "1/2 cup sour cream",
+      "1/4 cup mayonnaise",
+      "1 clove garlic, minced",
+      "1/4 cup grated parmesan",
+      "2-3 tbsp cannabis-infused olive oil"
+    ],
+    "steps": [
+      "Combine spinach, cream cheese, sour cream, mayo, garlic, and parmesan in a bowl and stir until smooth.",
+      "Stir in the infused olive oil last, mixing thoroughly to fully incorporate — this dip is served cold, so there's no cooking-off risk.",
+      "Chill at least 1 hour before serving with chips, crackers, or bread."
+    ],
+    "dosing": "Divide the infused oil's total THC by the number of servings the whole bowl makes.",
+    "category": "Savory & Snacks",
+    "status": "approved",
+    "usesBase": [
+      "cannabis-infused olive oil"
+    ]
+  },
+  {
+    "id": "r92",
+    "title": "Cannabis-Infused Buffalo Wings",
+    "time": "≈45 min",
+    "icon": "🍗",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "Classic wings tossed in an infused buffalo sauce after cooking, so the wings themselves can be baked or fried at full heat with no potency loss.",
+    "ingredients": [
+      "2 lbs chicken wings",
+      "1/2 cup hot sauce",
+      "3 tbsp cannabis-infused butter, melted",
+      "1/2 tsp garlic powder",
+      "Ranch or blue cheese, to serve"
+    ],
+    "steps": [
+      "Bake or fry the wings fully until cooked through and crispy, exactly as usual.",
+      "Whisk together hot sauce, melted infused butter, and garlic powder in a large bowl.",
+      "Toss the hot, cooked wings in the sauce right away — no further cooking needed.",
+      "Serve immediately with ranch or blue cheese."
+    ],
+    "dosing": "Divide the infused butter's total THC by the number of wings.",
+    "category": "Savory & Snacks",
+    "status": "approved",
+    "usesBase": [
+      "cannabutter"
+    ]
+  },
+  {
+    "id": "r93",
+    "title": "Cannabis-Infused Garlic Bread",
+    "time": "≈20 min",
+    "icon": "🥖",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "Toast the bread first, then brush on the infused butter right before serving so it never sees direct oven heat.",
+    "ingredients": [
+      "1 baguette or French bread, sliced",
+      "Regular butter and garlic, for toasting",
+      "3 tbsp cannabis-infused butter, softened",
+      "1 clove garlic, minced",
+      "1 tbsp chopped parsley",
+      "Grated parmesan, to finish"
+    ],
+    "steps": [
+      "Toast the bread with regular butter and garlic as you normally would, until golden.",
+      "Mix the infused butter with minced garlic and parsley in a small bowl.",
+      "While the bread is still warm, brush the infused butter mixture over the top — the residual heat helps it melt in without further baking.",
+      "Sprinkle with parmesan and serve immediately."
+    ],
+    "dosing": "Divide the infused butter's total THC by the number of slices.",
+    "category": "Savory & Snacks",
+    "status": "approved",
+    "usesBase": [
+      "cannabutter"
+    ]
+  },
+  {
+    "id": "r94",
+    "title": "Cannabis-Infused Nachos",
+    "time": "≈20 min",
+    "icon": "🌮",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "A shareable plate of nachos finished with a drizzle of infused oil for easy, even dosing across the whole tray.",
+    "ingredients": [
+      "1 bag tortilla chips",
+      "2 cups shredded cheese (or premade queso)",
+      "1/2 cup black beans",
+      "Sliced jalapeños",
+      "2-3 tbsp cannabis-infused oil (or melted cannabutter)",
+      "Salsa, sour cream, guacamole, to serve"
+    ],
+    "steps": [
+      "Layer chips, cheese, beans, and jalapeños on a baking sheet and bake until the cheese is melted, as usual.",
+      "Remove from the oven and drizzle the infused oil evenly over the top (or stir infused butter into warmed queso before pouring over).",
+      "Add remaining toppings and serve immediately while still warm."
+    ],
+    "dosing": "Divide the infused oil or butter's total THC by the number of servings.",
+    "category": "Savory & Snacks",
+    "status": "approved",
+    "usesBase": [
+      "cannabis-infused olive oil",
+      "cannabutter"
+    ]
+  },
+  {
+    "id": "r95",
+    "title": "Cannabis-Infused Quesadillas",
+    "time": "≈15 min",
+    "icon": "🧀",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "Cheesy quesadillas brushed with infused oil right after cooking.",
+    "ingredients": [
+      "2 flour tortillas",
+      "1 cup shredded cheese",
+      "Optional: cooked chicken, peppers, onions",
+      "1-2 tbsp cannabis-infused oil"
+    ],
+    "steps": [
+      "Cook the quesadilla in a dry pan with a little regular oil until the cheese melts and both sides are golden and crisp.",
+      "Remove from heat and brush one side lightly with the infused oil while still hot.",
+      "Let rest 1-2 minutes so the oil absorbs, then slice and serve."
+    ],
+    "dosing": "Divide the infused oil's total THC by the number of wedges.",
+    "category": "Savory & Snacks",
+    "status": "approved",
+    "usesBase": [
+      "cannabis-infused olive oil"
+    ]
+  },
+  {
+    "id": "r96",
+    "title": "Cannabis-Infused Jalapeño Poppers",
+    "time": "≈30 min",
+    "icon": "🌶️",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "Cream cheese-stuffed poppers finished with a drizzle of infused oil right out of the oven.",
+    "ingredients": [
+      "8 jalapeños, halved and seeded",
+      "8oz cream cheese, softened",
+      "1/2 cup shredded cheddar",
+      "Optional: cooked bacon bits",
+      "2 tbsp cannabis-infused oil"
+    ],
+    "steps": [
+      "Mix cream cheese and cheddar, then fill each jalapeño half. Top with bacon if using.",
+      "Bake at 400°F for about 20 minutes, until the cheese is melted and jalapeños are tender.",
+      "Remove from the oven and drizzle the warm infused oil evenly over the poppers.",
+      "Let sit 2 minutes before serving."
+    ],
+    "dosing": "Divide the infused oil's total THC by the number of poppers.",
+    "category": "Savory & Snacks",
+    "status": "approved",
+    "usesBase": [
+      "cannabis-infused olive oil"
+    ]
   }
 ]

@@ -136,5 +136,93 @@
     "author": "Chris",
     "likes": 28,
     "body": "Flushing means watering with plain, pH'd water only for the final 1-2 weeks before harvest — no more nutrients. It won't lower THC or change potency, but many growers find it improves smoothness and taste by using up nutrient salts stored in the plant tissue, which can otherwise cause a harsh, chemical-tasting smoke. It's most worth doing if you've been feeding heavily; if you grow in soil with light feeding, the benefit is smaller."
+  },
+  {
+    "id": "g17",
+    "title": "Germination: three reliable ways to sprout a seed",
+    "category": "Plant Life Cycle",
+    "author": "Maya",
+    "likes": 45,
+    "body": "Paper towel method: sandwich seeds between damp (not soaked) paper towels, keep warm (70-85°F) and dark, and check daily — most crack and show a taproot within 2-7 days. Direct-to-soil: push the seed about 1/2 inch deep into moist starter soil and keep it consistently damp until it sprouts, usually 3-10 days. Water-soak: float seeds in room-temp water for 12-24 hours until they sink and split slightly, then move to soil or paper towel to finish. Whichever method you use, handle sprouted seeds by the casing, never the delicate white taproot — snapping it kills the seedling before it starts."
+  },
+  {
+    "id": "g18",
+    "title": "The seedling stage: the first two weeks",
+    "category": "Plant Life Cycle",
+    "author": "Jordan",
+    "likes": 37,
+    "body": "Overwatering and too much light are the two most common seedling killers here, not underfeeding. Water sparingly, only when the top layer of soil is dry, since young roots haven't filled the pot yet. Skip nutrients entirely for the first 2 weeks in most soils, which already contain enough to support this stage. The first true, serrated leaves (not the rounded seed leaves the plant sprouted with) signal it's transitioning out of the seedling stage and ready for its first light feeding."
+  },
+  {
+    "id": "g19",
+    "title": "The vegetative stage: how long to veg, and what changes",
+    "category": "Plant Life Cycle",
+    "author": "Chris",
+    "likes": 29,
+    "body": "Vegetative growth is where the plant builds the structure that'll support its eventual flowers — leaves, stems, and root mass, with no buds yet. Photoperiod plants can be kept in veg indefinitely under 18+ hours of light a day; most home growers veg 4-8 weeks before flipping to flower, depending on the final size they want. Autoflowers move through veg automatically on their own timeline regardless of light schedule, typically 3-5 weeks. This is the stage to do most of your training (topping, LST) and to step up nutrients gradually as roots fill the pot."
+  },
+  {
+    "id": "g20",
+    "title": "Flowering stage: what happens week by week",
+    "category": "Plant Life Cycle",
+    "author": "Priya",
+    "likes": 52,
+    "body": "Switching a photoperiod plant to 12/12 light triggers flowering, but expect 1-3 more weeks of vertical 'stretch' before bud sites actually appear — plan pot size and space accordingly. Weeks 3-5 are when small white pistils emerge and colas start forming. Weeks 5-7 are peak bulking, where buds add most of their final size and weight. The final 1-3 weeks (varying by strain) are ripening: pistils darken and curl, trichomes shift from clear to cloudy to amber, and this is when harvest timing actually gets decided — not by a fixed calendar date."
+  },
+  {
+    "id": "g21",
+    "title": "Drying after harvest: the week before curing starts",
+    "category": "Harvest & Curing",
+    "author": "Sam",
+    "likes": 48,
+    "body": "Drying and curing are two different steps, and rushing the dry to get to curing faster usually hurts quality. Hang whole branches (or lay trimmed buds on a screen) in a dark space at 60-70°F and 45-55% humidity, with gentle air circulation but not a fan blowing directly on the buds. A proper dry takes 7-10 days — buds are ready to jar for curing when small stems snap rather than bend. Drying too fast with high heat or low humidity locks in a harsh, chlorophyll-heavy taste that curing can't fully fix afterward."
+  },
+  {
+    "id": "g22",
+    "title": "Long-term storage: what actually preserves potency",
+    "category": "Harvest & Curing",
+    "author": "Jordan",
+    "likes": 31,
+    "body": "Light, heat, and air are the three things that degrade THC into less potent CBN over time. Store cured buds in an airtight glass jar, kept somewhere cool and dark — a closet or drawer, not a sunny windowsill. A 62% humidity pack in each jar keeps buds from drying out further or growing mold, and is far more reliable than judging by feel alone. Stored this way, well-cured buds hold most of their potency for 6-12 months; vacuum-sealing and freezing extends that further for very long-term storage."
+  },
+  {
+    "id": "g23",
+    "title": "Cleaning glass pipes and bongs: the salt-and-alcohol method",
+    "category": "Cleaning & Gear Care",
+    "author": "Chris",
+    "likes": 44,
+    "body": "The fastest effective method: empty the piece, add coarse salt (rock or kosher) and 91%+ isopropyl alcohol, plug the openings, and shake vigorously for a minute or two — the salt scrubs resin loose while the alcohol dissolves it. Rinse thoroughly with hot water afterward until no alcohol smell remains before using again. For stubborn buildup, let it soak 30 minutes to a few hours before shaking. Never use a piece you'll heat directly until it's fully rinsed — residual alcohol vapor is unpleasant and unsafe to inhale."
+  },
+  {
+    "id": "g24",
+    "title": "Cleaning a grinder without losing your kief",
+    "category": "Cleaning & Gear Care",
+    "author": "Maya",
+    "likes": 36,
+    "body": "If your grinder has a kief catcher, empty and use that kief before deep-cleaning — a wash resets it to zero. Freeze the grinder for 10-15 minutes first; cold makes stuck resin brittle and easier to brush or tap loose with an old toothbrush. For a full clean, disassemble and soak the pieces in isopropyl alcohol for 20-30 minutes, then scrub and rinse well. Let every piece air-dry completely before reassembling — trapped alcohol residue affects flavor."
+  },
+  {
+    "id": "g25",
+    "title": "Cleaning a dab rig or nail",
+    "category": "Cleaning & Gear Care",
+    "author": "Sam",
+    "likes": 27,
+    "body": "For the nail or banger itself, the best clean happens right after a dab: while it's still warm (not hot), wipe with a cotton swab to remove residual oil before it hardens. For the water chamber, the same salt-and-isopropyl shake used for bongs works well. A dirty nail affects flavor more than almost anything else in a dab setup, so wiping after every use — rather than deep-cleaning occasionally — keeps hits consistently clean-tasting."
+  },
+  {
+    "id": "g26",
+    "title": "Cleaning a vaporizer",
+    "category": "Cleaning & Gear Care",
+    "author": "Priya",
+    "likes": 22,
+    "body": "Dry-herb vaporizer chambers and screens build up resin faster than most people expect, and it can restrict airflow if ignored. Brush loose material out after every few sessions with the small brush most vapes include, and do a deeper isopropyl-dipped cotton swab clean on the chamber and mouthpiece every couple of weeks. Never submerge the heating element or electronic components in liquid — check your specific model's manual, since battery vapes and dry-herb vapes have different safe-cleaning parts."
+  },
+  {
+    "id": "g27",
+    "title": "Odor control and storage between sessions",
+    "category": "Cleaning & Gear Care",
+    "author": "Jordan",
+    "likes": 19,
+    "body": "A small container of activated charcoal or a dedicated smell-proof bag in your storage area does more for ongoing odor control than any spray. Keep pipes and bongs empty of standing water between uses — stagnant bong water is the single biggest source of stale odor and also grows bacteria surprisingly fast. Store papers, grinders, and gear together in one dedicated container so residue doesn't transfer onto unrelated items in a bag or drawer."
   }
 ]
