@@ -418,6 +418,8 @@ function pageStrainDetail(req, res, id) {
   if (!s) return notFound(res);
   const userId = auth.currentUserId(req);
   const history = db.listCheckins({ userId, strain_id: id, limit: 10 });
+  const ratingStats = db.getStrainRatingStats(id);
+  const similar = db.getSimilarStrains(s, 4);
   const body = `
     <a href="/strains" class="empty-note">← Back to library</a>
     <div class="card" style="margin-top:10px;">
@@ -426,6 +428,7 @@ function pageStrainDetail(req, res, id) {
         <div>
           <h1 style="margin:0;font-size:19px;">${esc(s.name)}</h1>
           <div class="empty-note" style="padding:0;">${esc(s.type)}${s.lean ? ' · ' + esc(s.lean) : ''} · <span class="rarity-tag rarity-${s.rarity}">${rarityLabel(s.rarity)}</span></div>
+          ${ratingStats.count ? `<div style="margin-top:2px;">${starString(Math.round(ratingStats.avg))} <span class="empty-note" style="padding:0;">${ratingStats.avg}★ from ${ratingStats.count} check-in${ratingStats.count === 1 ? '' : 's'}</span></div>` : `<div class="empty-note" style="padding:2px 0 0;">No community ratings yet — be the first to check in.</div>`}
         </div>
       </div>
       <p style="margin:12px 0 4px;"><b>THC:</b> ${esc(s.thc)} &nbsp; <b>CBD:</b> ${esc(s.cbd)}</p>
@@ -439,6 +442,17 @@ function pageStrainDetail(req, res, id) {
       ` : ''}
     </div>
     <a class="btn block" href="/checkin?strain=${s.id}">＋ Check in this strain</a>
+    ${similar.length ? `
+      <h2 class="screen-title" style="margin-top:20px;">If you like this, try...</h2>
+      <div class="hcarousel">
+        ${similar.map(r => `
+          <a class="rec-card rarity-${r.s.rarity}" href="/strains/${r.s.id}">
+            ${strainPhotoTag(r.s, 'sm')}
+            <span class="n">${esc(r.s.name)}</span>
+            <span class="why">${r.why ? 'Shares ' + esc(r.why) : 'Similar profile'}</span>
+          </a>`).join('')}
+      </div>
+    ` : ''}
     <h2 class="screen-title" style="margin-top:20px;">Your history with this strain</h2>
     ${history.length ? `
       <p class="empty-note">Last had: <span class="local-time" data-utc="${history[0].created_at}Z">${esc(history[0].created_at)} UTC</span></p>
@@ -510,7 +524,8 @@ function pageCheckinForm(req, res, query, existing) {
       ${isEdit ? '' : `<p class="empty-note" id="strain-picker-hint" ${s ? 'style="display:none;"' : ''}>Tip: search from <a href="/strains">the Strain Library</a> and tap "Check in" on the strain page for a pre-filled form.</p>`}
 
       <label class="field-label">Method</label>
-      <select name="method">${METHOD_GROUPS.map(g => `<optgroup label="${esc(g.group)}">${g.items.map(m => `<option ${existing && existing.method === m ? 'selected' : ''}>${esc(m)}</option>`).join('')}</optgroup>`).join('')}</select>
+      <select name="method" id="checkin-method-select" onchange="toggleEdibleWarning(this.value)">${METHOD_GROUPS.map(g => `<optgroup label="${esc(g.group)}">${g.items.map(m => `<option ${existing && existing.method === m ? 'selected' : ''}>${esc(m)}</option>`).join('')}</optgroup>`).join('')}</select>
+      <div class="dosing-note" id="edible-warning" style="display:none;">⚠️ Edibles can take up to 2 hours to fully kick in. Redosing too early — before you feel the first dose — is the most common cause of an uncomfortable experience. Wait it out before taking more.</div>
 
       <label class="field-label">Rating</label>
       <select name="rating">${[5, 4, 3, 2, 1].map(n => `<option value="${n}" ${existing && existing.rating === n ? 'selected' : ''}>${starString(n)}</option>`).join('')}</select>
@@ -555,6 +570,12 @@ function pageCheckinForm(req, res, query, existing) {
       window.EFFECT_VOCAB = ${JSON.stringify(EFFECT_VOCAB)};
       window.INITIAL_EFFECTS = ${JSON.stringify(existing ? existing.effects || [] : [])};
       window.INITIAL_PHOTO = ${JSON.stringify(existing ? existing.photo || '' : '')};
+      window.EDIBLE_METHODS = ${JSON.stringify(METHOD_GROUPS.find(g => g.group === 'Edibles').items)};
+      function toggleEdibleWarning(method) {
+        const box = document.getElementById('edible-warning');
+        if (box) box.style.display = window.EDIBLE_METHODS.includes(method) ? 'block' : 'none';
+      }
+      toggleEdibleWarning(document.getElementById('checkin-method-select').value);
     </script>
   `;
   sendHtml(res, layout({ title: isEdit ? 'Edit Check-In' : 'Check In', active: 'strains', body, isAdmin: auth.isAdmin(req) }));
@@ -1069,6 +1090,114 @@ function pageOnboarding(req, res) {
   sendHtml(res, layout({ title: 'Welcome', body, isAdmin: auth.isAdmin(req) }));
 }
 
+// "Find your first strain" quiz -- a lightweight 3-question filter over the
+// same THC-bucket logic already used by the Strain Library's filters, plus
+// simple effect-tag scoring. Not a medical tool, just a starting point for
+// someone facing 1,600+ strains with no idea where to begin.
+const QUIZ_FEEL_TAGS = {
+  relaxed: ['Relaxed', 'Sleepy', 'Calm'],
+  happy: ['Happy', 'Social', 'Euphoric'],
+  creative: ['Creative', 'Focused', 'Uplifted'],
+  energetic: ['Energetic', 'Uplifted', 'Talkative'],
+};
+const QUIZ_TIME_TAGS = {
+  morning: ['Energetic', 'Focused', 'Creative', 'Uplifted'],
+  evening: ['Relaxed', 'Sleepy', 'Calm'],
+  anytime: [],
+};
+function pageQuiz(req, res, query) {
+  const exp = query.get('exp') || '';
+  const feel = query.get('feel') || '';
+  const time = query.get('time') || '';
+  const answered = exp && feel && time;
+  let results = [];
+  if (answered) {
+    const thcFilter = exp === 'new' ? 'Low' : exp === 'some' ? 'Medium' : 'All';
+    const candidates = db.listStrains({ thc: thcFilter, limit: 500 });
+    const feelTags = QUIZ_FEEL_TAGS[feel] || [];
+    const timeTags = QUIZ_TIME_TAGS[time] || [];
+    const scored = candidates.map(s => {
+      const feelHits = s.effects.filter(e => feelTags.includes(e)).length;
+      const timeHits = s.effects.filter(e => timeTags.includes(e)).length;
+      return { s, score: feelHits * 2 + timeHits };
+    }).sort((a, b) => b.score - a.score);
+    results = (scored[0] && scored[0].score > 0 ? scored.filter(x => x.score > 0) : scored).slice(0, 5).map(x => x.s);
+  }
+  const radioGroup = (name, opts, current) => opts.map(([val, label]) =>
+    `<label style="display:block;padding:10px 12px;margin-bottom:6px;border:1px solid var(--border);border-radius:10px;cursor:pointer;${current === val ? 'border-color:var(--brand-green);background:var(--brand-green-pale,#eef6ee);' : ''}">
+      <input type="radio" name="${name}" value="${val}" ${current === val ? 'checked' : ''} style="margin-right:8px;">${esc(label)}
+    </label>`).join('');
+  const body = `
+    <h1 class="screen-title">Find Your First Strain</h1>
+    <p class="screen-sub">Three quick questions, matched against real THC and effect data — a starting point, not a prescription.</p>
+    <form method="GET" action="/quiz">
+      <label class="field-label" style="margin-top:0;">How much cannabis experience do you have?</label>
+      ${radioGroup('exp', [['new', "I'm new to this"], ['some', 'Some experience'], ['experienced', 'Very experienced']], exp)}
+      <label class="field-label">What are you hoping to feel?</label>
+      ${radioGroup('feel', [['relaxed', 'Relaxed and calm'], ['happy', 'Happy and social'], ['creative', 'Creative and focused'], ['energetic', 'Energetic and active']], feel)}
+      <label class="field-label">When will you use it?</label>
+      ${radioGroup('time', [['morning', 'Morning / daytime'], ['evening', 'Evening / nighttime'], ['anytime', 'Anytime']], time)}
+      <button class="btn block" type="submit" style="margin-top:10px;">${answered ? 'Update Matches' : 'Find Matches'}</button>
+    </form>
+    ${answered ? `
+      <h2 class="screen-title" style="margin-top:20px;">Your matches</h2>
+      ${results.length ? results.map(s => `
+        <a class="library-row" href="/strains/${s.id}" style="text-decoration:none;color:inherit;">
+          ${strainPhotoTag(s, 'sm')}
+          <div class="info">
+            <div class="nm">${esc(s.name)}</div>
+            <div class="sub">${esc(s.type)} · THC ${esc(s.thc)} · ${s.effects.slice(0, 3).join(', ')}</div>
+          </div>
+        </a>`).join('') : `<div class="empty-note">No close matches — try a different combination above.</div>`}
+    ` : ''}
+  `;
+  sendHtml(res, layout({ title: 'Find Your First Strain', active: 'more', body, isAdmin: auth.isAdmin(req) }));
+}
+
+// Personal "your patterns" page -- distinct from /business, which is an
+// app-wide trending dashboard. This reflects one account's own check-in
+// history back at them: effects, type, method, and standout strains.
+function pageInsights(req, res) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const insights = db.getUserInsights(userId);
+  const body = `
+    <h1 class="screen-title">Your Patterns</h1>
+    ${!insights ? `<div class="empty-note">No check-ins logged yet — <a href="/checkin">log your first one</a> to start seeing your patterns here.</div>` : `
+      <p class="screen-sub">Based on your ${insights.totalCheckins} check-in${insights.totalCheckins === 1 ? '' : 's'} so far.</p>
+      ${insights.topEffects.length ? `
+        <div class="card">
+          <h2 style="margin:0 0 8px;font-size:15px;">Your most common effects</h2>
+          <p>${insights.topEffects.map(e => `<span class="filter-pill">${esc(e.name)} (${e.count})</span>`).join('')}</p>
+        </div>
+      ` : ''}
+      <div class="card" style="margin-top:12px;">
+        <h2 style="margin:0 0 8px;font-size:15px;">Your leanings</h2>
+        ${insights.topType ? `<p class="empty-note" style="padding:2px 0;">You gravitate toward <b>${esc(insights.topType.name)}</b> strains (${insights.topType.count} check-in${insights.topType.count === 1 ? '' : 's'}).</p>` : ''}
+        ${insights.topMethod ? `<p class="empty-note" style="padding:2px 0;">Your most-used method is <b>${esc(insights.topMethod.name)}</b>.</p>` : ''}
+        ${insights.topTerpene ? `<p class="empty-note" style="padding:2px 0;">Your check-ins lean heaviest on <b>${esc(insights.topTerpene)}</b> as a terpene.</p>` : ''}
+      </div>
+      ${insights.mostLoggedStrain ? `
+        <a class="library-row" href="/strains/${insights.mostLoggedStrain.strain.id}" style="text-decoration:none;color:inherit;margin-top:12px;">
+          ${strainPhotoTag(insights.mostLoggedStrain.strain, 'sm')}
+          <div class="info">
+            <div class="nm">Most logged: ${esc(insights.mostLoggedStrain.strain.name)}</div>
+            <div class="sub">${insights.mostLoggedStrain.count} check-in${insights.mostLoggedStrain.count === 1 ? '' : 's'}</div>
+          </div>
+        </a>` : ''}
+      ${insights.topRatedStrain ? `
+        <a class="library-row" href="/strains/${insights.topRatedStrain.strain.id}" style="text-decoration:none;color:inherit;margin-top:8px;">
+          ${strainPhotoTag(insights.topRatedStrain.strain, 'sm')}
+          <div class="info">
+            <div class="nm">Your highest rated: ${esc(insights.topRatedStrain.strain.name)}</div>
+            <div class="sub">${starString(Math.round(insights.topRatedStrain.avg))} (${insights.topRatedStrain.avg}★ average)</div>
+          </div>
+        </a>` : ''}
+    `}
+  `;
+  sendHtml(res, layout({ title: 'Your Patterns', active: 'more', body, isAdmin: auth.isAdmin(req) }));
+}
+
 function pageFeedback(req, res, query) {
   const userId = requireUser(req, res);
   if (userId == null) return;
@@ -1551,6 +1680,8 @@ function pageMore(req, res) {
     { href: '/chat', icon: '💬', t: 'Ask', s: 'Chat with the assistant' },
     { href: '/methods', icon: '/docs/joint-icon.png', t: 'Ways to Enjoy It', s: 'Every method, explained' },
     { href: '/concentrates', icon: '💠', t: 'Concentrates & Extracts', s: 'Kief, rosin, live resin & more' },
+    { href: '/quiz', icon: '🧭', t: 'Find Your First Strain', s: '3-question strain matcher' },
+    { href: '/insights', icon: '📊', t: 'Your Patterns', s: 'What your check-ins say about you' },
     { href: '/feedback', icon: '📝', t: 'Send Feedback', s: 'Bugs, ideas — anything' },
   ];
   // Hidden from this menu for now (not deleted — routes below still work if
@@ -2372,6 +2503,8 @@ const server = http.createServer(async (req, res) => {
     if (method === 'GET' && pathname === '/shop') return pageShop(req, res);
     if (method === 'POST' && (m = pathname.match(/^\/shop\/([^/]+)\/add$/))) return await handleShopAdd(req, res, m[1]);
     if (method === 'GET' && pathname === '/methods') return pageMethods(req, res);
+    if (method === 'GET' && pathname === '/quiz') return pageQuiz(req, res, url.searchParams);
+    if (method === 'GET' && pathname === '/insights') return pageInsights(req, res);
     if (method === 'GET' && pathname === '/concentrates') return pageConcentrates(req, res);
 
     return notFound(res);
