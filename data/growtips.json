@@ -240,5 +240,21 @@
     "author": "Priya",
     "likes": 24,
     "body": "The biggest outdoor mistake isn't a growing mistake at all — it's picking a strain whose flowering time doesn't fit the number of frost-free weeks available. Sativa-dominant strains often need 10-14 weeks of flowering and can get caught by early fall frost or rain in short-season climates. Indica-dominant and many hybrid strains finish faster, often 7-9 weeks, and are a safer bet outside of long growing regions. Autoflowering strains sidestep the issue entirely since they flower on a fixed timeline regardless of season length, making them the most forgiving choice for short or unpredictable summers."
+  },
+  {
+    "id": "g30",
+    "title": "Reading a seed bank listing before you buy",
+    "category": "Genetics & Seeds",
+    "author": "Sam",
+    "likes": 21,
+    "body": "A listing's indica/sativa split and THC range are usually averages from the breeder's own test plants, not a guarantee for every seed you get — cannabis is genetically variable, and even seeds from the same pack can express differently. Regular seeds produce both male and female plants (roughly 50/50), while feminized seeds are bred to produce almost exclusively females, which is what most home growers want since only female plants produce the buds people consume. Photoperiod, feminized, and autoflower are three separate traits that can combine in any way — a strain can be feminized and autoflowering at once, or feminized and photoperiod. Always check all three before buying, not just the strain name."
+  },
+  {
+    "id": "g31",
+    "title": "Why runoff water matters more than a fixed watering schedule",
+    "category": "Watering",
+    "author": "Jordan",
+    "likes": 27,
+    "body": "Watering on a strict schedule (like every 3 days) ignores how fast a specific pot, medium, and plant size actually dry out, which changes throughout the grow. A more reliable method: water until you see 10-20% of what you poured in come out the drainage holes as runoff, then don't water again until the pot feels noticeably lighter or the top inch or two of soil is dry to the touch. Runoff also flushes out built-up salts from nutrients between feedings, which helps prevent the nutrient lockout that shows up as leaf discoloration even when you're feeding correctly."
   }
 ]

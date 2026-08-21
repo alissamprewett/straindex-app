@@ -2793,5 +2793,91 @@
       "cannabis-infused honey",
       "cannabutter"
     ]
+  },
+  {
+    "id": "r100",
+    "title": "Cannabis-Infused Mashed Potatoes",
+    "time": "≈35 min",
+    "icon": "🥔",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "Creamy mashed potatoes finished with infused butter stirred in off the heat.",
+    "ingredients": [
+      "3 lbs potatoes, peeled and cubed",
+      "1/2 cup milk or cream",
+      "3-4 tbsp cannabis-infused butter",
+      "Salt and pepper to taste"
+    ],
+    "steps": [
+      "Boil the potatoes until fork-tender, about 15-20 minutes, then drain.",
+      "Warm the milk or cream separately (don't let it boil).",
+      "Mash the potatoes with the warm milk until smooth.",
+      "Once off the heat, stir in the infused butter until fully melted and combined — mixing it in after cooking keeps the potency intact.",
+      "Season with salt and pepper and serve immediately."
+    ],
+    "dosing": "Divide the infused butter's total THC by the number of servings the batch makes.",
+    "category": "Savory & Snacks",
+    "status": "approved",
+    "usesBase": [
+      "cannabutter"
+    ]
+  },
+  {
+    "id": "r101",
+    "title": "Cannabis-Infused Queso",
+    "time": "≈15 min",
+    "icon": "🧀",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "Warm, melty queso dip finished with infused oil stirred in at the end so the cheese stays hot without cooking off potency.",
+    "ingredients": [
+      "1 lb Velveeta or queso blanco, cubed",
+      "1 can diced tomatoes with green chilies",
+      "1/4 cup milk",
+      "2-3 tbsp cannabis-infused olive oil"
+    ],
+    "steps": [
+      "Melt the cheese with the tomatoes and milk in a saucepan over low heat, stirring often, until smooth.",
+      "Remove from heat once fully melted.",
+      "Stir in the infused olive oil, mixing thoroughly so it's evenly distributed through the dip.",
+      "Serve warm with tortilla chips."
+    ],
+    "dosing": "Divide the infused oil's total THC by the number of servings the whole batch makes.",
+    "category": "Savory & Snacks",
+    "status": "approved",
+    "usesBase": [
+      "cannabis-infused olive oil"
+    ]
+  },
+  {
+    "id": "r102",
+    "title": "Cannabis-Infused Ranch Dip",
+    "time": "≈10 min",
+    "icon": "🥕",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "A cold, creamy ranch dip with the infused oil whisked in raw — no heat involved, so no potency loss to worry about.",
+    "ingredients": [
+      "1 cup sour cream",
+      "1/2 cup mayonnaise",
+      "1 tbsp dried dill",
+      "1 tsp garlic powder",
+      "1 tsp onion powder",
+      "3 tbsp cannabis-infused olive oil"
+    ],
+    "steps": [
+      "Whisk together the sour cream, mayonnaise, dill, garlic powder, and onion powder in a bowl.",
+      "Whisk in the infused olive oil last, mixing thoroughly.",
+      "Chill for at least 30 minutes before serving with veggies, chips, or wings."
+    ],
+    "dosing": "Divide the infused oil's total THC by the number of servings the batch makes.",
+    "category": "Savory & Snacks",
+    "status": "approved",
+    "usesBase": [
+      "cannabis-infused olive oil"
+    ]
   }
 ]

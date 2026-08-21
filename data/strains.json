@@ -57547,5 +57547,129 @@
     "flavor": "Creamy tropical guava with sweet, sugary notes.",
     "icon": "🍈",
     "breeder": "Sherbinskis"
+  },
+  {
+    "id": "s1665",
+    "name": "Lava Cake",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "15–25%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Euphoric",
+      "Sleepy"
+    ],
+    "flavor": "Sweet chocolate and mint with a fruity twist.",
+    "icon": "🍫",
+    "breeder": "Cannarado Genetics"
+  },
+  {
+    "id": "s1666",
+    "name": "GMO Cookies",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20–28%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.35
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      },
+      {
+        "n": "Limonene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Euphoric",
+      "Sleepy"
+    ],
+    "flavor": "Pungent garlic and diesel with an earthy finish.",
+    "icon": "🧄",
+    "breeder": "Mamiko Seeds"
+  },
+  {
+    "id": "s1667",
+    "name": "Jet Fuel",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "16–20%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      },
+      {
+        "n": "Pinene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Energetic",
+      "Euphoric",
+      "Talkative"
+    ],
+    "flavor": "Pungent diesel with sweet, skunky undertones.",
+    "icon": "✈️",
+    "breeder": "303 Seeds"
+  },
+  {
+    "id": "s1668",
+    "name": "Cactus Cooler",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "14–23%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.25
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Creative",
+      "Focused",
+      "Uplifted"
+    ],
+    "flavor": "Sharp lemon and sweet wildflowers with citrus lime.",
+    "icon": "🌵",
+    "breeder": null
   }
 ]
