@@ -199,30 +199,6 @@ function getRecommendations(userId, limit = 4) {
   return scored.slice(0, limit);
 }
 
-// Badges, computed live from real app state (check-ins, trades, follows,
-// RSVPs, submitted recipes/grow-tips, cart) rather than hardcoded flags.
-function computeBadges(userId) {
-  const owned = db.getCollection(userId).map(o => o.strain);
-  const types = new Set(owned.map(s => s.type));
-  const checkinCount = db.listCheckins({ userId, limit: 1 }).length;
-  const anyPhoto = db.listCheckins({ userId, limit: 1000 }).some(c => c.photo);
-  return [
-    { id: 'b1', label: 'First Check-In', icon: '🌱', done: checkinCount >= 1 },
-    { id: 'b2', label: 'Explorer (5 cards)', icon: '🧭', done: db.getUniqueOwnedCount(userId) >= 5 },
-    { id: 'b3', label: 'Type Trifecta', icon: '🎯', done: types.has('Indica') && types.has('Sativa') && types.has('Hybrid') },
-    { id: 'b4', label: 'Landrace Hunter', icon: '🗺️', done: owned.some(s => s.rarity === 'rare' || s.rarity === 'legendary') },
-    { id: 'b5', label: 'Legendary Collector', icon: '👑', done: owned.some(s => s.rarity === 'legendary') },
-    { id: 'b6', label: 'First Trade', icon: '🔁', done: db.countTrades(userId) >= 1 },
-    { id: 'b7', label: 'Dispensary Scout', icon: '📍', done: db.anyDispensaryFollowed(userId) },
-    { id: 'b8', label: 'Event Goer', icon: '🎉', done: db.anyRsvped(userId) },
-    { id: 'b9', label: 'Recipe Contributor', icon: '✏️', done: db.hasUserApprovedRecipe(userId) },
-    { id: 'b10', label: 'Community Favorite', icon: '🌟', done: db.hasUserFavoriteRecipe(userId) },
-    { id: 'b11', label: 'Shopper', icon: '🛍️', done: db.getCartCount(userId) >= 1 },
-    { id: 'b12', label: 'Home Grower', icon: '🌱', done: db.hasUserSubmittedGrowTip(userId) },
-    { id: 'b13', label: 'Photographer', icon: '📸', done: anyPhoto },
-  ];
-}
-
 // ---------------------------------------------------------------- pages
 
 function pageHome(req, res) {
@@ -1390,11 +1366,10 @@ function pageMore(req, res) {
   // deleted, just hidden from the main menu until they're actually built out.
   // To bring one back: move its entry from comingSoonTiles into tiles below.
   const tiles = [
-    { href: '/collection', icon: '/docs/leaf-kudos.png', t: 'My Collection', s: 'Binder, badges & progress' },
+    { href: '/collection', icon: '/docs/leaf-kudos.png', t: 'My Collection', s: 'Your binder & rarity progress' },
     { href: '/trade', icon: '🔁', t: 'Trade', s: 'Swap dupes with real friends' },
     { href: '/history', icon: '🕐', t: 'Check-In History', s: 'Your full timeline' },
     { href: '/dispensaries', icon: '📍', t: 'Dispensaries', s: 'Locator & live menus' },
-    { href: '/badges', icon: '🏅', t: 'Badges', s: 'Full directory' },
     { href: '/strains', icon: '📇', t: 'Strain Library', s: `${db.countStrains().toLocaleString()}-strain rolodex` },
     { href: '/growing', icon: '🌱', t: 'Growing', s: 'Home-grow tips' },
     { href: '/faq', icon: '❓', t: 'FAQ', s: 'Strain school' },
@@ -1595,9 +1570,12 @@ function pageCollection(req, res) {
   const owned = db.getCollection(userId).sort((a, b) => a.strain.name.localeCompare(b.strain.name));
   const uniqueCount = db.getUniqueOwnedCount(userId);
   const totalStrains = db.countStrains();
-  const badges = computeBadges(userId);
-  const doneBadges = badges.filter(b => b.done).length;
   const pct = totalStrains ? Math.round((100 * uniqueCount) / totalStrains) : 0;
+
+  const rarityOrder = ['legendary', 'rare', 'uncommon', 'common'];
+  const rarityCounts = { common: 0, uncommon: 0, rare: 0, legendary: 0 };
+  owned.forEach(o => { if (rarityCounts[o.strain.rarity] != null) rarityCounts[o.strain.rarity]++; });
+  const rarestOwned = rarityOrder.map(r => owned.find(o => o.strain.rarity === r)).find(Boolean);
 
   const body = `
     <h1 class="screen-title">My Collection</h1>
@@ -1608,9 +1586,16 @@ function pageCollection(req, res) {
     <div class="collection-stats">
       <div class="stat-tile"><div class="num">${uniqueCount}/${totalStrains.toLocaleString()}</div><div class="lbl">Cards caught</div></div>
       <div class="stat-tile"><div class="num">${db.getTotalDupes(userId)}</div><div class="lbl">Tradeable dupes</div></div>
-      <div class="stat-tile"><div class="num">${doneBadges}/${badges.length}</div><div class="lbl">Badges</div></div>
+      <div class="stat-tile"><div class="num">${rarestOwned ? esc(rarityLabel(rarestOwned.strain.rarity)) : '—'}</div><div class="lbl">Rarest catch</div></div>
     </div>
     <div class="progress-bar"><div class="fill" style="width:${pct}%;"></div></div>
+
+    <div class="badge-row" style="margin-bottom:16px;">
+      <div class="badge-chip rarity-common" style="background:none;color:var(--ink-secondary);">Common: ${rarityCounts.common}</div>
+      <div class="badge-chip rarity-uncommon" style="background:none;color:var(--ink-secondary);">Uncommon: ${rarityCounts.uncommon}</div>
+      <div class="badge-chip rarity-rare" style="background:none;color:var(--ink-secondary);">Rare: ${rarityCounts.rare}</div>
+      <div class="badge-chip rarity-legendary" style="background:none;color:var(--ink-secondary);">Legendary: ${rarityCounts.legendary}</div>
+    </div>
 
     ${owned.length ? `<div class="binder-grid">
       ${owned.map(o => `
@@ -1620,9 +1605,6 @@ function pageCollection(req, res) {
           <div class="name">${esc(o.strain.name)}</div>
         </a>`).join('')}
     </div>` : `<div class="empty-note">No cards caught yet — <a href="/checkin">log a check-in</a> to unlock your first one.</div>`}
-
-    <h2 class="screen-title" style="margin-top:20px;">Badges</h2>
-    <div class="badge-row">${badges.map(b => `<div class="badge-chip ${b.done ? '' : 'locked'}">${b.icon} ${esc(b.label)}</div>`).join('')}</div>
   `;
   sendHtml(res, layout({ title: 'My Collection', active: 'more', body, isAdmin: auth.isAdmin(req) }));
 }
@@ -1726,15 +1708,13 @@ function pageFriendProfile(req, res, friendId) {
     return sendHtml(res, layout({ title: 'Profile', active: 'friends', body, isAdmin: auth.isAdmin(req) }));
   }
   const collection = db.getCollection(friendId);
-  const badges = computeBadges(friendId);
-  const earnedCount = badges.filter(b => b.done).length;
   const recentCheckins = db.listCheckins({ userId: friendId, limit: 10 });
   const body = `
     <a href="/friends" class="empty-note">← Back to Friends</a>
     <h1 class="screen-title" style="margin-top:8px;">👤 ${esc(friend.username)}</h1>
     <div class="card" style="display:flex;justify-content:space-around;text-align:center;margin-bottom:16px;">
-      <div><div style="font-size:20px;font-weight:700;">${collection.length}</div><div class="empty-note">Strains</div></div>
-      <div><div style="font-size:20px;font-weight:700;">${earnedCount}/${badges.length}</div><div class="empty-note">Badges</div></div>
+      <div><div style="font-size:20px;font-weight:700;">${collection.length}</div><div class="empty-note">Cards caught</div></div>
+      <div><div style="font-size:20px;font-weight:700;">${db.getTotalDupes(friendId)}</div><div class="empty-note">Tradeable dupes</div></div>
       <div><div style="font-size:20px;font-weight:700;">${recentCheckins.length}</div><div class="empty-note">Recent check-ins</div></div>
     </div>
     ${friendId !== userId ? `<a class="btn block secondary" href="/trade?friend=${friendId}" style="margin-bottom:16px;">🔁 Trade with ${esc(friend.username)}</a>` : ''}
@@ -2041,18 +2021,6 @@ async function handleShopAdd(req, res, id) {
 
 // ---------------------------------------------------------------- badges directory
 
-function pageBadges(req, res) {
-  const userId = requireUser(req, res);
-  if (userId == null) return;
-  const badges = computeBadges(userId);
-  const body = `
-    <h1 class="screen-title">Badges</h1>
-    <p class="screen-sub">${badges.filter(b => b.done).length} of ${badges.length} earned.</p>
-    <div class="badge-row">${badges.map(b => `<div class="badge-chip ${b.done ? '' : 'locked'}">${b.icon} ${esc(b.label)}</div>`).join('')}</div>
-  `;
-  sendHtml(res, layout({ title: 'Badges', active: 'more', body, isAdmin: auth.isAdmin(req) }));
-}
-
 // ---------------------------------------------------------------- consumption methods guide
 
 function pageMethods(req, res) {
@@ -2211,7 +2179,6 @@ const server = http.createServer(async (req, res) => {
     if (method === 'GET' && pathname === '/business') return pageBusiness(req, res);
     if (method === 'GET' && pathname === '/shop') return pageShop(req, res);
     if (method === 'POST' && (m = pathname.match(/^\/shop\/([^/]+)\/add$/))) return await handleShopAdd(req, res, m[1]);
-    if (method === 'GET' && pathname === '/badges') return pageBadges(req, res);
     if (method === 'GET' && pathname === '/methods') return pageMethods(req, res);
     if (method === 'GET' && pathname === '/concentrates') return pageConcentrates(req, res);
 
