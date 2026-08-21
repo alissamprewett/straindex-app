@@ -57175,5 +57175,222 @@
     "flavor": "Sweet dessert-like grape and vanilla cream.",
     "icon": "🍨",
     "breeder": "Cannarado Genetics"
+  },
+  {
+    "id": "s1652",
+    "name": "Animal Face",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "18–30%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.35
+      },
+      {
+        "n": "Humulene",
+        "p": 0.25
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Uplifted"
+    ],
+    "flavor": "Sweet mint with hints of nuts and pine.",
+    "icon": "🐾",
+    "breeder": "Seed Junky Genetics"
+  },
+  {
+    "id": "s1653",
+    "name": "Grape Gas",
+    "type": "Hybrid",
+    "lean": null,
+    "rarity": "uncommon",
+    "thc": "20–26%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.25
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Euphoric",
+      "Happy"
+    ],
+    "flavor": "Tart grape with a heavy diesel finish.",
+    "icon": "🍇",
+    "breeder": "Compound Genetics"
+  },
+  {
+    "id": "s1654",
+    "name": "Mochi Gelato",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20–26%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.25
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Euphoric",
+      "Sleepy"
+    ],
+    "flavor": "Sweet, creamy dough with dark berry and mint.",
+    "icon": "🍡",
+    "breeder": "Sherbinskis"
+  },
+  {
+    "id": "s1655",
+    "name": "Miracle Alien Cookies",
+    "type": "Hybrid",
+    "lean": null,
+    "rarity": "uncommon",
+    "thc": "20–27%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.35
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.25
+      },
+      {
+        "n": "Pinene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Uplifted",
+      "Focused",
+      "Relaxed"
+    ],
+    "flavor": "Zesty orange citrus with sweet floral undertones.",
+    "icon": "👽",
+    "breeder": "Capulator"
+  },
+  {
+    "id": "s1656",
+    "name": "Rainbow Sherbet",
+    "type": "Hybrid",
+    "lean": null,
+    "rarity": "uncommon",
+    "thc": "16–24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.25
+      },
+      {
+        "n": "Humulene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Uplifted",
+      "Creative",
+      "Relaxed"
+    ],
+    "flavor": "Sugary berry sherbet with a minty exhale.",
+    "icon": "🌈",
+    "breeder": "Apothecary Genetics"
+  },
+  {
+    "id": "s1657",
+    "name": "Pink Rozay",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "15–25%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.25
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Sleepy"
+    ],
+    "flavor": "Bright floral rosé notes over sweet berry and citrus.",
+    "icon": "🌹",
+    "breeder": "Cookies"
+  },
+  {
+    "id": "s1658",
+    "name": "Zoap",
+    "type": "Hybrid",
+    "lean": null,
+    "rarity": "rare",
+    "thc": "20–26%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.25
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Happy"
+    ],
+    "flavor": "Sweet floral and tropical fruit with a distinctive soapy-clean finish.",
+    "icon": "🧼",
+    "breeder": "Deo Farms"
   }
 ]
