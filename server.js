@@ -277,7 +277,10 @@ function pageHome(req, res) {
       const posterName = userNames.get(c.user_id) || 'Someone';
       const isMine = c.user_id === userId;
       return `<div class="feed-post">
-        ${friends.length ? `<div class="empty-note" style="padding:0 0 6px;font-weight:${isMine ? 'normal' : '700'};">${isMine ? 'You' : `<a href="/friends/${c.user_id}" style="color:inherit;">${esc(posterName)}</a>`}</div>` : ''}
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+          ${friends.length ? `<div class="empty-note" style="padding:0;font-weight:${isMine ? 'normal' : '700'};">${isMine ? 'You' : `<a href="/friends/${c.user_id}" style="color:inherit;">${esc(posterName)}</a>`}</div>` : '<div></div>'}
+          ${isMine ? `<a href="/checkin/${c.id}/edit" class="empty-note" style="padding:0;">Edit</a>` : ''}
+        </div>
         <a class="strain-chip" href="/strains/${c.strain_id}">
           ${strainPhotoTag(s, 'xs')}
           <span><b>${esc(s ? s.name : c.strain_id)}</b> ${s ? `<span class="rarity-tag rarity-${s.rarity}">${rarityLabel(s.rarity)}</span>` : ''}</span>
@@ -479,7 +482,7 @@ function pageCheckinForm(req, res, query, existing) {
           <div class="up-ic">📷</div>
           <div class="up-txt">Tap to snap or upload a photo of your bud<br>(optional — we'll show a placeholder if you skip it)</div>
         </div>
-        <input type="file" id="photo-file-input" accept="image/*" capture="environment" style="display:none;">
+        <input type="file" id="photo-file-input" accept="image/*" style="display:none;">
         <input type="hidden" name="photo" id="photo-data-input">
       </div>
 
