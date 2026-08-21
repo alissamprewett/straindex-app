@@ -57392,5 +57392,160 @@
     "flavor": "Sweet floral and tropical fruit with a distinctive soapy-clean finish.",
     "icon": "🧼",
     "breeder": "Deo Farms"
+  },
+  {
+    "id": "s1659",
+    "name": "Cap Junky",
+    "type": "Hybrid",
+    "lean": null,
+    "rarity": "rare",
+    "thc": "30–41%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.25
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Euphoric",
+      "Uplifted",
+      "Relaxed"
+    ],
+    "flavor": "Sour rotting fruit and diesel with peppery notes.",
+    "icon": "🧢",
+    "breeder": "Seed Junky Genetics / Capulator"
+  },
+  {
+    "id": "s1660",
+    "name": "Cherry Runtz",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20–26%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.25
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric"
+    ],
+    "flavor": "Sweet cherry candy with sour berry and gas.",
+    "icon": "🍒",
+    "breeder": null
+  },
+  {
+    "id": "s1661",
+    "name": "Motorbreath",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "25–28%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.35
+      },
+      {
+        "n": "Humulene",
+        "p": 0.2
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Euphoric",
+      "Sleepy"
+    ],
+    "flavor": "Heavy diesel and fuel with earthy, lemony notes.",
+    "icon": "🚗",
+    "breeder": "Pisces Genetics"
+  },
+  {
+    "id": "s1662",
+    "name": "Blue Cookies",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "17–28%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.25
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Happy"
+    ],
+    "flavor": "Sweet blueberry pastry with a doughy, fuel finish.",
+    "icon": "🍪",
+    "breeder": null
+  },
+  {
+    "id": "s1663",
+    "name": "Guava Gelato",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18–26%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Linalool",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.25
+      },
+      {
+        "n": "Limonene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Uplifted",
+      "Euphoric"
+    ],
+    "flavor": "Creamy tropical guava with sweet, sugary notes.",
+    "icon": "🍈",
+    "breeder": "Sherbinskis"
   }
 ]
