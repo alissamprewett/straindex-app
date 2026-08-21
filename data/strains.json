@@ -20545,7 +20545,7 @@
     "type": "Hybrid",
     "lean": "",
     "rarity": "common",
-    "thc": "16–20%",
+    "thc": "20–25%",
     "cbd": "<1%",
     "terps": [
       {
@@ -57111,5 +57111,69 @@
     "icon": "🍇",
     "id": "s1649",
     "breeder": "The Cali Connection"
+  },
+  {
+    "id": "s1650",
+    "name": "Ze Chem",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "rare",
+    "thc": "20–27%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.45
+      },
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Humulene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Energetic",
+      "Euphoric",
+      "Giggly",
+      "Uplifted"
+    ],
+    "flavor": "Sweet and fruity with sharp diesel and chemical notes.",
+    "icon": "🍬",
+    "breeder": "Phinest Cannabis"
+  },
+  {
+    "id": "s1651",
+    "name": "Sundae Driver",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "16–24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.4
+      },
+      {
+        "n": "Limonene",
+        "p": 0.28
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.22
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Uplifted",
+      "Happy",
+      "Euphoric"
+    ],
+    "flavor": "Sweet dessert-like grape and vanilla cream.",
+    "icon": "🍨",
+    "breeder": "Cannarado Genetics"
   }
 ]
