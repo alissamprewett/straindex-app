@@ -112,5 +112,29 @@
     "body": "By the time you see fine webbing, spider mites have already been established for a week or more — webbing is a late sign, not an early one. The actual early warning is stippling: tiny, scattered pale yellow or white dots on the top of a leaf where a mite has punctured a cell from underneath. Because it's scattered and irregular rather than a uniform color change, it's genuinely easy to confuse with early nutrient stress at a glance. The fastest way to tell them apart: flip a leaf over. If you see tiny moving specks (mites are only about 0.3–0.5mm) or fine webbing on the underside, it's mites, not a feed issue. A simple confirmation trick many growers use: hold a white sheet of paper under a suspect leaf and tap it gently — if tiny specks fall and start moving, that's your answer.",
     "source_name": "Happy Hydro — \"Spider Mites on Cannabis: How to Identify, Treat & Prevent Them\"",
     "source_url": "https://happyhydro.com/blogs/growing-cannabis/spider-mites-on-weed-plants-treatment-and-prevention"
+  },
+  {
+    "id": "g14",
+    "title": "Overwatering kills more first grows than underwatering",
+    "category": "Watering",
+    "author": "Sam",
+    "likes": 41,
+    "body": "A drooping plant gets blamed on 'needs more water' almost automatically, but yellowing leaves and soil that never dries out are classic overwatering signs, not thirst. Roots need oxygen as much as moisture — soil that's constantly wet suffocates them. Lift the pot: if it still feels heavy from the last watering, wait. As a rule of thumb, water when the top 1-2 inches of soil are dry to the touch, and water until you see runoff from the drainage holes, then let the pot dry back out before watering again."
+  },
+  {
+    "id": "g15",
+    "title": "pH swings cause more 'deficiency' symptoms than an actual lack of nutrients",
+    "category": "Nutrients & Feeding",
+    "author": "Priya",
+    "likes": 33,
+    "body": "Yellowing, spotting, or clawed leaves often get treated as a nutrient problem, but if your water or soil pH drifts outside 6.0-7.0 (soil) or 5.5-6.5 (hydro/coco), the plant can't absorb nutrients that are already right there in the medium — a lockout. Before adding more nutrients to fix a deficiency-looking symptom, test and correct pH first. Adding more of something the plant can't absorb usually makes things worse, not better."
+  },
+  {
+    "id": "g16",
+    "title": "Flushing before harvest: what it actually changes (and what it doesn't)",
+    "category": "Harvest & Curing",
+    "author": "Chris",
+    "likes": 28,
+    "body": "Flushing means watering with plain, pH'd water only for the final 1-2 weeks before harvest — no more nutrients. It won't lower THC or change potency, but many growers find it improves smoothness and taste by using up nutrient salts stored in the plant tissue, which can otherwise cause a harsh, chemical-tasting smoke. It's most worth doing if you've been feeding heavily; if you grow in soil with light feeding, the benefit is smaller."
   }
 ]
