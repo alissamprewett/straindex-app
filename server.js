@@ -2001,7 +2001,7 @@ function pageShop(req, res) {
     <div class="shop-grid">
       ${mock.shopItems.map(i => `
         <div class="shop-item">
-          <div class="ic">${i.icon.startsWith('/') ? `<img src="${i.icon}" alt="" class="shop-item-photo">` : i.icon}</div>
+          <div class="ic">${i.icon}</div>
           <div class="sn">${esc(i.name)}</div>
           <div class="sp">${esc(i.price)}</div>
           <form method="POST" action="/shop/${i.id}/add"><button type="submit">Add to Cart</button></form>
@@ -2029,7 +2029,7 @@ function pageMethods(req, res) {
     <p class="screen-sub">Every ingestion method, with realistic onset and duration windows.</p>
     ${mock.methodGuide.map(m => `
       <div class="method-guide-card">
-        <div class="mgtitle">${m.icon} ${esc(m.name)}</div>
+        <div class="mgtitle">${m.icon.startsWith('/') ? `<img src="${m.icon}" alt="" class="mg-icon-photo">` : m.icon} ${esc(m.name)}</div>
         <div class="mgstats"><span>Onset: ${esc(m.onset)}</span><span>Lasts: ${esc(m.duration)}</span></div>
         <div class="mgdesc">${esc(m.desc)}</div>
       </div>`).join('')}
