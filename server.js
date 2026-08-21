@@ -816,7 +816,7 @@ async function handleRecipeNewSubmit(req, res) {
 }
 
 function pageGrowing(req, res, query) {
-  const CATEGORIES = ['Watering', 'Lighting', 'Nutrients & Feeding', 'Pests & Disease', 'Training', 'Harvest & Curing', 'Genetics & Seeds', 'Indoor Setup', 'Outdoor Growing'];
+  const CATEGORIES = ['Plant Life Cycle', 'Watering', 'Lighting', 'Nutrients & Feeding', 'Pests & Disease', 'Training', 'Harvest & Curing', 'Genetics & Seeds', 'Indoor Setup', 'Outdoor Growing', 'Cleaning & Gear Care'];
   const cat = query.get('cat') || 'All';
   const tips = db.listGrowTips({ category: cat });
   const body = `
@@ -843,7 +843,7 @@ function pageGrowing(req, res, query) {
 }
 
 function pageGrowingNew(req, res) {
-  const CATEGORIES = ['Watering', 'Lighting', 'Nutrients & Feeding', 'Pests & Disease', 'Training', 'Harvest & Curing', 'Genetics & Seeds', 'Indoor Setup', 'Outdoor Growing'];
+  const CATEGORIES = ['Plant Life Cycle', 'Watering', 'Lighting', 'Nutrients & Feeding', 'Pests & Disease', 'Training', 'Harvest & Curing', 'Genetics & Seeds', 'Indoor Setup', 'Outdoor Growing', 'Cleaning & Gear Care'];
   const body = `
     <h1 class="screen-title">Share a Grow Tip</h1>
     <form method="POST" action="/growing/new">
