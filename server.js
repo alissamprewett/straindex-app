@@ -529,6 +529,79 @@ const EFFECT_VOCAB = [
 // Every ingestion method the original research turned up, grouped exactly
 // like the prototype (rendered here as <optgroup>s so it stays a plain,
 // dependency-free <select>).
+// Cannabis legal status by US state/territory. Categories:
+//   'recreational' -- adults 21+ can legally purchase/possess without a medical card
+//   'medical'      -- legal only for registered patients with qualifying conditions
+//   'cbd_only'     -- legal only for very low-THC / high-CBD products, not full medical
+//   'illegal'      -- no legal program of any kind (may still have decriminalization,
+//                     noted individually where that's true)
+// IMPORTANT: this changes often -- ballot measures, legislatures, and court rulings
+// shift a state's status with little notice. LEGAL_STATUS_LAST_VERIFIED should be
+// updated whenever this list is rechecked against current sources, and the page
+// itself carries a strong "verify locally" disclaimer rather than presenting this
+// as a legal guarantee. Marijuana remains illegal under federal law everywhere in
+// the US regardless of state status.
+const LEGAL_STATUS_LAST_VERIFIED = '2026-06-01';
+const LEGAL_STATUS = [
+  { state: 'Alabama', status: 'medical', note: 'Medical program for qualifying conditions; no recreational sales.' },
+  { state: 'Alaska', status: 'recreational', note: 'Adult-use legal since 2015; licensed retail available.' },
+  { state: 'Arizona', status: 'recreational', note: 'Adult-use legal since 2020.' },
+  { state: 'Arkansas', status: 'medical', note: 'Medical program for qualifying conditions; no recreational sales.' },
+  { state: 'California', status: 'recreational', note: 'Adult-use legal since 2016.' },
+  { state: 'Colorado', status: 'recreational', note: 'One of the first two adult-use states, legal since 2012.' },
+  { state: 'Connecticut', status: 'recreational', note: 'Adult-use legal since 2021.' },
+  { state: 'Delaware', status: 'recreational', note: 'Adult-use legal since 2023.' },
+  { state: 'Florida', status: 'medical', note: 'Medical program only; a 2024 recreational ballot measure fell short of the required supermajority.' },
+  { state: 'Georgia', status: 'cbd_only', note: 'Low-THC medical program only, not full-plant medical or recreational.' },
+  { state: 'Hawaii', status: 'medical', note: 'Medical program for qualifying conditions; no recreational sales.' },
+  { state: 'Idaho', status: 'illegal', note: 'No legal program of any kind, medical or recreational.' },
+  { state: 'Illinois', status: 'recreational', note: 'Adult-use legal since 2020.' },
+  { state: 'Indiana', status: 'cbd_only', note: 'Low-THC CBD products only; no medical or recreational program.' },
+  { state: 'Iowa', status: 'cbd_only', note: 'Very restrictive low-THC medical program only.' },
+  { state: 'Kansas', status: 'illegal', note: 'No legal program of any kind, medical or recreational.' },
+  { state: 'Kentucky', status: 'medical', note: 'Medical program for qualifying conditions; no recreational sales.' },
+  { state: 'Louisiana', status: 'medical', note: 'Medical program for qualifying conditions; no recreational sales.' },
+  { state: 'Maine', status: 'recreational', note: 'Adult-use legal since 2016.' },
+  { state: 'Maryland', status: 'recreational', note: 'Adult-use legal since 2022.' },
+  { state: 'Massachusetts', status: 'recreational', note: 'Adult-use legal since 2016.' },
+  { state: 'Michigan', status: 'recreational', note: 'Adult-use legal since 2018.' },
+  { state: 'Minnesota', status: 'recreational', note: 'Adult-use legal since 2023.' },
+  { state: 'Mississippi', status: 'medical', note: 'Medical program for qualifying conditions; no recreational sales.' },
+  { state: 'Missouri', status: 'recreational', note: 'Adult-use legal since 2022.' },
+  { state: 'Montana', status: 'recreational', note: 'Adult-use legal since 2020.' },
+  { state: 'Nebraska', status: 'medical', note: 'Medical program approved by voters; implementation has faced legal challenges, so confirm current availability locally.' },
+  { state: 'Nevada', status: 'recreational', note: 'Adult-use legal since 2016.' },
+  { state: 'New Hampshire', status: 'medical', note: 'Medical program only; recreational proposals have repeatedly failed to pass.' },
+  { state: 'New Jersey', status: 'recreational', note: 'Adult-use legal since 2020; among the higher possession limits nationally.' },
+  { state: 'New Mexico', status: 'recreational', note: 'Adult-use legal since 2021.' },
+  { state: 'New York', status: 'recreational', note: 'Adult-use legal since 2021.' },
+  { state: 'North Carolina', status: 'illegal', note: 'No medical or recreational program, though small possession has been decriminalized to a civil fine since 1977.' },
+  { state: 'North Dakota', status: 'medical', note: 'Medical program for qualifying conditions; no recreational sales.' },
+  { state: 'Ohio', status: 'recreational', note: 'Adult-use legal since 2023; retail sales began in 2024.' },
+  { state: 'Oklahoma', status: 'medical', note: 'Broad medical program with relatively accessible qualifying conditions; no recreational sales.' },
+  { state: 'Oregon', status: 'recreational', note: 'Adult-use legal since 2014.' },
+  { state: 'Pennsylvania', status: 'medical', note: 'Medical program only; often cited as the most likely next state to pursue recreational legalization.' },
+  { state: 'Rhode Island', status: 'recreational', note: 'Adult-use legal since 2022.' },
+  { state: 'South Carolina', status: 'illegal', note: 'No legal program of any kind, medical or recreational.' },
+  { state: 'South Dakota', status: 'medical', note: 'Medical program for qualifying conditions; a recreational ballot measure did not pass.' },
+  { state: 'Tennessee', status: 'cbd_only', note: 'Low-THC CBD products only; no medical or recreational program.' },
+  { state: 'Texas', status: 'cbd_only', note: "Compassionate Use Program covers specific conditions with a strict 0.5% THC cap; not full medical or recreational." },
+  { state: 'Utah', status: 'medical', note: 'Medical program for qualifying conditions; no recreational sales.' },
+  { state: 'Vermont', status: 'recreational', note: 'Adult-use legal since 2018; first state to legalize via legislature rather than ballot measure.' },
+  { state: 'Virginia', status: 'recreational', note: 'Adult-use possession legal since 2021, though retail sales have lagged behind legalization.' },
+  { state: 'Washington', status: 'recreational', note: 'One of the first two adult-use states, legal since 2012.' },
+  { state: 'West Virginia', status: 'medical', note: 'Medical program for qualifying conditions; no recreational sales.' },
+  { state: 'Wisconsin', status: 'cbd_only', note: 'Low-THC CBD products only; no medical or recreational program.' },
+  { state: 'Wyoming', status: 'illegal', note: 'No legal program of any kind, medical or recreational.' },
+  { state: 'Washington, D.C.', status: 'recreational', note: 'Adult possession and home cultivation are legal, but D.C. is barred by Congress from regulating commercial sales.' },
+];
+const LEGAL_STATUS_LABELS = {
+  recreational: { label: 'Recreational (21+)', color: '#1b5e3a' },
+  medical: { label: 'Medical only', color: '#8a6d1f' },
+  cbd_only: { label: 'Low-THC / CBD only', color: '#8a4a1f' },
+  illegal: { label: 'Illegal', color: '#8a1f2a' },
+};
+
 const METHOD_GROUPS = [
   { group: 'Smoking', items: ['Joint', 'Blunt', 'Pipe / Bowl', 'Bong / Bubbler', 'One-Hitter / Chillum', 'Gravity Bong', 'Infused Pre-Roll'] },
   { group: 'Vaping', items: ['Dry Herb Vaporizer', 'Vape Cartridge (510)', 'Disposable Vape Pen', 'Live Resin Cart', 'Desktop Vaporizer'] },
@@ -2026,6 +2099,7 @@ function pageMore(req, res) {
     { href: '/trade', icon: '🔁', t: 'Trade', s: 'Swap dupes with real friends' },
     { href: '/history', icon: '🕐', t: 'Check-In History', s: 'Your full timeline' },
     { href: '/dispensaries', icon: '📍', t: 'Dispensaries', s: 'Locator & live menus' },
+    { href: '/legal-status', icon: '⚖️', t: 'Is It Legal Near Me?', s: 'State-by-state cannabis law' },
     { href: '/faq', icon: '❓', t: 'FAQ', s: 'Strain school' },
     { href: '/chat', icon: '💬', t: 'Ask', s: 'Chat with the assistant' },
     { href: '/methods', icon: '/docs/joint-icon.png', t: 'Ways to Enjoy It', s: 'Every method, explained' },
@@ -2720,6 +2794,51 @@ function pageMethods(req, res) {
 // how each is made) rather than *how* (devices/techniques). THC ranges
 // come from real Washington state lab-testing data, cross-checked
 // against published sources — same standard used for the strain library.
+// State-by-state legal status lookup. Deliberately a simple dropdown/search
+// rather than GPS auto-detection -- reliably mapping coordinates to state
+// boundaries needs real geographic boundary data this app doesn't have, and
+// a wrong auto-detected state here is a much worse failure mode than for,
+// say, nearby dispensaries. A manual picker is slower by one tap but never
+// silently wrong.
+function pageLegalStatus(req, res, query) {
+  const selected = query.get('state') || '';
+  const sorted = [...LEGAL_STATUS].sort((a, b) => a.state.localeCompare(b.state));
+  const current = sorted.find(s => s.state === selected);
+  const grouped = {};
+  sorted.forEach(s => { (grouped[s.status] = grouped[s.status] || []).push(s); });
+  const body = `
+    <a href="/more" class="empty-note">← Back</a>
+    <h1 class="screen-title">Is It Legal Near Me?</h1>
+    <p class="screen-sub">Cannabis law is a fast-moving patchwork that changes with little notice. This is a starting point, not legal advice — always verify with your state's official government site before relying on it. Regardless of state law, cannabis remains illegal under federal law everywhere in the US.</p>
+    <p class="empty-note">Last checked against current sources: ${esc(LEGAL_STATUS_LAST_VERIFIED)}.</p>
+    <form method="GET" action="/legal-status" style="margin-bottom:16px;">
+      <label class="field-label" style="margin-top:0;">Pick your state</label>
+      <select name="state" onchange="this.form.submit()">
+        <option value="">Select a state...</option>
+        ${sorted.map(s => `<option value="${esc(s.state)}" ${selected === s.state ? 'selected' : ''}>${esc(s.state)}</option>`).join('')}
+      </select>
+    </form>
+    ${current ? `
+      <div class="card" style="border-left:4px solid ${LEGAL_STATUS_LABELS[current.status].color};margin-bottom:20px;">
+        <h2 style="margin:0 0 4px;font-size:17px;">${esc(current.state)}</h2>
+        <div style="font-weight:700;color:${LEGAL_STATUS_LABELS[current.status].color};margin-bottom:6px;">${esc(LEGAL_STATUS_LABELS[current.status].label)}</div>
+        <p style="margin:0;">${esc(current.note)}</p>
+      </div>
+    ` : ''}
+    <h2 class="screen-title" style="margin-top:8px;">Full list</h2>
+    ${Object.entries(LEGAL_STATUS_LABELS).map(([key, meta]) => `
+      <h3 style="font-size:13px;color:${meta.color};margin:16px 0 6px;">${esc(meta.label)}</h3>
+      ${(grouped[key] || []).map(s => `
+        <div class="card" style="padding:10px 14px;margin-bottom:6px;">
+          <b>${esc(s.state)}</b>
+          <p class="empty-note" style="padding:2px 0 0;">${esc(s.note)}</p>
+        </div>
+      `).join('')}
+    `).join('')}
+  `;
+  sendHtml(res, layout({ title: 'Is It Legal Near Me?', active: 'more', body, isAdmin: auth.isAdmin(req) }));
+}
+
 function pageConcentrates(req, res) {
   const body = `
     <h1 class="screen-title">Concentrates &amp; Extracts</h1>
@@ -2871,6 +2990,7 @@ const server = http.createServer(async (req, res) => {
     if (method === 'POST' && pathname === '/tolerance-break/start') return await handleToleranceBreakStart(req, res);
     if (method === 'POST' && pathname === '/tolerance-break/end') return await handleToleranceBreakEnd(req, res);
     if (method === 'GET' && pathname === '/concentrates') return pageConcentrates(req, res);
+    if (method === 'GET' && pathname === '/legal-status') return pageLegalStatus(req, res, url.searchParams);
 
     return notFound(res);
   } catch (err) {
