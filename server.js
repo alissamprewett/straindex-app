@@ -355,7 +355,15 @@ function pageHome(req, res) {
       return `<div class="feed-post">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
           ${friends.length ? `<div class="empty-note" style="padding:0;font-weight:${isMine ? 'normal' : '700'};">${isMine ? 'You' : `<a href="/friends/${c.user_id}" style="color:inherit;">${esc(posterName)}</a>`}</div>` : '<div></div>'}
-          ${isMine ? `<a href="/checkin/${c.id}/edit" class="empty-note" style="padding:0;">Edit</a>` : ''}
+          ${isMine ? `
+            <span>
+              <a href="/checkin/${c.id}/edit" class="empty-note" style="padding:0;">Edit</a>
+              <form method="POST" action="/checkin/${c.id}/delete" style="display:inline;margin-left:8px;" onsubmit="return confirm('Delete this check-in? This cannot be undone.')">
+                <input type="hidden" name="redirect_to" value="/">
+                <button type="submit" class="empty-note" style="padding:0;background:none;border:none;color:#a13a3a;cursor:pointer;font-size:inherit;">Delete</button>
+              </form>
+            </span>
+          ` : ''}
         </div>
         <a class="strain-chip" href="/strains/${c.strain_id}">
           ${strainPhotoTag(s, 'xs')}
@@ -492,6 +500,10 @@ function pageStrainDetail(req, res, id) {
           <div style="display:flex;justify-content:space-between;align-items:baseline;">
             <b>${esc(c.method)}</b>
             <a href="/checkin/${c.id}/edit" class="empty-note" style="padding:0;">Edit</a>
+            <form method="POST" action="/checkin/${c.id}/delete" style="display:inline;margin-left:8px;" onsubmit="return confirm('Delete this check-in? This cannot be undone.')">
+              <input type="hidden" name="redirect_to" value="/strains/${s.id}">
+              <button type="submit" class="empty-note" style="padding:0;background:none;border:none;color:#a13a3a;cursor:pointer;font-size:inherit;">Delete</button>
+            </form>
           </div>
           ${starString(c.rating)}
           <div class="empty-note" style="padding:2px 0 0;"><span class="local-time" data-utc="${c.created_at}Z">${esc(c.created_at)} UTC</span></div>
@@ -540,7 +552,9 @@ function pageCheckinForm(req, res, query, existing) {
   const strainId = existing ? existing.strain_id : (query.get('strain') || '');
   const s = strainId ? db.getStrain(strainId) : null;
   const isEdit = !!existing;
+  const backHref = s ? `/strains/${s.id}` : '/';
   const body = `
+    <a href="${backHref}" class="empty-note">← Back</a>
     <h1 class="screen-title">${isEdit ? 'Edit Check-In' : 'Check In'}</h1>
     ${isEdit ? `<p class="empty-note">Thoughts changed after the fact? That's normal, especially with edibles — update it below.</p>` : ''}
     <form method="POST" action="${isEdit ? `/checkin/${existing.id}/edit` : '/checkin'}" id="checkin-form">
@@ -654,6 +668,15 @@ async function handleCheckinEditSubmit(req, res, id) {
     pairing_entertainment: fields.pairing_entertainment || '', pairing_activity: fields.pairing_activity || '',
   });
   redirect(res, `/strains/${existing.strain_id}`);
+}
+async function handleCheckinDelete(req, res, id) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const existing = db.getCheckin(id);
+  if (!existing || existing.user_id !== userId) return notFound(res);
+  const f = await parseForm(req);
+  await db.deleteCheckin(id);
+  redirect(res, f.redirect_to || '/history');
 }
 
 function pageFaq(req, res, query) {
@@ -1193,6 +1216,7 @@ function pageCompare(req, res, query) {
     ['Flavor', a.flavor, b.flavor],
   ] : [];
   const body = `
+    <a href="/more" class="empty-note">← Back</a>
     <h1 class="screen-title">Compare Strains</h1>
     <p class="screen-sub">Pick two strains to see them side by side.</p>
     <div style="display:flex;gap:10px;margin-bottom:16px;">
@@ -1221,7 +1245,23 @@ function pageQuiz(req, res, query) {
   let results = [];
   if (answered) {
     const thcFilter = exp === 'new' ? 'Low' : exp === 'some' ? 'Medium' : 'All';
-    const candidates = db.listStrains({ thc: thcFilter, limit: 500 });
+    // listStrains() always sorts alphabetically before applying `limit` --
+    // fine for browsing, but deadly here: a capped limit meant the quiz was
+    // only ever scoring the first ~500 strains alphabetically within a THC
+    // bucket, and tied scores (common, since there are only a handful of
+    // effect tags to match against) fell back to that same alphabetical
+    // order via Array.sort's stability. Net effect: results always looked
+    // like "the first five A-named strains in this bucket," every time.
+    // Fix: pull every strain in the bucket (no meaningful cap at this
+    // scale), then shuffle before scoring so ties resolve randomly instead
+    // of alphabetically -- so retaking the quiz with the same answers
+    // actually surfaces different strains from the library, not the same
+    // five every time.
+    const candidates = db.listStrains({ thc: thcFilter, limit: 5000 });
+    for (let i = candidates.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [candidates[i], candidates[j]] = [candidates[j], candidates[i]];
+    }
     const feelTags = QUIZ_FEEL_TAGS[feel] || [];
     const timeTags = QUIZ_TIME_TAGS[time] || [];
     const scored = candidates.map(s => {
@@ -1236,6 +1276,7 @@ function pageQuiz(req, res, query) {
       <input type="radio" name="${name}" value="${val}" ${current === val ? 'checked' : ''} style="margin-right:8px;">${esc(label)}
     </label>`).join('');
   const body = `
+    <a href="/more" class="empty-note">← Back</a>
     <h1 class="screen-title">Find Your First Strain</h1>
     <p class="screen-sub">Three quick questions, matched against real THC and effect data — a starting point, not a prescription.</p>
     <form method="GET" action="/quiz">
@@ -1272,6 +1313,7 @@ function pageInsights(req, res) {
   const activeBreak = db.getActiveBreak(userId);
   const daysSince = (dateStr) => Math.max(0, Math.floor((Date.now() - new Date(dateStr + 'Z').getTime()) / 86400000));
   const body = `
+    <a href="/more" class="empty-note">← Back</a>
     <h1 class="screen-title">Your Patterns</h1>
     <div class="card" style="margin-bottom:14px;">
       <h2 style="margin:0 0 8px;font-size:15px;">🌿 Tolerance break</h2>
@@ -2098,6 +2140,10 @@ function pageHistory(req, res) {
           </div>
         </a>
         <a href="/checkin/${c.id}/edit" class="empty-note" style="padding:0 4px;">Edit</a>
+        <form method="POST" action="/checkin/${c.id}/delete" style="display:inline;" onsubmit="return confirm('Delete this check-in? This cannot be undone.')">
+          <input type="hidden" name="redirect_to" value="/history">
+          <button type="submit" class="empty-note" style="padding:0 4px;background:none;border:none;color:#a13a3a;cursor:pointer;font-size:inherit;">Delete</button>
+        </form>
       </div>`;
     }).join('') : `<div class="empty-note">No check-ins logged yet — <a href="/checkin">log your first one</a>.</div>`}
   `;
@@ -2580,6 +2626,7 @@ const server = http.createServer(async (req, res) => {
     if (method === 'GET' && (m = pathname.match(/^\/checkin\/(\d+)\/edit$/))) return pageCheckinEditForm(req, res, Number(m[1]));
     if (method === 'POST' && (m = pathname.match(/^\/checkin\/(\d+)\/edit$/))) return await handleCheckinEditSubmit(req, res, Number(m[1]));
     if (method === 'POST' && (m = pathname.match(/^\/checkin\/(\d+)\/comment$/))) return await handleCheckinComment(req, res, Number(m[1]));
+    if (method === 'POST' && (m = pathname.match(/^\/checkin\/(\d+)\/delete$/))) return await handleCheckinDelete(req, res, Number(m[1]));
     if (method === 'GET' && pathname === '/faq') return pageFaq(req, res, url.searchParams);
     if (method === 'GET' && pathname === '/recipes') return pageRecipes(req, res, url.searchParams);
     if (method === 'GET' && (m = pathname.match(/^\/recipes\/(\d+)$/))) return pageRecipeDetail(req, res, Number(m[1]));
