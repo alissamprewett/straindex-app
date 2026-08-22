@@ -473,6 +473,7 @@ function pageStrainDetail(req, res, id) {
       ` : ''}
     </div>
     <a class="btn block" href="/checkin?strain=${s.id}">＋ Check in this strain</a>
+    <a class="btn secondary block" href="/compare?a=${s.id}" style="margin-top:8px;">⚖️ Compare this strain</a>
     ${similar.length ? `
       <h2 class="screen-title" style="margin-top:20px;">If you like this, try...</h2>
       <div class="hcarousel">
@@ -2025,8 +2026,6 @@ function pageMore(req, res) {
     { href: '/trade', icon: '🔁', t: 'Trade', s: 'Swap dupes with real friends' },
     { href: '/history', icon: '🕐', t: 'Check-In History', s: 'Your full timeline' },
     { href: '/dispensaries', icon: '📍', t: 'Dispensaries', s: 'Locator & live menus' },
-    { href: '/strains', icon: '📇', t: 'Strain Library', s: `${db.countStrains().toLocaleString()}-strain rolodex` },
-    { href: '/growing', icon: '🌱', t: 'Growing', s: 'Home-grow tips' },
     { href: '/faq', icon: '❓', t: 'FAQ', s: 'Strain school' },
     { href: '/chat', icon: '💬', t: 'Ask', s: 'Chat with the assistant' },
     { href: '/methods', icon: '/docs/joint-icon.png', t: 'Ways to Enjoy It', s: 'Every method, explained' },
@@ -2034,12 +2033,15 @@ function pageMore(req, res) {
     { href: '/quiz', icon: '🧭', t: 'Find Your First Strain', s: '3-question strain matcher' },
     { href: '/compare', icon: '⚖️', t: 'Compare Strains', s: 'Side-by-side lookup' },
     { href: '/insights', icon: '📊', t: 'Your Patterns', s: 'What your check-ins say about you' },
+    { href: '/insights', icon: '🌿', t: 'Tolerance Break', s: 'Start, track, or end a break' },
     { href: '/feedback', icon: '📝', t: 'Send Feedback', s: 'Bugs, ideas — anything' },
   ];
   // Hidden from this menu for now (not deleted — routes below still work if
   // linked to directly): /events, /shop, /business. All three still run on
   // demo/mock data rather than anything real yet. To bring one back, add its
-  // tile object to the array above.
+  // tile object to the array above. /strains and /growing are also
+  // intentionally left out here since they're already one tap away on the
+  // bottom nav -- no need for a duplicate entry in this list too.
   const body = `
     <h1 class="screen-title">More</h1>
     ${user ? `
