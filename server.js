@@ -1324,7 +1324,7 @@ function pageCompare(req, res, query) {
   const a = aId ? db.getStrain(aId) : null;
   const b = bId ? db.getStrain(bId) : null;
   const pickerBox = (suffix, current) => `
-    <div style="flex:1;min-width:0;">
+    <div style="flex:1;min-width:0;position:relative;">
       ${current ? `
         <div class="card" style="display:flex;align-items:center;gap:8px;">
           ${strainPhotoTag(current, 'sm')}
