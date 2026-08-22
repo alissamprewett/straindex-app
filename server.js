@@ -355,15 +355,7 @@ function pageHome(req, res) {
       return `<div class="feed-post">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
           ${friends.length ? `<div class="empty-note" style="padding:0;font-weight:${isMine ? 'normal' : '700'};">${isMine ? 'You' : `<a href="/friends/${c.user_id}" style="color:inherit;">${esc(posterName)}</a>`}</div>` : '<div></div>'}
-          ${isMine ? `
-            <span>
-              <a href="/checkin/${c.id}/edit" class="empty-note" style="padding:0;">Edit</a>
-              <form method="POST" action="/checkin/${c.id}/delete" style="display:inline;margin-left:8px;" onsubmit="return confirm('Delete this check-in? This cannot be undone.')">
-                <input type="hidden" name="redirect_to" value="/">
-                <button type="submit" class="empty-note" style="padding:0;background:none;border:none;color:#a13a3a;cursor:pointer;font-size:inherit;">Delete</button>
-              </form>
-            </span>
-          ` : ''}
+          ${isMine ? `<a href="/checkin/${c.id}/edit" class="empty-note" style="padding:0;">Edit</a>` : ''}
         </div>
         <a class="strain-chip" href="/strains/${c.strain_id}">
           ${strainPhotoTag(s, 'xs')}
@@ -500,10 +492,6 @@ function pageStrainDetail(req, res, id) {
           <div style="display:flex;justify-content:space-between;align-items:baseline;">
             <b>${esc(c.method)}</b>
             <a href="/checkin/${c.id}/edit" class="empty-note" style="padding:0;">Edit</a>
-            <form method="POST" action="/checkin/${c.id}/delete" style="display:inline;margin-left:8px;" onsubmit="return confirm('Delete this check-in? This cannot be undone.')">
-              <input type="hidden" name="redirect_to" value="/strains/${s.id}">
-              <button type="submit" class="empty-note" style="padding:0;background:none;border:none;color:#a13a3a;cursor:pointer;font-size:inherit;">Delete</button>
-            </form>
           </div>
           ${starString(c.rating)}
           <div class="empty-note" style="padding:2px 0 0;"><span class="local-time" data-utc="${c.created_at}Z">${esc(c.created_at)} UTC</span></div>
@@ -612,6 +600,12 @@ function pageCheckinForm(req, res, query, existing) {
 
       <button class="btn block" type="submit" id="checkin-submit">${isEdit ? 'Save Changes' : '🔥 Light It Up'}</button>
     </form>
+    ${isEdit ? `
+      <form method="POST" action="/checkin/${existing.id}/delete" style="margin-top:10px;text-align:center;" onsubmit="return confirm('Delete this check-in? This cannot be undone.')">
+        <input type="hidden" name="redirect_to" value="/strains/${existing.strain_id}">
+        <button type="submit" style="background:none;border:none;color:#a13a3a;cursor:pointer;font-size:12px;padding:4px;">Delete this check-in</button>
+      </form>
+    ` : ''}
     <script>
       window.EFFECT_VOCAB = ${JSON.stringify(EFFECT_VOCAB)};
       window.INITIAL_EFFECTS = ${JSON.stringify(existing ? existing.effects || [] : [])};
@@ -2140,10 +2134,6 @@ function pageHistory(req, res) {
           </div>
         </a>
         <a href="/checkin/${c.id}/edit" class="empty-note" style="padding:0 4px;">Edit</a>
-        <form method="POST" action="/checkin/${c.id}/delete" style="display:inline;" onsubmit="return confirm('Delete this check-in? This cannot be undone.')">
-          <input type="hidden" name="redirect_to" value="/history">
-          <button type="submit" class="empty-note" style="padding:0 4px;background:none;border:none;color:#a13a3a;cursor:pointer;font-size:inherit;">Delete</button>
-        </form>
       </div>`;
     }).join('') : `<div class="empty-note">No check-ins logged yet — <a href="/checkin">log your first one</a>.</div>`}
   `;
