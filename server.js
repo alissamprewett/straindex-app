@@ -1106,7 +1106,8 @@ async function handleGoogleCallback(req, res, query) {
   const state = query.get('state');
   const cookies = auth.parseCookies(req);
   if (!code || !state || state !== cookies.google_oauth_state) {
-    return redirect(res, '/login?err=1');
+    console.error('Google sign-in: state mismatch or missing code', { hasCode: !!code, hasState: !!state, cookieState: cookies.google_oauth_state });
+    return redirect(res, '/login?err=google_state');
   }
   try {
     const tokenRes = await fetch('https://oauth2.googleapis.com/token', {
@@ -1121,13 +1122,21 @@ async function handleGoogleCallback(req, res, query) {
       }),
     });
     const tokenData = await tokenRes.json();
-    if (!tokenData.access_token) return redirect(res, '/login?err=1');
+    if (!tokenData.access_token) {
+      console.error('Google sign-in: token exchange failed', tokenData);
+      Sentry.captureException(new Error('Google token exchange failed: ' + JSON.stringify(tokenData)));
+      return redirect(res, '/login?err=google_token');
+    }
 
     const profileRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
       headers: { Authorization: `Bearer ${tokenData.access_token}` },
     });
     const profile = await profileRes.json();
-    if (!profile.sub || !profile.email) return redirect(res, '/login?err=1');
+    if (!profile.sub || !profile.email) {
+      console.error('Google sign-in: incomplete profile response', profile);
+      Sentry.captureException(new Error('Google userinfo missing sub/email: ' + JSON.stringify(profile)));
+      return redirect(res, '/login?err=google_profile');
+    }
 
     // 1) Already linked -- straight login.
     let user = db.getUserByGoogleId(profile.sub);
@@ -1158,7 +1167,9 @@ async function handleGoogleCallback(req, res, query) {
     res.setHeader('Set-Cookie', `google_pending=${encodeURIComponent(pending)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=600`);
     redirect(res, '/auth/google/finish');
   } catch (e) {
-    redirect(res, '/login?err=1');
+    console.error('Google sign-in: unexpected error in callback', e);
+    Sentry.captureException(e);
+    redirect(res, '/login?err=google_error');
   }
 }
 
@@ -1234,6 +1245,10 @@ function pageLogin(req, res, query) {
   const errMessages = {
     '1': 'Wrong username or password.',
     rate_limited: 'Too many failed attempts for this account. Try again in a few minutes, or reset your password.',
+    google_state: 'That Google sign-in link expired or was already used — try clicking "Continue with Google" again.',
+    google_token: "Google sign-in didn't complete on Google's end. Try again in a moment — if it keeps happening, let us know.",
+    google_profile: "Google didn't send back enough account info to sign you in. Try again, or use your username and password instead.",
+    google_error: "Something went wrong finishing Google sign-in. Try again, or use your username and password instead.",
   };
   const body = `
     <h1 class="screen-title">Log In</h1>
