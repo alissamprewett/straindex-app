@@ -159,6 +159,7 @@ function starString(n) { n = Number(n) || 0; return '★'.repeat(n) + '☆'.repe
 // actually filled in.
 function renderCheckinPairings(c) {
   return `
+    ${c.is_private ? `<div class="empty-note" style="padding:4px 0 0;font-weight:700;">🔒 Private — only visible to you</div>` : ''}
     ${c.tasting_notes ? `<div class="empty-note" style="padding:4px 0 0;">🍃 Tasting notes: ${esc(c.tasting_notes)}</div>` : ''}
     ${c.pairing_food ? `<div class="empty-note" style="padding:2px 0 0;">🍽️ Paired with: ${esc(c.pairing_food)}</div>` : ''}
     ${c.pairing_entertainment ? `<div class="empty-note" style="padding:2px 0 0;">🎵 Listening/watching: ${esc(c.pairing_entertainment)}</div>` : ''}
@@ -325,7 +326,7 @@ function pageHome(req, res) {
   const friends = db.listFriends(userId);
   const feedUserIds = [userId, ...friends.map(f => f.id)];
   const userNames = new Map([[userId, 'You'], ...friends.map(f => [f.id, f.username])]);
-  const recentCheckins = db.listCheckins({ userIds: feedUserIds, limit: 15 });
+  const recentCheckins = db.filterVisibleCheckins(db.listCheckins({ userIds: feedUserIds, limit: 30 }), userId).slice(0, 15);
   const recs = getRecommendations(userId, 4);
   const hasFollowedDispensaries = db.anyDispensaryFollowed(userId);
 
@@ -696,6 +697,11 @@ function pageCheckinForm(req, res, query, existing) {
       <label class="field-label">Activity Pairing</label>
       <input type="text" name="pairing_activity" placeholder="What you did while enjoying it" value="${existing ? esc(existing.pairing_activity || '') : ''}">
 
+      <label style="display:flex;align-items:center;gap:8px;margin-top:16px;cursor:pointer;">
+        <input type="checkbox" name="is_private" value="1" ${existing && existing.is_private ? 'checked' : ''} style="width:auto;margin:0;">
+        <span>🔒 Log privately — just for me, won't show in the feed</span>
+      </label>
+
       <button class="btn block" type="submit" id="checkin-submit">${isEdit ? 'Save Changes' : '🔥 Light It Up'}</button>
     </form>
     ${isEdit ? `
@@ -741,6 +747,7 @@ async function handleCheckinSubmit(req, res) {
     note: fields.note || '', effects, photo: photoUrl,
     tasting_notes: fields.tasting_notes || '', pairing_food: fields.pairing_food || '',
     pairing_entertainment: fields.pairing_entertainment || '', pairing_activity: fields.pairing_activity || '',
+    is_private: !!fields.is_private,
   });
   redirect(res, `/strains/${strainId}`);
 }
@@ -758,6 +765,7 @@ async function handleCheckinEditSubmit(req, res, id) {
     note: fields.note || '', effects, photo: photoUrl,
     tasting_notes: fields.tasting_notes || '', pairing_food: fields.pairing_food || '',
     pairing_entertainment: fields.pairing_entertainment || '', pairing_activity: fields.pairing_activity || '',
+    is_private: !!fields.is_private,
   });
   redirect(res, `/strains/${existing.strain_id}`);
 }
@@ -2859,7 +2867,7 @@ function pageFriendProfile(req, res, friendId) {
     return sendHtml(res, layout({ title: 'Profile', active: 'friends', body, isAdmin: auth.isAdmin(req) }));
   }
   const collection = db.getCollection(friendId);
-  const recentCheckins = db.listCheckins({ userId: friendId, limit: 10 });
+  const recentCheckins = db.filterVisibleCheckins(db.listCheckins({ userId: friendId, limit: 30 }), userId).slice(0, 10);
   const body = `
     <a href="/friends" class="empty-note">← Back to Friends</a>
     <h1 class="screen-title" style="margin-top:8px;">👤 ${esc(friend.username)}</h1>
