@@ -474,6 +474,12 @@ function pageStrainDetail(req, res, id) {
     </div>
     <a class="btn block" href="/checkin?strain=${s.id}">＋ Check in this strain</a>
     <a class="btn secondary block" href="/compare?a=${s.id}" style="margin-top:8px;">⚖️ Compare this strain</a>
+    ${userId != null ? `
+      <form method="POST" action="/wishlist/${s.id}/toggle" style="margin-top:8px;">
+        <input type="hidden" name="redirect_to" value="/strains/${s.id}">
+        <button type="submit" class="btn secondary block">${db.isInWishlist(userId, s.id) ? '★ Remove from Wishlist' : '☆ Add to Wishlist'}</button>
+      </form>
+    ` : ''}
     ${similar.length ? `
       <h2 class="screen-title" style="margin-top:20px;">If you like this, try...</h2>
       <div class="hcarousel">
@@ -1361,10 +1367,12 @@ function pageOnboarding(req, res) {
   const userId = requireUser(req, res);
   if (userId == null) return;
   const steps = [
-    { icon: '🌿', title: 'Welcome to StrainDex', body: 'Your personal cannabis journal — strains, recipes, and growing knowledge, all in one place.' },
+    { icon: '🌿', title: 'Welcome to StrainDex', body: 'Your personal cannabis journal — strains, recipes, growing knowledge, and a lot more, all in one place.' },
     { icon: '🔥', title: 'Log your first check-in', body: 'Tap "Light It Up" any time you try a strain — rate it, add tasting notes, and start your collection.' },
-    { icon: '📇', title: 'Explore the strain library', body: 'Browse real THC data, effects, and terpene profiles for every strain in the library.' },
+    { icon: '🧭', title: 'Not sure where to start?', body: 'Take the 3-question quiz to get matched to a starter strain, or hit "Surprise Me" for a random pick from the 1,600+ strain library.' },
+    { icon: '📊', title: 'See your own patterns', body: 'Your Patterns reflects your check-in history back at you — favorite effects, top strain type, even a tolerance break tracker.' },
     { icon: '🧑\u200d🤝\u200d🧑', title: 'Bring your friends', body: 'Add friends to see their check-ins, trade duplicate strain cards, and compare notes.' },
+    { icon: '⭐', title: 'A lot more in "More"', body: 'Compare strains side by side, check what’s trending, look up your state’s cannabis laws, keep a wishlist, and more — it’s all grouped by category in the More tab.' },
   ];
   const body = `
     <div class="card" style="text-align:center;padding:32px 20px;">
@@ -1469,6 +1477,122 @@ function pageCompare(req, res, query) {
     ` : `<div class="empty-note">Pick a strain in each box above to compare them.</div>`}
   `;
   sendHtml(res, layout({ title: 'Compare Strains', active: 'more', body, isAdmin: auth.isAdmin(req) }));
+}
+
+// "Surprise Me" -- picks one random strain the person hasn't checked into
+// yet and sends them straight to its page. Deliberately dumber than the
+// quiz: no preference-matching, just pure serendipity for someone who
+// wants to be shown something they'd never have found by browsing.
+function handleSurpriseMe(req, res) {
+  const userId = auth.currentUserId(req);
+  const all = db.listStrains({ limit: 5000 });
+  const tried = new Set(userId != null ? db.listCheckins({ userId, limit: 5000 }).map(c => c.strain_id) : []);
+  const untried = all.filter(s => !tried.has(s.id));
+  const pool = untried.length ? untried : all; // everyone's tried everything -- fall back to the full library
+  const pick = pool[Math.floor(Math.random() * pool.length)];
+  redirect(res, pick ? `/strains/${pick.id}` : '/strains');
+}
+
+// Wishlist toggle -- add/remove a strain, then bounce back to wherever the
+// person was (strain page, wishlist page, etc.) via a hidden redirect_to,
+// same pattern as check-in comments.
+async function handleWishlistToggle(req, res, strainId) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const f = await parseForm(req);
+  if (db.isInWishlist(userId, strainId)) {
+    await db.removeFromWishlist(userId, strainId);
+  } else {
+    await db.addToWishlist(userId, strainId);
+  }
+  redirect(res, f.redirect_to || `/strains/${strainId}`);
+}
+
+function pageWishlist(req, res) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const items = db.getWishlist(userId);
+  const body = `
+    <a href="/more" class="empty-note">← Back</a>
+    <h1 class="screen-title">Your Wishlist</h1>
+    <p class="screen-sub">Strains you've spotted and want to try next — separate from Collection, which only tracks what you've actually checked into.</p>
+    ${items.length ? items.map(s => `
+      <div class="library-row">
+        <a href="/strains/${s.id}" style="text-decoration:none;color:inherit;display:flex;flex:1;min-width:0;align-items:center;gap:10px;">
+          ${strainPhotoTag(s, 'sm')}
+          <div class="info">
+            <div class="nm">${esc(s.name)}</div>
+            <div class="sub">${esc(s.type)} · THC ${esc(s.thc)}</div>
+          </div>
+        </a>
+        <form method="POST" action="/wishlist/${s.id}/toggle">
+          <input type="hidden" name="redirect_to" value="/wishlist">
+          <button type="submit" class="empty-note" style="padding:0 6px;background:none;border:none;color:#a13a3a;cursor:pointer;font-size:inherit;">Remove</button>
+        </form>
+      </div>
+    `).join('') : `<div class="empty-note">Nothing here yet — browse the <a href="/strains">strain library</a> and tap "Add to Wishlist" on anything that catches your eye.</div>`}
+  `;
+  sendHtml(res, layout({ title: 'Your Wishlist', active: 'more', body, isAdmin: auth.isAdmin(req) }));
+}
+
+// Trending -- what the whole community has been checking into lately,
+// using data already collected for community ratings, just aggregated
+// over a recent window instead of all-time.
+function pageTrending(req, res) {
+  const userId = auth.currentUserId(req);
+  const windowDays = 7;
+  const cutoff = new Date(Date.now() - windowDays * 86400000).toISOString();
+  const recent = db.listCheckins({ limit: 100000 }).filter(c => (c.created_at + 'Z') >= cutoff);
+  const counts = {};
+  recent.forEach(c => { counts[c.strain_id] = (counts[c.strain_id] || 0) + 1; });
+  const ranked = Object.entries(counts)
+    .map(([id, count]) => ({ s: db.getStrain(id), count }))
+    .filter(x => x.s)
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 20);
+  const body = `
+    <a href="/more" class="empty-note">← Back</a>
+    <h1 class="screen-title">Trending This Week</h1>
+    <p class="screen-sub">The most checked-into strains across StrainDex in the last ${windowDays} days.</p>
+    ${ranked.length ? ranked.map((r, i) => `
+      <a class="library-row" href="/strains/${r.s.id}" style="text-decoration:none;color:inherit;">
+        <span style="font-weight:700;color:var(--ink-secondary);width:22px;text-align:center;">${i + 1}</span>
+        ${strainPhotoTag(r.s, 'sm')}
+        <div class="info">
+          <div class="nm">${esc(r.s.name)}</div>
+          <div class="sub">${r.count} check-in${r.count === 1 ? '' : 's'} this week</div>
+        </div>
+      </a>
+    `).join('') : `<div class="empty-note">No check-in data yet this week — check back soon.</div>`}
+  `;
+  sendHtml(res, layout({ title: 'Trending This Week', active: 'more', body, isAdmin: auth.isAdmin(req) }));
+}
+
+// Mixing cautions -- deliberately conservative, pattern-level guidance
+// only (matching the app's existing "not medical advice" framing), never
+// dosing specifics. General public-health caution categories, not a
+// comprehensive drug-interaction database.
+function pageMixingCautions(req, res) {
+  const cautions = [
+    { title: 'Alcohol', body: 'Combining cannabis and alcohol tends to intensify the effects of both, and impairment can hit harder and less predictably than either alone. This combination is also linked to a much higher risk of nausea ("greening out"). If combining at all, go slower and lower on both than you normally would with either individually.' },
+    { title: 'Sedatives & sleep medication', body: 'Cannabis is itself sedating for many people, and combining it with prescription sedatives, sleep aids, or benzodiazepines can compound drowsiness and impaired coordination well beyond what either produces alone. Talk to the prescribing doctor before combining.' },
+    { title: 'Stimulants', body: 'Combining cannabis with stimulants (including prescription ADHD medication or high caffeine intake) can mask how impaired or wired you actually are, since the two pull in different directions — makes it easy to misjudge your own state.' },
+    { title: 'Blood thinners & some heart/blood pressure medications', body: 'Cannabis can affect heart rate and blood pressure, and may interact with how the liver processes certain medications, including some blood thinners. This is genuinely a "talk to your doctor or pharmacist" situation, not a guess-and-check one.' },
+    { title: 'Driving or operating machinery', body: "Cannabis impairs reaction time and judgment in ways that don't always feel as obvious as alcohol impairment does. Treat any active THC in your system the same as you would being over a legal alcohol limit — don't drive." },
+    { title: 'Pregnancy & breastfeeding', body: 'Major health organizations advise against cannabis use during pregnancy and while breastfeeding due to potential effects on fetal and infant development. This one has clear medical consensus — talk to an OB or pediatrician directly rather than relying on general guidance here.' },
+  ];
+  const body = `
+    <a href="/more" class="empty-note">← Back</a>
+    <h1 class="screen-title">Mixing With Other Substances</h1>
+    <p class="screen-sub">General, pattern-level cautions — not medical advice, not a complete interaction database, and not a substitute for talking to a doctor or pharmacist about your specific medications.</p>
+    ${cautions.map(c => `
+      <div class="card" style="margin-bottom:10px;">
+        <h2 style="margin:0 0 6px;font-size:15px;">${esc(c.title)}</h2>
+        <p style="margin:0;">${esc(c.body)}</p>
+      </div>
+    `).join('')}
+  `;
+  sendHtml(res, layout({ title: 'Mixing With Other Substances', active: 'more', body, isAdmin: auth.isAdmin(req) }));
 }
 
 function pageQuiz(req, res, query) {
@@ -2088,34 +2212,57 @@ function apiAnalyticsSnapshot(req, res, query) {
 function pageMore(req, res) {
   const userId = auth.currentUserId(req);
   const user = userId != null ? db.getUserById(userId) : null;
-  // Only genuinely working features show up here. Features still using demo/
-  // mock data (Events, Shop, the Business preview) are intentionally left out
-  // of this list so people don't think they can do something real there —
-  // their routes/handlers still work if linked to directly, so nothing is
-  // deleted, just hidden from the main menu until they're actually built out.
-  // To bring one back: move its entry from comingSoonTiles into tiles below.
-  const tiles = [
-    { href: '/collection', icon: '/docs/leaf-kudos.png', t: 'My Collection', s: 'Your binder & rarity progress' },
-    { href: '/trade', icon: '🔁', t: 'Trade', s: 'Swap dupes with real friends' },
-    { href: '/history', icon: '🕐', t: 'Check-In History', s: 'Your full timeline' },
-    { href: '/dispensaries', icon: '📍', t: 'Dispensaries', s: 'Locator & live menus' },
-    { href: '/legal-status', icon: '⚖️', t: 'Is It Legal Near Me?', s: 'State-by-state cannabis law' },
-    { href: '/faq', icon: '❓', t: 'FAQ', s: 'Strain school' },
-    { href: '/chat', icon: '💬', t: 'Ask', s: 'Chat with the assistant' },
-    { href: '/methods', icon: '/docs/joint-icon.png', t: 'Ways to Enjoy It', s: 'Every method, explained' },
-    { href: '/concentrates', icon: '💠', t: 'Concentrates & Extracts', s: 'Kief, rosin, live resin & more' },
-    { href: '/quiz', icon: '🧭', t: 'Find Your First Strain', s: '3-question strain matcher' },
-    { href: '/compare', icon: '⚖️', t: 'Compare Strains', s: 'Side-by-side lookup' },
-    { href: '/insights', icon: '📊', t: 'Your Patterns', s: 'What your check-ins say about you' },
-    { href: '/insights', icon: '🌿', t: 'Tolerance Break', s: 'Start, track, or end a break' },
-    { href: '/feedback', icon: '📝', t: 'Send Feedback', s: 'Bugs, ideas — anything' },
+  // Grouped into sections rather than one long flat list -- this menu has
+  // grown a lot as features shipped, and a flat grid stops being scannable
+  // well before a dozen tiles. /strains and /growing are intentionally left
+  // out entirely since they're already one tap away on the bottom nav.
+  // Events/Shop/Business stay hidden too -- still running on demo data,
+  // not deleted, just not surfaced here until they're real.
+  const sections = [
+    {
+      title: 'Discover',
+      tiles: [
+        { href: '/quiz', icon: '🧭', t: 'Find Your First Strain', s: '3-question strain matcher' },
+        { href: '/compare', icon: '⚖️', t: 'Compare Strains', s: 'Side-by-side lookup' },
+        { href: '/surprise-me', icon: '🎲', t: 'Surprise Me', s: 'One random strain you haven\u2019t tried' },
+        { href: '/trending', icon: '🔥', t: 'Trending This Week', s: 'Most checked-into right now' },
+      ],
+    },
+    {
+      title: 'Your Journey',
+      tiles: [
+        { href: '/collection', icon: '/docs/leaf-kudos.png', t: 'My Collection', s: 'Your binder & rarity progress' },
+        { href: '/wishlist', icon: '⭐', t: 'Wishlist', s: 'Strains you want to try next' },
+        { href: '/history', icon: '🕐', t: 'Check-In History', s: 'Your full timeline' },
+        { href: '/insights', icon: '📊', t: 'Your Patterns', s: 'What your check-ins say about you' },
+        { href: '/insights', icon: '🌿', t: 'Tolerance Break', s: 'Start, track, or end a break' },
+      ],
+    },
+    {
+      title: 'Learn & Stay Safe',
+      tiles: [
+        { href: '/methods', icon: '/docs/joint-icon.png', t: 'Ways to Enjoy It', s: 'Every method, explained' },
+        { href: '/concentrates', icon: '💠', t: 'Concentrates & Extracts', s: 'Kief, rosin, live resin & more' },
+        { href: '/legal-status', icon: '⚖️', t: 'Is It Legal Near Me?', s: 'State-by-state cannabis law' },
+        { href: '/mixing-cautions', icon: '⚠️', t: 'Mixing With Other Substances', s: 'General cautions, not medical advice' },
+        { href: '/faq', icon: '❓', t: 'FAQ', s: 'Strain school' },
+        { href: '/chat', icon: '💬', t: 'Ask', s: 'Chat with the assistant' },
+      ],
+    },
+    {
+      title: 'Community & Local',
+      tiles: [
+        { href: '/trade', icon: '🔁', t: 'Trade', s: 'Swap dupes with real friends' },
+        { href: '/dispensaries', icon: '📍', t: 'Dispensaries', s: 'Locator & live menus' },
+      ],
+    },
+    {
+      title: 'Support',
+      tiles: [
+        { href: '/feedback', icon: '📝', t: 'Send Feedback', s: 'Bugs, ideas — anything' },
+      ],
+    },
   ];
-  // Hidden from this menu for now (not deleted — routes below still work if
-  // linked to directly): /events, /shop, /business. All three still run on
-  // demo/mock data rather than anything real yet. To bring one back, add its
-  // tile object to the array above. /strains and /growing are also
-  // intentionally left out here since they're already one tap away on the
-  // bottom nav -- no need for a duplicate entry in this list too.
   const body = `
     <h1 class="screen-title">More</h1>
     ${user ? `
@@ -2126,9 +2273,12 @@ function pageMore(req, res) {
           <form method="POST" action="/logout"><button class="btn secondary" type="submit">Log out</button></form>
         </div>
       </div>` : ''}
-    <div class="more-grid">
-      ${tiles.map(t => `<a class="more-tile" href="${t.href}"><span class="ic">${t.icon.startsWith('/') ? `<img src="${t.icon}" alt="" class="ic-img-lg">` : t.icon}</span><div class="t">${esc(t.t)}</div><div class="s">${esc(t.s)}</div></a>`).join('')}
-    </div>
+    ${sections.map(sec => `
+      <div class="section-label" style="margin-top:18px;">${esc(sec.title)}</div>
+      <div class="more-grid">
+        ${sec.tiles.map(t => `<a class="more-tile" href="${t.href}"><span class="ic">${t.icon.startsWith('/') ? `<img src="${t.icon}" alt="" class="ic-img-lg">` : t.icon}</span><div class="t">${esc(t.t)}</div><div class="s">${esc(t.s)}</div></a>`).join('')}
+      </div>
+    `).join('')}
   `;
   sendHtml(res, layout({ title: 'More', active: 'more', body, isAdmin: auth.isAdmin(req) }));
 }
@@ -2991,6 +3141,11 @@ const server = http.createServer(async (req, res) => {
     if (method === 'POST' && pathname === '/tolerance-break/end') return await handleToleranceBreakEnd(req, res);
     if (method === 'GET' && pathname === '/concentrates') return pageConcentrates(req, res);
     if (method === 'GET' && pathname === '/legal-status') return pageLegalStatus(req, res, url.searchParams);
+    if (method === 'GET' && pathname === '/surprise-me') return handleSurpriseMe(req, res);
+    if (method === 'GET' && pathname === '/wishlist') return pageWishlist(req, res);
+    if (method === 'POST' && (m = pathname.match(/^\/wishlist\/([^/]+)\/toggle$/))) return await handleWishlistToggle(req, res, m[1]);
+    if (method === 'GET' && pathname === '/trending') return pageTrending(req, res);
+    if (method === 'GET' && pathname === '/mixing-cautions') return pageMixingCautions(req, res);
 
     return notFound(res);
   } catch (err) {
