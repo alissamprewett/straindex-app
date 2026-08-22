@@ -479,6 +479,23 @@ function pageStrainDetail(req, res, id) {
         <input type="hidden" name="redirect_to" value="/strains/${s.id}">
         <button type="submit" class="btn secondary block">${db.isInWishlist(userId, s.id) ? '★ Remove from Wishlist' : '☆ Add to Wishlist'}</button>
       </form>
+      ${(() => {
+        const myLists = db.listCustomLists(userId);
+        return myLists.length ? `
+          <div class="card" style="margin-top:8px;">
+            <b style="font-size:13px;">Add to a list</b>
+            <p style="margin:6px 0 0;display:flex;flex-wrap:wrap;gap:6px;">
+              ${myLists.map(l => `
+                <form method="POST" action="/lists/${l.id}/items/${s.id}/toggle" style="display:inline;">
+                  <input type="hidden" name="redirect_to" value="/strains/${s.id}">
+                  <button type="submit" class="filter-pill ${db.isStrainInList(l.id, s.id) ? 'active' : ''}" style="border:none;cursor:pointer;">${db.isStrainInList(l.id, s.id) ? '✓ ' : '+ '}${esc(l.name)}</button>
+                </form>
+              `).join('')}
+            </p>
+            <p class="empty-note" style="padding:6px 0 0;"><a href="/lists">Manage your lists →</a></p>
+          </div>
+        ` : `<p class="empty-note" style="margin-top:8px;"><a href="/lists">Create a list</a> to organize strains your own way.</p>`;
+      })()}
     ` : ''}
     ${similar.length ? `
       <h2 class="screen-title" style="margin-top:20px;">If you like this, try...</h2>
@@ -1591,6 +1608,154 @@ async function handleGrowJournalDelete(req, res, id) {
   redirect(res, '/grow-journal');
 }
 
+// Social discovery: strains friends love that you haven't tried, using
+// data already collected -- no new tracking, just a new lens on it.
+function pageFriendsPicks(req, res) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const picks = db.getFriendsPicks(userId, 20);
+  const body = `
+    <a href="/more" class="empty-note">← Back</a>
+    <h1 class="screen-title">Friends' Picks</h1>
+    <p class="screen-sub">Strains your friends rated 4★ or higher that you haven't checked into yet.</p>
+    ${picks.length ? picks.map(p => `
+      <a class="library-row" href="/strains/${p.strain.id}" style="text-decoration:none;color:inherit;">
+        ${strainPhotoTag(p.strain, 'sm')}
+        <div class="info">
+          <div class="nm">${esc(p.strain.name)}</div>
+          <div class="sub">Loved by ${p.friendNames.map(esc).join(', ')} · ${p.avgRating}★ avg</div>
+        </div>
+      </a>
+    `).join('') : `<div class="empty-note">Nothing to show yet — either your friends haven't rated anything 4★+, or you've already tried everything they love. <a href="/friends">Add more friends</a> or check back later.</div>`}
+  `;
+  sendHtml(res, layout({ title: "Friends' Picks", active: 'more', body, isAdmin: auth.isAdmin(req) }));
+}
+
+// Custom personal lists -- as many as someone wants ("Morning strains",
+// "Date night"), distinct from the single fixed Wishlist.
+function pageLists(req, res) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const lists = db.listCustomLists(userId);
+  const body = `
+    <a href="/more" class="empty-note">← Back</a>
+    <h1 class="screen-title">Your Lists</h1>
+    <p class="screen-sub">Organize strains however makes sense to you — "Morning," "Date night," "Sleep," anything.</p>
+    <form method="POST" action="/lists" style="display:flex;gap:8px;margin-bottom:16px;">
+      <input type="text" name="name" placeholder="New list name..." required style="flex:1;margin:0;">
+      <button class="btn" type="submit" style="white-space:nowrap;">Create</button>
+    </form>
+    ${lists.length ? lists.map(l => {
+      const count = db.listCustomListItems(l.id).length;
+      return `
+      <div class="library-row">
+        <a href="/lists/${l.id}" style="text-decoration:none;color:inherit;flex:1;min-width:0;">
+          <div class="info">
+            <div class="nm">${esc(l.name)}</div>
+            <div class="sub">${count} strain${count === 1 ? '' : 's'}</div>
+          </div>
+        </a>
+        <form method="POST" action="/lists/${l.id}/delete" onsubmit="return confirm('Delete this list? The strains themselves aren\\'t affected, just this list.')">
+          <button type="submit" class="empty-note" style="padding:0 6px;background:none;border:none;color:#a13a3a;cursor:pointer;font-size:inherit;">Delete</button>
+        </form>
+      </div>`;
+    }).join('') : `<div class="empty-note">No lists yet — create your first one above.</div>`}
+  `;
+  sendHtml(res, layout({ title: 'Your Lists', active: 'more', body, isAdmin: auth.isAdmin(req) }));
+}
+function pageListDetail(req, res, id) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const list = db.getCustomList(Number(id));
+  if (!list || list.user_id !== userId) return notFound(res);
+  const items = db.listCustomListItems(list.id);
+  const body = `
+    <a href="/lists" class="empty-note">← Back to your lists</a>
+    <h1 class="screen-title">${esc(list.name)}</h1>
+    ${items.length ? items.map(s => `
+      <div class="library-row">
+        <a href="/strains/${s.id}" style="text-decoration:none;color:inherit;display:flex;flex:1;min-width:0;align-items:center;gap:10px;">
+          ${strainPhotoTag(s, 'sm')}
+          <div class="info">
+            <div class="nm">${esc(s.name)}</div>
+            <div class="sub">${esc(s.type)} · THC ${esc(s.thc)}</div>
+          </div>
+        </a>
+        <form method="POST" action="/lists/${list.id}/items/${s.id}/toggle">
+          <input type="hidden" name="redirect_to" value="/lists/${list.id}">
+          <button type="submit" class="empty-note" style="padding:0 6px;background:none;border:none;color:#a13a3a;cursor:pointer;font-size:inherit;">Remove</button>
+        </form>
+      </div>
+    `).join('') : `<div class="empty-note">Nothing here yet — browse the <a href="/strains">strain library</a> and add strains to this list from their page.</div>`}
+  `;
+  sendHtml(res, layout({ title: list.name, active: 'more', body, isAdmin: auth.isAdmin(req) }));
+}
+async function handleListCreate(req, res) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const f = await parseForm(req);
+  const name = String(f.name || '').trim();
+  if (name) await db.createCustomList(userId, name);
+  redirect(res, '/lists');
+}
+async function handleListDelete(req, res, id) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const list = db.getCustomList(Number(id));
+  if (!list || list.user_id !== userId) return notFound(res);
+  await db.deleteCustomList(Number(id));
+  redirect(res, '/lists');
+}
+async function handleListItemToggle(req, res, listId, strainId) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const list = db.getCustomList(Number(listId));
+  if (!list || list.user_id !== userId) return notFound(res);
+  const f = await parseForm(req);
+  if (db.isStrainInList(list.id, strainId)) {
+    await db.removeStrainFromList(list.id, strainId);
+  } else {
+    await db.addStrainToList(list.id, strainId);
+  }
+  redirect(res, f.redirect_to || `/strains/${strainId}`);
+}
+
+// Terpene guide -- built directly from the terpenes actually present in
+// the strain data, so "X strains" counts stay accurate as the library
+// grows rather than being hardcoded numbers that go stale.
+const TERPENE_GUIDE = {
+  Myrcene: { aroma: 'Earthy, musky, with a hint of ripe fruit', effects: 'Widely associated with relaxed, sedating effects — often cited in the (contested but popular) idea of an "indica couch-lock" feeling.' },
+  Linalool: { aroma: 'Floral, like lavender', effects: 'Commonly associated with calming, anti-anxiety effects — the same terpene that gives lavender its reputation for relaxation.' },
+  Limonene: { aroma: 'Bright citrus — lemon and orange peel', effects: 'Often associated with uplifted, elevated mood; also found in citrus fruit peels themselves.' },
+  Caryophyllene: { aroma: 'Peppery, spicy, woody', effects: 'Unusual among terpenes in that it can bind to the same receptors as cannabinoids; often associated with stress relief.' },
+  Pinene: { aroma: 'Sharp pine, like fresh rosemary', effects: 'Associated with alertness and focus; the same terpene responsible for the smell of pine forests.' },
+  Humulene: { aroma: 'Earthy, woody, slightly hoppy', effects: 'Also found in hops and used in beer brewing; often associated with mellow, subtle effects.' },
+  Terpinolene: { aroma: 'Complex — floral, herbal, with a hint of citrus and pine', effects: 'Less common as a dominant terpene; often associated with uplifted, slightly energetic effects.' },
+  Ocimene: { aroma: 'Sweet, herbal, slightly woody', effects: 'Often found alongside Limonene and Pinene; associated with uplifted, energizing effects.' },
+};
+function pageTerpeneGuide(req, res) {
+  const allStrains = db.listStrains({ limit: 5000 });
+  const counts = {};
+  allStrains.forEach(s => (s.terps || []).forEach(t => { counts[t.n] = (counts[t.n] || 0) + 1; }));
+  const entries = Object.entries(TERPENE_GUIDE).sort((a, b) => (counts[b[0]] || 0) - (counts[a[0]] || 0));
+  const body = `
+    <a href="/more" class="empty-note">← Back</a>
+    <h1 class="screen-title">Terpene Guide</h1>
+    <p class="screen-sub">Terpenes are the aromatic compounds behind a strain's smell and flavor. Effects here are commonly reported associations, not clinically proven outcomes — everyone responds differently.</p>
+    ${entries.map(([name, info]) => `
+      <div class="card" style="margin-bottom:10px;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;">
+          <h2 style="margin:0;font-size:16px;">${esc(name)}</h2>
+          <a href="/strains?terpene=${encodeURIComponent(name)}" class="empty-note" style="padding:0;">${counts[name] || 0} strains →</a>
+        </div>
+        <p style="margin:6px 0 2px;"><b>Aroma:</b> ${esc(info.aroma)}</p>
+        <p style="margin:2px 0 0;"><b>Commonly associated with:</b> ${esc(info.effects)}</p>
+      </div>
+    `).join('')}
+  `;
+  sendHtml(res, layout({ title: 'Terpene Guide', active: 'more', body, isAdmin: auth.isAdmin(req) }));
+}
+
 function pageWishlist(req, res) {
   const userId = requireUser(req, res);
   if (userId == null) return;
@@ -2317,6 +2482,7 @@ function pageMore(req, res) {
         { href: '/collection', icon: '/docs/leaf-kudos.png', t: 'My Collection', s: 'Your binder & rarity progress' },
         { href: '/wishlist', icon: '⭐', t: 'Wishlist', s: 'Strains you want to try next' },
         { href: '/grow-journal', icon: '📔', t: 'Grow Journal', s: 'Your private plant photo log' },
+        { href: '/lists', icon: '📋', t: 'Your Lists', s: 'Custom groupings — Morning, Sleep, anything' },
         { href: '/history', icon: '🕐', t: 'Check-In History', s: 'Your full timeline' },
         { href: '/insights', icon: '📊', t: 'Your Patterns', s: 'What your check-ins say about you' },
         { href: '/insights', icon: '🌿', t: 'Tolerance Break', s: 'Start, track, or end a break' },
@@ -2330,6 +2496,7 @@ function pageMore(req, res) {
         { href: '/legal-status', icon: '⚖️', t: 'Is It Legal Near Me?', s: 'State-by-state cannabis law' },
         { href: '/mixing-cautions', icon: '⚠️', t: 'Mixing With Other Substances', s: 'General cautions, not medical advice' },
         { href: '/faq', icon: '❓', t: 'FAQ', s: 'Strain school' },
+        { href: '/terpene-guide', icon: '🌸', t: 'Terpene Guide', s: 'Aroma & effects by terpene' },
         { href: '/chat', icon: '💬', t: 'Ask', s: 'Chat with the assistant' },
       ],
     },
@@ -2337,6 +2504,7 @@ function pageMore(req, res) {
       title: 'Community & Local',
       tiles: [
         { href: '/trade', icon: '🔁', t: 'Trade', s: 'Swap dupes with real friends' },
+        { href: '/friends-picks', icon: '🤝', t: "Friends' Picks", s: 'What your circle loves that you haven\u2019t tried' },
         { href: '/dispensaries', icon: '📍', t: 'Dispensaries', s: 'Locator & live menus' },
       ],
     },
@@ -3233,6 +3401,13 @@ const server = http.createServer(async (req, res) => {
     if (method === 'GET' && pathname === '/grow-journal') return pageGrowJournal(req, res);
     if (method === 'POST' && pathname === '/grow-journal') return await handleGrowJournalSubmit(req, res);
     if (method === 'POST' && (m = pathname.match(/^\/grow-journal\/(\d+)\/delete$/))) return await handleGrowJournalDelete(req, res, m[1]);
+    if (method === 'GET' && pathname === '/friends-picks') return pageFriendsPicks(req, res);
+    if (method === 'GET' && pathname === '/lists') return pageLists(req, res);
+    if (method === 'POST' && pathname === '/lists') return await handleListCreate(req, res);
+    if (method === 'GET' && (m = pathname.match(/^\/lists\/(\d+)$/))) return pageListDetail(req, res, m[1]);
+    if (method === 'POST' && (m = pathname.match(/^\/lists\/(\d+)\/delete$/))) return await handleListDelete(req, res, m[1]);
+    if (method === 'POST' && (m = pathname.match(/^\/lists\/(\d+)\/items\/([^/]+)\/toggle$/))) return await handleListItemToggle(req, res, m[1], m[2]);
+    if (method === 'GET' && pathname === '/terpene-guide') return pageTerpeneGuide(req, res);
 
     return notFound(res);
   } catch (err) {
