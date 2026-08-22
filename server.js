@@ -874,7 +874,11 @@ function pageRecipeDetail(req, res, id) {
         return targetId ? `<a href="/recipes/${targetId}">${esc(b)}</a>` : esc(b);
       }).join(', ')} <span style="opacity:.7;">(tap to see how to make it)</span></p>` : ''}
       <p><b>Ingredients:</b></p>
-      <ul>${r.ingredients.map(i => `<li>${linkGlossaryTerms(esc(i))}</li>`).join('')}</ul>
+      <div style="display:flex;gap:6px;margin-bottom:8px;">
+        <span class="empty-note" style="padding:6px 0;">Scale:</span>
+        ${[0.5, 1, 2, 3].map(f => `<button type="button" class="filter-pill scale-btn" data-factor="${f}" onclick="scaleRecipe(${f}, this)">${f}×</button>`).join('')}
+      </div>
+      <ul id="ingredients-list">${r.ingredients.map(i => `<li data-original="${esc(i)}">${linkGlossaryTerms(esc(i))}</li>`).join('')}</ul>
       <p><b>Steps:</b></p>
       <ol>${r.steps.map(i => `<li>${linkGlossaryTerms(esc(i))}</li>`).join('')}</ol>
       ${r.dosing ? `<div class="dosing-note">⚠️ ${esc(r.dosing)}</div>` : ''}
@@ -1506,6 +1510,85 @@ async function handleWishlistToggle(req, res, strainId) {
     await db.addToWishlist(userId, strainId);
   }
   redirect(res, f.redirect_to || `/strains/${strainId}`);
+}
+
+// Grow journal -- a private photo/note timeline, separate from the public
+// Grow Tips community page. Uses its own distinct element IDs for the
+// photo picker rather than reusing the check-in form's shared JS, since
+// that logic is gated inside initCheckinForm and shouldn't be assumed to
+// run on an unrelated page.
+function pageGrowJournal(req, res) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const entries = db.listGrowJournal(userId);
+  const body = `
+    <a href="/more" class="empty-note">← Back</a>
+    <h1 class="screen-title">Grow Journal</h1>
+    <p class="screen-sub">A private photo timeline for tracking a plant from seedling to harvest. Use the title field as a plant nickname to keep entries for the same plant easy to spot.</p>
+    <form method="POST" action="/grow-journal" style="margin-bottom:20px;">
+      <label class="field-label" style="margin-top:0;">Title (optional)</label>
+      <input type="text" name="title" placeholder="e.g. Wedding Cake #1 — Day 12">
+      <label class="field-label">Notes</label>
+      <textarea name="note" placeholder="What's going on with it today?"></textarea>
+      <label class="field-label">Photo</label>
+      <div class="photo-picker">
+        <div class="photo-upload-box" id="gj-photo-upload-box" onclick="document.getElementById('gj-photo-file-input').click()">
+          <div class="up-ic">📷</div>
+          <div class="up-txt">Tap to snap or upload a photo (optional)</div>
+        </div>
+        <input type="file" id="gj-photo-file-input" accept="image/*" style="display:none;">
+        <input type="hidden" name="photo" id="gj-photo-data-input">
+      </div>
+      <button class="btn block" type="submit" style="margin-top:14px;">Add Entry</button>
+    </form>
+    <script>
+      (function() {
+        const fileInput = document.getElementById('gj-photo-file-input');
+        const photoData = document.getElementById('gj-photo-data-input');
+        const uploadBox = document.getElementById('gj-photo-upload-box');
+        fileInput.addEventListener('change', () => {
+          const file = fileInput.files && fileInput.files[0];
+          if (!file) return;
+          const reader = new FileReader();
+          reader.onload = () => {
+            photoData.value = reader.result;
+            uploadBox.innerHTML = '<div class="photo-preview-wrap"><img src="' + reader.result + '" alt="Preview"></div>';
+          };
+          reader.readAsDataURL(file);
+        });
+      })();
+    </script>
+    ${entries.length ? entries.map(e => `
+      <div class="card" style="margin-bottom:10px;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;">
+          <b>${esc(e.title || 'Untitled entry')}</b>
+          <span class="local-time empty-note" style="padding:0;" data-utc="${e.created_at}Z">${esc(e.created_at)} UTC</span>
+        </div>
+        ${e.photo ? `<div class="checkin-photo-thumb" style="margin:8px 0;"><img src="${esc(e.photo)}" alt="Grow journal photo"></div>` : ''}
+        ${e.note ? `<p style="margin:6px 0 8px;">${esc(e.note)}</p>` : ''}
+        <form method="POST" action="/grow-journal/${e.id}/delete" onsubmit="return confirm('Delete this entry? This cannot be undone.')">
+          <button type="submit" class="empty-note" style="padding:0;background:none;border:none;color:#a13a3a;cursor:pointer;font-size:inherit;">Delete</button>
+        </form>
+      </div>
+    `).join('') : `<div class="empty-note">No entries yet — log your first one above.</div>`}
+  `;
+  sendHtml(res, layout({ title: 'Grow Journal', active: 'more', body, isAdmin: auth.isAdmin(req) }));
+}
+async function handleGrowJournalSubmit(req, res) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const f = await parseForm(req);
+  const photoUrl = await storage.uploadPhoto(f.photo || null, 'grow-journal');
+  await db.createGrowJournalEntry({ user_id: userId, title: f.title || '', note: f.note || '', photo: photoUrl });
+  redirect(res, '/grow-journal');
+}
+async function handleGrowJournalDelete(req, res, id) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const entry = db.getGrowJournalEntry(Number(id));
+  if (!entry || entry.user_id !== userId) return notFound(res);
+  await db.deleteGrowJournalEntry(Number(id));
+  redirect(res, '/grow-journal');
 }
 
 function pageWishlist(req, res) {
@@ -2233,6 +2316,7 @@ function pageMore(req, res) {
       tiles: [
         { href: '/collection', icon: '/docs/leaf-kudos.png', t: 'My Collection', s: 'Your binder & rarity progress' },
         { href: '/wishlist', icon: '⭐', t: 'Wishlist', s: 'Strains you want to try next' },
+        { href: '/grow-journal', icon: '📔', t: 'Grow Journal', s: 'Your private plant photo log' },
         { href: '/history', icon: '🕐', t: 'Check-In History', s: 'Your full timeline' },
         { href: '/insights', icon: '📊', t: 'Your Patterns', s: 'What your check-ins say about you' },
         { href: '/insights', icon: '🌿', t: 'Tolerance Break', s: 'Start, track, or end a break' },
@@ -3146,6 +3230,9 @@ const server = http.createServer(async (req, res) => {
     if (method === 'POST' && (m = pathname.match(/^\/wishlist\/([^/]+)\/toggle$/))) return await handleWishlistToggle(req, res, m[1]);
     if (method === 'GET' && pathname === '/trending') return pageTrending(req, res);
     if (method === 'GET' && pathname === '/mixing-cautions') return pageMixingCautions(req, res);
+    if (method === 'GET' && pathname === '/grow-journal') return pageGrowJournal(req, res);
+    if (method === 'POST' && pathname === '/grow-journal') return await handleGrowJournalSubmit(req, res);
+    if (method === 'POST' && (m = pathname.match(/^\/grow-journal\/(\d+)\/delete$/))) return await handleGrowJournalDelete(req, res, m[1]);
 
     return notFound(res);
   } catch (err) {

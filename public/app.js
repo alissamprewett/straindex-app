@@ -424,6 +424,44 @@ if ('serviceWorker' in navigator) {
 // Skips forms that opt out (data-no-loading-state) and doesn't fight
 // native validation: if required fields are empty, the browser blocks the
 // submit event before this ever runs.
+// -------------------------------------------------------------- recipe scaling
+// Recipes are stored as plain-text ingredient lines ("2-3 tbsp olive oil"),
+// not structured {amount, unit, name} data -- restructuring all of them
+// would be a real data migration. Instead this parses the leading quantity
+// out of each line at scale-time (handles plain numbers, decimals, simple
+// fractions, mixed numbers, and ranges like "2-3"), scales just that part,
+// and leaves the rest of the line untouched. Lines with no parseable
+// leading quantity (e.g. "Salt and pepper to taste") are left as-is.
+function formatScaledQty(n) {
+  const rounded = Math.round(n * 100) / 100;
+  const whole = Math.floor(rounded);
+  const frac = rounded - whole;
+  const fracMap = [[0.333, '⅓'], [0.25, '¼'], [0.667, '⅔'], [0.5, '½'], [0.75, '¾']];
+  for (const [val, sym] of fracMap) {
+    if (Math.abs(frac - val) < 0.05) return whole > 0 ? `${whole} ${sym}` : sym;
+  }
+  if (Math.abs(frac) < 0.05) return String(whole);
+  return String(Math.round(rounded * 10) / 10);
+}
+function scaleIngredientText(text, factor) {
+  let m = text.match(/^(\d+)\s+(\d+)\/(\d+)(\s.*)?$/); // mixed number: "1 1/2 cups"
+  if (m) return formatScaledQty((parseInt(m[1], 10) + parseInt(m[2], 10) / parseInt(m[3], 10)) * factor) + (m[4] || '');
+  m = text.match(/^(\d+(?:\.\d+)?)\s*-\s*(\d+(?:\.\d+)?)(\s.*)?$/); // range: "2-3 tbsp"
+  if (m) return `${formatScaledQty(parseFloat(m[1]) * factor)}-${formatScaledQty(parseFloat(m[2]) * factor)}${m[3] || ''}`;
+  m = text.match(/^(\d+)\/(\d+)(\s.*)?$/); // fraction: "1/2 cup"
+  if (m) return formatScaledQty((parseInt(m[1], 10) / parseInt(m[2], 10)) * factor) + (m[3] || '');
+  m = text.match(/^(\d+(?:\.\d+)?)(\s.*)?$/); // plain number: "2 flour tortillas"
+  if (m) return formatScaledQty(parseFloat(m[1]) * factor) + (m[2] || '');
+  return text; // no leading quantity found -- leave untouched
+}
+function scaleRecipe(factor, btn) {
+  document.querySelectorAll('#ingredients-list li[data-original]').forEach(li => {
+    li.textContent = scaleIngredientText(li.dataset.original, factor);
+  });
+  document.querySelectorAll('.scale-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+}
+
 (function initFormSubmitFeedback() {
   document.addEventListener('submit', (e) => {
     const form = e.target;
