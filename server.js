@@ -1229,7 +1229,7 @@ function pageLogin(req, res, query) {
     </a>
     <p class="empty-note" style="text-align:center;margin:0 0 14px;">or</p>
     <form method="POST" action="/login">
-      <label class="field-label" style="margin-top:0;">Username</label>
+      <label class="field-label" style="margin-top:0;">Username or email</label>
       <input type="text" name="username" required autocomplete="username">
       <label class="field-label">Password</label>
       <input type="password" name="password" required autocomplete="current-password">
