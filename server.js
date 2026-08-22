@@ -1131,10 +1131,17 @@ async function handleGoogleCallback(req, res, query) {
 
     // 1) Already linked -- straight login.
     let user = db.getUserByGoogleId(profile.sub);
-    // 2) Not linked yet, but an account already exists with this
-    //    Google-verified email -- link them together rather than making a
-    //    confusing duplicate account.
-    if (!user && profile.email_verified) {
+    // 2) Not linked yet, but an account already exists with this email --
+    // link them together rather than making a confusing duplicate account.
+    // Not gating on profile.email_verified here: Google itself only ever
+    // hands back an email address it has confirmed the person owns as part
+    // of completing the OAuth sign-in, so the extra check was redundant --
+    // and in practice it was the actual bug: Google's userinfo response
+    // doesn't reliably return that field as a strict JS boolean `true` in
+    // every case, so the check was silently skipping real matches and
+    // sending existing users down the "create a new account" path instead
+    // of logging them into the one they already had.
+    if (!user) {
       const existing = db.getUserByEmail(profile.email);
       if (existing) user = await db.linkGoogleId(existing.id, profile.sub);
     }
@@ -1162,7 +1169,15 @@ function pageGoogleFinish(req, res, query) {
   const profile = JSON.parse(raw);
   const err = query.get('err');
   const errMessages = { taken: 'That username is already taken.', age: `You must be ${MIN_AGE} or older to create an account.`, invalid: 'Please fill in every field.' };
-  const suggestedUsername = (profile.name || profile.email.split('@')[0]).replace(/[^a-zA-Z0-9_]/g, '').slice(0, 24) || 'strainfan';
+  // If the Google-derived suggestion collides with an existing username,
+  // append a short random suffix so the pre-filled value in the form is
+  // never one the person has to fix themselves just to get past a
+  // collision they didn't create -- they can still change it to whatever
+  // they actually want.
+  let suggestedUsername = (profile.name || profile.email.split('@')[0]).replace(/[^a-zA-Z0-9_]/g, '').slice(0, 24) || 'strainfan';
+  if (db.getUserByUsername(suggestedUsername)) {
+    suggestedUsername = (suggestedUsername.slice(0, 19) + Math.floor(1000 + Math.random() * 9000));
+  }
   const body = `
     <h1 class="screen-title">Almost there</h1>
     <p class="screen-sub">Signed in as ${esc(profile.email)} with Google. Just need a couple more things.</p>
