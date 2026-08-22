@@ -70,6 +70,33 @@ async function likeGrowTip(id, btn) {
 // Live search on /strains — fetches /api/strains as you type instead of
 // resubmitting the whole page on every keystroke (which used to reload the
 // page and kick focus out of the search box after each letter).
+(function initOnsetTimers() {
+  // Edible onset varies a lot person-to-person, but "give it up to 2 hours,
+  // don't redose early" is the safest general guidance. This just turns a
+  // stored timestamp into a live "started Xh Ym ago" reminder tied to that.
+  function label(minutes) {
+    const h = Math.floor(minutes / 60), m = Math.floor(minutes % 60);
+    const started = h > 0 ? `${h}h ${m}m ago` : `${m}m ago`;
+    if (minutes < 60) return `⏱ Started ${started} — onset can take up to 2 hours. Hold off on more.`;
+    if (minutes < 90) return `⏱ Started ${started} — getting close to the usual peak window.`;
+    return `⏱ Started ${started} — should be at or past full effect by now.`;
+  }
+  function apply() {
+    document.querySelectorAll('.onset-timer[data-utc]').forEach(el => {
+      const d = new Date(el.dataset.utc);
+      if (isNaN(d.getTime())) return;
+      const minutes = (Date.now() - d.getTime()) / 60000;
+      el.textContent = label(Math.max(0, minutes));
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', apply);
+  } else {
+    apply();
+  }
+  setInterval(apply, 60000);
+})();
+
 (function initStrainSearch() {
   const input = document.getElementById('strain-search-input');
   const resultsEl = document.getElementById('strain-search-results');
@@ -343,5 +370,42 @@ if ('serviceWorker' in navigator) {
     } else if (openPopover && !e.target.closest('.glossary-popover')) {
       closePopover();
     }
+  });
+})();
+
+// ---------------------------------------------------------------- compare
+// Two independent strain search-pickers on one page (/compare), each
+// suffixed 'a'/'b' so they don't collide. Same search-as-you-type pattern
+// as the check-in strain picker, just parameterized to run twice.
+(function initComparePickers() {
+  ['a', 'b'].forEach(suffix => {
+    const searchInput = document.getElementById('compare-search-' + suffix);
+    const resultsBox = document.getElementById('compare-results-' + suffix);
+    if (!searchInput || !resultsBox) return;
+    function escHtml(str) {
+      return String(str ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    }
+    let debounceTimer;
+    searchInput.addEventListener('input', () => {
+      clearTimeout(debounceTimer);
+      const q = searchInput.value.trim();
+      if (!q) { resultsBox.classList.remove('open'); resultsBox.innerHTML = ''; return; }
+      debounceTimer = setTimeout(async () => {
+        const res = await fetch(`/api/strains?${new URLSearchParams({ q, limit: '8' })}`);
+        if (!res.ok) return;
+        const data = await res.json();
+        resultsBox.innerHTML = data.results.length
+          ? data.results.map(s => `<div class="search-result-row" data-id="${s.id}">${s.icon} ${escHtml(s.name)} <span class="empty-note" style="padding:0;">— ${escHtml(s.type)}</span></div>`).join('')
+          : `<div class="search-no-results">No matches — try a different spelling.</div>`;
+        resultsBox.classList.add('open');
+        resultsBox.querySelectorAll('[data-id]').forEach(row => {
+          row.onclick = () => {
+            const params = new URLSearchParams(window.location.search);
+            params.set(suffix, row.dataset.id);
+            window.location.href = '/compare?' + params.toString();
+          };
+        });
+      }, 200);
+    });
   });
 })();

@@ -164,6 +164,34 @@ function renderCheckinPairings(c) {
     ${c.pairing_activity ? `<div class="empty-note" style="padding:2px 0 0;">🎯 Doing: ${esc(c.pairing_activity)}</div>` : ''}
   `;
 }
+// Shows a live "started Xh Ym ago" onset reminder under any check-in logged
+// with an edible method, filled in client-side (see initOnsetTimers in
+// app.js) so it stays accurate without a page refresh.
+function renderOnsetTimer(c) {
+  const edibleMethods = METHOD_GROUPS.find(g => g.group === 'Edibles').items;
+  if (!edibleMethods.includes(c.method)) return '';
+  return `<div class="onset-timer empty-note" style="padding:4px 0 0;" data-utc="${c.created_at}Z">⏱ Calculating onset time…</div>`;
+}
+// A lightweight comment thread under a check-in, alongside the existing
+// kudos button. redirectPath tells the plain-HTML-form submit where to
+// bounce back to, since the same check-in can appear on the Home feed,
+// a strain's own page, or a friend's profile.
+function renderCheckinComments(c, userId, redirectPath) {
+  const comments = db.listCheckinComments(c.id);
+  return `
+    ${comments.length ? `<div style="margin-top:8px;">${comments.map(cm => {
+      const author = db.getUserById(cm.user_id);
+      return `<div class="empty-note" style="padding:3px 0;"><b>${esc(author ? author.username : 'Someone')}:</b> ${esc(cm.body)}</div>`;
+    }).join('')}</div>` : ''}
+    ${userId != null ? `
+      <form method="POST" action="/checkin/${c.id}/comment" style="display:flex;gap:6px;margin-top:6px;">
+        <input type="hidden" name="redirect_to" value="${esc(redirectPath)}">
+        <input type="text" name="body" placeholder="Add a comment..." required style="flex:1;margin:0;">
+        <button class="btn secondary" type="submit" style="padding:6px 12px;">Post</button>
+      </form>
+    ` : ''}
+  `;
+}
 // A small original cartoon-bud icon used on kudos buttons — hand-drawn SVG,
 // not a stock asset, so there's no licensing question about using it.
 function rarityLabel(r) { return { common: 'Common', uncommon: 'Uncommon', rare: 'Rare', legendary: 'Legendary' }[r] || r; }
@@ -338,6 +366,8 @@ function pageHome(req, res) {
         ${(c.effects || []).length ? `<div class="effect-tags">${c.effects.map(e => `<span>${esc(e)}</span>`).join('')}</div>` : ''}
         ${c.note ? `<div class="note">"${esc(c.note)}"</div>` : ''}
         ${renderCheckinPairings(c)}
+        ${renderOnsetTimer(c)}
+        ${renderCheckinComments(c, userId, '/')}
         <div style="display:flex;justify-content:flex-end;margin-top:8px;">
           <button class="kudos-btn" onclick="giveCheckinKudos(${c.id}, this)">${KUDOS_BUD_ICON}Kudos${c.kudos ? ` (${c.kudos})` : ''}</button>
         </div>
@@ -468,6 +498,8 @@ function pageStrainDetail(req, res, id) {
           ${(c.effects || []).length ? `<p style="margin:6px 0 0;">${c.effects.map(e => `<span class="filter-pill">${esc(e)}</span>`).join('')}</p>` : ''}
           ${c.note ? `<span class="empty-note" style="display:block;padding:4px 0 0;">${esc(c.note)}</span>` : ''}
         ${renderCheckinPairings(c)}
+        ${renderOnsetTimer(c)}
+        ${renderCheckinComments(c, userId, '/strains/' + s.id)}
           <div style="display:flex;justify-content:flex-end;margin-top:6px;">
             <button class="kudos-btn" onclick="giveCheckinKudos(${c.id}, this)">${KUDOS_BUD_ICON}Kudos${c.kudos ? ` (${c.kudos})` : ''}</button>
           </div>
@@ -748,6 +780,30 @@ function pageRecipeDetail(req, res, id) {
       <p><b>Steps:</b></p>
       <ol>${r.steps.map(i => `<li>${linkGlossaryTerms(esc(i))}</li>`).join('')}</ol>
       ${r.dosing ? `<div class="dosing-note">⚠️ ${esc(r.dosing)}</div>` : ''}
+      <div class="card" style="margin-top:10px;background:var(--bg-subtle,#f7f7f2);">
+        <b style="font-size:14px;">🧮 Dosing calculator</b>
+        <p class="empty-note" style="padding:2px 0 8px;">Figure out mg per serving so you're not doing the math in your head.</p>
+        <label class="field-label" style="margin-top:0;">Total THC in the batch (mg)</label>
+        <input type="number" id="dose-total-mg" placeholder="e.g. 200" min="0" step="any">
+        <label class="field-label">Number of servings</label>
+        <input type="number" id="dose-servings" placeholder="e.g. 12" min="1" step="1">
+        <div id="dose-result" class="empty-note" style="padding:8px 0 0;font-weight:700;"></div>
+      </div>
+      <script>
+        (function() {
+          const totalEl = document.getElementById('dose-total-mg');
+          const servingsEl = document.getElementById('dose-servings');
+          const resultEl = document.getElementById('dose-result');
+          function recalc() {
+            const total = parseFloat(totalEl.value);
+            const servings = parseFloat(servingsEl.value);
+            if (!total || !servings || total <= 0 || servings <= 0) { resultEl.textContent = ''; return; }
+            resultEl.textContent = (total / servings).toFixed(1) + ' mg THC per serving';
+          }
+          totalEl.addEventListener('input', recalc);
+          servingsEl.addEventListener('input', recalc);
+        })();
+      </script>
       <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;">
         <span class="empty-note" style="padding:0;">${r.kudos} people found this helpful</span>
         <button class="kudos-btn" onclick="giveKudos(${r.id}, this)">${KUDOS_BUD_ICON}Kudos</button>
@@ -1105,6 +1161,58 @@ const QUIZ_TIME_TAGS = {
   evening: ['Relaxed', 'Sleepy', 'Calm'],
   anytime: [],
 };
+// Side-by-side strain comparison. Reuses two independent search pickers
+// (initComparePickers in app.js) that each redirect back here with their
+// own query param once a strain is picked, so the URL itself (?a=ID&b=ID)
+// is the whole state -- shareable, bookmarkable, works with back/forward.
+function pageCompare(req, res, query) {
+  const aId = query.get('a') || '';
+  const bId = query.get('b') || '';
+  const a = aId ? db.getStrain(aId) : null;
+  const b = bId ? db.getStrain(bId) : null;
+  const pickerBox = (suffix, current) => `
+    <div style="flex:1;min-width:0;">
+      ${current ? `
+        <div class="card" style="display:flex;align-items:center;gap:8px;">
+          ${strainPhotoTag(current, 'sm')}
+          <b style="flex:1;min-width:0;">${esc(current.name)}</b>
+          <a href="/compare?${suffix === 'a' ? 'b=' + esc(bId) : 'a=' + esc(aId)}" class="empty-note" style="padding:0;">Change</a>
+        </div>
+      ` : `
+        <input type="text" id="compare-search-${suffix}" placeholder="Search strain ${suffix.toUpperCase()}..." autocomplete="off">
+        <div class="effect-results" id="compare-results-${suffix}"></div>
+      `}
+    </div>`;
+  const rows = a && b ? [
+    ['Type', a.type + (a.lean ? ' · ' + a.lean : ''), b.type + (b.lean ? ' · ' + b.lean : '')],
+    ['THC', a.thc, b.thc],
+    ['CBD', a.cbd, b.cbd],
+    ['Rarity', rarityLabel(a.rarity), rarityLabel(b.rarity)],
+    ['Effects', a.effects.join(', '), b.effects.join(', ')],
+    ['Top terpenes', a.terps.map(t => t.n).join(', '), b.terps.map(t => t.n).join(', ')],
+    ['Flavor', a.flavor, b.flavor],
+  ] : [];
+  const body = `
+    <h1 class="screen-title">Compare Strains</h1>
+    <p class="screen-sub">Pick two strains to see them side by side.</p>
+    <div style="display:flex;gap:10px;margin-bottom:16px;">
+      ${pickerBox('a', a)}
+      ${pickerBox('b', b)}
+    </div>
+    ${a && b ? `
+      <table style="width:100%;border-collapse:collapse;font-size:13px;">
+        ${rows.map(([label, av, bv]) => `
+          <tr style="border-bottom:1px solid var(--border);">
+            <td style="padding:8px 6px;font-weight:700;color:var(--ink-secondary);width:28%;vertical-align:top;">${esc(label)}</td>
+            <td style="padding:8px 6px;vertical-align:top;">${esc(av)}</td>
+            <td style="padding:8px 6px;vertical-align:top;">${esc(bv)}</td>
+          </tr>`).join('')}
+      </table>
+    ` : `<div class="empty-note">Pick a strain in each box above to compare them.</div>`}
+  `;
+  sendHtml(res, layout({ title: 'Compare Strains', active: 'more', body, isAdmin: auth.isAdmin(req) }));
+}
+
 function pageQuiz(req, res, query) {
   const exp = query.get('exp') || '';
   const feel = query.get('feel') || '';
@@ -1161,8 +1269,23 @@ function pageInsights(req, res) {
   const userId = requireUser(req, res);
   if (userId == null) return;
   const insights = db.getUserInsights(userId);
+  const activeBreak = db.getActiveBreak(userId);
+  const daysSince = (dateStr) => Math.max(0, Math.floor((Date.now() - new Date(dateStr + 'Z').getTime()) / 86400000));
   const body = `
     <h1 class="screen-title">Your Patterns</h1>
+    <div class="card" style="margin-bottom:14px;">
+      <h2 style="margin:0 0 8px;font-size:15px;">🌿 Tolerance break</h2>
+      ${activeBreak ? `
+        <p class="empty-note" style="padding:0 0 8px;">You're on a break — started ${daysSince(activeBreak.started_at)} day${daysSince(activeBreak.started_at) === 1 ? '' : 's'} ago${activeBreak.note ? `: "${esc(activeBreak.note)}"` : '.'}</p>
+        <form method="POST" action="/tolerance-break/end"><button class="btn secondary block" type="submit">End Break</button></form>
+      ` : `
+        <p class="empty-note" style="padding:0 0 8px;">Not currently on a break.</p>
+        <form method="POST" action="/tolerance-break/start">
+          <input type="text" name="note" placeholder="Optional note — why are you taking this one?" style="margin-bottom:8px;">
+          <button class="btn block" type="submit">Start a Tolerance Break</button>
+        </form>
+      `}
+    </div>
     ${!insights ? `<div class="empty-note">No check-ins logged yet — <a href="/checkin">log your first one</a> to start seeing your patterns here.</div>` : `
       <p class="screen-sub">Based on your ${insights.totalCheckins} check-in${insights.totalCheckins === 1 ? '' : 's'} so far.</p>
       ${insights.topEffects.length ? `
@@ -1196,6 +1319,20 @@ function pageInsights(req, res) {
     `}
   `;
   sendHtml(res, layout({ title: 'Your Patterns', active: 'more', body, isAdmin: auth.isAdmin(req) }));
+}
+
+async function handleToleranceBreakStart(req, res) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const f = await parseForm(req);
+  await db.startToleranceBreak(userId, f.note || '');
+  redirect(res, '/insights');
+}
+async function handleToleranceBreakEnd(req, res) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  await db.endToleranceBreak(userId);
+  redirect(res, '/insights');
 }
 
 function pageFeedback(req, res, query) {
@@ -1643,6 +1780,18 @@ async function apiCheckinKudos(req, res, id) {
   if (!c) return sendJson(res, { error: 'not found' }, 404);
   sendJson(res, { kudos: c.kudos });
 }
+// Plain-HTML-form submit (not a fetch/API call) since the same check-in can
+// render on three different pages (Home, a strain's page, a friend's
+// profile) -- redirect_to is a hidden field carrying which page to bounce
+// back to, set by renderCheckinComments() at render time.
+async function handleCheckinComment(req, res, checkinId) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const f = await parseForm(req);
+  const body = (f.body || '').trim();
+  if (body) await db.createCheckinComment({ checkin_id: checkinId, user_id: userId, body });
+  redirect(res, f.redirect_to || '/');
+}
 // Protected analytics endpoint for the Google Sheets automation -- returns
 // real usernames, emails, and birth dates, so it's gated behind a shared
 // secret (ANALYTICS_API_KEY) rather than being a public JSON endpoint like
@@ -1681,6 +1830,7 @@ function pageMore(req, res) {
     { href: '/methods', icon: '/docs/joint-icon.png', t: 'Ways to Enjoy It', s: 'Every method, explained' },
     { href: '/concentrates', icon: '💠', t: 'Concentrates & Extracts', s: 'Kief, rosin, live resin & more' },
     { href: '/quiz', icon: '🧭', t: 'Find Your First Strain', s: '3-question strain matcher' },
+    { href: '/compare', icon: '⚖️', t: 'Compare Strains', s: 'Side-by-side lookup' },
     { href: '/insights', icon: '📊', t: 'Your Patterns', s: 'What your check-ins say about you' },
     { href: '/feedback', icon: '📝', t: 'Send Feedback', s: 'Bugs, ideas — anything' },
   ];
@@ -2052,6 +2202,8 @@ function pageFriendProfile(req, res, friendId) {
         ${(c.effects || []).length ? `<div class="effect-tags">${c.effects.map(e => `<span>${esc(e)}</span>`).join('')}</div>` : ''}
         ${c.note ? `<div class="note">"${esc(c.note)}"</div>` : ''}
         ${renderCheckinPairings(c)}
+        ${renderOnsetTimer(c)}
+        ${renderCheckinComments(c, userId, '/friends/' + friendId)}
         <div style="display:flex;justify-content:flex-end;margin-top:8px;">
           <button class="kudos-btn" onclick="giveCheckinKudos(${c.id}, this)">${KUDOS_BUD_ICON}Kudos${c.kudos ? ` (${c.kudos})` : ''}</button>
         </div>
@@ -2427,6 +2579,7 @@ const server = http.createServer(async (req, res) => {
     if (method === 'POST' && pathname === '/checkin') return await handleCheckinSubmit(req, res);
     if (method === 'GET' && (m = pathname.match(/^\/checkin\/(\d+)\/edit$/))) return pageCheckinEditForm(req, res, Number(m[1]));
     if (method === 'POST' && (m = pathname.match(/^\/checkin\/(\d+)\/edit$/))) return await handleCheckinEditSubmit(req, res, Number(m[1]));
+    if (method === 'POST' && (m = pathname.match(/^\/checkin\/(\d+)\/comment$/))) return await handleCheckinComment(req, res, Number(m[1]));
     if (method === 'GET' && pathname === '/faq') return pageFaq(req, res, url.searchParams);
     if (method === 'GET' && pathname === '/recipes') return pageRecipes(req, res, url.searchParams);
     if (method === 'GET' && (m = pathname.match(/^\/recipes\/(\d+)$/))) return pageRecipeDetail(req, res, Number(m[1]));
@@ -2504,7 +2657,10 @@ const server = http.createServer(async (req, res) => {
     if (method === 'POST' && (m = pathname.match(/^\/shop\/([^/]+)\/add$/))) return await handleShopAdd(req, res, m[1]);
     if (method === 'GET' && pathname === '/methods') return pageMethods(req, res);
     if (method === 'GET' && pathname === '/quiz') return pageQuiz(req, res, url.searchParams);
+    if (method === 'GET' && pathname === '/compare') return pageCompare(req, res, url.searchParams);
     if (method === 'GET' && pathname === '/insights') return pageInsights(req, res);
+    if (method === 'POST' && pathname === '/tolerance-break/start') return await handleToleranceBreakStart(req, res);
+    if (method === 'POST' && pathname === '/tolerance-break/end') return await handleToleranceBreakEnd(req, res);
     if (method === 'GET' && pathname === '/concentrates') return pageConcentrates(req, res);
 
     return notFound(res);
