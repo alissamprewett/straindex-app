@@ -53,7 +53,9 @@ form .btn{margin-top:14px;}
 .recipe-source-tag.official{background:#eef2ea;color:var(--brand-green-dark);}
 .recipe-source-tag.community{background:#f2ecf9;color:var(--brand-lilac);}
 .dosing-note{background:#fff6e0;border:1px solid #eddba4;color:#5c4a12;font-size:12px;padding:9px 11px;border-radius:9px;margin-top:10px;}
-.kudos-btn{border:1.5px solid var(--border);background:#fff;color:var(--ink-secondary);padding:6px 12px;border-radius:999px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;}
+.kudos-btn{border:1.5px solid var(--border);background:#fff;color:var(--ink-secondary);padding:6px 12px;border-radius:999px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;transition:border-color 0.15s,color 0.15s;}
+@keyframes kudosPulse{0%{transform:scale(1);}40%{transform:scale(1.15);}100%{transform:scale(1);}}
+.kudos-pulse{animation:kudosPulse 0.35s ease;border-color:var(--brand-green-dark);color:var(--brand-green-dark);}
 .library-row{display:flex;align-items:center;gap:10px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:10px 12px;margin-bottom:8px;}
 .library-row .icon{font-size:22px;flex-shrink:0;}
 .strain-thumb{object-fit:cover;border-radius:8px;flex-shrink:0;background:#e5e0d5;}
@@ -69,7 +71,7 @@ form .btn{margin-top:14px;}
 .admin-row{display:flex;justify-content:space-between;align-items:center;gap:10px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:10px;}
 .admin-row .actions{display:flex;gap:6px;flex-shrink:0;}
 .admin-row .actions button, .admin-row .actions a{padding:6px 10px;border-radius:8px;border:none;font-size:11.5px;font-weight:700;cursor:pointer;font-family:inherit;text-decoration:none;}
-.filter-pill{display:inline-block;padding:6px 12px;border-radius:999px;border:1px solid var(--border);background:#fff;font-size:11.5px;color:var(--ink-secondary);cursor:pointer;margin:0 6px 6px 0;text-decoration:none;}
+.filter-pill{display:inline-block;padding:6px 12px;border-radius:999px;border:1px solid var(--border);background:#fff;font-size:11.5px;color:var(--ink-secondary);cursor:pointer;margin:0 6px 6px 0;text-decoration:none;transition:background-color 0.15s,border-color 0.15s,color 0.15s;}
 .filter-pill.active{background:var(--brand-green-dark);border-color:var(--brand-green-dark);color:#fff;}
 .grow-tip-card .gcat{display:inline-block;font-size:9.5px;font-weight:800;text-transform:uppercase;background:#eef2ea;color:var(--brand-green-dark);padding:2px 8px;border-radius:6px;margin:4px 0;}
 
@@ -156,7 +158,8 @@ form .btn{margin-top:14px;}
 
 /* ---------------------------------------------------------------- more hub */
 .more-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
-.more-tile{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:12px 6px;text-align:center;box-shadow:var(--shadow);text-decoration:none;color:inherit;display:block;}
+.more-tile{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:12px 6px;text-align:center;box-shadow:var(--shadow);text-decoration:none;color:inherit;display:block;transition:transform 0.12s,box-shadow 0.12s;}
+.more-tile:active{transform:scale(0.97);}
 .more-tile .ic{font-size:20px;margin-bottom:5px;display:block;}
 .more-tile .ic-img-lg{width:20px;height:20px;object-fit:contain;display:inline-block;}
 .more-tile .t{font-weight:700;font-size:11px;line-height:1.2;}

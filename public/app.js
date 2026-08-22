@@ -41,6 +41,7 @@ async function giveKudos(id, btn) {
     const icon = btn.querySelector('img, svg');
     btn.innerHTML = (icon ? icon.outerHTML : '') + `Kudos (${data.kudos})`;
     btn.disabled = true;
+    btn.classList.add('kudos-pulse');
     toast('Kudos given!');
   }
 }
@@ -52,6 +53,7 @@ async function giveCheckinKudos(id, btn) {
     const icon = btn.querySelector('img, svg');
     btn.innerHTML = (icon ? icon.outerHTML : '') + `Kudos (${data.kudos})`;
     btn.disabled = true;
+    btn.classList.add('kudos-pulse');
     toast('Kudos given!');
   }
 }
@@ -136,6 +138,7 @@ async function likeGrowTip(id, btn) {
       q: input.value, type: typeSel.value, rarity: raritySel.value, effect: effectSel.value,
       thc: thcSel.value, terpene: terpeneSel.value, ailment: ailmentSel.value, limit: '60',
     });
+    countEl.textContent = 'Searching…';
     const res = await fetch(`/api/strains?${params}`);
     if (!res.ok) return;
     render(await res.json());
@@ -224,6 +227,8 @@ if ('serviceWorker' in navigator) {
     clearTimeout(debounceTimer);
     const q = searchInput.value.trim();
     if (!q) { resultsBox.classList.remove('open'); resultsBox.innerHTML = ''; return; }
+    resultsBox.innerHTML = `<div class="search-no-results">Searching…</div>`;
+    resultsBox.classList.add('open');
     debounceTimer = setTimeout(async () => {
       const res = await fetch(`/api/strains?${new URLSearchParams({ q, limit: '8' })}`);
       if (!res.ok) return;
@@ -390,6 +395,8 @@ if ('serviceWorker' in navigator) {
       clearTimeout(debounceTimer);
       const q = searchInput.value.trim();
       if (!q) { resultsBox.classList.remove('open'); resultsBox.innerHTML = ''; return; }
+      resultsBox.innerHTML = `<div class="search-no-results">Searching…</div>`;
+      resultsBox.classList.add('open');
       debounceTimer = setTimeout(async () => {
         const res = await fetch(`/api/strains?${new URLSearchParams({ q, limit: '8' })}`);
         if (!res.ok) return;
@@ -407,5 +414,26 @@ if ('serviceWorker' in navigator) {
         });
       }, 200);
     });
+  });
+})();
+
+// ---------------------------------------------------- form submit feedback
+// A generic "Saving..." state on any form's submit button the moment it's
+// clicked, so a slower connection reads as "working" rather than "did that
+// actually register?" -- without needing to touch every individual form.
+// Skips forms that opt out (data-no-loading-state) and doesn't fight
+// native validation: if required fields are empty, the browser blocks the
+// submit event before this ever runs.
+(function initFormSubmitFeedback() {
+  document.addEventListener('submit', (e) => {
+    const form = e.target;
+    if (!(form instanceof HTMLFormElement) || form.hasAttribute('data-no-loading-state')) return;
+    const btn = form.querySelector('button[type="submit"], input[type="submit"]');
+    if (!btn || btn.disabled) return;
+    btn.dataset.originalText = btn.tagName === 'INPUT' ? btn.value : btn.innerHTML;
+    const label = 'Saving…';
+    if (btn.tagName === 'INPUT') btn.value = label; else btn.innerHTML = label;
+    btn.disabled = true;
+    btn.style.opacity = '0.7';
   });
 })();

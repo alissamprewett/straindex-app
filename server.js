@@ -373,7 +373,7 @@ function pageHome(req, res) {
           <button class="kudos-btn" onclick="giveCheckinKudos(${c.id}, this)">${KUDOS_BUD_ICON}Kudos${c.kudos ? ` (${c.kudos})` : ''}</button>
         </div>
       </div>`;
-    }).join('') : `<div class="empty-note">No check-ins logged yet.</div>`}
+    }).join('') : `<div class="empty-note">No check-ins logged yet — <a href="/checkin">log your first one</a> to get your feed started.</div>`}
   `;
   sendHtml(res, layout({ title: 'Home', active: 'home', body, isAdmin: auth.isAdmin(req) }));
 }
@@ -691,7 +691,7 @@ function pageFaq(req, res, query) {
   const body = `
     <h1 class="screen-title">FAQ &amp; Strain School</h1>
     <div class="section-label">Most asked</div>
-    ${topFaqs.map(renderFaq).join('') || `<div class="empty-note">No FAQ entries yet.</div>`}
+    ${topFaqs.map(renderFaq).join('') || `<div class="empty-note">No FAQ entries yet — try the <a href="/chat">Ask</a> tab, it can answer from the same content base.</div>`}
 
     <div class="section-label" style="margin-top:20px;">Search everything else (${allFaqs.length - topFaqs.length} more)</div>
     <form method="GET" action="/faq" style="margin-bottom:12px;display:flex;gap:8px;">
@@ -933,7 +933,7 @@ function pageGrowing(req, res, query) {
           <span class="empty-note" style="padding:0;">by ${esc(g.author || 'Anonymous')}</span>
           <button class="kudos-btn" onclick="likeGrowTip(${g.id}, this)">${KUDOS_BUD_ICON}Kudos (${g.likes})</button>
         </div>
-      </div>`).join('') || `<div class="empty-note">No tips in this category yet.</div>`}
+      </div>`).join('') || `<div class="empty-note">No tips in this category yet — be the first to <a href="/growing">share one</a>.</div>`}
   `;
   sendHtml(res, layout({ title: 'Growing', active: 'growing', body, isAdmin: auth.isAdmin(req) }));
 }
