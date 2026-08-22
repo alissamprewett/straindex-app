@@ -13,6 +13,7 @@ const http = require('node:http');
 const fs = require('node:fs');
 const path = require('node:path');
 const { URL } = require('node:url');
+const crypto = require('node:crypto');
 
 const db = require('./lib/db');
 const auth = require('./lib/auth');
@@ -1049,6 +1050,11 @@ function pageSignup(req, res, query) {
     <p class="screen-sub">You must be ${MIN_AGE}+ to use StrainDex.</p>
     ${deleted ? `<p class="empty-note" style="color:var(--brand-green-dark);">Your account and data have been deleted.</p>` : ''}
     ${err && errMessages[err] ? `<p style="color:#a13a3a;">${esc(errMessages[err])}</p>` : ''}
+    <a href="/auth/google" class="btn secondary block" style="text-decoration:none;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:14px;">
+      <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.72v2.26h2.9c1.7-1.57 2.7-3.88 2.7-6.62z"/><path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.9-2.26c-.8.54-1.84.86-3.06.86-2.35 0-4.34-1.59-5.05-3.72H.98v2.33A9 9 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.95 10.7A5.4 5.4 0 0 1 3.67 9c0-.59.1-1.17.28-1.7V4.97H.98A9 9 0 0 0 0 9c0 1.45.35 2.83.98 4.03l2.97-2.33z"/><path fill="#EA4335" d="M9 3.58c1.32 0 2.5.46 3.44 1.35l2.58-2.58C13.46.89 11.43 0 9 0A9 9 0 0 0 .98 4.97l2.97 2.33C4.66 5.17 6.65 3.58 9 3.58z"/></svg>
+      Continue with Google
+    </a>
+    <p class="empty-note" style="text-align:center;margin:0 0 14px;">or</p>
     <form method="POST" action="/signup">
       <label class="field-label" style="margin-top:0;">Username</label>
       <input type="text" name="username" required minlength="3" maxlength="24" autocomplete="username">
@@ -1067,6 +1073,131 @@ function pageSignup(req, res, query) {
   `;
   sendHtml(res, layout({ title: 'Sign Up', body }));
 }
+// ---------------------------------------------------------------- Google sign-in
+// Standard OAuth 2.0 authorization-code flow, no external library -- just
+// fetch() against Google's token and userinfo endpoints (Node 18+ has
+// fetch built in, same as the Resend email calls elsewhere in this file).
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
+const GOOGLE_REDIRECT_URI = 'https://straindex-dber.onrender.com/auth/google/callback';
+
+function pageGoogleStart(req, res) {
+  if (!GOOGLE_CLIENT_ID) {
+    return sendHtml(res, layout({ title: 'Sign in with Google', body: `<h1 class="screen-title">Google sign-in isn't set up yet</h1><p class="empty-note">Missing GOOGLE_CLIENT_ID on the server. <a href="/login">Back to login</a></p>` }));
+  }
+  // A random, single-use state value guards against CSRF -- stored in a
+  // short-lived cookie, then checked against the value Google echoes back
+  // on the callback before we trust anything else in that request.
+  const state = crypto.randomBytes(16).toString('hex');
+  res.setHeader('Set-Cookie', `google_oauth_state=${state}; Path=/; HttpOnly; SameSite=Lax; Max-Age=600`);
+  const params = new URLSearchParams({
+    client_id: GOOGLE_CLIENT_ID,
+    redirect_uri: GOOGLE_REDIRECT_URI,
+    response_type: 'code',
+    scope: 'openid email profile',
+    state,
+    prompt: 'select_account',
+  });
+  redirect(res, `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`);
+}
+
+async function handleGoogleCallback(req, res, query) {
+  const code = query.get('code');
+  const state = query.get('state');
+  const cookies = auth.parseCookies(req);
+  if (!code || !state || state !== cookies.google_oauth_state) {
+    return redirect(res, '/login?err=1');
+  }
+  try {
+    const tokenRes = await fetch('https://oauth2.googleapis.com/token', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({
+        code,
+        client_id: GOOGLE_CLIENT_ID,
+        client_secret: GOOGLE_CLIENT_SECRET,
+        redirect_uri: GOOGLE_REDIRECT_URI,
+        grant_type: 'authorization_code',
+      }),
+    });
+    const tokenData = await tokenRes.json();
+    if (!tokenData.access_token) return redirect(res, '/login?err=1');
+
+    const profileRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+      headers: { Authorization: `Bearer ${tokenData.access_token}` },
+    });
+    const profile = await profileRes.json();
+    if (!profile.sub || !profile.email) return redirect(res, '/login?err=1');
+
+    // 1) Already linked -- straight login.
+    let user = db.getUserByGoogleId(profile.sub);
+    // 2) Not linked yet, but an account already exists with this
+    //    Google-verified email -- link them together rather than making a
+    //    confusing duplicate account.
+    if (!user && profile.email_verified) {
+      const existing = db.getUserByEmail(profile.email);
+      if (existing) user = await db.linkGoogleId(existing.id, profile.sub);
+    }
+    if (user) {
+      const token = auth.signUserSessionValue(user.id);
+      res.setHeader('Set-Cookie', `user_session=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000`);
+      return redirect(res, '/');
+    }
+    // 3) Genuinely new person -- Google doesn't give us a birth date, and
+    // this app legally requires one, so stash the verified profile in a
+    // short-lived signed cookie and send them to a small finishing form
+    // rather than creating an incomplete account.
+    const pending = auth.sign(JSON.stringify({ sub: profile.sub, email: profile.email, name: profile.name || '' }));
+    res.setHeader('Set-Cookie', `google_pending=${encodeURIComponent(pending)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=600`);
+    redirect(res, '/auth/google/finish');
+  } catch (e) {
+    redirect(res, '/login?err=1');
+  }
+}
+
+function pageGoogleFinish(req, res, query) {
+  const cookies = auth.parseCookies(req);
+  const raw = auth.verify(cookies.google_pending);
+  if (!raw) return redirect(res, '/signup');
+  const profile = JSON.parse(raw);
+  const err = query.get('err');
+  const errMessages = { taken: 'That username is already taken.', age: `You must be ${MIN_AGE} or older to create an account.`, invalid: 'Please fill in every field.' };
+  const suggestedUsername = (profile.name || profile.email.split('@')[0]).replace(/[^a-zA-Z0-9_]/g, '').slice(0, 24) || 'strainfan';
+  const body = `
+    <h1 class="screen-title">Almost there</h1>
+    <p class="screen-sub">Signed in as ${esc(profile.email)} with Google. Just need a couple more things.</p>
+    ${err && errMessages[err] ? `<p style="color:#a13a3a;">${esc(errMessages[err])}</p>` : ''}
+    <form method="POST" action="/auth/google/finish">
+      <label class="field-label" style="margin-top:0;">Username</label>
+      <input type="text" name="username" required minlength="3" maxlength="24" value="${esc(suggestedUsername)}">
+      <label class="field-label">Date of birth</label>
+      <input type="date" name="birth_date" required>
+      <button class="btn block" type="submit" style="margin-top:14px;">Finish Creating Account</button>
+    </form>
+    <p class="empty-note" style="margin-top:12px;">By creating an account, you agree to the <a href="/terms">Terms of Service</a> and <a href="/privacy">Privacy Policy</a>.</p>
+  `;
+  sendHtml(res, layout({ title: 'Finish Signing Up', body }));
+}
+
+async function handleGoogleFinishSubmit(req, res) {
+  const cookies = auth.parseCookies(req);
+  const raw = auth.verify(cookies.google_pending);
+  if (!raw) return redirect(res, '/signup');
+  const profile = JSON.parse(raw);
+  const f = await parseForm(req);
+  const username = String(f.username || '').trim();
+  if (!username || !f.birth_date) return redirect(res, '/auth/google/finish?err=invalid');
+  if (!isOldEnough(f.birth_date)) return redirect(res, '/auth/google/finish?err=age');
+  if (db.getUserByUsername(username)) return redirect(res, '/auth/google/finish?err=taken');
+  const user = await db.createUserFromGoogle({ username, birth_date: f.birth_date, email: profile.email, google_id: profile.sub });
+  const token = auth.signUserSessionValue(user.id);
+  res.setHeader('Set-Cookie', [
+    `user_session=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000`,
+    `google_pending=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0`,
+  ]);
+  redirect(res, '/onboarding');
+}
+
 async function handleSignupSubmit(req, res) {
   if (isSignupRateLimited(req)) return redirect(res, '/signup?err=rate_limited');
   const f = await parseForm(req);
@@ -1092,6 +1223,11 @@ function pageLogin(req, res, query) {
   const body = `
     <h1 class="screen-title">Log In</h1>
     ${err && errMessages[err] ? `<p style="color:#a13a3a;">${esc(errMessages[err])}</p>` : ''}
+    <a href="/auth/google" class="btn secondary block" style="text-decoration:none;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:14px;">
+      <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.72v2.26h2.9c1.7-1.57 2.7-3.88 2.7-6.62z"/><path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.9-2.26c-.8.54-1.84.86-3.06.86-2.35 0-4.34-1.59-5.05-3.72H.98v2.33A9 9 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.95 10.7A5.4 5.4 0 0 1 3.67 9c0-.59.1-1.17.28-1.7V4.97H.98A9 9 0 0 0 0 9c0 1.45.35 2.83.98 4.03l2.97-2.33z"/><path fill="#EA4335" d="M9 3.58c1.32 0 2.5.46 3.44 1.35l2.58-2.58C13.46.89 11.43 0 9 0A9 9 0 0 0 .98 4.97l2.97 2.33C4.66 5.17 6.65 3.58 9 3.58z"/></svg>
+      Continue with Google
+    </a>
+    <p class="empty-note" style="text-align:center;margin:0 0 14px;">or</p>
     <form method="POST" action="/login">
       <label class="field-label" style="margin-top:0;">Username</label>
       <input type="text" name="username" required autocomplete="username">
@@ -2602,7 +2738,7 @@ const server = http.createServer(async (req, res) => {
     // individually, everything requires a logged-in user except the
     // signup/login/logout routes themselves and the separate admin panel
     // (which has its own, unrelated password gate below).
-    const PUBLIC_PATHS = new Set(['/', '/signup', '/login', '/logout', '/terms', '/privacy', '/forgot-password', '/reset-password', '/api/analytics-snapshot']);
+    const PUBLIC_PATHS = new Set(['/', '/signup', '/login', '/logout', '/terms', '/privacy', '/forgot-password', '/reset-password', '/api/analytics-snapshot', '/auth/google', '/auth/google/callback', '/auth/google/finish']);
     if (!PUBLIC_PATHS.has(pathname) && !pathname.startsWith('/admin') && auth.currentUserId(req) == null) {
       return redirect(res, '/login');
     }
@@ -2632,6 +2768,10 @@ const server = http.createServer(async (req, res) => {
     if (method === 'POST' && pathname === '/admin/login') return await handleAdminLoginSubmit(req, res);
     if (method === 'GET' && pathname === '/signup') return pageSignup(req, res, url.searchParams);
     if (method === 'POST' && pathname === '/signup') return await handleSignupSubmit(req, res);
+    if (method === 'GET' && pathname === '/auth/google') return pageGoogleStart(req, res);
+    if (method === 'GET' && pathname === '/auth/google/callback') return await handleGoogleCallback(req, res, url.searchParams);
+    if (method === 'GET' && pathname === '/auth/google/finish') return pageGoogleFinish(req, res, url.searchParams);
+    if (method === 'POST' && pathname === '/auth/google/finish') return await handleGoogleFinishSubmit(req, res);
     if (method === 'GET' && pathname === '/login') return pageLogin(req, res, url.searchParams);
     if (method === 'POST' && pathname === '/login') return await handleLoginSubmit(req, res);
     if (method === 'POST' && pathname === '/logout') return handleLogout(req, res);
