@@ -59221,5 +59221,204 @@
     "flavor": null,
     "icon": "🍊",
     "breeder": "Claybourne Co."
+  },
+  {
+    "id": "s1742",
+    "name": "Cherry Cap",
+    "type": "Hybrid",
+    "lean": null,
+    "rarity": "rare",
+    "thc": null,
+    "cbd": null,
+    "terps": [],
+    "effects": [],
+    "flavor": null,
+    "icon": "🍒",
+    "breeder": "Seed Junky Genetics"
+  },
+  {
+    "id": "s1743",
+    "name": "Lava Flower",
+    "type": "Sativa",
+    "lean": null,
+    "rarity": "uncommon",
+    "thc": null,
+    "cbd": null,
+    "terps": [],
+    "effects": [],
+    "flavor": null,
+    "icon": "🌋",
+    "breeder": "A Golden State"
+  },
+  {
+    "id": "s1744",
+    "name": "Lavender Lemonade",
+    "type": "Hybrid",
+    "lean": null,
+    "rarity": "uncommon",
+    "thc": "18–22%",
+    "cbd": null,
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.35
+      },
+      {
+        "n": "Linalool",
+        "p": 0.25
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Uplifted",
+      "Energetic",
+      "Relaxed"
+    ],
+    "flavor": "Bright lemon citrus with soothing floral lavender notes.",
+    "icon": "💜",
+    "breeder": null
+  },
+  {
+    "id": "s1745",
+    "name": "Purple Lemon Craze",
+    "type": "Indica",
+    "lean": null,
+    "rarity": "uncommon",
+    "thc": null,
+    "cbd": null,
+    "terps": [],
+    "effects": [],
+    "flavor": "Citrus and earthy notes with a prominent lemon aroma.",
+    "icon": "🍋",
+    "breeder": "STIIIZY"
+  },
+  {
+    "id": "s1746",
+    "name": "Pineapple Chunks",
+    "type": "Indica",
+    "lean": null,
+    "rarity": "uncommon",
+    "thc": "25–26%",
+    "cbd": "1%",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Euphoric"
+    ],
+    "flavor": "Earthy and cheesy with a pineapple undertone.",
+    "icon": "🍍",
+    "breeder": null
+  },
+  {
+    "id": "s1747",
+    "name": "Blueberry Parfait",
+    "type": "Sativa",
+    "lean": null,
+    "rarity": "rare",
+    "thc": "31–33%",
+    "cbd": null,
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Energetic",
+      "Happy"
+    ],
+    "flavor": "Sweet blueberry cobbler with creamy vanilla and a slight citrus finish.",
+    "icon": "🫐",
+    "breeder": "PHASES"
+  },
+  {
+    "id": "s1748",
+    "name": "Apple Tartz",
+    "type": "Hybrid",
+    "lean": null,
+    "rarity": "uncommon",
+    "thc": null,
+    "cbd": null,
+    "terps": [],
+    "effects": [],
+    "flavor": null,
+    "icon": "🥧",
+    "breeder": "Tiny Fires"
+  },
+  {
+    "id": "s1749",
+    "name": "CBD Mendo Bliss",
+    "type": "CBD",
+    "lean": null,
+    "rarity": "uncommon",
+    "thc": null,
+    "cbd": null,
+    "terps": [],
+    "effects": [],
+    "flavor": null,
+    "icon": "🍃",
+    "breeder": "Moon Made Farms"
+  },
+  {
+    "id": "s1750",
+    "name": "Frosted Banana OG",
+    "type": "Hybrid",
+    "lean": null,
+    "rarity": "uncommon",
+    "thc": null,
+    "cbd": null,
+    "terps": [],
+    "effects": [],
+    "flavor": null,
+    "icon": "🍌",
+    "breeder": "Claybourne Co."
+  },
+  {
+    "id": "s1751",
+    "name": "Tang Gang",
+    "type": "Hybrid",
+    "lean": null,
+    "rarity": "uncommon",
+    "thc": null,
+    "cbd": null,
+    "terps": [],
+    "effects": [],
+    "flavor": null,
+    "icon": "🍊",
+    "breeder": null
+  },
+  {
+    "id": "s1752",
+    "name": "The Wendy",
+    "type": "Sativa",
+    "lean": null,
+    "rarity": "uncommon",
+    "thc": null,
+    "cbd": null,
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Relaxed"
+    ],
+    "flavor": "Bright citrus and floral notes with a touch of soothing lavender.",
+    "icon": "🌼",
+    "breeder": "Green Line"
+  },
+  {
+    "id": "s1753",
+    "name": "Zebra Ztripez",
+    "type": "Hybrid",
+    "lean": null,
+    "rarity": "rare",
+    "thc": "20–27%",
+    "cbd": null,
+    "terps": [],
+    "effects": [
+      "Creative",
+      "Uplifted",
+      "Relaxed"
+    ],
+    "flavor": "Explosive pineapple, mango, and citrus with herbal, earthy notes.",
+    "icon": "🦓",
+    "breeder": "Seed Junky Genetics"
   }
 ]
