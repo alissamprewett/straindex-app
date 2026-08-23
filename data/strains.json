@@ -58329,5 +58329,321 @@
     "flavor": "Sweet vanilla with minty herbal notes and a citrus finish.",
     "icon": "🍡",
     "breeder": "Sherbinskis"
+  },
+  {
+    "id": "s1697",
+    "name": "Bob Hope",
+    "type": "Sativa",
+    "lean": null,
+    "rarity": "rare",
+    "thc": "18–25%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Pinene",
+        "p": 0.25
+      },
+      {
+        "n": "Terpinolene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Energetic",
+      "Uplifted",
+      "Happy"
+    ],
+    "flavor": null,
+    "icon": "🎭",
+    "breeder": null
+  },
+  {
+    "id": "s1698",
+    "name": "Zookies",
+    "type": "Hybrid",
+    "lean": null,
+    "rarity": "uncommon",
+    "thc": "23–27%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.35
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Uplifted",
+      "Euphoric"
+    ],
+    "flavor": "Sweet nutty cookies with hints of chocolate, pepper, and diesel.",
+    "icon": "🍪",
+    "breeder": "Alien Labs"
+  },
+  {
+    "id": "s1699",
+    "name": "Snoozeberry",
+    "type": "Hybrid",
+    "lean": null,
+    "rarity": "uncommon",
+    "thc": null,
+    "cbd": null,
+    "terps": [],
+    "effects": [],
+    "flavor": null,
+    "icon": "🫐",
+    "breeder": null
+  },
+  {
+    "id": "s1700",
+    "name": "Grand Master",
+    "type": "Hybrid",
+    "lean": null,
+    "rarity": "uncommon",
+    "thc": null,
+    "cbd": null,
+    "terps": [],
+    "effects": [],
+    "flavor": null,
+    "icon": "🌿",
+    "breeder": "CBX Cannabiotix"
+  },
+  {
+    "id": "s1701",
+    "name": "Cherry Royale",
+    "type": "Hybrid",
+    "lean": null,
+    "rarity": "uncommon",
+    "thc": null,
+    "cbd": null,
+    "terps": [],
+    "effects": [],
+    "flavor": null,
+    "icon": "🍒",
+    "breeder": null
+  },
+  {
+    "id": "s1702",
+    "name": "Raspberry OG",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "29%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.25
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Sleepy",
+      "Happy"
+    ],
+    "flavor": "Sweet ripe raspberry with earthy and spicy undertones.",
+    "icon": "🍇",
+    "breeder": null
+  },
+  {
+    "id": "s1703",
+    "name": "Toad Burger",
+    "type": "Hybrid",
+    "lean": null,
+    "rarity": "rare",
+    "thc": null,
+    "cbd": null,
+    "terps": [],
+    "effects": [],
+    "flavor": null,
+    "icon": "🐸",
+    "breeder": "Green Dragon"
+  },
+  {
+    "id": "s1704",
+    "name": "Violet Dreams",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18–25%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      },
+      {
+        "n": "Limonene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Uplifted",
+      "Creative",
+      "Relaxed"
+    ],
+    "flavor": "Sweet berries and grape with floral lavender and citrus notes.",
+    "icon": "💜",
+    "breeder": null
+  },
+  {
+    "id": "s1705",
+    "name": "Watermelon Z",
+    "type": "Indica",
+    "lean": null,
+    "rarity": "uncommon",
+    "thc": null,
+    "cbd": null,
+    "terps": [],
+    "effects": [],
+    "flavor": null,
+    "icon": "🍉",
+    "breeder": "Claybourne Co."
+  },
+  {
+    "id": "s1706",
+    "name": "Alarm Clock XO",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "rare",
+    "thc": null,
+    "cbd": null,
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Energetic",
+      "Relaxed"
+    ],
+    "flavor": "Tangy sweet lemon and citrus with a smooth orange cream finish.",
+    "icon": "⏰",
+    "breeder": "Turn"
+  },
+  {
+    "id": "s1707",
+    "name": "Blueberry Waffles",
+    "type": "Hybrid",
+    "lean": null,
+    "rarity": "uncommon",
+    "thc": null,
+    "cbd": null,
+    "terps": [],
+    "effects": [],
+    "flavor": null,
+    "icon": "🧇",
+    "breeder": "Gramlin"
+  },
+  {
+    "id": "s1708",
+    "name": "Galactic Warheads",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "20–29%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.35
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Sleepy"
+    ],
+    "flavor": "Sour candy with citrus, grape, and a gassy finish.",
+    "icon": "☄️",
+    "breeder": "Craft Farmer Genetics"
+  },
+  {
+    "id": "s1709",
+    "name": "Garlic Ghost",
+    "type": "Hybrid",
+    "lean": null,
+    "rarity": "uncommon",
+    "thc": null,
+    "cbd": null,
+    "terps": [],
+    "effects": [],
+    "flavor": null,
+    "icon": "👻",
+    "breeder": "Smoken Promises"
+  },
+  {
+    "id": "s1710",
+    "name": "Lemon Papaya Gelato",
+    "type": "Hybrid",
+    "lean": null,
+    "rarity": "uncommon",
+    "thc": null,
+    "cbd": null,
+    "terps": [],
+    "effects": [],
+    "flavor": null,
+    "icon": "🍋",
+    "breeder": "Green Line"
+  },
+  {
+    "id": "s1711",
+    "name": "Pink Certz",
+    "type": "Hybrid",
+    "lean": null,
+    "rarity": "rare",
+    "thc": "22–28%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Ocimene",
+        "p": 0.2
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric"
+    ],
+    "flavor": "Sweet berry and floral notes with a grape-diesel-mint edge.",
+    "icon": "🌸",
+    "breeder": "Compound Genetics"
   }
 ]
