@@ -58202,13 +58202,13 @@
     "type": "Indica",
     "lean": null,
     "rarity": "rare",
-    "thc": null,
-    "cbd": null,
+    "thc": "26%",
+    "cbd": "<1%",
     "terps": [],
     "effects": [],
     "flavor": null,
     "icon": "🏔️",
-    "breeder": null
+    "breeder": "CBX Cannabiotix"
   },
   {
     "id": "s1692",
@@ -58645,5 +58645,287 @@
     "flavor": "Sweet berry and floral notes with a grape-diesel-mint edge.",
     "icon": "🌸",
     "breeder": "Compound Genetics"
+  },
+  {
+    "id": "s1712",
+    "name": "The Judge",
+    "type": "Indica",
+    "lean": null,
+    "rarity": "rare",
+    "thc": "~35%",
+    "cbd": "<1%",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Sleepy"
+    ],
+    "flavor": "Pungent diesel with notes of bitter coffee and rich plum.",
+    "icon": "⚖️",
+    "breeder": "Claybourne Co."
+  },
+  {
+    "id": "s1713",
+    "name": "Zaalander",
+    "type": "Hybrid",
+    "lean": null,
+    "rarity": "uncommon",
+    "thc": "26–28%",
+    "cbd": "<1%",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Relaxed",
+      "Happy"
+    ],
+    "flavor": "Sweet and citrusy with subtle earthy undertones.",
+    "icon": "🌀",
+    "breeder": "CBX Cannabiotix"
+  },
+  {
+    "id": "s1714",
+    "name": "Pineapple Fruz",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "rare",
+    "thc": "25–32%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.35
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Euphoric",
+      "Uplifted",
+      "Relaxed"
+    ],
+    "flavor": "Sweet tropical pineapple and citrus with a gassy exhale.",
+    "icon": "🍍",
+    "breeder": "Seed Junky Genetics"
+  },
+  {
+    "id": "s1715",
+    "name": "Bonfire",
+    "type": "Hybrid",
+    "lean": null,
+    "rarity": "uncommon",
+    "thc": null,
+    "cbd": null,
+    "terps": [],
+    "effects": [],
+    "flavor": null,
+    "icon": "🔥",
+    "breeder": "Seed Junky Genetics"
+  },
+  {
+    "id": "s1716",
+    "name": "Chapel of Love",
+    "type": "Hybrid",
+    "lean": null,
+    "rarity": "uncommon",
+    "thc": null,
+    "cbd": null,
+    "terps": [],
+    "effects": [],
+    "flavor": null,
+    "icon": "💒",
+    "breeder": null
+  },
+  {
+    "id": "s1717",
+    "name": "Magic Melon",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "20–26%",
+    "cbd": "1–2%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.35
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Euphoric",
+      "Uplifted",
+      "Energetic"
+    ],
+    "flavor": "Sweet melon and tropical mango with a diesel undertone.",
+    "icon": "🍈",
+    "breeder": "Humboldt Seed Company"
+  },
+  {
+    "id": "s1718",
+    "name": "LA Purps",
+    "type": "Indica",
+    "lean": null,
+    "rarity": "uncommon",
+    "thc": null,
+    "cbd": null,
+    "terps": [],
+    "effects": [],
+    "flavor": null,
+    "icon": "🍇",
+    "breeder": "Street Kings"
+  },
+  {
+    "id": "s1719",
+    "name": "Blue Pomegranate Gelato",
+    "type": "Hybrid",
+    "lean": null,
+    "rarity": "uncommon",
+    "thc": null,
+    "cbd": null,
+    "terps": [],
+    "effects": [],
+    "flavor": null,
+    "icon": "🫐",
+    "breeder": "The Marathon Cultivation"
+  },
+  {
+    "id": "s1720",
+    "name": "Moonbeam",
+    "type": "Indica",
+    "lean": null,
+    "rarity": "rare",
+    "thc": "29–33%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Linalool",
+        "p": 0.25
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Euphoric",
+      "Sleepy"
+    ],
+    "flavor": "Pink grapefruit and key lime pie with rainbow sherbet sweetness.",
+    "icon": "🌙",
+    "breeder": "A Golden State"
+  },
+  {
+    "id": "s1721",
+    "name": "Jet Mints",
+    "type": "Hybrid",
+    "lean": null,
+    "rarity": "uncommon",
+    "thc": null,
+    "cbd": null,
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.4
+      }
+    ],
+    "effects": [
+      "Euphoric",
+      "Uplifted",
+      "Relaxed"
+    ],
+    "flavor": "Sweet candy with peach and apple notes over a kush, herbal base.",
+    "icon": "✈️",
+    "breeder": null
+  },
+  {
+    "id": "s1722",
+    "name": "CCG",
+    "type": "Hybrid",
+    "lean": null,
+    "rarity": "uncommon",
+    "thc": null,
+    "cbd": null,
+    "terps": [],
+    "effects": [],
+    "flavor": null,
+    "icon": "🌿",
+    "breeder": "Street Kings"
+  },
+  {
+    "id": "s1723",
+    "name": "Frosted Fade",
+    "type": "Indica",
+    "lean": null,
+    "rarity": "uncommon",
+    "thc": null,
+    "cbd": null,
+    "terps": [],
+    "effects": [],
+    "flavor": null,
+    "icon": "❄️",
+    "breeder": "PHASES"
+  },
+  {
+    "id": "s1724",
+    "name": "Electric Colada",
+    "type": "Sativa",
+    "lean": null,
+    "rarity": "rare",
+    "thc": null,
+    "cbd": null,
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Uplifted",
+      "Focused"
+    ],
+    "flavor": "Bright tropical aromas with a frosty, functional edge.",
+    "icon": "⚡",
+    "breeder": "PHASES"
+  },
+  {
+    "id": "s1725",
+    "name": "Strawberry C.R.E.A.M.",
+    "type": "Sativa",
+    "lean": null,
+    "rarity": "rare",
+    "thc": null,
+    "cbd": null,
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Creative",
+      "Uplifted"
+    ],
+    "flavor": "Sweet strawberry cream, like a fresh bowl of strawberries.",
+    "icon": "🍓",
+    "breeder": "Claybourne Co."
+  },
+  {
+    "id": "s1726",
+    "name": "Super Jealous",
+    "type": "Hybrid",
+    "lean": null,
+    "rarity": "uncommon",
+    "thc": null,
+    "cbd": null,
+    "terps": [],
+    "effects": [],
+    "flavor": null,
+    "icon": "😤",
+    "breeder": "Field Trip"
   }
 ]
