@@ -57733,5 +57733,132 @@
     "flavor": "Bright grapefruit and orange with a sweet tropical finish.",
     "icon": "🍈",
     "breeder": "Dutch Passion"
+  },
+  {
+    "id": "s1671",
+    "name": "Bermuda Triangle",
+    "type": "Hybrid",
+    "lean": null,
+    "rarity": "uncommon",
+    "thc": "22–25%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.4
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.15
+      },
+      {
+        "n": "Limonene",
+        "p": 0.13
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Euphoric"
+    ],
+    "flavor": null,
+    "icon": "🔺",
+    "breeder": null
+  },
+  {
+    "id": "s1672",
+    "name": "Cobra Kush",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20–26%",
+    "cbd": "<1%",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Euphoric"
+    ],
+    "flavor": "Creamy sweet vanilla backed by a sharp diesel punch, with earthy kush and pepper notes.",
+    "icon": "🐍",
+    "breeder": null
+  },
+  {
+    "id": "s1673",
+    "name": "Mule Fuel",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "24–31%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Terpinolene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.25
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Sleepy",
+      "Euphoric"
+    ],
+    "flavor": "Diesel and chemical funk with notes of tobacco and garlic.",
+    "icon": "⛽",
+    "breeder": "Thug Pug Genetics"
+  },
+  {
+    "id": "s1674",
+    "name": "King Louis OG",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20–25%",
+    "cbd": "<1%",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Sleepy",
+      "Euphoric"
+    ],
+    "flavor": "Earthy pine and diesel with hints of citrus.",
+    "icon": "👑",
+    "breeder": null
+  },
+  {
+    "id": "s1675",
+    "name": "Lambsbread",
+    "type": "Sativa",
+    "lean": null,
+    "rarity": "rare",
+    "thc": "15–25%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.35
+      },
+      {
+        "n": "Limonene",
+        "p": 0.25
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Energetic",
+      "Uplifted",
+      "Creative"
+    ],
+    "flavor": "Earthy and spicy with citrus, hints of cheese and pine, and a sweet floral undertone.",
+    "icon": "🐑",
+    "breeder": null
   }
 ]
