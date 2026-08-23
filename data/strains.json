@@ -57922,5 +57922,292 @@
     "flavor": "Pungent earthy skunk with hints of lemon and sour grape citrus.",
     "icon": "🌿",
     "breeder": null
+  },
+  {
+    "id": "s1678",
+    "name": "Cherry OG",
+    "type": "Hybrid",
+    "lean": null,
+    "rarity": "uncommon",
+    "thc": "18–24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.4
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      },
+      {
+        "n": "Limonene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Euphoric",
+      "Happy"
+    ],
+    "flavor": "Sweet cherry with earthy pine and a diesel-citrus undertone.",
+    "icon": "🍒",
+    "breeder": "Emerald Triangle Seeds"
+  },
+  {
+    "id": "s1679",
+    "name": "Strawberry Haze",
+    "type": "Sativa",
+    "lean": null,
+    "rarity": "uncommon",
+    "thc": "18–22%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.35
+      },
+      {
+        "n": "Ocimene",
+        "p": 0.25
+      },
+      {
+        "n": "Pinene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Energetic",
+      "Talkative",
+      "Uplifted"
+    ],
+    "flavor": "Sweet strawberry with citrus haze and subtle herbal spice.",
+    "icon": "🍓",
+    "breeder": "Green House Seeds"
+  },
+  {
+    "id": "s1680",
+    "name": "Super Sour Apple",
+    "type": "Sativa",
+    "lean": null,
+    "rarity": "uncommon",
+    "thc": null,
+    "cbd": null,
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Euphoric"
+    ],
+    "flavor": "Sweet and fruity, reminiscent of berries and apples.",
+    "icon": "🍏",
+    "breeder": null
+  },
+  {
+    "id": "s1681",
+    "name": "Durban Lime",
+    "type": "Sativa",
+    "lean": null,
+    "rarity": "uncommon",
+    "thc": null,
+    "cbd": null,
+    "terps": [],
+    "effects": [],
+    "flavor": null,
+    "icon": "🌿",
+    "breeder": null
+  },
+  {
+    "id": "s1682",
+    "name": "Frosted Cherry Cookies",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "23–28%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      },
+      {
+        "n": "Linalool",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Sleepy"
+    ],
+    "flavor": "Sweet cherry and berry with doughy, earthy undertones.",
+    "icon": "🍪",
+    "breeder": "Liberty Reach"
+  },
+  {
+    "id": "s1683",
+    "name": "Forbidden GMO",
+    "type": "Hybrid",
+    "lean": null,
+    "rarity": "uncommon",
+    "thc": null,
+    "cbd": null,
+    "terps": [],
+    "effects": [],
+    "flavor": null,
+    "icon": "🚫",
+    "breeder": null
+  },
+  {
+    "id": "s1684",
+    "name": "Presha OG",
+    "type": "Hybrid",
+    "lean": null,
+    "rarity": "uncommon",
+    "thc": null,
+    "cbd": null,
+    "terps": [],
+    "effects": [],
+    "flavor": null,
+    "icon": "🌿",
+    "breeder": null
+  },
+  {
+    "id": "s1685",
+    "name": "Purple Carbonite",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "24–30%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.25
+      },
+      {
+        "n": "Limonene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric"
+    ],
+    "flavor": "Sweet, creamy citrus-berry with hints of grape and spice.",
+    "icon": "🟣",
+    "breeder": null
+  },
+  {
+    "id": "s1686",
+    "name": "Peace & Love",
+    "type": "Sativa",
+    "lean": null,
+    "rarity": "uncommon",
+    "thc": null,
+    "cbd": null,
+    "terps": [],
+    "effects": [],
+    "flavor": null,
+    "icon": "☮️",
+    "breeder": "Moon Made Farms"
+  },
+  {
+    "id": "s1687",
+    "name": "Vegas ODB",
+    "type": "Hybrid",
+    "lean": null,
+    "rarity": "uncommon",
+    "thc": null,
+    "cbd": null,
+    "terps": [],
+    "effects": [],
+    "flavor": null,
+    "icon": "🎲",
+    "breeder": null
+  },
+  {
+    "id": "s1688",
+    "name": "PSYOP",
+    "type": "Hybrid",
+    "lean": null,
+    "rarity": "rare",
+    "thc": null,
+    "cbd": null,
+    "terps": [],
+    "effects": [],
+    "flavor": null,
+    "icon": "👽",
+    "breeder": "Alien Labs"
+  },
+  {
+    "id": "s1689",
+    "name": "Atomic Apple",
+    "type": "Hybrid",
+    "lean": null,
+    "rarity": "rare",
+    "thc": null,
+    "cbd": null,
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed"
+    ],
+    "flavor": null,
+    "icon": "🍎",
+    "breeder": "Alien Labs"
+  },
+  {
+    "id": "s1690",
+    "name": "Casino Kush",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "27–31%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.35
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      },
+      {
+        "n": "Pinene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Sleepy"
+    ],
+    "flavor": "Spicy, fuel-forward, and earthy with a piney kush profile.",
+    "icon": "🎰",
+    "breeder": "Rythm"
+  },
+  {
+    "id": "s1691",
+    "name": "Mount Zereal Kush",
+    "type": "Indica",
+    "lean": null,
+    "rarity": "rare",
+    "thc": null,
+    "cbd": null,
+    "terps": [],
+    "effects": [],
+    "flavor": null,
+    "icon": "🏔️",
+    "breeder": null
   }
 ]
