@@ -58927,5 +58927,299 @@
     "flavor": null,
     "icon": "😤",
     "breeder": "Field Trip"
+  },
+  {
+    "id": "s1727",
+    "name": "Black Haze",
+    "type": "Sativa",
+    "lean": null,
+    "rarity": "uncommon",
+    "thc": "18–22%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      }
+    ],
+    "effects": [
+      "Uplifted",
+      "Energetic",
+      "Relaxed"
+    ],
+    "flavor": "Sweet woody berry with a smooth cherry aftertaste.",
+    "icon": "🖤",
+    "breeder": "Pioneer Nuggets"
+  },
+  {
+    "id": "s1728",
+    "name": "Banana Haze",
+    "type": "Sativa",
+    "lean": null,
+    "rarity": "uncommon",
+    "thc": "22–24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.35
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Happy",
+      "Euphoric",
+      "Energetic"
+    ],
+    "flavor": "Sweet banana and tropical citrus with spicy notes.",
+    "icon": "🍌",
+    "breeder": null
+  },
+  {
+    "id": "s1729",
+    "name": "Lemon Z",
+    "type": "Sativa",
+    "lean": null,
+    "rarity": "uncommon",
+    "thc": "18–26%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.35
+      },
+      {
+        "n": "Humulene",
+        "p": 0.2
+      },
+      {
+        "n": "Linalool",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Uplifted",
+      "Energetic",
+      "Happy"
+    ],
+    "flavor": "Sweet and sour lemon citrus with a subtle herbal undertone.",
+    "icon": "🍋",
+    "breeder": null
+  },
+  {
+    "id": "s1730",
+    "name": "Pineapple Sorbet",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "16–25%",
+    "cbd": null,
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      },
+      {
+        "n": "Pinene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Creative",
+      "Energetic",
+      "Relaxed"
+    ],
+    "flavor": "Tropical pineapple with diesel, guava, and a lavender lift.",
+    "icon": "🍍",
+    "breeder": "Aficionado French Connection"
+  },
+  {
+    "id": "s1731",
+    "name": "Gotti Beltz",
+    "type": "Hybrid",
+    "lean": null,
+    "rarity": "uncommon",
+    "thc": "20–24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      },
+      {
+        "n": "Pinene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Uplifted"
+    ],
+    "flavor": "Spicy, earthy pine with a Biscotti-forward sweetness.",
+    "icon": "🧬",
+    "breeder": "Farming Stoned"
+  },
+  {
+    "id": "s1732",
+    "name": "Donkey Butter",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20–27%",
+    "cbd": "<1%",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Sleepy",
+      "Happy"
+    ],
+    "flavor": "Spicy skunky diesel with earthy pine and herbal notes.",
+    "icon": "🧈",
+    "breeder": "Exotic Genetix"
+  },
+  {
+    "id": "s1733",
+    "name": "Bluebert",
+    "type": "Indica",
+    "lean": null,
+    "rarity": "rare",
+    "thc": "27–31%",
+    "cbd": "<1%",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Euphoric",
+      "Happy"
+    ],
+    "flavor": "Fruity cereal aroma with a grape-heavy inhale and gassy exhale.",
+    "icon": "🫐",
+    "breeder": "CBX Cannabiotix"
+  },
+  {
+    "id": "s1734",
+    "name": "Funk Master",
+    "type": "Indica",
+    "lean": null,
+    "rarity": "rare",
+    "thc": "32%",
+    "cbd": "<1%",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Sleepy"
+    ],
+    "flavor": null,
+    "icon": "🎺",
+    "breeder": "CBX Cannabiotix"
+  },
+  {
+    "id": "s1735",
+    "name": "Lemon ZaZa",
+    "type": "Hybrid",
+    "lean": null,
+    "rarity": "uncommon",
+    "thc": null,
+    "cbd": null,
+    "terps": [],
+    "effects": [],
+    "flavor": null,
+    "icon": "🍋",
+    "breeder": null
+  },
+  {
+    "id": "s1736",
+    "name": "Mango Cult",
+    "type": "Hybrid",
+    "lean": null,
+    "rarity": "uncommon",
+    "thc": null,
+    "cbd": null,
+    "terps": [],
+    "effects": [],
+    "flavor": null,
+    "icon": "🥭",
+    "breeder": "Turn"
+  },
+  {
+    "id": "s1737",
+    "name": "Kush Mintz x Do Si Dos",
+    "type": "Hybrid",
+    "lean": null,
+    "rarity": "uncommon",
+    "thc": null,
+    "cbd": null,
+    "terps": [],
+    "effects": [],
+    "flavor": null,
+    "icon": "🌿",
+    "breeder": "STIIIZY"
+  },
+  {
+    "id": "s1738",
+    "name": "Pink Pineapple",
+    "type": "Hybrid",
+    "lean": null,
+    "rarity": "uncommon",
+    "thc": null,
+    "cbd": null,
+    "terps": [],
+    "effects": [],
+    "flavor": null,
+    "icon": "🍍",
+    "breeder": "Green Line"
+  },
+  {
+    "id": "s1739",
+    "name": "Gelato x High Octane",
+    "type": "Hybrid",
+    "lean": null,
+    "rarity": "uncommon",
+    "thc": null,
+    "cbd": null,
+    "terps": [],
+    "effects": [],
+    "flavor": null,
+    "icon": "🍨",
+    "breeder": "STIIIZY"
+  },
+  {
+    "id": "s1740",
+    "name": "Mamba 8",
+    "type": "Hybrid",
+    "lean": null,
+    "rarity": "uncommon",
+    "thc": null,
+    "cbd": null,
+    "terps": [],
+    "effects": [],
+    "flavor": null,
+    "icon": "🐍",
+    "breeder": "Traditional"
+  },
+  {
+    "id": "s1741",
+    "name": "Paradise Pomelo",
+    "type": "Sativa",
+    "lean": null,
+    "rarity": "uncommon",
+    "thc": null,
+    "cbd": null,
+    "terps": [],
+    "effects": [],
+    "flavor": null,
+    "icon": "🍊",
+    "breeder": "Claybourne Co."
   }
 ]
