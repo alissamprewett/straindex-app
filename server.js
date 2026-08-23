@@ -143,6 +143,13 @@ function requireUser(req, res) {
   return id;
 }
 const MIN_AGE = 21;
+// A real, monitored contact point beyond the feedback form -- for
+// anything urgent (account issues, a bad actor, a safety/legal concern)
+// that shouldn't sit in a general feedback queue. Using a Gmail "+" alias
+// off Alissa's existing address is the zero-setup option: no new inbox to
+// check, mail still lands in the same account, and it's easy to filter or
+// swap for a real support@ address later if a custom domain gets set up.
+const SUPPORT_EMAIL = 'alissa.m.prewett+straindexsupport@gmail.com';
 function isOldEnough(birthDateStr) {
   const dob = new Date(birthDateStr);
   if (isNaN(dob.getTime())) return false;
@@ -179,11 +186,26 @@ function renderOnsetTimer(c) {
 // bounce back to, since the same check-in can appear on the Home feed,
 // a strain's own page, or a friend's profile.
 function renderCheckinComments(c, userId, redirectPath) {
-  const comments = db.listCheckinComments(c.id);
+  const comments = db.listCheckinComments(c.id, userId);
   return `
     ${comments.length ? `<div style="margin-top:8px;">${comments.map(cm => {
       const author = db.getUserById(cm.user_id);
-      return `<div class="empty-note" style="padding:3px 0;"><b>${esc(author ? author.username : 'Someone')}:</b> ${esc(cm.body)}</div>`;
+      const canModerate = userId != null && cm.user_id !== userId;
+      return `<div class="empty-note" style="padding:3px 0;">
+        <b>${esc(author ? author.username : 'Someone')}:</b> ${esc(cm.body)}
+        ${canModerate ? `
+          <form method="POST" action="/report" style="display:inline;" onsubmit="return confirm('Report this comment for review?')">
+            <input type="hidden" name="content_type" value="checkin_comment">
+            <input type="hidden" name="content_id" value="${cm.id}">
+            <input type="hidden" name="redirect_to" value="${esc(redirectPath)}">
+            <button type="submit" style="background:none;border:none;padding:0;margin-left:6px;color:inherit;text-decoration:underline;cursor:pointer;font-size:inherit;">Report</button>
+          </form>
+          <form method="POST" action="/block/${cm.user_id}" style="display:inline;" onsubmit="return confirm('Block ' + ${JSON.stringify(author ? author.username : 'this person')} + '? You will no longer see their comments, check-ins, or grow tips, and any friendship will end.')">
+            <input type="hidden" name="redirect_to" value="${esc(redirectPath)}">
+            <button type="submit" style="background:none;border:none;padding:0;margin-left:6px;color:inherit;text-decoration:underline;cursor:pointer;font-size:inherit;">Block</button>
+          </form>
+        ` : ''}
+      </div>`;
     }).join('')}</div>` : ''}
     ${userId != null ? `
       <form method="POST" action="/checkin/${c.id}/comment" style="display:flex;gap:6px;margin-top:6px;">
@@ -283,7 +305,7 @@ function pageLandingPage(req, res) {
     <div style="text-align:center;padding:20px 4px 8px;">
       <div style="font-size:44px;margin-bottom:8px;">🌿</div>
       <h1 style="margin:0 0 8px;font-size:22px;">StrainDex</h1>
-      <p class="screen-sub" style="margin:0 0 20px;">Your personal cannabis journal — strains, recipes, and growing knowledge, all in one place.</p>
+      <p class="screen-sub" style="margin:0 0 20px;">Your personal cannabis companion — track what you actually experience, stay informed on dosing and safety, discover your next favorite strain, and compare notes with real friends. All in one place.</p>
       <a href="/signup" class="btn block" style="text-decoration:none;max-width:280px;margin:0 auto;">Create Free Account</a>
       <p class="empty-note" style="margin-top:10px;">Already have an account? <a href="/login">Log in</a></p>
       <p class="empty-note" style="margin-top:4px;">Beta · For adults 21+ where legal · Not medical advice</p>
@@ -301,9 +323,19 @@ function pageLandingPage(req, res) {
         <div class="s">Tasting notes, pairings &amp; ratings</div>
       </div>
       <div class="more-tile">
+        <span class="ic">🧭</span>
+        <div class="t">Discover</div>
+        <div class="s">A strain quiz, trending picks &amp; friend recommendations</div>
+      </div>
+      <div class="more-tile">
+        <span class="ic">⚖️</span>
+        <div class="t">Stay Informed</div>
+        <div class="s">Dosing math, legal status &amp; safety cautions</div>
+      </div>
+      <div class="more-tile">
         <span class="ic">🍯</span>
         <div class="t">Recipes</div>
-        <div class="s">Infusions, edibles &amp; dosing</div>
+        <div class="s">Infusions, edibles &amp; scalable dosing</div>
       </div>
       <div class="more-tile">
         <span class="ic">📍</span>
@@ -332,7 +364,7 @@ function pageHome(req, res) {
 
   const body = `
     <h1 class="screen-title">Welcome back 🌿</h1>
-    <p class="screen-sub">Your personal cannabis journal — strains, recipes, and growing knowledge, all in one place.</p>
+    <p class="screen-sub">Your personal cannabis companion — check-ins, discovery, safety info, and your friends, all in one place.</p>
     <a class="btn block" href="/checkin" style="margin-bottom:18px;">🌿 Light Up</a>
 
     <div class="section-label">Recommended for you</div>
@@ -1020,9 +1052,10 @@ async function handleRecipeNewSubmit(req, res) {
 }
 
 function pageGrowing(req, res, query) {
+  const viewerId = auth.currentUserId(req);
   const CATEGORIES = ['Plant Life Cycle', 'Watering', 'Lighting', 'Nutrients & Feeding', 'Pests & Disease', 'Training', 'Harvest & Curing', 'Genetics & Seeds', 'Indoor Setup', 'Outdoor Growing', 'Cleaning & Gear Care'];
   const cat = query.get('cat') || 'All';
-  const tips = db.listGrowTips({ category: cat });
+  const tips = db.listGrowTips({ category: cat, viewerId });
   const body = `
     <h1 class="screen-title">Growing</h1>
     <p class="screen-sub">Tips &amp; tricks from home growers. Home cultivation laws vary by location — check yours first.</p>
@@ -1038,7 +1071,20 @@ function pageGrowing(req, res, query) {
         <p>${linkGlossaryTerms(esc(g.body))}</p>
         ${g.source_url ? `<p class="empty-note" style="padding:2px 0 0;">Source: <a href="${esc(g.source_url)}" target="_blank" rel="noopener noreferrer">${esc(g.source_name || g.source_url)}</a></p>` : ''}
         <div style="display:flex;justify-content:space-between;align-items:center;">
-          <span class="empty-note" style="padding:0;">by ${esc(g.author || 'Anonymous')}</span>
+          <span class="empty-note" style="padding:0;">by ${esc(g.author || 'Anonymous')}
+            ${viewerId != null && g.user_id != null && g.user_id !== viewerId ? `
+              <form method="POST" action="/report" style="display:inline;" onsubmit="return confirm('Report this grow tip for review?')">
+                <input type="hidden" name="content_type" value="grow_tip">
+                <input type="hidden" name="content_id" value="${g.id}">
+                <input type="hidden" name="redirect_to" value="/growing">
+                <button type="submit" style="background:none;border:none;padding:0;margin-left:6px;color:inherit;text-decoration:underline;cursor:pointer;font-size:inherit;">Report</button>
+              </form>
+              <form method="POST" action="/block/${g.user_id}" style="display:inline;" onsubmit="return confirm('Block ${esc(g.author || 'this person')}? You will no longer see their comments, check-ins, or grow tips, and any friendship will end.')">
+                <input type="hidden" name="redirect_to" value="/growing">
+                <button type="submit" style="background:none;border:none;padding:0;margin-left:6px;color:inherit;text-decoration:underline;cursor:pointer;font-size:inherit;">Block</button>
+              </form>
+            ` : ''}
+          </span>
           <button class="kudos-btn" onclick="likeGrowTip(${g.id}, this)">${KUDOS_BUD_ICON}Kudos (${g.likes})</button>
         </div>
       </div>`).join('') || `<div class="empty-note">No tips in this category yet — be the first to <a href="/growing">share one</a>.</div>`}
@@ -1166,17 +1212,21 @@ function pageSignup(req, res, query) {
     <p class="empty-note" style="text-align:center;margin:0 0 14px;">or</p>
     <form method="POST" action="/signup">
       <label class="field-label" style="margin-top:0;">Username</label>
-      <input type="text" name="username" required minlength="3" maxlength="24" autocomplete="username">
+      <input type="text" name="username" id="signup-username" required minlength="3" maxlength="24" autocomplete="username">
       <label class="field-label">Email</label>
       <input type="email" name="email" required autocomplete="email" placeholder="you@example.com">
       <label class="field-label">Date of birth</label>
       <input type="date" name="birth_date" required>
       <label class="field-label">Password</label>
-      <input type="password" name="password" required minlength="8" autocomplete="new-password">
+      <div style="position:relative;">
+        <input type="password" name="password" id="signup-password" required minlength="8" autocomplete="new-password" style="padding-right:44px;">
+        <button type="button" onclick="['signup-password','signup-password2'].forEach(id=>{const f=document.getElementById(id);f.type=f.type==='password'?'text':'password';});this.textContent=document.getElementById('signup-password').type==='password'?'👁':'🙈';" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:16px;padding:4px;">👁</button>
+      </div>
       <label class="field-label">Confirm password</label>
-      <input type="password" name="password2" required minlength="8" autocomplete="new-password">
+      <input type="password" name="password2" id="signup-password2" required minlength="8" autocomplete="new-password">
       <button class="btn block" type="submit" style="margin-top:14px;">Create Account</button>
     </form>
+    <script>document.getElementById('signup-username').focus();</script>
     <p class="empty-note" style="margin-top:12px;">By creating an account, you agree to the <a href="/terms">Terms of Service</a> and <a href="/privacy">Privacy Policy</a>.</p>
     <p class="empty-note">Already have an account? <a href="/login">Log in</a></p>
   `;
@@ -1190,7 +1240,7 @@ const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 const GOOGLE_REDIRECT_URI = 'https://straindex-dber.onrender.com/auth/google/callback';
 
-function pageGoogleStart(req, res) {
+function pageGoogleStart(req, res, query) {
   if (!GOOGLE_CLIENT_ID) {
     return sendHtml(res, layout({ title: 'Sign in with Google', body: `<h1 class="screen-title">Google sign-in isn't set up yet</h1><p class="empty-note">Missing GOOGLE_CLIENT_ID on the server. <a href="/login">Back to login</a></p>` }));
   }
@@ -1198,13 +1248,14 @@ function pageGoogleStart(req, res) {
   // short-lived cookie, then checked against the value Google echoes back
   // on the callback before we trust anything else in that request.
   const state = crypto.randomBytes(16).toString('hex');
+  const isRetry = query && query.get('retry') === '1';
   res.setHeader('Set-Cookie', `google_oauth_state=${state}; Path=/; HttpOnly; SameSite=Lax; Max-Age=600`);
   const params = new URLSearchParams({
     client_id: GOOGLE_CLIENT_ID,
     redirect_uri: GOOGLE_REDIRECT_URI,
     response_type: 'code',
     scope: 'openid email profile',
-    state,
+    state: isRetry ? `retry.${state}` : state,
     prompt: 'select_account',
   });
   redirect(res, `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`);
@@ -1214,8 +1265,23 @@ async function handleGoogleCallback(req, res, query) {
   const code = query.get('code');
   const state = query.get('state');
   const cookies = auth.parseCookies(req);
-  if (!code || !state || state !== cookies.google_oauth_state) {
-    console.error('Google sign-in: state mismatch or missing code', { hasCode: !!code, hasState: !!state, cookieState: cookies.google_oauth_state });
+  const alreadyRetried = typeof state === 'string' && state.startsWith('retry.');
+  const bareState = alreadyRetried ? state.slice('retry.'.length) : state;
+  if (!code || !state || bareState !== cookies.google_oauth_state) {
+    console.error('Google sign-in: state mismatch or missing code', { hasCode: !!code, hasState: !!state, cookieState: cookies.google_oauth_state, alreadyRetried });
+    // This mismatch is most often a cold-start timing hiccup on Render's
+    // free tier (the cookie-setting request and the callback landing far
+    // enough apart that something in between didn't stick) rather than an
+    // actual attack -- and the previous behavior of dumping the person
+    // onto an error page here is exactly the failure mode that makes
+    // someone assume Google sign-in is just broken and not bother trying
+    // again. So: silently retry the whole flow ONE time automatically
+    // before ever showing an error. If it fails twice in a row, something
+    // real is wrong and the error page is warranted.
+    if (!alreadyRetried) {
+      return redirect(res, '/auth/google?retry=1');
+    }
+    Sentry.captureException(new Error('Google sign-in state mismatch persisted after auto-retry'));
     return redirect(res, '/login?err=google_state');
   }
   try {
@@ -1369,11 +1435,15 @@ function pageLogin(req, res, query) {
     <p class="empty-note" style="text-align:center;margin:0 0 14px;">or</p>
     <form method="POST" action="/login">
       <label class="field-label" style="margin-top:0;">Username or email</label>
-      <input type="text" name="username" required autocomplete="username">
+      <input type="text" name="username" id="login-username" required autocomplete="username">
       <label class="field-label">Password</label>
-      <input type="password" name="password" required autocomplete="current-password">
+      <div style="position:relative;">
+        <input type="password" name="password" id="login-password" required autocomplete="current-password" style="padding-right:44px;">
+        <button type="button" onclick="const f=document.getElementById('login-password');f.type=f.type==='password'?'text':'password';this.textContent=f.type==='password'?'👁':'🙈';" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:16px;padding:4px;">👁</button>
+      </div>
       <button class="btn block" type="submit" style="margin-top:14px;">Log In</button>
     </form>
+    <script>document.getElementById('login-username').focus();</script>
     <p class="empty-note" style="margin-top:12px;">Forgot your password? <a href="/forgot-password">Reset it</a></p>
     <p class="empty-note">New here? <a href="/signup">Create an account</a></p>
   `;
@@ -1998,6 +2068,7 @@ function pageFeedback(req, res, query) {
   const body = `
     <h1 class="screen-title">Send Feedback</h1>
     <p class="screen-sub">StrainDex is in beta — bugs, ideas, confusing screens, anything at all. This goes straight to the person building the app.</p>
+    <p class="empty-note">For anything urgent — a compromised account, a safety concern, or a bad actor on the app — email <a href="mailto:${SUPPORT_EMAIL}">${SUPPORT_EMAIL}</a> directly instead of using the form below, since it's monitored more closely.</p>
     ${sent ? `<p class="empty-note" style="color:var(--brand-green-dark);">Thanks — your feedback was sent.</p>` : ''}
     <form method="POST" action="/feedback">
       <label class="field-label" style="margin-top:0;">Your feedback</label>
@@ -2649,6 +2720,11 @@ function pageAccount(req, res, query) {
     </div>
 
     <div class="card" style="margin-top:14px;">
+      <h2 style="margin:0 0 10px;font-size:15px;">Privacy & Safety</h2>
+      <a class="btn secondary block" href="/blocked-users" style="text-decoration:none;">🚫 Blocked Users</a>
+    </div>
+
+    <div class="card" style="margin-top:14px;">
       <h2 style="margin:0 0 10px;font-size:15px;">Your Data</h2>
       <p class="empty-note" style="padding:0 0 10px;">See our <a href="/privacy">Privacy Policy</a> and <a href="/terms">Terms of Service</a> for what this covers.</p>
       <a class="btn secondary block" href="/account/export" style="text-decoration:none;margin-bottom:10px;">⬇️ Export my data</a>
@@ -2856,6 +2932,82 @@ function pageFriends(req, res, query) {
   `;
   sendHtml(res, layout({ title: 'Friends', active: 'friends', body, isAdmin: auth.isAdmin(req) }));
 }
+// Abuse protection: report + block. Reports go to a simple admin review
+// queue; blocking is one-directional and hides the blocked person's
+// comments, check-ins, and grow tips from the blocker's own view, ends any
+// existing friendship, and stops them from sending a new friend request.
+async function handleReport(req, res) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const f = await parseForm(req);
+  if (f.content_type && f.content_id) {
+    await db.createReport({ reporter_id: userId, content_type: f.content_type, content_id: f.content_id, reason: f.reason || '' });
+  }
+  redirect(res, f.redirect_to || '/');
+}
+async function handleBlock(req, res, blockedId) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const f = await parseForm(req);
+  await db.blockUser(userId, Number(blockedId));
+  redirect(res, f.redirect_to || '/friends');
+}
+async function handleUnblock(req, res, blockedId) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  await db.unblockUser(userId, Number(blockedId));
+  redirect(res, '/blocked-users');
+}
+function pageBlockedUsers(req, res) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const blocked = db.listBlockedUsers(userId);
+  const body = `
+    <a href="/account" class="empty-note">← Back to Account Settings</a>
+    <h1 class="screen-title">Blocked Users</h1>
+    ${blocked.length ? blocked.map(u => `
+      <div class="library-row">
+        <div class="info"><div class="nm">${esc(u.username)}</div></div>
+        <form method="POST" action="/unblock/${u.id}">
+          <button type="submit" class="empty-note" style="padding:0 6px;background:none;border:none;color:var(--brand-green-dark);cursor:pointer;font-size:inherit;text-decoration:underline;">Unblock</button>
+        </form>
+      </div>
+    `).join('') : `<div class="empty-note">You haven't blocked anyone.</div>`}
+  `;
+  sendHtml(res, layout({ title: 'Blocked Users', body, isAdmin: auth.isAdmin(req) }));
+}
+// Admin review queue for reported content -- deliberately simple: see
+// what was reported and by whom, mark it reviewed once handled. Actually
+// removing bad content still happens through the existing admin tools for
+// that content type (or direct DB access at this scale), rather than
+// building a duplicate deletion path here.
+function pageAdminReports(req, res) {
+  if (!requireAdmin(req, res)) return;
+  const reports = db.listReports();
+  const body = `
+    <h1 class="screen-title">Reported Content</h1>
+    ${reports.length ? reports.map(r => {
+      const reporter = db.getUserById(r.reporter_id);
+      return `
+      <div class="card" style="margin-bottom:8px;${r.status === 'reviewed' ? 'opacity:0.5;' : ''}">
+        <b>${esc(r.content_type)}</b> #${esc(r.content_id)} — reported by ${esc(reporter ? reporter.username : 'unknown')}
+        <p class="empty-note" style="padding:2px 0;">${esc(r.reason || 'No reason given')} · ${esc(r.created_at)} UTC · ${esc(r.status)}</p>
+        ${r.status !== 'reviewed' ? `
+          <form method="POST" action="/admin/reports/${r.id}/reviewed">
+            <button type="submit" class="btn secondary" style="padding:6px 12px;">Mark Reviewed</button>
+          </form>
+        ` : ''}
+      </div>`;
+    }).join('') : `<div class="empty-note">No reports yet.</div>`}
+  `;
+  sendHtml(res, layout({ title: 'Reported Content', body, isAdmin: true }));
+}
+async function handleAdminReportReviewed(req, res, id) {
+  if (!requireAdmin(req, res)) return;
+  await db.markReportReviewed(Number(id));
+  redirect(res, '/admin/reports');
+}
+
 function pageFriendProfile(req, res, friendId) {
   const userId = requireUser(req, res);
   if (userId == null) return;
@@ -2871,6 +3023,12 @@ function pageFriendProfile(req, res, friendId) {
   const body = `
     <a href="/friends" class="empty-note">← Back to Friends</a>
     <h1 class="screen-title" style="margin-top:8px;">👤 ${esc(friend.username)}</h1>
+    ${friendId !== userId ? `
+      <form method="POST" action="/block/${friendId}" style="margin-bottom:10px;" onsubmit="return confirm('Block ${esc(friend.username)}? You will no longer see their comments, check-ins, or grow tips, and any friendship will end.')">
+        <input type="hidden" name="redirect_to" value="/friends">
+        <button type="submit" class="empty-note" style="padding:0;background:none;border:none;color:#a13a3a;cursor:pointer;font-size:inherit;text-decoration:underline;">Block this person</button>
+      </form>
+    ` : ''}
     <div class="card" style="display:flex;justify-content:space-around;text-align:center;margin-bottom:16px;">
       <div><div style="font-size:20px;font-weight:700;">${collection.length}</div><div class="empty-note">Cards caught</div></div>
       <div><div style="font-size:20px;font-weight:700;">${db.getTotalDupes(friendId)}</div><div class="empty-note">Tradeable dupes</div></div>
@@ -3329,7 +3487,7 @@ const server = http.createServer(async (req, res) => {
     if (method === 'POST' && pathname === '/admin/login') return await handleAdminLoginSubmit(req, res);
     if (method === 'GET' && pathname === '/signup') return pageSignup(req, res, url.searchParams);
     if (method === 'POST' && pathname === '/signup') return await handleSignupSubmit(req, res);
-    if (method === 'GET' && pathname === '/auth/google') return pageGoogleStart(req, res);
+    if (method === 'GET' && pathname === '/auth/google') return pageGoogleStart(req, res, url.searchParams);
     if (method === 'GET' && pathname === '/auth/google/callback') return await handleGoogleCallback(req, res, url.searchParams);
     if (method === 'GET' && pathname === '/auth/google/finish') return pageGoogleFinish(req, res, url.searchParams);
     if (method === 'POST' && pathname === '/auth/google/finish') return await handleGoogleFinishSubmit(req, res);
@@ -3416,6 +3574,12 @@ const server = http.createServer(async (req, res) => {
     if (method === 'POST' && (m = pathname.match(/^\/lists\/(\d+)\/delete$/))) return await handleListDelete(req, res, m[1]);
     if (method === 'POST' && (m = pathname.match(/^\/lists\/(\d+)\/items\/([^/]+)\/toggle$/))) return await handleListItemToggle(req, res, m[1], m[2]);
     if (method === 'GET' && pathname === '/terpene-guide') return pageTerpeneGuide(req, res);
+    if (method === 'POST' && pathname === '/report') return await handleReport(req, res);
+    if (method === 'POST' && (m = pathname.match(/^\/block\/(\d+)$/))) return await handleBlock(req, res, m[1]);
+    if (method === 'POST' && (m = pathname.match(/^\/unblock\/(\d+)$/))) return await handleUnblock(req, res, m[1]);
+    if (method === 'GET' && pathname === '/blocked-users') return pageBlockedUsers(req, res);
+    if (method === 'GET' && pathname === '/admin/reports') return pageAdminReports(req, res);
+    if (method === 'POST' && (m = pathname.match(/^\/admin\/reports\/(\d+)\/reviewed$/))) return await handleAdminReportReviewed(req, res, m[1]);
 
     return notFound(res);
   } catch (err) {
