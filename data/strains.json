@@ -57671,5 +57671,67 @@
     "flavor": "Sharp lemon and sweet wildflowers with citrus lime.",
     "icon": "🌵",
     "breeder": null
+  },
+  {
+    "id": "s1669",
+    "name": "Super Boof",
+    "type": "Hybrid",
+    "lean": null,
+    "rarity": "rare",
+    "thc": "28–32%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.35
+      },
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Uplifted"
+    ],
+    "flavor": "Sweet cherry and berry with a nutty, sour citrus finish.",
+    "icon": "🍒",
+    "breeder": "Blockhead"
+  },
+  {
+    "id": "s1670",
+    "name": "Passion Fruit",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "18–24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.35
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.25
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Uplifted",
+      "Creative",
+      "Energetic"
+    ],
+    "flavor": "Bright grapefruit and orange with a sweet tropical finish.",
+    "icon": "🍈",
+    "breeder": "Dutch Passion"
   }
 ]
