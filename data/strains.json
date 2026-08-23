@@ -59420,5 +59420,241 @@
     "flavor": "Explosive pineapple, mango, and citrus with herbal, earthy notes.",
     "icon": "🦓",
     "breeder": "Seed Junky Genetics"
+  },
+  {
+    "id": "s1754",
+    "name": "98' Octane",
+    "type": "Indica",
+    "lean": null,
+    "rarity": "rare",
+    "thc": "24–27%",
+    "cbd": "<1%",
+    "terps": [],
+    "effects": [],
+    "flavor": null,
+    "icon": "⛽",
+    "breeder": "CBX Cannabiotix"
+  },
+  {
+    "id": "s1755",
+    "name": "Blewtooth",
+    "type": "Indica",
+    "lean": null,
+    "rarity": "rare",
+    "thc": "30–34%",
+    "cbd": "<1%",
+    "terps": [],
+    "effects": [],
+    "flavor": null,
+    "icon": "🦷",
+    "breeder": "CBX Cannabiotix"
+  },
+  {
+    "id": "s1756",
+    "name": "Blue Crush",
+    "type": "Hybrid",
+    "lean": null,
+    "rarity": "uncommon",
+    "thc": "24–28%",
+    "cbd": "<1%",
+    "terps": [],
+    "effects": [],
+    "flavor": null,
+    "icon": "🌊",
+    "breeder": "CBX Cannabiotix"
+  },
+  {
+    "id": "s1757",
+    "name": "Blue Flame OG",
+    "type": "Indica",
+    "lean": null,
+    "rarity": "rare",
+    "thc": "30–34%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Sleepy",
+      "Euphoric"
+    ],
+    "flavor": "Earthy, piney OG kush with berry undertones.",
+    "icon": "🔥",
+    "breeder": "CBX Cannabiotix"
+  },
+  {
+    "id": "s1758",
+    "name": "Cherry Dairy",
+    "type": "Hybrid",
+    "lean": null,
+    "rarity": "rare",
+    "thc": "30–34%",
+    "cbd": "<1%",
+    "terps": [],
+    "effects": [],
+    "flavor": null,
+    "icon": "🍒",
+    "breeder": "CBX Cannabiotix"
+  },
+  {
+    "id": "s1759",
+    "name": "Dropane",
+    "type": "Indica",
+    "lean": null,
+    "rarity": "rare",
+    "thc": "30–34%",
+    "cbd": "<1%",
+    "terps": [],
+    "effects": [],
+    "flavor": null,
+    "icon": "💧",
+    "breeder": "CBX Cannabiotix"
+  },
+  {
+    "id": "s1760",
+    "name": "French Alps",
+    "type": "Indica",
+    "lean": null,
+    "rarity": "rare",
+    "thc": "29–33%",
+    "cbd": "<1%",
+    "terps": [],
+    "effects": [],
+    "flavor": null,
+    "icon": "🏔️",
+    "breeder": "CBX Cannabiotix"
+  },
+  {
+    "id": "s1761",
+    "name": "Glue Flame",
+    "type": "Hybrid",
+    "lean": null,
+    "rarity": "rare",
+    "thc": "31–33%",
+    "cbd": "<1%",
+    "terps": [],
+    "effects": [],
+    "flavor": null,
+    "icon": "🔥",
+    "breeder": "CBX Cannabiotix"
+  },
+  {
+    "id": "s1762",
+    "name": "Gluetopia",
+    "type": "Hybrid",
+    "lean": null,
+    "rarity": "rare",
+    "thc": "31–34%",
+    "cbd": "<1%",
+    "terps": [],
+    "effects": [],
+    "flavor": null,
+    "icon": "🌈",
+    "breeder": "CBX Cannabiotix"
+  },
+  {
+    "id": "s1763",
+    "name": "Head Change",
+    "type": "Hybrid",
+    "lean": null,
+    "rarity": "rare",
+    "thc": "28–31%",
+    "cbd": "<1%",
+    "terps": [],
+    "effects": [
+      "Creative",
+      "Euphoric",
+      "Happy"
+    ],
+    "flavor": "Sweet and candied with sour, subtle pine notes.",
+    "icon": "🧠",
+    "breeder": "CBX Cannabiotix"
+  },
+  {
+    "id": "s1764",
+    "name": "Zatomic",
+    "type": "Indica",
+    "lean": null,
+    "rarity": "rare",
+    "thc": "30–34%",
+    "cbd": "<1%",
+    "terps": [],
+    "effects": [],
+    "flavor": null,
+    "icon": "⚛️",
+    "breeder": "CBX Cannabiotix"
+  },
+  {
+    "id": "s1765",
+    "name": "Pink Panties",
+    "type": "Indica",
+    "lean": null,
+    "rarity": "rare",
+    "thc": null,
+    "cbd": null,
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Sleepy",
+      "Euphoric"
+    ],
+    "flavor": "Floral rose petals with berry and tangy citrus.",
+    "icon": "🌹",
+    "breeder": "Mr. Sherbinski"
+  },
+  {
+    "id": "s1766",
+    "name": "Wonka Bars",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": null,
+    "cbd": null,
+    "terps": [],
+    "effects": [],
+    "flavor": null,
+    "icon": "🍫",
+    "breeder": "Exotic Genetics"
+  },
+  {
+    "id": "s1767",
+    "name": "The Menthol",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "22–30%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      }
+    ],
+    "effects": [
+      "Uplifted",
+      "Creative",
+      "Talkative"
+    ],
+    "flavor": "Cool mint and menthol with spicy herbal and chemical undertones.",
+    "icon": "🌬️",
+    "breeder": "Compound Genetics"
+  },
+  {
+    "id": "s1768",
+    "name": "Grape Gasoline",
+    "type": "Hybrid",
+    "lean": null,
+    "rarity": "uncommon",
+    "thc": null,
+    "cbd": null,
+    "terps": [],
+    "effects": [],
+    "flavor": null,
+    "icon": "🍇",
+    "breeder": "Compound Genetics"
   }
 ]

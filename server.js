@@ -419,8 +419,9 @@ function pageStrains(req, res, query) {
   const thc = query.get('thc') || 'All';
   const terpene = query.get('terpene') || 'All';
   const ailment = query.get('ailment') || 'All';
-  const total = db.countStrains({ q, type, rarity, effect, thc, terpene, ailment });
-  const results = db.listStrains({ q, type, rarity, effect, thc, terpene, ailment, limit: 60 });
+  const breeder = query.get('breeder') || 'All';
+  const total = db.countStrains({ q, type, rarity, effect, thc, terpene, ailment, breeder });
+  const results = db.listStrains({ q, type, rarity, effect, thc, terpene, ailment, breeder, limit: 60 });
   const typeOpts = ['All', 'Indica', 'Sativa', 'Hybrid'];
   const rarityOpts = ['All', 'common', 'uncommon', 'rare', 'legendary'];
   const effectOpts = ['All', 'Happy', 'Relaxed', 'Euphoric', 'Uplifted', 'Sleepy', 'Energetic', 'Creative', 'Focused', 'Hungry', 'Talkative', 'Calm', 'Social'];
@@ -1834,6 +1835,108 @@ function pageTerpeneGuide(req, res) {
   sendHtml(res, layout({ title: 'Terpene Guide', active: 'more', body, isAdmin: auth.isAdmin(req) }));
 }
 
+// Effects Guide -- same spirit as the Terpene Guide, built from the
+// effect tags actually present in the strain data rather than a generic
+// textbook list. A handful of one-off medical/ailment-style tags that
+// leaked into a few older entries (e.g. "Pain relief," "Nausea relief")
+// are deliberately excluded here since they're a different category from
+// a subjective high-related effect and only appear once or twice each --
+// not enough real data behind them to warrant a guide entry.
+const EFFECTS_GUIDE = {
+  Relaxed: 'A calming, body-easing sensation — tension melts away without necessarily making you drowsy.',
+  Happy: 'A general lift in mood, often paired with a simple sense of contentment.',
+  Euphoric: 'A stronger, more pronounced sense of elation or bliss than a general mood lift.',
+  Uplifted: 'A bright, energizing shift in mood — often felt mentally before anything physical.',
+  Sleepy: 'A sedating, drowsy pull, most often reported with indica-leaning strains and evening use.',
+  Energetic: 'A physical and mental boost, commonly associated with sativa-leaning strains.',
+  Creative: 'A reported increase in imaginative or associative thinking.',
+  Focused: 'A sense of sharpened attention or mental clarity.',
+  Hungry: 'Increased appetite — sometimes called "the munchies."',
+  Talkative: 'An increased urge to socialize and chat.',
+  Tingly: 'A physical sensation often reported at the very start of a high, before other effects settle in.',
+  Aroused: 'Increased physical sensitivity reported by some users.',
+  Social: 'A general ease and enjoyment in group settings.',
+  Calm: 'A settled, even-keeled mental state without necessarily being sedating.',
+  Giggly: 'A lighthearted, laughter-prone mood.',
+  'Clear-headed': 'A functional high without much mental fog, often reported with balanced hybrids.',
+};
+function pageEffectsGuide(req, res) {
+  const allStrains = db.listStrains({ limit: 5000 });
+  const counts = {};
+  allStrains.forEach(s => (s.effects || []).forEach(e => { counts[e] = (counts[e] || 0) + 1; }));
+  const entries = Object.entries(EFFECTS_GUIDE).sort((a, b) => (counts[b[0]] || 0) - (counts[a[0]] || 0));
+  const body = `
+    <a href="/more" class="empty-note">← Back</a>
+    <h1 class="screen-title">Effects Guide</h1>
+    <p class="screen-sub">What people commonly report feeling from each effect tag — reported associations, not guaranteed outcomes. Everyone responds differently.</p>
+    ${entries.map(([name, description]) => `
+      <div class="card" style="margin-bottom:10px;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;">
+          <h2 style="margin:0;font-size:16px;">${esc(name)}</h2>
+          <a href="/strains?effect=${encodeURIComponent(name)}" class="empty-note" style="padding:0;">${counts[name] || 0} strains →</a>
+        </div>
+        <p style="margin:6px 0 0;">${esc(description)}</p>
+      </div>
+    `).join('')}
+  `;
+  sendHtml(res, layout({ title: 'Effects Guide', active: 'more', body, isAdmin: auth.isAdmin(req) }));
+}
+
+// Breeder Guide -- blurbs are only included where there's real, justified
+// knowledge behind them (either well-documented cannabis history for
+// classic seed banks, or specifics learned while researching dispensary
+// strains for this library). Breeders without a confidently-sourced blurb
+// still get listed with their strain count, just without invented detail.
+const BREEDER_GUIDE = {
+  'TGA Seeds': "Subcool's Oregon-based outfit, known for terpene-forward sativas like Jack the Ripper and Agent Orange.",
+  'DNA Genetics': 'Amsterdam-and-LA breeder behind LA Confidential, Chocolope, and Kosher Kush, with multiple Cannabis Cup wins.',
+  'Sensi Seeds': 'One of the original Amsterdam seed banks (founded 1985), known for classic genetics like Skunk #1 and Northern Lights.',
+  'Dutch Passion Seed Company': 'One of the oldest Dutch seed banks (founded 1987), known for stable, reliable genetics since the earliest days of legal breeding.',
+  'Green House Seed Co.': "Arjan Roskam's Amsterdam brand, famous for Super Silver Haze and White Widow, with a long Cannabis Cup history.",
+  'Rare Dankness Seeds': 'Colorado breeder known for high-THC hybrids like Moonshine Haze and Ghost Train Haze.',
+  'CBX Cannabiotix': 'Boutique California/Nevada brand founded in 2014, known for potent, resin-heavy indica and OG-leaning genetics.',
+  'Exotic Genetix': 'Washington-state breeder behind Donkey Butter, Black Mamba, and Cookies and Cream.',
+  'Nirvana': 'Dutch seed bank known for affordable, dependable genetics like Bubblelicious and Papaya.',
+  'Flying Dutchmen Seed Company': "One of Amsterdam's oldest seed banks, with deep roots in Northern Lights genetics.",
+  'The Cali Connection': 'California breeder known for OG Kush-family genetics.',
+  'T.H.Seeds': 'Amsterdam-based breeder known for Kushage and Sage \'n Sour.',
+  'Paradise Seeds': 'Dutch breeder known for consistent, easy-to-grow genetics.',
+  'Soma Seeds': 'Amsterdam breeder behind Somango and NYC Diesel.',
+  'Bodhi Seeds': 'West Coast breeder known for weaving rare and landrace genetics into modern crosses.',
+  'Big Buddha Seeds': 'UK-based breeder known for Big Buddha Cheese.',
+  'DJ Short': 'Legendary breeder widely credited with stabilizing the original Blueberry line.',
+  'Royal Queen': 'Large modern European seed bank with a broad, accessible catalog.',
+  'Serious Seeds': 'Amsterdam breeder behind AK-47, Chronic, and Kali Mist -- all multiple award winners.',
+  'Seed Junky Genetics': "JBeezy's influential Southern California outfit behind Wedding Cake, Ice Cream Cake, Kush Mints, and Jealousy.",
+  'Compound Genetics': 'Known for complex multi-generation crosses like Pink Certz and The Menthol.',
+  'Mr. Sherbinski': 'San Francisco breeder credited as the root of the entire Sherbet/Gelato/Runtz family tree, starting with Pink Panties.',
+  'A Golden State': '"Inhale, Exhale, Elevate" -- Southern California brand behind Moonbeam and Lava Flower.',
+  'Claybourne Co.': "Los Angeles brand with an in-house breeding and selection program, known for its Gold Cuts premium line.",
+  'Alien Labs': 'Skate-culture-inspired Redding, CA brand known for proprietary, high-potency genetics like Zookies and Atomic Apple.',
+  'Craft Farmer Genetics': 'Known for candy-gas hybrids like Galactic Warheads.',
+};
+function pageBreederGuide(req, res) {
+  const allStrains = db.listStrains({ limit: 5000 });
+  const counts = {};
+  allStrains.forEach(s => { if (s.breeder) counts[s.breeder] = (counts[s.breeder] || 0) + 1; });
+  const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]).slice(0, 40);
+  const body = `
+    <a href="/more" class="empty-note">← Back</a>
+    <h1 class="screen-title">Breeder Guide</h1>
+    <p class="screen-sub">Who's actually behind the strains in your library — from classic Amsterdam seed banks to the modern California brands you'll find on real dispensary shelves.</p>
+    ${sorted.map(([name, count]) => `
+      <div class="card" style="margin-bottom:10px;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;">
+          <h2 style="margin:0;font-size:16px;">${esc(name)}</h2>
+          <a href="/strains?breeder=${encodeURIComponent(name)}" class="empty-note" style="padding:0;">${count} strain${count === 1 ? '' : 's'} →</a>
+        </div>
+        ${BREEDER_GUIDE[name] ? `<p style="margin:6px 0 0;">${esc(BREEDER_GUIDE[name])}</p>` : ''}
+      </div>
+    `).join('')}
+  `;
+  sendHtml(res, layout({ title: 'Breeder Guide', active: 'more', body, isAdmin: auth.isAdmin(req) }));
+}
+
 function pageWishlist(req, res) {
   const userId = requireUser(req, res);
   if (userId == null) return;
@@ -2484,10 +2587,11 @@ function apiListStrains(req, res, query) {
   const thc = query.get('thc') || 'All';
   const terpene = query.get('terpene') || 'All';
   const ailment = query.get('ailment') || 'All';
+  const breeder = query.get('breeder') || 'All';
   const limit = Math.min(Number(query.get('limit')) || 60, 200);
   sendJson(res, {
-    total: db.countStrains({ q, type, rarity, effect, thc, terpene, ailment }),
-    results: db.listStrains({ q, type, rarity, effect, thc, terpene, ailment, limit }),
+    total: db.countStrains({ q, type, rarity, effect, thc, terpene, ailment, breeder }),
+    results: db.listStrains({ q, type, rarity, effect, thc, terpene, ailment, breeder, limit }),
   });
 }
 async function apiKudos(req, res, id) {
@@ -2576,6 +2680,8 @@ function pageMore(req, res) {
         { href: '/mixing-cautions', icon: '⚠️', t: 'Mixing With Other Substances', s: 'General cautions, not medical advice' },
         { href: '/faq', icon: '❓', t: 'FAQ', s: 'Strain school' },
         { href: '/terpene-guide', icon: '🌸', t: 'Terpene Guide', s: 'Aroma & effects by terpene' },
+        { href: '/effects-guide', icon: '✨', t: 'Effects Guide', s: 'What each effect actually feels like' },
+        { href: '/breeder-guide', icon: '🧬', t: 'Breeder Guide', s: 'Who\u2019s actually behind each strain' },
         { href: '/chat', icon: '💬', t: 'Ask', s: 'Chat with the assistant' },
       ],
     },
@@ -3574,6 +3680,8 @@ const server = http.createServer(async (req, res) => {
     if (method === 'POST' && (m = pathname.match(/^\/lists\/(\d+)\/delete$/))) return await handleListDelete(req, res, m[1]);
     if (method === 'POST' && (m = pathname.match(/^\/lists\/(\d+)\/items\/([^/]+)\/toggle$/))) return await handleListItemToggle(req, res, m[1], m[2]);
     if (method === 'GET' && pathname === '/terpene-guide') return pageTerpeneGuide(req, res);
+    if (method === 'GET' && pathname === '/effects-guide') return pageEffectsGuide(req, res);
+    if (method === 'GET' && pathname === '/breeder-guide') return pageBreederGuide(req, res);
     if (method === 'POST' && pathname === '/report') return await handleReport(req, res);
     if (method === 'POST' && (m = pathname.match(/^\/block\/(\d+)$/))) return await handleBlock(req, res, m[1]);
     if (method === 'POST' && (m = pathname.match(/^\/unblock\/(\d+)$/))) return await handleUnblock(req, res, m[1]);
