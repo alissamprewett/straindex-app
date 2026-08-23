@@ -57860,5 +57860,67 @@
     "flavor": "Earthy and spicy with citrus, hints of cheese and pine, and a sweet floral undertone.",
     "icon": "🐑",
     "breeder": null
+  },
+  {
+    "id": "s1676",
+    "name": "Watermelon Runtz",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "22–28%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.35
+      },
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Humulene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric"
+    ],
+    "flavor": "Sweet watermelon and tropical fruit with a gassy, citrus undertone.",
+    "icon": "🍉",
+    "breeder": "Silent Seeds"
+  },
+  {
+    "id": "s1677",
+    "name": "Old School OG",
+    "type": "Indica",
+    "lean": null,
+    "rarity": "uncommon",
+    "thc": "18–25%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Terpinolene",
+        "p": 0.35
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.25
+      },
+      {
+        "n": "Limonene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Sleepy",
+      "Happy"
+    ],
+    "flavor": "Pungent earthy skunk with hints of lemon and sour grape citrus.",
+    "icon": "🌿",
+    "breeder": null
   }
 ]
