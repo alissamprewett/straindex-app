@@ -185,6 +185,15 @@ function renderOnsetTimer(c) {
 // kudos button. redirectPath tells the plain-HTML-form submit where to
 // bounce back to, since the same check-in can appear on the Home feed,
 // a strain's own page, or a friend's profile.
+// Short "who gave kudos" label shown under the kudos button -- up to 3
+// names, then "and N more" for anything beyond that.
+function kudosGiversLabel(checkinId) {
+  const givers = db.listCheckinKudosGivers(checkinId);
+  if (!givers.length) return '';
+  const names = givers.slice(0, 3).map(u => esc(u.username));
+  const extra = givers.length - names.length;
+  return `<div class="empty-note kudos-givers-label" style="padding:2px 0 0;text-align:right;">🌿 ${names.join(', ')}${extra > 0 ? ` and ${extra} more` : ''}</div>`;
+}
 function renderCheckinComments(c, userId, redirectPath) {
   const comments = db.listCheckinComments(c.id, userId);
   return `
@@ -193,6 +202,11 @@ function renderCheckinComments(c, userId, redirectPath) {
       const canModerate = userId != null && cm.user_id !== userId;
       return `<div class="empty-note" style="padding:3px 0;">
         <b>${esc(author ? author.username : 'Someone')}:</b> ${esc(cm.body)}
+        ${userId != null ? `
+          <button type="button" id="comment-like-${cm.id}" onclick="likeComment(${cm.id}, this)" style="background:none;border:none;padding:0;margin-left:6px;color:inherit;text-decoration:${cm.likedByMe ? 'none' : 'underline'};cursor:pointer;font-size:inherit;">
+            ${cm.likedByMe ? '💚 Liked' : '🤍 Like'}${cm.likeCount ? ` (${cm.likeCount})` : ''}
+          </button>
+        ` : (cm.likeCount ? `<span style="margin-left:6px;">💚 ${cm.likeCount}</span>` : '')}
         ${canModerate ? `
           <form method="POST" action="/report" style="display:inline;" onsubmit="return confirm('Report this comment for review?')">
             <input type="hidden" name="content_type" value="checkin_comment">
@@ -402,8 +416,9 @@ function pageHome(req, res) {
         ${renderCheckinPairings(c)}
         ${renderOnsetTimer(c)}
         ${renderCheckinComments(c, userId, '/')}
-        <div style="display:flex;justify-content:flex-end;margin-top:8px;">
+        <div style="display:flex;flex-direction:column;align-items:flex-end;margin-top:8px;">
           <button class="kudos-btn" onclick="giveCheckinKudos(${c.id}, this)">${KUDOS_BUD_ICON}Kudos${c.kudos ? ` (${c.kudos})` : ''}</button>
+          ${kudosGiversLabel(c.id)}
         </div>
       </div>`;
     }).join('') : `<div class="empty-note">No check-ins logged yet — <a href="/checkin">log your first one</a> to get your feed started.</div>`}
@@ -470,6 +485,7 @@ function pageStrains(req, res, query) {
         <select id="strain-search-verified" name="verified" form="strain-search-form">${verifiedOpts.map(v => `<option value="${esc(v)}" ${verified === v ? 'selected' : ''}>${verifiedLabel[v]}</option>`).join('')}</select>
       </div>
     </div>
+    <p class="empty-note" style="margin-bottom:2px;">✅ Verified — THC, breeder, and flavor/terpene data all independently confirmed. &nbsp; 🔹 Partial — some details confirmed. &nbsp; ⚪ Listed only — seen on a dispensary menu, nothing independently confirmed yet.</p>
     <p class="empty-note" style="margin-bottom:10px;">User-reported associations, not medical advice — see a doctor for real guidance.</p>
     <p class="empty-note" id="strain-search-count">${total > 60 ? `Showing 60 of ${total.toLocaleString()} — refine your search to narrow it down.` : `${total} strain${total === 1 ? '' : 's'}`}</p>
     <div id="strain-search-results">${results.map(s => `
@@ -620,8 +636,9 @@ function pageStrainDetail(req, res, id) {
         ${renderCheckinPairings(c)}
         ${renderOnsetTimer(c)}
         ${renderCheckinComments(c, userId, '/strains/' + s.id)}
-          <div style="display:flex;justify-content:flex-end;margin-top:6px;">
+          <div style="display:flex;flex-direction:column;align-items:flex-end;margin-top:6px;">
             <button class="kudos-btn" onclick="giveCheckinKudos(${c.id}, this)">${KUDOS_BUD_ICON}Kudos${c.kudos ? ` (${c.kudos})` : ''}</button>
+            ${kudosGiversLabel(c.id)}
           </div>
         </div>
       </div>`).join('')}
@@ -2786,9 +2803,16 @@ async function apiGrowLike(req, res, id) {
 async function apiCheckinKudos(req, res, id) {
   const userId = requireUser(req, res);
   if (userId == null) return;
-  const c = await db.giveCheckinKudos(id);
+  const c = await db.giveCheckinKudos(id, userId);
   if (!c) return sendJson(res, { error: 'not found' }, 404);
-  sendJson(res, { kudos: c.kudos });
+  const givers = db.listCheckinKudosGivers(id).map(u => u.username);
+  sendJson(res, { kudos: c.kudos, givers });
+}
+async function apiCommentLike(req, res, id) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const result = await db.toggleCommentLike(id, userId);
+  sendJson(res, result);
 }
 // Plain-HTML-form submit (not a fetch/API call) since the same check-in can
 // render on three different pages (Home, a strain's page, a friend's
@@ -3336,8 +3360,9 @@ function pageFriendProfile(req, res, friendId) {
         ${renderCheckinPairings(c)}
         ${renderOnsetTimer(c)}
         ${renderCheckinComments(c, userId, '/friends/' + friendId)}
-        <div style="display:flex;justify-content:flex-end;margin-top:8px;">
+        <div style="display:flex;flex-direction:column;align-items:flex-end;margin-top:8px;">
           <button class="kudos-btn" onclick="giveCheckinKudos(${c.id}, this)">${KUDOS_BUD_ICON}Kudos${c.kudos ? ` (${c.kudos})` : ''}</button>
+          ${kudosGiversLabel(c.id)}
         </div>
       </div>`;
     }).join('') : `<div class="empty-note">No check-ins yet.</div>`}
@@ -3817,6 +3842,7 @@ const server = http.createServer(async (req, res) => {
     if (method === 'POST' && (m = pathname.match(/^\/api\/recipes\/(\d+)\/kudos$/))) return await apiKudos(req, res, Number(m[1]));
     if (method === 'POST' && (m = pathname.match(/^\/api\/growtips\/(\d+)\/like$/))) return await apiGrowLike(req, res, Number(m[1]));
     if (method === 'POST' && (m = pathname.match(/^\/api\/checkins\/(\d+)\/kudos$/))) return await apiCheckinKudos(req, res, Number(m[1]));
+    if (method === 'POST' && (m = pathname.match(/^\/api\/comments\/(\d+)\/like$/))) return await apiCommentLike(req, res, Number(m[1]));
     if (method === 'GET' && pathname === '/api/analytics-snapshot') return apiAnalyticsSnapshot(req, res, url.searchParams);
 
     if (method === 'GET' && pathname === '/more') return pageMore(req, res);

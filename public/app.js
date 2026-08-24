@@ -55,6 +55,29 @@ async function giveCheckinKudos(id, btn) {
     btn.disabled = true;
     btn.classList.add('kudos-pulse');
     toast('Kudos given!');
+    // Update (or create) the "who gave kudos" label right under the button.
+    const wrap = btn.parentElement;
+    if (wrap && Array.isArray(data.givers) && data.givers.length) {
+      const names = data.givers.slice(0, 3).join(', ');
+      const extra = data.givers.length - 3;
+      const text = `🌿 ${names}${extra > 0 ? ` and ${extra} more` : ''}`;
+      let label = wrap.querySelector('.kudos-givers-label');
+      if (!label) {
+        label = document.createElement('div');
+        label.className = 'empty-note kudos-givers-label';
+        label.style.cssText = 'padding:2px 0 0;text-align:right;';
+        wrap.appendChild(label);
+      }
+      label.textContent = text;
+    }
+  }
+}
+async function likeComment(id, btn) {
+  const res = await fetch(`/api/comments/${id}/like`, { method: 'POST' });
+  if (res.ok) {
+    const data = await res.json();
+    btn.textContent = (data.liked ? '💚 Liked' : '🤍 Like') + (data.count ? ` (${data.count})` : '');
+    btn.style.textDecoration = data.liked ? 'none' : 'underline';
   }
 }
 async function likeGrowTip(id, btn) {
@@ -111,32 +134,57 @@ async function likeGrowTip(id, btn) {
   const thcSel = document.getElementById('strain-search-thc');
   const terpeneSel = document.getElementById('strain-search-terpene');
   const ailmentSel = document.getElementById('strain-search-ailment');
+  const verifiedSel = document.getElementById('strain-search-verified');
+  // No dropdown exists for breeder (it's only reachable by clicking through
+  // from the Breeder Guide), but the value still needs to survive later
+  // filter changes -- read it once from the current URL and carry it
+  // forward manually so it doesn't silently vanish the moment another
+  // filter is touched.
+  const breederValue = new URLSearchParams(location.search).get('breeder') || 'All';
 
   function escHtml(str) {
     return String(str ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   }
   const rarityLabels = { common: 'Common', uncommon: 'Uncommon', rare: 'Rare', legendary: 'Legendary' };
   function rarityLabel(r) { return rarityLabels[r] || r; }
+  const verifiedBadges = {
+    verified: { icon: '✅', label: 'Verified' },
+    partial: { icon: '🔹', label: 'Partially verified' },
+    listed: { icon: '⚪', label: 'Listed only' },
+  };
+  function verifiedTier(s) {
+    const hasThc = !!s.thc;
+    const hasBreeder = !!s.breeder;
+    const hasDetail = !!s.flavor || (Array.isArray(s.terps) && s.terps.length > 0);
+    const score = [hasThc, hasBreeder, hasDetail].filter(Boolean).length;
+    if (score === 3) return 'verified';
+    if (score >= 1) return 'partial';
+    return 'listed';
+  }
 
   function render(data) {
     countEl.textContent = data.total > 60
       ? `Showing 60 of ${data.total.toLocaleString()} — refine your search to narrow it down.`
       : `${data.total} strain${data.total === 1 ? '' : 's'}`;
-    resultsEl.innerHTML = data.results.map(s => `
+    resultsEl.innerHTML = data.results.map(s => {
+      const badge = verifiedBadges[verifiedTier(s)];
+      return `
       <a class="library-row" href="/strains/${s.id}" style="text-decoration:none;color:inherit;">
         <span class="icon">${s.icon}</span>
         <div class="info">
-          <div class="nm">${escHtml(s.name)}</div>
+          <div class="nm">${escHtml(s.name)} <span title="${escHtml(badge.label)}">${badge.icon}</span></div>
           <div class="sub">${escHtml(s.type)} · ${rarityLabel(s.rarity)} · THC ${escHtml(s.thc)}</div>
         </div>
         <span class="rarity-tag rarity-${s.rarity}">${rarityLabel(s.rarity)}</span>
-      </a>`).join('') || `<div class="empty-note">No strains match your filters.</div>`;
+      </a>`;
+    }).join('') || `<div class="empty-note">No strains match your filters.</div>`;
   }
 
   async function runSearch() {
     const params = new URLSearchParams({
       q: input.value, type: typeSel.value, rarity: raritySel.value, effect: effectSel.value,
-      thc: thcSel.value, terpene: terpeneSel.value, ailment: ailmentSel.value, limit: '60',
+      thc: thcSel.value, terpene: terpeneSel.value, ailment: ailmentSel.value,
+      verified: verifiedSel ? verifiedSel.value : 'All', breeder: breederValue, limit: '60',
     });
     countEl.textContent = 'Searching…';
     const res = await fetch(`/api/strains?${params}`);
@@ -150,7 +198,7 @@ async function likeGrowTip(id, btn) {
     clearTimeout(debounceTimer);
     debounceTimer = setTimeout(runSearch, 200);
   });
-  [typeSel, raritySel, effectSel, thcSel, terpeneSel, ailmentSel].forEach(sel => sel && sel.addEventListener('change', runSearch));
+  [typeSel, raritySel, effectSel, thcSel, terpeneSel, ailmentSel, verifiedSel].forEach(sel => sel && sel.addEventListener('change', runSearch));
 })();
 
 // ------------------------------------------------------------ dispensaries
