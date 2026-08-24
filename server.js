@@ -1964,6 +1964,11 @@ const BREEDER_GUIDE = {
   'Claybourne Co.': "Los Angeles brand with an in-house breeding and selection program, known for its Gold Cuts premium line.",
   'Alien Labs': 'Skate-culture-inspired Redding, CA brand known for proprietary, high-potency genetics like Zookies and Atomic Apple.',
   'Craft Farmer Genetics': 'Known for candy-gas hybrids like Galactic Warheads.',
+  'Reeferman Seeds': 'Canadian breeder known for preserving landrace and heirloom genetics rather than chasing the newest hybrid trends.',
+  'Reserva Privada': "DNA Genetics' more exclusive sister imprint, known for certified cuts of strains like Kosher Kush and OG Kush.",
+  'Shantibaba': 'Legendary individual breeder -- co-founder of Green House Seed Co., later founder of Mr. Nice Seedbank and Ceres Seeds.',
+  'Sagarmatha Seeds': 'Amsterdam breeder known for high-THC genetics like Yumbolt and Blue Ice.',
+  'K.C. Brains': 'One of the older Dutch seed banks, known for its own numbered K.C. strain series.',
 };
 function pageBreederGuide(req, res) {
   const allStrains = db.listStrains({ limit: 5000 });

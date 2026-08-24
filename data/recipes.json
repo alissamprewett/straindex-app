@@ -2879,5 +2879,198 @@
     "usesBase": [
       "cannabis-infused olive oil"
     ]
+  },
+  {
+    "id": "r103",
+    "title": "Cannabis Rice Krispie Treats",
+    "time": "20 min + cool",
+    "icon": "🍬",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "The classic no-bake treat, infused — a fast, low-mess way to use up leftover cannabutter.",
+    "usesBase": [
+      "cannabutter"
+    ],
+    "ingredients": [
+      "3 tbsp cannabutter",
+      "3 tbsp regular butter (to balance flavor and fat)",
+      "1 bag (10 oz) mini marshmallows",
+      "6 cups crisped rice cereal",
+      "Pinch of salt"
+    ],
+    "steps": [
+      "Melt both butters together in a large pot over low heat.",
+      "Add marshmallows and stir constantly until fully melted and smooth — keep heat low to protect the THC.",
+      "Remove from heat, stir in salt, then fold in the cereal until evenly coated.",
+      "Press into a greased 9x13 pan while still warm. Don't pack too tightly, or the bars turn dense instead of light.",
+      "Let cool completely before cutting into squares."
+    ],
+    "dosing": "Cut into at least 16 squares from a standard cannabutter batch. Start with one square and wait a full 2 hours before considering more — the marshmallow makes these easy to eat quickly, which makes it easy to underestimate the dose.",
+    "category": "Baked Goods"
+  },
+  {
+    "id": "r104",
+    "title": "Cannabis Vanilla Layer Cake",
+    "time": "1 hr 30 min",
+    "icon": "🎂",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "A basic, from-scratch vanilla cake for when you want something more celebratory than a brownie pan.",
+    "usesBase": [
+      "cannabutter"
+    ],
+    "ingredients": [
+      "1 cup cannabutter, softened",
+      "1¾ cups sugar",
+      "3 large eggs",
+      "1 tbsp vanilla extract",
+      "2¾ cups all-purpose flour",
+      "2½ tsp baking powder",
+      "½ tsp salt",
+      "1¼ cups milk"
+    ],
+    "steps": [
+      "Preheat oven to 350°F (175°C). Grease and flour two 8-inch cake pans.",
+      "Cream cannabutter and sugar together until light and fluffy, about 3 minutes.",
+      "Beat in eggs one at a time, then the vanilla.",
+      "Whisk flour, baking powder, and salt in a separate bowl. Add to the butter mixture in three parts, alternating with the milk, mixing just until combined.",
+      "Divide batter between pans and bake 28-32 minutes, until a toothpick comes out clean.",
+      "Cool completely before frosting or stacking layers."
+    ],
+    "dosing": "A standard cannabutter batch spread across a full two-layer cake gives roughly 16 modest slices. Cut smaller than you think — cake is easy to underestimate — and wait 2 hours before a second piece.",
+    "category": "Baked Goods"
+  },
+  {
+    "id": "r105",
+    "title": "Cannabis Biscotti",
+    "time": "1 hr + cool",
+    "icon": "🍪",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "Twice-baked and sturdy enough to dunk — a good make-ahead edible that keeps well for weeks.",
+    "usesBase": [
+      "cannabutter"
+    ],
+    "ingredients": [
+      "½ cup cannabutter, softened",
+      "¾ cup sugar",
+      "2 large eggs",
+      "1 tsp vanilla extract",
+      "2 cups all-purpose flour",
+      "1½ tsp baking powder",
+      "¼ tsp salt",
+      "½ cup chopped almonds (optional)"
+    ],
+    "steps": [
+      "Preheat oven to 325°F (165°C) and line a baking sheet with parchment.",
+      "Cream cannabutter and sugar, then beat in eggs and vanilla.",
+      "Mix in flour, baking powder, and salt until a soft dough forms. Fold in almonds if using.",
+      "Shape into a flat log about 12 inches long and 3 inches wide directly on the baking sheet.",
+      "Bake 30 minutes, until firm and lightly golden. Let cool 15 minutes.",
+      "Slice diagonally into ½-inch pieces, lay cut-side down, and bake again for 10-12 minutes per side until crisp."
+    ],
+    "dosing": "One batch typically yields 18-20 pieces. Since these keep for weeks in an airtight container, label the container clearly — biscotti looks and stores exactly like the non-infused kind.",
+    "category": "Baked Goods"
+  },
+  {
+    "id": "r106",
+    "title": "Cannabis Baked Donuts",
+    "time": "35 min",
+    "icon": "🍩",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "Oven-baked, not fried — a cake-style donut that's far more approachable to make at home than the deep-fried kind.",
+    "usesBase": [
+      "cannabutter"
+    ],
+    "ingredients": [
+      "6 tbsp cannabutter, melted",
+      "¾ cup sugar",
+      "2 large eggs",
+      "½ cup milk",
+      "1 tsp vanilla extract",
+      "2 cups all-purpose flour",
+      "2 tsp baking powder",
+      "¼ tsp salt",
+      "Optional glaze: 1 cup powdered sugar + 2-3 tbsp milk"
+    ],
+    "steps": [
+      "Preheat oven to 350°F (175°C) and grease a donut pan.",
+      "Whisk melted cannabutter, sugar, eggs, milk, and vanilla together until smooth.",
+      "Whisk flour, baking powder, and salt in a separate bowl, then fold into the wet ingredients just until combined.",
+      "Pipe or spoon batter into the donut pan, filling each cavity about two-thirds full.",
+      "Bake 10-12 minutes, until a toothpick comes out clean. Cool in the pan 5 minutes before turning out.",
+      "If glazing, whisk powdered sugar and milk together and dip cooled donuts before serving."
+    ],
+    "dosing": "This makes about 10-12 standard-size donuts from one batch of cannabutter. Start with half a donut, especially if it's glazed — sugar can mask how much you're actually eating.",
+    "category": "Baked Goods"
+  },
+  {
+    "id": "r107",
+    "title": "Cannabis Waffles",
+    "time": "30 min",
+    "icon": "🧇",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "A weekend breakfast edible — crisp on the outside, using infused butter right in the batter.",
+    "usesBase": [
+      "cannabutter"
+    ],
+    "ingredients": [
+      "6 tbsp cannabutter, melted and cooled slightly",
+      "2 cups all-purpose flour",
+      "2 tbsp sugar",
+      "4 tsp baking powder",
+      "½ tsp salt",
+      "2 large eggs",
+      "1¾ cups milk",
+      "1 tsp vanilla extract"
+    ],
+    "steps": [
+      "Preheat your waffle iron.",
+      "Whisk flour, sugar, baking powder, and salt together in a large bowl.",
+      "In a separate bowl, whisk eggs, milk, vanilla, and melted cannabutter together.",
+      "Pour the wet ingredients into the dry and stir just until combined — a few lumps are fine.",
+      "Cook according to your waffle iron's instructions until golden and crisp."
+    ],
+    "dosing": "This batter makes about 6-8 standard waffles from one batch of cannabutter. Since these are typically eaten for breakfast, remember edibles take longer to feel on an empty stomach, not shorter — plan your day around a slow, delayed onset.",
+    "category": "Baked Goods"
+  },
+  {
+    "id": "r108",
+    "title": "Cannabis Granola Bars",
+    "time": "40 min + chill",
+    "icon": "🍯",
+    "source": "official",
+    "author": null,
+    "kudos": 0,
+    "desc": "A baked, no-fuss bar that infuses through honey instead of butter — a good option if you want something less rich than brownies.",
+    "usesBase": [
+      "honey"
+    ],
+    "ingredients": [
+      "½ cup cannabis-infused honey",
+      "¼ cup regular honey",
+      "⅓ cup brown sugar",
+      "3 cups rolled oats",
+      "½ cup chopped nuts",
+      "¼ cup mini chocolate chips (optional)",
+      "¼ tsp salt",
+      "2 tbsp melted coconut oil"
+    ],
+    "steps": [
+      "Preheat oven to 325°F (165°C) and line an 8x8 pan with parchment.",
+      "Warm both honeys, brown sugar, and coconut oil together in a saucepan over low heat until combined — do not boil.",
+      "Stir in oats, nuts, and salt until evenly coated.",
+      "Press firmly into the prepared pan. A flat-bottomed glass helps compact it evenly.",
+      "Bake 20-22 minutes, until lightly golden at the edges. Cool completely before pressing in chocolate chips (if using) and cutting."
+    ],
+    "dosing": "Cut into 12 bars from one batch of infused honey. These read as a wholesome snack, which makes it easy to grab a second one without thinking — treat them with the same one-at-a-time caution as any other edible.",
+    "category": "Baked Goods"
   }
 ]
