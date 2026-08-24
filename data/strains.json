@@ -57810,7 +57810,11 @@
     ],
     "flavor": "Diesel and chemical funk with notes of tobacco and garlic.",
     "icon": "⛽",
-    "breeder": "Thug Pug Genetics"
+    "breeder": "Thug Pug Genetics",
+    "parents": [
+      "Lurch",
+      "GMO Cookies"
+    ]
   },
   {
     "id": "s1674",
@@ -57890,7 +57894,11 @@
     ],
     "flavor": "Sweet watermelon and tropical fruit with a gassy, citrus undertone.",
     "icon": "🍉",
-    "breeder": "Silent Seeds"
+    "breeder": "Silent Seeds",
+    "parents": [
+      "Watermelon Zkittlez",
+      "Runtz"
+    ]
   },
   {
     "id": "s1677",
@@ -57921,7 +57929,11 @@
     ],
     "flavor": "Pungent earthy skunk with hints of lemon and sour grape citrus.",
     "icon": "🌿",
-    "breeder": null
+    "breeder": null,
+    "parents": [
+      "Pure Kush",
+      "OG Kush"
+    ]
   },
   {
     "id": "s1678",
@@ -57952,7 +57964,12 @@
     ],
     "flavor": "Sweet cherry with earthy pine and a diesel-citrus undertone.",
     "icon": "🍒",
-    "breeder": "Emerald Triangle Seeds"
+    "breeder": "Emerald Triangle Seeds",
+    "parents": [
+      "Cherry Thai",
+      "Afghani",
+      "Lost Coast OG"
+    ]
   },
   {
     "id": "s1679",
@@ -57983,7 +58000,11 @@
     ],
     "flavor": "Sweet strawberry with citrus haze and subtle herbal spice.",
     "icon": "🍓",
-    "breeder": "Green House Seeds"
+    "breeder": "Green House Seeds",
+    "parents": [
+      "Swiss Sativa",
+      "NL5 Haze Mist"
+    ]
   },
   {
     "id": "s1680",
@@ -58045,7 +58066,11 @@
     ],
     "flavor": "Sweet cherry and berry with doughy, earthy undertones.",
     "icon": "🍪",
-    "breeder": "Liberty Reach"
+    "breeder": "Liberty Reach",
+    "parents": [
+      "Cherry Cookies",
+      "The White"
+    ]
   },
   {
     "id": "s1683",
@@ -58194,7 +58219,11 @@
     ],
     "flavor": "Spicy, fuel-forward, and earthy with a piney kush profile.",
     "icon": "🎰",
-    "breeder": "Rythm"
+    "breeder": "Rythm",
+    "parents": [
+      "White Walker OG",
+      "Blue Flame OG"
+    ]
   },
   {
     "id": "s1691",
@@ -58328,7 +58357,11 @@
     ],
     "flavor": "Sweet vanilla with minty herbal notes and a citrus finish.",
     "icon": "🍡",
-    "breeder": "Sherbinskis"
+    "breeder": "Sherbinskis",
+    "parents": [
+      "Thin Mint GSC",
+      "Sunset Sherbet"
+    ]
   },
   {
     "id": "s1697",
@@ -58390,7 +58423,11 @@
     ],
     "flavor": "Sweet nutty cookies with hints of chocolate, pepper, and diesel.",
     "icon": "🍪",
-    "breeder": "Alien Labs"
+    "breeder": "Alien Labs",
+    "parents": [
+      "Animal Cookies",
+      "GG4"
+    ]
   },
   {
     "id": "s1699",
@@ -58463,7 +58500,11 @@
     ],
     "flavor": "Sweet ripe raspberry with earthy and spicy undertones.",
     "icon": "🍇",
-    "breeder": null
+    "breeder": null,
+    "parents": [
+      "Raspberry Kush",
+      "OG Kush"
+    ]
   },
   {
     "id": "s1703",
@@ -58644,7 +58685,11 @@
     ],
     "flavor": "Sweet berry and floral notes with a grape-diesel-mint edge.",
     "icon": "🌸",
-    "breeder": "Compound Genetics"
+    "breeder": "Compound Genetics",
+    "parents": [
+      "The Menthol",
+      "Grape Gasoline"
+    ]
   },
   {
     "id": "s1712",
@@ -58707,7 +58752,11 @@
     ],
     "flavor": "Sweet tropical pineapple and citrus with a gassy exhale.",
     "icon": "🍍",
-    "breeder": "Seed Junky Genetics"
+    "breeder": "Seed Junky Genetics",
+    "parents": [
+      "Animal Mints",
+      "Zkittlez"
+    ]
   },
   {
     "id": "s1715",
@@ -58766,7 +58815,12 @@
     ],
     "flavor": "Sweet melon and tropical mango with a diesel undertone.",
     "icon": "🍈",
-    "breeder": "Humboldt Seed Company"
+    "breeder": "Humboldt Seed Company",
+    "parents": [
+      "Mango Trees",
+      "Honeydew Melon",
+      "Mango Sherbet"
+    ]
   },
   {
     "id": "s1718",
@@ -58825,7 +58879,11 @@
     ],
     "flavor": "Pink grapefruit and key lime pie with rainbow sherbet sweetness.",
     "icon": "🌙",
-    "breeder": "A Golden State"
+    "breeder": "A Golden State",
+    "parents": [
+      "Purple Pineapple",
+      "Rainbow Belts 2.0"
+    ]
   },
   {
     "id": "s1721",
@@ -58848,7 +58906,11 @@
     ],
     "flavor": "Sweet candy with peach and apple notes over a kush, herbal base.",
     "icon": "✈️",
-    "breeder": null
+    "breeder": null,
+    "parents": [
+      "Sin Mint Cookies",
+      "Jet Fuel OG"
+    ]
   },
   {
     "id": "s1722",
@@ -58949,7 +59011,12 @@
     ],
     "flavor": "Sweet woody berry with a smooth cherry aftertaste.",
     "icon": "🖤",
-    "breeder": "Pioneer Nuggets"
+    "breeder": "Pioneer Nuggets",
+    "parents": [
+      "Colombian Black",
+      "Colombian Gold",
+      "Purple Haze"
+    ]
   },
   {
     "id": "s1728",
@@ -58976,7 +59043,11 @@
     ],
     "flavor": "Sweet banana and tropical citrus with spicy notes.",
     "icon": "🍌",
-    "breeder": null
+    "breeder": null,
+    "parents": [
+      "Super Silver Haze",
+      "Banana"
+    ]
   },
   {
     "id": "s1729",
@@ -59007,7 +59078,11 @@
     ],
     "flavor": "Sweet and sour lemon citrus with a subtle herbal undertone.",
     "icon": "🍋",
-    "breeder": null
+    "breeder": null,
+    "parents": [
+      "Lemon Skunk",
+      "Zkittlez"
+    ]
   },
   {
     "id": "s1730",
@@ -59087,7 +59162,11 @@
     ],
     "flavor": "Spicy skunky diesel with earthy pine and herbal notes.",
     "icon": "🧈",
-    "breeder": "Exotic Genetix"
+    "breeder": "Exotic Genetix",
+    "parents": [
+      "Grease Monkey",
+      "Triple OG"
+    ]
   },
   {
     "id": "s1733",
@@ -59419,7 +59498,11 @@
     ],
     "flavor": "Explosive pineapple, mango, and citrus with herbal, earthy notes.",
     "icon": "🦓",
-    "breeder": "Seed Junky Genetics"
+    "breeder": "Seed Junky Genetics",
+    "parents": [
+      "Zkittlez",
+      "Animal Cookies"
+    ]
   },
   {
     "id": "s1754",
@@ -59484,7 +59567,11 @@
     ],
     "flavor": "Earthy, piney OG kush with berry undertones.",
     "icon": "🔥",
-    "breeder": "CBX Cannabiotix"
+    "breeder": "CBX Cannabiotix",
+    "parents": [
+      "Thicc Mint Cookies",
+      "Private Reserve OG"
+    ]
   },
   {
     "id": "s1758",
@@ -59572,7 +59659,11 @@
     ],
     "flavor": "Sweet and candied with sour, subtle pine notes.",
     "icon": "🧠",
-    "breeder": "CBX Cannabiotix"
+    "breeder": "CBX Cannabiotix",
+    "parents": [
+      "Thicc Mint Cookies",
+      "J1"
+    ]
   },
   {
     "id": "s1764",
@@ -59604,7 +59695,11 @@
     ],
     "flavor": "Floral rose petals with berry and tangy citrus.",
     "icon": "🌹",
-    "breeder": "Mr. Sherbinski"
+    "breeder": "Mr. Sherbinski",
+    "parents": [
+      "Burmese Kush",
+      "Florida Kush"
+    ]
   },
   {
     "id": "s1766",
@@ -59641,7 +59736,13 @@
     ],
     "flavor": "Cool mint and menthol with spicy herbal and chemical undertones.",
     "icon": "🌬️",
-    "breeder": "Compound Genetics"
+    "breeder": "Compound Genetics",
+    "parents": [
+      "Gelato 45",
+      "Jet Fuel",
+      "Hi-Octane",
+      "White Diesel"
+    ]
   },
   {
     "id": "s1768",
@@ -59655,7 +59756,11 @@
     "effects": [],
     "flavor": null,
     "icon": "🍇",
-    "breeder": "Compound Genetics"
+    "breeder": "Compound Genetics",
+    "parents": [
+      "Grape Pie",
+      "Jet Fuel Gelato"
+    ]
   },
   {
     "id": "s1769",
@@ -59673,7 +59778,11 @@
     ],
     "flavor": "Pungent aged cheese with earthy, skunky undertones.",
     "icon": "🧀",
-    "breeder": "Big Buddha Seeds"
+    "breeder": "Big Buddha Seeds",
+    "parents": [
+      "UK Cheese",
+      "Afghani"
+    ]
   },
   {
     "id": "s1770",
@@ -59691,7 +59800,11 @@
     ],
     "flavor": "Sweet bubblegum and berry, candy-shop sweet.",
     "icon": "🍬",
-    "breeder": "Nirvana Seeds"
+    "breeder": "Nirvana Seeds",
+    "parents": [
+      "Skunk #1",
+      "Big Bud"
+    ]
   },
   {
     "id": "s1771",
@@ -59718,7 +59831,11 @@
     ],
     "flavor": "Intensely perfumed and floral, like fine soap, with mint, pine, rose, and lavender.",
     "icon": "🧼",
-    "breeder": "Seed Junky Genetics"
+    "breeder": "Seed Junky Genetics",
+    "parents": [
+      "Animal Mints",
+      "Kush Mints"
+    ]
   },
   {
     "id": "s1772",
@@ -59749,7 +59866,11 @@
     ],
     "flavor": "Kush gas and pine with fuel and vanilla notes.",
     "icon": "🏔️",
-    "breeder": "CBX Cannabiotix"
+    "breeder": "CBX Cannabiotix",
+    "parents": [
+      "White Walker OG",
+      "Blue Flame OG"
+    ]
   },
   {
     "id": "s1773",
@@ -59847,6 +59968,10 @@
     ],
     "flavor": "Fruity and minty with diesel-like notes.",
     "icon": "🍇",
-    "breeder": "Compound Genetics"
+    "breeder": "Compound Genetics",
+    "parents": [
+      "Grape Gasoline",
+      "The Menthol"
+    ]
   }
 ]

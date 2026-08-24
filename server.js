@@ -420,14 +420,17 @@ function pageStrains(req, res, query) {
   const terpene = query.get('terpene') || 'All';
   const ailment = query.get('ailment') || 'All';
   const breeder = query.get('breeder') || 'All';
-  const total = db.countStrains({ q, type, rarity, effect, thc, terpene, ailment, breeder });
-  const results = db.listStrains({ q, type, rarity, effect, thc, terpene, ailment, breeder, limit: 60 });
+  const verified = query.get('verified') || 'All';
+  const total = db.countStrains({ q, type, rarity, effect, thc, terpene, ailment, breeder, verified });
+  const results = db.listStrains({ q, type, rarity, effect, thc, terpene, ailment, breeder, verified, limit: 60 });
   const typeOpts = ['All', 'Indica', 'Sativa', 'Hybrid'];
   const rarityOpts = ['All', 'common', 'uncommon', 'rare', 'legendary'];
   const effectOpts = ['All', 'Happy', 'Relaxed', 'Euphoric', 'Uplifted', 'Sleepy', 'Energetic', 'Creative', 'Focused', 'Hungry', 'Talkative', 'Calm', 'Social'];
   const thcOpts = ['All', 'Low', 'Medium', 'High'];
   const terpeneOpts = ['All', 'Myrcene', 'Limonene', 'Caryophyllene', 'Pinene', 'Linalool', 'Terpinolene', 'Humulene', 'Ocimene'];
   const ailmentOpts = ['All', 'Stress', 'Pain', 'Depression', 'Insomnia', 'Lack of Appetite', 'Nausea', 'Inflammation', 'Muscle Spasms', 'Seizures'];
+  const verifiedOpts = ['All', 'verified', 'partial', 'listed'];
+  const verifiedLabel = { All: 'Any data quality', verified: '✅ Verified', partial: '🔹 Partially verified', listed: '⚪ Listed only' };
   const thcLabel = { All: 'Any THC', Low: 'Low (≤15%)', Medium: 'Medium (15–25%)', High: 'High (25%+)' };
   const mk = (params) => '/strains?' + new URLSearchParams({ q, type, rarity, effect, thc, terpene, ailment, ...params }).toString();
 
@@ -462,6 +465,10 @@ function pageStrains(req, res, query) {
         <div class="section-label" style="margin-bottom:4px;">Relief from...</div>
         <select id="strain-search-ailment" name="ailment" form="strain-search-form">${ailmentOpts.map(a => `<option value="${esc(a)}" ${ailment === a ? 'selected' : ''}>${a === 'All' ? 'Anything' : a}</option>`).join('')}</select>
       </div>
+      <div class="filter-group">
+        <div class="section-label" style="margin-bottom:4px;">Data quality</div>
+        <select id="strain-search-verified" name="verified" form="strain-search-form">${verifiedOpts.map(v => `<option value="${esc(v)}" ${verified === v ? 'selected' : ''}>${verifiedLabel[v]}</option>`).join('')}</select>
+      </div>
     </div>
     <p class="empty-note" style="margin-bottom:10px;">User-reported associations, not medical advice — see a doctor for real guidance.</p>
     <p class="empty-note" id="strain-search-count">${total > 60 ? `Showing 60 of ${total.toLocaleString()} — refine your search to narrow it down.` : `${total} strain${total === 1 ? '' : 's'}`}</p>
@@ -469,7 +476,7 @@ function pageStrains(req, res, query) {
       <a class="library-row" href="/strains/${s.id}" style="text-decoration:none;color:inherit;">
         ${strainPhotoTag(s, 'sm')}
         <div class="info">
-          <div class="nm">${esc(s.name)}</div>
+          <div class="nm">${esc(s.name)} <span title="${esc(VERIFICATION_BADGE[strainVerificationTier(s)].label)}">${VERIFICATION_BADGE[strainVerificationTier(s)].icon}</span></div>
           <div class="sub">${esc(s.type)} · ${rarityLabel(s.rarity)} · THC ${esc(s.thc)}</div>
         </div>
         <span class="rarity-tag rarity-${s.rarity}">${rarityLabel(s.rarity)}</span>
@@ -478,6 +485,58 @@ function pageStrains(req, res, query) {
   sendHtml(res, layout({ title: 'Strains', active: 'strains', body, isAdmin: auth.isAdmin(req) }));
 }
 
+// Verification tier is computed live from how complete a strain's actual
+// data is, rather than a manually-set flag -- this stays honest and
+// automatically accurate as more research gets added, without requiring
+// anyone to remember which strains were personally verified versus not.
+function strainVerificationTier(s) {
+  const hasThc = !!s.thc;
+  const hasBreeder = !!s.breeder;
+  const hasDetail = !!s.flavor || (Array.isArray(s.terps) && s.terps.length > 0);
+  const score = [hasThc, hasBreeder, hasDetail].filter(Boolean).length;
+  if (score === 3) return 'verified';
+  if (score >= 1) return 'partial';
+  return 'listed';
+}
+const VERIFICATION_BADGE = {
+  verified: { icon: '✅', label: 'Verified', note: 'THC, breeder, and flavor/terpene data all independently confirmed.' },
+  partial: { icon: '🔹', label: 'Partially verified', note: 'Some details confirmed; the rest wasn\u2019t independently found.' },
+  listed: { icon: '⚪', label: 'Listed only', note: 'Seen on a dispensary menu, but no independent data was found for it.' },
+};
+function findStrainByName(name) {
+  const target = name.toLowerCase();
+  return db.listStrains({ limit: 5000 }).find(s => s.name.toLowerCase() === target) || null;
+}
+// Renders parents (linked where the strain exists in the library, plain
+// text otherwise), siblings (other strains sharing at least one parent),
+// and descendants (other strains that list this strain as a parent). Only
+// strains with confirmed, uncontested lineage from research have a
+// `parents` field at all -- most of the library has none, and this
+// section simply doesn't render for those, rather than guessing at a
+// family tree that was never actually verified.
+function renderFamilyTree(s) {
+  const allStrains = db.listStrains({ limit: 5000 });
+  const parents = Array.isArray(s.parents) ? s.parents : [];
+  const descendants = allStrains.filter(o => Array.isArray(o.parents) && o.parents.some(p => p.toLowerCase() === s.name.toLowerCase()));
+  const siblings = parents.length
+    ? allStrains.filter(o => o.id !== s.id && Array.isArray(o.parents) &&
+        o.parents.some(p => parents.some(myP => myP.toLowerCase() === p.toLowerCase())))
+    : [];
+  if (!parents.length && !descendants.length && !siblings.length) return '';
+  const renderName = (name) => {
+    const match = findStrainByName(name);
+    return match ? `<a href="/strains/${match.id}">${esc(name)}</a>` : esc(name);
+  };
+  const renderStrainLink = (o) => `<a href="/strains/${o.id}">${esc(o.name)}</a>`;
+  return `
+    <div class="card" style="margin-top:10px;">
+      <h2 style="margin:0 0 6px;font-size:15px;">🌳 Family Tree</h2>
+      ${parents.length ? `<p style="margin:2px 0;"><b>Parents:</b> ${parents.map(renderName).join(' × ')}</p>` : ''}
+      ${siblings.length ? `<p style="margin:2px 0;"><b>Shares a parent with:</b> ${siblings.slice(0, 8).map(renderStrainLink).join(', ')}</p>` : ''}
+      ${descendants.length ? `<p style="margin:2px 0;"><b>Parent of:</b> ${descendants.map(renderStrainLink).join(', ')}</p>` : ''}
+    </div>
+  `;
+}
 function pageStrainDetail(req, res, id) {
   const s = db.getStrain(id);
   if (!s) return notFound(res);
@@ -493,6 +552,7 @@ function pageStrainDetail(req, res, id) {
         <div>
           <h1 style="margin:0;font-size:19px;">${esc(s.name)}</h1>
           <div class="empty-note" style="padding:0;">${esc(s.type)}${s.lean ? ' · ' + esc(s.lean) : ''} · <span class="rarity-tag rarity-${s.rarity}">${rarityLabel(s.rarity)}</span></div>
+          <div style="margin-top:2px;" title="${esc(VERIFICATION_BADGE[strainVerificationTier(s)].note)}"><span class="empty-note" style="padding:0;">${VERIFICATION_BADGE[strainVerificationTier(s)].icon} ${VERIFICATION_BADGE[strainVerificationTier(s)].label}</span></div>
           ${ratingStats.count ? `<div style="margin-top:2px;">${starString(Math.round(ratingStats.avg))} <span class="empty-note" style="padding:0;">${ratingStats.avg}★ from ${ratingStats.count} check-in${ratingStats.count === 1 ? '' : 's'}</span></div>` : `<div class="empty-note" style="padding:2px 0 0;">No community ratings yet — be the first to check in.</div>`}
         </div>
       </div>
@@ -506,6 +566,7 @@ function pageStrainDetail(req, res, id) {
         <p class="empty-note" style="padding:0;">User-reported, not medical advice — see a doctor for real guidance.</p>
       ` : ''}
     </div>
+    ${renderFamilyTree(s)}
     <a class="btn block" href="/checkin?strain=${s.id}">＋ Check in this strain</a>
     <a class="btn secondary block" href="/compare?a=${s.id}" style="margin-top:8px;">⚖️ Compare this strain</a>
     ${userId != null ? `
@@ -1932,6 +1993,68 @@ function pageEffectsGuide(req, res) {
   sendHtml(res, layout({ title: 'Effects Guide', active: 'more', body, isAdmin: auth.isAdmin(req) }));
 }
 
+// Mood-Based Strain Finder -- a goal-first shortcut into the same effects
+// data behind the Effects Guide and strain filters, but with real scoring
+// (strains matching more of a goal's effects rank higher) rather than a
+// single-effect filter link. Verification tier breaks ties so a
+// well-documented strain surfaces ahead of a same-scoring one with mostly
+// blank fields.
+const MOOD_GOALS = {
+  sleep: { label: 'Fall Asleep', icon: '😴', effects: ['Sleepy', 'Relaxed'] },
+  energize: { label: 'Get Energized', icon: '⚡', effects: ['Energetic', 'Uplifted'] },
+  socialize: { label: 'Socialize', icon: '😊', effects: ['Talkative', 'Social', 'Giggly'] },
+  focus: { label: 'Focus', icon: '🎯', effects: ['Focused', 'Clear-headed'] },
+  relax: { label: 'Relax & Unwind', icon: '😌', effects: ['Relaxed', 'Calm'] },
+  create: { label: 'Get Creative', icon: '🎨', effects: ['Creative', 'Uplifted'] },
+  mood: { label: 'Lift My Mood', icon: '😄', effects: ['Happy', 'Euphoric'] },
+  appetite: { label: 'Boost Appetite', icon: '🍕', effects: ['Hungry', 'Relaxed'] },
+};
+const TIER_RANK = { verified: 2, partial: 1, listed: 0 };
+function pageMoodFinder(req, res, query) {
+  const goalKey = query.get('goal');
+  const goal = goalKey && MOOD_GOALS[goalKey];
+  if (!goal) {
+    const body = `
+      <a href="/more" class="empty-note">← Back</a>
+      <h1 class="screen-title">What's the goal?</h1>
+      <p class="screen-sub">Pick what you're going for, and we'll match it against real effect data from your library.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        ${Object.entries(MOOD_GOALS).map(([key, g]) => `
+          <a href="/mood-finder?goal=${key}" class="card" style="text-decoration:none;color:inherit;text-align:center;padding:18px 10px;">
+            <div style="font-size:28px;">${g.icon}</div>
+            <div style="margin-top:6px;font-weight:600;">${esc(g.label)}</div>
+          </a>
+        `).join('')}
+      </div>
+    `;
+    return sendHtml(res, layout({ title: 'Mood Finder', active: 'more', body, isAdmin: auth.isAdmin(req) }));
+  }
+  const allStrains = db.listStrains({ limit: 5000 });
+  const scored = allStrains
+    .map(s => {
+      const overlap = (s.effects || []).filter(e => goal.effects.includes(e)).length;
+      return { s, score: overlap, tier: TIER_RANK[strainVerificationTier(s)] };
+    })
+    .filter(x => x.score > 0)
+    .sort((a, b) => b.score - a.score || b.tier - a.tier || a.s.name.localeCompare(b.s.name))
+    .slice(0, 20);
+  const body = `
+    <a href="/mood-finder" class="empty-note">← Pick a different goal</a>
+    <h1 class="screen-title">${goal.icon} ${esc(goal.label)}</h1>
+    <p class="screen-sub">Matched against strains tagged ${goal.effects.map(esc).join(' or ')}.</p>
+    ${scored.length ? scored.map(({ s }) => `
+      <a class="library-row" href="/strains/${s.id}" style="text-decoration:none;color:inherit;">
+        ${strainPhotoTag(s, 'sm')}
+        <div class="info">
+          <div class="nm">${esc(s.name)} <span title="${esc(VERIFICATION_BADGE[strainVerificationTier(s)].label)}">${VERIFICATION_BADGE[strainVerificationTier(s)].icon}</span></div>
+          <div class="sub">${esc(s.type)} · ${s.effects.map(esc).join(', ')}</div>
+        </div>
+      </a>
+    `).join('') : `<div class="empty-note">No strains matched this goal yet.</div>`}
+  `;
+  sendHtml(res, layout({ title: goal.label, active: 'more', body, isAdmin: auth.isAdmin(req) }));
+}
+
 // Breeder Guide -- blurbs are only included where there's real, justified
 // knowledge behind them (either well-documented cannabis history for
 // classic seed banks, or specifics learned while researching dispensary
@@ -2643,10 +2766,11 @@ function apiListStrains(req, res, query) {
   const terpene = query.get('terpene') || 'All';
   const ailment = query.get('ailment') || 'All';
   const breeder = query.get('breeder') || 'All';
+  const verified = query.get('verified') || 'All';
   const limit = Math.min(Number(query.get('limit')) || 60, 200);
   sendJson(res, {
-    total: db.countStrains({ q, type, rarity, effect, thc, terpene, ailment, breeder }),
-    results: db.listStrains({ q, type, rarity, effect, thc, terpene, ailment, breeder, limit }),
+    total: db.countStrains({ q, type, rarity, effect, thc, terpene, ailment, breeder, verified }),
+    results: db.listStrains({ q, type, rarity, effect, thc, terpene, ailment, breeder, verified, limit }),
   });
 }
 async function apiKudos(req, res, id) {
@@ -2709,6 +2833,7 @@ function pageMore(req, res) {
       title: 'Discover',
       tiles: [
         { href: '/quiz', icon: '🧭', t: 'Find Your First Strain', s: '3-question strain matcher' },
+        { href: '/mood-finder', icon: '🎯', t: 'Mood Finder', s: 'Pick a goal, get matched strains' },
         { href: '/compare', icon: '⚖️', t: 'Compare Strains', s: 'Side-by-side lookup' },
         { href: '/surprise-me', icon: '🎲', t: 'Surprise Me', s: 'One random strain you haven\u2019t tried' },
         { href: '/trending', icon: '🔥', t: 'Trending This Week', s: 'Most checked-into right now' },
@@ -3736,6 +3861,7 @@ const server = http.createServer(async (req, res) => {
     if (method === 'POST' && (m = pathname.match(/^\/lists\/(\d+)\/items\/([^/]+)\/toggle$/))) return await handleListItemToggle(req, res, m[1], m[2]);
     if (method === 'GET' && pathname === '/terpene-guide') return pageTerpeneGuide(req, res);
     if (method === 'GET' && pathname === '/effects-guide') return pageEffectsGuide(req, res);
+    if (method === 'GET' && pathname === '/mood-finder') return pageMoodFinder(req, res, url.searchParams);
     if (method === 'GET' && pathname === '/breeder-guide') return pageBreederGuide(req, res);
     if (method === 'POST' && pathname === '/report') return await handleReport(req, res);
     if (method === 'POST' && (m = pathname.match(/^\/block\/(\d+)$/))) return await handleBlock(req, res, m[1]);
