@@ -256,5 +256,117 @@
     "author": "Jordan",
     "likes": 27,
     "body": "Watering on a strict schedule (like every 3 days) ignores how fast a specific pot, medium, and plant size actually dry out, which changes throughout the grow. A more reliable method: water until you see 10-20% of what you poured in come out the drainage holes as runoff, then don't water again until the pot feels noticeably lighter or the top inch or two of soil is dry to the touch. Runoff also flushes out built-up salts from nutrients between feedings, which helps prevent the nutrient lockout that shows up as leaf discoloration even when you're feeding correctly."
+  },
+  {
+    "id": "g32",
+    "title": "Light leaks during flower can stress or hermie a plant",
+    "category": "Lighting",
+    "author": "Priya",
+    "likes": 27,
+    "body": "Once you've switched to 12/12, even a brief flash of light during the dark period (a phone screen, a door opened at the wrong time) can confuse the plant's flowering signal. Check your grow space for stray light before committing to a flowering schedule."
+  },
+  {
+    "id": "g33",
+    "title": "Veg and flower often want different light settings, not just different schedules",
+    "category": "Lighting",
+    "author": "Sam",
+    "likes": 22,
+    "body": "Many LED fixtures let you shift the spectrum, not just the intensity, between stages — more blue light in veg for compact growth, more red in flower for bud development. Check whether your light has this option before assuming 'more watts' is the only lever."
+  },
+  {
+    "id": "g34",
+    "title": "Yellow sticky traps catch problems before you'd otherwise notice them",
+    "category": "Pests & Disease",
+    "author": "Jordan",
+    "likes": 31,
+    "body": "Fungus gnats and whiteflies are often flying around well before you'd spot damage on a leaf. A few sticky traps near the soil line give you an early warning system, so you can act before a small problem becomes an infestation."
+  },
+  {
+    "id": "g35",
+    "title": "Powdery mildew is usually an airflow problem, not a cleanliness problem",
+    "category": "Pests & Disease",
+    "author": "Maya",
+    "likes": 38,
+    "body": "That white, dusty coating tends to show up in still, humid air — dense canopies and tight tent corners are the usual spots. An oscillating fan and trimming a few lower fan leaves for airflow does more to prevent it than any spray applied after the fact."
+  },
+  {
+    "id": "g36",
+    "title": "Ease off major training once flowering is underway",
+    "category": "Training",
+    "author": "Chris",
+    "likes": 24,
+    "body": "Topping and heavy LST are great early tools, but stressing a plant once it's a few weeks into flower can slow bud development instead of helping it. Save the aggressive training for veg, and stick to light defoliation once flowers are forming."
+  },
+  {
+    "id": "g37",
+    "title": "Supercropping is training without cutting anything",
+    "category": "Training",
+    "author": "Sam",
+    "likes": 19,
+    "body": "Gently pinching and bending a stem until you feel (not hear) the inner tissue give, then taping it in a new position, can flatten a canopy just like topping — without an open wound. It takes a light touch to learn, so practice on a branch you're not worried about."
+  },
+  {
+    "id": "g38",
+    "title": "Store extra seeds like you'd store spices, not produce",
+    "category": "Genetics & Seeds",
+    "author": "Priya",
+    "likes": 21,
+    "body": "Cool, dark, dry, and airtight is what keeps seeds viable — a sealed container in the back of a fridge works better than a drawer at room temperature. Properly stored seeds can stay viable for years; poorly stored ones can lose viability within months."
+  },
+  {
+    "id": "g39",
+    "title": "A strain's lineage tells you what to actually expect from it",
+    "category": "Genetics & Seeds",
+    "author": "Jordan",
+    "likes": 29,
+    "body": "Terms like 'Bx1' (backcrossed once) or 'F2' (second-generation cross) aren't just breeder jargon — they hint at how stable a strain's genetics are. A stable Bx line usually grows more predictably than a fresh F1 cross, which can throw noticeably different phenotypes plant to plant."
+  },
+  {
+    "id": "g40",
+    "title": "One oscillating fan does more than most people expect",
+    "category": "Indoor Setup",
+    "author": "Chris",
+    "likes": 33,
+    "body": "Beyond just preventing mold, gentle constant air movement strengthens stems (they thicken in response to being pushed around a bit) and keeps the whole canopy at a more even temperature than still air ever will."
+  },
+  {
+    "id": "g41",
+    "title": "Plan your tent around mature plant size, not seedling size",
+    "category": "Indoor Setup",
+    "author": "Maya",
+    "likes": 26,
+    "body": "It's tempting to fit in one more plant when everything's still small, but cannabis can double or triple in height during the stretch phase of early flower. Leave real room now, or you'll be fighting your own canopy for light later."
+  },
+  {
+    "id": "g42",
+    "title": "Nearby streetlights can mess with an outdoor flowering schedule",
+    "category": "Outdoor Growing",
+    "author": "Sam",
+    "likes": 20,
+    "body": "Photoperiod plants growing outdoors near consistent artificial light at night (a porch light, a streetlamp) can get confused signals about when to flower, sometimes triggering stress or hermaphroditism. Worth checking your spot after dark before committing to it."
+  },
+  {
+    "id": "g43",
+    "title": "Protect ripening colas from rain, not just cold",
+    "category": "Outdoor Growing",
+    "author": "Priya",
+    "likes": 25,
+    "body": "Dense, mature buds trap moisture in their center, and a heavy rain close to harvest is a common cause of bud rot you won't notice until you crack a cola open. A simple rain cover for the last few weeks outdoors is cheap insurance."
+  },
+  {
+    "id": "g44",
+    "title": "Lift the pot before you water — weight tells you more than a calendar",
+    "category": "Watering",
+    "author": "Jordan",
+    "likes": 30,
+    "body": "A dry pot is noticeably lighter than a recently-watered one. Get a feel for both weights early on, and you'll know when a plant actually needs water instead of guessing off a fixed every-few-days schedule that doesn't account for pot size or heat."
+  },
+  {
+    "id": "g45",
+    "title": "Water temperature matters more than people think",
+    "category": "Watering",
+    "author": "Chris",
+    "likes": 18,
+    "body": "Cold tap water can shock roots and slow nutrient uptake. Letting water sit out to reach room temperature first is a small habit that removes one more variable if a plant is struggling for reasons you can't otherwise explain."
   }
 ]
