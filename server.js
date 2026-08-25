@@ -149,7 +149,7 @@ const MIN_AGE = 21;
 // off Alissa's existing address is the zero-setup option: no new inbox to
 // check, mail still lands in the same account, and it's easy to filter or
 // swap for a real support@ address later if a custom domain gets set up.
-const SUPPORT_EMAIL = 'alissa.m.prewett+straindexsupport@gmail.com';
+const SUPPORT_EMAIL = 'straindex420@gmail.com';
 function isOldEnough(birthDateStr) {
   const dob = new Date(birthDateStr);
   if (isNaN(dob.getTime())) return false;
@@ -1367,7 +1367,7 @@ function pageSignup(req, res, query) {
 // fetch built in, same as the Resend email calls elsewhere in this file).
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
-const GOOGLE_REDIRECT_URI = 'https://straindex-dber.onrender.com/auth/google/callback';
+const GOOGLE_REDIRECT_URI = 'https://strain-dex.com/auth/google/callback';
 
 function pageGoogleStart(req, res, query) {
   if (!GOOGLE_CLIENT_ID) {
