@@ -193,7 +193,15 @@ function renderOnsetTimer(c) {
 // Short "who gave kudos" label shown under the kudos button -- up to 3
 // names, then "and N more" for anything beyond that.
 function kudosGiversLabel(checkinId) {
-  const givers = db.listCheckinKudosGivers(checkinId);
+  // Filters out any giver with a blank/missing username -- this shouldn't
+  // be possible for a real account, but a real bug surfaced during
+  // testing where phantom kudos_givers rows appeared referencing a
+  // brand-new, never-before-used checkin ID, with usernames resolving to
+  // empty strings. Root cause wasn't fully diagnosed (needs direct
+  // database inspection), but this at minimum stops the broken ", , and
+  // N more" display from ever showing to a real user while that's
+  // investigated further.
+  const givers = db.listCheckinKudosGivers(checkinId).filter(u => u && u.username);
   if (!givers.length) return '';
   const names = givers.slice(0, 3).map(u => esc(u.username));
   const extra = givers.length - names.length;
@@ -2873,7 +2881,9 @@ async function apiCheckinKudos(req, res, id) {
   if (userId == null) return;
   const { checkin, given } = await db.toggleCheckinKudos(id, userId);
   if (!checkin) return sendJson(res, { error: 'not found' }, 404);
-  const givers = db.listCheckinKudosGivers(id).map(u => u.username);
+  // Same defensive filter as kudosGiversLabel -- see the comment there for
+  // context on the real bug this guards against.
+  const givers = db.listCheckinKudosGivers(id).filter(u => u && u.username).map(u => u.username);
   sendJson(res, { kudos: checkin.kudos, given, givers });
 }
 async function apiCommentLike(req, res, id) {
