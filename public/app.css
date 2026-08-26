@@ -53,9 +53,10 @@ form .btn{margin-top:14px;}
 .recipe-source-tag.official{background:#eef2ea;color:var(--brand-green-dark);}
 .recipe-source-tag.community{background:#f2ecf9;color:var(--brand-lilac);}
 .dosing-note{background:#fff6e0;border:1px solid #eddba4;color:#5c4a12;font-size:12px;padding:9px 11px;border-radius:9px;margin-top:10px;}
-.kudos-btn{border:1.5px solid var(--border);background:#fff;color:var(--ink-secondary);padding:6px 12px;border-radius:999px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;transition:border-color 0.15s,color 0.15s;}
+.kudos-btn{border:1.5px solid var(--border);background:#fff;color:var(--ink-secondary);padding:6px 12px;border-radius:999px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;transition:border-color 0.15s,color 0.15s,background 0.15s;}
+.kudos-btn.kudos-given{background:var(--brand-green-dark);border-color:var(--brand-green-dark);color:#fff;}
 @keyframes kudosPulse{0%{transform:scale(1);}40%{transform:scale(1.15);}100%{transform:scale(1);}}
-.kudos-pulse{animation:kudosPulse 0.35s ease;border-color:var(--brand-green-dark);color:var(--brand-green-dark);}
+.kudos-pulse{animation:kudosPulse 0.35s ease;}
 .library-row{display:flex;align-items:center;gap:10px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:10px 12px;margin-bottom:8px;}
 .library-row .icon{font-size:22px;flex-shrink:0;}
 .strain-thumb{object-fit:cover;border-radius:8px;flex-shrink:0;background:#e5e0d5;}

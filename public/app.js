@@ -51,24 +51,33 @@ async function giveCheckinKudos(id, btn) {
   if (res.ok) {
     const data = await res.json();
     const icon = btn.querySelector('img, svg');
-    btn.innerHTML = (icon ? icon.outerHTML : '') + `Kudos (${data.kudos})`;
-    btn.disabled = true;
-    btn.classList.add('kudos-pulse');
-    toast('Kudos given!');
-    // Update (or create) the "who gave kudos" label right under the button.
+    btn.innerHTML = (icon ? icon.outerHTML : '') + (data.given ? 'Kudos given' : 'Kudos') + (data.kudos ? ` (${data.kudos})` : '');
+    btn.classList.toggle('kudos-given', data.given);
+    if (data.given) {
+      btn.classList.add('kudos-pulse');
+      toast('Kudos given!');
+    } else {
+      btn.classList.remove('kudos-pulse');
+      toast('Kudos removed');
+    }
+    // Update (or remove) the "who gave kudos" label right under the button.
     const wrap = btn.parentElement;
-    if (wrap && Array.isArray(data.givers) && data.givers.length) {
-      const names = data.givers.slice(0, 3).join(', ');
-      const extra = data.givers.length - 3;
-      const text = `🌿 ${names}${extra > 0 ? ` and ${extra} more` : ''}`;
+    if (wrap) {
       let label = wrap.querySelector('.kudos-givers-label');
-      if (!label) {
-        label = document.createElement('div');
-        label.className = 'empty-note kudos-givers-label';
-        label.style.cssText = 'padding:2px 0 0;text-align:right;';
-        wrap.appendChild(label);
+      if (Array.isArray(data.givers) && data.givers.length) {
+        const names = data.givers.slice(0, 3).join(', ');
+        const extra = data.givers.length - 3;
+        const text = `🌿 ${names}${extra > 0 ? ` and ${extra} more` : ''}`;
+        if (!label) {
+          label = document.createElement('div');
+          label.className = 'empty-note kudos-givers-label';
+          label.style.cssText = 'padding:2px 0 0;text-align:right;';
+          wrap.appendChild(label);
+        }
+        label.textContent = text;
+      } else if (label) {
+        label.remove();
       }
-      label.textContent = text;
     }
   }
 }

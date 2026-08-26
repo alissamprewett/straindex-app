@@ -194,6 +194,14 @@ function kudosGiversLabel(checkinId) {
   const extra = givers.length - names.length;
   return `<div class="empty-note kudos-givers-label" style="padding:2px 0 0;text-align:right;">🌿 ${names.join(', ')}${extra > 0 ? ` and ${extra} more` : ''}</div>`;
 }
+// The kudos button itself -- reflects whether the current viewer has
+// already given kudos on page load (not just after clicking), and is
+// styled/labeled differently in each state so a toggle-off feels
+// intentional rather than like the button just broke.
+function renderKudosButton(c, userId) {
+  const given = db.hasUserGivenKudos(c.id, userId);
+  return `<button class="kudos-btn${given ? ' kudos-given' : ''}" id="kudos-btn-${c.id}" data-given="${given}" onclick="giveCheckinKudos(${c.id}, this)">${KUDOS_BUD_ICON}${given ? 'Kudos given' : 'Kudos'}${c.kudos ? ` (${c.kudos})` : ''}</button>`;
+}
 function renderCheckinComments(c, userId, redirectPath) {
   const comments = db.listCheckinComments(c.id, userId);
   return `
@@ -417,7 +425,7 @@ function pageHome(req, res) {
         ${renderOnsetTimer(c)}
         ${renderCheckinComments(c, userId, '/')}
         <div style="display:flex;flex-direction:column;align-items:flex-end;margin-top:8px;">
-          <button class="kudos-btn" onclick="giveCheckinKudos(${c.id}, this)">${KUDOS_BUD_ICON}Kudos${c.kudos ? ` (${c.kudos})` : ''}</button>
+          ${renderKudosButton(c, userId)}
           ${kudosGiversLabel(c.id)}
         </div>
       </div>`;
@@ -637,7 +645,7 @@ function pageStrainDetail(req, res, id) {
         ${renderOnsetTimer(c)}
         ${renderCheckinComments(c, userId, '/strains/' + s.id)}
           <div style="display:flex;flex-direction:column;align-items:flex-end;margin-top:6px;">
-            <button class="kudos-btn" onclick="giveCheckinKudos(${c.id}, this)">${KUDOS_BUD_ICON}Kudos${c.kudos ? ` (${c.kudos})` : ''}</button>
+            ${renderKudosButton(c, userId)}
             ${kudosGiversLabel(c.id)}
           </div>
         </div>
@@ -2803,10 +2811,10 @@ async function apiGrowLike(req, res, id) {
 async function apiCheckinKudos(req, res, id) {
   const userId = requireUser(req, res);
   if (userId == null) return;
-  const c = await db.giveCheckinKudos(id, userId);
-  if (!c) return sendJson(res, { error: 'not found' }, 404);
+  const { checkin, given } = await db.toggleCheckinKudos(id, userId);
+  if (!checkin) return sendJson(res, { error: 'not found' }, 404);
   const givers = db.listCheckinKudosGivers(id).map(u => u.username);
-  sendJson(res, { kudos: c.kudos, givers });
+  sendJson(res, { kudos: checkin.kudos, given, givers });
 }
 async function apiCommentLike(req, res, id) {
   const userId = requireUser(req, res);
@@ -3361,7 +3369,7 @@ function pageFriendProfile(req, res, friendId) {
         ${renderOnsetTimer(c)}
         ${renderCheckinComments(c, userId, '/friends/' + friendId)}
         <div style="display:flex;flex-direction:column;align-items:flex-end;margin-top:8px;">
-          <button class="kudos-btn" onclick="giveCheckinKudos(${c.id}, this)">${KUDOS_BUD_ICON}Kudos${c.kudos ? ` (${c.kudos})` : ''}</button>
+          ${renderKudosButton(c, userId)}
           ${kudosGiversLabel(c.id)}
         </div>
       </div>`;
