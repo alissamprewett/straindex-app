@@ -53,11 +53,15 @@ async function giveCheckinKudos(id, btn) {
     const icon = btn.querySelector('img, svg');
     btn.innerHTML = (icon ? icon.outerHTML : '') + (data.given ? 'Kudos given' : 'Kudos') + (data.kudos ? ` (${data.kudos})` : '');
     btn.classList.toggle('kudos-given', data.given);
+    // Force the pulse animation to restart even if the class is already
+    // present from a previous toggle -- simply re-adding a class that's
+    // already there doesn't replay a CSS animation on its own.
+    btn.classList.remove('kudos-pulse');
+    void btn.offsetWidth; // reflow, so the browser treats the next add as new
     if (data.given) {
       btn.classList.add('kudos-pulse');
       toast('Kudos given!');
     } else {
-      btn.classList.remove('kudos-pulse');
       toast('Kudos removed');
     }
     // Update (or remove) the "who gave kudos" label right under the button.

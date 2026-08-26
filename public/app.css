@@ -33,6 +33,7 @@ nav.tabbar a{flex:1;text-align:center;padding:10px 2px 8px;display:flex;flex-dir
 nav.tabbar a .ic{font-size:19px;}
 nav.tabbar a .ic-img{width:19px;height:19px;object-fit:contain;display:block;}
 nav.tabbar a.active{color:var(--brand-green);}
+.nav-badge{position:absolute;top:4px;right:20%;background:#d64545;color:#fff;font-size:9px;font-weight:700;line-height:1;padding:2px 4px;border-radius:999px;min-width:14px;text-align:center;}
 .card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:12px;box-shadow:var(--shadow);}
 .btn{display:inline-block;background:var(--brand-green);color:#fff;border:none;padding:11px 16px;border-radius:12px;font-weight:700;font-size:13.5px;cursor:pointer;font-family:inherit;text-decoration:none;text-align:center;}
 .btn.secondary{background:#eee;color:var(--ink-secondary);}
