@@ -58449,11 +58449,19 @@
     "type": "Hybrid",
     "lean": null,
     "rarity": "uncommon",
-    "thc": null,
-    "cbd": null,
-    "terps": [],
-    "effects": [],
-    "flavor": null,
+    "thc": "28–32%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Sleepy"
+    ],
+    "flavor": "Piney, earthy kush with gasoline-soaked OG notes.",
     "icon": "🌿",
     "breeder": "CBX Cannabiotix"
   },
@@ -58589,11 +58597,20 @@
     "type": "Hybrid",
     "lean": null,
     "rarity": "uncommon",
-    "thc": null,
-    "cbd": null,
-    "terps": [],
-    "effects": [],
-    "flavor": null,
+    "thc": "21%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      }
+    ],
+    "effects": [
+      "Uplifted",
+      "Relaxed",
+      "Tingly"
+    ],
+    "flavor": "Blueberry and dough with a nutty, sweet finish.",
     "icon": "🧇",
     "breeder": "Gramlin"
   },
@@ -58634,13 +58651,17 @@
     "type": "Hybrid",
     "lean": null,
     "rarity": "uncommon",
-    "thc": null,
-    "cbd": null,
+    "thc": "29.2%",
+    "cbd": "<1%",
     "terps": [],
-    "effects": [],
-    "flavor": null,
+    "effects": [
+      "Uplifted",
+      "Relaxed",
+      "Sleepy"
+    ],
+    "flavor": "Pungent fresh garlic with tangy musk and spicy earthiness.",
     "icon": "👻",
-    "breeder": "Smoken Promises"
+    "breeder": "Smoken Promises x Connected Cannabis Co."
   },
   {
     "id": "s1710",
@@ -58924,7 +58945,7 @@
   {
     "id": "s1722",
     "name": "CCG",
-    "type": "Hybrid",
+    "type": "Indica",
     "lean": null,
     "rarity": "uncommon",
     "thc": null,
@@ -59302,11 +59323,14 @@
     "type": "Sativa",
     "lean": null,
     "rarity": "uncommon",
-    "thc": null,
-    "cbd": null,
+    "thc": "29.43%",
+    "cbd": "<1%",
     "terps": [],
-    "effects": [],
-    "flavor": null,
+    "effects": [
+      "Uplifted",
+      "Energetic"
+    ],
+    "flavor": "Bittersweet citrus with a loud grapefruit funk.",
     "icon": "🍊",
     "breeder": "Claybourne Co."
   },
@@ -59424,13 +59448,30 @@
     "type": "Hybrid",
     "lean": null,
     "rarity": "uncommon",
-    "thc": null,
-    "cbd": null,
-    "terps": [],
-    "effects": [],
-    "flavor": null,
+    "thc": "20–27%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Talkative"
+    ],
+    "flavor": "Tart green apple with sweet berry gas and a cookie-dough finish.",
     "icon": "🥧",
-    "breeder": "Tiny Fires"
+    "breeder": "Clearwater Genetics"
   },
   {
     "id": "s1749",
@@ -59452,8 +59493,8 @@
     "type": "Hybrid",
     "lean": null,
     "rarity": "uncommon",
-    "thc": null,
-    "cbd": null,
+    "thc": "42–48%",
+    "cbd": "<1%",
     "terps": [],
     "effects": [],
     "flavor": null,
