@@ -384,7 +384,7 @@ function pageLandingPage(req, res) {
       <a href="/signup" class="btn secondary block" style="text-decoration:none;">Get Started →</a>
     </div>
   `;
-  sendHtml(res, layout({ title: 'StrainDex', body, isAdmin: false }));
+  sendHtml(res, layout({ title: 'StrainDex', body, isAdmin: false, showBack: false }));
 }
 
 function pageHome(req, res) {
@@ -396,11 +396,16 @@ function pageHome(req, res) {
   const recentCheckins = db.filterVisibleCheckins(db.listCheckins({ userIds: feedUserIds, limit: 30 }), userId).slice(0, 15);
   const recs = getRecommendations(userId, 4);
   const hasFollowedDispensaries = db.anyDispensaryFollowed(userId);
+  // "Welcome back" doesn't make sense the very first time someone lands
+  // here right after signing up -- check whether this account has ever
+  // actually logged a check-in of its own before deciding which greeting
+  // to show.
+  const isFirstVisit = db.listCheckins({ userId, limit: 1 }).length === 0;
 
   const body = `
-    <h1 class="screen-title">Welcome back 🌿</h1>
+    <h1 class="screen-title">${isFirstVisit ? 'Welcome to StrainDex 🌿' : 'Welcome back 🌿'}</h1>
     <p class="screen-sub">Your personal cannabis companion — check-ins, discovery, safety info, and your friends, all in one place.</p>
-    <a class="btn block" href="/checkin" style="margin-bottom:18px;">🌿 Light Up</a>
+    <a class="btn block" href="/checkin" style="margin-bottom:18px;">🌿 Light It Up</a>
 
     <div class="section-label">Recommended for you</div>
     <div class="hcarousel">
@@ -444,7 +449,7 @@ function pageHome(req, res) {
       </div>`;
     }).join('') : `<div class="empty-note">No check-ins logged yet — <a href="/checkin">log your first one</a> to get your feed started.</div>`}
   `;
-  sendHtml(res, layout({ title: 'Home', active: 'home', body, isAdmin: auth.isAdmin(req), unreadMessages: db.countUnreadMessages(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: 'Home', active: 'home', body, isAdmin: auth.isAdmin(req), unreadMessages: db.countUnreadMessages(auth.currentUserId(req)), showBack: false }));
 }
 
 function pageStrains(req, res, query) {
@@ -582,7 +587,6 @@ function pageStrainDetail(req, res, id) {
   const ratingStats = db.getStrainRatingStats(id);
   const similar = db.getSimilarStrains(s, 4);
   const body = `
-    <a href="/strains" class="empty-note">← Back to library</a>
     <div class="card" style="margin-top:10px;">
       <div style="display:flex;align-items:center;gap:12px;">
         ${strainPhotoTag(s, 'lg')}
@@ -779,9 +783,7 @@ function pageCheckinForm(req, res, query, existing) {
   const strainId = existing ? existing.strain_id : (query.get('strain') || '');
   const s = strainId ? db.getStrain(strainId) : null;
   const isEdit = !!existing;
-  const backHref = s ? `/strains/${s.id}` : '/';
   const body = `
-    <a href="${backHref}" class="empty-note">← Back</a>
     <h1 class="screen-title">${isEdit ? 'Edit Check-In' : 'Check In'}</h1>
     ${isEdit ? `<p class="empty-note">Thoughts changed after the fact? That's normal, especially with edibles — update it below.</p>` : ''}
     <form method="POST" action="${isEdit ? `/checkin/${existing.id}/edit` : '/checkin'}" id="checkin-form">
@@ -1078,7 +1080,6 @@ function pageRecipeDetail(req, res, id) {
   const r = db.getRecipe(id);
   if (!r || r.status !== 'approved') return notFound(res);
   const body = `
-    <a href="/recipes" class="empty-note">← Back to recipes</a>
     <div class="card" style="margin-top:10px;">
       <b style="font-size:16px;">${r.icon || '🍽️'} ${esc(r.title)}</b>
       <span class="recipe-source-tag ${r.source}">${r.source === 'official' ? 'Official' : 'Community'}</span>
@@ -1388,7 +1389,7 @@ function pageSignup(req, res, query) {
     <p class="empty-note" style="margin-top:12px;">By creating an account, you agree to the <a href="/terms">Terms of Service</a> and <a href="/privacy">Privacy Policy</a>.</p>
     <p class="empty-note">Already have an account? <a href="/login">Log in</a></p>
   `;
-  sendHtml(res, layout({ title: 'Sign Up', body }));
+  sendHtml(res, layout({ title: 'Sign Up', body, showBack: false }));
 }
 // ---------------------------------------------------------------- Google sign-in
 // Standard OAuth 2.0 authorization-code flow, no external library -- just
@@ -1605,7 +1606,7 @@ function pageLogin(req, res, query) {
     <p class="empty-note" style="margin-top:12px;">Forgot your password? <a href="/forgot-password">Reset it</a></p>
     <p class="empty-note">New here? <a href="/signup">Create an account</a></p>
   `;
-  sendHtml(res, layout({ title: 'Log In', body }));
+  sendHtml(res, layout({ title: 'Log In', body, showBack: false }));
 }
 
 // ---------------------------------------------------------------- forgot / reset password
@@ -1626,9 +1627,9 @@ function pageOnboarding(req, res) {
   const steps = [
     { icon: '🌿', title: 'Welcome to StrainDex', body: 'Your personal cannabis journal — strains, recipes, growing knowledge, and a lot more, all in one place.' },
     { icon: '🔥', title: 'Log your first check-in', body: 'Tap "Light It Up" any time you try a strain — rate it, add tasting notes, and start your collection.' },
-    { icon: '🧭', title: 'Not sure where to start?', body: 'Take the 3-question quiz to get matched to a starter strain, or hit "Surprise Me" for a random pick from the 1,600+ strain library.' },
+    { icon: '🧭', title: 'Not sure where to start?', body: `Take the 3-question quiz to get matched to a starter strain, or hit "Surprise Me" for a random pick from the ${db.countStrains().toLocaleString()}+ strain library.` },
     { icon: '📊', title: 'See your own patterns', body: 'Your Patterns reflects your check-in history back at you — favorite effects, top strain type, even a tolerance break tracker.' },
-    { icon: '🧑\u200d🤝\u200d🧑', title: 'Bring your friends', body: 'Add friends to see their check-ins, trade duplicate strain cards, and compare notes.' },
+    { icon: '🧑\u200d🤝\u200d🧑', title: 'Bring your friends', body: 'Add friends to see their check-ins, message them, share strains, and trade duplicate cards.' },
     { icon: '⭐', title: 'A lot more in "More"', body: 'Compare strains side by side, check what’s trending, look up your state’s cannabis laws, keep a wishlist, and more — it’s all grouped by category in the More tab.' },
   ];
   const body = `
@@ -1665,7 +1666,7 @@ function pageOnboarding(req, res) {
       })();
     </script>
   `;
-  sendHtml(res, layout({ title: 'Welcome', body, isAdmin: auth.isAdmin(req), unreadMessages: db.countUnreadMessages(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: 'Welcome', body, isAdmin: auth.isAdmin(req), unreadMessages: db.countUnreadMessages(auth.currentUserId(req)), showBack: false }));
 }
 
 // "Find your first strain" quiz -- a lightweight 3-question filter over the
@@ -1715,7 +1716,6 @@ function pageCompare(req, res, query) {
     ['Flavor', a.flavor, b.flavor],
   ] : [];
   const body = `
-    <a href="/more" class="empty-note">← Back</a>
     <h1 class="screen-title">Compare Strains</h1>
     <p class="screen-sub">Pick two strains to see them side by side.</p>
     <div style="display:flex;gap:10px;margin-bottom:16px;">
@@ -1775,7 +1775,6 @@ function pageGrowJournal(req, res) {
   if (userId == null) return;
   const entries = db.listGrowJournal(userId);
   const body = `
-    <a href="/more" class="empty-note">← Back</a>
     <h1 class="screen-title">Grow Journal</h1>
     <p class="screen-sub">A private photo timeline for tracking a plant from seedling to harvest. Use the title field as a plant nickname to keep entries for the same plant easy to spot.</p>
     <form method="POST" action="/grow-journal" style="margin-bottom:20px;">
@@ -1851,7 +1850,6 @@ function pageFriendsPicks(req, res) {
   if (userId == null) return;
   const picks = db.getFriendsPicks(userId, 20);
   const body = `
-    <a href="/more" class="empty-note">← Back</a>
     <h1 class="screen-title">Friends' Picks</h1>
     <p class="screen-sub">Strains your friends rated 4★ or higher that you haven't checked into yet.</p>
     ${picks.length ? picks.map(p => `
@@ -1874,7 +1872,6 @@ function pageLists(req, res) {
   if (userId == null) return;
   const lists = db.listCustomLists(userId);
   const body = `
-    <a href="/more" class="empty-note">← Back</a>
     <h1 class="screen-title">Your Lists</h1>
     <p class="screen-sub">Organize strains however makes sense to you — "Morning," "Date night," "Sleep," anything.</p>
     <form method="POST" action="/lists" style="display:flex;gap:8px;margin-bottom:16px;">
@@ -1906,7 +1903,6 @@ function pageListDetail(req, res, id) {
   if (!list || list.user_id !== userId) return notFound(res);
   const items = db.listCustomListItems(list.id);
   const body = `
-    <a href="/lists" class="empty-note">← Back to your lists</a>
     <h1 class="screen-title">${esc(list.name)}</h1>
     ${items.length ? items.map(s => `
       <div class="library-row">
@@ -1975,7 +1971,6 @@ function pageTerpeneGuide(req, res) {
   allStrains.forEach(s => (s.terps || []).forEach(t => { counts[t.n] = (counts[t.n] || 0) + 1; }));
   const entries = Object.entries(TERPENE_GUIDE).sort((a, b) => (counts[b[0]] || 0) - (counts[a[0]] || 0));
   const body = `
-    <a href="/more" class="empty-note">← Back</a>
     <h1 class="screen-title">Terpene Guide</h1>
     <p class="screen-sub">Terpenes are the aromatic compounds behind a strain's smell and flavor. Effects here are commonly reported associations, not clinically proven outcomes — everyone responds differently.</p>
     ${entries.map(([name, info]) => `
@@ -2023,7 +2018,6 @@ function pageEffectsGuide(req, res) {
   allStrains.forEach(s => (s.effects || []).forEach(e => { counts[e] = (counts[e] || 0) + 1; }));
   const entries = Object.entries(EFFECTS_GUIDE).sort((a, b) => (counts[b[0]] || 0) - (counts[a[0]] || 0));
   const body = `
-    <a href="/more" class="empty-note">← Back</a>
     <h1 class="screen-title">Effects Guide</h1>
     <p class="screen-sub">What people commonly report feeling from each effect tag — reported associations, not guaranteed outcomes. Everyone responds differently.</p>
     ${entries.map(([name, description]) => `
@@ -2061,7 +2055,6 @@ function pageMoodFinder(req, res, query) {
   const goal = goalKey && MOOD_GOALS[goalKey];
   if (!goal) {
     const body = `
-      <a href="/more" class="empty-note">← Back</a>
       <h1 class="screen-title">What's the goal?</h1>
       <p class="screen-sub">Pick what you're going for, and we'll match it against real effect data from your library.</p>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
@@ -2085,7 +2078,6 @@ function pageMoodFinder(req, res, query) {
     .sort((a, b) => b.score - a.score || b.tier - a.tier || a.s.name.localeCompare(b.s.name))
     .slice(0, 20);
   const body = `
-    <a href="/mood-finder" class="empty-note">← Pick a different goal</a>
     <h1 class="screen-title">${goal.icon} ${esc(goal.label)}</h1>
     <p class="screen-sub">Matched against strains tagged ${goal.effects.map(esc).join(' or ')}.</p>
     ${scored.length ? scored.map(({ s }) => `
@@ -2145,7 +2137,6 @@ function pageBreederGuide(req, res) {
   allStrains.forEach(s => { if (s.breeder) counts[s.breeder] = (counts[s.breeder] || 0) + 1; });
   const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]).slice(0, 40);
   const body = `
-    <a href="/more" class="empty-note">← Back</a>
     <h1 class="screen-title">Breeder Guide</h1>
     <p class="screen-sub">Who's actually behind the strains in your library — from classic Amsterdam seed banks to the modern California brands you'll find on real dispensary shelves.</p>
     ${sorted.map(([name, count]) => `
@@ -2166,7 +2157,6 @@ function pageWishlist(req, res) {
   if (userId == null) return;
   const items = db.getWishlist(userId);
   const body = `
-    <a href="/more" class="empty-note">← Back</a>
     <h1 class="screen-title">Your Wishlist</h1>
     <p class="screen-sub">Strains you've spotted and want to try next — separate from Collection, which only tracks what you've actually checked into.</p>
     ${items.length ? items.map(s => `
@@ -2204,7 +2194,6 @@ function pageTrending(req, res) {
     .sort((a, b) => b.count - a.count)
     .slice(0, 20);
   const body = `
-    <a href="/more" class="empty-note">← Back</a>
     <h1 class="screen-title">Trending This Week</h1>
     <p class="screen-sub">The most checked-into strains across StrainDex in the last ${windowDays} days.</p>
     ${ranked.length ? ranked.map((r, i) => `
@@ -2235,7 +2224,6 @@ function pageMixingCautions(req, res) {
     { title: 'Pregnancy & breastfeeding', body: 'Major health organizations advise against cannabis use during pregnancy and while breastfeeding due to potential effects on fetal and infant development. This one has clear medical consensus — talk to an OB or pediatrician directly rather than relying on general guidance here.' },
   ];
   const body = `
-    <a href="/more" class="empty-note">← Back</a>
     <h1 class="screen-title">Mixing With Other Substances</h1>
     <p class="screen-sub">General, pattern-level cautions — not medical advice, not a complete interaction database, and not a substitute for talking to a doctor or pharmacist about your specific medications.</p>
     ${cautions.map(c => `
@@ -2287,7 +2275,6 @@ function pageQuiz(req, res, query) {
       <input type="radio" name="${name}" value="${val}" ${current === val ? 'checked' : ''} style="margin-right:8px;">${esc(label)}
     </label>`).join('');
   const body = `
-    <a href="/more" class="empty-note">← Back</a>
     <h1 class="screen-title">Find Your First Strain</h1>
     <p class="screen-sub">Three quick questions, matched against real THC and effect data — a starting point, not a prescription.</p>
     <form method="GET" action="/quiz">
@@ -2324,7 +2311,6 @@ function pageInsights(req, res) {
   const activeBreak = db.getActiveBreak(userId);
   const daysSince = (dateStr) => Math.max(0, Math.floor((Date.now() - new Date(dateStr + 'Z').getTime()) / 86400000));
   const body = `
-    <a href="/more" class="empty-note">← Back</a>
     <h1 class="screen-title">Your Patterns</h1>
     <div class="card" style="margin-bottom:14px;">
       <h2 style="margin:0 0 8px;font-size:15px;">🌿 Tolerance break</h2>
@@ -2391,7 +2377,7 @@ async function handleToleranceBreakEnd(req, res) {
 function pageSupportTheApp(req, res) {
   const body = `
     <h1 class="screen-title">💚 Support the App</h1>
-    <p class="screen-sub">StrainDex is free and always will be. If it's been useful to you and you'd like to help cover hosting costs, that's genuinely appreciated — but there's zero obligation and nothing extra unlocks either way.</p>
+    <p class="screen-sub">StrainDex is free to use right now. If it's been useful to you and you'd like to help cover hosting costs, that's genuinely appreciated — but there's zero obligation and nothing extra unlocks either way.</p>
     <div class="card" style="margin-bottom:10px;">
       <h2 style="margin:0 0 4px;font-size:16px;">Cash App</h2>
       <p class="empty-note" style="padding:0 0 8px;">Any amount, no account needed on your end beyond Cash App itself.</p>
@@ -2553,7 +2539,6 @@ function pageAdminUsers(req, res, query) {
   const deleted = query.get('deleted');
   const users = db.listUsers();
   const body = `
-    <a href="/admin" class="empty-note">← Admin</a>
     <h1 class="screen-title">Manage Users (${users.length})</h1>
     ${deleted ? `<p class="empty-note" style="color:var(--brand-green-dark);">User "${esc(deleted)}" was deleted.</p>` : ''}
     ${users.map(u => `
@@ -2580,7 +2565,6 @@ function pageAdminFeedback(req, res) {
   if (!requireAdmin(req, res)) return;
   const items = db.listFeedback();
   const body = `
-    <a href="/admin" class="empty-note">← Back to Admin</a>
     <h1 class="screen-title" style="margin-top:8px;">Feedback (${items.length})</h1>
     ${items.length === 0 ? `<p class="empty-note">No feedback submitted yet.</p>` : items.map(f => {
       const user = f.user_id != null ? db.getUserById(f.user_id) : null;
@@ -3066,7 +3050,6 @@ function pageAccount(req, res, query) {
   const error = query.get('error') || '';
   const success = query.get('ok') || '';
   const body = `
-    <a href="/more" class="empty-note">← Back to More</a>
     <h1 class="screen-title" style="margin-top:8px;">Account Settings</h1>
 
     <div class="card">
@@ -3365,7 +3348,6 @@ function pageBlockedUsers(req, res) {
   if (userId == null) return;
   const blocked = db.listBlockedUsers(userId);
   const body = `
-    <a href="/account" class="empty-note">← Back to Account Settings</a>
     <h1 class="screen-title">Blocked Users</h1>
     ${blocked.length ? blocked.map(u => `
       <div class="library-row">
@@ -3442,7 +3424,6 @@ function pageConversation(req, res, friendId) {
   db.markConversationRead(userId, friendId);
   const thread = db.listConversation(userId, friendId);
   const body = `
-    <a href="/messages" class="empty-note">← All conversations</a>
     <h1 class="screen-title">${esc(friend.username)}</h1>
     <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px;">
       ${thread.length ? thread.map(m => {
@@ -3513,7 +3494,6 @@ function pageFriendProfile(req, res, friendId) {
   const collection = db.getCollection(friendId);
   const recentCheckins = db.filterVisibleCheckins(db.listCheckins({ userId: friendId, limit: 30 }), userId).slice(0, 10);
   const body = `
-    <a href="/friends" class="empty-note">← Back to Friends</a>
     <h1 class="screen-title" style="margin-top:8px;">👤 ${esc(friend.username)}</h1>
     ${friendId !== userId && status === 'friends' ? `<a href="/messages/${friendId}" class="btn" style="text-decoration:none;display:inline-block;margin-bottom:10px;">💬 Message</a>` : ''}
     ${friendId !== userId ? `
@@ -3875,7 +3855,6 @@ function pageLegalStatus(req, res, query) {
   const grouped = {};
   sorted.forEach(s => { (grouped[s.status] = grouped[s.status] || []).push(s); });
   const body = `
-    <a href="/more" class="empty-note">← Back</a>
     <h1 class="screen-title">Is It Legal Near Me?</h1>
     <p class="screen-sub">Cannabis law is a fast-moving patchwork that changes with little notice. This is a starting point, not legal advice — always verify with your state's official government site before relying on it. Regardless of state law, cannabis remains illegal under federal law everywhere in the US.</p>
     <p class="empty-note">Last checked against current sources: ${esc(LEGAL_STATUS_LAST_VERIFIED)}.</p>
