@@ -2908,6 +2908,7 @@ function pageMore(req, res) {
     {
       title: 'Community & Local',
       tiles: [
+        { href: '/messages', icon: '💬', t: 'Messages', s: userId != null && db.countUnreadMessages(userId) > 0 ? `${db.countUnreadMessages(userId)} unread` : 'Chat with friends & shared strains' },
         { href: '/trade', icon: '🔁', t: 'Trade', s: 'Swap dupes with real friends' },
         { href: '/friends-picks', icon: '🤝', t: "Friends' Picks", s: 'What your circle loves that you haven\u2019t tried' },
         { href: '/dispensaries', icon: '📍', t: 'Dispensaries', s: 'Locator & live menus' },
