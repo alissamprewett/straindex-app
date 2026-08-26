@@ -58776,15 +58776,24 @@
     "id": "s1716",
     "name": "Chapel of Love",
     "type": "Hybrid",
-    "lean": null,
+    "lean": "Indica-leaning",
     "rarity": "uncommon",
-    "thc": null,
-    "cbd": null,
-    "terps": [],
-    "effects": [],
-    "flavor": null,
+    "thc": "25–30%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Euphoric",
+      "Happy"
+    ],
+    "flavor": "Creamy vanilla with mint, diesel, and earthy notes.",
     "icon": "💒",
-    "breeder": null
+    "breeder": "Purple City Genetics"
   },
   {
     "id": "s1717",
