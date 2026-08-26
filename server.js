@@ -3306,7 +3306,17 @@ function pageFriends(req, res, query) {
 
     ${outgoing.length ? `
       <div class="section-label" style="margin-top:20px;">Pending sent (${outgoing.length})</div>
-      ${outgoing.map(u => `<div class="admin-row"><span>👤 ${esc(u.username)}</span><span class="empty-note">Waiting for response</span></div>`).join('')}
+      ${outgoing.map(u => `
+        <div class="admin-row">
+          <span>👤 ${esc(u.username)}</span>
+          <div class="actions">
+            <span class="empty-note" style="padding:0;">Waiting for response</span>
+            <form method="POST" action="/friends/${u.id}/cancel" style="display:inline;" onsubmit="return confirm('Cancel your friend request to ${esc(u.username)}?')">
+              <button class="btn secondary" type="submit">Cancel</button>
+            </form>
+          </div>
+        </div>
+      `).join('')}
     ` : ''}
 
     <div class="section-label" style="margin-top:20px;">Your friends (${friends.length})</div>
@@ -3564,6 +3574,12 @@ async function handleFriendRemove(req, res, otherId) {
   const userId = requireUser(req, res);
   if (userId == null) return;
   await db.removeFriendship(userId, otherId);
+  redirect(res, '/friends');
+}
+async function handleFriendCancel(req, res, addresseeId) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  await db.cancelFriendRequest(userId, addresseeId);
   redirect(res, '/friends');
 }
 
@@ -4031,6 +4047,7 @@ const server = http.createServer(async (req, res) => {
     if (method === 'POST' && (m = pathname.match(/^\/friends\/(\d+)\/accept$/))) return await handleFriendAccept(req, res, Number(m[1]));
     if (method === 'POST' && (m = pathname.match(/^\/friends\/(\d+)\/decline$/))) return await handleFriendDecline(req, res, Number(m[1]));
     if (method === 'POST' && (m = pathname.match(/^\/friends\/(\d+)\/remove$/))) return await handleFriendRemove(req, res, Number(m[1]));
+    if (method === 'POST' && (m = pathname.match(/^\/friends\/(\d+)\/cancel$/))) return await handleFriendCancel(req, res, Number(m[1]));
     if (method === 'GET' && pathname === '/messages') return pageMessagesInbox(req, res);
     if (method === 'GET' && (m = pathname.match(/^\/messages\/(\d+)$/))) return pageConversation(req, res, Number(m[1]));
     if (method === 'POST' && (m = pathname.match(/^\/messages\/(\d+)\/send$/))) return await handleSendMessage(req, res, Number(m[1]));
