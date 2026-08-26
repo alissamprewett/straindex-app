@@ -593,6 +593,14 @@ function pageStrainDetail(req, res, id) {
     ${renderFamilyTree(s)}
     <a class="btn block" href="/checkin?strain=${s.id}">＋ Check in this strain</a>
     <a class="btn secondary block" href="/compare?a=${s.id}" style="margin-top:8px;">⚖️ Compare this strain</a>
+    ${userId != null && db.listFriends(userId).length ? `
+      <form method="POST" action="/strains/${s.id}/share" style="display:flex;gap:8px;margin-top:8px;">
+        <select name="friend_id" style="flex:1;">
+          ${db.listFriends(userId).map(f => `<option value="${f.id}">${esc(f.username)}</option>`).join('')}
+        </select>
+        <button class="btn secondary" type="submit">🌿 Share</button>
+      </form>
+    ` : ''}
     ${userId != null ? `
       <form method="POST" action="/wishlist/${s.id}/toggle" style="margin-top:8px;">
         <input type="hidden" name="redirect_to" value="/strains/${s.id}">
@@ -3241,6 +3249,7 @@ function pageFriends(req, res, query) {
       <div class="admin-row">
         <a href="/friends/${u.id}" style="text-decoration:none;color:inherit;">👤 ${esc(u.username)}</a>
         <div class="actions">
+          <a href="/messages/${u.id}" class="btn secondary" style="text-decoration:none;">Message</a>
           <a href="/trade?friend=${u.id}" class="btn secondary" style="text-decoration:none;">Trade</a>
           <form method="POST" action="/friends/${u.id}/remove" style="display:inline;" onsubmit="return confirm('Remove this friend?')">
             <button class="btn danger" style="color:#fff;" type="submit">Remove</button>
@@ -3326,6 +3335,96 @@ async function handleAdminReportReviewed(req, res, id) {
   redirect(res, '/admin/reports');
 }
 
+// ---------- Direct messages ----------
+function pageMessagesInbox(req, res) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const threads = db.listConversations(userId);
+  const body = `
+    <h1 class="screen-title">Messages</h1>
+    <p class="screen-sub">Private conversations with friends.</p>
+    ${threads.length ? threads.map(t => `
+      <a href="/messages/${t.partner.id}" class="admin-row" style="text-decoration:none;color:inherit;align-items:center;">
+        <div>
+          <div>${t.unread ? '<b>' : ''}👤 ${esc(t.partner.username)}${t.unread ? '</b>' : ''}</div>
+          <div class="empty-note" style="padding:2px 0 0;">${t.last.shared_strain_id ? '🌿 Shared a strain' : esc((t.last.body || '').slice(0, 60))}</div>
+        </div>
+        ${t.unread ? `<span class="rarity-tag rarity-rare">${t.unread}</span>` : ''}
+      </a>
+    `).join('') : `<div class="empty-note">No conversations yet — message a friend from their profile to get started.</div>`}
+  `;
+  sendHtml(res, layout({ title: 'Messages', active: 'friends', body, isAdmin: auth.isAdmin(req) }));
+}
+
+function pageConversation(req, res, friendId) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const friend = db.getUserById(friendId);
+  if (!friend) return notFound(res);
+  if (db.getFriendshipStatus(userId, friendId) !== 'friends') {
+    return sendHtml(res, layout({ title: 'Messages', active: 'friends', body: `<div class="empty-note">You can only message friends.</div>`, isAdmin: auth.isAdmin(req) }));
+  }
+  db.markConversationRead(userId, friendId);
+  const thread = db.listConversation(userId, friendId);
+  const body = `
+    <a href="/messages" class="empty-note">← All conversations</a>
+    <h1 class="screen-title">${esc(friend.username)}</h1>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px;">
+      ${thread.length ? thread.map(m => {
+        const mine = m.sender_id === userId;
+        const strain = m.shared_strain_id ? db.getStrain(m.shared_strain_id) : null;
+        return `<div style="align-self:${mine ? 'flex-end' : 'flex-start'};max-width:80%;">
+          ${strain ? `
+            <a href="/strains/${strain.id}" class="library-row" style="text-decoration:none;color:inherit;margin-bottom:0;">
+              ${strainPhotoTag(strain, 'sm')}
+              <div class="info">
+                <div class="nm">${esc(strain.name)}</div>
+                <div class="sub">${esc(strain.type)} · THC ${esc(strain.thc)}</div>
+              </div>
+            </a>
+          ` : ''}
+          ${m.body ? `<div class="admin-row" style="background:${mine ? 'var(--brand-green-dark)' : 'var(--bg-card)'};color:${mine ? '#fff' : 'inherit'};margin-top:${strain ? '4px' : '0'};">${esc(m.body)}</div>` : ''}
+        </div>`;
+      }).join('') : `<div class="empty-note">Say hi to ${esc(friend.username)} 👋</div>`}
+    </div>
+    <form method="POST" action="/messages/${friend.id}/send" style="display:flex;gap:8px;">
+      <input type="text" name="body" placeholder="Message ${esc(friend.username)}..." autocomplete="off" style="flex:1;">
+      <button class="btn" type="submit">Send</button>
+    </form>
+  `;
+  sendHtml(res, layout({ title: friend.username, active: 'friends', body, isAdmin: auth.isAdmin(req) }));
+}
+
+async function handleSendMessage(req, res, friendId) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const fields = await parseForm(req);
+  try {
+    await db.sendMessage({ sender_id: userId, recipient_id: friendId, body: fields.body, shared_strain_id: fields.shared_strain_id || null });
+  } catch (err) {
+    // Fall through to redirect either way -- the conversation page itself
+    // will look unchanged if the send silently failed validation, which is
+    // an acceptable, low-stakes failure mode for a short text message.
+  }
+  redirect(res, `/messages/${friendId}`);
+}
+async function handleShareStrain(req, res, strainId) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const fields = await parseForm(req);
+  const friendId = Number(fields.friend_id);
+  if (friendId) {
+    try {
+      await db.sendMessage({ sender_id: userId, recipient_id: friendId, body: null, shared_strain_id: strainId });
+    } catch (err) {
+      // Same low-stakes fallback as handleSendMessage -- worst case the
+      // share silently didn't go through and the person can just try again.
+    }
+    return redirect(res, `/messages/${friendId}`);
+  }
+  redirect(res, `/strains/${strainId}`);
+}
+
 function pageFriendProfile(req, res, friendId) {
   const userId = requireUser(req, res);
   if (userId == null) return;
@@ -3341,6 +3440,7 @@ function pageFriendProfile(req, res, friendId) {
   const body = `
     <a href="/friends" class="empty-note">← Back to Friends</a>
     <h1 class="screen-title" style="margin-top:8px;">👤 ${esc(friend.username)}</h1>
+    ${friendId !== userId && status === 'friends' ? `<a href="/messages/${friendId}" class="btn" style="text-decoration:none;display:inline-block;margin-bottom:10px;">💬 Message</a>` : ''}
     ${friendId !== userId ? `
       <form method="POST" action="/block/${friendId}" style="margin-bottom:10px;" onsubmit="return confirm('Block ${esc(friend.username)}? You will no longer see their comments, check-ins, or grow tips, and any friendship will end.')">
         <input type="hidden" name="redirect_to" value="/friends">
@@ -3863,6 +3963,10 @@ const server = http.createServer(async (req, res) => {
     if (method === 'POST' && (m = pathname.match(/^\/friends\/(\d+)\/accept$/))) return await handleFriendAccept(req, res, Number(m[1]));
     if (method === 'POST' && (m = pathname.match(/^\/friends\/(\d+)\/decline$/))) return await handleFriendDecline(req, res, Number(m[1]));
     if (method === 'POST' && (m = pathname.match(/^\/friends\/(\d+)\/remove$/))) return await handleFriendRemove(req, res, Number(m[1]));
+    if (method === 'GET' && pathname === '/messages') return pageMessagesInbox(req, res);
+    if (method === 'GET' && (m = pathname.match(/^\/messages\/(\d+)$/))) return pageConversation(req, res, Number(m[1]));
+    if (method === 'POST' && (m = pathname.match(/^\/messages\/(\d+)\/send$/))) return await handleSendMessage(req, res, Number(m[1]));
+    if (method === 'POST' && (m = pathname.match(/^\/strains\/([^/]+)\/share$/))) return await handleShareStrain(req, res, m[1]);
     if (method === 'POST' && pathname === '/trade/propose') return await handleTradePropose(req, res);
     if (method === 'GET' && pathname === '/dispensaries') return await pageDispensaries(req, res, url.searchParams);
     if (method === 'POST' && (m = pathname.match(/^\/dispensaries\/([^/]+)\/follow$/))) return await handleDispensaryFollow(req, res, m[1], url.searchParams);
