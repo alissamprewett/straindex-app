@@ -150,6 +150,11 @@ const MIN_AGE = 21;
 // check, mail still lands in the same account, and it's easy to filter or
 // swap for a real support@ address later if a custom domain gets set up.
 const SUPPORT_EMAIL = 'straindex420@gmail.com';
+// The one account allowed to even see the admin-login link -- Alissa's own
+// user ID. Logging into the separate admin password is still required to
+// actually reach anything in /admin; this just stops the link itself from
+// being advertised to every logged-in user, which it was before.
+const OWNER_USER_ID = 1;
 function isOldEnough(birthDateStr) {
   const dob = new Date(birthDateStr);
   if (isNaN(dob.getTime())) return false;
@@ -2529,10 +2534,39 @@ function pageAdminHome(req, res) {
     <div class="card"><a href="/admin/faqs">📋 Manage FAQ (${db.listFaqs().length})</a></div>
     <div class="card"><a href="/admin/recipes">🍽️ Manage Recipes (${db.listRecipes({ status: null }).length}${pendingCount ? `, ${pendingCount} pending` : ''})</a></div>
     <div class="card"><a href="/admin/strains">🌿 Manage Strains (${db.countStrains().toLocaleString()})</a></div>
+    <div class="card"><a href="/admin/users">👤 Manage Users (${db.listUsers().length})</a></div>
     <div class="card"><a href="/admin/logout">🚪 Log out</a></div>
   `;
   sendHtml(res, layout({ title: 'Admin', body, isAdmin: true }));
 }
+
+function pageAdminUsers(req, res, query) {
+  if (!requireAdmin(req, res)) return;
+  const deleted = query.get('deleted');
+  const users = db.listUsers();
+  const body = `
+    <a href="/admin" class="empty-note">← Admin</a>
+    <h1 class="screen-title">Manage Users (${users.length})</h1>
+    ${deleted ? `<p class="empty-note" style="color:var(--brand-green-dark);">User "${esc(deleted)}" was deleted.</p>` : ''}
+    ${users.map(u => `
+      <div class="admin-row">
+        <span>👤 <b>${esc(u.username)}</b>${u.email ? ` · ${esc(u.email)}` : ''}<br><span class="empty-note" style="padding:0;">Joined ${esc((u.created_at || '').slice(0, 10))}</span></span>
+        <form method="POST" action="/admin/users/${u.id}/delete" onsubmit="return confirm('Permanently delete ${esc(u.username)}\\'s account, check-ins, messages, and friendships? This cannot be undone.')">
+          <button class="btn danger" style="color:#fff;" type="submit">Delete</button>
+        </form>
+      </div>
+    `).join('')}
+  `;
+  sendHtml(res, layout({ title: 'Manage Users', body, isAdmin: true }));
+}
+async function handleAdminUserDelete(req, res, userId) {
+  if (!requireAdmin(req, res)) return;
+  const user = db.getUserById(userId);
+  const username = user ? user.username : 'that user';
+  await db.deleteUserAccount(userId);
+  redirect(res, `/admin/users?deleted=${encodeURIComponent(username)}`);
+}
+
 
 function pageAdminFeedback(req, res) {
   if (!requireAdmin(req, res)) return;
@@ -3079,7 +3113,7 @@ function pageAccount(req, res, query) {
       </form>
     </div>
 
-    <p class="empty-note" style="margin-top:18px;text-align:center;"><a href="${auth.isAdmin(req) ? '/admin' : '/admin/login'}">Site administration</a></p>
+    ${userId === OWNER_USER_ID ? `<p class="empty-note" style="margin-top:18px;text-align:center;"><a href="${auth.isAdmin(req) ? '/admin' : '/admin/login'}">Site administration</a></p>` : ''}
   `;
   sendHtml(res, layout({ title: 'Account Settings', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: db.countUnreadMessages(auth.currentUserId(req)) }));
 }
@@ -3952,6 +3986,8 @@ const server = http.createServer(async (req, res) => {
     if (method === 'POST' && pathname === '/account/password') return await handleAccountPassword(req, res);
     if (method === 'GET' && pathname === '/admin/logout') return handleAdminLogout(req, res);
     if (method === 'GET' && pathname === '/admin') return pageAdminHome(req, res);
+    if (method === 'GET' && pathname === '/admin/users') return pageAdminUsers(req, res, url.searchParams);
+    if (method === 'POST' && (m = pathname.match(/^\/admin\/users\/(\d+)\/delete$/))) return await handleAdminUserDelete(req, res, Number(m[1]));
     if (method === 'GET' && pathname === '/admin/feedback') return pageAdminFeedback(req, res);
     if (method === 'GET' && pathname === '/admin/faqs') return pageAdminFaqs(req, res);
     if (method === 'POST' && pathname === '/admin/faqs/new') return await handleAdminFaqNew(req, res);
