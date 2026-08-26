@@ -2375,6 +2375,24 @@ async function handleToleranceBreakEnd(req, res) {
   redirect(res, '/insights');
 }
 
+function pageSupportTheApp(req, res) {
+  const body = `
+    <h1 class="screen-title">💚 Support the App</h1>
+    <p class="screen-sub">StrainDex is free and always will be. If it's been useful to you and you'd like to help cover hosting costs, that's genuinely appreciated — but there's zero obligation and nothing extra unlocks either way.</p>
+    <div class="card" style="margin-bottom:10px;">
+      <h2 style="margin:0 0 4px;font-size:16px;">Cash App</h2>
+      <p class="empty-note" style="padding:0 0 8px;">Any amount, no account needed on your end beyond Cash App itself.</p>
+      <a class="btn block" href="https://cash.app/$straindex" style="text-decoration:none;">Send via Cash App — $straindex</a>
+    </div>
+    <div class="card">
+      <h2 style="margin:0 0 4px;font-size:16px;">Venmo</h2>
+      <p class="empty-note" style="padding:0 0 8px;">Same idea, if that's the app you already have.</p>
+      <a class="btn block" href="https://venmo.com/straindex" style="text-decoration:none;">Send via Venmo — @straindex</a>
+    </div>
+    <p class="empty-note" style="margin-top:14px;">Thank you for even reading this far — seriously. 🌿</p>
+  `;
+  sendHtml(res, layout({ title: 'Support the App', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: db.countUnreadMessages(auth.currentUserId(req)) }));
+}
 function pageFeedback(req, res, query) {
   const userId = requireUser(req, res);
   if (userId == null) return;
@@ -2918,6 +2936,7 @@ function pageMore(req, res) {
       title: 'Support',
       tiles: [
         { href: '/feedback', icon: '📝', t: 'Send Feedback', s: 'Bugs, ideas — anything' },
+        { href: '/support-the-app', icon: '💚', t: 'Support the App', s: 'Help cover hosting costs' },
       ],
     },
   ];
@@ -3925,6 +3944,7 @@ const server = http.createServer(async (req, res) => {
     if (method === 'GET' && pathname === '/onboarding') return pageOnboarding(req, res);
     if (method === 'GET' && pathname === '/feedback') return pageFeedback(req, res, url.searchParams);
     if (method === 'POST' && pathname === '/feedback') return await handleFeedbackSubmit(req, res);
+    if (method === 'GET' && pathname === '/support-the-app') return pageSupportTheApp(req, res);
     if (method === 'GET' && pathname === '/reset-password') return pageResetPassword(req, res, url.searchParams);
     if (method === 'POST' && pathname === '/reset-password') return await handleResetPasswordSubmit(req, res);
     if (method === 'POST' && pathname === '/account/username') return await handleAccountUsername(req, res);
