@@ -192,6 +192,14 @@ function renderOnsetTimer(c) {
 // a strain's own page, or a friend's profile.
 // Short "who gave kudos" label shown under the kudos button -- up to 3
 // names, then "and N more" for anything beyond that.
+// Combined badge count for the Friends nav tab -- unread messages plus
+// incoming friend requests, both genuinely "things needing your attention
+// in this section." Shown as one number rather than two separate badges
+// on the same icon, which would just look cluttered.
+function friendsBadgeCount(userId) {
+  if (userId == null) return 0;
+  return db.countUnreadMessages(userId) + db.listIncomingRequests(userId).length;
+}
 function kudosGiversLabel(checkinId) {
   // Filters out any giver with a blank/missing username -- this shouldn't
   // be possible for a real account, but a real bug surfaced during
@@ -363,7 +371,7 @@ function pageLandingPage(req, res) {
         <div class="s">A strain quiz, trending picks &amp; friend recommendations</div>
       </div>
       <div class="more-tile">
-        <span class="ic">⚖️</span>
+        <span class="ic">🛡️</span>
         <div class="t">Stay Informed</div>
         <div class="s">Dosing math, legal status &amp; safety cautions</div>
       </div>
@@ -449,7 +457,7 @@ function pageHome(req, res) {
       </div>`;
     }).join('') : `<div class="empty-note">No check-ins logged yet — <a href="/checkin">log your first one</a> to get your feed started.</div>`}
   `;
-  sendHtml(res, layout({ title: 'Home', active: 'home', body, isAdmin: auth.isAdmin(req), unreadMessages: db.countUnreadMessages(auth.currentUserId(req)), showBack: false }));
+  sendHtml(res, layout({ title: 'Home', active: 'home', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)), showBack: false }));
 }
 
 function pageStrains(req, res, query) {
@@ -524,7 +532,7 @@ function pageStrains(req, res, query) {
         <span class="rarity-tag rarity-${s.rarity}">${rarityLabel(s.rarity)}</span>
       </a>`).join('') || `<div class="empty-note">No strains match your filters.</div>`}</div>
   `;
-  sendHtml(res, layout({ title: 'Strains', active: 'strains', body, isAdmin: auth.isAdmin(req), unreadMessages: db.countUnreadMessages(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: 'Strains', active: 'strains', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
 // Verification tier is computed live from how complete a strain's actual
@@ -609,7 +617,7 @@ function pageStrainDetail(req, res, id) {
     </div>
     ${renderFamilyTree(s)}
     <a class="btn block" href="/checkin?strain=${s.id}">＋ Check in this strain</a>
-    <a class="btn secondary block" href="/compare?a=${s.id}" style="margin-top:8px;">⚖️ Compare this strain</a>
+    <a class="btn secondary block" href="/compare?a=${s.id}" style="margin-top:8px;">🆚 Compare this strain</a>
     ${userId != null && db.listFriends(userId).length ? `
       <form method="POST" action="/strains/${s.id}/share" style="display:flex;gap:8px;margin-top:8px;">
         <select name="friend_id" style="flex:1;">
@@ -677,7 +685,7 @@ function pageStrainDetail(req, res, id) {
       </div>`).join('')}
     ` : `<div class="empty-note">You haven't checked this one in yet.</div>`}
   `;
-  sendHtml(res, layout({ title: s.name, active: 'strains', body, isAdmin: auth.isAdmin(req), unreadMessages: db.countUnreadMessages(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: s.name, active: 'strains', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
 // Full 85-term mood/effects/relief vocabulary — matched against the
@@ -864,7 +872,7 @@ function pageCheckinForm(req, res, query, existing) {
       toggleEdibleWarning(document.getElementById('checkin-method-select').value);
     </script>
   `;
-  sendHtml(res, layout({ title: isEdit ? 'Edit Check-In' : 'Check In', active: 'strains', body, isAdmin: auth.isAdmin(req), unreadMessages: db.countUnreadMessages(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: isEdit ? 'Edit Check-In' : 'Check In', active: 'strains', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
 function pageCheckinEditForm(req, res, id) {
@@ -952,7 +960,7 @@ function pageFaq(req, res, query) {
 
     <p class="empty-note" style="margin-top:16px;">Have a question you don't see here? Ask the assistant on the <a href="/chat">Ask</a> tab.</p>
   `;
-  sendHtml(res, layout({ title: 'FAQ', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: db.countUnreadMessages(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: 'FAQ', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
 // Maps a usesBase keyword to the title of the one "core" recipe that
@@ -1128,7 +1136,7 @@ function pageRecipeDetail(req, res, id) {
       </div>
     </div>
   `;
-  sendHtml(res, layout({ title: r.title, active: 'recipes', body, isAdmin: auth.isAdmin(req), unreadMessages: db.countUnreadMessages(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: r.title, active: 'recipes', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
 function pageRecipes(req, res, query) {
@@ -1171,7 +1179,7 @@ function pageRecipes(req, res, query) {
         </div>
       </div>`).join('') || `<div class="empty-note">${q ? 'No recipes match your search.' : 'No recipes in this category yet.'}</div>`}
   `;
-  sendHtml(res, layout({ title: 'Recipes', active: 'recipes', body, isAdmin: auth.isAdmin(req), unreadMessages: db.countUnreadMessages(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: 'Recipes', active: 'recipes', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
 function pageRecipeNew(req, res) {
@@ -1194,7 +1202,7 @@ function pageRecipeNew(req, res) {
     </form>
     <p class="empty-note">Submissions are reviewed before they go live — check back, or ask the admin.</p>
   `;
-  sendHtml(res, layout({ title: 'Submit a Recipe', active: 'recipes', body, isAdmin: auth.isAdmin(req), unreadMessages: db.countUnreadMessages(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: 'Submit a Recipe', active: 'recipes', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
 async function handleRecipeNewSubmit(req, res) {
@@ -1248,7 +1256,7 @@ function pageGrowing(req, res, query) {
         </div>
       </div>`).join('') || `<div class="empty-note">No tips in this category yet — be the first to <a href="/growing">share one</a>.</div>`}
   `;
-  sendHtml(res, layout({ title: 'Growing', active: 'growing', body, isAdmin: auth.isAdmin(req), unreadMessages: db.countUnreadMessages(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: 'Growing', active: 'growing', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
 function pageGrowingNew(req, res) {
@@ -1267,7 +1275,7 @@ function pageGrowingNew(req, res) {
       <button class="btn block" type="submit">Post Tip</button>
     </form>
   `;
-  sendHtml(res, layout({ title: 'Share a Grow Tip', active: 'growing', body, isAdmin: auth.isAdmin(req), unreadMessages: db.countUnreadMessages(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: 'Share a Grow Tip', active: 'growing', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
 async function handleGrowingNewSubmit(req, res) {
@@ -1307,7 +1315,7 @@ function pageChat(req, res) {
       }
     </script>
   `;
-  sendHtml(res, layout({ title: 'Ask', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: db.countUnreadMessages(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: 'Ask', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
 async function handleChatApi(req, res) {
@@ -1666,7 +1674,7 @@ function pageOnboarding(req, res) {
       })();
     </script>
   `;
-  sendHtml(res, layout({ title: 'Welcome', body, isAdmin: auth.isAdmin(req), unreadMessages: db.countUnreadMessages(auth.currentUserId(req)), showBack: false }));
+  sendHtml(res, layout({ title: 'Welcome', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)), showBack: false }));
 }
 
 // "Find your first strain" quiz -- a lightweight 3-question filter over the
@@ -1733,7 +1741,7 @@ function pageCompare(req, res, query) {
       </table>
     ` : `<div class="empty-note">Pick a strain in each box above to compare them.</div>`}
   `;
-  sendHtml(res, layout({ title: 'Compare Strains', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: db.countUnreadMessages(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: 'Compare Strains', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
 // "Surprise Me" -- picks one random strain the person hasn't checked into
@@ -1824,7 +1832,7 @@ function pageGrowJournal(req, res) {
       </div>
     `).join('') : `<div class="empty-note">No entries yet — log your first one above.</div>`}
   `;
-  sendHtml(res, layout({ title: 'Grow Journal', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: db.countUnreadMessages(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: 'Grow Journal', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 async function handleGrowJournalSubmit(req, res) {
   const userId = requireUser(req, res);
@@ -1862,7 +1870,7 @@ function pageFriendsPicks(req, res) {
       </a>
     `).join('') : `<div class="empty-note">Nothing to show yet — either your friends haven't rated anything 4★+, or you've already tried everything they love. <a href="/friends">Add more friends</a> or check back later.</div>`}
   `;
-  sendHtml(res, layout({ title: "Friends' Picks", active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: db.countUnreadMessages(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: "Friends' Picks", active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
 // Custom personal lists -- as many as someone wants ("Morning strains",
@@ -1894,7 +1902,7 @@ function pageLists(req, res) {
       </div>`;
     }).join('') : `<div class="empty-note">No lists yet — create your first one above.</div>`}
   `;
-  sendHtml(res, layout({ title: 'Your Lists', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: db.countUnreadMessages(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: 'Your Lists', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 function pageListDetail(req, res, id) {
   const userId = requireUser(req, res);
@@ -1920,7 +1928,7 @@ function pageListDetail(req, res, id) {
       </div>
     `).join('') : `<div class="empty-note">Nothing here yet — browse the <a href="/strains">strain library</a> and add strains to this list from their page.</div>`}
   `;
-  sendHtml(res, layout({ title: list.name, active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: db.countUnreadMessages(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: list.name, active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 async function handleListCreate(req, res) {
   const userId = requireUser(req, res);
@@ -1984,7 +1992,7 @@ function pageTerpeneGuide(req, res) {
       </div>
     `).join('')}
   `;
-  sendHtml(res, layout({ title: 'Terpene Guide', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: db.countUnreadMessages(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: 'Terpene Guide', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
 // Effects Guide -- same spirit as the Terpene Guide, built from the
@@ -2030,7 +2038,7 @@ function pageEffectsGuide(req, res) {
       </div>
     `).join('')}
   `;
-  sendHtml(res, layout({ title: 'Effects Guide', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: db.countUnreadMessages(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: 'Effects Guide', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
 // Mood-Based Strain Finder -- a goal-first shortcut into the same effects
@@ -2066,7 +2074,7 @@ function pageMoodFinder(req, res, query) {
         `).join('')}
       </div>
     `;
-    return sendHtml(res, layout({ title: 'Mood Finder', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: db.countUnreadMessages(auth.currentUserId(req)) }));
+    return sendHtml(res, layout({ title: 'Mood Finder', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
   }
   const allStrains = db.listStrains({ limit: 5000 });
   const scored = allStrains
@@ -2090,7 +2098,7 @@ function pageMoodFinder(req, res, query) {
       </a>
     `).join('') : `<div class="empty-note">No strains matched this goal yet.</div>`}
   `;
-  sendHtml(res, layout({ title: goal.label, active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: db.countUnreadMessages(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: goal.label, active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
 // Breeder Guide -- blurbs are only included where there's real, justified
@@ -2149,7 +2157,7 @@ function pageBreederGuide(req, res) {
       </div>
     `).join('')}
   `;
-  sendHtml(res, layout({ title: 'Breeder Guide', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: db.countUnreadMessages(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: 'Breeder Guide', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
 function pageWishlist(req, res) {
@@ -2175,7 +2183,7 @@ function pageWishlist(req, res) {
       </div>
     `).join('') : `<div class="empty-note">Nothing here yet — browse the <a href="/strains">strain library</a> and tap "Add to Wishlist" on anything that catches your eye.</div>`}
   `;
-  sendHtml(res, layout({ title: 'Your Wishlist', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: db.countUnreadMessages(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: 'Your Wishlist', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
 // Trending -- what the whole community has been checking into lately,
@@ -2207,7 +2215,7 @@ function pageTrending(req, res) {
       </a>
     `).join('') : `<div class="empty-note">No check-in data yet this week — check back soon.</div>`}
   `;
-  sendHtml(res, layout({ title: 'Trending This Week', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: db.countUnreadMessages(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: 'Trending This Week', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
 // Mixing cautions -- deliberately conservative, pattern-level guidance
@@ -2233,7 +2241,7 @@ function pageMixingCautions(req, res) {
       </div>
     `).join('')}
   `;
-  sendHtml(res, layout({ title: 'Mixing With Other Substances', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: db.countUnreadMessages(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: 'Mixing With Other Substances', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
 function pageQuiz(req, res, query) {
@@ -2298,7 +2306,7 @@ function pageQuiz(req, res, query) {
         </a>`).join('') : `<div class="empty-note">No close matches — try a different combination above.</div>`}
     ` : ''}
   `;
-  sendHtml(res, layout({ title: 'Find Your First Strain', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: db.countUnreadMessages(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: 'Find Your First Strain', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
 // Personal "your patterns" page -- distinct from /business, which is an
@@ -2357,7 +2365,7 @@ function pageInsights(req, res) {
         </a>` : ''}
     `}
   `;
-  sendHtml(res, layout({ title: 'Your Patterns', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: db.countUnreadMessages(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: 'Your Patterns', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
 async function handleToleranceBreakStart(req, res) {
@@ -2390,7 +2398,7 @@ function pageSupportTheApp(req, res) {
     </div>
     <p class="empty-note" style="margin-top:14px;">Thank you for even reading this far — seriously. 🌿</p>
   `;
-  sendHtml(res, layout({ title: 'Support the App', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: db.countUnreadMessages(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: 'Support the App', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 function pageFeedback(req, res, query) {
   const userId = requireUser(req, res);
@@ -2407,7 +2415,7 @@ function pageFeedback(req, res, query) {
       <button class="btn block" type="submit" style="margin-top:14px;">Send</button>
     </form>
   `;
-  sendHtml(res, layout({ title: 'Send Feedback', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: db.countUnreadMessages(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: 'Send Feedback', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 async function handleFeedbackSubmit(req, res) {
   const userId = requireUser(req, res);
@@ -2920,7 +2928,7 @@ function pageMore(req, res) {
       tiles: [
         { href: '/quiz', icon: '🧭', t: 'Find Your First Strain', s: '3-question strain matcher' },
         { href: '/mood-finder', icon: '🎯', t: 'Mood Finder', s: 'Pick a goal, get matched strains' },
-        { href: '/compare', icon: '⚖️', t: 'Compare Strains', s: 'Side-by-side lookup' },
+        { href: '/compare', icon: '🆚', t: 'Compare Strains', s: 'Side-by-side lookup' },
         { href: '/surprise-me', icon: '🎲', t: 'Surprise Me', s: 'One random strain you haven\u2019t tried' },
         { href: '/trending', icon: '🔥', t: 'Trending This Week', s: 'Most checked-into right now' },
       ],
@@ -2942,7 +2950,7 @@ function pageMore(req, res) {
       tiles: [
         { href: '/methods', icon: '/docs/joint-icon.png', t: 'Ways to Enjoy It', s: 'Every method, explained' },
         { href: '/concentrates', icon: '💠', t: 'Concentrates & Extracts', s: 'Kief, rosin, live resin & more' },
-        { href: '/legal-status', icon: '⚖️', t: 'Is It Legal Near Me?', s: 'State-by-state cannabis law' },
+        { href: '/legal-status', icon: '🏛️', t: 'Is It Legal Near Me?', s: 'State-by-state cannabis law' },
         { href: '/mixing-cautions', icon: '⚠️', t: 'Mixing With Other Substances', s: 'General cautions, not medical advice' },
         { href: '/faq', icon: '❓', t: 'FAQ', s: 'Strain school' },
         { href: '/terpene-guide', icon: '🌸', t: 'Terpene Guide', s: 'Aroma & effects by terpene' },
@@ -2985,7 +2993,7 @@ function pageMore(req, res) {
       </div>
     `).join('')}
   `;
-  sendHtml(res, layout({ title: 'More', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: db.countUnreadMessages(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: 'More', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
 // ---------------------------------------------------------------- terms & privacy
@@ -3019,7 +3027,7 @@ function pageTerms(req, res) {
     </div>
     <p class="empty-note">Questions about these terms? Reach out through <a href="/feedback">Send Feedback</a>.</p>
   `;
-  sendHtml(res, layout({ title: 'Terms of Service', body, isAdmin: auth.isAdmin(req), unreadMessages: db.countUnreadMessages(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: 'Terms of Service', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
 function pagePrivacy(req, res) {
@@ -3040,7 +3048,7 @@ function pagePrivacy(req, res) {
     </div>
     <p class="empty-note">Questions about this policy? Reach out through <a href="/feedback">Send Feedback</a>.</p>
   `;
-  sendHtml(res, layout({ title: 'Privacy Policy', body, isAdmin: auth.isAdmin(req), unreadMessages: db.countUnreadMessages(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: 'Privacy Policy', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
 function pageAccount(req, res, query) {
@@ -3108,7 +3116,7 @@ function pageAccount(req, res, query) {
 
     ${userId === OWNER_USER_ID ? `<p class="empty-note" style="margin-top:18px;text-align:center;"><a href="${auth.isAdmin(req) ? '/admin' : '/admin/login'}">Site administration</a></p>` : ''}
   `;
-  sendHtml(res, layout({ title: 'Account Settings', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: db.countUnreadMessages(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: 'Account Settings', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 async function handleAccountExport(req, res) {
   const userId = requireUser(req, res);
@@ -3214,7 +3222,7 @@ function pageCollection(req, res) {
         </a>`).join('')}
     </div>` : `<div class="empty-note">No cards caught yet — <a href="/checkin">log a check-in</a> to unlock your first one.</div>`}
   `;
-  sendHtml(res, layout({ title: 'My Collection', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: db.countUnreadMessages(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: 'My Collection', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
 function pageHistory(req, res) {
@@ -3238,7 +3246,7 @@ function pageHistory(req, res) {
       </div>`;
     }).join('') : `<div class="empty-note">No check-ins logged yet — <a href="/checkin">log your first one</a>.</div>`}
   `;
-  sendHtml(res, layout({ title: 'Check-In History', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: db.countUnreadMessages(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: 'Check-In History', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
 // ---------------------------------------------------------------- friends
@@ -3276,7 +3284,7 @@ function pageFriends(req, res, query) {
     ` : ''}
 
     ${incoming.length ? `
-      <div class="section-label" style="margin-top:20px;">Friend requests (${incoming.length})</div>
+      <div class="section-label" style="margin-top:20px;color:var(--brand-green-dark);">🔔 Friend requests (${incoming.length})</div>
       ${incoming.map(u => `
         <div class="admin-row">
           <span>👤 ${esc(u.username)}</span>
@@ -3315,7 +3323,7 @@ function pageFriends(req, res, query) {
         </div>
       </div>`).join('') : `<div class="empty-note">No friends yet — search for a username above to get started.</div>`}
   `;
-  sendHtml(res, layout({ title: 'Friends', active: 'friends', body, isAdmin: auth.isAdmin(req), unreadMessages: db.countUnreadMessages(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: 'Friends', active: 'friends', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 // Abuse protection: report + block. Reports go to a simple admin review
 // queue; blocking is one-directional and hides the blocked person's
@@ -3358,7 +3366,7 @@ function pageBlockedUsers(req, res) {
       </div>
     `).join('') : `<div class="empty-note">You haven't blocked anyone.</div>`}
   `;
-  sendHtml(res, layout({ title: 'Blocked Users', body, isAdmin: auth.isAdmin(req), unreadMessages: db.countUnreadMessages(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: 'Blocked Users', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 // Admin review queue for reported content -- deliberately simple: see
 // what was reported and by whom, mark it reviewed once handled. Actually
@@ -3410,7 +3418,7 @@ function pageMessagesInbox(req, res) {
       </a>
     `).join('') : `<div class="empty-note">No conversations yet — message a friend from their profile to get started.</div>`}
   `;
-  sendHtml(res, layout({ title: 'Messages', active: 'friends', body, isAdmin: auth.isAdmin(req), unreadMessages: db.countUnreadMessages(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: 'Messages', active: 'friends', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
 function pageConversation(req, res, friendId) {
@@ -3419,7 +3427,7 @@ function pageConversation(req, res, friendId) {
   const friend = db.getUserById(friendId);
   if (!friend) return notFound(res);
   if (db.getFriendshipStatus(userId, friendId) !== 'friends') {
-    return sendHtml(res, layout({ title: 'Messages', active: 'friends', body: `<div class="empty-note">You can only message friends.</div>`, isAdmin: auth.isAdmin(req), unreadMessages: db.countUnreadMessages(auth.currentUserId(req)) }));
+    return sendHtml(res, layout({ title: 'Messages', active: 'friends', body: `<div class="empty-note">You can only message friends.</div>`, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
   }
   db.markConversationRead(userId, friendId);
   const thread = db.listConversation(userId, friendId);
@@ -3448,7 +3456,7 @@ function pageConversation(req, res, friendId) {
       <button class="btn" type="submit">Send</button>
     </form>
   `;
-  sendHtml(res, layout({ title: friend.username, active: 'friends', body, isAdmin: auth.isAdmin(req), unreadMessages: db.countUnreadMessages(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: friend.username, active: 'friends', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
 async function handleSendMessage(req, res, friendId) {
@@ -3489,7 +3497,7 @@ function pageFriendProfile(req, res, friendId) {
   const status = db.getFriendshipStatus(userId, friendId);
   if (status !== 'friends' && friendId !== userId) {
     const body = `<h1 class="screen-title">Not connected yet</h1><p class="empty-note">You can only see a profile once you're friends with them. <a href="/friends">Back to Friends</a></p>`;
-    return sendHtml(res, layout({ title: 'Profile', active: 'friends', body, isAdmin: auth.isAdmin(req), unreadMessages: db.countUnreadMessages(auth.currentUserId(req)) }));
+    return sendHtml(res, layout({ title: 'Profile', active: 'friends', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
   }
   const collection = db.getCollection(friendId);
   const recentCheckins = db.filterVisibleCheckins(db.listCheckins({ userId: friendId, limit: 30 }), userId).slice(0, 10);
@@ -3530,7 +3538,7 @@ function pageFriendProfile(req, res, friendId) {
       </div>`;
     }).join('') : `<div class="empty-note">No check-ins yet.</div>`}
   `;
-  sendHtml(res, layout({ title: friend.username, active: 'friends', body, isAdmin: auth.isAdmin(req), unreadMessages: db.countUnreadMessages(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: friend.username, active: 'friends', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 async function handleFriendRequest(req, res, otherId) {
   const userId = requireUser(req, res);
@@ -3628,7 +3636,7 @@ function pageTrade(req, res, query) {
       <button class="propose-btn" type="submit" ${(!yourPick || !theirPick) ? 'disabled' : ''}>Propose Trade</button>
     </form>
   `;
-  sendHtml(res, layout({ title: 'Trade', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: db.countUnreadMessages(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: 'Trade', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
 async function handleTradePropose(req, res) {
@@ -3721,7 +3729,7 @@ async function pageDispensaries(req, res, searchParams) {
       ${zipParam || realError ? `<div class="empty-note" style="margin-top:16px;">${realError ? 'Nothing to show right now — try again in a moment, or try a different ZIP code.' : 'No dispensaries found for that ZIP code.'}</div>` : `<div class="empty-note" style="margin-top:16px;">Enter a ZIP code or share your location above to find real dispensaries near you.</div>`}
     `;
   }
-  sendHtml(res, layout({ title: 'Dispensaries', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: db.countUnreadMessages(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: 'Dispensaries', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
 async function handleDispensaryFollow(req, res, id, searchParams) {
@@ -3757,7 +3765,7 @@ function pageEvents(req, res) {
       </div>`;
     }).join('')}
   `;
-  sendHtml(res, layout({ title: 'Events', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: db.countUnreadMessages(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: 'Events', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
 async function handleEventRsvp(req, res, id) {
@@ -3786,7 +3794,7 @@ function pageBusiness(req, res) {
         <div class="trend-val">${t.count}</div>
       </div>`).join('') : `<div class="empty-note">No check-in data yet — trends will appear here once check-ins start coming in.</div>`}
   `;
-  sendHtml(res, layout({ title: 'Business', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: db.countUnreadMessages(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: 'Business', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
 // ---------------------------------------------------------------- shop
@@ -3809,7 +3817,7 @@ function pageShop(req, res) {
     </div>
     <div class="cart-note">Cart: ${cartCount} item${cartCount === 1 ? '' : 's'}</div>
   `;
-  sendHtml(res, layout({ title: 'Shop', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: db.countUnreadMessages(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: 'Shop', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
 async function handleShopAdd(req, res, id) {
@@ -3834,7 +3842,7 @@ function pageMethods(req, res) {
         <div class="mgdesc">${esc(m.desc)}</div>
       </div>`).join('')}
   `;
-  sendHtml(res, layout({ title: 'Ways to Enjoy It', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: db.countUnreadMessages(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: 'Ways to Enjoy It', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
 // Concentrates & Extracts guide — a companion to "Ways to Enjoy It" that
@@ -3883,7 +3891,7 @@ function pageLegalStatus(req, res, query) {
       `).join('')}
     `).join('')}
   `;
-  sendHtml(res, layout({ title: 'Is It Legal Near Me?', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: db.countUnreadMessages(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: 'Is It Legal Near Me?', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
 function pageConcentrates(req, res) {
@@ -3898,7 +3906,7 @@ function pageConcentrates(req, res) {
       </div>`).join('')}
     <p class="empty-note" style="margin-top:6px;">Not medical advice — potency varies by batch and producer even within these ranges.</p>
   `;
-  sendHtml(res, layout({ title: 'Concentrates & Extracts', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: db.countUnreadMessages(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: 'Concentrates & Extracts', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
 function serveStatic(req, res, pathname) {
