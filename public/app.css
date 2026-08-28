@@ -34,8 +34,8 @@ p.screen-sub{color:var(--ink-secondary);font-size:13px;margin:-6px 0 11px;}
 nav.tabbar{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--border);display:flex;max-width:520px;margin:0 auto;padding-bottom:env(safe-area-inset-bottom);}
 .compose-bar{position:fixed;bottom:calc(58px + env(safe-area-inset-bottom));left:0;right:0;max-width:520px;margin:0 auto;background:#fff;border-top:1px solid var(--border);padding:10px 16px;display:flex;gap:8px;z-index:40;}
 nav.tabbar a{flex:1;text-align:center;padding:10px 2px 8px;display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--ink-muted);font-size:10.5px;text-decoration:none;}
-nav.tabbar a .ic{font-size:19px;}
-nav.tabbar a .ic-img{width:19px;height:19px;object-fit:contain;display:block;}
+nav.tabbar a .ic{font-size:19px;display:flex;align-items:center;justify-content:center;height:22px;line-height:1;}
+nav.tabbar a .ic-img{width:19px;height:22px;object-fit:contain;display:block;}
 nav.tabbar a.active{color:var(--brand-green);}
 .nav-badge{position:absolute;top:4px;right:20%;background:#d64545;color:#fff;font-size:9px;font-weight:700;line-height:1;padding:2px 4px;border-radius:999px;min-width:14px;text-align:center;}
 .card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:12px;margin-bottom:10px;box-shadow:var(--shadow);}
