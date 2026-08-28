@@ -3218,12 +3218,11 @@ function pageCollection(req, res, query) {
       <div class="stat-tile"><div class="num">${rarestOwned ? esc(rarityLabel(rarestOwned.strain.rarity)) : '—'}</div><div class="lbl">Rarest catch</div></div>
     </div>
     <div class="progress-bar"><div class="fill" style="width:${pct}%;"></div></div>
-
-    <div class="badge-row" style="margin-bottom:16px;">
-      <div class="badge-chip rarity-common" style="background:none;color:var(--ink-secondary);">Common: ${rarityCounts.common}</div>
-      <div class="badge-chip rarity-uncommon" style="background:none;color:var(--ink-secondary);">Uncommon: ${rarityCounts.uncommon}</div>
-      <div class="badge-chip rarity-rare" style="background:none;color:var(--ink-secondary);">Rare: ${rarityCounts.rare}</div>
-      <div class="badge-chip rarity-legendary" style="background:none;color:var(--ink-secondary);">Legendary: ${rarityCounts.legendary}</div>
+    <div class="rarity-mini-legend">
+      <span><span class="dot common"></span>Common ${rarityCounts.common}</span>
+      <span><span class="dot uncommon"></span>Uncommon ${rarityCounts.uncommon}</span>
+      <span><span class="dot rare"></span>Rare ${rarityCounts.rare}</span>
+      <span><span class="dot legendary"></span>Legendary ${rarityCounts.legendary}</span>
     </div>
 
     ${allOwned.length ? `
