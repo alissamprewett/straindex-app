@@ -35,16 +35,20 @@ nav.tabbar a .ic-img{width:19px;height:19px;object-fit:contain;display:block;}
 nav.tabbar a.active{color:var(--brand-green);}
 .nav-badge{position:absolute;top:4px;right:20%;background:#d64545;color:#fff;font-size:9px;font-weight:700;line-height:1;padding:2px 4px;border-radius:999px;min-width:14px;text-align:center;}
 .card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:12px;box-shadow:var(--shadow);}
-.btn{display:inline-block;background:var(--brand-green);color:#fff;border:none;padding:11px 16px;border-radius:12px;font-weight:700;font-size:13.5px;cursor:pointer;font-family:inherit;text-decoration:none;text-align:center;}
+.btn{display:inline-block;background:var(--brand-green);color:#fff;border:none;padding:11px 16px;border-radius:12px;font-weight:700;font-size:13.5px;cursor:pointer;font-family:inherit;text-decoration:none;text-align:center;transition:transform 0.1s,box-shadow 0.1s,opacity 0.1s;}
+.btn:active{transform:scale(0.97);opacity:0.9;}
 .btn.secondary{background:#eee;color:var(--ink-secondary);}
 .btn.lilac{background:var(--brand-lilac);}
 .btn.danger{background:#a13a3a;}
 .btn.block{display:block;width:100%;}
-.back-btn{display:inline-flex;align-items:center;gap:4px;background:#eee;color:var(--ink-secondary);border:none;padding:7px 14px;border-radius:999px;font-weight:700;font-size:12.5px;cursor:pointer;font-family:inherit;margin-bottom:12px;}
-.back-btn:active{background:#e2e2e2;}
+.back-btn{display:inline-flex;align-items:center;gap:4px;background:#eee;color:var(--ink-secondary);border:none;padding:7px 14px;border-radius:999px;font-weight:700;font-size:12.5px;cursor:pointer;font-family:inherit;margin-bottom:12px;transition:background 0.1s,transform 0.1s;}
+.back-btn:active{background:#e2e2e2;transform:scale(0.97);}
 label.field-label{display:block;font-size:12.5px;font-weight:700;color:var(--ink-secondary);margin:14px 0 6px;}
-input[type=text], input[type=password], input[type=search], select, textarea{
-  width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--border);font-family:inherit;font-size:16px;background:#fff;color:var(--ink);
+input[type=text], input[type=password], input[type=search], input[type=email], input[type=date], input[type=number], input[type=tel], select, textarea{
+  width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--border);font-family:inherit;font-size:16px;background:#fff;color:var(--ink);transition:border-color 0.12s;
+}
+input[type=text]:focus, input[type=password]:focus, input[type=search]:focus, input[type=email]:focus, input[type=date]:focus, input[type=number]:focus, input[type=tel]:focus, select:focus, textarea:focus{
+  outline:none;border-color:var(--brand-green);
 }
 textarea{min-height:80px;resize:vertical;}
 form .btn{margin-top:14px;}
@@ -189,7 +193,7 @@ form .btn{margin-top:14px;}
 .locate-row{display:flex;flex-wrap:wrap;align-items:center;gap:10px;}
 .zip-form{display:flex;gap:6px;}
 .zip-form input{width:96px;padding:8px 10px;border:1.5px solid var(--border);border-radius:8px;font-size:16px;font-family:inherit;}
-.zip-form input:focus{outline:none;border-color:var(--brand-green);}
+
 p.screen-sub.geo-live{display:flex;align-items:center;gap:6px;color:var(--brand-green-dark);font-weight:600;}
 p.screen-sub.geo-live .dot{width:6px;height:6px;border-radius:50%;background:#2fa84f;display:inline-block;flex-shrink:0;animation:pulse 1.6s infinite;}
 p.screen-sub.geo-live a{color:inherit;text-decoration:underline;font-weight:600;}
