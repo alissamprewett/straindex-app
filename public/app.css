@@ -16,10 +16,12 @@ body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;backgrou
 @media (min-width: 700px) {
   .app{max-width:640px;}
   nav.tabbar{max-width:640px;}
+  .compose-bar{max-width:640px;}
 }
 @media (min-width: 1000px) {
   .app{max-width:760px;}
   nav.tabbar{max-width:760px;}
+  .compose-bar{max-width:760px;}
 }
 a{color:inherit;}
 header.topbar{background:linear-gradient(135deg,var(--brand-green-dark),var(--brand-green));color:#fff;padding:calc(16px + env(safe-area-inset-top)) 18px 14px;display:flex;align-items:center;justify-content:space-between;}
@@ -30,6 +32,7 @@ main{padding:16px 16px 90px;}
 h1.screen-title, h2.screen-title{font-size:18px;margin:2px 0 12px;}
 p.screen-sub{color:var(--ink-secondary);font-size:13px;margin:-8px 0 14px;}
 nav.tabbar{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--border);display:flex;max-width:520px;margin:0 auto;}
+.compose-bar{position:fixed;bottom:58px;left:0;right:0;max-width:520px;margin:0 auto;background:#fff;border-top:1px solid var(--border);padding:10px 16px;display:flex;gap:8px;z-index:40;}
 nav.tabbar a{flex:1;text-align:center;padding:10px 2px 8px;display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--ink-muted);font-size:10.5px;text-decoration:none;}
 nav.tabbar a .ic{font-size:19px;}
 nav.tabbar a .ic-img{width:19px;height:19px;object-fit:contain;display:block;}
@@ -169,7 +172,6 @@ a.library-row:active{transform:scale(0.98);}
 .rec-card .icon{font-size:22px;}
 .rec-card .n{font-weight:800;font-size:12.5px;text-shadow:0 1px 3px rgba(0,0,0,.3);}
 .rec-card .why{font-size:10px;opacity:.9;margin-top:2px;line-height:1.3;}
-.rec-card .card-rarity-tag{position:absolute;top:6px;right:6px;left:auto;}
 .disp-strip{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px;margin-bottom:18px;}
 .disp-chip{flex-shrink:0;width:150px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:10px;cursor:pointer;text-decoration:none;color:inherit;display:block;}
 .disp-chip .dn{font-weight:700;font-size:12.5px;}

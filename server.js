@@ -419,7 +419,6 @@ function pageHome(req, res) {
     <div class="hcarousel">
       ${recs.map(r => `
         <a class="rec-card rarity-${r.s.rarity}" href="/strains/${r.s.id}">
-          <div class="card-rarity-tag">${rarityLabel(r.s.rarity)}</div>
           ${strainPhotoTag(r.s, 'sm')}
           <span class="n">${esc(r.s.name)}</span>
           <span class="why">${r.why ? 'Because you like ' + esc(r.why) : 'New for you'}</span>
@@ -655,7 +654,6 @@ function pageStrainDetail(req, res, id) {
       <div class="hcarousel">
         ${similar.map(r => `
           <a class="rec-card rarity-${r.s.rarity}" href="/strains/${r.s.id}">
-            <div class="card-rarity-tag">${rarityLabel(r.s.rarity)}</div>
             ${strainPhotoTag(r.s, 'sm')}
             <span class="n">${esc(r.s.name)}</span>
             <span class="why">${r.why ? 'Shares ' + esc(r.why) : 'Similar profile'}</span>
@@ -3439,7 +3437,7 @@ function pageConversation(req, res, friendId) {
   const thread = db.listConversation(userId, friendId);
   const body = `
     <h1 class="screen-title">${esc(friend.username)}</h1>
-    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px;">
+    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:80px;">
       ${thread.length ? thread.map(m => {
         const mine = m.sender_id === userId;
         const strain = m.shared_strain_id ? db.getStrain(m.shared_strain_id) : null;
@@ -3457,7 +3455,7 @@ function pageConversation(req, res, friendId) {
         </div>`;
       }).join('') : `<div class="empty-note">Say hi to ${esc(friend.username)} 👋</div>`}
     </div>
-    <form method="POST" action="/messages/${friend.id}/send" style="display:flex;gap:8px;">
+    <form method="POST" action="/messages/${friend.id}/send" class="compose-bar">
       <input type="text" name="body" placeholder="Message ${esc(friend.username)}..." autocomplete="off" style="flex:1;">
       <button class="btn" type="submit">Send</button>
     </form>
