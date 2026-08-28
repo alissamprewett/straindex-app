@@ -7,7 +7,8 @@
 }
 *{box-sizing:border-box;}
 body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg-page);color:var(--ink);-webkit-font-smoothing:antialiased;touch-action:manipulation;}
-.app{max-width:520px;margin:0 auto;min-height:100vh;background:var(--bg-page);box-shadow:0 0 40px rgba(0,0,0,0.08);}
+.app{max-width:520px;margin:0 auto;min-height:100vh;background:var(--bg-page);box-shadow:0 0 40px rgba(0,0,0,0.08);animation:pageFadeIn 0.18s ease-out;}
+@keyframes pageFadeIn{from{opacity:0;}to{opacity:1;}}
 /* On phones (the default above), the app already fills the actual screen
    width since max-width only caps it. On tablets/desktop there's a lot of
    unused space at a fixed 520px, so widen the content well in stages
@@ -64,7 +65,8 @@ form .btn{margin-top:14px;}
 .kudos-btn.kudos-given{background:var(--brand-green-dark);border-color:var(--brand-green-dark);color:#fff;}
 @keyframes kudosPulse{0%{transform:scale(1);}40%{transform:scale(1.15);}100%{transform:scale(1);}}
 .kudos-pulse{animation:kudosPulse 0.35s ease;}
-.library-row{display:flex;align-items:center;gap:10px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:10px 12px;margin-bottom:8px;}
+.library-row{display:flex;align-items:center;gap:10px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px;margin-bottom:8px;box-shadow:var(--shadow);transition:transform 0.1s;}
+a.library-row:active{transform:scale(0.98);}
 .library-row .icon{font-size:22px;flex-shrink:0;}
 .strain-thumb{object-fit:cover;border-radius:8px;flex-shrink:0;background:#e5e0d5;}
 .strain-thumb-xs{width:28px;height:28px;border-radius:6px;}
@@ -76,7 +78,7 @@ form .btn{margin-top:14px;}
 .library-row .sub{font-size:10.5px;color:var(--ink-muted);margin-top:2px;}
 .rarity-tag{display:inline-block;font-size:9.5px;font-weight:800;text-transform:uppercase;padding:2px 7px;border-radius:6px;color:#fff;}
 .rarity-common{background:#3d6b52;} .rarity-uncommon{background:#2a5f78;} .rarity-rare{background:#5a3a94;} .rarity-legendary{background:#a86f1a;}
-.admin-row{display:flex;justify-content:space-between;align-items:center;gap:10px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:10px;}
+.admin-row{display:flex;justify-content:space-between;align-items:center;gap:10px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:12px;margin-bottom:10px;box-shadow:var(--shadow);}
 .admin-row .actions{display:flex;gap:6px;flex-shrink:0;}
 .admin-row .actions button, .admin-row .actions a{padding:6px 10px;border-radius:8px;border:none;font-size:11.5px;font-weight:700;cursor:pointer;font-family:inherit;text-decoration:none;}
 .filter-pill{display:inline-block;padding:6px 12px;border-radius:999px;border:1px solid var(--border);background:#fff;font-size:11.5px;color:var(--ink-secondary);cursor:pointer;margin:0 6px 6px 0;text-decoration:none;transition:background-color 0.15s,border-color 0.15s,color 0.15s;}
@@ -167,7 +169,7 @@ form .btn{margin-top:14px;}
 
 /* ---------------------------------------------------------------- more hub */
 .more-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
-.more-tile{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:12px 6px;text-align:center;box-shadow:var(--shadow);text-decoration:none;color:inherit;display:block;transition:transform 0.12s,box-shadow 0.12s;}
+.more-tile{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:12px 6px;text-align:center;box-shadow:var(--shadow);text-decoration:none;color:inherit;display:block;transition:transform 0.12s,box-shadow 0.12s;}
 .more-tile:active{transform:scale(0.97);}
 .more-tile .ic{font-size:20px;margin-bottom:5px;display:block;}
 .more-tile .ic-img-lg{width:20px;height:20px;object-fit:contain;display:inline-block;}
