@@ -517,7 +517,7 @@ function pageStrains(req, res, query) {
     </div>
     <p class="empty-note" style="margin-bottom:2px;">✅ Verified — THC, breeder, and flavor/terpene data all independently confirmed. &nbsp; 🔹 Partial — some details confirmed. &nbsp; ⚪ Listed only — seen on a dispensary menu, nothing independently confirmed yet.</p>
     <p class="empty-note" style="margin-bottom:10px;">User-reported associations, not medical advice — see a doctor for real guidance.</p>
-    <p class="empty-note" id="strain-search-count">${total > 60 ? `Showing 60 of ${total.toLocaleString()} — refine your search to narrow it down.` : `${total} strain${total === 1 ? '' : 's'}`}</p>
+    <p class="empty-note" id="strain-search-count">${total.toLocaleString()} strain${total === 1 ? '' : 's'}</p>
     <div id="strain-search-results">${results.map(s => `
       <a class="library-row" href="/strains/${s.id}" style="text-decoration:none;color:inherit;">
         ${strainPhotoTag(s, 'sm')}
@@ -527,6 +527,7 @@ function pageStrains(req, res, query) {
         </div>
         <span class="rarity-tag rarity-${s.rarity}">${rarityLabel(s.rarity)}</span>
       </a>`).join('') || `<div class="empty-note">No strains match your filters.</div>`}</div>
+    <div id="strain-load-more-container">${total > results.length ? `<button type="button" class="btn secondary block" id="strain-load-more-btn" style="margin-top:10px;">Load ${Math.min(60, total - results.length)} more (${results.length} of ${total.toLocaleString()} shown)</button>` : ''}</div>
   `;
   sendHtml(res, layout({ title: 'Strains', active: 'strains', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
@@ -2852,9 +2853,10 @@ function apiListStrains(req, res, query) {
   const breeder = query.get('breeder') || 'All';
   const verified = query.get('verified') || 'All';
   const limit = Math.min(Number(query.get('limit')) || 60, 200);
+  const offset = Math.max(Number(query.get('offset')) || 0, 0);
   sendJson(res, {
     total: db.countStrains({ q, type, rarity, effect, thc, terpene, ailment, breeder, verified }),
-    results: db.listStrains({ q, type, rarity, effect, thc, terpene, ailment, breeder, verified, limit }),
+    results: db.listStrains({ q, type, rarity, effect, thc, terpene, ailment, breeder, verified, limit, offset }),
   });
 }
 async function apiKudos(req, res, id) {

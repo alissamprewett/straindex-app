@@ -212,13 +212,9 @@ async function likeGrowTip(id, btn) {
     return 'listed';
   }
 
-  function render(data) {
-    countEl.textContent = data.total > 60
-      ? `Showing 60 of ${data.total.toLocaleString()} — refine your search to narrow it down.`
-      : `${data.total} strain${data.total === 1 ? '' : 's'}`;
-    resultsEl.innerHTML = data.results.map(s => {
-      const badge = verifiedBadges[verifiedTier(s)];
-      return `
+  function renderRow(s) {
+    const badge = verifiedBadges[verifiedTier(s)];
+    return `
       <a class="library-row" href="/strains/${s.id}" style="text-decoration:none;color:inherit;">
         <span class="icon">${s.icon}</span>
         <div class="info">
@@ -227,7 +223,49 @@ async function likeGrowTip(id, btn) {
         </div>
         <span class="rarity-tag rarity-${s.rarity}">${rarityLabel(s.rarity)}</span>
       </a>`;
-    }).join('') || `<div class="empty-note">No strains match your filters.</div>`;
+  }
+
+  let shownCount = resultsEl.querySelectorAll('.library-row').length;
+  const loadMoreEl = document.getElementById('strain-load-more-container');
+  // The initial page load renders its own "Load more" button server-side
+  // (so it works before any JS search has run) -- wire that one up too,
+  // not just the ones render()/loadMore() create dynamically afterward.
+  const initialLoadMoreBtn = document.getElementById('strain-load-more-btn');
+  if (initialLoadMoreBtn) initialLoadMoreBtn.addEventListener('click', loadMore);
+
+  function renderLoadMore(total) {
+    if (!loadMoreEl) return;
+    if (shownCount >= total) { loadMoreEl.innerHTML = ''; return; }
+    const nextBatch = Math.min(60, total - shownCount);
+    loadMoreEl.innerHTML = `<button type="button" class="btn secondary block" id="strain-load-more-btn" style="margin-top:10px;">Load ${nextBatch} more (${shownCount} of ${total.toLocaleString()} shown)</button>`;
+    document.getElementById('strain-load-more-btn').addEventListener('click', loadMore);
+  }
+
+  function render(data) {
+    // A fresh search (new query/filter) always replaces from scratch --
+    // shownCount resets here, separately from loadMore()'s append path.
+    shownCount = data.results.length;
+    countEl.textContent = `${data.total.toLocaleString()} strain${data.total === 1 ? '' : 's'}`;
+    resultsEl.innerHTML = data.results.map(renderRow).join('') || `<div class="empty-note">No strains match your filters.</div>`;
+    renderLoadMore(data.total);
+  }
+
+  async function loadMore() {
+    const btn = document.getElementById('strain-load-more-btn');
+    if (btn) { btn.disabled = true; btn.textContent = 'Loading…'; }
+    const params = new URLSearchParams({
+      q: input.value, type: typeSel.value, rarity: raritySel.value, effect: effectSel.value,
+      thc: thcSel.value, terpene: terpeneSel.value, ailment: ailmentSel.value,
+      verified: verifiedSel ? verifiedSel.value : 'All', breeder: breederValue,
+      limit: '60', offset: String(shownCount),
+    });
+    const res = await fetch(`/api/strains?${params}`);
+    if (!res.ok) return;
+    const data = await res.json();
+    shownCount += data.results.length;
+    resultsEl.insertAdjacentHTML('beforeend', data.results.map(renderRow).join(''));
+    countEl.textContent = `${data.total.toLocaleString()} strain${data.total === 1 ? '' : 's'}`;
+    renderLoadMore(data.total);
   }
 
   async function runSearch() {
