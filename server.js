@@ -489,19 +489,19 @@ function pageStrains(req, res, query) {
     <form method="GET" action="/strains" id="strain-search-form" style="margin-bottom:12px;">
       <input type="search" name="q" id="strain-search-input" value="${esc(q)}" placeholder="Search by name or flavor..." autocomplete="off">
     </form>
+    <div class="section-label" style="margin-top:2px;">Type</div>
+    <div id="strain-search-type-pills" style="margin-bottom:10px;">${typeOpts.map(t => `<button type="button" class="filter-pill ${type === t ? 'active' : ''}" data-value="${esc(t)}">${t}</button>`).join('')}</div>
+    <input type="hidden" id="strain-search-type" name="type" form="strain-search-form" value="${esc(type)}">
+    <div class="section-label">Rarity</div>
+    <div id="strain-search-rarity-pills" style="margin-bottom:10px;">${rarityOpts.map(r => `<button type="button" class="filter-pill ${rarity === r ? 'active' : ''}" data-value="${esc(r)}">${r === 'All' ? 'All' : rarityLabel(r)}</button>`).join('')}</div>
+    <input type="hidden" id="strain-search-rarity" name="rarity" form="strain-search-form" value="${esc(rarity)}">
+    <div class="section-label">THC level</div>
+    <div id="strain-search-thc-pills" style="margin-bottom:10px;">${thcOpts.map(t => `<button type="button" class="filter-pill ${thc === t ? 'active' : ''}" data-value="${esc(t)}">${thcLabel[t]}</button>`).join('')}</div>
+    <input type="hidden" id="strain-search-thc" name="thc" form="strain-search-form" value="${esc(thc)}">
+    <div class="section-label">Data quality</div>
+    <div id="strain-search-verified-pills" style="margin-bottom:12px;">${verifiedOpts.map(v => `<button type="button" class="filter-pill ${verified === v ? 'active' : ''}" data-value="${esc(v)}">${verifiedLabel[v]}</button>`).join('')}</div>
+    <input type="hidden" id="strain-search-verified" name="verified" form="strain-search-form" value="${esc(verified)}">
     <div class="filter-grid">
-      <div class="filter-group">
-        <div class="section-label" style="margin-bottom:4px;">Type</div>
-        <select id="strain-search-type" name="type" form="strain-search-form">${typeOpts.map(t => `<option value="${esc(t)}" ${type === t ? 'selected' : ''}>${t}</option>`).join('')}</select>
-      </div>
-      <div class="filter-group">
-        <div class="section-label" style="margin-bottom:4px;">Rarity</div>
-        <select id="strain-search-rarity" name="rarity" form="strain-search-form">${rarityOpts.map(r => `<option value="${esc(r)}" ${rarity === r ? 'selected' : ''}>${r === 'All' ? 'All rarities' : rarityLabel(r)}</option>`).join('')}</select>
-      </div>
-      <div class="filter-group">
-        <div class="section-label" style="margin-bottom:4px;">THC level</div>
-        <select id="strain-search-thc" name="thc" form="strain-search-form">${thcOpts.map(t => `<option value="${esc(t)}" ${thc === t ? 'selected' : ''}>${thcLabel[t]}</option>`).join('')}</select>
-      </div>
       <div class="filter-group">
         <div class="section-label" style="margin-bottom:4px;">Feeling like...</div>
         <select id="strain-search-effect" name="effect" form="strain-search-form">${effectOpts.map(e => `<option value="${esc(e)}" ${effect === e ? 'selected' : ''}>${e === 'All' ? 'Any effect' : e}</option>`).join('')}</select>
@@ -513,10 +513,6 @@ function pageStrains(req, res, query) {
       <div class="filter-group">
         <div class="section-label" style="margin-bottom:4px;">Relief from...</div>
         <select id="strain-search-ailment" name="ailment" form="strain-search-form">${ailmentOpts.map(a => `<option value="${esc(a)}" ${ailment === a ? 'selected' : ''}>${a === 'All' ? 'Anything' : a}</option>`).join('')}</select>
-      </div>
-      <div class="filter-group">
-        <div class="section-label" style="margin-bottom:4px;">Data quality</div>
-        <select id="strain-search-verified" name="verified" form="strain-search-form">${verifiedOpts.map(v => `<option value="${esc(v)}" ${verified === v ? 'selected' : ''}>${verifiedLabel[v]}</option>`).join('')}</select>
       </div>
     </div>
     <p class="empty-note" style="margin-bottom:2px;">✅ Verified — THC, breeder, and flavor/terpene data all independently confirmed. &nbsp; 🔹 Partial — some details confirmed. &nbsp; ⚪ Listed only — seen on a dispensary menu, nothing independently confirmed yet.</p>
@@ -3234,23 +3230,20 @@ function pageCollection(req, res, query) {
       <form method="GET" action="/collection" id="collection-search-form" style="margin-bottom:12px;">
         <input type="search" name="q" value="${esc(q)}" placeholder="Search your collection..." autocomplete="off">
       </form>
-      <div class="filter-grid">
-        <div class="filter-group">
-          <div class="section-label" style="margin-bottom:4px;">Type</div>
-          <select name="type" form="collection-search-form">${typeOpts.map(t => `<option value="${esc(t)}" ${type === t ? 'selected' : ''}>${t}</option>`).join('')}</select>
-        </div>
-        <div class="filter-group">
-          <div class="section-label" style="margin-bottom:4px;">Rarity</div>
-          <select name="rarity" form="collection-search-form">${rarityOpts.map(r => `<option value="${esc(r)}" ${rarity === r ? 'selected' : ''}>${r === 'All' ? 'All rarities' : rarityLabel(r)}</option>`).join('')}</select>
-        </div>
-        <div class="filter-group">
-          <div class="section-label" style="margin-bottom:4px;">THC level</div>
-          <select name="thc" form="collection-search-form">${thcOpts.map(t => `<option value="${esc(t)}" ${thc === t ? 'selected' : ''}>${thcLabel[t]}</option>`).join('')}</select>
-        </div>
-        <div class="filter-group">
-          <div class="section-label" style="margin-bottom:4px;">Feeling like...</div>
-          <select name="effect" form="collection-search-form">${effectOpts.map(e => `<option value="${esc(e)}" ${effect === e ? 'selected' : ''}>${e === 'All' ? 'Any effect' : e}</option>`).join('')}</select>
-        </div>
+      ${(() => {
+        const mk = (params) => '/collection?' + new URLSearchParams({ q, type, rarity, thc, effect, ...params }).toString();
+        return `
+        <div class="section-label" style="margin-top:2px;">Type</div>
+        <div style="margin-bottom:10px;">${typeOpts.map(t => `<a class="filter-pill ${type === t ? 'active' : ''}" href="${mk({ type: t })}">${t}</a>`).join('')}</div>
+        <div class="section-label">Rarity</div>
+        <div style="margin-bottom:10px;">${rarityOpts.map(r => `<a class="filter-pill ${rarity === r ? 'active' : ''}" href="${mk({ rarity: r })}">${r === 'All' ? 'All' : rarityLabel(r)}</a>`).join('')}</div>
+        <div class="section-label">THC level</div>
+        <div style="margin-bottom:10px;">${thcOpts.map(t => `<a class="filter-pill ${thc === t ? 'active' : ''}" href="${mk({ thc: t })}">${thcLabel[t]}</a>`).join('')}</div>
+        `;
+      })()}
+      <div class="filter-group" style="max-width:220px;">
+        <div class="section-label" style="margin-bottom:4px;">Feeling like...</div>
+        <select name="effect" form="collection-search-form" onchange="this.form.submit()">${effectOpts.map(e => `<option value="${esc(e)}" ${effect === e ? 'selected' : ''}>${e === 'All' ? 'Any effect' : e}</option>`).join('')}</select>
       </div>
       ${hasFilters ? `<p class="empty-note" style="margin:8px 0 0;">${owned.length} of ${allOwned.length} cards match${owned.length !== allOwned.length ? ` — <a href="/collection">clear filters</a>` : ''}</p>` : ''}
     ` : ''}
