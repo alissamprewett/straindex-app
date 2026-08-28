@@ -149,6 +149,7 @@ a.library-row:active{transform:scale(0.98);}
 .card-slot .icon{font-size:26px;margin-bottom:4px;}
 .card-slot .name{font-weight:700;font-size:10.5px;line-height:1.15;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,0.35);}
 .card-slot .copies{position:absolute;top:5px;right:5px;background:rgba(0,0,0,0.35);color:#fff;font-size:9px;padding:2px 5px;border-radius:8px;font-weight:700;}
+.card-slot .card-rarity-tag{position:absolute;top:5px;left:5px;background:rgba(0,0,0,0.35);color:#fff;font-size:8.5px;font-weight:800;text-transform:uppercase;letter-spacing:.3px;padding:2px 6px;border-radius:8px;}
 .card-slot.rarity-common, .rec-card.rarity-common{background:linear-gradient(160deg,#6f9d80,#3d6b52);}
 .card-slot.rarity-uncommon, .rec-card.rarity-uncommon{background:linear-gradient(160deg,#4f93b0,#2a5f78);}
 .card-slot.rarity-rare, .rec-card.rarity-rare{background:linear-gradient(160deg,#8a63c9,#5a3a94);box-shadow:0 0 0 1px rgba(138,99,201,0.4);}
@@ -168,6 +169,7 @@ a.library-row:active{transform:scale(0.98);}
 .rec-card .icon{font-size:22px;}
 .rec-card .n{font-weight:800;font-size:12.5px;text-shadow:0 1px 3px rgba(0,0,0,.3);}
 .rec-card .why{font-size:10px;opacity:.9;margin-top:2px;line-height:1.3;}
+.rec-card .card-rarity-tag{position:absolute;top:6px;right:6px;left:auto;}
 .disp-strip{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px;margin-bottom:18px;}
 .disp-chip{flex-shrink:0;width:150px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:10px;cursor:pointer;text-decoration:none;color:inherit;display:block;}
 .disp-chip .dn{font-weight:700;font-size:12.5px;}

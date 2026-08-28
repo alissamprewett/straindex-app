@@ -419,6 +419,7 @@ function pageHome(req, res) {
     <div class="hcarousel">
       ${recs.map(r => `
         <a class="rec-card rarity-${r.s.rarity}" href="/strains/${r.s.id}">
+          <div class="card-rarity-tag">${rarityLabel(r.s.rarity)}</div>
           ${strainPhotoTag(r.s, 'sm')}
           <span class="n">${esc(r.s.name)}</span>
           <span class="why">${r.why ? 'Because you like ' + esc(r.why) : 'New for you'}</span>
@@ -654,6 +655,7 @@ function pageStrainDetail(req, res, id) {
       <div class="hcarousel">
         ${similar.map(r => `
           <a class="rec-card rarity-${r.s.rarity}" href="/strains/${r.s.id}">
+            <div class="card-rarity-tag">${rarityLabel(r.s.rarity)}</div>
             ${strainPhotoTag(r.s, 'sm')}
             <span class="n">${esc(r.s.name)}</span>
             <span class="why">${r.why ? 'Shares ' + esc(r.why) : 'Similar profile'}</span>
@@ -3220,6 +3222,7 @@ function pageCollection(req, res) {
       ${owned.map(o => `
         <a class="card-slot rarity-${o.strain.rarity}" href="/strains/${o.strain.id}">
           ${o.copies > 1 ? `<div class="copies">×${o.copies}</div>` : ''}
+          <div class="card-rarity-tag">${rarityLabel(o.strain.rarity)}</div>
           ${strainPhotoTag(o.strain, 'md')}
           <div class="name">${esc(o.strain.name)}</div>
         </a>`).join('')}
