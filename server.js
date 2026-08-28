@@ -811,7 +811,10 @@ function pageCheckinForm(req, res, query, existing) {
       <div class="dosing-note" id="edible-warning" style="display:none;">⚠️ Edibles can take up to 2 hours to fully kick in. Redosing too early — before you feel the first dose — is the most common cause of an uncomfortable experience. Wait it out before taking more.</div>
 
       <label class="field-label">Rating</label>
-      <select name="rating">${[5, 4, 3, 2, 1].map(n => `<option value="${n}" ${existing && existing.rating === n ? 'selected' : ''}>${starString(n)}</option>`).join('')}</select>
+      <div class="star-picker" id="star-picker" data-value="${existing ? existing.rating : 5}">
+        ${[1, 2, 3, 4, 5].map(n => `<button type="button" class="star-btn" data-star="${n}" aria-label="Rate ${n} star${n === 1 ? '' : 's'}">★</button>`).join('')}
+      </div>
+      <input type="hidden" name="rating" id="star-picker-value" value="${existing ? existing.rating : 5}">
 
       <label class="field-label">Mood / Effects (pick up to 5, optional)</label>
       <div class="effect-picker" id="effect-picker">

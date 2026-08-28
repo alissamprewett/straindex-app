@@ -84,6 +84,10 @@ a.library-row:active{transform:scale(0.98);}
 .filter-pill{display:inline-block;padding:6px 12px;border-radius:999px;border:1px solid var(--border);background:#fff;font-size:11.5px;color:var(--ink-secondary);cursor:pointer;margin:0 6px 6px 0;text-decoration:none;transition:background-color 0.15s,border-color 0.15s,color 0.15s;}
 .filter-pill.active{background:var(--brand-green-dark);border-color:var(--brand-green-dark);color:#fff;}
 .scale-btn.active{background:var(--brand-green-dark);border-color:var(--brand-green-dark);color:#fff;}
+.star-picker{display:flex;gap:6px;margin:2px 0 4px;}
+.star-btn{background:none;border:none;padding:2px;font-size:30px;line-height:1;cursor:pointer;color:var(--border);transition:color 0.1s,transform 0.1s;}
+.star-btn.filled{color:var(--brand-gold);}
+.star-btn:active{transform:scale(0.85);}
 .grow-tip-card .gcat{display:inline-block;font-size:9.5px;font-weight:800;text-transform:uppercase;background:#eef2ea;color:var(--brand-green-dark);padding:2px 8px;border-radius:6px;margin:4px 0;}
 
 /* ---------------------------------------------------------------- glossary terms */

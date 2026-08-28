@@ -400,6 +400,38 @@ if ('serviceWorker' in navigator) {
   }
 })();
 
+// Custom tap-to-rate star widget -- replaces what used to be a plain
+// <select> showing "★★★★★" as text. A hidden input still carries the
+// actual value on submit, so the server-side form handling needed zero
+// changes for this.
+(function initStarPicker() {
+  const picker = document.getElementById('star-picker');
+  const hidden = document.getElementById('star-picker-value');
+  if (!picker || !hidden) return;
+  const stars = Array.from(picker.querySelectorAll('.star-btn'));
+
+  function paint(value) {
+    stars.forEach(btn => {
+      btn.classList.toggle('filled', Number(btn.dataset.star) <= value);
+    });
+  }
+
+  stars.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const value = Number(btn.dataset.star);
+      hidden.value = value;
+      picker.dataset.value = value;
+      paint(value);
+    });
+    // Live preview on hover for anyone on a real mouse -- has no effect
+    // on touch, where there's no hover state to fire.
+    btn.addEventListener('mouseenter', () => paint(Number(btn.dataset.star)));
+  });
+  picker.addEventListener('mouseleave', () => paint(Number(hidden.value)));
+
+  paint(Number(hidden.value));
+})();
+
 // ---------------------------------------------------------------- glossary terms
 // Tap a dotted-underline term (e.g. "decarb") in a recipe or grow tip to
 // see a plain-language definition in a small popover near the word.
