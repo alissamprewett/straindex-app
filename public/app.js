@@ -1,5 +1,42 @@
 // app.js — shared client-side behavior. No framework, no build step.
 
+// Prevents accidental double-submission of any form in the app -- a real
+// risk on a phone with a slow connection, where a tap that doesn't seem to
+// register right away easily gets tapped again before the first one has
+// actually gone through. This is one global listener rather than a
+// per-page fix, so it automatically covers every current form (check-in,
+// signup, feedback, recipe/tip submission, friend requests...) and any
+// future one, without needing to remember to wire it up each time.
+// Native `required`/validation still runs first -- this only fires once
+// the browser has already decided the form is valid and is really
+// submitting.
+document.addEventListener('submit', (event) => {
+  // Some forms use onsubmit="return confirm(...)" for destructive actions
+  // (delete account, remove friend, block user). If someone cancels that
+  // dialog, the default action is already prevented by the time this
+  // runs -- skip disabling the button, since nothing is actually being
+  // submitted and it would otherwise look permanently stuck on "Saving…".
+  if (event.defaultPrevented) return;
+  const form = event.target;
+  const btn = form.querySelector('button[type="submit"], input[type="submit"]');
+  if (!btn || btn.disabled) return;
+  btn.dataset.originalText = btn.dataset.originalText || btn.innerHTML;
+  btn.disabled = true;
+  btn.style.opacity = '0.7';
+  btn.innerHTML = 'Saving…';
+});
+// If the page is restored from the browser's back/forward cache (e.g.
+// someone submits, then taps back), buttons could otherwise stay stuck
+// showing "Saving…" from before -- put them back to normal in that case.
+window.addEventListener('pageshow', (event) => {
+  if (!event.persisted) return;
+  document.querySelectorAll('button[type="submit"][disabled]').forEach(btn => {
+    if (btn.dataset.originalText) btn.innerHTML = btn.dataset.originalText;
+    btn.disabled = false;
+    btn.style.opacity = '';
+  });
+});
+
 // Timestamps are stored and sent as UTC. Formatting them server-side would
 // bake in the *server's* timezone for every viewer, which isn't what anyone
 // wants — each person should see the time converted to their own device's
@@ -321,7 +358,6 @@ if ('serviceWorker' in navigator) {
   const chipsBox = document.getElementById('effect-chips');
   const noteBox = document.getElementById('effect-note');
   const hiddenBox = document.getElementById('effect-hidden-inputs');
-  const submitBtn = document.getElementById('checkin-submit');
   let selected = Array.isArray(window.INITIAL_EFFECTS) ? window.INITIAL_EFFECTS.slice(0, 5) : [];
 
   function renderEffects() {
