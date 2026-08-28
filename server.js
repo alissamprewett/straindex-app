@@ -3183,18 +3183,32 @@ async function handleAccountPassword(req, res) {
 
 // ---------------------------------------------------------------- collection / binder
 
-function pageCollection(req, res) {
+function pageCollection(req, res, query) {
   const userId = requireUser(req, res);
   if (userId == null) return;
-  const owned = db.getCollection(userId).sort((a, b) => a.strain.name.localeCompare(b.strain.name));
+  const q = query.get('q') || '';
+  const type = query.get('type') || 'All';
+  const rarity = query.get('rarity') || 'All';
+  const effect = query.get('effect') || 'All';
+  const thc = query.get('thc') || 'All';
+  const hasFilters = q || type !== 'All' || rarity !== 'All' || effect !== 'All' || thc !== 'All';
+
+  const allOwned = db.getCollection(userId).sort((a, b) => a.strain.name.localeCompare(b.strain.name));
+  const owned = allOwned.filter(o => db.matchesFilters(o.strain, { q, type, rarity, effect, thc }));
   const uniqueCount = db.getUniqueOwnedCount(userId);
   const totalStrains = db.countStrains();
   const pct = totalStrains ? Math.round((100 * uniqueCount) / totalStrains) : 0;
 
   const rarityOrder = ['legendary', 'rare', 'uncommon', 'common'];
   const rarityCounts = { common: 0, uncommon: 0, rare: 0, legendary: 0 };
-  owned.forEach(o => { if (rarityCounts[o.strain.rarity] != null) rarityCounts[o.strain.rarity]++; });
-  const rarestOwned = rarityOrder.map(r => owned.find(o => o.strain.rarity === r)).find(Boolean);
+  allOwned.forEach(o => { if (rarityCounts[o.strain.rarity] != null) rarityCounts[o.strain.rarity]++; });
+  const rarestOwned = rarityOrder.map(r => allOwned.find(o => o.strain.rarity === r)).find(Boolean);
+
+  const typeOpts = ['All', 'Indica', 'Sativa', 'Hybrid'];
+  const rarityOpts = ['All', 'common', 'uncommon', 'rare', 'legendary'];
+  const effectOpts = ['All', 'Happy', 'Relaxed', 'Euphoric', 'Uplifted', 'Sleepy', 'Energetic', 'Creative', 'Focused', 'Hungry', 'Talkative', 'Calm', 'Social'];
+  const thcOpts = ['All', 'Low', 'Medium', 'High'];
+  const thcLabel = { All: 'Any THC', Low: 'Low (≤15%)', Medium: 'Medium (15–25%)', High: 'High (25%+)' };
 
   const body = `
     <h1 class="screen-title">My Collection</h1>
@@ -3216,14 +3230,39 @@ function pageCollection(req, res) {
       <div class="badge-chip rarity-legendary" style="background:none;color:var(--ink-secondary);">Legendary: ${rarityCounts.legendary}</div>
     </div>
 
-    ${owned.length ? `<div class="binder-grid">
+    ${allOwned.length ? `
+      <form method="GET" action="/collection" id="collection-search-form" style="margin-bottom:12px;">
+        <input type="search" name="q" value="${esc(q)}" placeholder="Search your collection..." autocomplete="off">
+      </form>
+      <div class="filter-grid">
+        <div class="filter-group">
+          <div class="section-label" style="margin-bottom:4px;">Type</div>
+          <select name="type" form="collection-search-form">${typeOpts.map(t => `<option value="${esc(t)}" ${type === t ? 'selected' : ''}>${t}</option>`).join('')}</select>
+        </div>
+        <div class="filter-group">
+          <div class="section-label" style="margin-bottom:4px;">Rarity</div>
+          <select name="rarity" form="collection-search-form">${rarityOpts.map(r => `<option value="${esc(r)}" ${rarity === r ? 'selected' : ''}>${r === 'All' ? 'All rarities' : rarityLabel(r)}</option>`).join('')}</select>
+        </div>
+        <div class="filter-group">
+          <div class="section-label" style="margin-bottom:4px;">THC level</div>
+          <select name="thc" form="collection-search-form">${thcOpts.map(t => `<option value="${esc(t)}" ${thc === t ? 'selected' : ''}>${thcLabel[t]}</option>`).join('')}</select>
+        </div>
+        <div class="filter-group">
+          <div class="section-label" style="margin-bottom:4px;">Feeling like...</div>
+          <select name="effect" form="collection-search-form">${effectOpts.map(e => `<option value="${esc(e)}" ${effect === e ? 'selected' : ''}>${e === 'All' ? 'Any effect' : e}</option>`).join('')}</select>
+        </div>
+      </div>
+      ${hasFilters ? `<p class="empty-note" style="margin:8px 0 0;">${owned.length} of ${allOwned.length} cards match${owned.length !== allOwned.length ? ` — <a href="/collection">clear filters</a>` : ''}</p>` : ''}
+    ` : ''}
+
+    ${allOwned.length ? `<div class="binder-grid" style="margin-top:12px;">
       ${owned.map(o => `
         <a class="card-slot rarity-${o.strain.rarity}" href="/strains/${o.strain.id}">
           ${o.copies > 1 ? `<div class="copies">×${o.copies}</div>` : ''}
           <div class="card-rarity-tag">${rarityLabel(o.strain.rarity)}</div>
           ${strainPhotoTag(o.strain, 'md')}
           <div class="name">${esc(o.strain.name)}</div>
-        </a>`).join('')}
+        </a>`).join('') || `<div class="empty-note">No cards match those filters.</div>`}
     </div>` : `<div class="empty-note">No cards caught yet — <a href="/checkin">log a check-in</a> to unlock your first one.</div>`}
   `;
   sendHtml(res, layout({ title: 'My Collection', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
@@ -4029,7 +4068,7 @@ const server = http.createServer(async (req, res) => {
     if (method === 'GET' && pathname === '/api/analytics-snapshot') return apiAnalyticsSnapshot(req, res, url.searchParams);
 
     if (method === 'GET' && pathname === '/more') return pageMore(req, res);
-    if (method === 'GET' && pathname === '/collection') return pageCollection(req, res);
+    if (method === 'GET' && pathname === '/collection') return pageCollection(req, res, url.searchParams);
     if (method === 'GET' && pathname === '/history') return pageHistory(req, res);
     if (method === 'GET' && pathname === '/trade') return pageTrade(req, res, url.searchParams);
     if (method === 'GET' && pathname === '/friends') return pageFriends(req, res, url.searchParams);
