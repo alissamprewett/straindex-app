@@ -60682,5 +60682,44 @@
       "Monster Cookies"
     ],
     "id": "s1809"
+  },
+  {
+    "name": "Wookies N Cream",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "15-20%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Calm",
+      "Euphoric"
+    ],
+    "flavor": "Sweet, creamy chocolate cookie with fruity and peppery notes.",
+    "icon": "🌿",
+    "breeder": "",
+    "parents": [
+      "Wookies",
+      "Cookies and Cream"
+    ],
+    "id": "s1810"
+  },
+  {
+    "name": "City of Gold",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Uplifted"
+    ],
+    "flavor": "Sweet and earthy with citrus and spice.",
+    "icon": "🌿",
+    "breeder": "",
+    "id": "s1811"
   }
 ]
