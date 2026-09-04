@@ -543,7 +543,7 @@ function pageHome(req, res) {
         </a>
         <div class="sub" style="margin-top:8px;">${esc(c.method)} · ${starString(c.rating)}</div>
         ${c.photo ? `<img class="photo-thumb" src="${esc(c.photo)}" alt="photo">` : ''}
-        ${(c.effects || []).length ? `<div class="effect-tags">${c.effects.map(e => `<span>${esc(e)}</span>`).join('')}</div>` : ''}
+        ${(c.effects || []).length ? `<div class="effect-tags">${c.effects.map(e => `<span>${EFFECT_ICON[e] ? EFFECT_ICON[e] + ' ' : ''}${esc(e)}</span>`).join('')}</div>` : ''}
         ${c.note ? `<div class="note">"${esc(c.note)}"</div>` : ''}
         ${renderCheckinPairings(c)}
         ${renderOnsetTimer(c)}
@@ -706,7 +706,27 @@ function pageStrainDetail(req, res, id) {
       ${s.breeder ? `<p class="empty-note" style="padding:0;"><b>Bred by:</b> ${esc(s.breeder)}</p>` : ''}
       ${s.flavor ? `<p style="font-style:italic;color:var(--ink-secondary);">"${esc(s.flavor)}"</p>` : ''}
       <p>${s.effects.map(e => `<span class="filter-pill">${EFFECT_ICON[e] ? EFFECT_ICON[e] + ' ' : ''}${esc(e)}</span>`).join('')}</p>
-      ${s.terps.length ? `<p><b>Top terpenes:</b> ${s.terps.map(t => `<span class="terp-dot" style="background:${TERPENE_COLOR[t.n] || 'var(--ink-muted)'};"></span>${esc(t.n)} (${Math.round(t.p * 100)}%)`).join(', ')}</p>` : ''}
+      ${s.terps.length ? `
+        <div style="margin-top:10px;">
+          <b style="font-size:13px;">Top terpenes</b>
+          ${(() => {
+            const maxP = Math.max(...s.terps.map(t => t.p));
+            return s.terps.map(t => {
+              const color = TERPENE_COLOR[t.n] || 'var(--ink-muted)';
+              const widthPct = maxP > 0 ? Math.round((t.p / maxP) * 100) : 0;
+              return `
+                <div style="display:flex;align-items:center;gap:8px;margin-top:6px;">
+                  <span style="width:92px;flex-shrink:0;font-size:12.5px;"><span class="terp-dot" style="background:${color};"></span>${esc(t.n)}</span>
+                  <div class="track" style="flex:1;height:7px;background:#e9e7dd;border-radius:99px;overflow:hidden;">
+                    <div style="height:100%;width:${widthPct}%;background:${color};border-radius:99px;"></div>
+                  </div>
+                  <span style="font-size:12px;color:var(--ink-secondary);width:34px;text-align:right;flex-shrink:0;">${Math.round(t.p * 100)}%</span>
+                </div>
+              `;
+            }).join('');
+          })()}
+        </div>
+      ` : ''}
       ${(() => {
         const topFlavorTerps = [...s.terps].sort((a, b) => b.p - a.p).filter(t => TERPENE_FLAVOR_TAG[t.n]).slice(0, 3);
         if (!topFlavorTerps.length) return '';
@@ -792,7 +812,7 @@ function pageStrainDetail(req, res, id) {
           </div>
           ${starString(c.rating)}
           <div class="empty-note" style="padding:2px 0 0;"><span class="local-time" data-utc="${c.created_at}Z">${esc(c.created_at)} UTC</span></div>
-          ${(c.effects || []).length ? `<p style="margin:6px 0 0;">${c.effects.map(e => `<span class="filter-pill">${esc(e)}</span>`).join('')}</p>` : ''}
+          ${(c.effects || []).length ? `<p style="margin:6px 0 0;">${c.effects.map(e => `<span class="filter-pill">${EFFECT_ICON[e] ? EFFECT_ICON[e] + ' ' : ''}${esc(e)}</span>`).join('')}</p>` : ''}
           ${c.note ? `<span class="empty-note" style="display:block;padding:4px 0 0;">${esc(c.note)}</span>` : ''}
         ${renderCheckinPairings(c)}
         ${renderOnsetTimer(c)}
@@ -3783,7 +3803,7 @@ function pageFriendProfile(req, res, friendId) {
         </a>
         <div class="sub" style="margin-top:8px;">${esc(c.method)} · ${starString(c.rating)}</div>
         ${c.photo ? `<img class="photo-thumb" src="${esc(c.photo)}" alt="photo">` : ''}
-        ${(c.effects || []).length ? `<div class="effect-tags">${c.effects.map(e => `<span>${esc(e)}</span>`).join('')}</div>` : ''}
+        ${(c.effects || []).length ? `<div class="effect-tags">${c.effects.map(e => `<span>${EFFECT_ICON[e] ? EFFECT_ICON[e] + ' ' : ''}${esc(e)}</span>`).join('')}</div>` : ''}
         ${c.note ? `<div class="note">"${esc(c.note)}"</div>` : ''}
         ${renderCheckinPairings(c)}
         ${renderOnsetTimer(c)}
