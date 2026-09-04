@@ -60106,5 +60106,406 @@
       "Governmint Oasis",
       "THC Bomb"
     ]
+  },
+  {
+    "name": "Jenny Kush",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Creative",
+      "Relaxed"
+    ],
+    "flavor": "Sweet citrus and lemon over an earthy haze funk.",
+    "icon": "🌿",
+    "breeder": "Rare Dankness Seeds",
+    "parents": [
+      "Amnesia Haze",
+      "Rare Dankness #2"
+    ],
+    "id": "s1783"
+  },
+  {
+    "name": "Head Cheese",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "25-30%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "Sharp cheese and kush with chemical, citrus, and pine notes.",
+    "icon": "🌿",
+    "breeder": "",
+    "parents": [
+      "707 Headband",
+      "UK Cheese"
+    ],
+    "id": "s1784"
+  },
+  {
+    "name": "Sour Sunset",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18-24%",
+    "cbd": "<1%",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Energetic",
+      "Relaxed"
+    ],
+    "flavor": "Tropical citrus and lemon with a sour diesel edge.",
+    "icon": "🌿",
+    "breeder": "Crockett Family Farms",
+    "parents": [
+      "AJ's Sour Diesel",
+      "Secret Sherbet"
+    ],
+    "id": "s1785"
+  },
+  {
+    "name": "Modified Banana",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "28-31%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Talkative"
+    ],
+    "flavor": "Ripe banana sweetness over garlic-diesel funk.",
+    "icon": "🌿",
+    "breeder": "Skunk House Genetics",
+    "parents": [
+      "GMO",
+      "Banana OG"
+    ],
+    "id": "s1786"
+  },
+  {
+    "name": "Deadhead OG",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "20-26%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Energetic",
+      "Focused"
+    ],
+    "flavor": "Diesel fuel with pine and lemon.",
+    "icon": "🌿",
+    "breeder": "Cali Connection",
+    "parents": [
+      "Chemdawg 91",
+      "SFV OG Kush"
+    ],
+    "id": "s1787"
+  },
+  {
+    "name": "Starberry",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18-22%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Calm"
+    ],
+    "flavor": "Sweet berries with earthy pine and a hint of lemon.",
+    "icon": "🌿",
+    "breeder": "",
+    "id": "s1788"
+  },
+  {
+    "name": "Hippie Crippler",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "20-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Creative",
+      "Relaxed",
+      "Uplifted"
+    ],
+    "flavor": "Sweet berry and citrus finishing with light wood.",
+    "icon": "🌿",
+    "breeder": "",
+    "parents": [
+      "AK-47",
+      "Blue Satellite"
+    ],
+    "id": "s1789"
+  },
+  {
+    "name": "Duct Tape",
+    "type": "Hybrid",
+    "rarity": "uncommon",
+    "thc": "20-27%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Sleepy",
+      "Euphoric"
+    ],
+    "flavor": "Diesel and skunk with a peppery finish.",
+    "icon": "🌿",
+    "breeder": "Archive Seed Bank",
+    "parents": [
+      "Gorilla Glue #4",
+      "Do-Si-Dos"
+    ],
+    "id": "s1790"
+  },
+  {
+    "name": "Fruit Pie",
+    "type": "Hybrid",
+    "rarity": "uncommon",
+    "thc": "25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Relaxed",
+      "Euphoric"
+    ],
+    "flavor": "Sweet, fresh fruit over an earthy base with a minty edge.",
+    "icon": "🌿",
+    "breeder": "Green Team Genetics",
+    "parents": [
+      "Fruitbound",
+      "Pie 95"
+    ],
+    "id": "s1791"
+  },
+  {
+    "name": "Cherry Death Star",
+    "type": "Hybrid",
+    "rarity": "uncommon",
+    "thc": "25-31%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Creative"
+    ],
+    "flavor": "Sweet cherry over peppery diesel.",
+    "icon": "🌿",
+    "breeder": "",
+    "parents": [
+      "Cherry Pie",
+      "Death Star"
+    ],
+    "id": "s1792"
+  },
+  {
+    "name": "TK Stardawg Haze",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "23-24%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Euphoric",
+      "Creative"
+    ],
+    "flavor": "Sour citrus and pine with a musky, gassy edge.",
+    "icon": "🌿",
+    "breeder": "",
+    "parents": [
+      "Stardawg",
+      "Triangle Kush"
+    ],
+    "id": "s1793"
+  },
+  {
+    "name": "Pre-Soviet Tahoe",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-22%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Creative",
+      "Happy"
+    ],
+    "flavor": "Sour citrus lemon-lime with a spicy, coffee-like finish.",
+    "icon": "🌿",
+    "breeder": "",
+    "parents": [
+      "Tahoe OG",
+      "Pre-Soviet Afghan"
+    ],
+    "id": "s1794"
+  },
+  {
+    "name": "Chem Cage",
+    "type": "Hybrid",
+    "rarity": "uncommon",
+    "thc": "15-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed"
+    ],
+    "flavor": "Sour citrus and chemical notes with grassy kush and black pepper.",
+    "icon": "🌿",
+    "breeder": "",
+    "id": "s1795"
+  },
+  {
+    "name": "Sour Banana Sherbert",
+    "type": "Hybrid",
+    "rarity": "uncommon",
+    "thc": "18-24%",
+    "cbd": "<1%",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Focused"
+    ],
+    "flavor": "Sour diesel with sweet, creamy banana.",
+    "icon": "🌿",
+    "breeder": "Crockett Family Farms",
+    "parents": [
+      "Sour Diesel",
+      "Banana Sherbet"
+    ],
+    "id": "s1796"
+  },
+  {
+    "name": "BlackJack",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "16-24%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Creative",
+      "Energetic",
+      "Relaxed"
+    ],
+    "flavor": "Sweet and woody with pine, spice, and lemon.",
+    "icon": "🌿",
+    "breeder": "",
+    "parents": [
+      "Jack Herer",
+      "Black Domina"
+    ],
+    "id": "s1797"
+  },
+  {
+    "name": "Orange Daiquiri",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "23%",
+    "cbd": "<1%",
+    "terps": [],
+    "effects": [
+      "Focused",
+      "Creative",
+      "Relaxed"
+    ],
+    "flavor": "Sweet orange citrus with pine and diesel.",
+    "icon": "🌿",
+    "breeder": "Cannarado Genetics",
+    "parents": [
+      "Orange Cookies",
+      "Grape Pie"
+    ],
+    "id": "s1798"
+  },
+  {
+    "name": "Fruity P Cookies",
+    "type": "Hybrid",
+    "rarity": "uncommon",
+    "thc": "17-20%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Creative",
+      "Relaxed"
+    ],
+    "flavor": "Sweet, fruity, and woody with a sour citrus exhale.",
+    "icon": "🌿",
+    "breeder": "",
+    "parents": [
+      "Fruity OG",
+      "Blueberry Cookies"
+    ],
+    "id": "s1799"
+  },
+  {
+    "name": "Jungle Cookies",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-26%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Happy"
+    ],
+    "flavor": "Sweet and nutty with gassy, kushy diesel undertones.",
+    "icon": "🌿",
+    "breeder": "The Plug Genetics",
+    "parents": [
+      "GSC",
+      "Jungle Kush"
+    ],
+    "id": "s1800"
+  },
+  {
+    "name": "Resting Bitch Face",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "22-30%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Happy",
+      "Euphoric"
+    ],
+    "flavor": "Sweet, sour citrus and lemon-pine with a spicy exhale.",
+    "icon": "🌿",
+    "breeder": "",
+    "parents": [
+      "Flo White #7",
+      "TK91"
+    ],
+    "id": "s1801"
   }
 ]
