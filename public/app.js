@@ -202,6 +202,29 @@ async function likeGrowTip(id, btn) {
     partial: { icon: '🔹', label: 'Partially verified' },
     listed: { icon: '⚪', label: 'Listed only' },
   };
+  // Mirrors EFFECT_ICON in server.js -- kept in sync manually since this
+  // page's live search re-renders results entirely client-side. Update
+  // both together if an icon ever changes.
+  const EFFECT_ICON = {
+    Relaxed: '😌', Happy: '😊', Euphoric: '🤩', Uplifted: '🎈', Creative: '🎨',
+    Energetic: '⚡', Focused: '🎯', Talkative: '💬', Sleepy: '😴', Hungry: '🍕',
+    Calm: '🕊️', 'Clear-headed': '🧠', Giggly: '😄', Social: '👥', Tingly: '✨',
+    Aroused: '💗', Anxious: '😟', Paranoid: '👀', 'Dry Mouth': '🥤', 'Dry Eyes': '👁️',
+    Dizzy: '💫', Mellow: '🍃', Chill: '🧊', 'Zoned-out': '🌀', Introspective: '🪞',
+    Blissful: '😇', Sedated: '💤', 'Couch-locked': '🛋️', Buzzy: '🔋', Floaty: '🎈',
+    Grounded: '🌳', Present: '🧘', Warm: '☀️', 'Light-headed': '💫', 'Heavy-limbed': '🏋️',
+    Alert: '👀', Sharp: '🔪', Inspired: '💡', Playful: '🎉', Silly: '🤪',
+    Confident: '💪', Chatty: '🗣️', Cuddly: '🤗', Dreamy: '💭', Nostalgic: '📼',
+    Peaceful: '🕊️', Serene: '🌊', Refreshed: '🌿', Rejuvenated: '🌱', Cozy: '🧸',
+    Sociable: '🎊', Easygoing: '🌤️', Adventurous: '🧭', Curious: '🔍', Observant: '👁️',
+    'In-the-zone': '🎯', Productive: '✅', Wired: '🔌', Jittery: '⚡', Foggy: '🌫️',
+    Groggy: '🥱', Spacey: '🌌', Munchies: '🍔', Thirsty: '🥤', 'Red-eyed': '👁️',
+    Lightweight: '🪶', 'Heavy-eyed': '😑', Yawny: '🥱', Motivated: '🚀', Amorous: '💕',
+    Loose: '🎐', 'Free-spirited': '🦋', Tranquil: '🌅', Elevated: '🎈', Airy: '☁️',
+    'Slowed-down': '🐌', Spirited: '🔥', 'Numb (localized)': '🧊',
+    'Stress relief': '🧘', 'Pain relief': '💊', 'Sleep support': '🌙', 'Nausea relief': '🍵',
+    'Appetite boost': '🍽️', 'Inflammation relief': '❄️', 'Muscle relief': '💆', 'Mood lift': '☀️',
+  };
   function verifiedTier(s) {
     const hasThc = !!s.thc;
     const hasBreeder = !!s.breeder;
@@ -214,11 +237,12 @@ async function likeGrowTip(id, btn) {
 
   function renderRow(s) {
     const badge = verifiedBadges[verifiedTier(s)];
+    const effectIcon = s.effects && s.effects[0] && EFFECT_ICON[s.effects[0]] ? EFFECT_ICON[s.effects[0]] + ' ' : '';
     return `
       <a class="library-row" href="/strains/${s.id}" style="text-decoration:none;color:inherit;">
         <span class="icon">${s.icon}</span>
         <div class="info">
-          <div class="nm">${escHtml(s.name)} <span title="${escHtml(badge.label)}">${badge.icon}</span></div>
+          <div class="nm">${effectIcon}${escHtml(s.name)} <span title="${escHtml(badge.label)}">${badge.icon}</span></div>
           <div class="sub">${escHtml(s.type)} · ${rarityLabel(s.rarity)} · THC ${escHtml(s.thc)}</div>
         </div>
         <span class="rarity-tag rarity-${s.rarity}">${rarityLabel(s.rarity)}</span>
@@ -426,7 +450,7 @@ if ('serviceWorker' in navigator) {
     searchInput.disabled = atMax;
     searchInput.placeholder = atMax ? 'Max 5 selected — remove one to add another' : 'Search 85+ moods, feelings & relief tags...';
     chipsBox.innerHTML = selected.map(e =>
-      `<span class="tag-chip">${e} <button type="button" data-remove="${e}">✕</button></span>`
+      `<span class="tag-chip">${window.EFFECT_ICON && window.EFFECT_ICON[e] ? window.EFFECT_ICON[e] + ' ' : ''}${e} <button type="button" data-remove="${e}">✕</button></span>`
     ).join('');
     hiddenBox.innerHTML = selected.map(e => `<input type="hidden" name="effects" value="${e}">`).join('');
     noteBox.textContent = `${selected.length} of 5 selected`;
@@ -441,7 +465,7 @@ if ('serviceWorker' in navigator) {
     if (!q) { resultsBox.classList.remove('open'); resultsBox.innerHTML = ''; return; }
     const matches = window.EFFECT_VOCAB.filter(e => !selected.includes(e) && e.toLowerCase().includes(q)).slice(0, 8);
     resultsBox.innerHTML = matches.length
-      ? matches.map(e => `<div class="search-result-row" data-add="${e}">${e}</div>`).join('')
+      ? matches.map(e => `<div class="search-result-row" data-add="${e}">${window.EFFECT_ICON && window.EFFECT_ICON[e] ? window.EFFECT_ICON[e] + ' ' : ''}${e}</div>`).join('')
       : `<div class="search-no-results">No matches</div>`;
     resultsBox.classList.add('open');
     resultsBox.querySelectorAll('[data-add]').forEach(row => {

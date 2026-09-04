@@ -298,6 +298,15 @@ function effectEnergyPercent(effects) {
   const avg = scores.reduce((a, b) => a + b, 0) / scores.length;
   return Math.round(((avg + 1) / 2) * 100);
 }
+// A condensed version of the calming/energizing spectrum bar for tight
+// spaces (comparison table cells, recommendation cards) -- just a thin
+// track with a single dot marker, no labels. Returns '' when a strain
+// has no usable effect data, same rule as the full-size bar.
+function renderMiniEnergyBar(effects) {
+  const pct = effectEnergyPercent(effects);
+  if (pct === null) return '';
+  return `<div class="mini-spectrum" title="Calming ↔ Energizing"><div class="track"><div class="dot" style="left:${pct}%;"></div></div></div>`;
+}
 // Parses a THC string like "20-25%", "23%", or "88-93%" into a 0-100 bar
 // position. Anything at or above THC_BAR_CEILING reads as fully "high" --
 // this is a flower-scaled bar, so a concentrate-potency strain (Live
@@ -337,6 +346,14 @@ const TERPENE_COLOR = {
   Myrcene: '#4a5fc1', Caryophyllene: '#c0397a', Pinene: '#3d8b52', Limonene: '#d4a017',
   Linalool: '#8a63c9', Humulene: '#8a6d4a', Terpinolene: '#2a9d8f', Ocimene: '#e07b39',
 };
+// The color of a strain's single most-dominant terpene (by percentage),
+// for a quick visual hint on cards where there's no room for a full
+// terpene breakdown. Returns null for a strain with no terpene data.
+function dominantTerpColor(terps) {
+  if (!terps || !terps.length) return null;
+  const top = [...terps].sort((a, b) => b.p - a.p)[0];
+  return TERPENE_COLOR[top.n] || null;
+}
 // One small icon per mood/effect tag, shown next to the effect's name
 // wherever it's displayed on a strain's page.
 const EFFECT_ICON = {
@@ -518,8 +535,9 @@ function pageHome(req, res) {
       ${recs.map(r => `
         <a class="rec-card rarity-${r.s.rarity}" href="/strains/${r.s.id}">
           ${strainPhotoTag(r.s, 'sm')}
-          <span class="n">${esc(r.s.name)}</span>
+          <span class="n">${(() => { const c = dominantTerpColor(r.s.terps); return c ? `<span class="terp-dot" style="background:${c};"></span>` : ''; })()}${esc(r.s.name)}</span>
           <span class="why">${r.why ? 'Because you like ' + esc(r.why) : 'New for you'}</span>
+          ${renderMiniEnergyBar(r.s.effects)}
         </a>`).join('')}
     </div>
 
@@ -622,7 +640,7 @@ function pageStrains(req, res, query) {
       <a class="library-row" href="/strains/${s.id}" style="text-decoration:none;color:inherit;">
         ${strainPhotoTag(s, 'sm')}
         <div class="info">
-          <div class="nm">${esc(s.name)} <span title="${esc(VERIFICATION_BADGE[strainVerificationTier(s)].label)}">${VERIFICATION_BADGE[strainVerificationTier(s)].icon}</span></div>
+          <div class="nm">${s.effects[0] && EFFECT_ICON[s.effects[0]] ? EFFECT_ICON[s.effects[0]] + ' ' : ''}${esc(s.name)} <span title="${esc(VERIFICATION_BADGE[strainVerificationTier(s)].label)}">${VERIFICATION_BADGE[strainVerificationTier(s)].icon}</span></div>
           <div class="sub">${esc(s.type)} · ${rarityLabel(s.rarity)} · THC ${esc(s.thc)}</div>
         </div>
         <span class="rarity-tag rarity-${s.rarity}">${rarityLabel(s.rarity)}</span>
@@ -795,8 +813,9 @@ function pageStrainDetail(req, res, id) {
         ${similar.map(r => `
           <a class="rec-card rarity-${r.s.rarity}" href="/strains/${r.s.id}">
             ${strainPhotoTag(r.s, 'sm')}
-            <span class="n">${esc(r.s.name)}</span>
+            <span class="n">${(() => { const c = dominantTerpColor(r.s.terps); return c ? `<span class="terp-dot" style="background:${c};"></span>` : ''; })()}${esc(r.s.name)}</span>
             <span class="why">${r.why ? 'Shares ' + esc(r.why) : 'Similar profile'}</span>
+            ${renderMiniEnergyBar(r.s.effects)}
           </a>`).join('')}
       </div>
     ` : ''}
@@ -1005,6 +1024,7 @@ function pageCheckinForm(req, res, query, existing) {
     ` : ''}
     <script>
       window.EFFECT_VOCAB = ${JSON.stringify(EFFECT_VOCAB)};
+      window.EFFECT_ICON = ${JSON.stringify(EFFECT_ICON)};
       window.INITIAL_EFFECTS = ${JSON.stringify(existing ? existing.effects || [] : [])};
       window.INITIAL_PHOTO = ${JSON.stringify(existing ? existing.photo || '' : '')};
       window.EDIBLE_METHODS = ${JSON.stringify(METHOD_GROUPS.find(g => g.group === 'Edibles').items)};
@@ -1881,6 +1901,13 @@ function pageCompare(req, res, query) {
             <td style="padding:8px 6px;vertical-align:top;">${esc(av)}</td>
             <td style="padding:8px 6px;vertical-align:top;">${esc(bv)}</td>
           </tr>`).join('')}
+        ${(renderMiniEnergyBar(a.effects) || renderMiniEnergyBar(b.effects)) ? `
+          <tr style="border-bottom:1px solid var(--border);">
+            <td style="padding:8px 6px;font-weight:700;color:var(--ink-secondary);width:28%;vertical-align:top;">Feel</td>
+            <td style="padding:8px 6px;vertical-align:top;">${renderMiniEnergyBar(a.effects)}</td>
+            <td style="padding:8px 6px;vertical-align:top;">${renderMiniEnergyBar(b.effects)}</td>
+          </tr>
+        ` : ''}
       </table>
     ` : `<div class="empty-note">Pick a strain in each box above to compare them.</div>`}
   `;
@@ -3495,7 +3522,7 @@ function pageCollection(req, res, query) {
           ${o.copies > 1 ? `<div class="copies">×${o.copies}</div>` : ''}
           <div class="card-rarity-tag">${rarityLabel(o.strain.rarity)}</div>
           ${strainPhotoTag(o.strain, 'md')}
-          <div class="name">${esc(o.strain.name)}</div>
+          <div class="name">${(() => { const c = dominantTerpColor(o.strain.terps); return c ? `<span class="terp-dot" style="background:${c};"></span>` : ''; })()}${esc(o.strain.name)}</div>
         </a>`).join('') || `<div class="empty-note">No cards match those filters.</div>`}
     </div>` : `<div class="empty-note">No cards caught yet — <a href="/checkin">log a check-in</a> to unlock your first one.</div>`}
   `;
