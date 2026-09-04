@@ -354,6 +354,54 @@ function dominantTerpColor(terps) {
   const top = [...terps].sort((a, b) => b.p - a.p)[0];
   return TERPENE_COLOR[top.n] || null;
 }
+// Average of a THC range string like "20-25%" -> 22.5. Returns null if
+// the field is blank -- used only for the similarity score below, kept
+// separate from thcBarPercent() since that one needs a 0-100 bar
+// position, not a raw percentage.
+function thcAverage(thcStr) {
+  if (!thcStr) return null;
+  const nums = String(thcStr).match(/\d+(\.\d+)?/g);
+  if (!nums || !nums.length) return null;
+  return nums.map(Number).reduce((a, b) => a + b, 0) / nums.length;
+}
+// A transparent, explainable "how similar are these two strains"
+// percentage for the Compare page. Combines type match, effect overlap,
+// terpene overlap, and THC closeness -- each only counted if BOTH
+// strains actually have that data, with the remaining weights
+// renormalized so a strain missing one field isn't unfairly marked
+// "dissimilar" on it. Returns null only if there's no comparable data
+// between the two at all.
+function strainSimilarity(a, b) {
+  let totalWeight = 0, weightedScore = 0;
+
+  totalWeight += 20;
+  weightedScore += 20 * (a.type === b.type ? 1 : 0.3);
+
+  if (a.effects.length && b.effects.length) {
+    const setA = new Set(a.effects), setB = new Set(b.effects);
+    const intersection = [...setA].filter(x => setB.has(x)).length;
+    const union = new Set([...setA, ...setB]).size;
+    totalWeight += 35;
+    weightedScore += 35 * (union > 0 ? intersection / union : 0);
+  }
+
+  if (a.terps.length && b.terps.length) {
+    const setA = new Set(a.terps.map(t => t.n)), setB = new Set(b.terps.map(t => t.n));
+    const intersection = [...setA].filter(x => setB.has(x)).length;
+    const union = new Set([...setA, ...setB]).size;
+    totalWeight += 30;
+    weightedScore += 30 * (union > 0 ? intersection / union : 0);
+  }
+
+  const aThc = thcAverage(a.thc), bThc = thcAverage(b.thc);
+  if (aThc !== null && bThc !== null) {
+    totalWeight += 15;
+    weightedScore += 15 * Math.max(0, 1 - Math.abs(aThc - bThc) / 30);
+  }
+
+  if (totalWeight === 0) return null;
+  return Math.round((weightedScore / totalWeight) * 100);
+}
 // One small icon per mood/effect tag, shown next to the effect's name
 // wherever it's displayed on a strain's page.
 const EFFECT_ICON = {
@@ -519,6 +567,9 @@ function pageHome(req, res) {
   const recentCheckins = db.filterVisibleCheckins(db.listCheckins({ userIds: feedUserIds, limit: 30 }), userId).slice(0, 15);
   const recs = getRecommendations(userId, 4);
   const hasFollowedDispensaries = db.anyDispensaryFollowed(userId);
+  const ownedForLegend = db.getCollection(userId);
+  const homeRarityCounts = { common: 0, uncommon: 0, rare: 0, legendary: 0 };
+  ownedForLegend.forEach(o => { if (homeRarityCounts[o.strain.rarity] != null) homeRarityCounts[o.strain.rarity]++; });
   // "Welcome back" doesn't make sense the very first time someone lands
   // here right after signing up -- check whether this account has ever
   // actually logged a check-in of its own before deciding which greeting
@@ -544,7 +595,17 @@ function pageHome(req, res) {
     <div class="section-label">Dispensaries</div>
     <a class="btn secondary block" href="/dispensaries" style="text-decoration:none;margin-bottom:4px;">${hasFollowedDispensaries ? '📍 View your followed dispensaries →' : '📍 Find real dispensaries near you →'}</a>
 
-    <h2 class="screen-title" style="margin-top:20px;">${friends.length ? 'Recent activity' : 'Recent check-ins'}</h2>
+    ${ownedForLegend.length ? `
+      <a href="/collection" style="text-decoration:none;color:inherit;">
+        <div class="rarity-mini-legend" style="margin-top:20px;margin-bottom:2px;">
+          <span><span class="dot common"></span>Common ${homeRarityCounts.common}</span>
+          <span><span class="dot uncommon"></span>Uncommon ${homeRarityCounts.uncommon}</span>
+          <span><span class="dot rare"></span>Rare ${homeRarityCounts.rare}</span>
+          <span><span class="dot legendary"></span>Legendary ${homeRarityCounts.legendary}</span>
+        </div>
+      </a>
+    ` : ''}
+    <h2 class="screen-title" style="margin-top:${ownedForLegend.length ? '4px' : '20px'};">${friends.length ? 'Recent activity' : 'Recent check-ins'}</h2>
     ${friends.length && recentCheckins.every(c => c.user_id === userId) ? `<p class="empty-note">None of your friends have checked in yet — once they do, it'll show up here too.</p>` : ''}
     ${recentCheckins.length ? recentCheckins.map(c => {
       const s = db.getStrain(c.strain_id);
@@ -637,7 +698,7 @@ function pageStrains(req, res, query) {
     <p class="empty-note" style="margin-bottom:10px;">User-reported associations, not medical advice — see a doctor for real guidance.</p>
     <p class="empty-note" id="strain-search-count">${total.toLocaleString()} strain${total === 1 ? '' : 's'}</p>
     <div id="strain-search-results">${results.map(s => `
-      <a class="library-row" href="/strains/${s.id}" style="text-decoration:none;color:inherit;">
+      <a class="library-row tier-${strainVerificationTier(s)}" href="/strains/${s.id}" style="text-decoration:none;color:inherit;">
         ${strainPhotoTag(s, 'sm')}
         <div class="info">
           <div class="nm">${s.effects[0] && EFFECT_ICON[s.effects[0]] ? EFFECT_ICON[s.effects[0]] + ' ' : ''}${esc(s.name)} <span title="${esc(VERIFICATION_BADGE[strainVerificationTier(s)].label)}">${VERIFICATION_BADGE[strainVerificationTier(s)].icon}</span></div>
@@ -1893,6 +1954,15 @@ function pageCompare(req, res, query) {
       ${pickerBox('a', a)}
       ${pickerBox('b', b)}
     </div>
+    ${a && b ? (() => {
+      const sim = strainSimilarity(a, b);
+      return sim === null ? '' : `
+        <div class="card" style="text-align:center;margin-bottom:12px;">
+          <div style="font-size:26px;font-weight:800;color:var(--brand-green-dark);">${sim}%</div>
+          <div class="empty-note" style="padding:2px 0 0;">similar vibe, based on type, effects, terpenes, and THC</div>
+        </div>
+      `;
+    })() : ''}
     ${a && b ? `
       <table style="width:100%;border-collapse:collapse;font-size:13px;">
         ${rows.map(([label, av, bv]) => `

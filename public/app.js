@@ -236,10 +236,11 @@ async function likeGrowTip(id, btn) {
   }
 
   function renderRow(s) {
-    const badge = verifiedBadges[verifiedTier(s)];
+    const tier = verifiedTier(s);
+    const badge = verifiedBadges[tier];
     const effectIcon = s.effects && s.effects[0] && EFFECT_ICON[s.effects[0]] ? EFFECT_ICON[s.effects[0]] + ' ' : '';
     return `
-      <a class="library-row" href="/strains/${s.id}" style="text-decoration:none;color:inherit;">
+      <a class="library-row tier-${tier}" href="/strains/${s.id}" style="text-decoration:none;color:inherit;">
         <span class="icon">${s.icon}</span>
         <div class="info">
           <div class="nm">${effectIcon}${escHtml(s.name)} <span title="${escHtml(badge.label)}">${badge.icon}</span></div>

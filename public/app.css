@@ -72,6 +72,9 @@ form .btn{margin-top:14px;}
 @keyframes kudosPulse{0%{transform:scale(1);}40%{transform:scale(1.15);}100%{transform:scale(1);}}
 .kudos-pulse{animation:kudosPulse 0.35s ease;}
 .library-row{display:flex;align-items:center;gap:9px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:9px 11px;margin-bottom:7px;box-shadow:var(--shadow);transition:transform 0.1s;}
+.library-row.tier-verified{border-left:4px solid var(--brand-green-dark);}
+.library-row.tier-partial{border-left:4px solid var(--brand-gold);}
+.library-row.tier-listed{border-left:4px solid var(--border);}
 a.library-row:active{transform:scale(0.98);}
 .library-row .icon{font-size:22px;flex-shrink:0;}
 .strain-thumb{object-fit:cover;border-radius:8px;flex-shrink:0;background:#e5e0d5;}
