@@ -60721,5 +60721,131 @@
     "icon": "🌿",
     "breeder": "",
     "id": "s1811"
+  },
+  {
+    "name": "Strange Haze #8",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "26-31%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Uplifted",
+      "Creative"
+    ],
+    "flavor": "Pungent pine and lemon with a peppery, earthy edge.",
+    "icon": "🌿",
+    "breeder": "Srene",
+    "parents": [
+      "Nigerian Haze",
+      "Garlic Breath"
+    ],
+    "id": "s1812"
+  },
+  {
+    "name": "007 Up",
+    "type": "Hybrid",
+    "rarity": "uncommon",
+    "thc": "22-29%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Energetic",
+      "Creative"
+    ],
+    "flavor": "Tangy lemon-lime with a creamy vanilla sweetness and pine.",
+    "icon": "🌿",
+    "breeder": "",
+    "parents": [
+      "Lemon Tree",
+      "White OG"
+    ],
+    "id": "s1813"
+  },
+  {
+    "name": "Dosi Woah",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-26%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Happy"
+    ],
+    "flavor": "Classic gas over earth and pine with a nutty sweetness.",
+    "icon": "🌿",
+    "breeder": "Ethos Genetics",
+    "parents": [
+      "Do-Si-Dos",
+      "Kush RBx4"
+    ],
+    "id": "s1814"
+  },
+  {
+    "name": "Ocean Beach",
+    "type": "Hybrid",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Talkative",
+      "Happy"
+    ],
+    "flavor": "Sweet fruit tart with kush undertones.",
+    "icon": "🌿",
+    "breeder": "Cookies",
+    "id": "s1815"
+  },
+  {
+    "name": "Miss X",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "30-38%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Energetic",
+      "Focused"
+    ],
+    "flavor": "Sour lemon diesel with sweet, grassy notes.",
+    "icon": "🌿",
+    "breeder": "",
+    "parents": [
+      "Mr. X",
+      "AC/DC"
+    ],
+    "id": "s1816"
+  },
+  {
+    "name": "Sherb Cake",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "22-28%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric"
+    ],
+    "flavor": "Sweet, creamy sherbet with a gassy finish.",
+    "icon": "🌿",
+    "breeder": "Seed Junky Genetics",
+    "parents": [
+      "Sunset Sherbet",
+      "Wedding Cake"
+    ],
+    "id": "s1817"
   }
 ]
