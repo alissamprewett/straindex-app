@@ -313,6 +313,53 @@ function thcBarPercent(thcStr) {
   return Math.min(100, Math.round((avg / THC_BAR_CEILING) * 100));
 }
 
+// A short flavor-family tag + icon per terpene, used to build a "Top
+// Flavors" section directly from a strain's real, already-verified
+// terpene percentages -- rather than trying to re-derive flavor tags by
+// keyword-guessing the free-text flavor sentence, which risks reading
+// something into it that isn't really there. A strain with no terpene
+// data on file simply doesn't get this section, same principle as the
+// spectrum bars above.
+const TERPENE_FLAVOR_TAG = {
+  Myrcene: { label: 'Earthy', icon: '🌍' },
+  Linalool: { label: 'Floral', icon: '🌸' },
+  Limonene: { label: 'Citrus', icon: '🍋' },
+  Caryophyllene: { label: 'Peppery', icon: '🌶️' },
+  Pinene: { label: 'Piney', icon: '🌲' },
+  Humulene: { label: 'Woody', icon: '🪵' },
+  Terpinolene: { label: 'Herbal', icon: '🌿' },
+  Ocimene: { label: 'Sweet', icon: '🍯' },
+};
+// A consistent color per terpene, used for the small dot next to each
+// name in the "Top terpenes" line -- same terpene always gets the same
+// color everywhere it appears on a strain's page.
+const TERPENE_COLOR = {
+  Myrcene: '#4a5fc1', Caryophyllene: '#c0397a', Pinene: '#3d8b52', Limonene: '#d4a017',
+  Linalool: '#8a63c9', Humulene: '#8a6d4a', Terpinolene: '#2a9d8f', Ocimene: '#e07b39',
+};
+// One small icon per mood/effect tag, shown next to the effect's name
+// wherever it's displayed on a strain's page.
+const EFFECT_ICON = {
+  Relaxed: '😌', Happy: '😊', Euphoric: '🤩', Uplifted: '🎈', Creative: '🎨',
+  Energetic: '⚡', Focused: '🎯', Talkative: '💬', Sleepy: '😴', Hungry: '🍕',
+  Calm: '🕊️', 'Clear-headed': '🧠', Giggly: '😄', Social: '👥', Tingly: '✨',
+  Aroused: '💗', Anxious: '😟', Paranoid: '👀', 'Dry Mouth': '🥤', 'Dry Eyes': '👁️',
+  Dizzy: '💫', Mellow: '🍃', Chill: '🧊', 'Zoned-out': '🌀', Introspective: '🪞',
+  Blissful: '😇', Sedated: '💤', 'Couch-locked': '🛋️', Buzzy: '🔋', Floaty: '🎈',
+  Grounded: '🌳', Present: '🧘', Warm: '☀️', 'Light-headed': '💫', 'Heavy-limbed': '🏋️',
+  Alert: '👀', Sharp: '🔪', Inspired: '💡', Playful: '🎉', Silly: '🤪',
+  Confident: '💪', Chatty: '🗣️', Cuddly: '🤗', Dreamy: '💭', Nostalgic: '📼',
+  Peaceful: '🕊️', Serene: '🌊', Refreshed: '🌿', Rejuvenated: '🌱', Cozy: '🧸',
+  Sociable: '🎊', Easygoing: '🌤️', Adventurous: '🧭', Curious: '🔍', Observant: '👁️',
+  'In-the-zone': '🎯', Productive: '✅', Wired: '🔌', Jittery: '⚡', Foggy: '🌫️',
+  Groggy: '🥱', Spacey: '🌌', Munchies: '🍔', Thirsty: '🥤', 'Red-eyed': '👁️',
+  Lightweight: '🪶', 'Heavy-eyed': '😑', Yawny: '🥱', Motivated: '🚀', Amorous: '💕',
+  Loose: '🎐', 'Free-spirited': '🦋', Tranquil: '🌅', Elevated: '🎈', Airy: '☁️',
+  'Slowed-down': '🐌', Spirited: '🔥', 'Numb (localized)': '🧊',
+  'Stress relief': '🧘', 'Pain relief': '💊', 'Sleep support': '🌙', 'Nausea relief': '🍵',
+  'Appetite boost': '🍽️', 'Inflammation relief': '❄️', 'Muscle relief': '💆', 'Mood lift': '☀️',
+};
+
 // A small original cartoon-bud icon used on kudos buttons — hand-drawn SVG,
 // not a stock asset, so there's no licensing question about using it.
 const KUDOS_BUD_ICON = `<img src="/docs/leaf-kudos.png" alt="" width="15" height="15" style="vertical-align:-3px;margin-right:4px;">`;
@@ -658,8 +705,13 @@ function pageStrainDetail(req, res, id) {
       ${(s.thc || s.cbd) ? `<p style="margin:12px 0 4px;">${s.thc ? `<b>THC:</b> ${esc(s.thc)}` : ''}${s.thc && s.cbd ? ' &nbsp; ' : ''}${s.cbd ? `<b>CBD:</b> ${esc(s.cbd)}` : ''}</p>` : `<p class="empty-note" style="padding:0 0 4px;">No verified THC/CBD data for this strain yet.</p>`}
       ${s.breeder ? `<p class="empty-note" style="padding:0;"><b>Bred by:</b> ${esc(s.breeder)}</p>` : ''}
       ${s.flavor ? `<p style="font-style:italic;color:var(--ink-secondary);">"${esc(s.flavor)}"</p>` : ''}
-      <p>${s.effects.map(e => `<span class="filter-pill">${esc(e)}</span>`).join('')}</p>
-      ${s.terps.length ? `<p><b>Top terpenes:</b> ${s.terps.map(t => `${esc(t.n)} (${Math.round(t.p * 100)}%)`).join(', ')}</p>` : ''}
+      <p>${s.effects.map(e => `<span class="filter-pill">${EFFECT_ICON[e] ? EFFECT_ICON[e] + ' ' : ''}${esc(e)}</span>`).join('')}</p>
+      ${s.terps.length ? `<p><b>Top terpenes:</b> ${s.terps.map(t => `<span class="terp-dot" style="background:${TERPENE_COLOR[t.n] || 'var(--ink-muted)'};"></span>${esc(t.n)} (${Math.round(t.p * 100)}%)`).join(', ')}</p>` : ''}
+      ${(() => {
+        const topFlavorTerps = [...s.terps].sort((a, b) => b.p - a.p).filter(t => TERPENE_FLAVOR_TAG[t.n]).slice(0, 3);
+        if (!topFlavorTerps.length) return '';
+        return `<p><b>Top flavors:</b> ${topFlavorTerps.map(t => `<span class="filter-pill">${TERPENE_FLAVOR_TAG[t.n].icon} ${TERPENE_FLAVOR_TAG[t.n].label}</span>`).join('')}</p>`;
+      })()}
       ${(() => {
         const energyPct = effectEnergyPercent(s.effects);
         const thcPct = thcBarPercent(s.thc);
