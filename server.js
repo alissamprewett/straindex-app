@@ -262,6 +262,57 @@ function renderCheckinComments(c, userId, redirectPath) {
 // A small original cartoon-bud icon used on kudos buttons — hand-drawn SVG,
 // not a stock asset, so there's no licensing question about using it.
 function rarityLabel(r) { return { common: 'Common', uncommon: 'Uncommon', rare: 'Rare', legendary: 'Legendary' }[r] || r; }
+
+// Maps each mood/effect tag to a position on a calming <-> energizing
+// spectrum, from -1 (deeply calming) to +1 (highly energizing). Used to
+// compute the visual bar on a strain's detail page. Genuine side-effect
+// tags (Dry Mouth, Paranoid, Red-eyed...) and relief tags (Pain relief,
+// Nausea relief...) are left out of this map entirely rather than forced
+// into a direction they don't really have -- they're skipped when
+// averaging, not counted as neutral, since neutral would still be a
+// claim about them that isn't really true.
+const EFFECT_ENERGY_MAP = {
+  'Energetic': 1, 'Wired': 1, 'Alert': 1, 'Motivated': 1, 'Spirited': 1, 'Jittery': 1,
+  'Uplifted': 0.7, 'Talkative': 0.7, 'Focused': 0.7, 'Chatty': 0.7, 'Social': 0.7,
+  'Sociable': 0.7, 'Productive': 0.7, 'In-the-zone': 0.7, 'Adventurous': 0.7,
+  'Curious': 0.7, 'Sharp': 0.7, 'Confident': 0.7, 'Elevated': 0.7,
+  'Euphoric': 0.4, 'Creative': 0.4, 'Giggly': 0.4, 'Playful': 0.4, 'Silly': 0.4,
+  'Inspired': 0.4, 'Refreshed': 0.4, 'Rejuvenated': 0.4, 'Buzzy': 0.4, 'Loose': 0.4,
+  'Free-spirited': 0.4,
+  'Happy': 0, 'Blissful': 0, 'Present': 0, 'Grounded': 0, 'Warm': 0, 'Observant': 0,
+  'Airy': 0, 'Introspective': 0, 'Dreamy': 0, 'Nostalgic': 0, 'Cuddly': 0, 'Cozy': 0,
+  'Easygoing': 0, 'Clear-headed': 0,
+  'Calm': -0.4, 'Mellow': -0.4, 'Chill': -0.4, 'Peaceful': -0.4, 'Serene': -0.4,
+  'Tranquil': -0.4, 'Floaty': -0.4, 'Light-headed': -0.4,
+  'Relaxed': -0.7, 'Sedated': -0.7, 'Groggy': -0.7, 'Spacey': -0.7, 'Foggy': -0.7,
+  'Zoned-out': -0.7, 'Heavy-limbed': -0.7, 'Slowed-down': -0.7, 'Heavy-eyed': -0.7,
+  'Yawny': -0.7,
+  'Sleepy': -1, 'Couch-locked': -1,
+};
+// Returns 0-100 (0 = fully calming end, 100 = fully energizing end) or
+// null if none of the strain's tagged effects have a mapped direction --
+// showing no bar at all is more honest than a fake halfway point.
+function effectEnergyPercent(effects) {
+  const scores = (effects || []).map(e => EFFECT_ENERGY_MAP[e]).filter(v => v !== undefined);
+  if (!scores.length) return null;
+  const avg = scores.reduce((a, b) => a + b, 0) / scores.length;
+  return Math.round(((avg + 1) / 2) * 100);
+}
+// Parses a THC string like "20-25%", "23%", or "88-93%" into a 0-100 bar
+// position. Anything at or above THC_BAR_CEILING reads as fully "high" --
+// this is a flower-scaled bar, so a concentrate-potency strain (Live
+// Rosin, Liquid Diamonds...) simply pins to the right edge rather than
+// needing its own separate scale. Returns null for strains with no THC
+// data on file, rather than guessing a position.
+const THC_BAR_CEILING = 35;
+function thcBarPercent(thcStr) {
+  if (!thcStr) return null;
+  const nums = String(thcStr).match(/\d+(\.\d+)?/g);
+  if (!nums || !nums.length) return null;
+  const avg = nums.map(Number).reduce((a, b) => a + b, 0) / nums.length;
+  return Math.min(100, Math.round((avg / THC_BAR_CEILING) * 100));
+}
+
 // A small original cartoon-bud icon used on kudos buttons — hand-drawn SVG,
 // not a stock asset, so there's no licensing question about using it.
 const KUDOS_BUD_ICON = `<img src="/docs/leaf-kudos.png" alt="" width="15" height="15" style="vertical-align:-3px;margin-right:4px;">`;
@@ -609,6 +660,24 @@ function pageStrainDetail(req, res, id) {
       ${s.flavor ? `<p style="font-style:italic;color:var(--ink-secondary);">"${esc(s.flavor)}"</p>` : ''}
       <p>${s.effects.map(e => `<span class="filter-pill">${esc(e)}</span>`).join('')}</p>
       ${s.terps.length ? `<p><b>Top terpenes:</b> ${s.terps.map(t => `${esc(t.n)} (${Math.round(t.p * 100)}%)`).join(', ')}</p>` : ''}
+      ${(() => {
+        const energyPct = effectEnergyPercent(s.effects);
+        const thcPct = thcBarPercent(s.thc);
+        return `
+          ${energyPct !== null ? `
+            <div class="spectrum-bar">
+              <div class="labels"><span>Calming</span><span>Energizing</span></div>
+              <div class="track"><div class="fill" style="width:${energyPct}%;"></div></div>
+            </div>
+          ` : ''}
+          ${thcPct !== null ? `
+            <div class="spectrum-bar">
+              <div class="labels"><span>Low THC</span><span>High THC</span></div>
+              <div class="track"><div class="fill" style="width:${thcPct}%;"></div></div>
+            </div>
+          ` : ''}
+        `;
+      })()}
       ${Array.isArray(s.ailments) && s.ailments.length ? `
         <p style="margin:10px 0 2px;"><b>Users report relief from:</b> ${s.ailments.map(a => `<span class="filter-pill">${esc(a)}</span>`).join(' ')}</p>
         <p class="empty-note" style="padding:0;">User-reported, not medical advice — see a doctor for real guidance.</p>
