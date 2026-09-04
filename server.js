@@ -486,6 +486,8 @@ function pageStrains(req, res, query) {
   const body = `
     <h1 class="screen-title">Strain Library</h1>
     <p class="screen-sub">${total.toLocaleString()} strains — search by name, flavor, effect, THC level, terpene, or relief.</p>
+    ${query.get('submitted') ? `<p class="empty-note" style="color:var(--brand-green-dark);">Thanks — we've got it and will take a look.</p>` : ''}
+    <a href="/strains/submit" class="btn secondary block" style="text-decoration:none;margin-bottom:12px;">🔍 Can't find a strain? Tell us what's missing</a>
     <form method="GET" action="/strains" id="strain-search-form" style="margin-bottom:12px;">
       <input type="search" name="q" id="strain-search-input" value="${esc(q)}" placeholder="Search by name or flavor..." autocomplete="off">
     </form>
@@ -1834,6 +1836,67 @@ function pageGrowJournal(req, res) {
   `;
   sendHtml(res, layout({ title: 'Grow Journal', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
+// "Can't find your strain?" -- a lightweight report a user can file
+// straight from the Strain Library, so a missing strain doesn't just
+// become a dead end. Deliberately simple: a name, an optional photo of
+// the packaging, an optional free-text description. Reviewed by hand in
+// admin before anything gets added to the real library -- see the
+// strain_submissions table comment in db.js for why this stays a
+// separate queue rather than writing directly into `strains`.
+function pageSubmitStrain(req, res) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const body = `
+    <h1 class="screen-title">Report a Missing Strain</h1>
+    <p class="screen-sub">Can't find a strain in the library? Send us what you've got — a photo of the packaging is the fastest way, but a name alone still helps.</p>
+    <form method="POST" action="/strains/submit">
+      <label class="field-label" style="margin-top:0;">Strain name</label>
+      <input type="text" name="strain_name" placeholder="What's it called on the package?" required>
+      <label class="field-label">Anything else you know (optional)</label>
+      <textarea name="description" placeholder="Breeder, THC %, effects, where you got it — anything helps"></textarea>
+      <label class="field-label">Photo of the packaging (optional)</label>
+      <div class="photo-picker">
+        <div class="photo-upload-box" id="submit-strain-photo-box" onclick="document.getElementById('submit-strain-photo-input').click()">
+          <div class="up-ic">📷</div>
+          <div class="up-txt">Tap to snap or upload a photo of the label</div>
+        </div>
+        <input type="file" id="submit-strain-photo-input" accept="image/*" style="display:none;">
+        <input type="hidden" name="photo" id="submit-strain-photo-data">
+      </div>
+      <button class="btn block" type="submit" style="margin-top:14px;">Send It In</button>
+    </form>
+    <p class="empty-note" style="margin-top:12px;">We read every one of these — no promises on timing, but nothing gets ignored.</p>
+    <script>
+      (function() {
+        const fileInput = document.getElementById('submit-strain-photo-input');
+        const photoData = document.getElementById('submit-strain-photo-data');
+        const uploadBox = document.getElementById('submit-strain-photo-box');
+        fileInput.addEventListener('change', () => {
+          const file = fileInput.files && fileInput.files[0];
+          if (!file) return;
+          const reader = new FileReader();
+          reader.onload = () => {
+            photoData.value = reader.result;
+            uploadBox.innerHTML = '<div class="photo-preview-wrap"><img src="' + reader.result + '" alt="Preview"></div>';
+          };
+          reader.readAsDataURL(file);
+        });
+      })();
+    </script>
+  `;
+  sendHtml(res, layout({ title: 'Report a Missing Strain', active: 'strains', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
+}
+async function handleSubmitStrainSubmit(req, res) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const f = await parseForm(req);
+  const strainName = String(f.strain_name || '').trim();
+  if (!strainName) return redirect(res, '/strains/submit');
+  const photoUrl = await storage.uploadPhoto(f.photo || null, 'strain-submissions');
+  await db.createStrainSubmission({ user_id: userId, strain_name: strainName, description: f.description || '', photo: photoUrl });
+  redirect(res, '/strains?submitted=1');
+}
+
 async function handleGrowJournalSubmit(req, res) {
   const userId = requireUser(req, res);
   if (userId == null) return;
@@ -2536,6 +2599,7 @@ function pageAdminHome(req, res) {
     <div class="card"><a href="/admin/faqs">📋 Manage FAQ (${db.listFaqs().length})</a></div>
     <div class="card"><a href="/admin/recipes">🍽️ Manage Recipes (${db.listRecipes({ status: null }).length}${pendingCount ? `, ${pendingCount} pending` : ''})</a></div>
     <div class="card"><a href="/admin/strains">🌿 Manage Strains (${db.countStrains().toLocaleString()})</a></div>
+    <div class="card"><a href="/admin/strain-submissions">🔍 Missing Strain Reports${db.listStrainSubmissions().filter(s => s.status === 'pending').length ? ` (${db.listStrainSubmissions().filter(s => s.status === 'pending').length} pending)` : ''}</a></div>
     <div class="card"><a href="/admin/users">👤 Manage Users (${db.listUsers().length})</a></div>
     <div class="card"><a href="/admin/logout">🚪 Log out</a></div>
   `;
@@ -2583,6 +2647,40 @@ function pageAdminFeedback(req, res) {
     }).join('')}
   `;
   sendHtml(res, layout({ title: 'Feedback', body, isAdmin: true }));
+}
+
+function pageAdminStrainSubmissions(req, res) {
+  if (!requireAdmin(req, res)) return;
+  const items = db.listStrainSubmissions();
+  const pending = items.filter(s => s.status === 'pending');
+  const body = `
+    <h1 class="screen-title" style="margin-top:8px;">Missing Strain Reports (${pending.length} pending)</h1>
+    ${items.length === 0 ? `<p class="empty-note">No reports submitted yet.</p>` : items.map(s => {
+      const user = s.user_id != null ? db.getUserById(s.user_id) : null;
+      return `<div class="admin-row" style="flex-direction:column;align-items:stretch;${s.status === 'reviewed' ? 'opacity:0.5;' : ''}">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;">
+          <b>${esc(s.strain_name)}</b>
+          <span class="empty-note" style="padding:0;">${user ? esc(user.username) : 'Anonymous'} · <span class="local-time" data-utc="${esc(s.created_at)}Z">${esc(s.created_at)}</span></span>
+        </div>
+        ${s.description ? `<p style="margin:6px 0 0;white-space:pre-wrap;">${esc(s.description)}</p>` : ''}
+        ${s.photo ? `<div class="checkin-photo-thumb" style="margin:8px 0;"><img src="${esc(s.photo)}" alt="Submitted photo"></div>` : ''}
+        <div class="actions" style="margin-top:8px;">
+          <a href="/admin/strains?name=${encodeURIComponent(s.strain_name)}" class="btn secondary" style="text-decoration:none;">Add to Library</a>
+          ${s.status !== 'reviewed' ? `
+            <form method="POST" action="/admin/strain-submissions/${s.id}/reviewed" style="display:inline;">
+              <button type="submit" class="btn secondary">Mark Reviewed</button>
+            </form>
+          ` : ''}
+        </div>
+      </div>`;
+    }).join('')}
+  `;
+  sendHtml(res, layout({ title: 'Missing Strain Reports', body, isAdmin: true }));
+}
+async function handleAdminStrainSubmissionReviewed(req, res, id) {
+  if (!requireAdmin(req, res)) return;
+  await db.markStrainSubmissionReviewed(Number(id));
+  redirect(res, '/admin/strain-submissions');
 }
 
 function pageAdminFaqs(req, res) {
@@ -2703,6 +2801,7 @@ function strainFormFields(s) {
 function pageAdminStrains(req, res, query) {
   if (!requireAdmin(req, res)) return;
   const q = (query && query.get('q')) || '';
+  const prefillName = (query && query.get('name')) || '';
   const results = q ? db.listStrains({ q, limit: 50 }) : db.listStrains({ limit: 50 });
   const total = db.countStrains();
   const body = `
@@ -2711,7 +2810,7 @@ function pageAdminStrains(req, res, query) {
     <div class="card">
       <h2 style="margin-top:0;font-size:16px;">Add a strain</h2>
       <form method="POST" action="/admin/strains/new">
-        ${strainFormFields(null)}
+        ${strainFormFields(prefillName ? { name: prefillName } : null)}
         <button class="btn block" type="submit">Add Strain</button>
       </form>
     </div>
@@ -3989,6 +4088,8 @@ const server = http.createServer(async (req, res) => {
     let m;
     if (method === 'GET' && pathname === '/') return pageHome(req, res);
     if (method === 'GET' && pathname === '/strains') return pageStrains(req, res, url.searchParams);
+    if (method === 'GET' && pathname === '/strains/submit') return pageSubmitStrain(req, res);
+    if (method === 'POST' && pathname === '/strains/submit') return await handleSubmitStrainSubmit(req, res);
     if (method === 'GET' && (m = pathname.match(/^\/strains\/([^/]+)$/))) return pageStrainDetail(req, res, m[1]);
     if (method === 'GET' && pathname === '/checkin') return pageCheckinForm(req, res, url.searchParams);
     if (method === 'POST' && pathname === '/checkin') return await handleCheckinSubmit(req, res);
@@ -4039,6 +4140,8 @@ const server = http.createServer(async (req, res) => {
     if (method === 'GET' && pathname === '/admin/users') return pageAdminUsers(req, res, url.searchParams);
     if (method === 'POST' && (m = pathname.match(/^\/admin\/users\/(\d+)\/delete$/))) return await handleAdminUserDelete(req, res, Number(m[1]));
     if (method === 'GET' && pathname === '/admin/feedback') return pageAdminFeedback(req, res);
+    if (method === 'GET' && pathname === '/admin/strain-submissions') return pageAdminStrainSubmissions(req, res);
+    if (method === 'POST' && (m = pathname.match(/^\/admin\/strain-submissions\/(\d+)\/reviewed$/))) return await handleAdminStrainSubmissionReviewed(req, res, m[1]);
     if (method === 'GET' && pathname === '/admin/faqs') return pageAdminFaqs(req, res);
     if (method === 'POST' && pathname === '/admin/faqs/new') return await handleAdminFaqNew(req, res);
     if (method === 'GET' && (m = pathname.match(/^\/admin\/faqs\/(\d+)\/edit$/))) return pageAdminFaqEdit(req, res, Number(m[1]));
