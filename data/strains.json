@@ -60023,5 +60023,88 @@
       "Grape Gasoline",
       "The Menthol"
     ]
+  },
+  {
+    "id": "s1778",
+    "name": "Blue Matcha",
+    "type": "Sativa",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "88-93%",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Earthy tea and creamy botanicals.",
+    "icon": "🌿",
+    "breeder": "BOUTIQ"
+  },
+  {
+    "id": "s1779",
+    "name": "Acai Berry",
+    "type": "Sativa",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "88-93%",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Rich, tart berry sweetness.",
+    "icon": "🌿",
+    "breeder": "BOUTIQ"
+  },
+  {
+    "id": "s1780",
+    "name": "Sour Slush",
+    "type": "Sativa",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "88-93%",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Bright, icy citrus, like a frozen sour slushie.",
+    "icon": "🌿",
+    "breeder": "BOUTIQ"
+  },
+  {
+    "id": "s1781",
+    "name": "Double Shot",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "20-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed"
+    ],
+    "flavor": "Sweet and gassy with hints of coffee and cocoa.",
+    "icon": "🌿",
+    "breeder": "Verano",
+    "parents": [
+      "London Pound Mintz",
+      "Jealousy"
+    ]
+  },
+  {
+    "id": "s1782",
+    "name": "Coup d'etat",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "73-77%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Euphoric"
+    ],
+    "flavor": "Earthy, honey, and gassy with woody undertones.",
+    "icon": "🌿",
+    "breeder": "Purple City Genetics",
+    "parents": [
+      "Governmint Oasis",
+      "THC Bomb"
+    ]
   }
 ]
