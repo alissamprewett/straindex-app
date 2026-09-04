@@ -60616,5 +60616,71 @@
       "Orange Cookies"
     ],
     "id": "s1806"
+  },
+  {
+    "name": "LA Kush Cake",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-28%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Euphoric",
+      "Happy"
+    ],
+    "flavor": "Sweet vanilla cake with a cool, minty finish.",
+    "icon": "🌿",
+    "breeder": "Seed Junky Genetics",
+    "parents": [
+      "Wedding Cake",
+      "Kush Mints"
+    ],
+    "id": "s1807"
+  },
+  {
+    "name": "Mac and Cheese",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Focused",
+      "Uplifted",
+      "Euphoric"
+    ],
+    "flavor": "Sweet, creamy cheese with a citrus edge.",
+    "icon": "🌿",
+    "breeder": "Capulator",
+    "parents": [
+      "The MAC",
+      "Alien Cheese"
+    ],
+    "id": "s1808"
+  },
+  {
+    "name": "Grape Monster",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "24-28%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Relaxed",
+      "Creative"
+    ],
+    "flavor": "Sweet grape and cherry over a herbal cheese undertone.",
+    "icon": "🌿",
+    "breeder": "",
+    "parents": [
+      "Elephant Stomper",
+      "Monster Cookies"
+    ],
+    "id": "s1809"
   }
 ]
