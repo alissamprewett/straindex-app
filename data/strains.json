@@ -60507,5 +60507,114 @@
       "TK91"
     ],
     "id": "s1801"
+  },
+  {
+    "name": "Mango OG",
+    "type": "Indica",
+    "rarity": "uncommon",
+    "thc": "15-24%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Sleepy"
+    ],
+    "flavor": "Ripe mango with a sweet, tropical edge.",
+    "icon": "🌿",
+    "breeder": "KC Brains",
+    "parents": [
+      "KC 33",
+      "Afghani"
+    ],
+    "id": "s1802"
+  },
+  {
+    "name": "Mandarin Cookies",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "19-26%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Calm",
+      "Creative"
+    ],
+    "flavor": "Tart mandarin citrus over a doughy cookie finish.",
+    "icon": "🌿",
+    "breeder": "Ethos Genetics",
+    "parents": [
+      "Forum Cut Cookies",
+      "Mandarin Sunset"
+    ],
+    "id": "s1803"
+  },
+  {
+    "name": "Sour Cream",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "18-24%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Euphoric",
+      "Energetic"
+    ],
+    "flavor": "Sour diesel with a sweet, creamy hazy finish.",
+    "icon": "🌿",
+    "breeder": "DNA Genetics",
+    "parents": [
+      "Sour Diesel",
+      "G13 Haze"
+    ],
+    "id": "s1804"
+  },
+  {
+    "name": "First Class Funk",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "26-33%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "Savory garlic and onion over a sharp, gassy diesel base.",
+    "icon": "🌿",
+    "breeder": "Compound Genetics",
+    "parents": [
+      "GMO",
+      "Jet Fuel Gelato"
+    ],
+    "id": "s1805"
+  },
+  {
+    "name": "Blue Tang Cookies",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "19-30%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Euphoric",
+      "Energetic"
+    ],
+    "flavor": "Sweet, creamy blueberry cookie with a sour citrus exhale.",
+    "icon": "🌿",
+    "breeder": "",
+    "parents": [
+      "Blueberry Cookies & Cream",
+      "Orange Cookies"
+    ],
+    "id": "s1806"
   }
 ]
