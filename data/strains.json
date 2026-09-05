@@ -61122,5 +61122,184 @@
       "Lemon Party"
     ],
     "id": "s1832"
+  },
+  {
+    "name": "Blueberry Z",
+    "type": "Indica",
+    "rarity": "uncommon",
+    "thc": "22-23%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Calm",
+      "Sleepy"
+    ],
+    "flavor": "Juicy blueberry and ripe berry with sugary sweetness.",
+    "icon": "🌿",
+    "breeder": "STIIIZY",
+    "parents": [
+      "Blueberry",
+      "Zkittlez"
+    ],
+    "id": "s1833"
+  },
+  {
+    "name": "Grape Gasolina",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Calm",
+      "Euphoric",
+      "Happy"
+    ],
+    "flavor": "Dank earth and diesel-fuel pepper with sweet, fruity grape accents.",
+    "icon": "🌿",
+    "breeder": "Claybourne Co.",
+    "parents": [
+      "Grape Pie",
+      "Jet Fuel Gelato"
+    ],
+    "id": "s1834"
+  },
+  {
+    "name": "Pink Acai",
+    "type": "Hybrid",
+    "rarity": "uncommon",
+    "thc": "18-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric"
+    ],
+    "flavor": "Sweet berry and tropical citrus with earthy floral notes.",
+    "icon": "🌿",
+    "breeder": "STIIIZY",
+    "parents": [
+      "Pink Kush",
+      "Acai"
+    ],
+    "id": "s1835"
+  },
+  {
+    "name": "Guava Gaslato",
+    "type": "Hybrid",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed"
+    ],
+    "flavor": "Sweet guava funk over rich gas and earthy pine.",
+    "icon": "🌿",
+    "breeder": "Claybourne Co.",
+    "id": "s1836"
+  },
+  {
+    "name": "Umami Butter",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "29-37%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Euphoric",
+      "Sleepy"
+    ],
+    "flavor": "Sweet and savory with a tangy, creamy exhale.",
+    "icon": "🌿",
+    "breeder": "Maven Genetics",
+    "parents": [
+      "Gelatti",
+      "Black Diamond X"
+    ],
+    "id": "s1837"
+  },
+  {
+    "name": "Sky OG",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18-26%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Euphoric",
+      "Creative"
+    ],
+    "flavor": "Sage and herbs over sweet lime and citrus.",
+    "icon": "🌿",
+    "parents": [
+      "Skywalker",
+      "OG Kush"
+    ],
+    "id": "s1838"
+  },
+  {
+    "name": "Mendo Fuel",
+    "type": "Hybrid",
+    "rarity": "uncommon",
+    "thc": "32-33%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Uplifted",
+      "Creative"
+    ],
+    "flavor": "Sweet, fruity cherry grape with a minty, spicy diesel edge.",
+    "icon": "🌿",
+    "parents": [
+      "Mendo Purps",
+      "Haze"
+    ],
+    "id": "s1839"
+  },
+  {
+    "name": "Sour Apple Pie",
+    "type": "Sativa",
+    "rarity": "uncommon",
+    "thc": "88%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Uplifted",
+      "Euphoric"
+    ],
+    "flavor": "Tart green apple with sweet, doughy Kush undertones.",
+    "icon": "🌿",
+    "breeder": "Gramlin",
+    "id": "s1840"
+  },
+  {
+    "name": "Watermelon Lemonade",
+    "type": "Hybrid",
+    "rarity": "uncommon",
+    "thc": "20-23%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Clear-headed",
+      "Focused"
+    ],
+    "flavor": "Strong lemon citrus with earthy, musky watermelon notes.",
+    "icon": "🌿",
+    "parents": [
+      "Lemon Tree",
+      "Watermelon Zkittlez"
+    ],
+    "id": "s1841"
   }
 ]
