@@ -38251,7 +38251,11 @@
     ],
     "flavor": "Limonene-forward with a pinene undertone.",
     "icon": "🌿",
-    "breeder": "Sweet Seeds"
+    "breeder": "Sweet Seeds",
+    "parents": [
+      "Jack Herer",
+      "Black Domina"
+    ]
   },
   {
     "id": "s1040",
@@ -39413,36 +39417,6 @@
     "flavor": "Myrcene-forward with a linalool undertone.",
     "icon": "🌿",
     "breeder": "DNA Genetics"
-  },
-  {
-    "id": "s1079",
-    "name": "Cotton Candy Kush",
-    "type": "Hybrid",
-    "lean": "",
-    "rarity": "common",
-    "thc": "17–21%",
-    "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Humulene",
-        "p": 0.4
-      },
-      {
-        "n": "Myrcene",
-        "p": 0.27
-      },
-      {
-        "n": "Caryophyllene",
-        "p": 0.16
-      }
-    ],
-    "effects": [
-      "Sleepy",
-      "Energetic",
-      "Happy"
-    ],
-    "flavor": "Humulene-forward with a myrcene undertone.",
-    "icon": "🌿"
   },
   {
     "id": "s1080",
@@ -41271,36 +41245,6 @@
       "Sleepy"
     ],
     "flavor": "Humulene-forward with a pinene undertone.",
-    "icon": "🌿"
-  },
-  {
-    "id": "s1140",
-    "name": "Lavender Kush",
-    "type": "Hybrid",
-    "lean": "",
-    "rarity": "uncommon",
-    "thc": "23–27%",
-    "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Myrcene",
-        "p": 0.4
-      },
-      {
-        "n": "Pinene",
-        "p": 0.27
-      },
-      {
-        "n": "Terpinolene",
-        "p": 0.16
-      }
-    ],
-    "effects": [
-      "Tingly",
-      "Uplifted",
-      "Giggly"
-    ],
-    "flavor": "Myrcene-forward with a pinene undertone.",
     "icon": "🌿"
   },
   {
@@ -59925,28 +59869,6 @@
     "id": "s1796"
   },
   {
-    "name": "BlackJack",
-    "type": "Hybrid",
-    "lean": "Indica-leaning",
-    "rarity": "uncommon",
-    "thc": "16-24%",
-    "cbd": "",
-    "terps": [],
-    "effects": [
-      "Creative",
-      "Energetic",
-      "Relaxed"
-    ],
-    "flavor": "Sweet and woody with pine, spice, and lemon.",
-    "icon": "🌿",
-    "breeder": "",
-    "parents": [
-      "Jack Herer",
-      "Black Domina"
-    ],
-    "id": "s1797"
-  },
-  {
     "name": "Orange Daiquiri",
     "type": "Hybrid",
     "lean": "Sativa-leaning",
@@ -61207,5 +61129,63 @@
       "Biscotti"
     ],
     "id": "s1860"
+  },
+  {
+    "name": "Pink Kush",
+    "type": "Indica",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "18-26%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Sleepy",
+      "Happy"
+    ],
+    "flavor": "Sweet vanilla and floral notes with earthy spice and a hint of citrus.",
+    "icon": "🌿",
+    "breeder": "Barney's Farm",
+    "id": "s1861"
+  },
+  {
+    "name": "Holy Grail Kush",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Tingly",
+      "Happy"
+    ],
+    "flavor": "Complex mint, tea, and coffee with earthy pine.",
+    "icon": "🌿",
+    "breeder": "DNA Genetics",
+    "parents": [
+      "OG #18",
+      "Kosher Kush"
+    ],
+    "id": "s1862"
+  },
+  {
+    "name": "OG #18",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "16-26%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Sleepy",
+      "Euphoric"
+    ],
+    "flavor": "Sour diesel kush with earthy citrus notes.",
+    "icon": "🌿",
+    "breeder": "Reserva Privada",
+    "id": "s1863"
   }
 ]
