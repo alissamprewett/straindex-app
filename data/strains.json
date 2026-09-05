@@ -60991,5 +60991,69 @@
       "OG Kush"
     ],
     "id": "s1866"
+  },
+  {
+    "name": "Blue Raspberry",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Focused"
+    ],
+    "flavor": "Sweet blueberry candy.",
+    "icon": "🌿",
+    "parents": [
+      "Raspberry Kush"
+    ],
+    "id": "s1867"
+  },
+  {
+    "name": "Sherb Cream Pie",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "22-28%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Sleepy",
+      "Euphoric"
+    ],
+    "flavor": "Creamy citrus and vanilla with a piney pepper funk.",
+    "icon": "🌿",
+    "breeder": "Seed Junky Genetics",
+    "parents": [
+      "Ice Cream Cake",
+      "Sherb BX1"
+    ],
+    "id": "s1868"
+  },
+  {
+    "name": "Blue Zushi",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "24-28%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Calm",
+      "Euphoric"
+    ],
+    "flavor": "Berry and tropical fruit with creamy mint and earthy kush.",
+    "icon": "🌿",
+    "breeder": "TenCo",
+    "parents": [
+      "Zkittlez",
+      "Kush Mints"
+    ],
+    "id": "s1869"
   }
 ]
