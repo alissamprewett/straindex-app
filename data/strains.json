@@ -61055,5 +61055,107 @@
       "Kush Mints"
     ],
     "id": "s1869"
+  },
+  {
+    "name": "Strawberry Shortcake",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "18-23%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Creative",
+      "Energetic",
+      "Uplifted"
+    ],
+    "flavor": "Sweet strawberry with a fuel-forward undertone.",
+    "icon": "🌿",
+    "breeder": "Dark Horse Genetics",
+    "parents": [
+      "Juliet",
+      "Strawberry Diesel"
+    ],
+    "id": "s1870"
+  },
+  {
+    "name": "Glitter Bomb",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "25-30%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed"
+    ],
+    "flavor": "Sweet grape and blueberry candy with a kerosene-gas edge.",
+    "icon": "🌿",
+    "breeder": "Compound Genetics",
+    "parents": [
+      "OGKB Blueberry Headband",
+      "Grape Gasoline"
+    ],
+    "id": "s1871"
+  },
+  {
+    "name": "Cheetah Piss",
+    "type": "Sativa",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Euphoric",
+      "Creative"
+    ],
+    "flavor": "Musky lemon with a funky undertone.",
+    "icon": "🌿",
+    "id": "s1872"
+  },
+  {
+    "name": "Papaya Punch",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-29%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Uplifted",
+      "Giggly"
+    ],
+    "flavor": "Tropical fruit and berry with a hint of cheese.",
+    "icon": "🌿",
+    "breeder": "Oni Seed Co.",
+    "parents": [
+      "Papaya",
+      "Purple Punch"
+    ],
+    "id": "s1873"
+  },
+  {
+    "name": "Golden Pineapple",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "18-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Creative",
+      "Energetic",
+      "Uplifted"
+    ],
+    "flavor": "Sweet pineapple and tropical fruit with a tart citrus edge.",
+    "icon": "🌿",
+    "parents": [
+      "Golden Goat",
+      "Pineapple Kush"
+    ],
+    "id": "s1874"
   }
 ]
