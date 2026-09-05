@@ -61301,5 +61301,107 @@
       "Watermelon Zkittlez"
     ],
     "id": "s1841"
+  },
+  {
+    "name": "Apples and Bananas",
+    "type": "Hybrid",
+    "rarity": "uncommon",
+    "thc": "20-28%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "Apple, pear, and tree fruit over a gassy, piney backbone.",
+    "icon": "🌿",
+    "breeder": "Compound Genetics",
+    "parents": [
+      "Platinum Cookies",
+      "Granddaddy Purple",
+      "Blue Power",
+      "Gelatti"
+    ],
+    "id": "s1842"
+  },
+  {
+    "name": "Garlic OZ",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Grounded"
+    ],
+    "flavor": "Savory garlic spice with sweet, earthy kush undertones.",
+    "icon": "🌿",
+    "breeder": "Claybourne Co.",
+    "id": "s1843"
+  },
+  {
+    "name": "Silver Jack",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "22-29%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Focused",
+      "Energetic",
+      "Uplifted"
+    ],
+    "flavor": "Sweet and tart with a pungent, aromatic haze.",
+    "icon": "🌿",
+    "parents": [
+      "Super Silver Haze",
+      "Jack Herer"
+    ],
+    "id": "s1844"
+  },
+  {
+    "name": "Strawberry Daiquiri",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "20-24%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "Sweet strawberry and cherry with chocolate and a hint of fuel.",
+    "icon": "🌿",
+    "breeder": "TGA Subcool Seeds",
+    "parents": [
+      "Strawberry Cough",
+      "Jack the Ripper"
+    ],
+    "id": "s1845"
+  },
+  {
+    "name": "El Chemino",
+    "type": "Sativa",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Uplifted"
+    ],
+    "flavor": "Lemon spice with floral and citrus notes.",
+    "icon": "🌿",
+    "parents": [
+      "Chemdawg",
+      "SFV OG Kush"
+    ],
+    "id": "s1846"
   }
 ]
