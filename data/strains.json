@@ -61044,5 +61044,83 @@
     "icon": "🌿",
     "breeder": "3 Bros",
     "id": "s1827"
+  },
+  {
+    "name": "Black-Z",
+    "type": "Indica",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Creative"
+    ],
+    "flavor": "Bold berry and earthy grape spice.",
+    "icon": "🌿",
+    "breeder": "BOUTIQ",
+    "id": "s1828"
+  },
+  {
+    "name": "Z Limeade",
+    "type": "Indica",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Calm"
+    ],
+    "flavor": "Zesty lime and citrus with sweet, candy-like undertones.",
+    "icon": "🌿",
+    "breeder": "BOUTIQ",
+    "id": "s1829"
+  },
+  {
+    "name": "Yuzu Haze",
+    "type": "Sativa",
+    "rarity": "uncommon",
+    "thc": "82-87%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic"
+    ],
+    "flavor": "Bright, zesty yuzu lemon citrus.",
+    "icon": "🌿",
+    "breeder": "Tempo",
+    "id": "s1830"
+  },
+  {
+    "name": "Cherry 42",
+    "type": "Indica",
+    "rarity": "uncommon",
+    "thc": "75.5%",
+    "cbd": "0.1%",
+    "terps": [],
+    "effects": [],
+    "icon": "🌿",
+    "breeder": "Jetty Extracts",
+    "id": "s1831"
+  },
+  {
+    "name": "Clockwork Lemon",
+    "type": "Sativa",
+    "rarity": "uncommon",
+    "thc": "74.61%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Creative"
+    ],
+    "flavor": "Bright, citrusy lemon.",
+    "icon": "🌿",
+    "breeder": "CLSICS",
+    "parents": [
+      "Zkittlez",
+      "Lemon Party"
+    ],
+    "id": "s1832"
   }
 ]
