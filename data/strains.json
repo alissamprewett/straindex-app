@@ -8402,43 +8402,6 @@
     ]
   },
   {
-    "id": "s224",
-    "name": "Herijuana",
-    "type": "Hybrid",
-    "lean": "",
-    "rarity": "common",
-    "thc": "13–21%",
-    "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Myrcene",
-        "p": 0.4
-      },
-      {
-        "n": "Pinene",
-        "p": 0.27
-      },
-      {
-        "n": "Ocimene",
-        "p": 0.16
-      }
-    ],
-    "effects": [
-      "Relaxed",
-      "Sleepy",
-      "Happy",
-      "Uplifted"
-    ],
-    "flavor": "Earthy and pine on the palate with a myrcene-leaning finish.",
-    "icon": "🌰",
-    "ailments": [
-      "Stress",
-      "Pain",
-      "Insomnia",
-      "Depression"
-    ]
-  },
-  {
     "id": "s225",
     "name": "The HOG",
     "type": "Hybrid",
@@ -15511,44 +15474,6 @@
       "Nausea",
       "Pain",
       "Stress"
-    ]
-  },
-  {
-    "id": "s413",
-    "name": "Pure Kush",
-    "type": "Indica",
-    "lean": "",
-    "rarity": "uncommon",
-    "thc": "16–25%",
-    "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Myrcene",
-        "p": 0.4
-      },
-      {
-        "n": "Limonene",
-        "p": 0.27
-      },
-      {
-        "n": "Linalool",
-        "p": 0.16
-      }
-    ],
-    "effects": [
-      "Relaxed",
-      "Sleepy",
-      "Euphoric",
-      "Happy"
-    ],
-    "flavor": "Earthy and skunk on the palate with a myrcene-leaning finish.",
-    "icon": "🌰",
-    "breeder": "Uprising Seed Co.",
-    "ailments": [
-      "Pain",
-      "Insomnia",
-      "Stress",
-      "Nausea"
     ]
   },
   {
@@ -39877,36 +39802,6 @@
     "icon": "🌿"
   },
   {
-    "id": "s1095",
-    "name": "G-13",
-    "type": "Hybrid",
-    "lean": "",
-    "rarity": "uncommon",
-    "thc": "22–30%",
-    "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Ocimene",
-        "p": 0.4
-      },
-      {
-        "n": "Myrcene",
-        "p": 0.27
-      },
-      {
-        "n": "Limonene",
-        "p": 0.16
-      }
-    ],
-    "effects": [
-      "Sleepy",
-      "Giggly",
-      "Aroused"
-    ],
-    "flavor": "Ocimene-forward with a myrcene undertone.",
-    "icon": "🌿"
-  },
-  {
     "id": "s1096",
     "name": "G13 Haze",
     "type": "Hybrid",
@@ -40362,7 +40257,7 @@
   },
   {
     "id": "s1111",
-    "name": "Herojuana",
+    "name": "Herijuana",
     "type": "Hybrid",
     "lean": "",
     "rarity": "legendary",
@@ -42740,37 +42635,6 @@
     "flavor": "Linalool-forward with a humulene undertone.",
     "icon": "🌿",
     "breeder": "PAPA GANJA"
-  },
-  {
-    "id": "s1191",
-    "name": "Purple Trainwreck",
-    "type": "Hybrid",
-    "lean": "",
-    "rarity": "uncommon",
-    "thc": "19–27%",
-    "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Myrcene",
-        "p": 0.4
-      },
-      {
-        "n": "Terpinolene",
-        "p": 0.27
-      },
-      {
-        "n": "Pinene",
-        "p": 0.16
-      }
-    ],
-    "effects": [
-      "Calm",
-      "Happy",
-      "Aroused"
-    ],
-    "flavor": "Myrcene-forward with a terpinolene undertone.",
-    "icon": "🌿",
-    "breeder": "Humboldt Seed Organisation"
   },
   {
     "id": "s1192",
@@ -46107,37 +45971,6 @@
     ],
     "flavor": "Linalool-forward with a ocimene undertone.",
     "icon": "🌿"
-  },
-  {
-    "id": "s1302",
-    "name": "Black Cherry",
-    "type": "Hybrid",
-    "lean": "",
-    "rarity": "common",
-    "thc": "18–25%",
-    "cbd": "9–25%",
-    "terps": [
-      {
-        "n": "Pinene",
-        "p": 0.4
-      },
-      {
-        "n": "Terpinolene",
-        "p": 0.27
-      },
-      {
-        "n": "Linalool",
-        "p": 0.16
-      }
-    ],
-    "effects": [
-      "Calm",
-      "Relaxed",
-      "Social"
-    ],
-    "flavor": "Pinene-forward with a terpinolene undertone.",
-    "icon": "🌿",
-    "breeder": "Subcool"
   },
   {
     "id": "s1303",
@@ -50144,37 +49977,6 @@
     "flavor": "Caryophyllene-forward with a limonene undertone.",
     "icon": "🌿",
     "breeder": "Sunshine Seeds"
-  },
-  {
-    "id": "s1433",
-    "name": "Fruity Juice",
-    "type": "Hybrid",
-    "lean": "",
-    "rarity": "uncommon",
-    "thc": "21–26%",
-    "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Pinene",
-        "p": 0.4
-      },
-      {
-        "n": "Terpinolene",
-        "p": 0.27
-      },
-      {
-        "n": "Myrcene",
-        "p": 0.16
-      }
-    ],
-    "effects": [
-      "Giggly",
-      "Sleepy",
-      "Aroused"
-    ],
-    "flavor": "Pinene-forward with a terpinolene undertone.",
-    "icon": "🌿",
-    "breeder": "Sensi"
   },
   {
     "id": "s1434",
@@ -54425,38 +54227,6 @@
     "icon": "🍉"
   },
   {
-    "id": "s1572",
-    "name": "Rainbow Sherbert",
-    "type": "Hybrid",
-    "lean": "Indica-leaning",
-    "rarity": "uncommon",
-    "thc": "17–22%",
-    "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Myrcene",
-        "p": 0.3
-      },
-      {
-        "n": "Limonene",
-        "p": 0.25
-      },
-      {
-        "n": "Caryophyllene",
-        "p": 0.15
-      }
-    ],
-    "effects": [
-      "Relaxed",
-      "Happy",
-      "Euphoric",
-      "Uplifted"
-    ],
-    "flavor": "Sweet berry sherbet with a creamy, citrus finish.",
-    "icon": "🌈",
-    "breeder": "Apothecary Seed Company"
-  },
-  {
     "id": "s1573",
     "name": "Bacio Gelato",
     "type": "Hybrid",
@@ -54926,37 +54696,6 @@
     ],
     "flavor": "Sharp lemon and pine over a heavy diesel base.",
     "icon": "🔥"
-  },
-  {
-    "id": "s1589",
-    "name": "9lb Hammer",
-    "type": "Indica",
-    "lean": "",
-    "rarity": "uncommon",
-    "thc": "18–24%",
-    "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Myrcene",
-        "p": 0.3
-      },
-      {
-        "n": "Caryophyllene",
-        "p": 0.25
-      },
-      {
-        "n": "Limonene",
-        "p": 0.15
-      }
-    ],
-    "effects": [
-      "Relaxed",
-      "Sleepy",
-      "Happy",
-      "Euphoric"
-    ],
-    "flavor": "Earthy grape and berry with a heavy, sedating finish.",
-    "icon": "🔨"
   },
   {
     "id": "s1590",
@@ -61187,5 +60926,70 @@
     "icon": "🌿",
     "breeder": "Reserva Privada",
     "id": "s1863"
+  },
+  {
+    "name": "Grape Pie",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Calm",
+      "Euphoric"
+    ],
+    "flavor": "Sugary grape candy with a subtle earthy undertone.",
+    "icon": "🌿",
+    "breeder": "Cannarado Genetics",
+    "parents": [
+      "Cherry Pie",
+      "Grape Stomper"
+    ],
+    "id": "s1864"
+  },
+  {
+    "name": "Grape Stomper",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "18-27%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Uplifted",
+      "Relaxed",
+      "Tingly"
+    ],
+    "flavor": "Sweet grape candy with sour, earthy berry notes.",
+    "icon": "🌿",
+    "breeder": "Gage Green Genetics",
+    "parents": [
+      "Purple Elephant",
+      "Chemdawg Sour Diesel"
+    ],
+    "id": "s1865"
+  },
+  {
+    "name": "Khalifa Kush",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "21-29%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Uplifted",
+      "Relaxed"
+    ],
+    "flavor": "Velvety kush with pepper, sour lemon, and pine.",
+    "icon": "🌿",
+    "parents": [
+      "OG Kush"
+    ],
+    "id": "s1866"
   }
 ]
