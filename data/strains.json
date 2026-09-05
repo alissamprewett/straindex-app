@@ -61557,5 +61557,130 @@
       "SFV OG Kush"
     ],
     "id": "s1854"
+  },
+  {
+    "name": "Durban Haze",
+    "type": "Sativa",
+    "rarity": "uncommon",
+    "thc": "13-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Relaxed",
+      "Creative"
+    ],
+    "flavor": "Spicy herbs and earth with a hint of sour fruit.",
+    "icon": "🌿",
+    "parents": [
+      "Durban Poison",
+      "Haze"
+    ],
+    "id": "s1855"
+  },
+  {
+    "name": "Space Lemonade",
+    "type": "Hybrid",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Tingly"
+    ],
+    "flavor": "Lime and berries with earthy, sweet undertones.",
+    "icon": "🌿",
+    "breeder": "Habitat",
+    "parents": [
+      "Zoap",
+      "Lemon Cherry Gelato"
+    ],
+    "id": "s1856"
+  },
+  {
+    "name": "Ronin OG",
+    "type": "Hybrid",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Focused"
+    ],
+    "flavor": "Savory and sweet with fresh fruit, sour citrus, mint, and herbal cheese.",
+    "icon": "🌿",
+    "breeder": "Habitat",
+    "parents": [
+      "Gas Face OG"
+    ],
+    "id": "s1857"
+  },
+  {
+    "name": "Sour Power OG",
+    "type": "Hybrid",
+    "rarity": "uncommon",
+    "thc": "18-23%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Euphoric",
+      "Relaxed"
+    ],
+    "flavor": "Sharp diesel and lemon with a tart, sour finish.",
+    "icon": "🌿",
+    "breeder": "Karma Genetics",
+    "parents": [
+      "Biker Kush",
+      "Sour Power"
+    ],
+    "id": "s1858"
+  },
+  {
+    "name": "FKAFL",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "30-34%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Focused",
+      "Relaxed"
+    ],
+    "flavor": "Sweet, soapy citrus with pungent diesel and sharp cheese notes.",
+    "icon": "🌿",
+    "breeder": "Maven Genetics",
+    "parents": [
+      "LA Rouge",
+      "The Soap"
+    ],
+    "id": "s1859"
+  },
+  {
+    "name": "Jack Of Diamonds",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "18-26%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Uplifted",
+      "Talkative"
+    ],
+    "flavor": "Sweet and peppery with citrus, grape, and a hint of mint.",
+    "icon": "🌿",
+    "breeder": "Connected Cannabis Co.",
+    "parents": [
+      "Jack Herer",
+      "Biscotti"
+    ],
+    "id": "s1860"
   }
 ]
