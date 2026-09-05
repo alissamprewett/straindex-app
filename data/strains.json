@@ -60847,5 +60847,202 @@
       "Wedding Cake"
     ],
     "id": "s1817"
+  },
+  {
+    "name": "Donny Burger",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "26-30%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Euphoric",
+      "Giggly"
+    ],
+    "flavor": "Pine and earth with savory garlic-diesel funk.",
+    "icon": "🌿",
+    "breeder": "Skunk House Genetics",
+    "parents": [
+      "GMO",
+      "Han Solo Burger"
+    ],
+    "id": "s1818"
+  },
+  {
+    "name": "Venom OG",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-27%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Calm",
+      "Euphoric"
+    ],
+    "flavor": "Skunky pine with lemon and diesel.",
+    "icon": "🌿",
+    "breeder": "Rare Dankness Seeds",
+    "parents": [
+      "Poison OG",
+      "Rare Dankness #1"
+    ],
+    "id": "s1819"
+  },
+  {
+    "name": "Purple Chem",
+    "type": "Hybrid",
+    "rarity": "uncommon",
+    "thc": "18-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Diesel and chemical notes over sweet chocolate-coffee and earthy Bubba Kush undertones, with hints of grape.",
+    "icon": "🌿",
+    "parents": [
+      "Chem 91",
+      "Bubba Kush"
+    ],
+    "id": "s1820"
+  },
+  {
+    "name": "Black Triangle OG",
+    "type": "Hybrid",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Euphoric"
+    ],
+    "flavor": "Citrus and pine with earthy hash spice.",
+    "icon": "🌿",
+    "parents": [
+      "Triangle Kush",
+      "'88 G13 Hash Plant"
+    ],
+    "id": "s1821"
+  },
+  {
+    "name": "G-Runtz",
+    "type": "Hybrid",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Uplifted"
+    ],
+    "flavor": "Sweet candy and cream with a floral finish.",
+    "icon": "🌿",
+    "parents": [
+      "Runtz",
+      "Gush Mints"
+    ],
+    "id": "s1822"
+  },
+  {
+    "name": "Gas Plant",
+    "type": "Indica",
+    "rarity": "uncommon",
+    "thc": "36.20%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Calm"
+    ],
+    "flavor": "Intense gas with funk, citrus, and sweet floral undertones.",
+    "icon": "🌿",
+    "breeder": "Claybourne Co.",
+    "parents": [
+      "The Judge",
+      "Herer Hash Plant"
+    ],
+    "id": "s1823"
+  },
+  {
+    "name": "Lemon Drop Top",
+    "type": "Sativa",
+    "rarity": "uncommon",
+    "thc": "29-33%",
+    "cbd": "",
+    "terps": [
+      {
+        "n": "Pinene",
+        "p": null
+      }
+    ],
+    "effects": [
+      "Energetic",
+      "Alert",
+      "Focused"
+    ],
+    "flavor": "Zesty lemon citrus with musky, woodsy pine notes.",
+    "icon": "🌿",
+    "breeder": "Claybourne Co.",
+    "parents": [
+      "Herer Hashplant",
+      "Lemon Jack"
+    ],
+    "id": "s1824"
+  },
+  {
+    "name": "Banana Sherbet",
+    "type": "Indica",
+    "rarity": "uncommon",
+    "thc": "26.90%",
+    "cbd": "0.06%",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Euphoric"
+    ],
+    "flavor": "Sweet and citrusy with a banana overtone.",
+    "icon": "🌿",
+    "breeder": "Claybourne Co.",
+    "parents": [
+      "Banana Cream Cake",
+      "Jealousy"
+    ],
+    "id": "s1825"
+  },
+  {
+    "name": "805 Glue",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "21-27%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Uplifted",
+      "Talkative"
+    ],
+    "flavor": "Earthy diesel with grapefruit and woody notes.",
+    "icon": "🌿",
+    "breeder": "Pacific Stone",
+    "parents": [
+      "Gorilla Glue #4",
+      "Chem Sister"
+    ],
+    "id": "s1826"
+  },
+  {
+    "name": "Sunset Sorbet",
+    "type": "Hybrid",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "icon": "🌿",
+    "breeder": "3 Bros",
+    "id": "s1827"
   }
 ]
