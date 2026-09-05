@@ -61157,5 +61157,164 @@
       "Pineapple Kush"
     ],
     "id": "s1874"
+  },
+  {
+    "name": "Superglue",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Focused",
+      "Happy"
+    ],
+    "flavor": "Pine and citrus with a sweet caramel finish.",
+    "icon": "🌿",
+    "breeder": "Seedism Seeds",
+    "parents": [
+      "Northern Lights",
+      "Afghani"
+    ],
+    "id": "s1875"
+  },
+  {
+    "name": "Lemonade OG",
+    "type": "Hybrid",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Relaxed"
+    ],
+    "flavor": "Bright lemon citrus over an earthy, peppery Kush base.",
+    "icon": "🌿",
+    "id": "s1876"
+  },
+  {
+    "name": "24K Gold",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18-24%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Creative"
+    ],
+    "flavor": "Sweet tangerine citrus over an earthy, piney kush base.",
+    "icon": "🌿",
+    "breeder": "DNA Genetics",
+    "parents": [
+      "Kosher Kush",
+      "Tangie"
+    ],
+    "id": "s1877"
+  },
+  {
+    "name": "Mai Tai",
+    "type": "Hybrid",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Tingly",
+      "Uplifted"
+    ],
+    "flavor": "Tropical guava and citrus with a sweet floral candy finish.",
+    "icon": "🌿",
+    "id": "s1878"
+  },
+  {
+    "name": "Lilac Diesel",
+    "type": "Hybrid",
+    "rarity": "uncommon",
+    "thc": "20-28%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Creative",
+      "Relaxed"
+    ],
+    "flavor": "Bright citrus and sweet berries over earthy pine and chem.",
+    "icon": "🌿",
+    "breeder": "Ethos Genetics",
+    "parents": [
+      "Silver Lemon Haze",
+      "Forbidden Fruit",
+      "NYC Cherry Pie",
+      "Citral Glue"
+    ],
+    "id": "s1879"
+  },
+  {
+    "name": "Cadillac Rainbow",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-27%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Social"
+    ],
+    "flavor": "Citrus and sweet cherry with a diesel and mint edge.",
+    "icon": "🌿",
+    "breeder": "3rd Coast Genetics",
+    "parents": [
+      "Pure Michigan",
+      "Runtz"
+    ],
+    "id": "s1880"
+  },
+  {
+    "name": "Honeydew",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Happy",
+      "Relaxed"
+    ],
+    "flavor": "Sweet melon with fresh berries and woody pine.",
+    "icon": "🌿",
+    "id": "s1881"
+  },
+  {
+    "name": "Crunch Berry",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Peaceful",
+      "Happy"
+    ],
+    "flavor": "Sweet berry cereal and candied blueberry with a peppery pine finish.",
+    "icon": "🌿",
+    "breeder": "Exotic Genetix",
+    "parents": [
+      "Triple OG",
+      "Blueberry"
+    ],
+    "id": "s1882"
   }
 ]
