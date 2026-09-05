@@ -61403,5 +61403,159 @@
       "SFV OG Kush"
     ],
     "id": "s1846"
+  },
+  {
+    "name": "Gurple",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18-21%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Calm"
+    ],
+    "flavor": "Sweet grape and berries with a skunky edge.",
+    "icon": "🌿",
+    "id": "s1847"
+  },
+  {
+    "name": "Blue Caviar",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Creative"
+    ],
+    "flavor": "Fruity blueberry with a smooth, creamy depth.",
+    "icon": "🌿",
+    "breeder": "Cookies",
+    "parents": [
+      "Grape Gas",
+      "Lantz"
+    ],
+    "id": "s1848"
+  },
+  {
+    "name": "Mango Machine",
+    "type": "Hybrid",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Happy",
+      "Relaxed"
+    ],
+    "flavor": "Ripe mango with gas and OG notes.",
+    "icon": "🌿",
+    "breeder": "Claybourne Co.",
+    "id": "s1849"
+  },
+  {
+    "name": "French Lotus",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "25-31%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed"
+    ],
+    "flavor": "Earthy and citrus with a subtle umami undertone.",
+    "icon": "🌿",
+    "breeder": "Maven Genetics",
+    "parents": [
+      "FKAFL",
+      "Blue Lotus"
+    ],
+    "id": "s1850"
+  },
+  {
+    "name": "Blue Burst",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "27-31%",
+    "cbd": "1%",
+    "terps": [],
+    "effects": [
+      "Focused",
+      "Relaxed",
+      "Uplifted"
+    ],
+    "flavor": "Ripe blueberry with tart sour apple and red fruit notes.",
+    "icon": "🌿",
+    "parents": [
+      "Purple Thai",
+      "Afghan"
+    ],
+    "id": "s1851"
+  },
+  {
+    "name": "Lemon Gumball",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "26-32%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Energetic",
+      "Creative"
+    ],
+    "flavor": "Pure lemon candy with a zesty, sour bite.",
+    "icon": "🌿",
+    "breeder": "Smacked Studios",
+    "parents": [
+      "Gelonade",
+      "Gumbo"
+    ],
+    "id": "s1852"
+  },
+  {
+    "name": "Triple P'z",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed"
+    ],
+    "flavor": "Smooth and trichome-rich with a peachy, fruity sweetness.",
+    "icon": "🌿",
+    "breeder": "Seed Junky Genetics",
+    "parents": [
+      "Peach Pie",
+      "Purple Punch"
+    ],
+    "id": "s1853"
+  },
+  {
+    "name": "Animal Mintz x SFV",
+    "type": "Indica",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Full mint profile with notes of savory gas.",
+    "icon": "🌿",
+    "breeder": "STIIIZY",
+    "parents": [
+      "Animal Mintz",
+      "SFV OG Kush"
+    ],
+    "id": "s1854"
   }
 ]
