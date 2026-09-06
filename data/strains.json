@@ -59322,7 +59322,7 @@
     "type": "Indica",
     "lean": null,
     "rarity": "uncommon",
-    "thc": null,
+    "thc": "27%",
     "cbd": null,
     "terps": [],
     "effects": [
@@ -59330,7 +59330,11 @@
     ],
     "flavor": null,
     "icon": "👁️",
-    "breeder": "Seed Junky Genetics"
+    "breeder": "Seed Junky Genetics",
+    "parents": [
+      "Permanent Marker",
+      "Lemon Cherry Gelato"
+    ]
   },
   {
     "id": "s1775",
@@ -60926,18 +60930,19 @@
     "name": "Ronin OG",
     "type": "Hybrid",
     "rarity": "uncommon",
-    "thc": "",
+    "thc": "28-31%",
     "cbd": "",
     "terps": [],
     "effects": [
       "Relaxed",
       "Focused"
     ],
-    "flavor": "Savory and sweet with fresh fruit, sour citrus, mint, and herbal cheese.",
+    "flavor": "Savory sweet fruits with sour citrus, mint, and herbal cheese.",
     "icon": "🌿",
     "breeder": "Habitat",
     "parents": [
-      "Gas Face OG"
+      "Creamsicle OG",
+      "Yoda OG"
     ],
     "id": "s1857"
   },
@@ -61271,7 +61276,7 @@
     "name": "Cheetah Piss",
     "type": "Sativa",
     "rarity": "uncommon",
-    "thc": "",
+    "thc": "14-28%",
     "cbd": "",
     "terps": [],
     "effects": [
@@ -61279,11 +61284,17 @@
       "Euphoric",
       "Creative"
     ],
-    "flavor": "Musky lemon with a funky undertone.",
+    "flavor": "Pungent ammonia and citrus with sour lemon and diesel.",
     "icon": "🌿",
     "id": "s1872",
     "aka": [
       "Funky Kitty"
+    ],
+    "breeder": "Cookies",
+    "parents": [
+      "Lemonnade",
+      "Gelato 42",
+      "London Pound Cake 97"
     ]
   },
   {
@@ -61360,14 +61371,14 @@
     "name": "Lemonade OG",
     "type": "Hybrid",
     "rarity": "uncommon",
-    "thc": "",
+    "thc": "18-26%",
     "cbd": "",
     "terps": [],
     "effects": [
       "Uplifted",
       "Relaxed"
     ],
-    "flavor": "Bright lemon citrus over an earthy, peppery Kush base.",
+    "flavor": "Bright lemon citrus with earthy peppery Kush undertones.",
     "icon": "🌿",
     "id": "s1876",
     "aka": [
@@ -61404,7 +61415,7 @@
     "name": "Mai Tai",
     "type": "Hybrid",
     "rarity": "uncommon",
-    "thc": "",
+    "thc": "18-25%",
     "cbd": "",
     "terps": [],
     "effects": [
@@ -61412,7 +61423,7 @@
       "Tingly",
       "Uplifted"
     ],
-    "flavor": "Tropical guava and citrus with a sweet floral candy finish.",
+    "flavor": "Fruity berry with sweet and sour citrus and mint.",
     "icon": "🌿",
     "id": "s1878"
   },
@@ -61476,7 +61487,7 @@
     "type": "Hybrid",
     "lean": "Sativa-leaning",
     "rarity": "uncommon",
-    "thc": "",
+    "thc": "18-25%",
     "cbd": "",
     "terps": [],
     "effects": [
@@ -61484,7 +61495,7 @@
       "Happy",
       "Relaxed"
     ],
-    "flavor": "Sweet melon with fresh berries and woody pine.",
+    "flavor": "Sweet melon with berries and woody earthiness.",
     "icon": "🌿",
     "id": "s1881",
     "aka": [
