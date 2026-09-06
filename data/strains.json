@@ -58876,16 +58876,20 @@
     "type": "Sativa",
     "lean": null,
     "rarity": "uncommon",
-    "thc": null,
+    "thc": "23-24%",
     "cbd": null,
     "terps": [],
     "effects": [
       "Uplifted",
       "Relaxed"
     ],
-    "flavor": "Bright citrus and floral notes with a touch of soothing lavender.",
+    "flavor": "Citrus and floral with a touch of soothing lavender.",
     "icon": "🌼",
-    "breeder": "Green Line"
+    "breeder": "Greenline",
+    "parents": [
+      "Amnesia Haze",
+      "Black Widow"
+    ]
   },
   {
     "id": "s1753",
@@ -59090,7 +59094,7 @@
     "type": "Indica",
     "lean": null,
     "rarity": "rare",
-    "thc": null,
+    "thc": "19-27%",
     "cbd": null,
     "terps": [],
     "effects": [
@@ -59112,13 +59116,17 @@
     "type": "Hybrid",
     "lean": "Sativa-leaning",
     "rarity": "uncommon",
-    "thc": null,
+    "thc": "15-26%",
     "cbd": null,
     "terps": [],
     "effects": [],
-    "flavor": null,
+    "flavor": "Sweet nutty chocolate with a sharp mint finish.",
     "icon": "🍫",
-    "breeder": "Exotic Genetics"
+    "breeder": "Exotic Genetix",
+    "parents": [
+      "GMO",
+      "Mint Chocolate Chip"
+    ]
   },
   {
     "id": "s1767",
@@ -59155,16 +59163,20 @@
     "type": "Hybrid",
     "lean": null,
     "rarity": "uncommon",
-    "thc": null,
+    "thc": "20-33%",
     "cbd": null,
     "terps": [],
     "effects": [],
-    "flavor": null,
+    "flavor": "Grape and diesel with earthy fuel notes.",
     "icon": "🍇",
     "breeder": "Compound Genetics",
     "parents": [
       "Grape Pie",
       "Jet Fuel Gelato"
+    ],
+    "aka": [
+      "Grape Gas",
+      "Grape Gasolina"
     ]
   },
   {
@@ -59326,13 +59338,17 @@
     "type": "Hybrid",
     "lean": null,
     "rarity": "uncommon",
-    "thc": null,
+    "thc": "18-24%",
     "cbd": null,
     "terps": [],
     "effects": [],
-    "flavor": null,
+    "flavor": "Earthy kush and fresh pine with sandalwood and citrus.",
     "icon": "🌿",
-    "breeder": "T.H.Seeds"
+    "breeder": "T.H.Seeds",
+    "parents": [
+      "S.A.G.E.",
+      "OG Kush"
+    ]
   },
   {
     "id": "s1776",
@@ -59340,13 +59356,17 @@
     "type": "Hybrid",
     "lean": null,
     "rarity": "uncommon",
-    "thc": null,
+    "thc": "15-24%",
     "cbd": null,
     "terps": [],
     "effects": [],
-    "flavor": null,
+    "flavor": "Sharp citrus with herbal sage and a pungent fuel finish.",
     "icon": "🌿",
-    "breeder": "T.H.Seeds"
+    "breeder": "T.H.Seeds",
+    "parents": [
+      "S.A.G.E.",
+      "Sour Diesel"
+    ]
   },
   {
     "id": "s1777",
@@ -59453,7 +59473,7 @@
     "type": "Hybrid",
     "lean": "Sativa-leaning",
     "rarity": "uncommon",
-    "thc": "",
+    "thc": "26-32%",
     "cbd": "",
     "terps": [],
     "effects": [
@@ -59461,7 +59481,7 @@
       "Creative",
       "Relaxed"
     ],
-    "flavor": "Sweet citrus and lemon over an earthy haze funk.",
+    "flavor": "Sweet citrus and berry with a fruity haze finish.",
     "icon": "🌿",
     "breeder": "Rare Dankness Seeds",
     "parents": [
@@ -60462,28 +60482,6 @@
       "Zkittlez"
     ],
     "id": "s1833"
-  },
-  {
-    "name": "Grape Gasolina",
-    "type": "Hybrid",
-    "lean": "Indica-leaning",
-    "rarity": "uncommon",
-    "thc": "",
-    "cbd": "",
-    "terps": [],
-    "effects": [
-      "Calm",
-      "Euphoric",
-      "Happy"
-    ],
-    "flavor": "Dank earth and diesel-fuel pepper with sweet, fruity grape accents.",
-    "icon": "🌿",
-    "breeder": "Claybourne Co.",
-    "parents": [
-      "Grape Pie",
-      "Jet Fuel Gelato"
-    ],
-    "id": "s1834"
   },
   {
     "name": "Pink Acai",
