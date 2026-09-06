@@ -65033,5 +65033,105 @@
       "Gush Mints"
     ],
     "id": "s2036"
+  },
+  {
+    "name": "Wildberry",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "14%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Sleepy",
+      "Relaxed",
+      "Giggly"
+    ],
+    "flavor": "Mint and berry with honey and sour citrus cherries.",
+    "icon": "🌿",
+    "breeder": "Annunaki Genetics",
+    "parents": [
+      "Black Cherry Soda",
+      "Gorilla Biscuit"
+    ],
+    "aka": [
+      "Wild Berry"
+    ],
+    "id": "s2037"
+  },
+  {
+    "name": "Citrus Sap",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "17-24%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Euphoric",
+      "Creative",
+      "Relaxed"
+    ],
+    "flavor": "Sweet mandarin orange and citrus lemon.",
+    "icon": "🌿",
+    "breeder": "Crockett Family Farms",
+    "parents": [
+      "Gorilla Glue #4",
+      "Tangie"
+    ],
+    "id": "s2038"
+  },
+  {
+    "name": "Moonbow",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "20-30%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Tingly"
+    ],
+    "flavor": "Sweet berries and citrus with tropical fruit and floral vanilla.",
+    "icon": "🌿",
+    "breeder": "Archive Seed Bank",
+    "parents": [
+      "Zkittlez",
+      "Do-Si-Dos"
+    ],
+    "aka": [
+      "Moon Bow",
+      "Moonbow #112"
+    ],
+    "id": "s2039"
+  },
+  {
+    "name": "BTY OG",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "23-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Euphoric",
+      "Sleepy"
+    ],
+    "flavor": "Earthy and skunky with vanilla, lemon zest, and pine.",
+    "icon": "🌿",
+    "breeder": "Certified Genetics",
+    "parents": [
+      "OG Kush",
+      "Tahoe OG"
+    ],
+    "aka": [
+      "Better Than Yours OG"
+    ],
+    "id": "s2040"
   }
 ]
