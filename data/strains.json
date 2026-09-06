@@ -64487,5 +64487,342 @@
       "Ocean Haze"
     ],
     "id": "s2012"
+  },
+  {
+    "name": "Jungle Juice",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "15-22%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Creative",
+      "Euphoric",
+      "Relaxed"
+    ],
+    "flavor": "Citrusy and fruity with sour banana and earthy pine.",
+    "icon": "🌿",
+    "breeder": "Golden State Genetics",
+    "parents": [
+      "Animal Cookies",
+      "Tangie"
+    ],
+    "id": "s2013"
+  },
+  {
+    "name": "Blueberry Pancakes",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Happy"
+    ],
+    "flavor": "Blueberries and grape with dough and syrupy tart berry.",
+    "icon": "🌿",
+    "breeder": "Humboldt Seed Company",
+    "parents": [
+      "Slurricane",
+      "Purple Panty Dropper"
+    ],
+    "aka": [
+      "Blueberry Pancake",
+      "BBP"
+    ],
+    "id": "s2014"
+  },
+  {
+    "name": "Raspberry Parfait",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "21%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Creative",
+      "Talkative",
+      "Uplifted"
+    ],
+    "flavor": "Plum and berries with violet and vanilla yogurt.",
+    "icon": "🌿",
+    "breeder": "Humboldt Seed Company",
+    "parents": [
+      "Shishkaberry",
+      "Truffula Tree"
+    ],
+    "id": "s2015"
+  },
+  {
+    "name": "Georgia Peach",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "29%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Focused",
+      "Relaxed",
+      "Uplifted"
+    ],
+    "flavor": "Sweet sugary peach with sour citrus and nuttiness.",
+    "icon": "🌿",
+    "parents": [
+      "GSC",
+      "Space Jill"
+    ],
+    "id": "s2016"
+  },
+  {
+    "name": "Bob Marley",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "14-23%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Energetic"
+    ],
+    "flavor": "Bright citrus and pine with tropical notes.",
+    "icon": "🌿",
+    "id": "s2017"
+  },
+  {
+    "name": "Wild Cherry",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed"
+    ],
+    "flavor": "Cherry candy.",
+    "icon": "🌿",
+    "parents": [
+      "Trainwreck",
+      "Cherry Thunder Fuck"
+    ],
+    "id": "s2018"
+  },
+  {
+    "name": "Florida Kush",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Sleepy",
+      "Euphoric",
+      "Happy"
+    ],
+    "flavor": "Sweet floral orange with tropical pineapple and mango.",
+    "icon": "🌿",
+    "parents": [
+      "Triangle Kush",
+      "LA Kush Cake"
+    ],
+    "id": "s2019"
+  },
+  {
+    "name": "Blueberry Cheesecake",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "17-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Relaxed",
+      "Euphoric"
+    ],
+    "flavor": "Sweet blueberry cheesecake with pungent creamy cheese.",
+    "icon": "🌿",
+    "parents": [
+      "Blueberry",
+      "Cheese"
+    ],
+    "aka": [
+      "Blue Cheesecake"
+    ],
+    "id": "s2020"
+  },
+  {
+    "name": "Lucky Charms",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "18-24%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Happy",
+      "Creative",
+      "Talkative"
+    ],
+    "flavor": "Sweet cereal and marshmallow with tangy fruit berry.",
+    "icon": "🌿",
+    "breeder": "Bodhi Seeds",
+    "parents": [
+      "The White",
+      "Appalachia"
+    ],
+    "aka": [
+      "Lucky Charmz",
+      "Bodhi's Charms",
+      "LC"
+    ],
+    "id": "s2021"
+  },
+  {
+    "name": "Juicy Melon",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "23%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Creative",
+      "Happy"
+    ],
+    "flavor": "Sweet fruity melon with honey and flowery haze.",
+    "icon": "🌿",
+    "breeder": "STIIIZY",
+    "parents": [
+      "Juicy Fruit",
+      "Watermelon"
+    ],
+    "id": "s2022"
+  },
+  {
+    "name": "Cookie Dough",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Aroused",
+      "Relaxed"
+    ],
+    "flavor": "Blue cheese and mint with sweetness.",
+    "icon": "🌿",
+    "breeder": "Flavour Chasers",
+    "parents": [
+      "GSC",
+      "Do-Si-Dos"
+    ],
+    "id": "s2023"
+  },
+  {
+    "name": "Sherblato",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Relaxed",
+      "Tingly"
+    ],
+    "flavor": "Tart citrus and gas with cherry sweetness.",
+    "icon": "🌿",
+    "breeder": "Flavour Chasers",
+    "parents": [
+      "Sunset Sherbet",
+      "Gelato"
+    ],
+    "id": "s2024"
+  },
+  {
+    "name": "Planet Of The Grapes",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-30%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Euphoric"
+    ],
+    "flavor": "Grape and chemical diesel with earthy chestnut.",
+    "icon": "🌿",
+    "breeder": "Ethos Genetics",
+    "parents": [
+      "Grape Diamonds",
+      "Chem D-95"
+    ],
+    "aka": [
+      "P.O.G."
+    ],
+    "id": "s2025"
+  },
+  {
+    "name": "Cherry Diesel",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "15-24%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Motivated",
+      "Uplifted",
+      "Relaxed"
+    ],
+    "flavor": "Sweet dark cherry with tart gas and diesel.",
+    "icon": "🌿",
+    "breeder": "MTG Seeds",
+    "parents": [
+      "Cherry OG",
+      "Turbo Diesel"
+    ],
+    "aka": [
+      "Cherry Turbo Diesel"
+    ],
+    "id": "s2026"
+  },
+  {
+    "name": "Canal Street Runtz",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-36%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Uplifted"
+    ],
+    "flavor": "Sweet candy and tart berry bubblegum with gassy diesel.",
+    "icon": "🌿",
+    "breeder": "Purple City Genetics",
+    "parents": [
+      "Pre-64 Runtz",
+      "THC Bomb"
+    ],
+    "id": "s2027"
   }
 ]
