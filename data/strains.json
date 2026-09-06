@@ -61338,5 +61338,114 @@
       "Hash Burger"
     ],
     "id": "s1883"
+  },
+  {
+    "name": "RS11",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "27-30%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Focused",
+      "Relaxed",
+      "Euphoric"
+    ],
+    "flavor": "Berry and gas with evergreen citrus and mango notes.",
+    "icon": "🌿",
+    "breeder": "DEO Farms",
+    "parents": [
+      "Pink Guava",
+      "OZK"
+    ],
+    "id": "s1884"
+  },
+  {
+    "name": "Blueberry Cookies",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18-24%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Uplifted",
+      "Creative"
+    ],
+    "flavor": "Ripe blueberry with roasted nuts and mint.",
+    "icon": "🌿",
+    "breeder": "Dinafem",
+    "parents": [
+      "Blueberry Tahoe",
+      "Thin Mint GSC"
+    ],
+    "id": "s1885"
+  },
+  {
+    "name": "Grape Soda",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-30%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Sleepy"
+    ],
+    "flavor": "Sweet grape and berries with a pungent, floral finish.",
+    "icon": "🌿",
+    "breeder": "Taste Budz",
+    "parents": [
+      "Tahoe OG"
+    ],
+    "id": "s1886"
+  },
+  {
+    "name": "Garlic Breath",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "17-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Hungry"
+    ],
+    "flavor": "Pungent garlic and diesel with earthy, savory funk.",
+    "icon": "🌿",
+    "breeder": "ThugPug Genetics",
+    "parents": [
+      "GMO",
+      "Mendo Breath"
+    ],
+    "id": "s1887"
+  },
+  {
+    "name": "Dante's Inferno",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Uplifted",
+      "Creative"
+    ],
+    "flavor": "Sweet creamy cookies with fresh strawberries and black pepper.",
+    "icon": "🌿",
+    "breeder": "Clearwater Genetics",
+    "parents": [
+      "Oreoz",
+      "Devil Driver"
+    ],
+    "id": "s1888"
   }
 ]
