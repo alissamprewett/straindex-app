@@ -62476,5 +62476,305 @@
       "White Widow"
     ],
     "id": "s1919"
+  },
+  {
+    "name": "Banana Split",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Happy",
+      "Relaxed",
+      "Motivated"
+    ],
+    "flavor": "Sweet banana with tangerine citrus and vanilla cream.",
+    "icon": "🌿",
+    "breeder": "Crockett Family Farms",
+    "parents": [
+      "Tangie",
+      "Banana Sherbet"
+    ],
+    "id": "s1920"
+  },
+  {
+    "name": "Papaya Bomb",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "22-31%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Euphoric",
+      "Relaxed"
+    ],
+    "flavor": "Tropical fruit and papaya with melon, strawberry, and skunk.",
+    "icon": "🌿",
+    "breeder": "Purple City Genetics",
+    "parents": [
+      "Papaya",
+      "THC Bomb"
+    ],
+    "id": "s1921"
+  },
+  {
+    "name": "Peach Crescendo",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "16-30%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Happy",
+      "Relaxed"
+    ],
+    "flavor": "Sweet peach candy with chemical spice and citrus.",
+    "icon": "🌿",
+    "breeder": "Ethos Genetics",
+    "parents": [
+      "Chem D",
+      "i95",
+      "Mandarin Cookies",
+      "Peach Ringz"
+    ],
+    "id": "s1922"
+  },
+  {
+    "name": "Sub Zero",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "22-30%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed"
+    ],
+    "flavor": "Fruity citrus and sweet cream with a chocolate gas edge.",
+    "icon": "🌿",
+    "breeder": "GrowMoreFire Genetics",
+    "parents": [
+      "Super Boof",
+      "Oreoz"
+    ],
+    "aka": [
+      "SubZero"
+    ],
+    "id": "s1923"
+  },
+  {
+    "name": "Rainbow OG",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Relaxed",
+      "Euphoric",
+      "Tingly"
+    ],
+    "flavor": "Citrus and grapefruit with pineapple and sweet tropical notes.",
+    "icon": "🌿",
+    "breeder": "Lifetime Seeds",
+    "parents": [
+      "Dancehall",
+      "Blueberry"
+    ],
+    "aka": [
+      "Rainbow",
+      "Rainbow Bud"
+    ],
+    "id": "s1924"
+  },
+  {
+    "name": "Jack One",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "24-30%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Energetic",
+      "Clear-headed",
+      "Focused"
+    ],
+    "flavor": "Sweet citrus and pine with a touch of lemon and skunk.",
+    "icon": "🌿",
+    "parents": [
+      "Skunk #1",
+      "Jack Herer"
+    ],
+    "aka": [
+      "J1"
+    ],
+    "id": "s1925"
+  },
+  {
+    "name": "007",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "19-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Euphoric"
+    ],
+    "flavor": "Sweet citrus and sour lemon with bubblegum and cream.",
+    "icon": "🌿",
+    "breeder": "LIT Farms",
+    "parents": [
+      "London Pound Cake",
+      "Project 4516"
+    ],
+    "aka": [
+      "Project 007"
+    ],
+    "id": "s1926"
+  },
+  {
+    "name": "Gas",
+    "type": "Indica",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Earthy citrus and diesel with pine, spice, and lemon.",
+    "icon": "🌿",
+    "aka": [
+      "Gas '97"
+    ],
+    "id": "s1927"
+  },
+  {
+    "name": "Bubble Bath",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "21%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Focused",
+      "Uplifted",
+      "Happy"
+    ],
+    "flavor": "Sage and lavender with earthy pine and a hint of ammonia.",
+    "icon": "🌿",
+    "breeder": "LIT Farms",
+    "parents": [
+      "The Soap",
+      "Project 4516"
+    ],
+    "id": "s1928"
+  },
+  {
+    "name": "Horchata",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-28%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Relaxed",
+      "Talkative",
+      "Creative"
+    ],
+    "flavor": "Earthy and floral with creamy vanilla and a gassy edge.",
+    "icon": "🌿",
+    "breeder": "Compound Genetics",
+    "parents": [
+      "Jet Fuel Gelato",
+      "Mochi Gelato"
+    ],
+    "id": "s1929"
+  },
+  {
+    "name": "Berry Gelato",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "21%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Clear-headed",
+      "Relaxed",
+      "Happy"
+    ],
+    "flavor": "Aromatic fruity berry with earthy undertones.",
+    "icon": "🌿",
+    "parents": [
+      "Thin Mint GSC",
+      "Blueberry"
+    ],
+    "aka": [
+      "Blueberry Gelato"
+    ],
+    "id": "s1930"
+  },
+  {
+    "name": "Dulce De Fresa",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-26%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Creative",
+      "Energetic"
+    ],
+    "flavor": "Sweet strawberry with cream, vanilla, and sugar.",
+    "icon": "🌿",
+    "breeder": "Bloom Seed Co.",
+    "parents": [
+      "Dulce De Uva",
+      "Strawberry Guava"
+    ],
+    "id": "s1931"
+  },
+  {
+    "name": "Strawberry Guava",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-28%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Relaxed",
+      "Hungry",
+      "Euphoric"
+    ],
+    "flavor": "Sweet strawberry and tropical guava candy.",
+    "icon": "🌿",
+    "breeder": "Oni Seed Co.",
+    "parents": [
+      "Strawberry Banana",
+      "Papaya"
+    ],
+    "aka": [
+      "Strawguava"
+    ],
+    "id": "s1932"
   }
 ]
