@@ -2844,10 +2844,10 @@ function pageAdminHome(req, res) {
   sendHtml(res, layout({ title: 'Admin', body, isAdmin: true }));
 }
 
-function pageAdminUsers(req, res, query) {
+async function pageAdminUsers(req, res, query) {
   if (!requireAdmin(req, res)) return;
   const deleted = query.get('deleted');
-  const users = db.listUsers();
+  const users = await db.listUsersLive();
   const body = `
     <h1 class="screen-title">Manage Users (${users.length})</h1>
     ${deleted ? `<p class="empty-note" style="color:var(--brand-green-dark);">User "${esc(deleted)}" was deleted.</p>` : ''}
@@ -4375,7 +4375,7 @@ const server = http.createServer(async (req, res) => {
     if (method === 'POST' && pathname === '/account/password') return await handleAccountPassword(req, res);
     if (method === 'GET' && pathname === '/admin/logout') return handleAdminLogout(req, res);
     if (method === 'GET' && pathname === '/admin') return pageAdminHome(req, res);
-    if (method === 'GET' && pathname === '/admin/users') return pageAdminUsers(req, res, url.searchParams);
+    if (method === 'GET' && pathname === '/admin/users') return await pageAdminUsers(req, res, url.searchParams);
     if (method === 'POST' && (m = pathname.match(/^\/admin\/users\/(\d+)\/delete$/))) return await handleAdminUserDelete(req, res, Number(m[1]));
     if (method === 'GET' && pathname === '/admin/feedback') return pageAdminFeedback(req, res);
     if (method === 'GET' && pathname === '/admin/strain-submissions') return pageAdminStrainSubmissions(req, res);

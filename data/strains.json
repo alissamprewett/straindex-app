@@ -2009,6 +2009,9 @@
       "Insomnia",
       "Depression",
       "Nausea"
+    ],
+    "aka": [
+      "Pot of Gold"
     ]
   },
   {
@@ -2359,44 +2362,6 @@
     "breeder": "The Bionosphere",
     "aka": [
       "Platinum OG"
-    ]
-  },
-  {
-    "id": "s64",
-    "name": "Pot of Gold",
-    "type": "Hybrid",
-    "lean": "",
-    "rarity": "uncommon",
-    "thc": "12–21%",
-    "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Linalool",
-        "p": 0.4
-      },
-      {
-        "n": "Myrcene",
-        "p": 0.27
-      },
-      {
-        "n": "Caryophyllene",
-        "p": 0.16
-      }
-    ],
-    "effects": [
-      "Relaxed",
-      "Sleepy",
-      "Euphoric",
-      "Hungry"
-    ],
-    "flavor": "Sweet and grape on the palate with a linalool-leaning finish.",
-    "icon": "🍬",
-    "breeder": "Flying Dutchmen Seed Company",
-    "ailments": [
-      "Insomnia",
-      "Pain",
-      "Lack of Appetite",
-      "Stress"
     ]
   },
   {
@@ -4982,10 +4947,15 @@
       "Muscle Spasms"
     ],
     "aka": [
+      "King Louis",
       "King Louie",
       "King Louis OG",
       "King Louie XIII",
       "Louis XIII"
+    ],
+    "parents": [
+      "OG Kush",
+      "LA Confidential"
     ]
   },
   {
@@ -41077,37 +41047,6 @@
     "breeder": "GreenLeaf Healing Collective"
   },
   {
-    "id": "s1132",
-    "name": "King Louis",
-    "type": "Indica",
-    "lean": "",
-    "rarity": "common",
-    "thc": "26–30%",
-    "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Linalool",
-        "p": 0.4
-      },
-      {
-        "n": "Pinene",
-        "p": 0.27
-      },
-      {
-        "n": "Terpinolene",
-        "p": 0.16
-      }
-    ],
-    "effects": [
-      "Clear-headed",
-      "Uplifted",
-      "Giggly"
-    ],
-    "flavor": "Linalool-forward with a pinene undertone.",
-    "icon": "🌿",
-    "breeder": "Uprising Seed Co."
-  },
-  {
     "id": "s1133",
     "name": "King's Bread",
     "type": "Sativa",
@@ -54244,7 +54183,10 @@
       "Uplifted"
     ],
     "flavor": "Sweet berry and cream with a tart, fruity edge.",
-    "icon": "🫐"
+    "icon": "🫐",
+    "aka": [
+      "Acai Berry"
+    ]
   },
   {
     "id": "s1567",
@@ -59423,20 +59365,6 @@
     "breeder": "BOUTIQ"
   },
   {
-    "id": "s1779",
-    "name": "Acai Berry",
-    "type": "Sativa",
-    "lean": "",
-    "rarity": "uncommon",
-    "thc": "88-93%",
-    "cbd": "",
-    "terps": [],
-    "effects": [],
-    "flavor": "Rich, tart berry sweetness.",
-    "icon": "🌿",
-    "breeder": "BOUTIQ"
-  },
-  {
     "id": "s1780",
     "name": "Sour Slush",
     "type": "Sativa",
@@ -63970,5 +63898,101 @@
       "Yoda OG"
     ],
     "id": "s1987"
+  },
+  {
+    "name": "Pineapple Runtz",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Giggly",
+      "Sleepy"
+    ],
+    "flavor": "Fruity tropical pineapple with citrus, berries, and earth.",
+    "icon": "🌿",
+    "parents": [
+      "White Runtz",
+      "Pineapple Kush"
+    ],
+    "id": "s1988"
+  },
+  {
+    "name": "Dosilato",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "23-26%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed"
+    ],
+    "flavor": "Sweet lavender and earthy spice with citrus and pine.",
+    "icon": "🌿",
+    "breeder": "In House Genetics",
+    "parents": [
+      "Do-Si-Dos",
+      "Gelato #41"
+    ],
+    "aka": [
+      "Dosi Latte",
+      "Dosi Lato",
+      "Do-Si-Lato",
+      "Dolato"
+    ],
+    "id": "s1989"
+  },
+  {
+    "name": "Blueberry Lemonade",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "9-14%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Euphoric",
+      "Creative",
+      "Uplifted"
+    ],
+    "flavor": "Sweet berry with lemon citrus.",
+    "icon": "🌿",
+    "parents": [
+      "Blueberry Fuel",
+      "Lemon Skunk"
+    ],
+    "id": "s1990"
+  },
+  {
+    "name": "Passion Orange Guava",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "16-20%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Creative",
+      "Euphoric",
+      "Happy",
+      "Energetic"
+    ],
+    "flavor": "Bright orange and guava with a diesel undertone.",
+    "icon": "🌿",
+    "breeder": "Growing Passion",
+    "parents": [
+      "Tangie",
+      "Guava Dawg"
+    ],
+    "aka": [
+      "POG",
+      "P.O.G."
+    ],
+    "id": "s1991"
   }
 ]
