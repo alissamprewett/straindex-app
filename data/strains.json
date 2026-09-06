@@ -41311,7 +41311,7 @@
       "Energetic",
       "Sleepy"
     ],
-    "flavor": "Humulene-forward with a pinene undertone.",
+    "flavor": "Earthy and spicy with citrus, hints of cheese and pine, and a sweet floral undertone.",
     "icon": "🌿"
   },
   {
@@ -42487,36 +42487,6 @@
       "Calm"
     ],
     "flavor": "Ocimene-forward with a linalool undertone.",
-    "icon": "🌿"
-  },
-  {
-    "id": "s1180",
-    "name": "Platinum Bubba",
-    "type": "Hybrid",
-    "lean": "",
-    "rarity": "rare",
-    "thc": "19–25%",
-    "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Pinene",
-        "p": 0.4
-      },
-      {
-        "n": "Caryophyllene",
-        "p": 0.27
-      },
-      {
-        "n": "Humulene",
-        "p": 0.16
-      }
-    ],
-    "effects": [
-      "Clear-headed",
-      "Calm",
-      "Focused"
-    ],
-    "flavor": "Pinene-forward with a caryophyllene undertone.",
     "icon": "🌿"
   },
   {
@@ -57289,37 +57259,6 @@
     ]
   },
   {
-    "id": "s1675",
-    "name": "Lambsbread",
-    "type": "Sativa",
-    "lean": null,
-    "rarity": "rare",
-    "thc": "15–25%",
-    "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Myrcene",
-        "p": 0.35
-      },
-      {
-        "n": "Limonene",
-        "p": 0.25
-      },
-      {
-        "n": "Caryophyllene",
-        "p": 0.2
-      }
-    ],
-    "effects": [
-      "Energetic",
-      "Uplifted",
-      "Creative"
-    ],
-    "flavor": "Earthy and spicy with citrus, hints of cheese and pine, and a sweet floral undertone.",
-    "icon": "🐑",
-    "breeder": null
-  },
-  {
     "id": "s1676",
     "name": "Watermelon Runtz",
     "type": "Hybrid",
@@ -62912,5 +62851,79 @@
       "Humboldt Kush"
     ],
     "id": "s1938"
+  },
+  {
+    "name": "Black Runtz",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "19-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Aroused",
+      "Euphoric"
+    ],
+    "flavor": "Creamy citrus and sweet berry candy.",
+    "icon": "🌿",
+    "breeder": "Big Boss Farms",
+    "parents": [
+      "Zkittlez",
+      "Gelato"
+    ],
+    "id": "s1939"
+  },
+  {
+    "name": "Jungle Cake",
+    "type": "Hybrid",
+    "rarity": "uncommon",
+    "thc": "21-33%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Giggly",
+      "Talkative"
+    ],
+    "flavor": "Sweet and spicy with diesel, nutty vanilla, and marshmallow.",
+    "icon": "🌿",
+    "breeder": "Seed Junky Genetics",
+    "parents": [
+      "White Fire OG",
+      "Wedding Cake"
+    ],
+    "aka": [
+      "Jungle",
+      "GMO Jungle Cake"
+    ],
+    "id": "s1940"
+  },
+  {
+    "name": "Cherry Cookies",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Focused",
+      "Happy",
+      "Tingly"
+    ],
+    "flavor": "Sweet cherry with earthy, herbal cookie notes.",
+    "icon": "🌿",
+    "breeder": "Purple Caper Seeds",
+    "parents": [
+      "Cherry Pie",
+      "GSC"
+    ],
+    "aka": [
+      "Cherry Cookie"
+    ],
+    "id": "s1941"
   }
 ]
