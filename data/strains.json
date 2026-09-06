@@ -62925,5 +62925,147 @@
       "Cherry Cookie"
     ],
     "id": "s1941"
+  },
+  {
+    "name": "White Tahoe Cookies",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18.84%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Creative"
+    ],
+    "flavor": "Sweet cookie dough with pine, lemon gas, and vanilla cream.",
+    "icon": "🌿",
+    "breeder": "Kush4Breakfast",
+    "parents": [
+      "The White",
+      "Tahoe OG",
+      "GSC"
+    ],
+    "aka": [
+      "Tahoe Cookies"
+    ],
+    "id": "s1942"
+  },
+  {
+    "name": "Sour Cherry",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "20-28%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Sleepy",
+      "Happy"
+    ],
+    "flavor": "Tart cherry and lemon with spice, berries, and diesel.",
+    "icon": "🌿",
+    "breeder": "Crockett Family Farms",
+    "parents": [
+      "Cherry Pie",
+      "Sour Diesel"
+    ],
+    "aka": [
+      "Sour Cherries"
+    ],
+    "id": "s1943"
+  },
+  {
+    "name": "E85",
+    "type": "Hybrid",
+    "rarity": "uncommon",
+    "thc": "20-28%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed"
+    ],
+    "flavor": "Sweet dessert and ripe fruit with gas and vanilla frosting.",
+    "icon": "🌿",
+    "breeder": "Grandiflora Genetics",
+    "parents": [
+      "Wedding Cake",
+      "Project 4516"
+    ],
+    "aka": [
+      "Ethanol",
+      "E-85"
+    ],
+    "id": "s1944"
+  },
+  {
+    "name": "Slimer",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric"
+    ],
+    "flavor": "Citrus candy with a fuel-forward gas edge.",
+    "icon": "🌿",
+    "breeder": "MzJill Genetics",
+    "parents": [
+      "Chernobyl"
+    ],
+    "aka": [
+      "Slymer",
+      "Slimer OG",
+      "Slymer OG"
+    ],
+    "id": "s1945"
+  },
+  {
+    "name": "Pure Michigan",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "25-31%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Aroused",
+      "Giggly",
+      "Euphoric"
+    ],
+    "flavor": "Burnt rubber and coffee with vanilla, dark chocolate, and citrus diesel.",
+    "icon": "🌿",
+    "breeder": "ThugPug Genetics",
+    "parents": [
+      "Oreoz",
+      "Mendo Breath"
+    ],
+    "id": "s1946"
+  },
+  {
+    "name": "Blue Runtz",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-27%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Euphoric",
+      "Creative",
+      "Tingly"
+    ],
+    "flavor": "Blueberry and pear with vanilla, citrus, and pepper.",
+    "icon": "🌿",
+    "parents": [
+      "Blueberry",
+      "White Runtz"
+    ],
+    "id": "s1947"
   }
 ]
