@@ -133,13 +133,32 @@ Alissa has no local dev environment and no git CLI. The workflow is:
 - No photo uploaded → nothing renders in that slot (no placeholder icon
   box). Only real uploaded photos ever show.
 
-**Strain library** (1,649 strains)
-- Search by name/flavor text, Type (Indica/Sativa/Hybrid), Rarity, THC
+**Strain library** (2,005 strains as of the latest Weedmaps directory audit
+session -- this count will keep climbing across sessions, treat "1,649"
+above as stale rather than current)
+- Search by name/flavor text, **and now also alias/aka text** (`lib/db.js`
+  `matchesFilters()` -- previously only checked `name` and `flavor`, so a
+  strain search for e.g. "Tallyman" or "Better Than Yours OG" returned
+  nothing even though the strain existed under a different display name.
+  Fixed by also checking the `aka` array field. 200+ strains already have
+  real aka data sitting there from prior research batches -- this fix made
+  all of it actually searchable), Type (Indica/Sativa/Hybrid), Rarity, THC
   bucket (Low/Medium/High, parsed from the stored range string), dominant
   terpene, and "Looking for relief from..." (ailment tags from the Kushy
-  dataset — 960 strains have real ailment associations; explicitly labeled
+  dataset -- 960 strains have real ailment associations; explicitly labeled
   "user-reported, not medical advice").
-- Breeder credit shown on strain detail pages where known (798 strains).
+- Breeder credit shown on strain detail pages where known (798 strains,
+  though this number is also stale -- many more added since via the
+  Weedmaps audit, most with confirmed breeder + parent strains).
+- **Ongoing Weedmaps directory audit**: cross-referencing
+  `weedmaps.com/strains?page=N` (1,106 pages total) against the library to
+  find missing strains and duplicate/misspelled entries. See
+  `docs/strain-research-log.md` for the standing research methodology
+  (specifically the "multi-version / ambiguous-lineage strains" section --
+  read this before researching any strain whose name is generic enough
+  that multiple unrelated breeders might have used it) and the running
+  list of names that were researched but couldn't be confirmed well
+  enough to add (revisit those before re-researching from scratch).
 - Real photos everywhere (see Images section above).
 - **Known data-quality issue, not fully resolved**: the original starter
   dataset (pre-dating this session) has ~75 strains with a suspicious

@@ -3,6 +3,55 @@
 Purpose: track candidate strain-name sources found so far, what's actually
 usable in each, and what's queued up for future batches.
 
+## Research methodology: multi-version / ambiguous-lineage strains
+
+Applies whenever independent sources report *different* parentage for the
+same strain name — extremely common for popular/generic names (fruit names,
+color names, single-word names) that multiple unrelated breeders have all
+used at some point. This is not the same problem as "no one knows the
+parents" (a single strain with a genuinely undocumented lineage) — it's
+"multiple different strains happen to share this name."
+
+**The rule: use it if 2+ independent sources agree on the same specific
+cross, even when other unrelated cuts exist under the same name. Skip it
+if no single version clears that bar.**
+
+- "Independent" means separate publishers, not two articles quoting the
+  same original press release — e.g. Leafly and Weedmaps both stating the
+  same breeder + parents independently counts; two SEO-farm articles that
+  are clearly the same syndicated content do not.
+- A specific parent-strain pairing (e.g. "Gelato #33 x 1991 Triangle Kush")
+  counts as convergence. A vague shared theme (e.g. "some kind of OG
+  Kush descendant") does not — that's just everyone agreeing the name
+  sounds like an OG, not confirmation of an actual cross.
+- If breeder attribution is disputed but the *parents* are consistent
+  across sources, use the parents and either state the most-cited breeder
+  or leave breeder blank — don't let breeder-name disagreement alone sink
+  an otherwise well-corroborated cross.
+- When a genuine winner emerges among several named versions (e.g. one
+  cut is explicitly the origin and the "well known"/most documented cut,
+  or is a well known/named breeder collaboration), use that version and
+  note in the entry's flavor/effects that other cuts exist under the same
+  name, rather than trying to average conflicting data together.
+
+**Worked examples from actual research (for calibration):**
+- *Used, multi-version but convergent*: Jungle Juice (3+ sources agree on
+  Golden State Genetics' Animal Cookies x Tangie, despite at least two
+  other unrelated "Jungle Juice" cuts existing), Tire Fire (Archive Seed
+  Bank's Hi-Octane x Do-Si-Dos is far more documented than the other
+  Weedmaps-acknowledged version), Wild Cherry, Kiwi Kush, Unicorn Piss,
+  Tropical Punch, Bob Marley (genuinely unattributed lineage across every
+  source, but the sensory profile itself was still consistent enough to
+  document honestly as "breeder/parents unconfirmed").
+- *Skipped, no convergence*: Pomegranate, Midnight, Paloma, Lucky, Boss —
+  see "Unconfirmed / skipped strains" below for specifics on each.
+
+**Practical note**: don't spend more than 2-3 searches trying to resolve
+a name past this point — if the first couple of searches show 3+ clearly
+unrelated confirmed crosses with no majority, it's faster and more honest
+to log it as skipped (see below) than to keep digging for a tiebreaker
+that may not exist.
+
 ## Source 1 — openthc/vdb (GPL-3.0)
 GitHub: github.com/openthc/vdb — a purpose-built, community-submitted
 directory of strain *names only* (no descriptions, effects, or potency
@@ -163,3 +212,43 @@ used to *cross-check* research, not replace judgment.
   list a batch at a time.
 - Consider pulling one more state (WA has the largest sample at
   202,812 records) for a broader validation pass once useful.
+
+---
+
+## Unconfirmed / skipped strains (revisit later)
+
+Names pulled from the Weedmaps directory audit's "missing strain" lists
+that were researched but **not added**, per the multi-version methodology
+above. Logged here so future sessions don't burn searches re-discovering
+the same dead ends — check this list before re-researching a name below.
+Each entry can be revisited if a future search turns up a breeder
+publishing an official lineage, or a second independent source starts
+agreeing with one of the versions already found.
+
+- **Pomegranate** (plain name) — no data exists for the plain name itself.
+  Only unrelated *named variants* are documented: Pomegranate Shake
+  (Weedmaps confirms this itself is two different crosses), Black
+  Pomegranate (Massive Seeds), Purple Pomegranate, Berry Pomegranate.
+  None of these establish anything about a plain "Pomegranate."
+- **Midnight** (plain name) — at least 3 unrelated confirmed cultivars:
+  Tikun Olam's secret-formula medical strain (CBD-dominant, Israel),
+  3rd Coast Genetics' indica-leaning cut (parents undisclosed), and an
+  "unknown combination" per AllBud. No convergence between any two.
+- **Paloma** (plain name) — at least 4 unrelated confirmed crosses:
+  1937 Farms/Raw Genetics' "Cherry Paloma" (Tropicanna Cherries x
+  Georgia Pie), Green Dot Labs' (Pirate Milk x ROYGBIV Red), Symbiotic
+  Genetics' (Grapefruit x Durban Poison), Weedys' (Grapefruit Fly x
+  Durban Poison). Four different specific crosses, no majority.
+- **Lucky** (plain name) — no confirmable lineage at all. Weedmaps'
+  own strain page explicitly states they're "still gathering
+  information." The one other result found (GrowDiaries) appears to be
+  a data/content mismatch — it describes Bodhi Seeds' "Ice Cream Cake"
+  genetics under a page titled "Lucky," which reads like a template or
+  indexing error rather than real data about a strain called Lucky.
+- **Boss** (plain name) — even the closest-matching named version,
+  "Boss OG," has 3 conflicting confirmed parentages across sources:
+  OG Kush x Fire OG, Dark Heart Nursery's backcrossed OG Kush phenotype
+  (no named second parent), and OG Kush x Strawberry Diesel. No majority
+  among the three, and the plain "Boss" (without "OG") wasn't confirmably
+  distinguished from "Boss OG" in any source, adding another layer of
+  ambiguity on top of the parentage conflict itself.
