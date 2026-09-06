@@ -57352,7 +57352,7 @@
     "type": "Sativa",
     "lean": null,
     "rarity": "uncommon",
-    "thc": null,
+    "thc": "17-24%",
     "cbd": null,
     "terps": [],
     "effects": [
@@ -57369,7 +57369,7 @@
     "type": "Sativa",
     "lean": null,
     "rarity": "uncommon",
-    "thc": null,
+    "thc": "20-29%",
     "cbd": null,
     "terps": [],
     "effects": [],
@@ -57505,7 +57505,7 @@
     "type": "Hybrid",
     "lean": null,
     "rarity": "rare",
-    "thc": null,
+    "thc": "27-29%",
     "cbd": null,
     "terps": [],
     "effects": [],
@@ -57519,7 +57519,7 @@
     "type": "Hybrid",
     "lean": null,
     "rarity": "rare",
-    "thc": null,
+    "thc": "26-31%",
     "cbd": null,
     "terps": [],
     "effects": [
@@ -57660,7 +57660,7 @@
     "type": "Sativa",
     "lean": null,
     "rarity": "uncommon",
-    "thc": null,
+    "thc": "27-29%",
     "cbd": null,
     "terps": [],
     "effects": [],
@@ -57860,13 +57860,17 @@
     "type": "Hybrid",
     "lean": null,
     "rarity": "rare",
-    "thc": null,
+    "thc": "28-31%",
     "cbd": null,
     "terps": [],
     "effects": [],
-    "flavor": null,
+    "flavor": "Savory garlic, onion, and diesel with doughy mint and sweet candy gas.",
     "icon": "🐸",
-    "breeder": "Green Dragon"
+    "breeder": "Green Dragon",
+    "parents": [
+      "Toad Venom",
+      "Donnie Burger"
+    ]
   },
   {
     "id": "s1704",
@@ -57915,7 +57919,11 @@
     ],
     "flavor": "Tangy sweet lemon and citrus with a smooth orange cream finish.",
     "icon": "⏰",
-    "breeder": "Turn"
+    "breeder": "Turn",
+    "parents": [
+      "Lemonhead",
+      "Orange Elixir"
+    ]
   },
   {
     "id": "s1707",
@@ -58204,7 +58212,11 @@
     "effects": [],
     "flavor": null,
     "icon": "🫐",
-    "breeder": "The Marathon Cultivation"
+    "breeder": "The Marathon Cultivation",
+    "parents": [
+      "Sunset Sherbert",
+      "Gelato"
+    ]
   },
   {
     "id": "s1720",
@@ -58247,7 +58259,7 @@
     "type": "Hybrid",
     "lean": null,
     "rarity": "uncommon",
-    "thc": null,
+    "thc": "28-31%",
     "cbd": null,
     "terps": [
       {
@@ -58262,7 +58274,7 @@
     ],
     "flavor": "Sweet candy with peach and apple notes over a kush, herbal base.",
     "icon": "✈️",
-    "breeder": null,
+    "breeder": "Pearl Pharma",
     "parents": [
       "Sin Mint Cookies",
       "Jet Fuel OG"
@@ -58302,7 +58314,7 @@
     "type": "Sativa",
     "lean": null,
     "rarity": "rare",
-    "thc": null,
+    "thc": "29-35%",
     "cbd": null,
     "terps": [],
     "effects": [
@@ -58310,9 +58322,13 @@
       "Uplifted",
       "Focused"
     ],
-    "flavor": "Bright tropical aromas with a frosty, functional edge.",
+    "flavor": "Pina colada with mango and vanilla cream.",
     "icon": "⚡",
-    "breeder": "PHASES"
+    "breeder": "PHASES",
+    "parents": [
+      "MAC Daddy",
+      "Maui Waui"
+    ]
   },
   {
     "id": "s1725",
@@ -58328,9 +58344,14 @@
       "Creative",
       "Uplifted"
     ],
-    "flavor": "Sweet strawberry cream, like a fresh bowl of strawberries.",
+    "flavor": "Fresh strawberries with sweet cream.",
     "icon": "🍓",
-    "breeder": "Claybourne Co."
+    "breeder": "Claybourne Co.",
+    "parents": [
+      "Strawberry",
+      "GSC",
+      "Starfighter"
+    ]
   },
   {
     "id": "s1726",
