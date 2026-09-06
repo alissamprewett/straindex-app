@@ -6415,43 +6415,6 @@
     ]
   },
   {
-    "id": "s169",
-    "name": "Darth Vader OG",
-    "type": "Indica",
-    "lean": "",
-    "rarity": "uncommon",
-    "thc": "20–25%",
-    "cbd": "8–26%",
-    "terps": [
-      {
-        "n": "Myrcene",
-        "p": 0.4
-      },
-      {
-        "n": "Linalool",
-        "p": 0.27
-      },
-      {
-        "n": "Pinene",
-        "p": 0.16
-      }
-    ],
-    "effects": [
-      "Relaxed",
-      "Sleepy",
-      "Happy",
-      "Euphoric"
-    ],
-    "flavor": "Grape and earthy on the palate with a myrcene-leaning finish.",
-    "icon": "🍇",
-    "ailments": [
-      "Insomnia",
-      "Stress",
-      "Pain",
-      "Depression"
-    ]
-  },
-  {
     "id": "s170",
     "name": "Death Star",
     "type": "Hybrid",
@@ -11431,7 +11394,8 @@
       "Depression",
       "Insomnia",
       "Lack of Appetite"
-    ]
+    ],
+    "breeder": "The Cali Connection"
   },
   {
     "id": "s302",
@@ -38037,37 +38001,6 @@
     "breeder": "Brothers Grimm Marijuana Seed Bank"
   },
   {
-    "id": "s1029",
-    "name": "Arjan's Strawberry Haze",
-    "type": "Hybrid",
-    "lean": "",
-    "rarity": "common",
-    "thc": "23–27%",
-    "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Ocimene",
-        "p": 0.4
-      },
-      {
-        "n": "Linalool",
-        "p": 0.27
-      },
-      {
-        "n": "Terpinolene",
-        "p": 0.16
-      }
-    ],
-    "effects": [
-      "Happy",
-      "Giggly",
-      "Talkative"
-    ],
-    "flavor": "Ocimene-forward with a linalool undertone.",
-    "icon": "🌿",
-    "breeder": "Green House"
-  },
-  {
     "id": "s1030",
     "name": "Atomic Northern Lights",
     "type": "Hybrid",
@@ -43916,37 +43849,6 @@
     "icon": "🌿"
   },
   {
-    "id": "s1226",
-    "name": "Sweet Island Skunk",
-    "type": "Hybrid",
-    "lean": "",
-    "rarity": "rare",
-    "thc": "14–21%",
-    "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Terpinolene",
-        "p": 0.4
-      },
-      {
-        "n": "Pinene",
-        "p": 0.27
-      },
-      {
-        "n": "Humulene",
-        "p": 0.16
-      }
-    ],
-    "effects": [
-      "Tingly",
-      "Talkative",
-      "Clear-headed"
-    ],
-    "flavor": "Terpinolene-forward with a pinene undertone.",
-    "icon": "🌿",
-    "breeder": "BC Bud Depot"
-  },
-  {
     "id": "s1227",
     "name": "Sweet Kush",
     "type": "Hybrid",
@@ -45014,37 +44916,6 @@
     "breeder": "Subcool"
   },
   {
-    "id": "s1262",
-    "name": "SpaceJill",
-    "type": "Hybrid",
-    "lean": "",
-    "rarity": "common",
-    "thc": "12–17%",
-    "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Terpinolene",
-        "p": 0.4
-      },
-      {
-        "n": "Ocimene",
-        "p": 0.27
-      },
-      {
-        "n": "Pinene",
-        "p": 0.16
-      }
-    ],
-    "effects": [
-      "Uplifted",
-      "Social",
-      "Hungry"
-    ],
-    "flavor": "Terpinolene-forward with a ocimene undertone.",
-    "icon": "🌿",
-    "breeder": "TGA Seeds"
-  },
-  {
     "id": "s1263",
     "name": "The Third Dimension",
     "type": "Hybrid",
@@ -45445,37 +45316,6 @@
     "flavor": "Linalool-forward with a pinene undertone.",
     "icon": "🌿",
     "breeder": "Top Dawg Seeds"
-  },
-  {
-    "id": "s1276",
-    "name": "Star Dawg",
-    "type": "Hybrid",
-    "lean": "",
-    "rarity": "common",
-    "thc": "21–25%",
-    "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Myrcene",
-        "p": 0.4
-      },
-      {
-        "n": "Limonene",
-        "p": 0.27
-      },
-      {
-        "n": "Linalool",
-        "p": 0.16
-      }
-    ],
-    "effects": [
-      "Giggly",
-      "Energetic",
-      "Happy"
-    ],
-    "flavor": "Myrcene-forward with a limonene undertone.",
-    "icon": "🌿",
-    "breeder": "Top Dawg"
   },
   {
     "id": "s1277",
@@ -56797,38 +56637,6 @@
     "icon": "🍔"
   },
   {
-    "name": "Blackwater OG",
-    "type": "Indica",
-    "lean": "",
-    "rarity": "rare",
-    "thc": "17–20%",
-    "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Myrcene",
-        "p": 0.3
-      },
-      {
-        "n": "Caryophyllene",
-        "p": 0.25
-      },
-      {
-        "n": "Limonene",
-        "p": 0.15
-      }
-    ],
-    "effects": [
-      "Relaxed",
-      "Sleepy",
-      "Hungry",
-      "Euphoric"
-    ],
-    "flavor": "Earthy and sweet with a distinct grape and berry finish.",
-    "icon": "🍇",
-    "id": "s1649",
-    "breeder": "The Cali Connection"
-  },
-  {
     "id": "s1650",
     "name": "Ze Chem",
     "type": "Hybrid",
@@ -56956,37 +56764,6 @@
     "flavor": "Tart grape with a heavy diesel finish.",
     "icon": "🍇",
     "breeder": "Compound Genetics"
-  },
-  {
-    "id": "s1654",
-    "name": "Mochi Gelato",
-    "type": "Hybrid",
-    "lean": "Indica-leaning",
-    "rarity": "uncommon",
-    "thc": "20–26%",
-    "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Myrcene",
-        "p": 0.3
-      },
-      {
-        "n": "Caryophyllene",
-        "p": 0.25
-      },
-      {
-        "n": "Limonene",
-        "p": 0.2
-      }
-    ],
-    "effects": [
-      "Relaxed",
-      "Euphoric",
-      "Sleepy"
-    ],
-    "flavor": "Sweet, creamy dough with dark berry and mint.",
-    "icon": "🍡",
-    "breeder": "Sherbinskis"
   },
   {
     "id": "s1656",
@@ -62356,5 +62133,348 @@
       "Jack Herer"
     ],
     "id": "s1905"
+  },
+  {
+    "name": "Grape Cream Cake",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed"
+    ],
+    "flavor": "Creamy grape and cherry with a hint of nutty vanilla.",
+    "icon": "🌿",
+    "breeder": "Bloom Seed Co.",
+    "parents": [
+      "Grape Pie",
+      "Wedding Crasher"
+    ],
+    "aka": [
+      "GCC"
+    ],
+    "id": "s1906"
+  },
+  {
+    "name": "Oreo Cookies",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-30%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Clear-headed"
+    ],
+    "flavor": "Chocolate and sweet cream with earthy vanilla and spice.",
+    "icon": "🌿",
+    "breeder": "Exotic Genetix",
+    "parents": [
+      "Cookies & Cream",
+      "Secret Weapon"
+    ],
+    "aka": [
+      "Oreos"
+    ],
+    "id": "s1907"
+  },
+  {
+    "name": "Rainbow Runtz",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "19-30%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Euphoric",
+      "Relaxed"
+    ],
+    "flavor": "Lavender and sweet fruit with pear, earth, and apricot notes.",
+    "icon": "🌿",
+    "parents": [
+      "Zkittlez",
+      "Do-Si-Dos"
+    ],
+    "aka": [
+      "Rainbow RZ",
+      "Rainbow Runts"
+    ],
+    "id": "s1908"
+  },
+  {
+    "name": "Peaches and Cream",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "14-22%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Focused",
+      "Energetic"
+    ],
+    "flavor": "Ripe peach and cream with bright citrus and floral notes.",
+    "icon": "🌿",
+    "breeder": "Big Buddha Seeds",
+    "parents": [
+      "Skunk #1"
+    ],
+    "aka": [
+      "Peaches & Cream"
+    ],
+    "id": "s1909"
+  },
+  {
+    "name": "Fatso",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-26%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Happy",
+      "Sleepy"
+    ],
+    "flavor": "Coffee and garlic with gas, skunk, and vanilla.",
+    "icon": "🌿",
+    "breeder": "Cannarado Genetics",
+    "parents": [
+      "GMO",
+      "Legend OG"
+    ],
+    "aka": [
+      "Fatso OG",
+      "Fatso Kush"
+    ],
+    "id": "s1910"
+  },
+  {
+    "name": "Sherbanger",
+    "type": "Hybrid",
+    "rarity": "uncommon",
+    "thc": "21-27%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "Fuel-drenched sherbet with sweet spicy citrus and berry.",
+    "icon": "🌿",
+    "breeder": "Boston Roots Seed Co.",
+    "parents": [
+      "Sunset Sherbet",
+      "Headbanger"
+    ],
+    "aka": [
+      "Sherbanger OG"
+    ],
+    "id": "s1911"
+  },
+  {
+    "name": "Lemon Cookies",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed"
+    ],
+    "flavor": "Sweet citrus and nutty cookie with earthy, herbal notes.",
+    "icon": "🌿",
+    "parents": [
+      "Lemon Haze",
+      "GSC"
+    ],
+    "aka": [
+      "Lemon Cookie OG",
+      "Lemon Cookie",
+      "LCO",
+      "LCOG"
+    ],
+    "id": "s1912"
+  },
+  {
+    "name": "Governmint Oasis",
+    "type": "Hybrid",
+    "rarity": "uncommon",
+    "thc": "up to 30%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Sleepy",
+      "Tingly",
+      "Relaxed"
+    ],
+    "flavor": "Herbal and minty with a gassy, garlicky edge.",
+    "icon": "🌿",
+    "breeder": "Purple City Genetics",
+    "parents": [
+      "GMO",
+      "Gush Mints"
+    ],
+    "aka": [
+      "Northern Oasis"
+    ],
+    "id": "s1913"
+  },
+  {
+    "name": "Goji OG",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "18-26%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Creative",
+      "Energetic"
+    ],
+    "flavor": "Red berry and tart cherry with earthy pine and a sour gas edge.",
+    "icon": "🌿",
+    "breeder": "Bodhi Seeds",
+    "parents": [
+      "Nepali OG",
+      "Snow Lotus"
+    ],
+    "id": "s1914"
+  },
+  {
+    "name": "Blue Nerds",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Creative",
+      "Focused",
+      "Talkative",
+      "Euphoric"
+    ],
+    "flavor": "Sour citrus and green apple with sweet blueberry and tropical candy.",
+    "icon": "🌿",
+    "breeder": "Global Genetics LA",
+    "parents": [
+      "Runtz",
+      "Zkittlez"
+    ],
+    "aka": [
+      "Blue NRDZ",
+      "Blue NDZ",
+      "Nerd Runtz",
+      "Nerds OG",
+      "Blue Nerdz"
+    ],
+    "id": "s1915"
+  },
+  {
+    "name": "Candy Fumez",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "23-30%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Relaxed",
+      "Happy"
+    ],
+    "flavor": "Sweet candy and citrus berry with a diesel gas finish.",
+    "icon": "🌿",
+    "breeder": "Bloom Seed Co.",
+    "parents": [
+      "Zkittlez",
+      "Sherbanger"
+    ],
+    "aka": [
+      "Fumez",
+      "Candy Fumes"
+    ],
+    "id": "s1916"
+  },
+  {
+    "name": "Gas Face",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "24-33%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Creative",
+      "Relaxed",
+      "Uplifted"
+    ],
+    "flavor": "Gassy and minty with sweet cream and sherbet.",
+    "icon": "🌿",
+    "breeder": "Seed Junky Genetics",
+    "parents": [
+      "Face Mints",
+      "Biscotti"
+    ],
+    "id": "s1917"
+  },
+  {
+    "name": "Strawberry Sour Diesel",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "19-22%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Euphoric",
+      "Creative",
+      "Focused"
+    ],
+    "flavor": "Sour strawberry and sweet berry with pungent diesel.",
+    "icon": "🌿",
+    "breeder": "Devil's Harvest Seeds",
+    "parents": [
+      "Strawberry Cough",
+      "Sour Diesel"
+    ],
+    "id": "s1918"
+  },
+  {
+    "name": "Apple Jack",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "18.5-20%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Focused",
+      "Uplifted",
+      "Relaxed"
+    ],
+    "flavor": "Sweet apple with earthy, woody pine and spice.",
+    "icon": "🌿",
+    "breeder": "Seedism Seeds",
+    "parents": [
+      "Jack Herer",
+      "White Widow"
+    ],
+    "id": "s1919"
   }
 ]
