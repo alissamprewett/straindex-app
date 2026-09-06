@@ -60130,7 +60130,7 @@
     "name": "Ocean Beach",
     "type": "Hybrid",
     "rarity": "uncommon",
-    "thc": "",
+    "thc": "25-26%",
     "cbd": "",
     "terps": [],
     "effects": [
@@ -60138,7 +60138,7 @@
       "Talkative",
       "Happy"
     ],
-    "flavor": "Sweet fruit tart with kush undertones.",
+    "flavor": "Sweet spearmint and lemon with a spicy kush finish.",
     "icon": "🌿",
     "breeder": "Cookies",
     "id": "s1815"
@@ -60258,13 +60258,14 @@
       "Happy",
       "Euphoric"
     ],
-    "flavor": "Citrus and pine with earthy hash spice.",
+    "flavor": "Citrus and pine with earth and hash spice.",
     "icon": "🌿",
     "parents": [
       "Triangle Kush",
       "'88 G13 Hash Plant"
     ],
-    "id": "s1821"
+    "id": "s1821",
+    "breeder": "Claybourne Co."
   },
   {
     "name": "G-Runtz",
@@ -60376,13 +60377,18 @@
     "name": "Sunset Sorbet",
     "type": "Hybrid",
     "rarity": "uncommon",
-    "thc": "",
+    "thc": "15-19%",
     "cbd": "",
     "terps": [],
     "effects": [],
     "icon": "🌿",
     "breeder": "3 Bros",
-    "id": "s1827"
+    "id": "s1827",
+    "parents": [
+      "Golden Saigon",
+      "A420"
+    ],
+    "flavor": "Creamy sweet fruit with a soothing finish."
   },
   {
     "name": "Black-Z",
@@ -60508,13 +60514,13 @@
     "name": "Guava Gaslato",
     "type": "Hybrid",
     "rarity": "uncommon",
-    "thc": "",
+    "thc": "32%",
     "cbd": "",
     "terps": [],
     "effects": [
       "Relaxed"
     ],
-    "flavor": "Sweet guava funk over rich gas and earthy pine.",
+    "flavor": "Sweet guava funk with rich gas, earthy pine, and sweet fruit.",
     "icon": "🌿",
     "breeder": "Claybourne Co.",
     "id": "s1836"
@@ -61145,7 +61151,7 @@
     "type": "Hybrid",
     "lean": "Indica-leaning",
     "rarity": "uncommon",
-    "thc": "",
+    "thc": "12-25%",
     "cbd": "",
     "terps": [],
     "effects": [
@@ -61153,7 +61159,7 @@
       "Happy",
       "Focused"
     ],
-    "flavor": "Sweet blueberry candy.",
+    "flavor": "Sweet blueberry and raspberry.",
     "icon": "🌿",
     "parents": [
       "Raspberry Kush"
@@ -61711,7 +61717,7 @@
     "name": "Premium Jack",
     "type": "Sativa",
     "rarity": "uncommon",
-    "thc": "",
+    "thc": "17-24%",
     "cbd": "",
     "terps": [],
     "effects": [
@@ -61757,7 +61763,7 @@
     "type": "Hybrid",
     "lean": "Indica-leaning",
     "rarity": "uncommon",
-    "thc": "",
+    "thc": "18-30%",
     "cbd": "",
     "terps": [],
     "effects": [
@@ -61766,7 +61772,7 @@
       "Creative",
       "Talkative"
     ],
-    "flavor": "Skunky grape and fizzy fruit with an elite fuel edge.",
+    "flavor": "Skunky grape and apple with banana and candied berry.",
     "icon": "🌿",
     "breeder": "Compound Genetics",
     "parents": [
@@ -61783,7 +61789,7 @@
     "type": "Hybrid",
     "lean": "Sativa-leaning",
     "rarity": "uncommon",
-    "thc": "",
+    "thc": "18-24%",
     "cbd": "",
     "terps": [],
     "effects": [
@@ -61791,7 +61797,7 @@
       "Relaxed",
       "Euphoric"
     ],
-    "flavor": "Bold cherry and berries with pepper and citrus.",
+    "flavor": "Sweet cherry with berry, citrus, and pepper.",
     "icon": "🌿",
     "breeder": "Symbiotic Genetics",
     "parents": [
@@ -62019,17 +62025,19 @@
     "name": "Tangerine",
     "type": "Sativa",
     "rarity": "uncommon",
-    "thc": "",
+    "thc": "12-18%",
     "cbd": "",
     "terps": [],
     "effects": [
       "Euphoric"
     ],
-    "flavor": "Tropical fruit with a distinctly tangerine aroma.",
+    "flavor": "Tropical tangerine with mango and pineapple.",
     "icon": "🌿",
     "breeder": "CH9 Female Seeds",
     "parents": [
-      "Jack Herer"
+      "Ed Rosenthal Super Bud",
+      "Jack Herer",
+      "CH9 Aroma"
     ],
     "id": "s1905"
   },
@@ -62038,18 +62046,19 @@
     "type": "Hybrid",
     "lean": "Indica-leaning",
     "rarity": "uncommon",
-    "thc": "",
+    "thc": "20-29%",
     "cbd": "",
     "terps": [],
     "effects": [
       "Relaxed"
     ],
-    "flavor": "Creamy grape and cherry with a hint of nutty vanilla.",
+    "flavor": "Sweet grapes with velvety vanilla and berries.",
     "icon": "🌿",
     "breeder": "Bloom Seed Co.",
     "parents": [
       "Grape Pie",
-      "Wedding Crasher"
+      "Wedding Crasher",
+      "Ice Cream Cake #5"
     ],
     "aka": [
       "GCC"
@@ -62185,24 +62194,21 @@
     "type": "Hybrid",
     "lean": "Sativa-leaning",
     "rarity": "uncommon",
-    "thc": "",
+    "thc": "18-28%",
     "cbd": "",
     "terps": [],
     "effects": [
       "Euphoric",
       "Relaxed"
     ],
-    "flavor": "Sweet citrus and nutty cookie with earthy, herbal notes.",
+    "flavor": "Rich sweet citrus with a spicy nutty cookie.",
     "icon": "🌿",
     "parents": [
       "Lemon Haze",
       "GSC"
     ],
     "aka": [
-      "Lemon Cookie OG",
-      "Lemon Cookie",
-      "LCO",
-      "LCOG"
+      "Lemon Cookie OG"
     ],
     "id": "s1912"
   },
@@ -62257,7 +62263,7 @@
     "type": "Hybrid",
     "lean": "",
     "rarity": "uncommon",
-    "thc": "",
+    "thc": "20-26%",
     "cbd": "",
     "terps": [],
     "effects": [
@@ -62266,7 +62272,7 @@
       "Talkative",
       "Euphoric"
     ],
-    "flavor": "Sour citrus and green apple with sweet blueberry and tropical candy.",
+    "flavor": "Blue raspberry candy and grape with sugary fruit.",
     "icon": "🌿",
     "breeder": "Global Genetics LA",
     "parents": [
@@ -62274,10 +62280,6 @@
       "Zkittlez"
     ],
     "aka": [
-      "Blue NRDZ",
-      "Blue NDZ",
-      "Nerd Runtz",
-      "Nerds OG",
       "Blue Nerdz"
     ],
     "id": "s1915"
@@ -62381,7 +62383,7 @@
     "type": "Hybrid",
     "lean": "Sativa-leaning",
     "rarity": "uncommon",
-    "thc": "",
+    "thc": "18-25%",
     "cbd": "",
     "terps": [],
     "effects": [
@@ -62390,7 +62392,7 @@
       "Relaxed",
       "Motivated"
     ],
-    "flavor": "Sweet banana with tangerine citrus and vanilla cream.",
+    "flavor": "Sweet banana cream with sharp tropical citrus.",
     "icon": "🌿",
     "breeder": "Crockett Family Farms",
     "parents": [
@@ -62681,7 +62683,7 @@
     "type": "Hybrid",
     "lean": "Sativa-leaning",
     "rarity": "uncommon",
-    "thc": "",
+    "thc": "14-27%",
     "cbd": "",
     "terps": [],
     "effects": [
@@ -62689,7 +62691,7 @@
       "Energetic",
       "Uplifted"
     ],
-    "flavor": "Bright citrus lemon and lime with floral notes.",
+    "flavor": "Sour lemon with fresh cherry and berries.",
     "icon": "🌿",
     "breeder": "Growing Passion",
     "parents": [
@@ -62698,7 +62700,7 @@
     ],
     "aka": [
       "Lemoncello",
-      "Limon Cello"
+      "Lemonchello 28"
     ],
     "id": "s1933"
   },
@@ -62753,14 +62755,14 @@
     "type": "Hybrid",
     "lean": "Indica-leaning",
     "rarity": "uncommon",
-    "thc": "",
+    "thc": "18-25%",
     "cbd": "",
     "terps": [],
     "effects": [
       "Uplifted",
       "Relaxed"
     ],
-    "flavor": "Sweet and sour vanilla citrus with tangerine, pine, and earth.",
+    "flavor": "Zesty citrus with sweet and sour vanilla, woody on exhale.",
     "icon": "🌿",
     "breeder": "Surfr Seeds",
     "parents": [
@@ -62866,7 +62868,7 @@
     "type": "Hybrid",
     "lean": "Indica-leaning",
     "rarity": "uncommon",
-    "thc": "",
+    "thc": "14-23%",
     "cbd": "",
     "terps": [],
     "effects": [
@@ -62874,7 +62876,7 @@
       "Happy",
       "Tingly"
     ],
-    "flavor": "Sweet cherry with earthy, herbal cookie notes.",
+    "flavor": "Sweet cherry with tangy citrus.",
     "icon": "🌿",
     "breeder": "Purple Caper Seeds",
     "parents": [
@@ -62964,13 +62966,13 @@
     "type": "Hybrid",
     "lean": "Sativa-leaning",
     "rarity": "uncommon",
-    "thc": "",
+    "thc": "18-26%",
     "cbd": "",
     "terps": [],
     "effects": [
       "Euphoric"
     ],
-    "flavor": "Citrus candy with a fuel-forward gas edge.",
+    "flavor": "Citrus candy and fuel with lime and lemon.",
     "icon": "🌿",
     "breeder": "MzJill Genetics",
     "parents": [
@@ -62978,8 +62980,7 @@
     ],
     "aka": [
       "Slymer",
-      "Slimer OG",
-      "Slymer OG"
+      "Golden Ticket"
     ],
     "id": "s1945"
   },
@@ -63131,7 +63132,7 @@
     "type": "Hybrid",
     "lean": "Sativa-leaning",
     "rarity": "uncommon",
-    "thc": "",
+    "thc": "18-25%",
     "cbd": "",
     "terps": [],
     "effects": [
@@ -63140,26 +63141,29 @@
       "Creative",
       "Focused"
     ],
-    "flavor": "Lemon and lime with floral mint and a peppery finish.",
+    "flavor": "Lime zest and sweet citrus with spearmint.",
     "icon": "🌿",
     "breeder": "Swamp Boy Seeds",
     "parents": [
       "Limegerian",
       "Orange Blossom Trail"
     ],
-    "id": "s1952"
+    "id": "s1952",
+    "aka": [
+      "Mojito #1"
+    ]
   },
   {
     "name": "Kiwi",
     "type": "Hybrid",
     "rarity": "uncommon",
-    "thc": "",
+    "thc": "24%",
     "cbd": "",
     "terps": [],
     "effects": [
       "Relaxed"
     ],
-    "flavor": "Fruity with notes of tropical citrus.",
+    "flavor": "Melon, peach, and berry with pine and floral notes.",
     "icon": "🌿",
     "breeder": "Dynasty Genetics",
     "parents": [
@@ -63167,6 +63171,7 @@
       "Blue Heron"
     ],
     "aka": [
+      "Ghetto Bird",
       "Kiwi Punch"
     ],
     "id": "s1953"
@@ -63243,7 +63248,7 @@
     "name": "Royal Kush",
     "type": "Hybrid",
     "rarity": "uncommon",
-    "thc": "",
+    "thc": "15-22%",
     "cbd": "",
     "terps": [],
     "effects": [
@@ -63251,7 +63256,7 @@
       "Euphoric",
       "Relaxed"
     ],
-    "flavor": "Kushy and spicy with earthy, skunky herbal notes.",
+    "flavor": "Sweet skunk with sandalwood, citrus, and spice.",
     "icon": "🌿",
     "breeder": "G13 Labs",
     "parents": [
@@ -63491,7 +63496,7 @@
     "type": "Hybrid",
     "lean": "Indica-leaning",
     "rarity": "uncommon",
-    "thc": "",
+    "thc": "18-30%",
     "cbd": "",
     "terps": [],
     "effects": [
@@ -63500,7 +63505,7 @@
       "Creative",
       "Focused"
     ],
-    "flavor": "Sweet buttery creamy vanilla with herbal notes.",
+    "flavor": "Creamy vanilla frosting with a fuel finish.",
     "icon": "🌿",
     "breeder": "Humboldt Seed Company",
     "parents": [
@@ -63844,7 +63849,7 @@
     "type": "Hybrid",
     "lean": "Sativa-leaning",
     "rarity": "uncommon",
-    "thc": "",
+    "thc": "18-28%",
     "cbd": "",
     "terps": [],
     "effects": [
@@ -63852,7 +63857,7 @@
       "Euphoric",
       "Relaxed"
     ],
-    "flavor": "Cheese and sour citrus with sweet piney tangerine.",
+    "flavor": "Cheesy tangerine zest with citrus and pine.",
     "icon": "🌿",
     "breeder": "Parker Sullivan",
     "parents": [
@@ -63886,14 +63891,14 @@
     "type": "Hybrid",
     "lean": "",
     "rarity": "uncommon",
-    "thc": "",
+    "thc": "21-24%",
     "cbd": "",
     "terps": [],
     "effects": [
       "Euphoric",
       "Relaxed"
     ],
-    "flavor": "Earthy pine with a citrus undertone.",
+    "flavor": "Lemon and pine sol with citrus undertones.",
     "icon": "🌿",
     "parents": [
       "Rollins",
@@ -63931,7 +63936,7 @@
     "type": "Hybrid",
     "lean": "Indica-leaning",
     "rarity": "uncommon",
-    "thc": "",
+    "thc": "20-30%",
     "cbd": "",
     "terps": [],
     "effects": [
@@ -63939,7 +63944,7 @@
       "Giggly",
       "Sleepy"
     ],
-    "flavor": "Fruity tropical pineapple with citrus, berries, and earth.",
+    "flavor": "Sweet fruity pineapple candy with berries and citrus.",
     "icon": "🌿",
     "parents": [
       "White Runtz",
@@ -64054,14 +64059,14 @@
     "type": "Hybrid",
     "lean": "",
     "rarity": "uncommon",
-    "thc": "",
+    "thc": "21-28%",
     "cbd": "",
     "terps": [],
     "effects": [
       "Relaxed",
       "Sleepy"
     ],
-    "flavor": "Tropical fruit and sweet sugary berries with brown sugar and vanilla.",
+    "flavor": "Brown sugar, vanilla, and blueberry.",
     "icon": "🌿",
     "breeder": "Oregon Green Seed",
     "parents": [
@@ -64173,13 +64178,13 @@
     "type": "Hybrid",
     "lean": "",
     "rarity": "uncommon",
-    "thc": "",
+    "thc": "18-22%",
     "cbd": "",
     "terps": [],
     "effects": [
       "Relaxed"
     ],
-    "flavor": "Sweet soda with strawberry and cream.",
+    "flavor": "Sweet strawberry soda with cherry-cream candy.",
     "icon": "🌿",
     "breeder": "Exotic Genetix",
     "parents": [
