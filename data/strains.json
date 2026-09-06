@@ -62776,5 +62776,141 @@
       "Strawguava"
     ],
     "id": "s1932"
+  },
+  {
+    "name": "Limoncello",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Focused",
+      "Energetic",
+      "Uplifted"
+    ],
+    "flavor": "Bright citrus lemon and lime with floral notes.",
+    "icon": "🌿",
+    "breeder": "Growing Passion",
+    "parents": [
+      "Lemonnade",
+      "Cherry Pie"
+    ],
+    "aka": [
+      "Lemoncello",
+      "Limon Cello"
+    ],
+    "id": "s1933"
+  },
+  {
+    "name": "Full Melt",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "28-30%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Focused"
+    ],
+    "flavor": "Sweet, spicy peppery hash with sour citrus and dank.",
+    "icon": "🌿",
+    "breeder": "Bloom Seed Co.",
+    "parents": [
+      "Forza Sour",
+      "Sour Dubb"
+    ],
+    "id": "s1934"
+  },
+  {
+    "name": "Cherrylato",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "14-26%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Creative",
+      "Happy"
+    ],
+    "flavor": "Sweet cherry and tropical berry with creamy gelato undertones.",
+    "icon": "🌿",
+    "parents": [
+      "Black Cherry Funk",
+      "Acai"
+    ],
+    "aka": [
+      "Cherry Gelato"
+    ],
+    "id": "s1935"
+  },
+  {
+    "name": "Point Break",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Relaxed"
+    ],
+    "flavor": "Sweet and sour vanilla citrus with tangerine, pine, and earth.",
+    "icon": "🌿",
+    "breeder": "Surfr Seeds",
+    "parents": [
+      "Tropicana Cookies",
+      "Trophy Wife"
+    ],
+    "id": "s1936"
+  },
+  {
+    "name": "Pave",
+    "type": "Hybrid",
+    "rarity": "uncommon",
+    "thc": "26.8%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Focused"
+    ],
+    "flavor": "Minty and gassy with vanilla, like Dr. Pepper.",
+    "icon": "🌿",
+    "breeder": "Compound Genetics",
+    "parents": [
+      "Paris OG",
+      "The Menthol"
+    ],
+    "aka": [
+      "Pavé",
+      "Pav"
+    ],
+    "id": "s1937"
+  },
+  {
+    "name": "Humboldt",
+    "type": "Indica",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Clear-headed"
+    ],
+    "flavor": "Floral and sweet with herbs, citrus, and a hashy spice.",
+    "icon": "🌿",
+    "aka": [
+      "Humboldt Kush"
+    ],
+    "id": "s1938"
   }
 ]
