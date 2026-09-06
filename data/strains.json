@@ -63553,5 +63553,243 @@
       "Humboldt Frost"
     ],
     "id": "s1968"
+  },
+  {
+    "name": "Papaya Cake",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "23-30%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Uplifted",
+      "Creative",
+      "Happy"
+    ],
+    "flavor": "Tropical mango and apricot with a sour, tart edge.",
+    "icon": "🌿",
+    "breeder": "Oni Seed Co.",
+    "parents": [
+      "Papaya",
+      "Wedding Cake"
+    ],
+    "id": "s1969"
+  },
+  {
+    "name": "Black Cherry Soda",
+    "type": "Hybrid",
+    "rarity": "uncommon",
+    "thc": "15-26%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Talkative",
+      "Energetic",
+      "Creative",
+      "Relaxed"
+    ],
+    "flavor": "Dark cherry and sweet berry soda with earthy undertones.",
+    "icon": "🌿",
+    "id": "s1970"
+  },
+  {
+    "name": "Carbon Fiber",
+    "type": "Hybrid",
+    "rarity": "uncommon",
+    "thc": "21-29%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Talkative",
+      "Aroused",
+      "Euphoric",
+      "Giggly"
+    ],
+    "flavor": "Peppery and earthy with berries, grapes, and pine.",
+    "icon": "🌿",
+    "breeder": "Cannarado Genetics",
+    "parents": [
+      "Grape Pie",
+      "Biscotti",
+      "Cookies and Cream"
+    ],
+    "id": "s1971"
+  },
+  {
+    "name": "Melon",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed"
+    ],
+    "flavor": "Green candy melon with gassy OG notes.",
+    "icon": "🌿",
+    "breeder": "Karma Genetics",
+    "id": "s1972"
+  },
+  {
+    "name": "Double Dream",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "20-30%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Focused",
+      "Uplifted",
+      "Relaxed"
+    ],
+    "flavor": "Sweet floral berries with spice and hash.",
+    "icon": "🌿",
+    "breeder": "Purple City Genetics",
+    "parents": [
+      "Blue Dream",
+      "Dream Star"
+    ],
+    "id": "s1973"
+  },
+  {
+    "name": "Orange Soda",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "21-23%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Relaxed",
+      "Happy",
+      "Creative"
+    ],
+    "flavor": "Bright citrus orange with sweet apricot.",
+    "icon": "🌿",
+    "breeder": "Team Elite Genetics",
+    "parents": [
+      "Tangie",
+      "Grandma's Sugar Cookies"
+    ],
+    "id": "s1974"
+  },
+  {
+    "name": "Blueberry Pie",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Euphoric"
+    ],
+    "flavor": "Sweet fruity berries with gas and creamy kush.",
+    "icon": "🌿",
+    "breeder": "Raw Genetics",
+    "parents": [
+      "Blueberry Gushers",
+      "Georgia Pie"
+    ],
+    "id": "s1975"
+  },
+  {
+    "name": "Brownie Scout",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "25-37.5%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Sleepy",
+      "Euphoric"
+    ],
+    "flavor": "Sweet chocolate and earthy pine with a skunky nuttiness.",
+    "icon": "🌿",
+    "breeder": "Green Thumb Industries",
+    "parents": [
+      "Platinum GSC",
+      "Kosher Kush"
+    ],
+    "aka": [
+      "BS"
+    ],
+    "id": "s1976"
+  },
+  {
+    "name": "L'Orange",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "15%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Focused",
+      "Euphoric",
+      "Creative"
+    ],
+    "flavor": "Bright orange citrus with lemon and menthol.",
+    "icon": "🌿",
+    "breeder": "Cannabiotix",
+    "id": "s1977"
+  },
+  {
+    "name": "Don Mega",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "24-26%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Euphoric",
+      "Happy"
+    ],
+    "flavor": "Skunky and chemical with garlic-diesel and citrus.",
+    "icon": "🌿",
+    "breeder": "Solfire Gardens",
+    "parents": [
+      "GMO",
+      "Black Banana"
+    ],
+    "aka": [
+      "The Don Mega"
+    ],
+    "id": "s1978"
+  },
+  {
+    "name": "Zen",
+    "type": "Hybrid",
+    "rarity": "uncommon",
+    "thc": "11%",
+    "cbd": "9%",
+    "terps": [],
+    "effects": [
+      "Calm",
+      "Focused",
+      "Happy",
+      "Creative"
+    ],
+    "flavor": "Sour berry and earthy with a spicy finish.",
+    "icon": "🌿",
+    "breeder": "CBD Seeds",
+    "parents": [
+      "Mexican Sativa",
+      "Afghani",
+      "Lavender"
+    ],
+    "id": "s1979"
   }
 ]
