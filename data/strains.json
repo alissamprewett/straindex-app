@@ -1570,9 +1570,14 @@
       "Insomnia"
     ],
     "aka": [
+      "White Raspberry",
       "Blue Widow",
       "Blueberry Widow",
       "White Berry Ice"
+    ],
+    "parents": [
+      "Blueberry",
+      "White Widow"
     ]
   },
   {
@@ -63233,5 +63238,320 @@
       "Cookie OG"
     ],
     "id": "s1954"
+  },
+  {
+    "name": "Banana Runtz",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-26%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Hungry",
+      "Sleepy",
+      "Euphoric"
+    ],
+    "flavor": "Overripe banana and tropical fruit with a sour gas finish.",
+    "icon": "🌿",
+    "breeder": "Solfire Gardens",
+    "parents": [
+      "Banana OG",
+      "Runtz"
+    ],
+    "id": "s1955"
+  },
+  {
+    "name": "Bolo Runtz",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "26-33%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed"
+    ],
+    "flavor": "Sweet candy and citrus over a creamy, earthy gas base.",
+    "icon": "🌿",
+    "parents": [
+      "Biscotti",
+      "Sherb Cake"
+    ],
+    "aka": [
+      "Bolo RTZ"
+    ],
+    "id": "s1956"
+  },
+  {
+    "name": "Royal Kush",
+    "type": "Hybrid",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Euphoric",
+      "Relaxed"
+    ],
+    "flavor": "Kushy and spicy with earthy, skunky herbal notes.",
+    "icon": "🌿",
+    "breeder": "G13 Labs",
+    "parents": [
+      "Afghan #1",
+      "Skunk #1"
+    ],
+    "id": "s1957"
+  },
+  {
+    "name": "Layer Cake",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "24-32%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "Sweet spicy diesel with rich cheese, wood, and vanilla.",
+    "icon": "🌿",
+    "breeder": "Swamp Boys Seeds",
+    "parents": [
+      "Wedding Cake",
+      "GMO",
+      "Triangle Kush",
+      "Skunk #1"
+    ],
+    "id": "s1958"
+  },
+  {
+    "name": "Milk Chocolate",
+    "type": "Hybrid",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Uplifted",
+      "Relaxed"
+    ],
+    "flavor": "Sweet sugary creamy chocolate with minty vanilla and spice.",
+    "icon": "🌿",
+    "aka": [
+      "Chocolate Milk",
+      "Chocolate Milkshake"
+    ],
+    "id": "s1959"
+  },
+  {
+    "name": "Earth OG",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "15-23%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Creative",
+      "Energetic",
+      "Talkative",
+      "Uplifted"
+    ],
+    "flavor": "Earthy with lemon, pine, and diesel fuel.",
+    "icon": "🌿",
+    "breeder": "Apothecary Genetics",
+    "parents": [
+      "Sour Diesel",
+      "Ghost OG"
+    ],
+    "aka": [
+      "Earth OG Kush"
+    ],
+    "id": "s1960"
+  },
+  {
+    "name": "Raspberry Lemonade",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "20%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Energetic",
+      "Creative",
+      "Focused"
+    ],
+    "flavor": "Sweet citrus and berry, like a fresh lemonade.",
+    "icon": "🌿",
+    "parents": [
+      "Lemonade",
+      "Raspberry Kush"
+    ],
+    "aka": [
+      "Razzberry Lemonaid"
+    ],
+    "id": "s1961"
+  },
+  {
+    "name": "Gucci OG",
+    "type": "Hybrid",
+    "rarity": "uncommon",
+    "thc": "20-27%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Creative",
+      "Happy",
+      "Relaxed"
+    ],
+    "flavor": "Pine and lemon with sweet berry and earthy herbs.",
+    "icon": "🌿",
+    "parents": [
+      "OG Kush"
+    ],
+    "aka": [
+      "Gucci OG Kush"
+    ],
+    "id": "s1962"
+  },
+  {
+    "name": "Punch Breath",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "17-28%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Tingly",
+      "Happy"
+    ],
+    "flavor": "Vanilla and caramel with grape and sweet berries.",
+    "icon": "🌿",
+    "breeder": "Symbiotic Genetics",
+    "parents": [
+      "Purple Punch",
+      "Mendo Breath"
+    ],
+    "id": "s1963"
+  },
+  {
+    "name": "Pineapple Chunk",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "25-30%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Euphoric",
+      "Sleepy"
+    ],
+    "flavor": "Earthy cheese and skunk with a sweet pineapple finish.",
+    "icon": "🌿",
+    "breeder": "Barney's Farm",
+    "parents": [
+      "Pineapple",
+      "Cheese",
+      "Skunk #1"
+    ],
+    "id": "s1964"
+  },
+  {
+    "name": "Tropic Thunder",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "15-28%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Euphoric",
+      "Creative",
+      "Uplifted"
+    ],
+    "flavor": "Tropical citrus with pineapple and mango.",
+    "icon": "🌿",
+    "id": "s1965"
+  },
+  {
+    "name": "Sour Watermelon",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "17-29%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Relaxed"
+    ],
+    "flavor": "Sweet tangy watermelon with tropical grape and hashy earth.",
+    "icon": "🌿",
+    "breeder": "Raw Garden",
+    "parents": [
+      "Sour Pinot",
+      "Watermelon",
+      "Sour Crack"
+    ],
+    "id": "s1966"
+  },
+  {
+    "name": "Candy Apple",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "14-24%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Happy",
+      "Creative",
+      "Energetic"
+    ],
+    "flavor": "Sweet apple and vanilla with tropical fruit.",
+    "icon": "🌿",
+    "breeder": "TreeHawk Farms",
+    "parents": [
+      "Blueberry",
+      "Pineapple",
+      "Afghan"
+    ],
+    "id": "s1967"
+  },
+  {
+    "name": "Vanilla Frosting",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Energetic",
+      "Creative",
+      "Focused"
+    ],
+    "flavor": "Sweet buttery creamy vanilla with herbal notes.",
+    "icon": "🌿",
+    "breeder": "Humboldt Seed Company",
+    "parents": [
+      "Humboldt Gelato BX3",
+      "Humboldt Frost"
+    ],
+    "id": "s1968"
   }
 ]
