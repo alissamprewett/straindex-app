@@ -64276,5 +64276,216 @@
       "Papaya"
     ],
     "id": "s2003"
+  },
+  {
+    "name": "Watermelon Gelato",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "15.5-26%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Giggly",
+      "Talkative",
+      "Uplifted"
+    ],
+    "flavor": "Sweet watermelon with citrus and floral fruit.",
+    "icon": "🌿",
+    "breeder": "Lit Farms",
+    "parents": [
+      "Watermelon Zkittlez",
+      "Gelato #45"
+    ],
+    "aka": [
+      "Watermelon Gelato #36"
+    ],
+    "id": "s2004"
+  },
+  {
+    "name": "Tropical Trainwreck",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "18-24%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Uplifted",
+      "Focused",
+      "Relaxed"
+    ],
+    "flavor": "Sweet citrus and tropical pineapple with earthy pine.",
+    "icon": "🌿",
+    "parents": [
+      "Pineapple Express",
+      "Trainwreck"
+    ],
+    "id": "s2005"
+  },
+  {
+    "name": "Champagne Kush",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "14-29%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Happy",
+      "Talkative",
+      "Relaxed"
+    ],
+    "flavor": "Pear and tea with lavender and sweet earth.",
+    "icon": "🌿",
+    "breeder": "Seedism Seeds",
+    "parents": [
+      "Hindu Kush",
+      "Hash Plant"
+    ],
+    "aka": [
+      "Champagne"
+    ],
+    "id": "s2006"
+  },
+  {
+    "name": "LA Kush",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "19-21%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Uplifted",
+      "Focused",
+      "Relaxed"
+    ],
+    "flavor": "Earthy pine with menthol.",
+    "icon": "🌿",
+    "parents": [
+      "OG Kush"
+    ],
+    "aka": [
+      "Los Angeles Kush"
+    ],
+    "id": "s2007"
+  },
+  {
+    "name": "Berry Pie",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "18-22%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Relaxed",
+      "Euphoric",
+      "Focused"
+    ],
+    "flavor": "Blueberry waffles with floral notes and sweet cream.",
+    "icon": "🌿",
+    "breeder": "Cookies",
+    "parents": [
+      "GSC",
+      "Blueberry"
+    ],
+    "id": "s2008"
+  },
+  {
+    "name": "Super Runtz",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "24-35%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Relaxed",
+      "Euphoric",
+      "Focused"
+    ],
+    "flavor": "Sweet candy and tropical fruit with citrus and cream.",
+    "icon": "🌿",
+    "breeder": "Cronja",
+    "parents": [
+      "Super Lemon Cherry Gelato",
+      "Runtz"
+    ],
+    "aka": [
+      "Super Runts"
+    ],
+    "id": "s2009"
+  },
+  {
+    "name": "Kiwi Kush",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "14-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Calm"
+    ],
+    "flavor": "Berry and citrus with earthy notes.",
+    "icon": "🌿",
+    "parents": [
+      "Hindu Kush",
+      "Kiwiskunk"
+    ],
+    "id": "s2010"
+  },
+  {
+    "name": "Grapefruit Kush",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18-22%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Calm"
+    ],
+    "flavor": "Sweet hashish with fruity grapefruit and earthy florals.",
+    "icon": "🌿",
+    "breeder": "Next Generation Seed Company",
+    "parents": [
+      "BC Kush",
+      "Grapefruit"
+    ],
+    "id": "s2011"
+  },
+  {
+    "name": "Prickly Pear",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "27-29%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Creative",
+      "Relaxed"
+    ],
+    "flavor": "Sweet fruity spice with sour citrus lemon and woody pine.",
+    "icon": "🌿",
+    "parents": [
+      "Purple Chitral Kush",
+      "OG Kush Breath",
+      "Ocean Haze"
+    ],
+    "id": "s2012"
   }
 ]
