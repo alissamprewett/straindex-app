@@ -65133,5 +65133,126 @@
       "Better Than Yours OG"
     ],
     "id": "s2040"
+  },
+  {
+    "name": "Pluto",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "22-29%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Sleepy"
+    ],
+    "flavor": "Citrus and skunky berry with gassy sweet grape.",
+    "icon": "🌿",
+    "breeder": "GasHouse",
+    "parents": [
+      "Gelato #33",
+      "1991 Triangle Kush"
+    ],
+    "id": "s2041"
+  },
+  {
+    "name": "Dark Rainbow",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "24-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Giggly",
+      "Happy",
+      "Sedated"
+    ],
+    "flavor": "Sweet lemon-lime citrus with spicy black pepper and herbal sage.",
+    "icon": "🌿",
+    "breeder": "Archive Seed Bank",
+    "parents": [
+      "GMO",
+      "Rainbow Belts F1"
+    ],
+    "id": "s2042"
+  },
+  {
+    "name": "Rainbow Guava #5",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Sleepy",
+      "Relaxed"
+    ],
+    "flavor": "Candy and cream with tart strawberry and sweet tropical guava.",
+    "icon": "🌿",
+    "breeder": "Bloom Seed Co",
+    "parents": [
+      "Rainbow Belts",
+      "Strawberry Guava"
+    ],
+    "id": "s2043"
+  },
+  {
+    "name": "Scented Marker",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "20-32.66%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Happy",
+      "Sedated"
+    ],
+    "flavor": "Sweet citrus and blueberries with tropical pineapple and gassy marker funk.",
+    "icon": "🌿",
+    "breeder": "Seed Junky Genetics",
+    "parents": [
+      "Pineapple Fruz",
+      "Permanent Marker"
+    ],
+    "aka": [
+      "Scented Marker #1"
+    ],
+    "id": "s2044"
+  },
+  {
+    "name": "Tally Mon",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "24-32%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Tingly",
+      "Relaxed",
+      "Sleepy",
+      "Aroused"
+    ],
+    "flavor": "Sweet banana and earthy citrus with apple and cherry.",
+    "icon": "🌿",
+    "breeder": "Oni Seed Co.",
+    "parents": [
+      "Papaya",
+      "Banana OG",
+      "Do-Si-Dos"
+    ],
+    "aka": [
+      "Tally Man",
+      "Tallyman"
+    ],
+    "id": "s2045"
   }
 ]
