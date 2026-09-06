@@ -60657,14 +60657,14 @@
     "type": "Hybrid",
     "lean": "Indica-leaning",
     "rarity": "uncommon",
-    "thc": "",
+    "thc": "20-24%",
     "cbd": "",
     "terps": [],
     "effects": [
       "Relaxed",
       "Grounded"
     ],
-    "flavor": "Savory garlic spice with sweet, earthy kush undertones.",
+    "flavor": "Pungent garlic and diesel with citrus.",
     "icon": "🌿",
     "breeder": "Claybourne Co.",
     "id": "s1843"
@@ -60716,20 +60716,21 @@
     "name": "El Chemino",
     "type": "Sativa",
     "rarity": "uncommon",
-    "thc": "",
+    "thc": "26-29%",
     "cbd": "",
     "terps": [],
     "effects": [
       "Happy",
       "Uplifted"
     ],
-    "flavor": "Lemon spice with floral and citrus notes.",
+    "flavor": "Lemon spice with floral and citrus.",
     "icon": "🌿",
     "parents": [
       "Chemdawg",
       "SFV OG Kush"
     ],
-    "id": "s1846"
+    "id": "s1846",
+    "breeder": "Daily Special"
   },
   {
     "name": "Gurple",
@@ -60780,7 +60781,7 @@
       "Happy",
       "Relaxed"
     ],
-    "flavor": "Ripe mango with gas and OG notes.",
+    "flavor": "Mango with gas and OG notes.",
     "icon": "🌿",
     "breeder": "Claybourne Co.",
     "id": "s1849"
@@ -60859,7 +60860,7 @@
     "effects": [
       "Relaxed"
     ],
-    "flavor": "Smooth and trichome-rich with a peachy, fruity sweetness.",
+    "flavor": "Smooth, relaxing indica with an all-white ash burn.",
     "icon": "🌿",
     "breeder": "Seed Junky Genetics",
     "parents": [
@@ -61654,7 +61655,7 @@
     "type": "Hybrid",
     "lean": "Indica-leaning",
     "rarity": "uncommon",
-    "thc": "",
+    "thc": "25-30%",
     "cbd": "",
     "terps": [],
     "effects": [
@@ -61662,7 +61663,7 @@
       "Uplifted",
       "Creative"
     ],
-    "flavor": "Sweet creamy cookies with fresh strawberries and black pepper.",
+    "flavor": "Sweet fruit candies with grape, cherry, and chocolate.",
     "icon": "🌿",
     "breeder": "Clearwater Genetics",
     "parents": [
@@ -62562,16 +62563,19 @@
     "name": "Gas",
     "type": "Indica",
     "rarity": "uncommon",
-    "thc": "",
+    "thc": "18-22%",
     "cbd": "",
     "terps": [],
     "effects": [],
-    "flavor": "Earthy citrus and diesel with pine, spice, and lemon.",
+    "flavor": "Earthy citrus and diesel with pine and lemon.",
     "icon": "🌿",
     "aka": [
       "Gas '97"
     ],
-    "id": "s1927"
+    "id": "s1927",
+    "parents": [
+      "OG Kush"
+    ]
   },
   {
     "name": "Bubble Bath",
@@ -63304,7 +63308,7 @@
     "name": "Milk Chocolate",
     "type": "Hybrid",
     "rarity": "uncommon",
-    "thc": "",
+    "thc": "23-29%",
     "cbd": "",
     "terps": [],
     "effects": [
@@ -63599,7 +63603,7 @@
     "effects": [
       "Relaxed"
     ],
-    "flavor": "Green candy melon with gassy OG notes.",
+    "flavor": "Green candy melon with gassy OG undertones.",
     "icon": "🌿",
     "breeder": "Karma Genetics",
     "id": "s1972"
