@@ -61316,5 +61316,27 @@
       "Blueberry"
     ],
     "id": "s1882"
+  },
+  {
+    "name": "Imperial Hash",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Sleepy",
+      "Euphoric"
+    ],
+    "flavor": "A hash blend of Gurple and Hash Burger — sweet grape and berry against pungent, garlicky funk.",
+    "icon": "🍔",
+    "breeder": "Jetty Extracts",
+    "parents": [
+      "Gurple",
+      "Hash Burger"
+    ],
+    "id": "s1883"
   }
 ]
