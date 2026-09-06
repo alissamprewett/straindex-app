@@ -63791,5 +63791,184 @@
       "Lavender"
     ],
     "id": "s1979"
+  },
+  {
+    "name": "Peach Mango",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "16-19%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Tingly",
+      "Giggly",
+      "Euphoric",
+      "Relaxed"
+    ],
+    "flavor": "Sweet mango and peach with tropical citrus and nutty coffee.",
+    "icon": "🌿",
+    "parents": [
+      "Mango D",
+      "Pineapple Super Silver Haze"
+    ],
+    "id": "s1980"
+  },
+  {
+    "name": "Jokerz",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "22-30%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Euphoric",
+      "Focused",
+      "Sleepy"
+    ],
+    "flavor": "Sweet candy and gas with earthy skunk and citrus.",
+    "icon": "🌿",
+    "breeder": "Compound Genetics",
+    "parents": [
+      "White Runtz",
+      "Jet Fuel Gelato"
+    ],
+    "id": "s1981"
+  },
+  {
+    "name": "Triple Burger",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "23-30%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Sleepy",
+      "Tingly"
+    ],
+    "flavor": "Pungent garlic, butter, and diesel with blue cheese notes.",
+    "icon": "🌿",
+    "breeder": "Skunk House Genetics",
+    "parents": [
+      "GMO",
+      "Double Burger"
+    ],
+    "id": "s1982"
+  },
+  {
+    "name": "Pineapple Cake",
+    "type": "Hybrid",
+    "rarity": "uncommon",
+    "thc": "17-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Focused",
+      "Relaxed",
+      "Happy"
+    ],
+    "flavor": "Sweet nutty tropical pineapple with citrus.",
+    "icon": "🌿",
+    "breeder": "Humboldt Seed Company",
+    "parents": [
+      "Pineapple Trainwreck",
+      "Cookie Monster"
+    ],
+    "aka": [
+      "Pineapple Upside Down Cake"
+    ],
+    "id": "s1983"
+  },
+  {
+    "name": "Banjo",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Euphoric",
+      "Relaxed"
+    ],
+    "flavor": "Cheese and sour citrus with sweet piney tangerine.",
+    "icon": "🌿",
+    "breeder": "Parker Sullivan",
+    "parents": [
+      "Boost",
+      "Tangelo"
+    ],
+    "id": "s1984"
+  },
+  {
+    "name": "Lemon Lime",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "11.5%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed"
+    ],
+    "flavor": "Bright citrus lemon and lime.",
+    "icon": "🌿",
+    "parents": [
+      "Lemon",
+      "Key Lime Haze"
+    ],
+    "id": "s1985"
+  },
+  {
+    "name": "Heavy Hitter",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed"
+    ],
+    "flavor": "Earthy pine with a citrus undertone.",
+    "icon": "🌿",
+    "parents": [
+      "Rollins",
+      "White OG"
+    ],
+    "id": "s1986"
+  },
+  {
+    "name": "Master Yoda",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-28%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Focused",
+      "Creative",
+      "Euphoric"
+    ],
+    "flavor": "Fruity vanilla with earthy pine and lemon citrus.",
+    "icon": "🌿",
+    "parents": [
+      "OG Kush",
+      "Master Kush"
+    ],
+    "aka": [
+      "Yoda OG"
+    ],
+    "id": "s1987"
   }
 ]
