@@ -64824,5 +64824,214 @@
       "THC Bomb"
     ],
     "id": "s2027"
+  },
+  {
+    "name": "Lemon Cherry Sherbert",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Creative",
+      "Uplifted"
+    ],
+    "flavor": "Bright lemon zest and tart cherry with creamy citrus.",
+    "icon": "🌿",
+    "breeder": "Cookies",
+    "parents": [
+      "Lemon Cherry Gelato",
+      "Sunset Sherbet"
+    ],
+    "aka": [
+      "Lemon Cherry Sherbet"
+    ],
+    "id": "s2028"
+  },
+  {
+    "name": "Purple Alien OG",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "12-14%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Focused"
+    ],
+    "flavor": "Earthy pine and citrus with sweet grape.",
+    "icon": "🌿",
+    "parents": [
+      "Alien Kush",
+      "Tahoe OG"
+    ],
+    "aka": [
+      "Purple Alien",
+      "Alien Purple OG"
+    ],
+    "id": "s2029"
+  },
+  {
+    "name": "Tire Fire",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-31%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Sleepy",
+      "Giggly",
+      "Relaxed"
+    ],
+    "flavor": "Tar and diesel with apricot, mint, and nutty cookie.",
+    "icon": "🌿",
+    "breeder": "Archive Seed Bank",
+    "parents": [
+      "Hi-Octane OG",
+      "Do-Si-Dos"
+    ],
+    "id": "s2030"
+  },
+  {
+    "name": "Banana Mac",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-22%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Creative",
+      "Tingly",
+      "Relaxed"
+    ],
+    "flavor": "Peach and sweet banana cookies with earthy nuttiness.",
+    "icon": "🌿",
+    "breeder": "Anesia Seeds",
+    "parents": [
+      "Banana Kush",
+      "Miracle Alien Cookies"
+    ],
+    "aka": [
+      "Banana Miracle Alien Cookies",
+      "BMAC"
+    ],
+    "id": "s2031"
+  },
+  {
+    "name": "Tropical Punch",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "23%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Giggly",
+      "Energetic",
+      "Focused"
+    ],
+    "flavor": "Tropical fruit with apricot and pear.",
+    "icon": "🌿",
+    "breeder": "G13 Labs",
+    "parents": [
+      "Tropicana Cookies",
+      "Purple Punch"
+    ],
+    "id": "s2032"
+  },
+  {
+    "name": "Unicorn Piss",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-26%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Giggly",
+      "Talkative"
+    ],
+    "flavor": "Sweet lemony orange with flowery notes.",
+    "icon": "🌿",
+    "breeder": "Rage City Genetics",
+    "parents": [
+      "OX Piss",
+      "Unicorn BX1"
+    ],
+    "id": "s2033"
+  },
+  {
+    "name": "Red Velvet",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "27%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Relaxed"
+    ],
+    "flavor": "Cinnamon and apple with red hot candy and earthy fruit.",
+    "icon": "🌿",
+    "breeder": "Grandiflora Genetics",
+    "parents": [
+      "Lemon Cherry Gelato",
+      "Pina Acai"
+    ],
+    "aka": [
+      "Red Cake"
+    ],
+    "id": "s2034"
+  },
+  {
+    "name": "Alchemy",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed"
+    ],
+    "flavor": "Pungent earth and sour grapes with diesel and lemon tart.",
+    "icon": "🌿",
+    "breeder": "SubCool",
+    "parents": [
+      "Chemdog",
+      "Querkle"
+    ],
+    "id": "s2035"
+  },
+  {
+    "name": "Mango Mintality",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "22-29%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Talkative",
+      "Uplifted"
+    ],
+    "flavor": "Citrusy floral with spice, tropical mango, and menthol.",
+    "icon": "🌿",
+    "breeder": "Purple City Genetics",
+    "parents": [
+      "Mango Haze",
+      "Gush Mints"
+    ],
+    "id": "s2036"
   }
 ]
