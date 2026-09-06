@@ -63067,5 +63067,171 @@
       "White Runtz"
     ],
     "id": "s1947"
+  },
+  {
+    "name": "Cannalope Kush",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Uplifted",
+      "Focused"
+    ],
+    "flavor": "Citrus and diesel with fresh, fruity sweetness.",
+    "icon": "🌿",
+    "breeder": "DNA Genetics",
+    "parents": [
+      "Cannalope Haze",
+      "OG #18"
+    ],
+    "aka": [
+      "Cantaloupe Kush",
+      "Cannalope",
+      "Momma Kush"
+    ],
+    "id": "s1948"
+  },
+  {
+    "name": "Black Cherry Punch",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18-26%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Euphoric"
+    ],
+    "flavor": "Dark cherry and blackberry with earthy wood and spice.",
+    "icon": "🌿",
+    "breeder": "In House Genetics",
+    "parents": [
+      "Black Cherry Pie",
+      "Purple Punch"
+    ],
+    "aka": [
+      "Black Cherry Pop"
+    ],
+    "id": "s1949"
+  },
+  {
+    "name": "Strawberries and Cream",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "18-24%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Motivated"
+    ],
+    "flavor": "Sweet strawberry and berries with a spicy herbal edge.",
+    "icon": "🌿",
+    "breeder": "Connoisseur Genetics",
+    "parents": [
+      "Strawberry Cough",
+      "The White"
+    ],
+    "aka": [
+      "Strawberries & Cream"
+    ],
+    "id": "s1950"
+  },
+  {
+    "name": "Gruntz",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "22-32%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Energetic",
+      "Tingly"
+    ],
+    "flavor": "Sweet fruity berry candy with cotton candy and earthy spice.",
+    "icon": "🌿",
+    "breeder": "Nasha Genetics",
+    "parents": [
+      "Gushers",
+      "Runtz"
+    ],
+    "id": "s1951"
+  },
+  {
+    "name": "Mojito",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Happy",
+      "Creative",
+      "Focused"
+    ],
+    "flavor": "Lemon and lime with floral mint and a peppery finish.",
+    "icon": "🌿",
+    "breeder": "Swamp Boy Seeds",
+    "parents": [
+      "Limegerian",
+      "Orange Blossom Trail"
+    ],
+    "id": "s1952"
+  },
+  {
+    "name": "Kiwi",
+    "type": "Hybrid",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed"
+    ],
+    "flavor": "Fruity with notes of tropical citrus.",
+    "icon": "🌿",
+    "breeder": "Dynasty Genetics",
+    "parents": [
+      "Ice Queen",
+      "Blue Heron"
+    ],
+    "aka": [
+      "Kiwi Punch"
+    ],
+    "id": "s1953"
+  },
+  {
+    "name": "OG Cookies",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-24%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Euphoric"
+    ],
+    "flavor": "Lemon, pine, and earth with bakery mint and cocoa.",
+    "icon": "🌿",
+    "parents": [
+      "OG Kush",
+      "GSC"
+    ],
+    "aka": [
+      "Cookie OG"
+    ],
+    "id": "s1954"
   }
 ]
