@@ -64160,5 +64160,121 @@
       "Cookies and Cream"
     ],
     "id": "s1998"
+  },
+  {
+    "name": "El Chapo",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Creative",
+      "Relaxed"
+    ],
+    "flavor": "Gassy sour diesel.",
+    "icon": "🌿",
+    "breeder": "Sour Genetics",
+    "parents": [
+      "Sour Diesel IBL",
+      "Headbanger"
+    ],
+    "id": "s1999"
+  },
+  {
+    "name": "Mango Tango",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "21-26%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Uplifted",
+      "Talkative",
+      "Giggly",
+      "Relaxed"
+    ],
+    "flavor": "Sweet ripe peach with tropical citrus and pine.",
+    "icon": "🌿",
+    "breeder": "Elemental Seeds",
+    "parents": [
+      "True OG",
+      "Tangie",
+      "Peaches"
+    ],
+    "id": "s2000"
+  },
+  {
+    "name": "Pink Guava",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "20-30%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Aroused",
+      "Giggly",
+      "Talkative",
+      "Relaxed"
+    ],
+    "flavor": "Tropical guava with citrus, grapefruit, and apricot.",
+    "icon": "🌿",
+    "breeder": "DEO Farms",
+    "parents": [
+      "OZ Kush"
+    ],
+    "id": "s2001"
+  },
+  {
+    "name": "Cali Kush",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "13-24%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Energetic"
+    ],
+    "flavor": "Fruity citrus with coffee and earthy notes.",
+    "icon": "🌿",
+    "breeder": "Sensible Seeds",
+    "parents": [
+      "Mendocino Purps",
+      "LA Confidential"
+    ],
+    "aka": [
+      "California Kush",
+      "Kali Kush"
+    ],
+    "id": "s2002"
+  },
+  {
+    "name": "Garlic Juice",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "31%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Sedated"
+    ],
+    "flavor": "Pungent garlic and diesel with tropical papaya.",
+    "icon": "🌿",
+    "breeder": "Oni Seed Co.",
+    "parents": [
+      "GMO",
+      "Papaya"
+    ],
+    "id": "s2003"
   }
 ]
