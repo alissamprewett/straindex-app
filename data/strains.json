@@ -58606,7 +58606,11 @@
     "effects": [],
     "flavor": null,
     "icon": "🥭",
-    "breeder": "Turn"
+    "breeder": "CLSICS",
+    "parents": [
+      "Mango Haze",
+      "Orange Zkittlez"
+    ]
   },
   {
     "id": "s1737",
@@ -58656,11 +58660,11 @@
     "type": "Hybrid",
     "lean": null,
     "rarity": "uncommon",
-    "thc": null,
+    "thc": "18-20%",
     "cbd": null,
     "terps": [],
     "effects": [],
-    "flavor": null,
+    "flavor": "Sharp diesel with tropical pineapple, tart and sweet.",
     "icon": "🐍",
     "breeder": "Traditional"
   },
@@ -58701,13 +58705,17 @@
     "type": "Sativa",
     "lean": null,
     "rarity": "uncommon",
-    "thc": null,
+    "thc": "28-38%",
     "cbd": null,
     "terps": [],
     "effects": [],
-    "flavor": null,
+    "flavor": "Diesel with candied lemon and lime, gassy and sweet.",
     "icon": "🌋",
-    "breeder": "A Golden State"
+    "breeder": "A Golden State",
+    "parents": [
+      "Chem 91",
+      "Northern Lights"
+    ]
   },
   {
     "id": "s1744",
