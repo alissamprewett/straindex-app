@@ -53071,7 +53071,12 @@
       "Sleepy"
     ],
     "flavor": "Sweet and earthy with a cooling, minty edge.",
-    "icon": "💍"
+    "icon": "💍",
+    "breeder": "Symbiotic Genetics",
+    "parents": [
+      "Wedding Cake",
+      "Purple Punch"
+    ]
   },
   {
     "id": "s1534",
@@ -61447,5 +61452,242 @@
       "Devil Driver"
     ],
     "id": "s1888"
+  },
+  {
+    "name": "Blood Orange",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "21%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Talkative",
+      "Focused",
+      "Energetic"
+    ],
+    "flavor": "Sweet orange and apricot with a honeyed finish.",
+    "icon": "🌿",
+    "breeder": "Bodhi Seeds",
+    "parents": [
+      "Appalachia",
+      "Cali Orange Bud"
+    ],
+    "id": "s1889"
+  },
+  {
+    "name": "3 Kings",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "18-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Energetic",
+      "Focused"
+    ],
+    "flavor": "Tangy and sour diesel with a citrus edge.",
+    "icon": "🌿",
+    "parents": [
+      "Headband",
+      "Sour Diesel",
+      "OG Kush"
+    ],
+    "id": "s1890"
+  },
+  {
+    "name": "Premium Jack",
+    "type": "Sativa",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Creative",
+      "Energetic",
+      "Focused"
+    ],
+    "flavor": "Sharp eucalyptus-lime with a distinctive musk.",
+    "icon": "🌿",
+    "breeder": "Sensi Seeds",
+    "parents": [
+      "Jack Herer"
+    ],
+    "id": "s1891"
+  },
+  {
+    "name": "Peach Ringz",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "19-24%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Focused",
+      "Tingly"
+    ],
+    "flavor": "Sweet peach candy with tropical and sour berry notes.",
+    "icon": "🌿",
+    "breeder": "Dying Breed Seeds",
+    "parents": [
+      "Marionberry",
+      "Eddy OG"
+    ],
+    "id": "s1892"
+  },
+  {
+    "name": "Gastro Pop",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Creative",
+      "Talkative"
+    ],
+    "flavor": "Skunky grape and fizzy fruit with an elite fuel edge.",
+    "icon": "🌿",
+    "breeder": "Compound Genetics",
+    "parents": [
+      "Apples and Bananas",
+      "Grape Gas"
+    ],
+    "id": "s1893"
+  },
+  {
+    "name": "Cherry Punch",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Relaxed",
+      "Euphoric"
+    ],
+    "flavor": "Bold cherry and berries with pepper and citrus.",
+    "icon": "🌿",
+    "breeder": "Symbiotic Genetics",
+    "parents": [
+      "Cherry AK-47",
+      "Purple Punch"
+    ],
+    "id": "s1894"
+  },
+  {
+    "name": "Banana Punch",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18-26%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Relaxed",
+      "Tingly"
+    ],
+    "flavor": "Sweet banana and tropical fruit with berry and citrus notes.",
+    "icon": "🌿",
+    "breeder": "Symbiotic Genetics",
+    "parents": [
+      "Banana OG",
+      "Purple Punch"
+    ],
+    "id": "s1895"
+  },
+  {
+    "name": "Green Apple",
+    "type": "Sativa",
+    "rarity": "uncommon",
+    "thc": "15-18%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Euphoric",
+      "Creative"
+    ],
+    "flavor": "Sweet and tart green apple, like fresh apple pie.",
+    "icon": "🌿",
+    "breeder": "Green Apple Co-op",
+    "id": "s1896"
+  },
+  {
+    "name": "Member Berry",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "15-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Relaxed",
+      "Creative"
+    ],
+    "flavor": "Sweet citrus and berries with a skunky, tropical edge.",
+    "icon": "🌿",
+    "breeder": "Ethos Genetics",
+    "parents": [
+      "Skunkberry",
+      "Mandarin Sunset"
+    ],
+    "id": "s1897"
+  },
+  {
+    "name": "Dulce De Uva",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-24%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Relaxed",
+      "Giggly"
+    ],
+    "flavor": "Grape candy and vanilla with a creamy, sweet finish.",
+    "icon": "🌿",
+    "breeder": "Bloom Seed Co.",
+    "parents": [
+      "Grape Pie",
+      "Wedding Crasher",
+      "Ice Cream Cake"
+    ],
+    "id": "s1898"
+  },
+  {
+    "name": "Melonade",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "20-27%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Energetic",
+      "Creative"
+    ],
+    "flavor": "Sweet melon and citrus with a tropical lemon-lime zest.",
+    "icon": "🌿",
+    "breeder": "Midwest Best",
+    "parents": [
+      "Watermelon Zkittlez",
+      "Lemon Tree"
+    ],
+    "id": "s1899"
   }
 ]
