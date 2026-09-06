@@ -65301,5 +65301,224 @@
       "Tallyman"
     ],
     "id": "s2045"
+  },
+  {
+    "name": "91 Octane",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "25-31%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Sleepy"
+    ],
+    "flavor": "Sweet fruity grapes with spicy nutty cookies and diesel.",
+    "icon": "🌿",
+    "breeder": "Exotic Genetix",
+    "parents": [
+      "Biscotti",
+      "Scotty2Hotty"
+    ],
+    "aka": [
+      "Octane 91"
+    ],
+    "id": "s2046"
+  },
+  {
+    "name": "Afternoon Delight",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "18-24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.25
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Hungry"
+    ],
+    "flavor": "Sweet citrus and tropical banana with pine and diesel.",
+    "icon": "🌿",
+    "breeder": "Colorado Seed Inc",
+    "parents": [
+      "Banana",
+      "Schrom",
+      "Tangie"
+    ],
+    "aka": [
+      "Afternoon Delite"
+    ],
+    "id": "s2047"
+  },
+  {
+    "name": "Baby Yoda",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "22-30%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.25
+      },
+      {
+        "n": "Limonene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Sleepy"
+    ],
+    "flavor": "Diesel and tobacco with sweet mint and pepper.",
+    "icon": "🌿",
+    "breeder": "Compound Genetics",
+    "parents": [
+      "Khalifa Kush",
+      "The Menthol"
+    ],
+    "aka": [
+      "Grogu"
+    ],
+    "id": "s2048"
+  },
+  {
+    "name": "Baklava",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18-29%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Euphoric",
+      "Creative"
+    ],
+    "flavor": "Sweet spicy citrus berry with a creamy exhale.",
+    "icon": "🌿",
+    "breeder": "Alien Labs",
+    "parents": [
+      "Kosher Kush",
+      "Gelato 41"
+    ],
+    "id": "s2049"
+  },
+  {
+    "name": "Banana Peel",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "15-26%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      },
+      {
+        "n": "Limonene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Hungry"
+    ],
+    "flavor": "Sweet banana taffy with earthy diesel.",
+    "icon": "🌿",
+    "breeder": "Illuminati Seeds",
+    "parents": [
+      "Banana OG",
+      "Pestilence"
+    ],
+    "id": "s2050"
+  },
+  {
+    "name": "High Octane",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Sleepy",
+      "Happy"
+    ],
+    "flavor": "Gassy with a smooth creamy floral finish.",
+    "icon": "🌿",
+    "breeder": "Cookies Fam",
+    "parents": [
+      "Sunset Sherbert",
+      "Octane"
+    ],
+    "aka": [
+      "Hi-Octane"
+    ],
+    "id": "s2051"
   }
 ]
