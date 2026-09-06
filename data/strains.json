@@ -63994,5 +63994,171 @@
       "P.O.G."
     ],
     "id": "s1991"
+  },
+  {
+    "name": "Bubblegum Gelato",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18-26%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Uplifted",
+      "Social",
+      "Hungry"
+    ],
+    "flavor": "Sweet candy bubblegum with cherry and raspberry.",
+    "icon": "🌿",
+    "breeder": "BackPack Boyz",
+    "parents": [
+      "Gelato #45",
+      "Indiana Bubblegum"
+    ],
+    "aka": [
+      "BG Gelato",
+      "Bubble Gum Gelato"
+    ],
+    "id": "s1992"
+  },
+  {
+    "name": "Sugar Cookie",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Sleepy"
+    ],
+    "flavor": "Tropical fruit and sweet sugary berries with brown sugar and vanilla.",
+    "icon": "🌿",
+    "breeder": "Oregon Green Seed",
+    "parents": [
+      "Crystal Gayle",
+      "Blue Hawaiian",
+      "Sensi Star"
+    ],
+    "aka": [
+      "Sugar Cookies"
+    ],
+    "id": "s1993"
+  },
+  {
+    "name": "Cake Crasher",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "22-26%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Creative"
+    ],
+    "flavor": "Sweet gassy fruit with vanilla, berry, and citrus.",
+    "icon": "🌿",
+    "breeder": "Seed Junky Genetics",
+    "parents": [
+      "Wedding Cake",
+      "Wedding Crasher"
+    ],
+    "id": "s1994"
+  },
+  {
+    "name": "Han Solo Burger",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18-28%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Uplifted",
+      "Tingly"
+    ],
+    "flavor": "Savory and funky with spicy earthy pine and citrus.",
+    "icon": "🌿",
+    "breeder": "Skunk House Genetics",
+    "parents": [
+      "GMO",
+      "Larry OG"
+    ],
+    "aka": [
+      "Solo Burger"
+    ],
+    "id": "s1995"
+  },
+  {
+    "name": "Creme Brulee",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "15%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Sleepy"
+    ],
+    "flavor": "Earthy and sweet with vanilla and nutty notes.",
+    "icon": "🌿",
+    "breeder": "Emerald Family Farms",
+    "parents": [
+      "Platinum Kush",
+      "OG Kush",
+      "GSC"
+    ],
+    "aka": [
+      "Naughty"
+    ],
+    "id": "s1996"
+  },
+  {
+    "name": "Red Runtz",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "25-29%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Euphoric",
+      "Creative"
+    ],
+    "flavor": "Sour red candy and strawberry soda with fruity cream.",
+    "icon": "🌿",
+    "breeder": "Exotic Genetix",
+    "parents": [
+      "Red Pop",
+      "Runtz"
+    ],
+    "id": "s1997"
+  },
+  {
+    "name": "Red Pop",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed"
+    ],
+    "flavor": "Sweet soda with strawberry and cream.",
+    "icon": "🌿",
+    "breeder": "Exotic Genetix",
+    "parents": [
+      "Strawberry",
+      "Cookies and Cream"
+    ],
+    "id": "s1998"
   }
 ]
