@@ -69742,5 +69742,179 @@
       "The Boost"
     ],
     "id": "s2181"
+  },
+  {
+    "name": "Orange Sherbet",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18-24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Calm",
+      "Happy"
+    ],
+    "flavor": "Creamy orange with citrus sweetness.",
+    "icon": "🌿",
+    "breeder": "Barney's Farm",
+    "parents": [
+      "Orange Cream",
+      "Purple Urkle",
+      "Cherry Pie"
+    ],
+    "aka": [
+      "Orange Sherbert"
+    ],
+    "id": "s2182"
+  },
+  {
+    "name": "Strawberry Jam",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "17-22%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      },
+      {
+        "n": "Terpinolene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Happy",
+      "Hungry",
+      "Relaxed"
+    ],
+    "flavor": "Sweet sugary strawberry with tangy citrus and floral notes.",
+    "icon": "🌿",
+    "breeder": "Flash Seeds",
+    "parents": [
+      "Jamaican landrace",
+      "Bubble Berry",
+      "Mexican Ruderalis"
+    ],
+    "aka": [
+      "Jam Berry",
+      "Strawberry Jamz"
+    ],
+    "id": "s2183"
+  },
+  {
+    "name": "Kosher Dawg",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18-25%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Sleepy",
+      "Creative"
+    ],
+    "flavor": "Sour citrus with spicy herbal notes and wood.",
+    "icon": "🌿",
+    "breeder": "DNA Genetics",
+    "parents": [
+      "Stardawg",
+      "Kosher Kush"
+    ],
+    "aka": [
+      "Hebrew National"
+    ],
+    "id": "s2184"
+  },
+  {
+    "name": "Blueberry Lemon Haze",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "21-26%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Euphoric",
+      "Energetic",
+      "Talkative"
+    ],
+    "flavor": "Sweet citrusy lemon with fruity blueberry and earthy flowers.",
+    "icon": "🌿",
+    "parents": [
+      "Super Lemon Haze",
+      "Blueberry Haze"
+    ],
+    "id": "s2185"
+  },
+  {
+    "name": "Blackberry Lemonade",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18-25%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Uplifted",
+      "Happy",
+      "Relaxed"
+    ],
+    "flavor": "Sharp lemon with tangy blackberries and herbal finish.",
+    "icon": "🌿",
+    "breeder": "H.B.K. Genetics",
+    "parents": [
+      "Lemon Larry OG",
+      "Purple Unicorn"
+    ],
+    "id": "s2186"
   }
 ]
