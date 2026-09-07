@@ -66132,5 +66132,127 @@
       "Biscotti"
     ],
     "id": "s2069"
+  },
+  {
+    "name": "Malibu OG",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.35
+      }
+    ],
+    "effects": [
+      "Uplifted",
+      "Energetic",
+      "Happy"
+    ],
+    "flavor": "Earthy citrus and lemon with musky kush.",
+    "icon": "🌿",
+    "id": "s2070"
+  },
+  {
+    "name": "Root Beer",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "21%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Sleepy"
+    ],
+    "flavor": "Sweet earthy notes with spicy herbals.",
+    "icon": "🌿",
+    "parents": [
+      "Headband",
+      "OG Coffee"
+    ],
+    "id": "s2071"
+  },
+  {
+    "name": "Ice Cream Cookies",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "19-28%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Humulene",
+        "p": 0.2
+      },
+      {
+        "n": "Limonene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Euphoric",
+      "Hungry"
+    ],
+    "flavor": "Creamy vanilla with cookie dough sweetness.",
+    "icon": "🌿",
+    "breeder": "Seed Junky Genetics",
+    "parents": [
+      "Gelato 33",
+      "Wedding Cake"
+    ],
+    "aka": [
+      "ICC",
+      "Ice Cream Cookie"
+    ],
+    "id": "s2072"
+  },
+  {
+    "name": "Strawberry Runtz",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "22-32%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Euphoric",
+      "Sleepy",
+      "Creative"
+    ],
+    "flavor": "Honey, strawberry, and earth.",
+    "icon": "🌿",
+    "breeder": "Soloud Genetics",
+    "parents": [
+      "Kushberries",
+      "White Runtz"
+    ],
+    "id": "s2073"
   }
 ]
