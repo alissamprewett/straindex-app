@@ -66601,5 +66601,760 @@
       "Watermelon Mojito Zkittlez"
     ],
     "id": "s2083"
+  },
+  {
+    "name": "Mac Stomper",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-34%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      },
+      {
+        "n": "Pinene",
+        "p": 0.1
+      }
+    ],
+    "effects": [
+      "Happy",
+      "Relaxed",
+      "Euphoric"
+    ],
+    "flavor": "Fruity grapes, citrus, and berries with earthy spice.",
+    "icon": "🌿",
+    "breeder": "Capulator",
+    "parents": [
+      "MAC",
+      "Grape Stomper"
+    ],
+    "id": "s2084"
+  },
+  {
+    "name": "White Cookies",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "19-20%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Euphoric",
+      "Hungry"
+    ],
+    "flavor": "Minty vanilla with citrus and earth.",
+    "icon": "🌿",
+    "breeder": "Crop King Seeds",
+    "parents": [
+      "White Widow",
+      "Girl Scout Cookies"
+    ],
+    "aka": [
+      "White Oreos"
+    ],
+    "id": "s2085"
+  },
+  {
+    "name": "Big Smooth",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-27%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Pinene",
+        "p": 0.2
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Happy",
+      "Relaxed",
+      "Euphoric"
+    ],
+    "flavor": "Sweet doughy blueberry pancakes with vanilla cream.",
+    "icon": "🌿",
+    "breeder": "Exotic Genetix",
+    "parents": [
+      "OG Blueberry",
+      "Cookies and Cream"
+    ],
+    "aka": [
+      "Big Smooth #3"
+    ],
+    "id": "s2086"
+  },
+  {
+    "name": "Vice City",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "23-27%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Focused",
+      "Creative",
+      "Euphoric"
+    ],
+    "flavor": "Sweet fresh cherries and blueberries with diesel and wood.",
+    "icon": "🌿",
+    "breeder": "Exotic Genetix",
+    "parents": [
+      "Sunset Runtz",
+      "Scotty 2 Hotty"
+    ],
+    "id": "s2087"
+  },
+  {
+    "name": "Orange Cream",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.35
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Focused",
+      "Creative",
+      "Relaxed"
+    ],
+    "flavor": "Smooth creamy orange citrus.",
+    "icon": "🌿",
+    "breeder": "Exotic Genetix",
+    "parents": [
+      "Orange Valley OG",
+      "Cookies and Cream"
+    ],
+    "aka": [
+      "Orange Cream #26"
+    ],
+    "id": "s2088"
+  },
+  {
+    "name": "Bomb Pop",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "20-25%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Energetic",
+      "Uplifted",
+      "Relaxed"
+    ],
+    "flavor": "Chemical fuel with fresh lime and berries.",
+    "icon": "🌿",
+    "breeder": "Sci-Fi Genetics",
+    "parents": [
+      "Chemdawg Guava",
+      "Blue Steel"
+    ],
+    "aka": [
+      "Bomb Popz"
+    ],
+    "id": "s2089"
+  },
+  {
+    "name": "Double Rainbow",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "21-30%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Euphoric",
+      "Happy"
+    ],
+    "flavor": "Sour berry and skunk with a spicy pepper aftertaste.",
+    "icon": "🌿",
+    "breeder": "In House Genetics",
+    "parents": [
+      "Purple Hulk",
+      "Rainbow Cookies"
+    ],
+    "id": "s2090"
+  },
+  {
+    "name": "StarKiller OG",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "23-33%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Euphoric",
+      "Sleepy",
+      "Relaxed"
+    ],
+    "flavor": "Kushy and chemmy with a lemony taste.",
+    "icon": "🌿",
+    "breeder": "Rare Dankness Seeds",
+    "parents": [
+      "Skywalker OG",
+      "Rare Dankness #2"
+    ],
+    "aka": [
+      "Star Killer",
+      "Starkiller"
+    ],
+    "id": "s2091"
+  },
+  {
+    "name": "Candy Runtz",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "19-38%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Creative",
+      "Energetic",
+      "Relaxed"
+    ],
+    "flavor": "Sweet berries, caramel candies, and tropical citrus.",
+    "icon": "🌿",
+    "parents": [
+      "Zkittlez",
+      "Gelato"
+    ],
+    "id": "s2092"
+  },
+  {
+    "name": "Slapz",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-30%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Hungry",
+      "Euphoric"
+    ],
+    "flavor": "Skunk, diesel, and pine with an ammonia edge.",
+    "icon": "🌿",
+    "breeder": "Exotic Genetix",
+    "parents": [
+      "Grease Monkey",
+      "Runtz"
+    ],
+    "id": "s2093"
+  },
+  {
+    "name": "Yeager",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "14-24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Euphoric",
+      "Sleepy"
+    ],
+    "flavor": "Musty and sweet.",
+    "icon": "🌿",
+    "parents": [
+      "Hindu Kush"
+    ],
+    "aka": [
+      "Jager",
+      "Yager"
+    ],
+    "id": "s2094"
+  },
+  {
+    "name": "Tropicana Banana",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "16-28%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Humulene",
+        "p": 0.2
+      },
+      {
+        "n": "Pinene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Energetic",
+      "Focused",
+      "Uplifted"
+    ],
+    "flavor": "Honey, tropical fruit, and vanilla.",
+    "icon": "🌿",
+    "breeder": "Barney's Farm",
+    "parents": [
+      "Tropicanna",
+      "Banana Kush"
+    ],
+    "aka": [
+      "Tropicanna Banana"
+    ],
+    "id": "s2095"
+  },
+  {
+    "name": "Chimera",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "18-27%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Euphoric",
+      "Creative",
+      "Energetic"
+    ],
+    "flavor": "Earthy pine and citrus with creme brulee sweetness.",
+    "icon": "🌿",
+    "breeder": "Beleaf Cannabis",
+    "parents": [
+      "White Truffle",
+      "The Creature"
+    ],
+    "id": "s2096"
+  },
+  {
+    "name": "Chimera Junky",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "27-34%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.35
+      }
+    ],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Sleepy"
+    ],
+    "flavor": "Chemical fuel with sweet berry, blueberry jam, and custard.",
+    "icon": "🌿",
+    "breeder": "Seed Junky Genetics x BeLeaf Cannabis",
+    "parents": [
+      "Chimera #2",
+      "Permanent Marker"
+    ],
+    "aka": [
+      "Permanent Chimera"
+    ],
+    "id": "s2097"
+  },
+  {
+    "name": "Diesel Lab",
+    "type": "Sativa",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "22-30%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Energetic",
+      "Focused",
+      "Creative"
+    ],
+    "flavor": "Sweet earthy citrus with a gassy chem finish.",
+    "icon": "🌿",
+    "breeder": "Codes Cannabis",
+    "parents": [
+      "Aspen OG",
+      "High Country Diesel"
+    ],
+    "id": "s2098"
+  },
+  {
+    "name": "Wappa",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18-24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Pinene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Happy",
+      "Relaxed",
+      "Uplifted"
+    ],
+    "flavor": "Sweet fruity candy with citrus, berries, and diesel.",
+    "icon": "🌿",
+    "breeder": "Paradise Seeds",
+    "id": "s2099"
+  },
+  {
+    "name": "Third Eye",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "20-27%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Terpinolene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      },
+      {
+        "n": "Pinene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Creative",
+      "Focused",
+      "Energetic"
+    ],
+    "flavor": "Blueberry and cheese with chemical fuel.",
+    "icon": "🌿",
+    "breeder": "West Coast Masters",
+    "parents": [
+      "Headband",
+      "Jack the Ripper"
+    ],
+    "id": "s2100"
+  },
+  {
+    "name": "Meat Breath",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "17-29%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      },
+      {
+        "n": "Limonene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Euphoric",
+      "Sleepy"
+    ],
+    "flavor": "Savory earth and nuttiness with spice and diesel.",
+    "icon": "🌿",
+    "breeder": "ThugPug Genetics",
+    "parents": [
+      "Meatloaf",
+      "Mendo Breath"
+    ],
+    "id": "s2101"
+  },
+  {
+    "name": "Sour Banana Sherbet",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "18-25%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      },
+      {
+        "n": "Humulene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Sleepy",
+      "Creative"
+    ],
+    "flavor": "Sour fruit, citrus, and diesel.",
+    "icon": "🌿",
+    "breeder": "Crockett Family Farms",
+    "parents": [
+      "Sour Diesel",
+      "Banana Sherbet"
+    ],
+    "aka": [
+      "Sour Banana Sherbert",
+      "Banana Sherbet Kush",
+      "Sour Banana"
+    ],
+    "id": "s2102"
+  },
+  {
+    "name": "Golden Lemons",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-26%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.35
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Euphoric",
+      "Happy",
+      "Relaxed"
+    ],
+    "flavor": "Pungent herbal citrus with old-school kush.",
+    "icon": "🌿",
+    "breeder": "DNA Genetics",
+    "parents": [
+      "Kosher Kush",
+      "Lemon Skunk"
+    ],
+    "aka": [
+      "Golden Lemon"
+    ],
+    "id": "s2103"
+  },
+  {
+    "name": "Maui Pineapple",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "16-19%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Uplifted",
+      "Energetic",
+      "Happy"
+    ],
+    "flavor": "Ripe pineapple and tropical candy with sweet citrus and pine.",
+    "icon": "🌿",
+    "breeder": "Pua Mana 1st Hawaiian Pakalolo Seed Bank",
+    "parents": [
+      "Pineapple Chunk",
+      "Maui Wowie"
+    ],
+    "aka": [
+      "Maui Pineapple Chunk"
+    ],
+    "id": "s2104"
+  },
+  {
+    "name": "Orangeade",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "14-22%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.35
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Happy",
+      "Energetic",
+      "Relaxed"
+    ],
+    "flavor": "Sweet and sour orange with earthy grapes and herbs.",
+    "icon": "🌿",
+    "breeder": "Symbiotic Genetics",
+    "parents": [
+      "Tangie",
+      "Purple Punch F2"
+    ],
+    "aka": [
+      "Orange Aid"
+    ],
+    "id": "s2105"
   }
 ]
