@@ -69056,5 +69056,554 @@
       "Khalifa Mints"
     ],
     "id": "s2158"
+  },
+  {
+    "name": "Tropicana Cherry",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "18-24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Energetic",
+      "Focused",
+      "Creative"
+    ],
+    "flavor": "Tangerine and cherry with sweet earthy nuttiness.",
+    "icon": "🌿",
+    "breeder": "Relentless Genetics",
+    "parents": [
+      "Tropicana Cookies",
+      "Cherry Cookies F3"
+    ],
+    "aka": [
+      "Tropicanna Cherries",
+      "Trop Cherry",
+      "Cherry Tropicana"
+    ],
+    "id": "s2159"
+  },
+  {
+    "name": "Grape OG",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "16-25%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Happy",
+      "Relaxed",
+      "Euphoric"
+    ],
+    "flavor": "Floral grape with fruit and lemon.",
+    "icon": "🌿",
+    "breeder": "The Cali Connection",
+    "parents": [
+      "Grapefruit Romulan",
+      "Tahoe OG"
+    ],
+    "id": "s2160"
+  },
+  {
+    "name": "Dosi Punch",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18-26%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Linalool",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Happy",
+      "Relaxed",
+      "Sleepy"
+    ],
+    "flavor": "Grape, gas, and cookies.",
+    "icon": "🌿",
+    "breeder": "Symbiotic Genetics",
+    "parents": [
+      "Do-Si-Dos",
+      "Purple Punch F2"
+    ],
+    "id": "s2161"
+  },
+  {
+    "name": "Orange Push Pop",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18-25%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.35
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Focused",
+      "Relaxed",
+      "Happy"
+    ],
+    "flavor": "Orange creamsicle with citrus and vanilla.",
+    "icon": "🌿",
+    "breeder": "Seed Junky Genetics",
+    "parents": [
+      "Triangle Kush",
+      "Orange Cookies"
+    ],
+    "id": "s2162"
+  },
+  {
+    "name": "Bubba Fett",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-29%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.35
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Euphoric",
+      "Sleepy"
+    ],
+    "flavor": "Dank diesel and skunky cheese with sour earthiness.",
+    "icon": "🌿",
+    "breeder": "Green Dream Cannabis",
+    "parents": [
+      "Pre '98 Bubba Kush",
+      "Stardawg"
+    ],
+    "aka": [
+      "Bubba F"
+    ],
+    "id": "s2163"
+  },
+  {
+    "name": "Galactic Glue",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "20-27%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Pinene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Euphoric",
+      "Talkative",
+      "Relaxed"
+    ],
+    "flavor": "Sweet berries with skunk pine and sharp earth.",
+    "icon": "🌿",
+    "breeder": "Alphakronik Genes",
+    "parents": [
+      "Gorilla Glue #4",
+      "Gobstopper"
+    ],
+    "id": "s2164"
+  },
+  {
+    "name": "Whitethorn Rose",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "rare",
+    "thc": "18-30%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Linalool",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Uplifted",
+      "Relaxed",
+      "Euphoric"
+    ],
+    "flavor": "Sweet sour lemony citrus with lavender and berry.",
+    "icon": "🌿",
+    "breeder": "Huckleberry Hill Farms",
+    "parents": [
+      "Paradise Punch",
+      "Lemon OG"
+    ],
+    "id": "s2165"
+  },
+  {
+    "name": "Platinum Jack",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "24-28%",
+    "cbd": "<1%",
+    "terps": [],
+    "effects": [
+      "Creative",
+      "Uplifted",
+      "Energetic"
+    ],
+    "flavor": "Citrus and earthy pine.",
+    "icon": "🌿",
+    "parents": [
+      "Jack Herer"
+    ],
+    "id": "s2166"
+  },
+  {
+    "name": "Sour Berry",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "24-25%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Focused",
+      "Euphoric"
+    ],
+    "flavor": "Tart bittersweet fruit.",
+    "icon": "🌿",
+    "breeder": "Apothecary Genetics",
+    "parents": [
+      "Sour Headband",
+      "Blackberry"
+    ],
+    "id": "s2167"
+  },
+  {
+    "name": "Blue Lobster",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "24-32%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Euphoric",
+      "Uplifted",
+      "Relaxed"
+    ],
+    "flavor": "Creamy blueberry candy with tropical citrus and gas.",
+    "icon": "🌿",
+    "breeder": "Cipher Genetics",
+    "parents": [
+      "Apples and Bananas",
+      "Eye Candy"
+    ],
+    "id": "s2168"
+  },
+  {
+    "name": "Garlic Cocktail",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "26-32%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.35
+      }
+    ],
+    "effects": [
+      "Happy",
+      "Relaxed",
+      "Creative"
+    ],
+    "flavor": "Earthy garlic with sour orange and tangerine.",
+    "icon": "🌿",
+    "breeder": "Up Rising Seed Co.",
+    "parents": [
+      "GMO",
+      "Mimosa"
+    ],
+    "id": "s2169"
+  },
+  {
+    "name": "Cheddar Cheeze",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "26-32%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Sleepy"
+    ],
+    "flavor": "Creamy herbal cheese with dank fruity mango.",
+    "icon": "🌿",
+    "parents": [
+      "CakeMints",
+      "Platinum GSC",
+      "Gorilla Diesel #3"
+    ],
+    "id": "s2170"
+  },
+  {
+    "name": "Blue Hawaiian",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "15-22%",
+    "cbd": "<1%",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Creative",
+      "Relaxed"
+    ],
+    "flavor": "Sweet tropical fruit with berry and light citrus.",
+    "icon": "🌿",
+    "breeder": "Jordan of the Islands",
+    "parents": [
+      "Blueberry",
+      "Hawaiian Sativa"
+    ],
+    "id": "s2171"
+  },
+  {
+    "name": "Fuel Biscuits",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "21-28%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Uplifted",
+      "Euphoric",
+      "Energetic"
+    ],
+    "flavor": "Sour citrus diesel with kushy vanilla cake.",
+    "icon": "🌿",
+    "parents": [
+      "Mandarin Cookies",
+      "Jet Fuel"
+    ],
+    "id": "s2172"
+  },
+  {
+    "name": "Peach Kush",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18-24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Happy",
+      "Relaxed",
+      "Uplifted"
+    ],
+    "flavor": "Sweet peach with earthy kush.",
+    "icon": "🌿",
+    "breeder": "Alien Genetics",
+    "parents": [
+      "Topanga Pure Kush",
+      "Triangle Kush",
+      "Peach"
+    ],
+    "id": "s2173"
+  },
+  {
+    "name": "Gorilla OG",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "18-28%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.35
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Euphoric",
+      "Sleepy"
+    ],
+    "flavor": "Fruit, citrus, and diesel.",
+    "icon": "🌿",
+    "breeder": "Dr. Underground",
+    "parents": [
+      "Gorilla Glue #4",
+      "Tahoe Kush"
+    ],
+    "aka": [
+      "Gorilla Mango",
+      "Gorilla Mango OG"
+    ],
+    "id": "s2174"
+  },
+  {
+    "name": "Gorilla Breath",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "23-27%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Happy",
+      "Relaxed",
+      "Sleepy"
+    ],
+    "flavor": "Pine, fuel, chocolate, and diesel.",
+    "icon": "🌿",
+    "breeder": "Humboldt Seed Organization",
+    "parents": [
+      "Original Glue",
+      "OGKB"
+    ],
+    "id": "s2175"
+  },
+  {
+    "name": "Papaya Juice",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18-26%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      },
+      {
+        "n": "Limonene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Sleepy",
+      "Creative"
+    ],
+    "flavor": "Tropical papaya with garlic-onion funk.",
+    "icon": "🌿",
+    "parents": [
+      "Papaya",
+      "GMO"
+    ],
+    "id": "s2176"
   }
 ]
