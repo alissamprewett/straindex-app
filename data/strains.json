@@ -68246,5 +68246,139 @@
       "Mandarin Cookies"
     ],
     "id": "s2132"
+  },
+  {
+    "name": "Jealousy Split",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "22-25%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Euphoric",
+      "Creative",
+      "Relaxed"
+    ],
+    "flavor": "Sweet creamy sugary banana with spicy vanilla.",
+    "icon": "🌿",
+    "parents": [
+      "Jealousy",
+      "Banana Split"
+    ],
+    "id": "s2133"
+  },
+  {
+    "name": "Mango Sherbet",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "19-28%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Creative",
+      "Happy"
+    ],
+    "flavor": "Sugared mango with creamy pungent notes.",
+    "icon": "🌿",
+    "breeder": "Humboldt Seed Company",
+    "parents": [
+      "Mango Trees",
+      "Mango Kush",
+      "Sherbet"
+    ],
+    "aka": [
+      "Mango Sherbert"
+    ],
+    "id": "s2134"
+  },
+  {
+    "name": "Watermelon Burst",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-23%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      },
+      {
+        "n": "Linalool",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Focused",
+      "Relaxed",
+      "Energetic"
+    ],
+    "flavor": "Sugary watermelon with fruity berries and spice.",
+    "icon": "🌿",
+    "parents": [
+      "Florida Cake",
+      "Triangle Kush BX1"
+    ],
+    "id": "s2135"
+  },
+  {
+    "name": "High Society",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "18-27%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Hungry",
+      "Calm"
+    ],
+    "flavor": "Chestnut, coffee, and diesel.",
+    "icon": "🌿",
+    "breeder": "Compound Genetics",
+    "parents": [
+      "Biscotti",
+      "Jet Fuel Gelato"
+    ],
+    "id": "s2136"
   }
 ]
