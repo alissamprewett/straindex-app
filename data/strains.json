@@ -69916,5 +69916,103 @@
       "Purple Unicorn"
     ],
     "id": "s2186"
+  },
+  {
+    "name": "Tom Ford",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "23-27%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.35
+      }
+    ],
+    "effects": [
+      "Happy",
+      "Sleepy",
+      "Hungry"
+    ],
+    "flavor": "Earthy and woodsy with citrus and floral undertones.",
+    "icon": "🌿",
+    "parents": [
+      "Pink Kush",
+      "Death Bubba"
+    ],
+    "aka": [
+      "Tom Ford Pink Kush",
+      "TFPK",
+      "Pink Death"
+    ],
+    "id": "s2187"
+  },
+  {
+    "name": "Gas Mask",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18-27%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Sleepy",
+      "Relaxed",
+      "Tingly"
+    ],
+    "flavor": "Skunky with dank cherry and sour citrus.",
+    "icon": "🌿",
+    "breeder": "Pacific NW Roots x Exotic Genetix",
+    "parents": [
+      "Cherry Pie",
+      "Alien Kush F2"
+    ],
+    "aka": [
+      "Gasmask"
+    ],
+    "id": "s2188"
+  },
+  {
+    "name": "Hollywood OG",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18-27%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Happy"
+    ],
+    "flavor": "Earthy kush with diesel and citrus.",
+    "icon": "🌿",
+    "parents": [
+      "OG Kush"
+    ],
+    "id": "s2189"
   }
 ]
