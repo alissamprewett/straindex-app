@@ -67594,5 +67594,207 @@
       "Tiki Cookies"
     ],
     "id": "s2112"
+  },
+  {
+    "name": "OG Kush Breath",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "20-28%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.35
+      },
+      {
+        "n": "Limonene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Sleepy"
+    ],
+    "flavor": "Earth, dough, vanilla, nuts, and chocolate with peppery herbs and diesel.",
+    "icon": "🌿",
+    "aka": [
+      "OGKB"
+    ],
+    "id": "s2113"
+  },
+  {
+    "name": "Platinum Kush Breath",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-30%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Sleepy",
+      "Happy"
+    ],
+    "flavor": "Earthy peppery berries with diesel and citrus.",
+    "icon": "🌿",
+    "breeder": "In House Genetics",
+    "parents": [
+      "Platinum",
+      "OGKB V2.1"
+    ],
+    "aka": [
+      "PKB"
+    ],
+    "id": "s2114"
+  },
+  {
+    "name": "Cherry Chem",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18-27%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Hungry"
+    ],
+    "flavor": "Chemical and pungent with cherry and spice.",
+    "icon": "🌿",
+    "breeder": "South Fork Seed Collective",
+    "parents": [
+      "Cherry Pie",
+      "Chemdawg BC3"
+    ],
+    "id": "s2115"
+  },
+  {
+    "name": "Comatose OG",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-27%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Sleepy",
+      "Euphoric"
+    ],
+    "flavor": "Citrus pine with peppery woody diesel.",
+    "icon": "🌿",
+    "breeder": "Mainland Cannabis",
+    "parents": [
+      "OG Kush"
+    ],
+    "aka": [
+      "Comatose",
+      "Coma Kush"
+    ],
+    "id": "s2116"
+  },
+  {
+    "name": "Fly",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "20-24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Euphoric",
+      "Happy",
+      "Relaxed"
+    ],
+    "flavor": "Sweet vanilla kush with gassy diesel and peppery spice.",
+    "icon": "🌿",
+    "breeder": "Powerzzzup Genetics",
+    "parents": [
+      "Florida Kush",
+      "The Y"
+    ],
+    "aka": [
+      "The Fly"
+    ],
+    "id": "s2117"
+  },
+  {
+    "name": "Harmony",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "16-19%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Creative"
+    ],
+    "flavor": "Earthy butter with citrus and pepper spice.",
+    "icon": "🌿",
+    "breeder": "Reeferman Genetics",
+    "parents": [
+      "Santa Marta Colombian Gold",
+      "Lemon OG Kush",
+      "Lemon Thai"
+    ],
+    "id": "s2118"
   }
 ]
