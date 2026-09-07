@@ -69605,5 +69605,142 @@
       "GMO"
     ],
     "id": "s2176"
+  },
+  {
+    "name": "Medellin",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "25-30%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.35
+      }
+    ],
+    "effects": [
+      "Energetic",
+      "Tingly",
+      "Uplifted"
+    ],
+    "flavor": "Citrusy tea and pepper.",
+    "icon": "🌿",
+    "breeder": "Lemonnade",
+    "parents": [
+      "Wedding Cake",
+      "Chemdawg"
+    ],
+    "id": "s2177"
+  },
+  {
+    "name": "Lemon Fresh",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "22-27%",
+    "cbd": "<1%",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Talkative",
+      "Creative"
+    ],
+    "flavor": "Mouth-puckering lemon with diesel, herbal, and pepper notes.",
+    "icon": "🌿",
+    "parents": [
+      "Jungle Spice",
+      "Gorilla Diesel #3"
+    ],
+    "aka": [
+      "LeF"
+    ],
+    "id": "s2178"
+  },
+  {
+    "name": "Sugar Berry Scone",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "17-27%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      }
+    ],
+    "effects": [
+      "Focused",
+      "Relaxed",
+      "Sleepy"
+    ],
+    "flavor": "Sweet pastry with vanilla, blueberries, and sour grapes.",
+    "icon": "🌿",
+    "breeder": "House of Cultivar",
+    "parents": [
+      "Grape Pie",
+      "Thin Mint GSC"
+    ],
+    "aka": [
+      "Sugarberry Scones",
+      "Sugar Berry Scones"
+    ],
+    "id": "s2179"
+  },
+  {
+    "name": "Juicee J",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "30-37%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Euphoric",
+      "Energetic",
+      "Creative"
+    ],
+    "flavor": "Sweet fruity lemons with creamy fruits and spicy pungency.",
+    "icon": "🌿",
+    "breeder": "Seed Junky Genetics",
+    "parents": [
+      "Cap Junky",
+      "Jealousy"
+    ],
+    "id": "s2180"
+  },
+  {
+    "name": "Boost",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "14-22%",
+    "cbd": "<1%",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Creative",
+      "Relaxed"
+    ],
+    "flavor": "Sweet fruity blueberry candy with flowery aroma.",
+    "icon": "🌿",
+    "parents": [
+      "Blueberry",
+      "Sweet Tooth"
+    ],
+    "aka": [
+      "The Boost"
+    ],
+    "id": "s2181"
   }
 ]
