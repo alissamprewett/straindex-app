@@ -67796,5 +67796,173 @@
       "Lemon Thai"
     ],
     "id": "s2118"
+  },
+  {
+    "name": "Peanut Butter Souffle",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "19-32%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      },
+      {
+        "n": "Limonene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Euphoric",
+      "Creative"
+    ],
+    "flavor": "Chocolate, butter, and cream with lemon.",
+    "icon": "🌿",
+    "breeder": "pHinest x Cannarado Genetics",
+    "parents": [
+      "Do-Si-Dos",
+      "Lava Cake"
+    ],
+    "aka": [
+      "PB Souffle"
+    ],
+    "id": "s2119"
+  },
+  {
+    "name": "Pink Panther",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "22-26%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      },
+      {
+        "n": "Terpinolene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Energetic",
+      "Creative",
+      "Focused"
+    ],
+    "flavor": "Sweet pine and pear with floral notes.",
+    "icon": "🌿",
+    "id": "s2120"
+  },
+  {
+    "name": "Tropical Runtz",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "20-28%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Energetic",
+      "Happy",
+      "Talkative"
+    ],
+    "flavor": "Sweet candy with tropical fruit and citrus.",
+    "icon": "🌿",
+    "breeder": "Exotic Genetix",
+    "parents": [
+      "Runtz",
+      "Tropic Truffle"
+    ],
+    "aka": [
+      "Tropical Runts"
+    ],
+    "id": "s2121"
+  },
+  {
+    "name": "Jelly Runtz",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "24-25%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Linalool",
+        "p": 0.2
+      },
+      {
+        "n": "Limonene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Happy",
+      "Hungry",
+      "Talkative"
+    ],
+    "flavor": "Sweet berry with sour candy and flowery hash.",
+    "icon": "🌿",
+    "breeder": "Humboldt Seed Co.",
+    "parents": [
+      "White Runtz",
+      "Hella Jelly"
+    ],
+    "id": "s2122"
+  },
+  {
+    "name": "Madman OG",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "16-26%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Euphoric",
+      "Sleepy"
+    ],
+    "flavor": "Earthy pine and coffee with sour kush.",
+    "icon": "🌿",
+    "breeder": "Ocean Grown Genetics",
+    "parents": [
+      "LA Confidential",
+      "OG Kush"
+    ],
+    "id": "s2123"
   }
 ]
