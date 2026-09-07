@@ -68091,5 +68091,160 @@
       "1987"
     ],
     "id": "s2127"
+  },
+  {
+    "name": "Lemon Head",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.4
+      }
+    ],
+    "effects": [
+      "Uplifted",
+      "Energetic",
+      "Focused"
+    ],
+    "flavor": "Extreme lemon with a sour-sweet taste.",
+    "icon": "🌿",
+    "breeder": "Dark Horse Genetics",
+    "parents": [
+      "Lemonade",
+      "Lemon"
+    ],
+    "id": "s2128"
+  },
+  {
+    "name": "Orange Tree",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "18-24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.35
+      },
+      {
+        "n": "Pinene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Uplifted",
+      "Energetic",
+      "Relaxed"
+    ],
+    "flavor": "Sweet orange citrus with pine.",
+    "icon": "🌿",
+    "breeder": "Greenline Organics",
+    "parents": [
+      "24k Gold",
+      "Orange Valley OG"
+    ],
+    "id": "s2129"
+  },
+  {
+    "name": "Power",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "20-25%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Pinene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Happy"
+    ],
+    "flavor": "Diesel with sweet hash.",
+    "icon": "🌿",
+    "breeder": "Exotic Genetix",
+    "parents": [
+      "Gary Payton",
+      "Scotty2Hotty"
+    ],
+    "id": "s2130"
+  },
+  {
+    "name": "Tear Gas",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "25-33%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.25
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Focused",
+      "Creative",
+      "Relaxed"
+    ],
+    "flavor": "Aggressive diesel and gas with earthy pine and spice.",
+    "icon": "🌿",
+    "parents": [
+      "Stardawg",
+      "Chemdawg"
+    ],
+    "id": "s2131"
+  },
+  {
+    "name": "Purple Sunset",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18-25%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Creative",
+      "Happy"
+    ],
+    "flavor": "Sweet citrus and spice with floral berries.",
+    "icon": "🌿",
+    "breeder": "Ethos Genetics",
+    "parents": [
+      "Purple Punch",
+      "Mandarin Sunset",
+      "Mandarin Cookies"
+    ],
+    "id": "s2132"
   }
 ]
