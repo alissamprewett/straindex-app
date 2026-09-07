@@ -68380,5 +68380,681 @@
       "Jet Fuel Gelato"
     ],
     "id": "s2136"
+  },
+  {
+    "name": "Animal Tsunami",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "24-32%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Sleepy",
+      "Relaxed",
+      "Euphoric"
+    ],
+    "flavor": "Sugary sweet with pine notes.",
+    "icon": "🌿",
+    "parents": [
+      "Animal Cookies",
+      "Caramel Tsunami"
+    ],
+    "id": "s2137"
+  },
+  {
+    "name": "Strawberry Kiwi",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "26%",
+    "cbd": "<1%",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Talkative",
+      "Creative"
+    ],
+    "flavor": "Light strawberry with tangy kiwi zing.",
+    "icon": "🌿",
+    "id": "s2138"
+  },
+  {
+    "name": "RudeBoi OG",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "15-23%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.35
+      },
+      {
+        "n": "Humulene",
+        "p": 0.15
+      },
+      {
+        "n": "Pinene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Sleepy",
+      "Calm"
+    ],
+    "flavor": "Spicy hash with pine and damp soil.",
+    "icon": "🌿",
+    "breeder": "Archive Seed Bank",
+    "parents": [
+      "Irene OG",
+      "Face Off OG BX1"
+    ],
+    "aka": [
+      "Rude Boy"
+    ],
+    "id": "s2139"
+  },
+  {
+    "name": "UBC Chemo",
+    "type": "Indica",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "18-24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.35
+      },
+      {
+        "n": "Pinene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Sleepy",
+      "Relaxed",
+      "Hungry"
+    ],
+    "flavor": "Woody pine with earth and forest floor.",
+    "icon": "🌿",
+    "aka": [
+      "Chemo",
+      "Kemo"
+    ],
+    "id": "s2140"
+  },
+  {
+    "name": "Swamp Water Fumez",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "22-33%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Linalool",
+        "p": 0.2
+      },
+      {
+        "n": "Humulene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Calm"
+    ],
+    "flavor": "Sweet fruity berry candy with flowery kush and savory skunk.",
+    "icon": "🌿",
+    "breeder": "Boston Roots Seed Co. x Bloom Seed Co.",
+    "parents": [
+      "OGKB 2.1",
+      "Candy Fumez"
+    ],
+    "aka": [
+      "Swampwater Fumez"
+    ],
+    "id": "s2141"
+  },
+  {
+    "name": "Garlicane",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18-23%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Sleepy",
+      "Relaxed",
+      "Tingly"
+    ],
+    "flavor": "Savory garlic with pepper, chestnut, and mint.",
+    "icon": "🌿",
+    "breeder": "In House Genetics",
+    "parents": [
+      "GMO",
+      "Slurricane"
+    ],
+    "id": "s2142"
+  },
+  {
+    "name": "Heavy Fog",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "18-22%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric"
+    ],
+    "flavor": "Skunky herbal with citrus.",
+    "icon": "🌿",
+    "breeder": "Good Day Farm",
+    "parents": [
+      "Peanut Butter Trix",
+      "Sherbet #41"
+    ],
+    "id": "s2143"
+  },
+  {
+    "name": "High Tide",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18-20%",
+    "cbd": "<1%",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Happy",
+      "Relaxed"
+    ],
+    "flavor": "Bright and calming with earthy sweetness.",
+    "icon": "🌿",
+    "parents": [
+      "Hindu Kush",
+      "AK-47"
+    ],
+    "id": "s2144"
+  },
+  {
+    "name": "Chem Dog #4",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "20-30%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Euphoric",
+      "Talkative"
+    ],
+    "flavor": "Pungent citrus, sweet earth, pine, and fuel.",
+    "icon": "🌿",
+    "parents": [
+      "Nepali landrace",
+      "Thai landrace"
+    ],
+    "aka": [
+      "Chemdawg #4",
+      "Chemdog 4"
+    ],
+    "id": "s2145"
+  },
+  {
+    "name": "Blue Slush",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-25%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Happy"
+    ],
+    "flavor": "Blue raspberry and earthiness with ripe berries and diesel.",
+    "icon": "🌿",
+    "breeder": "Raw Genetics",
+    "parents": [
+      "Blue Cookies",
+      "Georgia Pie"
+    ],
+    "aka": [
+      "Blue Slushie",
+      "Blue Slushee"
+    ],
+    "id": "s2146"
+  },
+  {
+    "name": "Purple Milk",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "28-35%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Linalool",
+        "p": 0.2
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Uplifted",
+      "Happy"
+    ],
+    "flavor": "Creamy sweet mochi with fruity grape and spice.",
+    "icon": "🌿",
+    "breeder": "Compound Genetics",
+    "parents": [
+      "Horchata",
+      "Grape Gasoline"
+    ],
+    "id": "s2147"
+  },
+  {
+    "name": "Modified Grapes",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "23-30%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Pinene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Sleepy",
+      "Euphoric"
+    ],
+    "flavor": "Sweet fruity grape with pungent spicy dank.",
+    "icon": "🌿",
+    "breeder": "Symbiotic Genetics",
+    "parents": [
+      "GMO",
+      "Purple Punch"
+    ],
+    "aka": [
+      "Modified Grape"
+    ],
+    "id": "s2148"
+  },
+  {
+    "name": "Banana Cream Jealousy",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "22%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      },
+      {
+        "n": "Limonene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric"
+    ],
+    "flavor": "Sweet creamy banana bread with vanilla and spice.",
+    "icon": "🌿",
+    "breeder": "Good Day Farm x Seed Junky Genetics",
+    "parents": [
+      "Banana Cream Cake",
+      "Jealousy"
+    ],
+    "aka": [
+      "Banana Jealousy"
+    ],
+    "id": "s2149"
+  },
+  {
+    "name": "Beyond Blue Dream",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "20-26%",
+    "cbd": "<1%",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Creative"
+    ],
+    "flavor": "Pungent herbs, earth, and spiced berries with blueberry sweetness.",
+    "icon": "🌿",
+    "parents": [
+      "Super Silver Haze",
+      "Blue Dream"
+    ],
+    "aka": [
+      "Super Blue Dream"
+    ],
+    "id": "s2150"
+  },
+  {
+    "name": "Platinum Blue Dream",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "19-28%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric"
+    ],
+    "flavor": "Tart berries with warm earth and spice.",
+    "icon": "🌿",
+    "parents": [
+      "Haze",
+      "Blueberry"
+    ],
+    "id": "s2151"
+  },
+  {
+    "name": "Super Buff Cherry",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "19-26%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Tingly"
+    ],
+    "flavor": "Tangy tropical cherry with citrus and berry candy.",
+    "icon": "🌿",
+    "breeder": "GrowMoreFire Genetics",
+    "parents": [
+      "Super Boof",
+      "Tropicana Cherry"
+    ],
+    "aka": [
+      "Super Boof Cherry",
+      "SB Cherry",
+      "SBC"
+    ],
+    "id": "s2152"
+  },
+  {
+    "name": "Chem De La Chem",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "18-25%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Focused",
+      "Energetic",
+      "Hungry"
+    ],
+    "flavor": "Sweet, creamy, and earthy with a chemical edge.",
+    "icon": "🌿",
+    "breeder": "Top Dawg Seeds",
+    "parents": [
+      "Chemdog D",
+      "I-95"
+    ],
+    "aka": [
+      "La Chem",
+      "CDLC"
+    ],
+    "id": "s2153"
+  },
+  {
+    "name": "Island Pink",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "24-28%",
+    "cbd": "<1%",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Relaxed",
+      "Euphoric"
+    ],
+    "flavor": "Sweet vanilla candy with flowery skunk and earth.",
+    "icon": "🌿",
+    "parents": [
+      "Pink Kush"
+    ],
+    "aka": [
+      "Island Pink Kush"
+    ],
+    "id": "s2154"
+  },
+  {
+    "name": "La Pop Rocks",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "25-30%",
+    "cbd": "<1%",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Tingly",
+      "Uplifted"
+    ],
+    "flavor": "Sweet and floral with candy notes.",
+    "icon": "🌿",
+    "breeder": "Seed Junky Genetics",
+    "parents": [
+      "Triangle Kush BX2",
+      "Z Animal"
+    ],
+    "aka": [
+      "LA Pop Rockz",
+      "LA Pop Rockz #4"
+    ],
+    "id": "s2155"
+  },
+  {
+    "name": "Cactus Chiller",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "23-24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Pinene",
+        "p": 0.25
+      },
+      {
+        "n": "Limonene",
+        "p": 0.25
+      },
+      {
+        "n": "Linalool",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Euphoric",
+      "Happy",
+      "Focused"
+    ],
+    "flavor": "Sweet sugary lemon lime with cherries and berries.",
+    "icon": "🌿",
+    "id": "s2156"
+  },
+  {
+    "name": "Tko",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "20-34%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Sleepy",
+      "Euphoric"
+    ],
+    "flavor": "Pungent earthy and spicy gas with sharp diesel and citrus.",
+    "icon": "🌿",
+    "breeder": "Skunk House Genetics",
+    "parents": [
+      "Triangle Kush",
+      "GMO"
+    ],
+    "aka": [
+      "T.K.O."
+    ],
+    "id": "s2157"
+  },
+  {
+    "name": "Violet Fog",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "25%",
+    "cbd": "<1%",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Sleepy",
+      "Euphoric"
+    ],
+    "flavor": "Sweet rotting grapes with old-school skunk.",
+    "icon": "🌿",
+    "breeder": "Compound Genetics x Cannarado Genetics",
+    "parents": [
+      "Grape Gasoline",
+      "Khalifa Mints"
+    ],
+    "id": "s2158"
   }
 ]
