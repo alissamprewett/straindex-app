@@ -425,7 +425,10 @@
     ],
     "flavor": "Woodsy and grassy with a barely-there high.",
     "icon": "⚕️",
-    "breeder": "David Meiners"
+    "breeder": "David Meiners",
+    "aka": [
+      "AC/DC"
+    ]
   },
   {
     "id": "s13",
@@ -39117,7 +39120,10 @@
       "Aroused"
     ],
     "flavor": "Humulene-forward with a ocimene undertone.",
-    "icon": "🌿"
+    "icon": "🌿",
+    "aka": [
+      "Charlotte's Web"
+    ]
   },
   {
     "id": "s1068",
@@ -40761,7 +40767,10 @@
     ],
     "flavor": "Humulene-forward with a pinene undertone.",
     "icon": "🌿",
-    "breeder": "TGA"
+    "breeder": "TGA",
+    "aka": [
+      "Jilly Bean"
+    ]
   },
   {
     "id": "s1123",
@@ -52640,7 +52649,11 @@
     ],
     "flavor": "Pungent diesel and earth with a sour, chocolatey undertone.",
     "icon": "🦍",
-    "breeder": "Joesy Whales"
+    "breeder": "Joesy Whales",
+    "aka": [
+      "GG4",
+      "Original Glue"
+    ]
   },
   {
     "id": "s1519",
@@ -53834,7 +53847,10 @@
       "Uplifted"
     ],
     "flavor": "Sweet mint and chocolate over an earthy cookie base.",
-    "icon": "🍬"
+    "icon": "🍬",
+    "aka": [
+      "Thin Mint"
+    ]
   },
   {
     "id": "s1556",
