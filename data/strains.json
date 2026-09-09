@@ -70871,5 +70871,79 @@
       "Gorilla Glue #4"
     ],
     "id": "s2214"
+  },
+  {
+    "name": "Black Lime Reserve",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18-24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Uplifted",
+      "Relaxed",
+      "Happy"
+    ],
+    "flavor": "Sweet lemony lime citrus with earthy pine and black pepper.",
+    "icon": "🌿",
+    "breeder": "Aficionado Seeds",
+    "parents": [
+      "Woodman Canyon Oil Can",
+      "Lime Afghani",
+      "Northern Lights",
+      "Purple Kush",
+      "Chemdawg Special Reserve"
+    ],
+    "aka": [
+      "Black Lime",
+      "Black Lime Special Reserve",
+      "Black Lime Special"
+    ],
+    "id": "s2215"
+  },
+  {
+    "name": "Millennium",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "15-20%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Sleepy",
+      "Happy"
+    ],
+    "flavor": "Pungent and earthy.",
+    "icon": "🌿",
+    "breeder": "Dr. Greenthumb Seeds",
+    "parents": [
+      "Iranian Indica",
+      "Niagara",
+      "Shiva"
+    ],
+    "aka": [
+      "Millennium Bud"
+    ],
+    "id": "s2216"
   }
 ]
