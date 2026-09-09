@@ -71830,5 +71830,70 @@
       "Planet Purple"
     ],
     "id": "s2243"
+  },
+  {
+    "name": "Fortune Cookies",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "20-26%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Happy",
+      "Relaxed",
+      "Creative"
+    ],
+    "flavor": "Sweet honey and freshly baked cookies with earthy finish.",
+    "icon": "🌿",
+    "parents": [
+      "Girl Scout Cookies",
+      "OG Kush"
+    ],
+    "aka": [
+      "Cookies N Kush",
+      "Fortune Cookie"
+    ],
+    "id": "s2244"
+  },
+  {
+    "name": "Sour Lemon",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "15-24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      }
+    ],
+    "effects": [
+      "Energetic",
+      "Creative",
+      "Relaxed"
+    ],
+    "flavor": "Citrusy and sour with lemon, lime, and green apple.",
+    "icon": "🌿",
+    "breeder": "Emerald Triangle Seeds",
+    "parents": [
+      "California Sour",
+      "Lemon OG"
+    ],
+    "aka": [
+      "Sour Lemon OG",
+      "OG Sour Lemon"
+    ],
+    "id": "s2245"
   }
 ]
