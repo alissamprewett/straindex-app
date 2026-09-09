@@ -1601,6 +1601,7 @@ function pageSignup(req, res, query) {
     invalid: 'Please fill in every field.',
     email_taken: 'That email is already in use.',
     rate_limited: 'Too many signup attempts from this connection. Try again in a few minutes.',
+    name: 'Please enter your first and last name.',
   };
   const body = `
     <h1 class="screen-title">Create an Account</h1>
@@ -1613,8 +1614,12 @@ function pageSignup(req, res, query) {
     </a>
     <p class="empty-note" style="text-align:center;margin:0 0 14px;">or</p>
     <form method="POST" action="/signup">
-      <label class="field-label" style="margin-top:0;">Username</label>
-      <input type="text" name="username" id="signup-username" required minlength="3" maxlength="24" autocomplete="username">
+      <label class="field-label" style="margin-top:0;">First name</label>
+      <input type="text" name="first_name" id="signup-first-name" required minlength="1" maxlength="50" autocomplete="given-name">
+      <label class="field-label">Last name</label>
+      <input type="text" name="last_name" required minlength="1" maxlength="50" autocomplete="family-name">
+      <label class="field-label">Username</label>
+      <input type="text" name="username" required minlength="3" maxlength="24" autocomplete="username">
       <label class="field-label">Email</label>
       <input type="email" name="email" required autocomplete="email" placeholder="you@example.com">
       <label class="field-label">Date of birth</label>
@@ -1628,7 +1633,7 @@ function pageSignup(req, res, query) {
       <input type="password" name="password2" id="signup-password2" required minlength="8" autocomplete="new-password">
       <button class="btn block" type="submit" style="margin-top:14px;">Create Account</button>
     </form>
-    <script>document.getElementById('signup-username').focus();</script>
+    <script>document.getElementById('signup-first-name').focus();</script>
     <p class="empty-note" style="margin-top:12px;">By creating an account, you agree to the <a href="/terms">Terms of Service</a> and <a href="/privacy">Privacy Policy</a>.</p>
     <p class="empty-note">Already have an account? <a href="/login">Log in</a></p>
   `;
@@ -1756,7 +1761,14 @@ function pageGoogleFinish(req, res, query) {
   if (!raw) return redirect(res, '/signup');
   const profile = JSON.parse(raw);
   const err = query.get('err');
-  const errMessages = { taken: 'That username is already taken.', age: `You must be ${MIN_AGE} or older to create an account.`, invalid: 'Please fill in every field.' };
+  const errMessages = { taken: 'That username is already taken.', age: `You must be ${MIN_AGE} or older to create an account.`, invalid: 'Please fill in every field.', name: 'Please enter your first and last name.' };
+  // Google gives us a full name but not split into first/last -- a naive
+  // split on the first space is imperfect for multi-word first or last
+  // names, but it's a reasonable pre-filled starting point that the person
+  // can still correct before submitting.
+  const nameParts = (profile.name || '').trim().split(/\s+/);
+  const suggestedFirstName = nameParts[0] || '';
+  const suggestedLastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : '';
   // If the Google-derived suggestion collides with an existing username,
   // append a short random suffix so the pre-filled value in the form is
   // never one the person has to fix themselves just to get past a
@@ -1771,7 +1783,11 @@ function pageGoogleFinish(req, res, query) {
     <p class="screen-sub">Signed in as ${esc(profile.email)} with Google. Just need a couple more things.</p>
     ${err && errMessages[err] ? `<p style="color:#a13a3a;">${esc(errMessages[err])}</p>` : ''}
     <form method="POST" action="/auth/google/finish">
-      <label class="field-label" style="margin-top:0;">Username</label>
+      <label class="field-label" style="margin-top:0;">First name</label>
+      <input type="text" name="first_name" required minlength="1" maxlength="50" value="${esc(suggestedFirstName)}" autocomplete="given-name">
+      <label class="field-label">Last name</label>
+      <input type="text" name="last_name" required minlength="1" maxlength="50" value="${esc(suggestedLastName)}" autocomplete="family-name">
+      <label class="field-label">Username</label>
       <input type="text" name="username" required minlength="3" maxlength="24" value="${esc(suggestedUsername)}">
       <label class="field-label">Date of birth</label>
       <input type="date" name="birth_date" required>
@@ -1789,10 +1805,13 @@ async function handleGoogleFinishSubmit(req, res) {
   const profile = JSON.parse(raw);
   const f = await parseForm(req);
   const username = String(f.username || '').trim();
+  const firstName = String(f.first_name || '').trim();
+  const lastName = String(f.last_name || '').trim();
   if (!username || !f.birth_date) return redirect(res, '/auth/google/finish?err=invalid');
+  if (!firstName || !lastName) return redirect(res, '/auth/google/finish?err=name');
   if (!isOldEnough(f.birth_date)) return redirect(res, '/auth/google/finish?err=age');
   if (db.getUserByUsername(username)) return redirect(res, '/auth/google/finish?err=taken');
-  const user = await db.createUserFromGoogle({ username, birth_date: f.birth_date, email: profile.email, google_id: profile.sub });
+  const user = await db.createUserFromGoogle({ username, birth_date: f.birth_date, email: profile.email, google_id: profile.sub, first_name: firstName, last_name: lastName });
   const token = auth.signUserSessionValue(user.id);
   res.setHeader('Set-Cookie', [
     `user_session=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000`,
@@ -1806,13 +1825,16 @@ async function handleSignupSubmit(req, res) {
   const f = await parseForm(req);
   const username = String(f.username || '').trim();
   const email = String(f.email || '').trim().toLowerCase();
+  const firstName = String(f.first_name || '').trim();
+  const lastName = String(f.last_name || '').trim();
   if (!username || !email || !f.birth_date || !f.password || !f.password2) return redirect(res, '/signup?err=invalid');
+  if (!firstName || !lastName) return redirect(res, '/signup?err=name');
   if (!isOldEnough(f.birth_date)) return redirect(res, '/signup?err=age');
   if (f.password !== f.password2) return redirect(res, '/signup?err=mismatch');
   if (f.password.length < 8) return redirect(res, '/signup?err=short');
   if (db.getUserByUsername(username)) return redirect(res, '/signup?err=taken');
   if (db.getUserByEmail(email)) return redirect(res, '/signup?err=email_taken');
-  const user = await db.createUser({ username, password: f.password, birth_date: f.birth_date, email });
+  const user = await db.createUser({ username, password: f.password, birth_date: f.birth_date, email, first_name: firstName, last_name: lastName });
   const token = auth.signUserSessionValue(user.id);
   res.setHeader('Set-Cookie', `user_session=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000`);
   redirect(res, '/onboarding');
@@ -3410,6 +3432,20 @@ function pageAccount(req, res, query) {
     <h1 class="screen-title" style="margin-top:8px;">Account Settings</h1>
 
     <div class="card">
+      <h2 style="margin:0 0 10px;font-size:15px;">Full Name</h2>
+      ${!user.first_name || !user.last_name ? `<p class="empty-note" style="padding:0 0 10px;">We didn't have this on file for your account yet — add it below.</p>` : ''}
+      ${error === 'name_invalid' ? `<p class="dosing-note">Please enter both a first and last name.</p>` : ''}
+      ${success === 'name' ? `<p class="empty-note" style="color:var(--brand-green-dark);">Name updated.</p>` : ''}
+      <form method="POST" action="/account/name">
+        <label class="field-label" style="margin-top:0;">First name</label>
+        <input type="text" name="first_name" value="${esc(user.first_name || '')}" required minlength="1" maxlength="50" autocomplete="given-name">
+        <label class="field-label">Last name</label>
+        <input type="text" name="last_name" value="${esc(user.last_name || '')}" required minlength="1" maxlength="50" autocomplete="family-name">
+        <button class="btn block" type="submit" style="margin-top:10px;">Update Name</button>
+      </form>
+    </div>
+
+    <div class="card" style="margin-top:14px;">
       <h2 style="margin:0 0 10px;font-size:15px;">Username</h2>
       ${error === 'username_taken' ? `<p class="dosing-note">That username is already taken — try another.</p>` : ''}
       ${success === 'username' ? `<p class="empty-note" style="color:var(--brand-green-dark);">Username updated.</p>` : ''}
@@ -3498,6 +3534,16 @@ async function handleAccountUsername(req, res) {
   } catch (err) {
     redirect(res, '/account?error=username_taken');
   }
+}
+async function handleAccountName(req, res) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const fields = await parseForm(req);
+  const firstName = String(fields.first_name || '').trim();
+  const lastName = String(fields.last_name || '').trim();
+  if (!firstName || !lastName) return redirect(res, '/account?error=name_invalid');
+  await db.updateName(userId, firstName, lastName);
+  redirect(res, '/account?ok=name');
 }
 async function handleAccountEmail(req, res) {
   const userId = requireUser(req, res);
@@ -4381,6 +4427,7 @@ const server = http.createServer(async (req, res) => {
     if (method === 'GET' && pathname === '/support-the-app') return pageSupportTheApp(req, res);
     if (method === 'GET' && pathname === '/reset-password') return pageResetPassword(req, res, url.searchParams);
     if (method === 'POST' && pathname === '/reset-password') return await handleResetPasswordSubmit(req, res);
+    if (method === 'POST' && pathname === '/account/name') return await handleAccountName(req, res);
     if (method === 'POST' && pathname === '/account/username') return await handleAccountUsername(req, res);
     if (method === 'POST' && pathname === '/account/email') return await handleAccountEmail(req, res);
     if (method === 'POST' && pathname === '/account/password') return await handleAccountPassword(req, res);
