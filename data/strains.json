@@ -71015,5 +71015,183 @@
       "Afgoo"
     ],
     "id": "s2218"
+  },
+  {
+    "name": "Platinum Lemon Cherry Gelato",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "27-33%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Euphoric",
+      "Uplifted",
+      "Focused"
+    ],
+    "flavor": "Fruity citrus and berries with earthy pepper.",
+    "icon": "🌿",
+    "breeder": "Cannatique Farms",
+    "parents": [
+      "Lemon Haze",
+      "Lemon Cherry Gelato"
+    ],
+    "id": "s2219"
+  },
+  {
+    "name": "Grape Cake",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "21-29%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      },
+      {
+        "n": "Linalool",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Sleepy",
+      "Happy"
+    ],
+    "flavor": "Sweet grape and cherry with gassy vanilla cream.",
+    "icon": "🌿",
+    "breeder": "Seed Junky Genetics",
+    "parents": [
+      "Grape Stomper",
+      "Cherry Pie",
+      "Wedding Cake F4"
+    ],
+    "aka": [
+      "Grape Cake Head"
+    ],
+    "id": "s2220"
+  },
+  {
+    "name": "Orange Cake",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-26%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Terpinolene",
+        "p": 0.3
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      },
+      {
+        "n": "Limonene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric"
+    ],
+    "flavor": "Tart citrus with pepper and fresh earth.",
+    "icon": "🌿",
+    "parents": [
+      "California Orange",
+      "Mimosa",
+      "Orangeade"
+    ],
+    "aka": [
+      "Orange Layer Cake",
+      "Orange Cake Pop"
+    ],
+    "id": "s2221"
+  },
+  {
+    "name": "Jokerz Candy",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "22-30%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Happy",
+      "Giggly",
+      "Relaxed"
+    ],
+    "flavor": "Sweet grape candy with light diesel.",
+    "icon": "🌿",
+    "breeder": "Compound Genetics",
+    "parents": [
+      "Gummiez",
+      "Grape Gasoline"
+    ],
+    "aka": [
+      "Jokerz Kandy"
+    ],
+    "id": "s2222"
+  },
+  {
+    "name": "Grape Jelly",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18-30%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Sleepy"
+    ],
+    "flavor": "Sweet grape with sour skunk and gas.",
+    "icon": "🌿",
+    "breeder": "Mary Jones x Uncle Spaceman",
+    "parents": [
+      "OG Glue",
+      "Sweet Purple D"
+    ],
+    "id": "s2223"
   }
 ]
