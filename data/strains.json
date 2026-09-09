@@ -72744,5 +72744,40 @@
       "Kashmir"
     ],
     "id": "s2272"
+  },
+  {
+    "name": "Strawberry Candy",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "22-31%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      },
+      {
+        "n": "Pinene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Happy",
+      "Creative",
+      "Energetic"
+    ],
+    "flavor": "Sweet strawberry candy with lemon zest and tropical berry.",
+    "icon": "🌿",
+    "breeder": "Bloom Seed Co.",
+    "parents": [
+      "Orange Zkittlez",
+      "Strawberry Guava"
+    ],
+    "id": "s2273"
   }
 ]
