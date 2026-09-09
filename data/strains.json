@@ -73334,5 +73334,202 @@
       "White Widow Phenotype"
     ],
     "id": "s2291"
+  },
+  {
+    "name": "OG Chem",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "20-24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Uplifted",
+      "Euphoric",
+      "Creative"
+    ],
+    "flavor": "Diesel and sour pine with a pungent skunky aroma.",
+    "icon": "🌿",
+    "parents": [
+      "Chemdawg",
+      "OG Kush"
+    ],
+    "aka": [
+      "Chem OG",
+      "Chemdog OG",
+      "Chemdawg OG"
+    ],
+    "id": "s2292"
+  },
+  {
+    "name": "Rainbow Chip",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "20-25%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Euphoric",
+      "Focused",
+      "Creative"
+    ],
+    "flavor": "Sweet fruity chocolate with minty herbs and sour citrus.",
+    "icon": "🌿",
+    "breeder": "Exotic Genetix",
+    "parents": [
+      "Sunset Sherbet",
+      "Mint Chocolate Chip"
+    ],
+    "id": "s2293"
+  },
+  {
+    "name": "Paradise Punch",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "26-29%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Pinene",
+        "p": 0.2
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Sedating"
+    ],
+    "flavor": "Sugary papaya juice with spicy tropical fruit.",
+    "icon": "🌿",
+    "breeder": "Elyon Cannabis",
+    "parents": [
+      "Papaya",
+      "Purple Punch"
+    ],
+    "id": "s2294"
+  },
+  {
+    "name": "Heir Heads",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "20-33%",
+    "cbd": "<1%",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Focused",
+      "Relaxed"
+    ],
+    "flavor": "Earthy and diesel with citrus and spiced apple.",
+    "icon": "🌿",
+    "breeder": "Kounter Kulture",
+    "parents": [
+      "Runtz",
+      "Apples and Bananas"
+    ],
+    "aka": [
+      "Hair Heads"
+    ],
+    "id": "s2295"
+  },
+  {
+    "name": "Platinum Cookies",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "17-28%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "Sweet berry and candy with fruity spiciness.",
+    "icon": "🌿",
+    "breeder": "Cookie Fam",
+    "parents": [
+      "OG Kush",
+      "Durban Poison"
+    ],
+    "aka": [
+      "Platinum GSC",
+      "Platinum Girl Scout Cookies",
+      "PGSC"
+    ],
+    "id": "s2296"
+  },
+  {
+    "name": "Banana Daddy",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "25-30%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Happy",
+      "Talkative",
+      "Euphoric"
+    ],
+    "flavor": "Sweet skunky banana with bubblegum and gas.",
+    "icon": "🌿",
+    "breeder": "Ethos Genetics",
+    "parents": [
+      "Granddaddy Purple",
+      "Banana Hammock R1"
+    ],
+    "id": "s2297"
   }
 ]
