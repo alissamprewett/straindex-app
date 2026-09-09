@@ -211,9 +211,17 @@ function kudosGiversLabel(checkinId) {
   // investigated further.
   const givers = db.listCheckinKudosGivers(checkinId).filter(u => u && u.username);
   if (!givers.length) return '';
-  const names = givers.slice(0, 3).map(u => esc(u.username));
-  const extra = givers.length - names.length;
-  return `<div class="empty-note kudos-givers-label" style="padding:2px 0 0;text-align:right;">🌿 ${names.join(', ')}${extra > 0 ? ` and ${extra} more` : ''}</div>`;
+  // Each giver links to their profile so "who gave kudos" is something you
+  // can actually click into, not just a name -- same /friends/:id page used
+  // everywhere else in the app (gated the same way: friends and yourself).
+  const linkFor = (u) => `<a href="/friends/${u.id}" style="color:inherit;text-decoration:underline;">${esc(u.username)}</a>`;
+  const shown = givers.slice(0, 3);
+  const rest = givers.slice(3);
+  const shownHtml = shown.map(linkFor).join(', ');
+  const restHtml = rest.length
+    ? ` <details style="display:inline-block;vertical-align:top;"><summary style="display:inline;cursor:pointer;">and ${rest.length} more</summary> ${rest.map(linkFor).join(', ')}</details>`
+    : '';
+  return `<div class="empty-note kudos-givers-label" style="padding:2px 0 0;text-align:right;">🌿 ${shownHtml}${restHtml}</div>`;
 }
 // The kudos button itself -- reflects whether the current viewer has
 // already given kudos on page load (not just after clicking), and is
@@ -620,7 +628,7 @@ function pageHome(req, res) {
           ${strainPhotoTag(s, 'xs')}
           <span><b>${esc(s ? s.name : c.strain_id)}</b> ${s ? `<span class="rarity-tag rarity-${s.rarity}">${rarityLabel(s.rarity)}</span>` : ''}</span>
         </a>
-        <div class="sub" style="margin-top:8px;">${esc(c.method)} · ${starString(c.rating)}</div>
+        <div class="sub" style="margin-top:8px;">${esc(c.method)} · ${starString(c.rating)}${c.brand ? ` · ${esc(c.brand)}` : ''}</div>
         ${c.photo ? `<img class="photo-thumb" src="${esc(c.photo)}" alt="photo">` : ''}
         ${(c.effects || []).length ? `<div class="effect-tags">${c.effects.map(e => `<span>${EFFECT_ICON[e] ? EFFECT_ICON[e] + ' ' : ''}${esc(e)}</span>`).join('')}</div>` : ''}
         ${c.note ? `<div class="note">"${esc(c.note)}"</div>` : ''}
@@ -887,7 +895,7 @@ function pageStrainDetail(req, res, id) {
         ${c.photo ? `<div class="checkin-photo-thumb"><img src="${esc(c.photo)}" alt="Your photo"></div>` : ''}
         <div style="flex:1;min-width:0;">
           <div style="display:flex;justify-content:space-between;align-items:baseline;">
-            <b>${esc(c.method)}</b>
+            <b>${esc(c.method)}${c.brand ? ` <span class="empty-note" style="padding:0;">· ${esc(c.brand)}</span>` : ''}</b>
             <a href="/checkin/${c.id}/edit" class="empty-note" style="padding:0;">Edit</a>
           </div>
           ${starString(c.rating)}
@@ -1030,6 +1038,9 @@ function pageCheckinForm(req, res, query, existing) {
       <select name="method" id="checkin-method-select" onchange="toggleEdibleWarning(this.value)">${METHOD_GROUPS.map(g => `<optgroup label="${esc(g.group)}">${g.items.map(m => `<option ${existing && existing.method === m ? 'selected' : ''}>${esc(m)}</option>`).join('')}</optgroup>`).join('')}</select>
       <div class="dosing-note" id="edible-warning" style="display:none;">⚠️ Edibles can take up to 2 hours to fully kick in. Redosing too early — before you feel the first dose — is the most common cause of an uncomfortable experience. Wait it out before taking more.</div>
 
+      <label class="field-label">Brand (optional)</label>
+      <input type="text" name="brand" placeholder="e.g. Cookies, Jungle Boys — same strain can differ by brand" value="${existing ? esc(existing.brand || '') : ''}">
+
       <label class="field-label">Rating</label>
       <div class="star-picker" id="star-picker" data-value="${existing ? existing.rating : 5}">
         ${[1, 2, 3, 4, 5].map(n => `<button type="button" class="star-btn" data-star="${n}" aria-label="Rate ${n} star${n === 1 ? '' : 's'}">★</button>`).join('')}
@@ -1118,7 +1129,7 @@ async function handleCheckinSubmit(req, res) {
   const photoUrl = await storage.uploadCheckinPhoto(fields.photo || null);
   await db.createCheckin({
     user_id: userId, strain_id: strainId, method: fields.method, rating: Number(fields.rating) || 0,
-    note: fields.note || '', effects, photo: photoUrl,
+    note: fields.note || '', effects, photo: photoUrl, brand: fields.brand || '',
     tasting_notes: fields.tasting_notes || '', pairing_food: fields.pairing_food || '',
     pairing_entertainment: fields.pairing_entertainment || '', pairing_activity: fields.pairing_activity || '',
     is_private: !!fields.is_private,
@@ -1136,7 +1147,7 @@ async function handleCheckinEditSubmit(req, res, id) {
   const photoUrl = await storage.uploadCheckinPhoto(fields.photo || null);
   await db.updateCheckin(id, {
     method: fields.method, rating: Number(fields.rating) || 0,
-    note: fields.note || '', effects, photo: photoUrl,
+    note: fields.note || '', effects, photo: photoUrl, brand: fields.brand || '',
     tasting_notes: fields.tasting_notes || '', pairing_food: fields.pairing_food || '',
     pairing_entertainment: fields.pairing_entertainment || '', pairing_activity: fields.pairing_activity || '',
     is_private: !!fields.is_private,
@@ -3613,7 +3624,7 @@ function pageHistory(req, res) {
           ${strainPhotoTag(s, 'sm')}
           <div class="info">
             <div class="nm">${esc(s ? s.name : c.strain_id)}</div>
-            <div class="sub">${esc(c.method)} · ${starString(c.rating)} · <span class="local-time" data-utc="${c.created_at}Z">${esc(c.created_at)} UTC</span></div>
+            <div class="sub">${esc(c.method)}${c.brand ? ` · ${esc(c.brand)}` : ''} · ${starString(c.rating)} · <span class="local-time" data-utc="${c.created_at}Z">${esc(c.created_at)} UTC</span></div>
           </div>
         </a>
         <a href="/checkin/${c.id}/edit" class="empty-note" style="padding:0 4px;">Edit</a>
@@ -3898,7 +3909,7 @@ function pageFriendProfile(req, res, friendId) {
           ${strainPhotoTag(s, 'xs')}
           <span><b>${esc(s ? s.name : c.strain_id)}</b> ${s ? `<span class="rarity-tag rarity-${s.rarity}">${rarityLabel(s.rarity)}</span>` : ''}</span>
         </a>
-        <div class="sub" style="margin-top:8px;">${esc(c.method)} · ${starString(c.rating)}</div>
+        <div class="sub" style="margin-top:8px;">${esc(c.method)} · ${starString(c.rating)}${c.brand ? ` · ${esc(c.brand)}` : ''}</div>
         ${c.photo ? `<img class="photo-thumb" src="${esc(c.photo)}" alt="photo">` : ''}
         ${(c.effects || []).length ? `<div class="effect-tags">${c.effects.map(e => `<span>${EFFECT_ICON[e] ? EFFECT_ICON[e] + ' ' : ''}${esc(e)}</span>`).join('')}</div>` : ''}
         ${c.note ? `<div class="note">"${esc(c.note)}"</div>` : ''}
