@@ -72837,5 +72837,27 @@
       "Shishkaberry"
     ],
     "id": "s2275"
+  },
+  {
+    "name": "Super Gremlin",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "25-28%",
+    "cbd": "<1%",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric"
+    ],
+    "flavor": "Doughy herbal notes with sweet biscuits, citrus, and ripe fruit.",
+    "icon": "🌿",
+    "breeder": "Bloom Seed Co.",
+    "parents": [
+      "'09 Animal Cookies",
+      "Sherbanger"
+    ],
+    "id": "s2276"
   }
 ]
