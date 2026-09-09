@@ -71250,5 +71250,36 @@
       "Do-Si-Dos"
     ],
     "id": "s2225"
+  },
+  {
+    "name": "Zangria",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-28%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Happy",
+      "Relaxed",
+      "Sleepy"
+    ],
+    "flavor": "Sweet fruit with cherries, berries, and sour pineapple.",
+    "icon": "🌿",
+    "breeder": "Wizard Trees",
+    "parents": [
+      "Thin Mint",
+      "Zkittlez"
+    ],
+    "id": "s2226"
   }
 ]
