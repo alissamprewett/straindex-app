@@ -72250,5 +72250,175 @@
       "Dirty Squirt"
     ],
     "id": "s2256"
+  },
+  {
+    "name": "High Fructose Corn Syrup",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "24-32%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      },
+      {
+        "n": "Limonene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "Funky diesel, pine, earth, garlic, and citrus.",
+    "icon": "🌿",
+    "breeder": "Fullmoon Genetics",
+    "parents": [
+      "GMO",
+      "OZ Kush BX2"
+    ],
+    "aka": [
+      "HFCS"
+    ],
+    "id": "s2257"
+  },
+  {
+    "name": "Scooby Snacks",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Uplifted",
+      "Euphoric",
+      "Relaxed"
+    ],
+    "flavor": "Sweet piney OG kush with earthy sweetness.",
+    "icon": "🌿",
+    "breeder": "Archive Seed Bank",
+    "parents": [
+      "Platinum Girl Scout Cookies",
+      "Face Off OG"
+    ],
+    "id": "s2258"
+  },
+  {
+    "name": "Soul Assassin OG",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18-24%",
+    "cbd": "<1%",
+    "terps": [],
+    "effects": [
+      "Sleepy",
+      "Relaxed",
+      "Happy"
+    ],
+    "flavor": "Pungent diesel with citrus fumes.",
+    "icon": "🌿",
+    "breeder": "Soul Assassins Crew",
+    "parents": [
+      "OG Kush",
+      "Lemon Thai"
+    ],
+    "aka": [
+      "Assassin OG",
+      "Soul Assassin OG Kush",
+      "Soul Assassin Kush"
+    ],
+    "id": "s2259"
+  },
+  {
+    "name": "Coma",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "28-33%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Pinene",
+        "p": 0.2
+      },
+      {
+        "n": "Limonene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Sleepy",
+      "Relaxed",
+      "Happy"
+    ],
+    "flavor": "Diesel fumes with pine, earth, and spice.",
+    "icon": "🌿",
+    "breeder": "Jungle Boys",
+    "parents": [
+      "Ghost OG",
+      "Skywalker OG",
+      "SFV OG"
+    ],
+    "id": "s2260"
+  },
+  {
+    "name": "Dr. Who",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Calming",
+      "Relaxed",
+      "Sociable"
+    ],
+    "flavor": "Sweet and sour grape and ripe pineapple.",
+    "icon": "🌿",
+    "breeder": "Homegrown Natural Wonders",
+    "parents": [
+      "Mad Scientist",
+      "Timewreck"
+    ],
+    "aka": [
+      "Doctor Who"
+    ],
+    "id": "s2261"
   }
 ]
