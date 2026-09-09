@@ -73531,5 +73531,195 @@
       "Banana Hammock R1"
     ],
     "id": "s2297"
+  },
+  {
+    "name": "M2",
+    "type": "Sativa",
+    "lean": "Sativa",
+    "rarity": "rare",
+    "thc": "18-25%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Terpinolene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Energetic",
+      "Social",
+      "Euphoric"
+    ],
+    "flavor": "Bright, classic landrace sativa profile.",
+    "icon": "🌿",
+    "breeder": "Elev8 Seeds",
+    "parents": [
+      "Sri Lankan Landrace",
+      "Thai Landrace",
+      "Acapulco Gold",
+      "South African Landrace",
+      "Haze"
+    ],
+    "id": "s2298"
+  },
+  {
+    "name": "Oishii",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-28%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      }
+    ],
+    "effects": [
+      "Tingly",
+      "Euphoric",
+      "Focused"
+    ],
+    "flavor": "Sweet citrus with a fermented, skunky twist.",
+    "icon": "🌿",
+    "breeder": "Archive Seed Bank",
+    "parents": [
+      "Flavor Pack #7",
+      "Moonbow 112 F2"
+    ],
+    "id": "s2299"
+  },
+  {
+    "name": "Piff",
+    "type": "Sativa",
+    "lean": "Sativa",
+    "rarity": "uncommon",
+    "thc": "18-24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Energetic",
+      "Creative",
+      "Euphoric"
+    ],
+    "flavor": "Incense, pepper, and chemical funk with hazy spice.",
+    "icon": "🌿",
+    "parents": [
+      "Purple Haze",
+      "Unknown Haze Phenotype"
+    ],
+    "aka": [
+      "Uptown Haze",
+      "NYC Haze"
+    ],
+    "id": "s2300"
+  },
+  {
+    "name": "White Gorilla",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18-22%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      },
+      {
+        "n": "Limonene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "Pine and diesel with violet and faint chocolate.",
+    "icon": "🌿",
+    "breeder": "Greenlife",
+    "parents": [
+      "White Fire Alien OG",
+      "Gorilla Glue #4"
+    ],
+    "aka": [
+      "White Glue",
+      "White Gorilla Glue"
+    ],
+    "id": "s2301"
+  },
+  {
+    "name": "Galaxy",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "15-22%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Sedating"
+    ],
+    "flavor": "Sweet earthy pine with citrus and skunk.",
+    "icon": "🌿",
+    "breeder": "Pyramid Seeds",
+    "parents": [
+      "Northern Lights",
+      "Afghani"
+    ],
+    "id": "s2302"
+  },
+  {
+    "name": "Future",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "30-37%",
+    "cbd": "<1%",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Creative",
+      "Relaxed"
+    ],
+    "flavor": "Pungent fuel and skunk with sour lemon and sweet berries.",
+    "icon": "🌿",
+    "breeder": "Exotic Genetix",
+    "parents": [
+      "Gorilla Glue #4",
+      "Starfighter F2"
+    ],
+    "id": "s2303"
   }
 ]
