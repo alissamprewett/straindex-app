@@ -1596,6 +1596,7 @@ function pageSignup(req, res, query) {
     email_taken: 'That email is already in use.',
     rate_limited: 'Too many signup attempts from this connection. Try again in a few minutes.',
     name: 'Please enter your first and last name.',
+    agree: 'You need to agree to the Terms of Service and Privacy Policy to create an account.',
   };
   const body = `
     <h1 class="screen-title">Create an Account</h1>
@@ -1625,10 +1626,13 @@ function pageSignup(req, res, query) {
       </div>
       <label class="field-label">Confirm password</label>
       <input type="password" name="password2" id="signup-password2" required minlength="8" autocomplete="new-password">
+      <label style="display:flex;align-items:flex-start;gap:8px;margin-top:16px;cursor:pointer;">
+        <input type="checkbox" name="agree_tos" value="1" required style="width:auto;margin:3px 0 0;">
+        <span>I agree to the <a href="/terms" target="_blank" rel="noopener noreferrer">Terms of Service</a> and <a href="/privacy" target="_blank" rel="noopener noreferrer">Privacy Policy</a>.</span>
+      </label>
       <button class="btn block" type="submit" style="margin-top:14px;">Create Account</button>
     </form>
     <script>document.getElementById('signup-first-name').focus();</script>
-    <p class="empty-note" style="margin-top:12px;">By creating an account, you agree to the <a href="/terms">Terms of Service</a> and <a href="/privacy">Privacy Policy</a>.</p>
     <p class="empty-note">Already have an account? <a href="/login">Log in</a></p>
   `;
   sendHtml(res, layout({ title: 'Sign Up', body, showBack: false }));
@@ -1755,7 +1759,7 @@ function pageGoogleFinish(req, res, query) {
   if (!raw) return redirect(res, '/signup');
   const profile = JSON.parse(raw);
   const err = query.get('err');
-  const errMessages = { taken: 'That username is already taken.', age: `You must be ${MIN_AGE} or older to create an account.`, invalid: 'Please fill in every field.', name: 'Please enter your first and last name.' };
+  const errMessages = { taken: 'That username is already taken.', age: `You must be ${MIN_AGE} or older to create an account.`, invalid: 'Please fill in every field.', name: 'Please enter your first and last name.', agree: 'You need to agree to the Terms of Service and Privacy Policy to create an account.' };
   // Google gives us a full name but not split into first/last -- a naive
   // split on the first space is imperfect for multi-word first or last
   // names, but it's a reasonable pre-filled starting point that the person
@@ -1785,9 +1789,12 @@ function pageGoogleFinish(req, res, query) {
       <input type="text" name="username" required minlength="3" maxlength="24" value="${esc(suggestedUsername)}">
       <label class="field-label">Date of birth</label>
       <input type="date" name="birth_date" required>
+      <label style="display:flex;align-items:flex-start;gap:8px;margin-top:16px;cursor:pointer;">
+        <input type="checkbox" name="agree_tos" value="1" required style="width:auto;margin:3px 0 0;">
+        <span>I agree to the <a href="/terms" target="_blank" rel="noopener noreferrer">Terms of Service</a> and <a href="/privacy" target="_blank" rel="noopener noreferrer">Privacy Policy</a>.</span>
+      </label>
       <button class="btn block" type="submit" style="margin-top:14px;">Finish Creating Account</button>
     </form>
-    <p class="empty-note" style="margin-top:12px;">By creating an account, you agree to the <a href="/terms">Terms of Service</a> and <a href="/privacy">Privacy Policy</a>.</p>
   `;
   sendHtml(res, layout({ title: 'Finish Signing Up', body }));
 }
@@ -1803,6 +1810,7 @@ async function handleGoogleFinishSubmit(req, res) {
   const lastName = String(f.last_name || '').trim();
   if (!username || !f.birth_date) return redirect(res, '/auth/google/finish?err=invalid');
   if (!firstName || !lastName) return redirect(res, '/auth/google/finish?err=name');
+  if (!f.agree_tos) return redirect(res, '/auth/google/finish?err=agree');
   if (!isOldEnough(f.birth_date)) return redirect(res, '/auth/google/finish?err=age');
   if (db.getUserByUsername(username)) return redirect(res, '/auth/google/finish?err=taken');
   const user = await db.createUserFromGoogle({ username, birth_date: f.birth_date, email: profile.email, google_id: profile.sub, first_name: firstName, last_name: lastName });
@@ -1823,6 +1831,7 @@ async function handleSignupSubmit(req, res) {
   const lastName = String(f.last_name || '').trim();
   if (!username || !email || !f.birth_date || !f.password || !f.password2) return redirect(res, '/signup?err=invalid');
   if (!firstName || !lastName) return redirect(res, '/signup?err=name');
+  if (!f.agree_tos) return redirect(res, '/signup?err=agree');
   if (!isOldEnough(f.birth_date)) return redirect(res, '/signup?err=age');
   if (f.password !== f.password2) return redirect(res, '/signup?err=mismatch');
   if (f.password.length < 8) return redirect(res, '/signup?err=short');
