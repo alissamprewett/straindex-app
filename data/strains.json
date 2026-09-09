@@ -71748,5 +71748,87 @@
       "Lemon Royale"
     ],
     "id": "s2240"
+  },
+  {
+    "name": "Ice Cream Mints",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "22-30%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Hungry",
+      "Giggly",
+      "Happy"
+    ],
+    "flavor": "Creamy vanilla and sharp mint with earthy spice.",
+    "icon": "🌿",
+    "breeder": "Seed Junky Genetics",
+    "parents": [
+      "Ice Cream Cake",
+      "Kush Mints"
+    ],
+    "aka": [
+      "Ice Cream Mintz"
+    ],
+    "id": "s2241"
+  },
+  {
+    "name": "Honey Bananas",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18-26%",
+    "cbd": "<1%",
+    "terps": [],
+    "effects": [
+      "Giggly",
+      "Happy",
+      "Uplifted"
+    ],
+    "flavor": "Sweet tree fruit, bananas, and honey with a candy aftertaste.",
+    "icon": "🌿",
+    "breeder": "Elemental Seeds",
+    "parents": [
+      "Strawberry Banana",
+      "Honey Boo Boo"
+    ],
+    "aka": [
+      "Honey Banana"
+    ],
+    "id": "s2242"
+  },
+  {
+    "name": "Cherry Fritter",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-28%",
+    "cbd": "<1%",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Uplifted",
+      "Sleepy"
+    ],
+    "flavor": "Sweet sugary apple fritter with creamy cherry pie.",
+    "icon": "🌿",
+    "breeder": "Cookie Fam Genetics",
+    "parents": [
+      "Apple Fritter",
+      "Cherry Pie",
+      "Planet Purple"
+    ],
+    "id": "s2243"
   }
 ]
