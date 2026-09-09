@@ -71933,5 +71933,105 @@
       "Cherry Slushie"
     ],
     "id": "s2246"
+  },
+  {
+    "name": "Smarties",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "25-27%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Tingly",
+      "Happy"
+    ],
+    "flavor": "Sweet candy with tart berry and mint.",
+    "icon": "🌿",
+    "breeder": "Kush4Breakfast",
+    "parents": [
+      "Blue City Diesel",
+      "Girl Scout Cookies"
+    ],
+    "aka": [
+      "Smartiez",
+      "The Smarties"
+    ],
+    "id": "s2247"
+  },
+  {
+    "name": "God'S Green Crack",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "19-30%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Pinene",
+        "p": 0.2
+      },
+      {
+        "n": "Limonene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Happy",
+      "Relaxed",
+      "Energetic"
+    ],
+    "flavor": "Sweet berry and earthy tones with fruity mango.",
+    "icon": "🌿",
+    "breeder": "Jordan of the Islands",
+    "parents": [
+      "God Bud",
+      "Green Crack"
+    ],
+    "aka": [
+      "God's Crack",
+      "GCG"
+    ],
+    "id": "s2248"
+  },
+  {
+    "name": "Ruby Violet",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "25-32%",
+    "cbd": "<1%",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Creative"
+    ],
+    "flavor": "Sweet grape candy with citrus, mint, and diesel.",
+    "icon": "🌿",
+    "breeder": "Purple City Genetics",
+    "parents": [
+      "Grape Nana",
+      "Gush Mints"
+    ],
+    "id": "s2249"
   }
 ]
