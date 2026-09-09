@@ -72779,5 +72779,41 @@
       "Strawberry Guava"
     ],
     "id": "s2273"
+  },
+  {
+    "name": "Banana Pie",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18-24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      },
+      {
+        "n": "Linalool",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Creative",
+      "Happy"
+    ],
+    "flavor": "Tropical banana cream and lime zest over earthy undertones.",
+    "icon": "🌿",
+    "breeder": "Crockett Family Farms",
+    "parents": [
+      "Banana OG",
+      "OG Kush",
+      "Key Lime Pie"
+    ],
+    "id": "s2274"
   }
 ]
