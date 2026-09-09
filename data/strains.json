@@ -70294,5 +70294,39 @@
       "PiDo"
     ],
     "id": "s2197"
+  },
+  {
+    "name": "White Cherry Gelato",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "18-22%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Sleepy",
+      "Euphoric"
+    ],
+    "flavor": "Sweet cherries with creamy vanilla and floral accents.",
+    "icon": "🌿",
+    "parents": [
+      "Gelato",
+      "White Cherry"
+    ],
+    "aka": [
+      "White Gelato",
+      "White Cherry"
+    ],
+    "id": "s2198"
   }
 ]
