@@ -72815,5 +72815,27 @@
       "Key Lime Pie"
     ],
     "id": "s2274"
+  },
+  {
+    "name": "C4",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18-22%",
+    "cbd": "<1%",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Sleepy"
+    ],
+    "flavor": "Citrus and fruity pine with sage and earthiness.",
+    "icon": "🌿",
+    "breeder": "Chimera Seeds",
+    "parents": [
+      "Cotton Candy",
+      "Shishkaberry"
+    ],
+    "id": "s2275"
   }
 ]
