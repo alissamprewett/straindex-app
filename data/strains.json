@@ -70810,5 +70810,66 @@
       "G Gurtz"
     ],
     "id": "s2212"
+  },
+  {
+    "name": "Khalifa Mints",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "26-29%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Euphoric",
+      "Sleepy"
+    ],
+    "flavor": "Citrusy with pine, diesel, and sharp mint.",
+    "icon": "🌿",
+    "breeder": "Compound Genetics x Khalifa Kush",
+    "parents": [
+      "Khalifa Kush",
+      "The Menthol"
+    ],
+    "id": "s2213"
+  },
+  {
+    "name": "Foreign Glue",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "22-31%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Happy",
+      "Relaxed",
+      "Focused"
+    ],
+    "flavor": "Earthy and skunky with spice and vanilla.",
+    "icon": "🌿",
+    "breeder": "West Coast Cure",
+    "parents": [
+      "Gorilla Glue #4"
+    ],
+    "id": "s2214"
   }
 ]
