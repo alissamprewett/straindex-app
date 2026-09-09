@@ -72190,5 +72190,65 @@
       "Rocket"
     ],
     "id": "s2254"
+  },
+  {
+    "name": "Pineapple Burst",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "20-27%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      },
+      {
+        "n": "Pinene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Energetic",
+      "Happy",
+      "Uplifted"
+    ],
+    "flavor": "Tropical pineapple with dank earthiness and mint.",
+    "icon": "🌿",
+    "breeder": "Seed Junky Genetics",
+    "parents": [
+      "Pineapple Fruz",
+      "Kush Mints"
+    ],
+    "id": "s2255"
+  },
+  {
+    "name": "Squirt",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "18-26%",
+    "cbd": "<1%",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Uplifted",
+      "Relaxed"
+    ],
+    "flavor": "Sweet and sour citrus with spicy grapefruit.",
+    "icon": "🌿",
+    "breeder": "Humboldt Seed Company",
+    "parents": [
+      "Tangie",
+      "Blueberry Muffin"
+    ],
+    "aka": [
+      "Dirty Squirt"
+    ],
+    "id": "s2256"
   }
 ]
