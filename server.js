@@ -27,11 +27,11 @@ const storage = require('./lib/storage');
 const PORT = process.env.PORT || 3000;
 
 // ---------------------------------------------------------------- basic signup rate limiting
-// A simple in-memory per-IP throttle -- not bulletproof (resets on
-// restart, doesn't help behind a shared IP like a school or office), but
-// stops the easy case: a bot or script hammering /signup. Max 5 signup
-// attempts per IP per 15 minutes.
-const signupAttempts = new Map(); // ip -> array of timestamps (ms)
+// Persisted to the database (see db.js's rate_limit_attempts table) rather
+// than kept in memory, so the limit survives Render restarts and
+// redeploys instead of quietly resetting every time the free-tier
+// service spins down and back up. Max 5 signup attempts per IP per 15
+// minutes.
 const SIGNUP_WINDOW_MS = 15 * 60 * 1000;
 const SIGNUP_MAX_ATTEMPTS = 5;
 function clientIp(req) {
@@ -39,13 +39,11 @@ function clientIp(req) {
   if (fwd) return fwd.split(',')[0].trim();
   return req.socket.remoteAddress || 'unknown';
 }
-function isSignupRateLimited(req) {
+async function isSignupRateLimited(req) {
   const ip = clientIp(req);
-  const now = Date.now();
-  const attempts = (signupAttempts.get(ip) || []).filter(t => now - t < SIGNUP_WINDOW_MS);
-  attempts.push(now);
-  signupAttempts.set(ip, attempts);
-  return attempts.length > SIGNUP_MAX_ATTEMPTS;
+  const count = await db.pruneAndCountAttempts('signup', ip, SIGNUP_WINDOW_MS);
+  await db.recordRateLimitAttempt('signup', ip);
+  return count + 1 > SIGNUP_MAX_ATTEMPTS;
 }
 
 // ---------------------------------------------------------------- basic login rate limiting
@@ -53,28 +51,24 @@ function isSignupRateLimited(req) {
 // brute-forcing one account's password, without penalizing everyone on a
 // shared network (school, office) for one person's typos. Only failed
 // attempts count -- a successful login clears the counter. Max 5 failed
-// attempts per 15 minutes per IP+username combination.
-const loginAttempts = new Map(); // "ip:username" -> array of failed-attempt timestamps
+// attempts per 15 minutes per IP+username combination. Same
+// database-backed persistence as signup rate limiting, for the same reason.
 const LOGIN_WINDOW_MS = 15 * 60 * 1000;
 const LOGIN_MAX_ATTEMPTS = 5;
 function loginAttemptKey(req, username) {
   return `${clientIp(req)}:${String(username || '').trim().toLowerCase()}`;
 }
-function isLoginRateLimited(req, username) {
+async function isLoginRateLimited(req, username) {
   const key = loginAttemptKey(req, username);
-  const now = Date.now();
-  const attempts = (loginAttempts.get(key) || []).filter(t => now - t < LOGIN_WINDOW_MS);
-  return attempts.length >= LOGIN_MAX_ATTEMPTS;
+  const count = await db.pruneAndCountAttempts('login', key, LOGIN_WINDOW_MS);
+  return count >= LOGIN_MAX_ATTEMPTS;
 }
-function recordFailedLogin(req, username) {
+async function recordFailedLogin(req, username) {
   const key = loginAttemptKey(req, username);
-  const now = Date.now();
-  const attempts = (loginAttempts.get(key) || []).filter(t => now - t < LOGIN_WINDOW_MS);
-  attempts.push(now);
-  loginAttempts.set(key, attempts);
+  await db.recordRateLimitAttempt('login', key);
 }
-function clearLoginAttempts(req, username) {
-  loginAttempts.delete(loginAttemptKey(req, username));
+async function clearLoginAttempts(req, username) {
+  await db.clearRateLimitAttempts('login', loginAttemptKey(req, username));
 }
 const PUBLIC_DIR = path.join(__dirname, 'public');
 const DOCS_DIR = path.join(__dirname, 'docs');
@@ -1821,7 +1815,7 @@ async function handleGoogleFinishSubmit(req, res) {
 }
 
 async function handleSignupSubmit(req, res) {
-  if (isSignupRateLimited(req)) return redirect(res, '/signup?err=rate_limited');
+  if (await isSignupRateLimited(req)) return redirect(res, '/signup?err=rate_limited');
   const f = await parseForm(req);
   const username = String(f.username || '').trim();
   const email = String(f.email || '').trim().toLowerCase();
@@ -2845,13 +2839,13 @@ async function handleResetPasswordSubmit(req, res) {
 async function handleLoginSubmit(req, res) {
   const f = await parseForm(req);
   const username = String(f.username || '').trim();
-  if (isLoginRateLimited(req, username)) return redirect(res, '/login?err=rate_limited');
+  if (await isLoginRateLimited(req, username)) return redirect(res, '/login?err=rate_limited');
   const user = db.verifyLogin(username, f.password || '');
   if (!user) {
-    recordFailedLogin(req, username);
+    await recordFailedLogin(req, username);
     return redirect(res, '/login?err=1');
   }
-  clearLoginAttempts(req, username);
+  await clearLoginAttempts(req, username);
   const token = auth.signUserSessionValue(user.id);
   res.setHeader('Set-Cookie', `user_session=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000`);
   redirect(res, '/');
@@ -2886,10 +2880,13 @@ async function pageAdminUsers(req, res, query) {
     ${deleted ? `<p class="empty-note" style="color:var(--brand-green-dark);">User "${esc(deleted)}" was deleted.</p>` : ''}
     ${users.map(u => `
       <div class="admin-row">
-        <span>👤 <b>${esc(u.username)}</b>${u.email ? ` · ${esc(u.email)}` : ''}<br><span class="empty-note" style="padding:0;">Joined ${esc((u.created_at || '').slice(0, 10))}</span></span>
-        <form method="POST" action="/admin/users/${u.id}/delete" onsubmit="return confirm('Permanently delete ${esc(u.username)}\\'s account, check-ins, messages, and friendships? This cannot be undone.')">
-          <button class="btn danger" style="color:#fff;" type="submit">Delete</button>
-        </form>
+        <span>👤 <b>${esc(u.username)}</b>${(u.first_name || u.last_name) ? ` — ${esc([u.first_name, u.last_name].filter(Boolean).join(' '))}` : ' <span class="empty-note" style="padding:0;">(no name on file)</span>'}${u.email ? ` · ${esc(u.email)}` : ''}<br><span class="empty-note" style="padding:0;">Joined ${esc((u.created_at || '').slice(0, 10))}</span></span>
+        <div class="actions">
+          <a href="/admin/users/${u.id}/edit" class="btn secondary" style="text-decoration:none;">Edit</a>
+          <form method="POST" action="/admin/users/${u.id}/delete" onsubmit="return confirm('Permanently delete ${esc(u.username)}\\'s account, check-ins, messages, and friendships? This cannot be undone.')">
+            <button class="btn danger" style="color:#fff;" type="submit">Delete</button>
+          </form>
+        </div>
       </div>
     `).join('')}
   `;
@@ -2901,6 +2898,58 @@ async function handleAdminUserDelete(req, res, userId) {
   const username = user ? user.username : 'that user';
   await db.deleteUserAccount(userId);
   redirect(res, `/admin/users?deleted=${encodeURIComponent(username)}`);
+}
+// Edit page for an admin to correct a user's own-editable fields (same set
+// as Account Settings, minus password -- see adminUpdateUser in db.js for
+// why password stays out of admin reach). Reads live rather than from the
+// cache for the same staleness reason as the Users list itself.
+async function pageAdminUserEdit(req, res, userId, query) {
+  if (!requireAdmin(req, res)) return;
+  const users = await db.listUsersLive();
+  const user = users.find(u => u.id === userId);
+  if (!user) return notFound(res);
+  const error = query.get('error') || '';
+  const errMessages = {
+    taken: 'That username is already taken by another account.',
+    email_taken: 'That email is already in use by another account.',
+    invalid: 'Username and birth date are required.',
+  };
+  const body = `
+    <h1 class="screen-title">Edit User: ${esc(user.username)}</h1>
+    ${error && errMessages[error] ? `<p class="dosing-note">${esc(errMessages[error])}</p>` : ''}
+    <form method="POST" action="/admin/users/${user.id}/edit">
+      <label class="field-label" style="margin-top:0;">First name</label>
+      <input type="text" name="first_name" value="${esc(user.first_name || '')}" maxlength="50">
+      <label class="field-label">Last name</label>
+      <input type="text" name="last_name" value="${esc(user.last_name || '')}" maxlength="50">
+      <label class="field-label">Username</label>
+      <input type="text" name="username" value="${esc(user.username)}" required minlength="3" maxlength="24">
+      <label class="field-label">Email</label>
+      <input type="email" name="email" value="${esc(user.email || '')}">
+      <label class="field-label">Birth date</label>
+      <input type="date" name="birth_date" value="${esc(user.birth_date)}" required>
+      <p class="empty-note" style="padding:8px 0;">Password can't be changed here — that has to go through the normal "Forgot Password" email flow, so the account owner is always notified.</p>
+      <button class="btn block" type="submit">Save Changes</button>
+    </form>
+    <p class="empty-note" style="margin-top:12px;"><a href="/admin/users">← Back to Manage Users</a></p>
+  `;
+  sendHtml(res, layout({ title: 'Edit User', body, isAdmin: true }));
+}
+async function handleAdminUserEditSubmit(req, res, userId) {
+  if (!requireAdmin(req, res)) return;
+  const f = await parseForm(req);
+  const username = String(f.username || '').trim();
+  const email = String(f.email || '').trim().toLowerCase();
+  const firstName = String(f.first_name || '').trim();
+  const lastName = String(f.last_name || '').trim();
+  if (!username || !f.birth_date) return redirect(res, `/admin/users/${userId}/edit?error=invalid`);
+  try {
+    await db.adminUpdateUser(userId, { username, email, first_name: firstName, last_name: lastName, birth_date: f.birth_date });
+    redirect(res, '/admin/users');
+  } catch (err) {
+    const code = /username/i.test(err.message) ? 'taken' : /email/i.test(err.message) ? 'email_taken' : 'invalid';
+    redirect(res, `/admin/users/${userId}/edit?error=${code}`);
+  }
 }
 
 
@@ -4434,6 +4483,8 @@ const server = http.createServer(async (req, res) => {
     if (method === 'GET' && pathname === '/admin/logout') return handleAdminLogout(req, res);
     if (method === 'GET' && pathname === '/admin') return pageAdminHome(req, res);
     if (method === 'GET' && pathname === '/admin/users') return await pageAdminUsers(req, res, url.searchParams);
+    if (method === 'GET' && (m = pathname.match(/^\/admin\/users\/(\d+)\/edit$/))) return await pageAdminUserEdit(req, res, Number(m[1]), url.searchParams);
+    if (method === 'POST' && (m = pathname.match(/^\/admin\/users\/(\d+)\/edit$/))) return await handleAdminUserEditSubmit(req, res, Number(m[1]));
     if (method === 'POST' && (m = pathname.match(/^\/admin\/users\/(\d+)\/delete$/))) return await handleAdminUserDelete(req, res, Number(m[1]));
     if (method === 'GET' && pathname === '/admin/feedback') return pageAdminFeedback(req, res);
     if (method === 'GET' && pathname === '/admin/strain-submissions') return pageAdminStrainSubmissions(req, res);
