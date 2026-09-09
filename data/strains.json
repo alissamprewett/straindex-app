@@ -72577,5 +72577,62 @@
       "Apples and Bananas"
     ],
     "id": "s2266"
+  },
+  {
+    "name": "Cookie Breath",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "18-30%",
+    "cbd": "<1%",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Happy"
+    ],
+    "flavor": "Sweet grape and spicy nuts with vanilla and herbs.",
+    "icon": "🌿",
+    "breeder": "Cereal Killer Genetics",
+    "parents": [
+      "Thin Mint Girl Scout Cookies",
+      "Forum Cut Girl Scout Cookies",
+      "OG Kush Breath 2.0"
+    ],
+    "aka": [
+      "Cookies Breath"
+    ],
+    "id": "s2267"
+  },
+  {
+    "name": "Divorce Cake",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-27%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Hungry",
+      "Relaxed",
+      "Sleepy"
+    ],
+    "flavor": "Creamy and citrusy with pine and diesel.",
+    "icon": "🌿",
+    "breeder": "Jungle Boys",
+    "parents": [
+      "White Widow",
+      "Wedding Cake"
+    ],
+    "id": "s2268"
   }
 ]
