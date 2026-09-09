@@ -30331,6 +30331,9 @@
       "Depression",
       "Insomnia",
       "Stress"
+    ],
+    "aka": [
+      "Illuminati"
     ]
   },
   {
@@ -40062,7 +40065,10 @@
     ],
     "flavor": "Linalool-forward with a myrcene undertone.",
     "icon": "🌿",
-    "breeder": "Holistic Healing Collective"
+    "breeder": "Holistic Healing Collective",
+    "aka": [
+      "Grandaddy"
+    ]
   },
   {
     "id": "s1100",
@@ -43020,7 +43026,16 @@
       "Uplifted"
     ],
     "flavor": "Ocimene-forward with a limonene undertone.",
-    "icon": "🌿"
+    "icon": "🌿",
+    "breeder": "TH Seeds",
+    "parents": [
+      "Big Sur Holy",
+      "Afghani"
+    ],
+    "aka": [
+      "S.A.G.E.",
+      "Sativa Afghani Genetic Equilibrium"
+    ]
   },
   {
     "id": "s1201",
@@ -53019,8 +53034,14 @@
     "aka": [
       "Mint Kush",
       "Kush Mintz",
-      "Kush Mint"
-    ]
+      "Kush Mint",
+      "Mintz"
+    ],
+    "parents": [
+      "Bubba Kush",
+      "Animal Mints"
+    ],
+    "breeder": "Seed Junky Genetics"
   },
   {
     "id": "s1530",
@@ -55415,7 +55436,10 @@
       "Euphoric"
     ],
     "flavor": "Sweet vanilla cake over a pungent kush base.",
-    "icon": "🎂"
+    "icon": "🎂",
+    "aka": [
+      "Kush Cakes"
+    ]
   },
   {
     "id": "s1609",
@@ -55961,7 +55985,10 @@
       "Uplifted"
     ],
     "flavor": "Sweet tropical fruit with a creamy, candy-like finish.",
-    "icon": "🐯"
+    "icon": "🐯",
+    "aka": [
+      "Tigers Blood"
+    ]
   },
   {
     "id": "s1628",
@@ -65629,7 +65656,11 @@
     "flavor": "Sweet flowery pine with lemon, lime, and fuel.",
     "icon": "🌿",
     "breeder": "Dark Heart Nursery",
-    "id": "s2054"
+    "id": "s2054",
+    "aka": [
+      "Boss",
+      "Boss Kush"
+    ]
   },
   {
     "name": "Chocolope Kush",
@@ -73721,5 +73752,151 @@
       "Starfighter F2"
     ],
     "id": "s2303"
+  },
+  {
+    "name": "Orange Zkittlez",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "23-26%",
+    "cbd": "<1%",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Creative",
+      "Happy"
+    ],
+    "flavor": "Sweet and sour citrus with fruity oranges.",
+    "icon": "🌿",
+    "parents": [
+      "Agent Orange",
+      "Zkittlez"
+    ],
+    "aka": [
+      "Orange Zkittles"
+    ],
+    "id": "s2304"
+  },
+  {
+    "name": "Mango Diesel",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "16-20%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Creative",
+      "Energetic",
+      "Uplifted"
+    ],
+    "flavor": "Sweet mango and tropical fruit with a clean diesel snap.",
+    "icon": "🌿",
+    "breeder": "Pua Mana 1st Hawaiian Pakalōlō Seed Bank",
+    "parents": [
+      "Maui Wowie",
+      "Brooklyn Mango"
+    ],
+    "aka": [
+      "Maui Mango Diesel"
+    ],
+    "id": "s2305"
+  },
+  {
+    "name": "Blue Magoo",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "16-24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Sleepy"
+    ],
+    "flavor": "Sweet ripe blueberries with floral lavender and herbal anise.",
+    "icon": "🌿",
+    "parents": [
+      "DJ Short Blueberry",
+      "William's Wonder F2"
+    ],
+    "aka": [
+      "Major League Bud"
+    ],
+    "id": "s2306"
+  },
+  {
+    "name": "Tangie OG",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "17-18%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      }
+    ],
+    "effects": [
+      "Creative",
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "Tangy citrusy pine with a lemony herbal exhale.",
+    "icon": "🌿",
+    "parents": [
+      "Tangie",
+      "OG Kush"
+    ],
+    "id": "s2307"
+  },
+  {
+    "name": "DJ Short Flo",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "12-20%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Linalool",
+        "p": 0.3
+      },
+      {
+        "n": "Pinene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Energetic",
+      "Creative",
+      "Focused"
+    ],
+    "flavor": "Sweet floral pear with fresh herbs and earthy hash.",
+    "icon": "🌿",
+    "breeder": "DJ Short",
+    "parents": [
+      "Purple Thai",
+      "Afghani"
+    ],
+    "aka": [
+      "Flo"
+    ],
+    "id": "s2308"
   }
 ]
