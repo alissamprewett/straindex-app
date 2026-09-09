@@ -74077,5 +74077,314 @@
       "Cinderella 99"
     ],
     "id": "s2314"
+  },
+  {
+    "name": "Liberty Haze",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "17-29%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      }
+    ],
+    "effects": [
+      "Happy",
+      "Relaxed",
+      "Energetic"
+    ],
+    "flavor": "Earthy with notes of citrus and lime.",
+    "icon": "🌿",
+    "breeder": "Barney's Farm",
+    "parents": [
+      "Chemdawg 91",
+      "G13"
+    ],
+    "id": "s2315"
+  },
+  {
+    "name": "Marathon OG",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-28%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Sleepy",
+      "Sedating"
+    ],
+    "flavor": "Earthy and spiced lemon.",
+    "icon": "🌿",
+    "breeder": "The Cure Company",
+    "parents": [
+      "OG Kush"
+    ],
+    "aka": [
+      "Marathon Kush"
+    ],
+    "id": "s2316"
+  },
+  {
+    "name": "Sour Zkittlez",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "17-27%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      }
+    ],
+    "effects": [
+      "Uplifted",
+      "Creative",
+      "Happy"
+    ],
+    "flavor": "Sweet and sour tropical candy with a spicy grapefruit exhale.",
+    "icon": "🌿",
+    "parents": [
+      "Sour Diesel",
+      "Zkittlez"
+    ],
+    "aka": [
+      "Sour Z",
+      "Sour Skittles",
+      "Sour Zkittles"
+    ],
+    "id": "s2317"
+  },
+  {
+    "name": "Sherbacio",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "20-29%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Focused"
+    ],
+    "flavor": "Sweet fruit and citrus with earthy gas.",
+    "icon": "🌿",
+    "breeder": "Alien Labs",
+    "parents": [
+      "Sunset Sherbet",
+      "Gelato #41"
+    ],
+    "id": "s2318"
+  },
+  {
+    "name": "I-95 Cookies",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "22-29%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      },
+      {
+        "n": "Limonene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Sleepy"
+    ],
+    "flavor": "Diesel fuel and skunky earth with toasted cookies.",
+    "icon": "🌿",
+    "breeder": "Top Dawg Genetics",
+    "parents": [
+      "I-95",
+      "Girl Scout Cookies Forum Cut"
+    ],
+    "aka": [
+      "95 Cookies"
+    ],
+    "id": "s2319"
+  },
+  {
+    "name": "GMO Zkittlez",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "24-30%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Sedating",
+      "Euphoric"
+    ],
+    "flavor": "Fruity diesel with sweet citrus berry.",
+    "icon": "🌿",
+    "breeder": "Ethos Genetics",
+    "parents": [
+      "GMO Cookies",
+      "Zkittlez x OG Kush"
+    ],
+    "aka": [
+      "GMOZK",
+      "GMO Z",
+      "GMO'Z"
+    ],
+    "id": "s2320"
+  },
+  {
+    "name": "Cookie Wreck",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "18-26%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      }
+    ],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Sleepy"
+    ],
+    "flavor": "Nutty, creamy vanilla with a woody scent.",
+    "icon": "🌿",
+    "breeder": "CannaVenture Seeds",
+    "parents": [
+      "Girl Scout Cookies Forum Cut",
+      "Trainwreck BXII"
+    ],
+    "aka": [
+      "Cookie Trainwreck",
+      "GSC Wreck",
+      "GSC Trainwreck"
+    ],
+    "id": "s2321"
+  },
+  {
+    "name": "Crazy Glue",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "18-24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Creative",
+      "Euphoric"
+    ],
+    "flavor": "Sweet vanilla and citrus with pine, earth, and skunk.",
+    "icon": "🌿",
+    "breeder": "The Bank Genetics",
+    "parents": [
+      "GG4",
+      "Super Silver Chemdawg Haze"
+    ],
+    "aka": [
+      "Krazy Glue"
+    ],
+    "id": "s2322"
+  },
+  {
+    "name": "Waffle Cone",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-30%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Euphoric",
+      "Sedating"
+    ],
+    "flavor": "Sweet cream, cherry, and gas with vanilla and sugar.",
+    "icon": "🌿",
+    "breeder": "Compound Genetics",
+    "parents": [
+      "Jet Fuel Gelato",
+      "Dosilato"
+    ],
+    "id": "s2323"
+  },
+  {
+    "name": "Black Cherry Pie",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "18-25%",
+    "cbd": "<1%",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Focused",
+      "Social"
+    ],
+    "flavor": "Sour and fruity with earthy floral notes and fresh berries.",
+    "icon": "🌿",
+    "parents": [
+      "Blackberry Kush",
+      "Cherry Pie"
+    ],
+    "id": "s2324"
   }
 ]
