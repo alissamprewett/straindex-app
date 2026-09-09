@@ -74742,5 +74742,401 @@
       "Face Off OG"
     ],
     "id": "s2338"
+  },
+  {
+    "name": "Apple Mac",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "18-29%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      }
+    ],
+    "effects": [
+      "Aroused",
+      "Focused",
+      "Creative"
+    ],
+    "flavor": "Blueberry, apple, and diesel.",
+    "icon": "🌿",
+    "breeder": "Surfr Seeds",
+    "parents": [
+      "MAC 1",
+      "Trophy Wife"
+    ],
+    "id": "s2339"
+  },
+  {
+    "name": "Rainbow Candy",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-24%",
+    "cbd": "<1%",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Uplifted"
+    ],
+    "flavor": "Sweet candy with fresh fruit.",
+    "icon": "🌿",
+    "breeder": "Growers Choice",
+    "parents": [
+      "Zkittlez",
+      "Dosidos"
+    ],
+    "id": "s2340"
+  },
+  {
+    "name": "Sour Blue Raspberry",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "17-27%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      },
+      {
+        "n": "Limonene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Energetic",
+      "Relaxed",
+      "Sleepy"
+    ],
+    "flavor": "Sour lemon-lime and blue raspberry candy with spicy diesel.",
+    "icon": "🌿",
+    "parents": [
+      "Blue Raspberry",
+      "Sour Diesel"
+    ],
+    "id": "s2341"
+  },
+  {
+    "name": "Lemongrass",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "19-25%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Uplifted",
+      "Relaxed"
+    ],
+    "flavor": "Lemon peel and fresh-cut lemongrass with creamy Gelato depth.",
+    "icon": "🌿",
+    "breeder": "Humboldt Seed Company",
+    "parents": [
+      "Lemon Kush BX5",
+      "Humboldt Gelato BX3"
+    ],
+    "aka": [
+      "Lemon Grass",
+      "Lemon Gas"
+    ],
+    "id": "s2342"
+  },
+  {
+    "name": "Triple Chocolate Chip",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "22-30%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      },
+      {
+        "n": "Humulene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Sleepy"
+    ],
+    "flavor": "Cool mint and cookie dough with coffee and subtle gas.",
+    "icon": "🌿",
+    "breeder": "Exotic Genetix",
+    "parents": [
+      "Mint Chocolate Chip",
+      "Triple OG"
+    ],
+    "id": "s2343"
+  },
+  {
+    "name": "Garlic Icing",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "19-25%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Sedating"
+    ],
+    "flavor": "Herbal and garlicky with sage, nuts, and creamy icing.",
+    "icon": "🌿",
+    "parents": [
+      "GMO",
+      "Papaya"
+    ],
+    "id": "s2344"
+  },
+  {
+    "name": "Unruly OG",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "29-31%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      },
+      {
+        "n": "Limonene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Euphoric",
+      "Happy",
+      "Relaxed"
+    ],
+    "flavor": "Bold gas, diesel, citrus, and pine.",
+    "icon": "🌿",
+    "breeder": "BLEM (Cali Lotus)",
+    "parents": [
+      "OG Kush"
+    ],
+    "id": "s2345"
+  },
+  {
+    "name": "Pineapple Paradise",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "20-21%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Talkative",
+      "Creative",
+      "Energetic"
+    ],
+    "flavor": "Citrusy with hints of diesel and fuel, sweet pineapple.",
+    "icon": "🌿",
+    "parents": [
+      "Pre-98 Bubba Kush",
+      "Sour Diesel"
+    ],
+    "id": "s2346"
+  },
+  {
+    "name": "Goofiez",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "28-30%",
+    "cbd": "<1%",
+    "terps": [],
+    "effects": [
+      "Creative",
+      "Giggly",
+      "Euphoric"
+    ],
+    "flavor": "Sweet pear, peach, and vanilla.",
+    "icon": "🌿",
+    "breeder": "Compound Genetics",
+    "parents": [
+      "Apples & Bananas",
+      "Jokerz"
+    ],
+    "id": "s2347"
+  },
+  {
+    "name": "White Apple Tartz",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "26%",
+    "cbd": "<1%",
+    "terps": [],
+    "effects": [
+      "Creative",
+      "Uplifted",
+      "Relaxed"
+    ],
+    "flavor": "Sweet candy with a tart green apple bite.",
+    "icon": "🌿",
+    "breeder": "Clearwater Genetics",
+    "parents": [
+      "Apple Fritter",
+      "Runtz"
+    ],
+    "id": "s2348"
+  },
+  {
+    "name": "Smackerz",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "31-34%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Euphoric",
+      "Hungry"
+    ],
+    "flavor": "Sweet and fruity with diesel, pine, and berry.",
+    "icon": "🌿",
+    "parents": [
+      "Gorilla Glue #4",
+      "Rozay"
+    ],
+    "aka": [
+      "Smuckers",
+      "Schmuckerz"
+    ],
+    "id": "s2349"
+  },
+  {
+    "name": "Yesca",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "23-26%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Sedating"
+    ],
+    "flavor": "Sweet skunkiness, spicy pepper, and sour citrus.",
+    "icon": "🌿",
+    "parents": [
+      "OG Kush"
+    ],
+    "aka": [
+      "Yesca OG",
+      "Yesca OG Kush"
+    ],
+    "id": "s2350"
+  },
+  {
+    "name": "T.I.T.S.",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "25-30%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Euphoric",
+      "Creative",
+      "Energetic"
+    ],
+    "flavor": "Sweet, spicy, and diesel with pine and lemon.",
+    "icon": "🌿",
+    "breeder": "Diamondback Genetics",
+    "parents": [
+      "Sour Diesel",
+      "Forum Cookies"
+    ],
+    "aka": [
+      "This Is The Shit",
+      "Tits"
+    ],
+    "id": "s2351"
   }
 ]
