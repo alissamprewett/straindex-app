@@ -71281,5 +71281,201 @@
       "Zkittlez"
     ],
     "id": "s2226"
+  },
+  {
+    "name": "Sugar Cone",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "20-23%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      },
+      {
+        "n": "Limonene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Focused",
+      "Energetic",
+      "Creative"
+    ],
+    "flavor": "Nutty, sweet, and citrusy.",
+    "icon": "🌿",
+    "breeder": "Connected Cannabis Co.",
+    "parents": [
+      "Gelato #41",
+      "Cookies and Cream"
+    ],
+    "aka": [
+      "Sugar Cones"
+    ],
+    "id": "s2227"
+  },
+  {
+    "name": "Dirty Taxi",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "18-28%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Happy",
+      "Focused",
+      "Energetic"
+    ],
+    "flavor": "Earthy, pungent, and skunky with pepper and diesel.",
+    "icon": "🌿",
+    "breeder": "Top Dawg Seeds",
+    "parents": [
+      "GMO",
+      "Chem I-95"
+    ],
+    "id": "s2228"
+  },
+  {
+    "name": "White Diamond",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "21-30%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      }
+    ],
+    "effects": [
+      "Sleepy",
+      "Talkative",
+      "Tingly"
+    ],
+    "flavor": "Sour diesel with spicy sage and light floral notes.",
+    "icon": "🌿",
+    "breeder": "Alphakronik Genes",
+    "parents": [
+      "The White",
+      "Space Queen"
+    ],
+    "aka": [
+      "White Diamonds",
+      "White Diamond OG"
+    ],
+    "id": "s2229"
+  },
+  {
+    "name": "Candy Cartel",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "25-29%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Calm",
+      "Happy",
+      "Relaxed"
+    ],
+    "flavor": "Vanilla cream and candied citrus with buttery biscotti.",
+    "icon": "🌿",
+    "breeder": "BeanFiendz",
+    "parents": [
+      "Sherb Cream Pie",
+      "Biscotti"
+    ],
+    "id": "s2230"
+  },
+  {
+    "name": "Evergreen",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "21-23%",
+    "cbd": "<1%",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Giggly",
+      "Happy"
+    ],
+    "flavor": "Fresh earthiness with woody pine and sour citrus.",
+    "icon": "🌿",
+    "breeder": "Greenpoint Seeds",
+    "parents": [
+      "Alpine Kush",
+      "Stardawg"
+    ],
+    "id": "s2231"
+  },
+  {
+    "name": "Magic Marker",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "22-30%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Linalool",
+        "p": 0.2
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Creative"
+    ],
+    "flavor": "Sweet smooth citrus with zesty diesel skunk.",
+    "icon": "🌿",
+    "breeder": "Seed Junky Genetics",
+    "parents": [
+      "Permanent Marker",
+      "RS-11"
+    ],
+    "id": "s2232"
   }
 ]
