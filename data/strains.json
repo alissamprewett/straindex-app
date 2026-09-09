@@ -74386,5 +74386,361 @@
       "Cherry Pie"
     ],
     "id": "s2324"
+  },
+  {
+    "name": "Wookie",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "23-25%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Social",
+      "Happy"
+    ],
+    "flavor": "Earthy-sweet and floral with a pungent finish.",
+    "icon": "🌿",
+    "breeder": "Bodhi Seeds",
+    "parents": [
+      "Lavender",
+      "Appalachia"
+    ],
+    "id": "s2325"
+  },
+  {
+    "name": "Coconut Cream",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "28-31%",
+    "cbd": "<1%",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Sedating"
+    ],
+    "flavor": "Sweet vanilla cream and coconut with chocolate and diesel.",
+    "icon": "🌿",
+    "parents": [
+      "LA Kush Cake",
+      "Coco Milk"
+    ],
+    "id": "s2326"
+  },
+  {
+    "name": "Lemon Loopz",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "26-32%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Euphoric",
+      "Uplifted",
+      "Happy"
+    ],
+    "flavor": "Tangy citrus with gassy and sweet undertones.",
+    "icon": "🌿",
+    "breeder": "Gastown Genetics",
+    "parents": [
+      "Lemon Candy Fuel",
+      "Animal Mints"
+    ],
+    "id": "s2327"
+  },
+  {
+    "name": "Tokyo Snow",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "18-24%",
+    "cbd": "<1%",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Sedating"
+    ],
+    "flavor": "Citrus and grape with sharp mint on the exhale.",
+    "icon": "🌿",
+    "breeder": "Compound Genetics",
+    "parents": [
+      "Hibachi Supreme",
+      "The Menthol"
+    ],
+    "aka": [
+      "Tokyo Sno"
+    ],
+    "id": "s2328"
+  },
+  {
+    "name": "Sour Cheetah",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "18-20%",
+    "cbd": "<1%",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Uplifted"
+    ],
+    "flavor": "Sweet honey vanilla with spicy creamy citrus custard.",
+    "icon": "🌿",
+    "breeder": "Good Day Farm",
+    "parents": [
+      "Sour Cookies",
+      "Cheetah Piss"
+    ],
+    "id": "s2329"
+  },
+  {
+    "name": "Purple Ice Water",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "25-36%",
+    "cbd": "<1%",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed"
+    ],
+    "flavor": "Sweet grape and citrus with fresh berries.",
+    "icon": "🌿",
+    "breeder": "Bloom Seed Co.",
+    "parents": [
+      "Ice Cream Cake #5",
+      "Grape Cream Cake"
+    ],
+    "id": "s2330"
+  },
+  {
+    "name": "Lucid Blue",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "24-30%",
+    "cbd": "4%",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Euphoric",
+      "Creative"
+    ],
+    "flavor": "Blueberry and grass with a spicy pungent finish.",
+    "icon": "🌿",
+    "breeder": "Gage Green Genetics",
+    "parents": [
+      "Blue Dream",
+      "Grateful Breath"
+    ],
+    "id": "s2331"
+  },
+  {
+    "name": "Space Runtz",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "20-28%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Uplifted",
+      "Sleepy"
+    ],
+    "flavor": "Sweet citrus and berries with notes of pear and violet.",
+    "icon": "🌿",
+    "breeder": "Tiki Madman",
+    "parents": [
+      "Runtz",
+      "Candy Rain"
+    ],
+    "id": "s2332"
+  },
+  {
+    "name": "Designer Runtz",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-30%",
+    "cbd": "<1%",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Euphoric",
+      "Sleepy"
+    ],
+    "flavor": "Sweet and sour fruity candy with lemony citrus and creamy strawberries.",
+    "icon": "🌿",
+    "breeder": "Exotic Genetix",
+    "parents": [
+      "Luxuriotti",
+      "Runtz"
+    ],
+    "id": "s2333"
+  },
+  {
+    "name": "Unicorn Poop",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "22-26%",
+    "cbd": "<1%",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Happy",
+      "Relaxed"
+    ],
+    "flavor": "Sweet and sour citrusy fruits with ripened berries and earthiness.",
+    "icon": "🌿",
+    "breeder": "ThugPug Genetics",
+    "parents": [
+      "GMO Cookies",
+      "Sophisticated Lady"
+    ],
+    "id": "s2334"
+  },
+  {
+    "name": "Strawberry Gary",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "20-29%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Energetic",
+      "Relaxed",
+      "Aroused"
+    ],
+    "flavor": "Sweet strawberry cream with sharp gassy diesel and black pepper.",
+    "icon": "🌿",
+    "breeder": "Exotic Genetix",
+    "parents": [
+      "Gary Payton",
+      "Red Pop"
+    ],
+    "aka": [
+      "Strawberry Gary Payton"
+    ],
+    "id": "s2335"
+  },
+  {
+    "name": "Cheese Quake",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "15-29%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Euphoric",
+      "Sedating"
+    ],
+    "flavor": "Cheesy and pungent with sweetness and grape notes.",
+    "icon": "🌿",
+    "breeder": "Subcool (TGA Genetics)",
+    "parents": [
+      "Cheese",
+      "Querkle"
+    ],
+    "aka": [
+      "Cheesequake"
+    ],
+    "id": "s2336"
+  },
+  {
+    "name": "Pura Vida",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "18-30%",
+    "cbd": "<1%",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Creative",
+      "Relaxed"
+    ],
+    "flavor": "Earthy, musky, and menthol with fuel and citrus.",
+    "icon": "🌿",
+    "breeder": "Bodhi Seeds",
+    "parents": [
+      "LA Pure Kush",
+      "Appalachia"
+    ],
+    "aka": [
+      "Pure Vida",
+      "Pure Life"
+    ],
+    "id": "s2337"
+  },
+  {
+    "name": "Double Cross",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "28-34%",
+    "cbd": "<1%",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Sedating"
+    ],
+    "flavor": "Woody, spicy, and citrus.",
+    "icon": "🌿",
+    "breeder": "Archive Seed Bank",
+    "parents": [
+      "Moonbow",
+      "Face Off OG"
+    ],
+    "id": "s2338"
   }
 ]
