@@ -55630,7 +55630,14 @@
     "breeder": "Capulator",
     "aka": [
       "Miracle Alien Cookies",
-      "M.A.C."
+      "M.A.C.",
+      "MAC #1",
+      "MAC1",
+      "Caps Cut"
+    ],
+    "parents": [
+      "Alien Cookies",
+      "Colombian x Starfighter"
     ]
   },
   {
@@ -73898,5 +73905,177 @@
       "Flo"
     ],
     "id": "s2308"
+  },
+  {
+    "name": "Melted Strawberry",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "22-26%",
+    "cbd": "<1%",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Happy",
+      "Uplifted"
+    ],
+    "flavor": "Sweet strawberries with spicy earthiness and faint diesel.",
+    "icon": "🌿",
+    "breeder": "Bloom Seed Co.",
+    "parents": [
+      "GMO",
+      "Strawberry Guava"
+    ],
+    "aka": [
+      "Melted Strawberries"
+    ],
+    "id": "s2309"
+  },
+  {
+    "name": "Red Rock Runtz",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "29-31%",
+    "cbd": "<1%",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Relaxed"
+    ],
+    "flavor": "Bright citrus with spice, herbs, earth, and mild sweetness.",
+    "icon": "🌿",
+    "parents": [
+      "Obama Runtz",
+      "Superboof #15"
+    ],
+    "id": "s2310"
+  },
+  {
+    "name": "Galactic Gas",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "19-27%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Humulene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Creative",
+      "Sedating"
+    ],
+    "flavor": "Pungent diesel with sweet fruit and creamy earthiness.",
+    "icon": "🌿",
+    "parents": [
+      "Gelato #45",
+      "Gushers"
+    ],
+    "id": "s2311"
+  },
+  {
+    "name": "Crescendo",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "24-30%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Energetic",
+      "Relaxed"
+    ],
+    "flavor": "Sweet, earthy, and citrus with gassy, kushy cookie dough notes.",
+    "icon": "🌿",
+    "breeder": "Ethos Genetics",
+    "parents": [
+      "Chemdog",
+      "I-95",
+      "Mandarin Cookies"
+    ],
+    "aka": [
+      "Crescendo RBx1"
+    ],
+    "id": "s2312"
+  },
+  {
+    "name": "All Gas OG",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-25%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Sleepy",
+      "Hungry"
+    ],
+    "flavor": "Diesel, pungent, and earthy.",
+    "icon": "🌿",
+    "breeder": "Humboldt Seed Company",
+    "parents": [
+      "Venom OG",
+      "Humboldt OG"
+    ],
+    "aka": [
+      "All Gas",
+      "Gas",
+      "Asphalt Plant"
+    ],
+    "id": "s2313"
+  },
+  {
+    "name": "Lucinda Williams",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "24-29%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      }
+    ],
+    "effects": [
+      "Euphoric",
+      "Focused",
+      "Creative"
+    ],
+    "flavor": "Sweet berries and sour spicy lemon citrus with woody undertones.",
+    "icon": "🌿",
+    "breeder": "Kind Meds",
+    "parents": [
+      "William's Wonder",
+      "Cinderella 99"
+    ],
+    "id": "s2314"
   }
 ]
