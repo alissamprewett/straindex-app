@@ -72634,5 +72634,55 @@
       "Wedding Cake"
     ],
     "id": "s2268"
+  },
+  {
+    "name": "Shark",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "20-29%",
+    "cbd": "<1%",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Euphoric",
+      "Relaxed"
+    ],
+    "flavor": "Blueberry diesel with sweet spices and earth.",
+    "icon": "🌿",
+    "parents": [
+      "Great White Shark",
+      "OG Kush"
+    ],
+    "aka": [
+      "Shark OG",
+      "OG Shark"
+    ],
+    "id": "s2269"
+  },
+  {
+    "name": "Kiwi Strawberry",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "25-28%",
+    "cbd": "<1%",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Focused",
+      "Tingly"
+    ],
+    "flavor": "Sweet strawberries with sour citrus and tropical fruit.",
+    "icon": "🌿",
+    "breeder": "Equilibrium Genetics",
+    "parents": [
+      "Blue Frost",
+      "Gorilla Princess"
+    ],
+    "aka": [
+      "Dancing Flame"
+    ],
+    "id": "s2270"
   }
 ]
