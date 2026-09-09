@@ -72684,5 +72684,65 @@
       "Dancing Flame"
     ],
     "id": "s2270"
+  },
+  {
+    "name": "La Baker",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "21-29%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Sleepy"
+    ],
+    "flavor": "Creamy vanilla frosting, sponge cake, and warm spice with mint.",
+    "icon": "🌿",
+    "breeder": "Jungle Boys",
+    "parents": [
+      "LA Kush Cake",
+      "Jungle Cake"
+    ],
+    "id": "s2271"
+  },
+  {
+    "name": "Kashmir Kush",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "17-20%",
+    "cbd": "<1%",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Energetic"
+    ],
+    "flavor": "Lavender, lemon, and vanilla with an herbal, peppery finish.",
+    "icon": "🌿",
+    "breeder": "Guru Seeds Company",
+    "parents": [
+      "Barney's Vanilla Kush",
+      "Purple Pig"
+    ],
+    "aka": [
+      "Kashmir"
+    ],
+    "id": "s2272"
   }
 ]
