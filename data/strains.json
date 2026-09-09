@@ -72875,5 +72875,68 @@
       "Sherbanger"
     ],
     "id": "s2276"
+  },
+  {
+    "name": "Headbanger",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "18-28%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Humulene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Creative",
+      "Focused",
+      "Euphoric"
+    ],
+    "flavor": "Citrusy and sweet with skunky undertones.",
+    "icon": "🌿",
+    "breeder": "Karma Genetics",
+    "parents": [
+      "Sour Diesel",
+      "Biker Kush"
+    ],
+    "aka": [
+      "Headbanger Kush"
+    ],
+    "id": "s2277"
+  },
+  {
+    "name": "Lamb's Breath",
+    "type": "Sativa",
+    "lean": "Sativa",
+    "rarity": "uncommon",
+    "thc": "15-25%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      }
+    ],
+    "effects": [
+      "Energetic",
+      "Creative",
+      "Euphoric"
+    ],
+    "flavor": "Pungent cheesy aroma with sweet, spicy notes.",
+    "icon": "🌿",
+    "parents": [
+      "Jamaican Landrace"
+    ],
+    "aka": [
+      "Lamb's Bread",
+      "Jahweed"
+    ],
+    "id": "s2278"
   }
 ]
