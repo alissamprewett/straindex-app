@@ -70945,5 +70945,75 @@
       "Millennium Bud"
     ],
     "id": "s2216"
+  },
+  {
+    "name": "Banana Cake",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "20-27%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      },
+      {
+        "n": "Limonene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Happy",
+      "Hungry",
+      "Relaxed"
+    ],
+    "flavor": "Sweet banana with buttery vanilla finish.",
+    "icon": "🌿",
+    "breeder": "In House Genetics",
+    "parents": [
+      "Banana OG",
+      "Wedding Cake"
+    ],
+    "id": "s2217"
+  },
+  {
+    "name": "Blueberry Afgoo",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "12-18%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      },
+      {
+        "n": "Limonene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Tingly",
+      "Sleepy",
+      "Happy"
+    ],
+    "flavor": "Sweet and skunky with blueberry and pine.",
+    "icon": "🌿",
+    "breeder": "Hermetic Genetics",
+    "parents": [
+      "Blueberry",
+      "Afgoo"
+    ],
+    "id": "s2218"
   }
 ]
