@@ -75657,5 +75657,71 @@
       "Gush Mints"
     ],
     "id": "s2419"
+  },
+  {
+    "name": "Tongue Splasher",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "24%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Relaxed",
+      "Giggly"
+    ],
+    "flavor": "Gassy and fruity with hints of citrus and pine.",
+    "icon": "🌿",
+    "breeder": "Exotic Genetix",
+    "parents": [
+      "Gushers",
+      "Rainbow Chip"
+    ],
+    "id": "s2420"
+  },
+  {
+    "name": "Trap Star",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "26-30%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Sleepy",
+      "Happy"
+    ],
+    "flavor": "Sweet cherry berry with woody pine and diesel.",
+    "icon": "🌿",
+    "breeder": "Exotic Genetix",
+    "parents": [
+      "LA OG Kush",
+      "The Cube"
+    ],
+    "id": "s2421"
+  },
+  {
+    "name": "Walker Kush",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "15-18%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Calm",
+      "Happy"
+    ],
+    "flavor": "Sweet and tangy with a touch of kush and pine.",
+    "icon": "🌿",
+    "breeder": "Rare Dankness",
+    "parents": [
+      "Albert Walker",
+      "Rare Dankness #1"
+    ],
+    "id": "s2422"
   }
 ]
