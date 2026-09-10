@@ -74174,5 +74174,97 @@
     ],
     "aka": "This Is The Shit, Tits",
     "id": "s2351"
+  },
+  {
+    "id": "s2352",
+    "name": "White Cindy",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Creative",
+      "Focused",
+      "Euphoric"
+    ],
+    "flavor": "Sweet citrus and earthy pine with a subtle spice and tropical fruit finish.",
+    "icon": "🌿",
+    "aka": "White Cindy 99",
+    "parents": [
+      "Cinderella 99",
+      "The White"
+    ]
+  },
+  {
+    "id": "s2353",
+    "name": "Truth Serum",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "≤20%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Energetic",
+      "Talkative",
+      "Social"
+    ],
+    "flavor": "Sweet tropical herbs and fruit with a peppery herbal exhale.",
+    "icon": "🌿",
+    "parents": [
+      "G13",
+      "Trinity",
+      "Pineapple"
+    ]
+  },
+  {
+    "id": "s2354",
+    "name": "MK Ultra Black Ops",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18-24%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Sleepy"
+    ],
+    "flavor": "Pungent and earthy with herbal spice and sweet grape undertones.",
+    "icon": "🌿",
+    "breeder": "Third Eye Genetics",
+    "parents": [
+      "MK Ultra",
+      "The Black"
+    ]
+  },
+  {
+    "id": "s2355",
+    "name": "Yellow Fruit Stripe",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "17-23%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Focused",
+      "Euphoric",
+      "Talkative"
+    ],
+    "flavor": "Bright sour citrus with mango and a touch of spicy coffee.",
+    "icon": "🌿",
+    "breeder": "Lemonnade / Cookies",
+    "aka": "Yellow Fruit Stripes",
+    "parents": [
+      "Lemonchello 10",
+      "London Pound Cake 97"
+    ]
   }
 ]
