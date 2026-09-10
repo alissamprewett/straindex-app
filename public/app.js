@@ -312,29 +312,14 @@ async function likeGrowTip(id, btn) {
     debounceTimer = setTimeout(runSearch, 200);
   });
   [effectSel, terpeneSel, ailmentSel].forEach(sel => sel && sel.addEventListener('change', runSearch));
-  // Type/Rarity/THC/Data quality are rendered as tappable pills rather than
-  // dropdowns (fewer than a handful of options each, so a visible row of
-  // buttons is faster to use than opening a native select on mobile). Each
-  // pill updates a hidden input behind the scenes so runSearch() above
-  // doesn't need to know or care whether a value came from a pill or a
-  // real <select> -- it just reads .value either way.
-  [
-    ['strain-search-type-pills', typeSel],
-    ['strain-search-rarity-pills', raritySel],
-    ['strain-search-thc-pills', thcSel],
-    ['strain-search-verified-pills', verifiedSel],
-  ].forEach(([containerId, hiddenInput]) => {
-    const container = document.getElementById(containerId);
-    if (!container || !hiddenInput) return;
-    container.querySelectorAll('.filter-pill').forEach(pill => {
-      pill.addEventListener('click', () => {
-        container.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
-        pill.classList.add('active');
-        hiddenInput.value = pill.dataset.value;
-        runSearch();
-      });
-    });
-  });
+  // Type/Rarity/THC/Data quality are plain <select> dropdowns (same as the
+  // three above) -- wiring them the same way. This used to be tappable
+  // pill-buttons with hidden inputs behind them, which needed a different
+  // click-based wiring; that UI was replaced with plain selects but this
+  // wiring was never updated to match, so these four filters silently did
+  // nothing when changed. Fixed by treating them identically to the
+  // dropdowns above.
+  [typeSel, raritySel, thcSel, verifiedSel].forEach(sel => sel && sel.addEventListener('change', runSearch));
 })();
 
 // ------------------------------------------------------------ dispensaries
