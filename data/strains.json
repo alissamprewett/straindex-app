@@ -75120,5 +75120,114 @@
       "Lilac Diesel BX3"
     ],
     "id": "s2394"
+  },
+  {
+    "name": "Fritter Licker",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-24%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Tingly",
+      "Giggly"
+    ],
+    "flavor": "Toffee apple with earthy notes.",
+    "icon": "🌿",
+    "breeder": "Archive Seeds",
+    "parents": [
+      "Apple Fritter",
+      "Face Off OG"
+    ],
+    "id": "s2395"
+  },
+  {
+    "name": "G4",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "22-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Sleepy",
+      "Hungry"
+    ],
+    "flavor": "Pungent, pine, and earthy.",
+    "icon": "🌿",
+    "breeder": "Sunday Goods",
+    "parents": [
+      "G13",
+      "Chem-4"
+    ],
+    "id": "s2396"
+  },
+  {
+    "name": "Gelateria",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "17-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Focused",
+      "Energetic"
+    ],
+    "flavor": "Sugary sweet fruity with creamy vanilla and a touch of cheese.",
+    "icon": "🌿",
+    "parents": [
+      "Acai Berry Gelato",
+      "Jet Fuel Gelato"
+    ],
+    "id": "s2397"
+  },
+  {
+    "name": "Ghost Mode",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "25-30%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Calm"
+    ],
+    "flavor": "Candy-citrus with a faint diesel wink, lemon and sweet cherry.",
+    "icon": "🌿",
+    "breeder": "Craft Farmer Genetics",
+    "parents": [
+      "Warheadz",
+      "Lemon Cherry Gelato"
+    ],
+    "id": "s2398"
+  },
+  {
+    "name": "Guavamelon",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Relaxed",
+      "Calm"
+    ],
+    "flavor": "Melon and tropical stone fruit with subtle floral undertones.",
+    "icon": "🌿",
+    "breeder": "Raw Garden",
+    "parents": [
+      "Watermelon",
+      "Beary White",
+      "3 Bears OG"
+    ],
+    "id": "s2399"
   }
 ]
