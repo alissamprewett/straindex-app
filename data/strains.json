@@ -75764,5 +75764,448 @@
       "Slurricane"
     ],
     "id": "s2424"
+  },
+  {
+    "name": "Z33",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "19-29%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Euphoric",
+      "Relaxed",
+      "Creative"
+    ],
+    "flavor": "Sweet candy and berries with sharp citrus and creamy gas.",
+    "icon": "🌿",
+    "breeder": "Terp Hogz",
+    "parents": [
+      "Zkittlez",
+      "Gelato #33"
+    ],
+    "id": "s2425"
+  },
+  {
+    "name": "Grilled Peaches",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "28%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Sedating"
+    ],
+    "flavor": "Toasted sugar and ripe peaches with gassy fuel and earthy undertones.",
+    "icon": "🍑",
+    "parents": [
+      "Cherry Pie",
+      "Kimbo Kush"
+    ],
+    "id": "s2426"
+  },
+  {
+    "name": "Outta My Head",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Cerebral"
+    ],
+    "flavor": "Gassy, lemon-scented.",
+    "icon": "🌿",
+    "aka": "Layer Cake phenotype",
+    "breeder": "RYTHM",
+    "parents": [
+      "Wedding Cake",
+      "GMO",
+      "Triangle Kush x Skunk #1"
+    ],
+    "id": "s2427"
+  },
+  {
+    "name": "Southern Sugar",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "21%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Euphoric",
+      "Creative"
+    ],
+    "flavor": "Sweet and sugary, resembling minty fruit with hints of diesel and earth.",
+    "icon": "🌿",
+    "breeder": "Exotic Genetix",
+    "parents": [
+      "Georgia Pie",
+      "Rainbow Chip"
+    ],
+    "id": "s2428"
+  },
+  {
+    "name": "Baby Jokerz",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "24-32%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Euphoric",
+      "Sleepy"
+    ],
+    "flavor": "Fuel notes with citrus candy and dough; peach and floral in some phenos.",
+    "icon": "🌿",
+    "aka": "Phenotype of Jokerz",
+    "breeder": "Compound Genetics",
+    "parents": [
+      "White Runtz",
+      "Jet Fuel Gelato"
+    ],
+    "id": "s2429"
+  },
+  {
+    "name": "Blu Bomb Pop",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Calm"
+    ],
+    "flavor": "Sweet fruity scents with earthy funk.",
+    "icon": "🌿",
+    "parents": [
+      "Candy Rain",
+      "Blulato"
+    ],
+    "id": "s2430"
+  },
+  {
+    "name": "Blue Burger",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Mood-elevated",
+      "Stress-relief"
+    ],
+    "flavor": "Gas, funk, and berry notes.",
+    "icon": "🌿",
+    "breeder": "AMAZE Cannabis",
+    "parents": [
+      "Triple Burger",
+      "Blueberry Muffin"
+    ],
+    "id": "s2431"
+  },
+  {
+    "name": "Cookie Burger",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "28-30%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Creative",
+      "Relaxed"
+    ],
+    "flavor": "Skunky, savory meat-like overtone with sour citrusy nutty cookies.",
+    "icon": "🌿",
+    "parents": [
+      "Girl Scout Cookies",
+      "Johnny Burger"
+    ],
+    "id": "s2432"
+  },
+  {
+    "name": "Dolce Banana",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Sedating"
+    ],
+    "flavor": "Sweet, doughy with earthy spice notes.",
+    "icon": "🍌",
+    "aka": "Banana Dulce",
+    "breeder": "Skunkhouse Genetics",
+    "parents": [
+      "Gelato 25",
+      "Modified Banana"
+    ],
+    "id": "s2433"
+  },
+  {
+    "name": "Green Ribbon BX",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "18-23%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Relaxed",
+      "Creative"
+    ],
+    "flavor": "Refreshing lime, citrus, and pine.",
+    "icon": "🌿",
+    "breeder": "Exotic Genetix",
+    "parents": [
+      "Green Ribbon",
+      "The Hulk"
+    ],
+    "id": "s2434"
+  },
+  {
+    "name": "Island Freeze",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "18-20%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Relaxed"
+    ],
+    "flavor": "Juicy tropical pineapple and citrus with a frosty menthol finish.",
+    "icon": "🍍",
+    "breeder": "Glacier Cannabis",
+    "parents": [
+      "Golden Pineapple",
+      "The Menthol"
+    ],
+    "id": "s2435"
+  },
+  {
+    "name": "Las Vegas Triangle Kush",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "20-30%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Focused"
+    ],
+    "flavor": "Lemon zest and citrus-skunk drifting into pine, diesel, and peppery earth.",
+    "icon": "🌿",
+    "aka": "LVTK, Las Vegas Triangle, LV Triangle Kush",
+    "breeder": "CannaVenture Seeds",
+    "parents": [
+      "Triangle Kush",
+      "Las Vegas Lemon Skunk"
+    ],
+    "id": "s2436"
+  },
+  {
+    "name": "Slaughter House",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "23-28%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed"
+    ],
+    "flavor": "Sweet and fruity, tropical fruit profile.",
+    "icon": "🌿",
+    "breeder": "Smokey Point Productions",
+    "parents": [
+      "White Runtz",
+      "Kut Throat Kandy"
+    ],
+    "id": "s2437"
+  },
+  {
+    "name": "AK 1995",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "18-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Creative",
+      "Talkative"
+    ],
+    "flavor": "Chemical, earthy, and spicy skunkiness with sweet lemon, tangy cheese, and floral pine.",
+    "icon": "🌿",
+    "aka": "AK 95, AK-95, AK-1995",
+    "parents": [
+      "Colombian",
+      "Mexican",
+      "Thai",
+      "Afghani"
+    ],
+    "id": "s2438"
+  },
+  {
+    "name": "Alien Apple Warp",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "14-26%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Relaxed",
+      "Happy"
+    ],
+    "flavor": "Sweet fruity tropical candy with a punch of sour pineapple, grapes, and Granny Smith apple.",
+    "icon": "🍏",
+    "breeder": "Alien Genetics",
+    "parents": [
+      "Tahoe Alien",
+      "Sour Apple IBL"
+    ],
+    "id": "s2439"
+  },
+  {
+    "name": "Apple Cider",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "15-24%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Creative",
+      "Relaxed"
+    ],
+    "flavor": "Crisp apple with honeyed sweetness, vanilla, and earthy nutty undertones.",
+    "icon": "🍎",
+    "breeder": "Green Wolf Genetics",
+    "parents": [
+      "Apple Fritter (Lumpy's Cut)",
+      "Pure Michigan F2"
+    ],
+    "id": "s2440"
+  },
+  {
+    "name": "Avatar",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "18-30%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Cerebral",
+      "Uplifted",
+      "Euphoric"
+    ],
+    "flavor": "Sweet citrus-pine with fresh sugary berries and spicy earth.",
+    "icon": "🌿",
+    "aka": "Avatar OG, Avatar Kush",
+    "parents": [
+      "Jack Herer",
+      "Champagne"
+    ],
+    "id": "s2441"
+  },
+  {
+    "name": "Bridesmaid",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18-35%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Calm"
+    ],
+    "flavor": "Cakey sweetness, gas, dough, and earthy vanilla with a dominant anise note.",
+    "icon": "🌿",
+    "aka": "BC Organic Bridesmaid",
+    "breeder": "Simply Bare",
+    "parents": [
+      "Wedding Cake",
+      "Jealousy"
+    ],
+    "id": "s2442"
+  },
+  {
+    "name": "Bubba Cheesecake",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20%+",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Sedating"
+    ],
+    "flavor": "Sweet, earthy licorice and moss.",
+    "icon": "🌿",
+    "breeder": "Seedsman",
+    "parents": [
+      "Pre-'98 Bubba Kush",
+      "Wedding Cake",
+      "Exodus Cheese"
+    ],
+    "id": "s2443"
+  },
+  {
+    "name": "Cocolato",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "17-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Giggly",
+      "Relaxed",
+      "Creative"
+    ],
+    "flavor": "Creamy chocolate, vanilla, sweet berries, and fruity gelato with subtle spice.",
+    "icon": "🍫",
+    "aka": "Coco Latto",
+    "breeder": "STIIIZY",
+    "parents": [
+      "White Chocolate",
+      "Gelato"
+    ],
+    "id": "s2444"
   }
 ]
