@@ -76731,5 +76731,69 @@
       "Strawberries & Cream"
     ],
     "id": "s2469"
+  },
+  {
+    "name": "Neon Flamingo",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "26.7%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Focused"
+    ],
+    "flavor": "",
+    "icon": "🦩",
+    "breeder": "Pip of Souvenir Seed Co",
+    "parents": [
+      "Triangle Kush",
+      "Kentucky Bluegrass"
+    ],
+    "id": "s2470"
+  },
+  {
+    "name": "OGKZ",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-24%",
+    "cbd": "0.1%",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Focused",
+      "Relaxed"
+    ],
+    "flavor": "Gassy and sweet, citrus, cedar, grapes, and cinnamon.",
+    "icon": "🌿",
+    "breeder": "Humboldt Seed Organization",
+    "parents": [
+      "Zkittlez",
+      "OGKB (OG Kush Breath)"
+    ],
+    "id": "s2471"
+  },
+  {
+    "name": "Peach Z (UpNorth)",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Relaxed"
+    ],
+    "flavor": "Juicy ripe peach with subtle earthy undertones and hints of cardamom.",
+    "icon": "🍑",
+    "aka": "Peach Z",
+    "breeder": "UpNorth",
+    "parents": [
+      "Georgia Pie",
+      "Original Z (Zkittlez)"
+    ],
+    "id": "s2472"
   }
 ]
