@@ -75382,5 +75382,280 @@
       "Trophy Wife"
     ],
     "id": "s2406"
+  },
+  {
+    "name": "Papaya Dream",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "17%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Creative",
+      "Relaxed"
+    ],
+    "flavor": "Fresh tropical fruits with sweet citrus and berries.",
+    "icon": "🌿",
+    "parents": [
+      "Papaya",
+      "Blue Dream"
+    ],
+    "id": "s2407"
+  },
+  {
+    "name": "Pine Soul",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "17-18%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Relaxed",
+      "Creative"
+    ],
+    "flavor": "Super woody pine with touches of sweet fruitiness.",
+    "icon": "🌿",
+    "aka": "Pine Soul OG",
+    "parents": [
+      "Nepali OG",
+      "Snow Lotus"
+    ],
+    "id": "s2408"
+  },
+  {
+    "name": "Pink Pellegrino",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Calm",
+      "Happy"
+    ],
+    "flavor": "County Time pink lemonade with strawberry, lemon, and cherry tart.",
+    "icon": "🌿",
+    "aka": "Mint Lemonade, Pink Pelligrino",
+    "breeder": "Umami Seed Co",
+    "parents": [
+      "Pink Lemonaid #2",
+      "MacMints"
+    ],
+    "id": "s2409"
+  },
+  {
+    "name": "Pint Sized",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed"
+    ],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "ClearWater Genetics",
+    "parents": [
+      "Gello",
+      "Creamsicle #4"
+    ],
+    "id": "s2410"
+  },
+  {
+    "name": "Primal Punch",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "21-22%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Creative",
+      "Relaxed"
+    ],
+    "flavor": "Sweet and creamy banana with fruity berries and spicy kush.",
+    "icon": "🌿",
+    "parents": [
+      "Gorilla Glue #4",
+      "Banana Punch"
+    ],
+    "id": "s2411"
+  },
+  {
+    "name": "Purple Mimosa",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "19-20%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Creative",
+      "Focused"
+    ],
+    "flavor": "Sweet fruity berry grape with bright sugary tropical pineapples.",
+    "icon": "🌿",
+    "breeder": "Symbiotic Genetics",
+    "parents": [
+      "Clementine",
+      "Purple Punch"
+    ],
+    "id": "s2412"
+  },
+  {
+    "name": "Purple Plague",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "27-30%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Focused",
+      "Relaxed",
+      "Happy"
+    ],
+    "flavor": "Sugary sweet berry with bright citrus and skunky kush.",
+    "icon": "🌿",
+    "parents": [
+      "Animal Mints BX1",
+      "Kush Mints"
+    ],
+    "id": "s2413"
+  },
+  {
+    "name": "Purple Roze",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "14-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Euphoric",
+      "Happy"
+    ],
+    "flavor": "Spicy grape with rich flowery herbs; wine-like.",
+    "icon": "🌿",
+    "breeder": "Ethos Genetics",
+    "parents": [
+      "Purple Punch",
+      "Roze"
+    ],
+    "id": "s2414"
+  },
+  {
+    "name": "Razzleberry Kush",
+    "type": "Indica",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed"
+    ],
+    "flavor": "Sweet, berry-like.",
+    "icon": "🌿",
+    "parents": [
+      "Raspberry Kush",
+      "Purple Kush"
+    ],
+    "id": "s2415"
+  },
+  {
+    "name": "Socrates Sour",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "20-30%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Creative",
+      "Social"
+    ],
+    "flavor": "Deep earthy tones with hints of pine.",
+    "icon": "🌿",
+    "breeder": "Trilogene Seeds",
+    "parents": [
+      "OG Deluxe",
+      "Sour Punch"
+    ],
+    "id": "s2416"
+  },
+  {
+    "name": "Soul Safari",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "18-22%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric"
+    ],
+    "flavor": "Sweet and citrusy lemon-lime with a skunky, herbal exhale.",
+    "icon": "🌿",
+    "breeder": "Culta",
+    "parents": [
+      "Malawi Gold",
+      "Northern Lights #5",
+      "Haze",
+      "Face Off OG BX1"
+    ],
+    "id": "s2417"
+  },
+  {
+    "name": "Sour Stomper",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "22%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed"
+    ],
+    "flavor": "Sweet and sour grape with a rich earthy exhale.",
+    "icon": "🌿",
+    "parents": [
+      "Grape Stomper",
+      "Sour Crack"
+    ],
+    "id": "s2418"
+  },
+  {
+    "name": "Sugar Bowl",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Intense sweet fuel and biscuits.",
+    "icon": "🌿",
+    "breeder": "Purple City Genetics",
+    "parents": [
+      "White Tahoe Cookie",
+      "Gush Mints"
+    ],
+    "id": "s2419"
   }
 ]
