@@ -20328,7 +20328,13 @@
       "Nausea",
       "Pain",
       "Stress"
-    ]
+    ],
+    "breeder": "Los Angeles Kush",
+    "parents": [
+      "SFV OG",
+      "LA Kush (phenotype)"
+    ],
+    "aka": "Federal Reserve"
   },
   {
     "id": "s544",
@@ -75071,5 +75077,48 @@
       "Do-Si-Dos"
     ],
     "id": "s2392"
+  },
+  {
+    "name": "Deadband",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "20-35%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Giggly",
+      "Hungry"
+    ],
+    "flavor": "Skunky and sweet fruity cherry with hints of sour citrusy lemon.",
+    "icon": "🌿",
+    "parents": [
+      "Headband",
+      "Skunk"
+    ],
+    "id": "s2393"
+  },
+  {
+    "name": "Ethos Apex",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "21%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Hungry",
+      "Sleepy",
+      "Tingly"
+    ],
+    "flavor": "Sweet candied lilac and lemon to grapefruit and fuel.",
+    "icon": "🌿",
+    "breeder": "Ethos Genetics",
+    "parents": [
+      "Mandarin Cookies",
+      "Lilac Diesel BX3"
+    ],
+    "id": "s2394"
   }
 ]
