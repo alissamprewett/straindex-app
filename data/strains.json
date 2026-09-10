@@ -53496,7 +53496,11 @@
     "flavor": "Earthy citrus with a spicy, gassy edge.",
     "icon": "👽",
     "breeder": "The Rising Sun Farm",
-    "aka": "Alien OG Kush"
+    "aka": "Alien OG Kush, Alien Banana",
+    "parents": [
+      "Tahoe OG",
+      "Alien Kush"
+    ]
   },
   {
     "id": "s1552",
@@ -54124,7 +54128,12 @@
       "Uplifted"
     ],
     "flavor": "Sweet hazelnut and cream with an earthy gas finish.",
-    "icon": "🍫"
+    "icon": "🍫",
+    "parents": [
+      "Sunset Sherbet",
+      "Thin Mint GSC"
+    ],
+    "aka": "Gelato #41, BACIO 33"
   },
   {
     "id": "s1574",
@@ -54378,7 +54387,11 @@
       "Focused"
     ],
     "flavor": "Bright lemon zest over a sweet, earthy base.",
-    "icon": "🍋"
+    "icon": "🍋",
+    "parents": [
+      "Lemon Skunk",
+      "Sour Diesel"
+    ]
   },
   {
     "id": "s1582",
@@ -76862,5 +76875,788 @@
       "(OG x Chemdawg) x C99"
     ],
     "id": "s2475"
+  },
+  {
+    "name": "999",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "15-27%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Creative",
+      "Focused"
+    ],
+    "flavor": "Pine, citrus, funky earth, and gas.",
+    "icon": "🌿",
+    "aka": "999 Kush",
+    "breeder": "Josh D & Karma Genetics",
+    "parents": [
+      "Tahoe OG Kush",
+      "Triangle Kush",
+      "Biker Kush"
+    ],
+    "id": "s2476"
+  },
+  {
+    "name": "Acid",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "17%+",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Creative"
+    ],
+    "flavor": "Citrus, earth, and diesel.",
+    "icon": "🌿",
+    "breeder": "Paradise Seeds",
+    "parents": [
+      "NYC Diesel",
+      "Undisclosed secret father"
+    ],
+    "id": "s2477"
+  },
+  {
+    "name": "Agent Tangie",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "16-18%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Energetic",
+      "Uplifted"
+    ],
+    "flavor": "Sweet fruity citrus with an orange peel zest.",
+    "icon": "🍊",
+    "parents": [
+      "Agent Orange",
+      "Tangie"
+    ],
+    "id": "s2478"
+  },
+  {
+    "name": "Ajo Blanco",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "35%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Focused",
+      "Energetic",
+      "Relaxed"
+    ],
+    "flavor": "Garlic and pepper with earthy notes and a creamy finish.",
+    "icon": "🧄",
+    "breeder": "Happy Dreams Genetics (with Maven Genetics)",
+    "parents": [
+      "Garlic Pancakes",
+      "Vanilla Cheesecake"
+    ],
+    "id": "s2479"
+  },
+  {
+    "name": "Alien Cheese (Obsoul33t Genetics)",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "14-30%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Happy"
+    ],
+    "flavor": "Sharp cheese bouquet over earthy skunk and dry pine.",
+    "icon": "🧀",
+    "aka": "Alien Cheese, Alien Formaggio",
+    "breeder": "Obsoul33t Genetics",
+    "parents": [
+      "Alien Technology",
+      "UK Cheese (Exodus Cheese)"
+    ],
+    "id": "s2480"
+  },
+  {
+    "name": "AMG (Amnesia Mac Ganja)",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "22%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Euphoric",
+      "Creative"
+    ],
+    "flavor": "Spicy earth with subtle sweetness and herbal tea.",
+    "icon": "🌿",
+    "aka": "AMG, Medical AMG, AMG Haze",
+    "breeder": "Royal Queen Seeds (originally The Ganja Man)",
+    "parents": [
+      "Amnesia",
+      "Mexican Haze"
+    ],
+    "id": "s2481"
+  },
+  {
+    "name": "Animal House",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "24%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Euphoric",
+      "Relaxed"
+    ],
+    "flavor": "Sweet, creamy aromas with mint, earth, and cookie dough notes.",
+    "icon": "🌿",
+    "parents": [
+      "Animal Face",
+      "Kush Mints"
+    ],
+    "id": "s2482"
+  },
+  {
+    "name": "Animal Punch",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-23%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Relaxed"
+    ],
+    "flavor": "Sweet and fruity tropical citrus with hints of spicy berries and woody pine.",
+    "icon": "🌿",
+    "parents": [
+      "Animal Cookies",
+      "Purple Punch"
+    ],
+    "id": "s2483"
+  },
+  {
+    "name": "Animal Scout #10",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-32%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed"
+    ],
+    "flavor": "Earthy notes with a rich chocolatey finish.",
+    "icon": "🌿",
+    "aka": "Animal Scout",
+    "breeder": "RYTHM",
+    "parents": [
+      "Animal Face",
+      "Brownie Scout"
+    ],
+    "id": "s2484"
+  },
+  {
+    "name": "Animism",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "21-23%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Giggly",
+      "Relaxed"
+    ],
+    "flavor": "Sour citrus with a punch of diesel and fuel.",
+    "icon": "🌿",
+    "breeder": "Gage Green Group",
+    "parents": [
+      "Animal Cookies",
+      "Joseph OG"
+    ],
+    "id": "s2485"
+  },
+  {
+    "name": "Apple Cake",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "20-28%",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Fruity flavor with cream, vanilla, and lots of apple.",
+    "icon": "🍎",
+    "parents": [
+      "Sour Apple",
+      "Sunset Sherbet",
+      "Animal Cookies"
+    ],
+    "id": "s2486"
+  },
+  {
+    "name": "Apple Cookies",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "23%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Euphoric",
+      "Creative"
+    ],
+    "flavor": "Sweet and fruity aroma with hints of cheese and dough.",
+    "icon": "🍎",
+    "breeder": "Olympia Genetics",
+    "parents": [
+      "Sour Apple",
+      "Animal Cookies"
+    ],
+    "id": "s2487"
+  },
+  {
+    "name": "Apple Punch (CBD)",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "Low (CBD-dominant)",
+    "cbd": "13.41%",
+    "terps": [],
+    "effects": [
+      "Relaxed"
+    ],
+    "flavor": "Refreshing apple-like aroma with subtle citrus undertones.",
+    "icon": "🍎",
+    "aka": "Apple Punch CBD, Apple Punch Hemp",
+    "parents": [
+      "Haze",
+      "Afghani",
+      "Skunk"
+    ],
+    "id": "s2488"
+  },
+  {
+    "name": "Baba Yaga",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed"
+    ],
+    "flavor": "Skunk, spice, and gas notes.",
+    "icon": "🧙",
+    "parents": [
+      "Diesel",
+      "Ruderalis"
+    ],
+    "id": "s2489"
+  },
+  {
+    "name": "Bacio Runtz",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "24-29%",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Candy-sweet Runtz flavor with creamy Bacio Gelato undertones.",
+    "icon": "🍬",
+    "parents": [
+      "Bacio Gelato (Gelato #41)",
+      "Runtz"
+    ],
+    "id": "s2490"
+  },
+  {
+    "name": "Bakers Dozen (Exotic Genetix)",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "15-30%",
+    "cbd": "0.15-1.29%",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Euphoric",
+      "Energetic",
+      "Relaxed"
+    ],
+    "flavor": "Earthy, sweet, and spicy notes reminiscent of cookies, creamy vanilla, and spice cake.",
+    "icon": "🧁",
+    "aka": "Bakers Dozen",
+    "breeder": "Exotic Genetix",
+    "parents": [
+      "Milk & Cookies",
+      "Rainbow Chip"
+    ],
+    "id": "s2491"
+  },
+  {
+    "name": "Bananium #2",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "20-28%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed"
+    ],
+    "flavor": "Creamy banana taste accented by sugary, sweet vanilla.",
+    "icon": "🍌",
+    "aka": "Bananium",
+    "parents": [
+      "Platinum",
+      "Banana OG"
+    ],
+    "id": "s2492"
+  },
+  {
+    "name": "Barbie Runtz",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "22-28%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed"
+    ],
+    "flavor": "Sweet, fruity, creamy, and citrus.",
+    "icon": "💗",
+    "parents": [
+      "Girl Scout Cookies x Sunset Sherbert",
+      "Runtz"
+    ],
+    "id": "s2493"
+  },
+  {
+    "name": "Bazooka Joe G",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "13-24%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Focused"
+    ],
+    "flavor": "Berry, skunk, and bubblegum/cotton candy sweetness.",
+    "icon": "🍬",
+    "aka": "Bazooka Bumble, Bazookas, Bazooka Joe",
+    "breeder": "Archive Seed Bank",
+    "parents": [
+      "Indiana Bubblegum",
+      "Face Off OG"
+    ],
+    "id": "s2494"
+  },
+  {
+    "name": "Beach Grapes",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "19-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Creative",
+      "Relaxed"
+    ],
+    "flavor": "Sweet and earthy fresh fruity grapes with spicy nuttiness and sandalwood.",
+    "icon": "🍇",
+    "breeder": "Oni Seed Co",
+    "parents": [
+      "Wedding Crasher",
+      "Grape Pie",
+      "Beach Wedding"
+    ],
+    "id": "s2495"
+  },
+  {
+    "name": "Beaver Tail",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "26-31%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Euphoric"
+    ],
+    "flavor": "Fruity, smooth, and creamy with sweet berry syrup aroma.",
+    "icon": "🌿",
+    "breeder": "Roots Genetics (for Burb)",
+    "parents": [
+      "Pink Gelato",
+      "Kush Mints #11"
+    ],
+    "id": "s2496"
+  },
+  {
+    "name": "Belladonna",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "10-14%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed"
+    ],
+    "flavor": "Skunk and fruit with berries, spice, wood, and minty pine.",
+    "icon": "🌿",
+    "breeder": "Paradise Seeds",
+    "parents": [
+      "White Widow",
+      "Malawi x Skunk"
+    ],
+    "id": "s2497"
+  },
+  {
+    "name": "Berry Chill",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "16-22%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Creative",
+      "Energetic",
+      "Focused"
+    ],
+    "flavor": "Sweet berrylicious with lavender and honey.",
+    "icon": "🫐",
+    "aka": "Berrychill",
+    "parents": [
+      "Blueberry",
+      "Triple OG"
+    ],
+    "id": "s2498"
+  },
+  {
+    "name": "Berry Citrus Slurricane",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed"
+    ],
+    "flavor": "Ripe berry sweetness with zesty citrus peel over a creamy, kushy base.",
+    "icon": "🫐",
+    "breeder": "In House Genetics",
+    "parents": [
+      "Do-Si-Dos",
+      "Purple Punch"
+    ],
+    "id": "s2499"
+  },
+  {
+    "name": "Berry Jane",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "18-29.5%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Creative"
+    ],
+    "flavor": "Strawberry candy with boysenberry and sugary citrus.",
+    "icon": "🫐",
+    "parents": [
+      "Fruity Pebbles OG",
+      "Blueberry"
+    ],
+    "id": "s2500"
+  },
+  {
+    "name": "Berry Larry (GDP)",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "19-22%",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🫐",
+    "aka": "Larry Berry",
+    "breeder": "Grand Daddy Purple",
+    "parents": [
+      "Goji OG",
+      "Grandpa Larry (Grand Daddy Purple x Larry OG)"
+    ],
+    "id": "s2501"
+  },
+  {
+    "name": "Big Dipper (Cookies)",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "19-36%",
+    "cbd": "1%",
+    "terps": [],
+    "effects": [
+      "Creative",
+      "Happy"
+    ],
+    "flavor": "Thick, creamy, fruity, gassy, sherbert with notes of red roses and fruit candy.",
+    "icon": "🍇",
+    "aka": "Big Dipper",
+    "breeder": "Cookies (bred by Jay)",
+    "parents": [
+      "Sunset Sherbet",
+      "Zkittlez"
+    ],
+    "id": "s2502"
+  },
+  {
+    "name": "Big Lemons",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "22-28%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Focused"
+    ],
+    "flavor": "Sweet and sour lemony citrus with skunky diesel exhale.",
+    "icon": "🍋",
+    "aka": "Big Lemon",
+    "parents": [
+      "Lemon Skunk",
+      "Sour Diesel"
+    ],
+    "id": "s2503"
+  },
+  {
+    "name": "Big Papa (Skunk House Genetics)",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-22%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Relaxed",
+      "Creative"
+    ],
+    "flavor": "Sweet and sugary tropical pineapple and papaya with skunky dank.",
+    "icon": "🍌",
+    "aka": "Big Papa",
+    "breeder": "Skunk House Genetics",
+    "parents": [
+      "Papaya",
+      "Modified Banana"
+    ],
+    "id": "s2504"
+  },
+  {
+    "name": "Birthday Runtz",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "20-29%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Giggly",
+      "Talkative"
+    ],
+    "flavor": "Fruity flavor with tropical citrus and sour berries, sweet vanilla cake.",
+    "icon": "🎂",
+    "breeder": "Elev8 Seeds",
+    "parents": [
+      "Runtz",
+      "Cake and Ice Cream"
+    ],
+    "id": "s2505"
+  },
+  {
+    "name": "Biscotti Pie (Raw Genetics)",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Sweet, fruity flavor with a hint of nuttiness.",
+    "icon": "🍪",
+    "aka": "Biscotti Pie",
+    "breeder": "Raw Genetics",
+    "parents": [
+      "Biscotti",
+      "Georgia Pie"
+    ],
+    "id": "s2506"
+  },
+  {
+    "name": "Biscotti Pie (Good Day Farm)",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "21%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed"
+    ],
+    "flavor": "Rich and decadent flavor resembling a freshly baked pie with a hint of nutty.",
+    "icon": "🍒",
+    "aka": "Biscotti Pie",
+    "breeder": "Good Day Farm",
+    "parents": [
+      "Biscotti",
+      "Cherry Pie"
+    ],
+    "id": "s2507"
+  },
+  {
+    "name": "Bittersweet (Bitter Sweetz)",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "17-23%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Energetic",
+      "Talkative"
+    ],
+    "flavor": "Sweet tangerine-like flavor with skunky and earthy notes.",
+    "icon": "🍊",
+    "aka": "Bitter Sweetz",
+    "breeder": "Full Moon Genetics",
+    "parents": [
+      "Sour Tangie",
+      "Oz Kush"
+    ],
+    "id": "s2508"
+  },
+  {
+    "name": "Black Banana Cookies",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "14.5-22%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Creative",
+      "Happy",
+      "Talkative"
+    ],
+    "flavor": "Fresh sweet bananas and pungent earth.",
+    "icon": "🍌",
+    "aka": "Black Banana, BBC",
+    "breeder": "Solfire Gardens",
+    "parents": [
+      "Blackberry Kush",
+      "Banana Fire Cookies"
+    ],
+    "id": "s2509"
+  },
+  {
+    "name": "Black Cookies (Jordan of the Islands)",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed"
+    ],
+    "flavor": "Kush, chocolate, berries, sweet cookies, and spicy citrus.",
+    "icon": "🍪",
+    "aka": "Black Cookies",
+    "breeder": "Jordan of the Islands",
+    "parents": [
+      "Girl Scout Cookies",
+      "Blackberry Kush"
+    ],
+    "id": "s2510"
+  },
+  {
+    "name": "Black Out",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed"
+    ],
+    "flavor": "Pepper, hash plant, incense, and blackberry.",
+    "icon": "🌑",
+    "aka": "Blackout, Black Out Bobby",
+    "breeder": "Archive Seed Bank",
+    "parents": [
+      "The Black",
+      "Face Off OG"
+    ],
+    "id": "s2511"
+  },
+  {
+    "name": "Blood Orange Kush",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "15%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Creative"
+    ],
+    "flavor": "Fruity orange inhale that turns earthy and gassy upon exhale.",
+    "icon": "🍊",
+    "parents": [
+      "Aota x Pinecracker",
+      "unnamed OG"
+    ],
+    "id": "s2512"
   }
 ]
