@@ -74266,5 +74266,114 @@
       "Lemonchello 10",
       "London Pound Cake 97"
     ]
+  },
+  {
+    "name": "Mischief",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "22-23%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Focused"
+    ],
+    "flavor": "Sweet and skunky flowery citrus with an earthy, spicy aroma.",
+    "icon": "🌿",
+    "breeder": "Happy Eddie",
+    "parents": [
+      "San Fernando Valley OG",
+      "Triangle Kush"
+    ],
+    "id": "s2356"
+  },
+  {
+    "name": "Dying Dreaming",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "27-28%",
+    "cbd": "0-1%",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Euphoric",
+      "Relaxed"
+    ],
+    "flavor": "Sweet blueberry bubblegum with a citrusy lemon exhale.",
+    "icon": "🌿",
+    "breeder": "Seed Junky Genetics",
+    "parents": [
+      "Bubblegum",
+      "Gelato"
+    ],
+    "id": "s2357"
+  },
+  {
+    "name": "Blackout Truffle",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18-22%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Sleepy"
+    ],
+    "flavor": "Pungent chem, pepper, and diesel with musky, earthy sweetness.",
+    "icon": "🌿",
+    "breeder": "Terp Fi3nd",
+    "parents": [
+      "Bio Chem",
+      "White Cherry Truffle"
+    ],
+    "id": "s2358"
+  },
+  {
+    "name": "Terpwin Station",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "15-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Creative",
+      "Sleepy"
+    ],
+    "flavor": "Sour citrus with spicy herbs and an earthy, chemical exhale.",
+    "icon": "🌿",
+    "breeder": "Ethos Genetics",
+    "aka": "Terrapin Station",
+    "parents": [
+      "Original Glue",
+      "Mandarin Sunset"
+    ],
+    "id": "s2359"
+  },
+  {
+    "name": "Berry Blossom",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "14-16%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Calm"
+    ],
+    "flavor": "Sweet berry candy with floral cotton candy and lavender notes.",
+    "icon": "🌿",
+    "breeder": "HGH Seeds (High Grade Hemp Seed)",
+    "parents": [
+      "Cherry Kandahar",
+      "Chardonnay"
+    ],
+    "id": "s2360"
   }
 ]
