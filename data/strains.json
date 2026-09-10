@@ -74375,5 +74375,116 @@
       "Chardonnay"
     ],
     "id": "s2360"
+  },
+  {
+    "name": "Bubba Diesel",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "18-23%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Uplifted"
+    ],
+    "flavor": "Sweet fresh scent with a hint of sour lemon, earthy berry on exhale.",
+    "icon": "🌿",
+    "aka": "Bubba D, Big Bubba Diesel",
+    "parents": [
+      "Sour Diesel",
+      "Bubba Kush"
+    ],
+    "id": "s2361"
+  },
+  {
+    "name": "Durban Margy",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "18-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric"
+    ],
+    "flavor": "Sweet, sour citrusy lemon with tropical fruit and bright spices.",
+    "icon": "🌿",
+    "breeder": "Cannarado Genetics",
+    "parents": [
+      "Durban Poison",
+      "Frozen Margy"
+    ],
+    "id": "s2362"
+  },
+  {
+    "name": "Goldust",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "21-24%",
+    "cbd": "0-1%",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Sleepy",
+      "Happy"
+    ],
+    "flavor": "Sweet juicy mango with tropical citrus and spicy fresh menthol.",
+    "icon": "🌿",
+    "breeder": "Exotic Genetix",
+    "parents": [
+      "Rainbow Runtz",
+      "Scotty 2 Hotty"
+    ],
+    "id": "s2363"
+  },
+  {
+    "name": "Lemosa",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "18-22%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Energetic",
+      "Happy"
+    ],
+    "flavor": "Zesty lemon with citrusy sweetness and tropical fruit undertones.",
+    "icon": "🌿",
+    "breeder": "Symbiotic Genetics",
+    "aka": "Limosa",
+    "parents": [
+      "Str8lemonade",
+      "Mimosa V6"
+    ],
+    "id": "s2364"
+  },
+  {
+    "name": "Mac Mints",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "23-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric"
+    ],
+    "flavor": "Sour lemony citrus with spicy black pepper and sharp mint.",
+    "icon": "🌿",
+    "aka": "MAC Mintz, MacMints",
+    "parents": [
+      "MAC (Miracle Alien Cookies)",
+      "Kush Mints"
+    ],
+    "id": "s2365"
   }
 ]
