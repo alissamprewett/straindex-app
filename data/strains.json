@@ -76207,5 +76207,529 @@
       "Gelato"
     ],
     "id": "s2444"
+  },
+  {
+    "name": "Lemon Berry Tart",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "21%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Blissful",
+      "Calm",
+      "Relaxed"
+    ],
+    "flavor": "Citrusy lemon and sweet berry with woodsy pine and a diesel undertone.",
+    "icon": "🍋",
+    "aka": "Berry Tart",
+    "breeder": "The Pharm",
+    "parents": [
+      "Lemon Meringue",
+      "Blackberry Kush"
+    ],
+    "id": "s2445"
+  },
+  {
+    "name": "Cowboy Caviar (Family Tree Seeds)",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "aka": "Cowboy Caviar",
+    "breeder": "Family Tree Seeds",
+    "parents": [
+      "Dogwalker OG",
+      "Heirloom SFV OG"
+    ],
+    "id": "s2446"
+  },
+  {
+    "name": "Cowboy Caviar (High Supply)",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "21.5%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Energetic",
+      "Happy"
+    ],
+    "flavor": "Sweet candy and grape aromas becoming more pronounced blueberry, fruity flavors.",
+    "icon": "🌿",
+    "aka": "Cowboy Caviar",
+    "breeder": "High Supply",
+    "parents": [
+      "Texas Shoreline",
+      "Kush Mints x Slurricrasher Kush Mints #9"
+    ],
+    "id": "s2447"
+  },
+  {
+    "name": "Cranebow City",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "18-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Candy, orange creamsicle gas, and sour candy.",
+    "icon": "🌈",
+    "breeder": "Crane City Cannabis",
+    "parents": [
+      "Zainbow (Runtz x Z-Cube)",
+      "707 Headband"
+    ],
+    "id": "s2448"
+  },
+  {
+    "name": "Donny Double",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Calm"
+    ],
+    "flavor": "Rich blend of savory, earthy notes with a distinct burger funk.",
+    "icon": "🌿",
+    "breeder": "Skunk House Genetics",
+    "parents": [
+      "Donny Burger",
+      "Double Burger"
+    ],
+    "id": "s2449"
+  },
+  {
+    "name": "Doomsday (Enlightened Genetics)",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Relaxed",
+      "Calm"
+    ],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "Enlightened Genetics",
+    "parents": [
+      "Kerosene Cookies #24",
+      "Robot Girl"
+    ],
+    "id": "s2450"
+  },
+  {
+    "name": "Dosi Breath",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-27%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Relaxed",
+      "Energetic"
+    ],
+    "flavor": "Sweet vanilla cookie with sour lemon-lime and pungent dank.",
+    "icon": "🌿",
+    "parents": [
+      "Do-Si-Dos",
+      "Mendo Breath"
+    ],
+    "id": "s2451"
+  },
+  {
+    "name": "Durban Glue",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "20-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Relaxed",
+      "Euphoric"
+    ],
+    "flavor": "Sweet, earthy Gorilla Glue notes with spicy anise Durban Poison undertones.",
+    "icon": "🌿",
+    "parents": [
+      "Durban Poison",
+      "GG#4 (Gorilla Glue #4)"
+    ],
+    "id": "s2452"
+  },
+  {
+    "name": "Freakshow (Humboldt Seed Company)",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "15-20%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Euphoric",
+      "Relaxed"
+    ],
+    "flavor": "Fuel, grapefruit, and thyme; tastes of bananas, lemons, and vanilla.",
+    "icon": "🌿",
+    "breeder": "Jordan (Shapeshifter)",
+    "parents": [
+      "Big Bud x Skunk #1",
+      "Big Sur Holy Bud x Banana Kush"
+    ],
+    "id": "s2453"
+  },
+  {
+    "name": "Frosted Churro",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "30%",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Sour, clean soap and menthol spice into lemongrass and chocolate earth.",
+    "icon": "🌿",
+    "parents": [
+      "Purple Churro",
+      "Frosted Flakes"
+    ],
+    "id": "s2454"
+  },
+  {
+    "name": "Gak Smoovie",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Energetic"
+    ],
+    "flavor": "Sweet and creamy melon-berry with a creamy, citrusy exhale.",
+    "icon": "🍈",
+    "aka": "Gak Smoovie #5",
+    "breeder": "Dying Breed Seeds",
+    "parents": [
+      "Gak",
+      "4 Locoz"
+    ],
+    "id": "s2455"
+  },
+  {
+    "name": "Gelato Zafari",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Sweet candy flavors with a balanced high.",
+    "icon": "🍨",
+    "breeder": "High Supply",
+    "parents": [
+      "Gelato",
+      "Zkittlez"
+    ],
+    "id": "s2456"
+  },
+  {
+    "name": "Guava Gelato OG",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "28.93%",
+    "cbd": "0.5%",
+    "terps": [],
+    "effects": [
+      "Uplifted"
+    ],
+    "flavor": "Creamy, tropical aromas with bright notes of piña colada and hops.",
+    "icon": "🍈",
+    "breeder": "CAM (Private Reserve)",
+    "parents": [
+      "Gelato 25",
+      "Sour Florida OG"
+    ],
+    "id": "s2457"
+  },
+  {
+    "name": "Happy Ending (Grateful Seeds)",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "20-25%",
+    "cbd": "Low",
+    "terps": [],
+    "effects": [],
+    "flavor": "Peach and papaya with tropical sunset notes.",
+    "icon": "🌿",
+    "breeder": "Grateful Seeds",
+    "parents": [
+      "Sunsetz",
+      "Fruit Joy #20"
+    ],
+    "id": "s2458"
+  },
+  {
+    "name": "Hard Candy (Ronin Garden)",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Creative"
+    ],
+    "flavor": "Sweet and minty scents evoking candy shops with grounding earthy hints.",
+    "icon": "🍬",
+    "breeder": "Ronin Garden",
+    "parents": [
+      "Zkittlez",
+      "Kush Mints (Rabid Hippy cut)"
+    ],
+    "id": "s2459"
+  },
+  {
+    "name": "Hot Mint Sundae",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "15-19%",
+    "cbd": "0.45%",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Euphoric",
+      "Relaxed"
+    ],
+    "flavor": "Earthy pungent Chem on the inhale, sweet fruity floral on the exhale.",
+    "icon": "🍨",
+    "parents": [
+      "Fatso Biscotti Sundae",
+      "London Pound Mints"
+    ],
+    "id": "s2460"
+  },
+  {
+    "name": "Jelly Pancakes",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "21-27%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Happy",
+      "Relaxed"
+    ],
+    "flavor": "Nutty, freshly cooked pancakes topped with citrusy syrup and creamy vanilla.",
+    "icon": "🥞",
+    "breeder": "In House Genetics",
+    "parents": [
+      "Jelly Breath",
+      "Pancakes"
+    ],
+    "id": "s2461"
+  },
+  {
+    "name": "Jungle Kush",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "31%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Calm"
+    ],
+    "flavor": "Sweet and sour woody with a hint of spicy earth.",
+    "icon": "🌿",
+    "breeder": "Trichome Jungle Seeds",
+    "parents": [
+      "Bubba Kush (Pre-98)",
+      "OG Kush SFV",
+      "Hawaiian"
+    ],
+    "id": "s2462"
+  },
+  {
+    "name": "Kauai Cookies (Fox Cannabis)",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Focused"
+    ],
+    "flavor": "Sweet, sour, tropical citrus with light berry and fresh earth on exhale.",
+    "icon": "🍍",
+    "aka": "Kauai Cookies",
+    "breeder": "Fox Cannabis",
+    "parents": [
+      "Pineapple Orange Cookies",
+      "Blueberry"
+    ],
+    "id": "s2463"
+  },
+  {
+    "name": "Lemon Berry Cookies",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "21-26%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Uplifted",
+      "Relaxed"
+    ],
+    "flavor": "Iconic lemony cookie flavor with hints of sweet mint and banana.",
+    "icon": "🍋",
+    "aka": "Lemon Berry Cookie",
+    "parents": [
+      "Kimbo Cookies",
+      "Purple Lemonade"
+    ],
+    "id": "s2464"
+  },
+  {
+    "name": "Lemonato",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Relaxed"
+    ],
+    "flavor": "Candied citrus with notes of vanilla and pine.",
+    "icon": "🍋",
+    "parents": [
+      "Straight Lemonade",
+      "Gelato 33"
+    ],
+    "id": "s2465"
+  },
+  {
+    "name": "Pinky's Advice",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "24-26%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Giggly",
+      "Relaxed"
+    ],
+    "flavor": "Orange peel meeting sweet candy and petrol.",
+    "icon": "🍊",
+    "breeder": "Pollen Nation Elite Genetics",
+    "parents": [
+      "Totten's Treasure (Jilly Bean x The White)",
+      "Loud Sour"
+    ],
+    "id": "s2466"
+  },
+  {
+    "name": "Purple Heart (Almighty Seeds)",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed"
+    ],
+    "flavor": "Mellow, fruity, kush, and slightly medicinal.",
+    "icon": "💜",
+    "aka": "Purple Heart",
+    "breeder": "Almighty Seeds",
+    "parents": [
+      "Purple Kush",
+      "Lionheart"
+    ],
+    "id": "s2467"
+  },
+  {
+    "name": "Purple Heart (Alphakronik Genes)",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed"
+    ],
+    "flavor": "Sweet fruits with earthy notes.",
+    "icon": "💜",
+    "aka": "Purple Heart",
+    "breeder": "Alphakronik Genes",
+    "parents": [
+      "Las Vegas Purple Kush",
+      "Snowdawg 2"
+    ],
+    "id": "s2468"
+  },
+  {
+    "name": "Rainbow Reserve (Exotic Genetix)",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "20-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Uplifted",
+      "Relaxed"
+    ],
+    "flavor": "Sweet berry and vanilla cream with a faint mint-chocolate echo.",
+    "icon": "🌈",
+    "aka": "Rainbow Reserve",
+    "breeder": "Exotic Genetix",
+    "parents": [
+      "Rainbow Chip",
+      "Strawberries & Cream"
+    ],
+    "id": "s2469"
   }
 ]
