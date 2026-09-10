@@ -29,9 +29,7 @@
     ],
     "flavor": "Berry-sweet with a mellow herbal exhale.",
     "icon": "🫐",
-    "aka": [
-      "Blue Dream Diamond"
-    ]
+    "aka": "Blue Dream Diamond"
   },
   {
     "id": "s2",
@@ -63,10 +61,7 @@
     ],
     "flavor": "Earthy pine with a fuel-like edge.",
     "icon": "🌲",
-    "aka": [
-      "OG",
-      "Original Kush"
-    ]
+    "aka": "OG, Original Kush"
   },
   {
     "id": "s3",
@@ -97,10 +92,7 @@
     ],
     "flavor": "Pungent diesel fuel with citrus undertones.",
     "icon": "⛽",
-    "aka": [
-      "Sour D",
-      "ECSD"
-    ]
+    "aka": "Sour D, ECSD"
   },
   {
     "id": "s4",
@@ -132,9 +124,7 @@
     "flavor": "Sweet earthy dough with a minty finish.",
     "icon": "🍪",
     "breeder": "Cookie Family",
-    "aka": [
-      "GSC"
-    ]
+    "aka": "GSC"
   },
   {
     "id": "s5",
@@ -173,13 +163,7 @@
       "Depression",
       "Lack of Appetite"
     ],
-    "aka": [
-      "Granddaddy Purp",
-      "Big Daddy Purp",
-      "Big Daddy Purple",
-      "GDP",
-      "Grand Daddy Purple"
-    ]
+    "aka": "Granddaddy Purp, Big Daddy Purp, Big Daddy Purple, GDP, Grand Daddy Purple"
   },
   {
     "id": "s6",
@@ -211,10 +195,7 @@
     "flavor": "Woodsy and earthy with a peppery bite.",
     "icon": "❄️",
     "breeder": "Green House Seed Co.",
-    "aka": [
-      "Arnhem's Wonder",
-      "White Widow OG"
-    ]
+    "aka": "Arnhem's Wonder, White Widow OG"
   },
   {
     "id": "s7",
@@ -277,13 +258,7 @@
     "flavor": "Sweet dessert citrus with a creamy exhale.",
     "icon": "🍨",
     "breeder": "Holistic Healing Collective",
-    "aka": [
-      "Gelato 33",
-      "Gelato #33",
-      "Larry Bird",
-      "Larry Bird Kush",
-      "Gelato Cookies"
-    ]
+    "aka": "Gelato 33, Gelato #33, Larry Bird, Larry Bird Kush, Gelato Cookies"
   },
   {
     "id": "s9",
@@ -315,11 +290,7 @@
     "flavor": "Vanilla and pepper over a tangy base.",
     "icon": "🎂",
     "breeder": "Holistic Healing Collective",
-    "aka": [
-      "Pink Cookies",
-      "Triangle Mints",
-      "Triangle Mints #23"
-    ]
+    "aka": "Pink Cookies, Triangle Mints, Triangle Mints #23"
   },
   {
     "id": "s10",
@@ -426,9 +397,7 @@
     "flavor": "Woodsy and grassy with a barely-there high.",
     "icon": "⚕️",
     "breeder": "David Meiners",
-    "aka": [
-      "AC/DC"
-    ]
+    "aka": "AC/DC"
   },
   {
     "id": "s13",
@@ -504,9 +473,7 @@
       "Depression",
       "Lack of Appetite"
     ],
-    "aka": [
-      "Hindi Kush"
-    ]
+    "aka": "Hindi Kush"
   },
   {
     "id": "s15",
@@ -1532,9 +1499,7 @@
       "Lack of Appetite",
       "Depression"
     ],
-    "aka": [
-      "Afghan"
-    ]
+    "aka": "Afghan"
   },
   {
     "id": "s42",
@@ -1572,12 +1537,7 @@
       "Depression",
       "Insomnia"
     ],
-    "aka": [
-      "White Raspberry",
-      "Blue Widow",
-      "Blueberry Widow",
-      "White Berry Ice"
-    ],
+    "aka": "White Raspberry, Blue Widow, Blueberry Widow, White Berry Ice",
     "parents": [
       "Blueberry",
       "White Widow"
@@ -1621,10 +1581,7 @@
       "Lack of Appetite"
     ],
     "breeder": "Apothecary Seed Company",
-    "aka": [
-      "Blueberry OG",
-      "Juicy Blueberries"
-    ]
+    "aka": "Blueberry OG, Juicy Blueberries"
   },
   {
     "id": "s44",
@@ -1701,9 +1658,7 @@
       "Pain",
       "Lack of Appetite"
     ],
-    "aka": [
-      "D Line"
-    ]
+    "aka": "D Line"
   },
   {
     "id": "s46",
@@ -2013,9 +1968,7 @@
       "Depression",
       "Nausea"
     ],
-    "aka": [
-      "Pot of Gold"
-    ]
+    "aka": "Pot of Gold"
   },
   {
     "id": "s54",
@@ -2244,9 +2197,7 @@
       "Insomnia",
       "Lack of Appetite"
     ],
-    "aka": [
-      "KC Mango"
-    ]
+    "aka": "KC Mango"
   },
   {
     "id": "s60",
@@ -2363,9 +2314,7 @@
       "Depression"
     ],
     "breeder": "The Bionosphere",
-    "aka": [
-      "Platinum OG"
-    ]
+    "aka": "Platinum OG"
   },
   {
     "id": "s65",
@@ -3210,14 +3159,7 @@
       "Insomnia",
       "Lack of Appetite"
     ],
-    "aka": [
-      "Dosi",
-      "Dosidos",
-      "Do-Si-Do",
-      "Do Si Do",
-      "Do Si Dos",
-      "Dosido"
-    ]
+    "aka": "Dosi, Dosidos, Do-Si-Do, Do Si Do, Do Si Dos, Dosido"
   },
   {
     "id": "s87",
@@ -3257,12 +3199,7 @@
       "Depression",
       "Muscle Spasms"
     ],
-    "aka": [
-      "9lb Hammer",
-      "9 Hammer",
-      "Nine Pound Hammer",
-      "9 lb Hammer"
-    ]
+    "aka": "9lb Hammer, 9 Hammer, Nine Pound Hammer, 9 lb Hammer"
   },
   {
     "id": "s88",
@@ -3379,10 +3316,7 @@
       "Depression",
       "Lack of Appetite"
     ],
-    "aka": [
-      "Watermelon OG",
-      "Watermelon Kush"
-    ]
+    "aka": "Watermelon OG, Watermelon Kush"
   },
   {
     "id": "s91",
@@ -4064,11 +3998,7 @@
       "Stress",
       "Depression"
     ],
-    "aka": [
-      "Black Cherry",
-      "Blackcherry",
-      "Black Cherry Kush"
-    ]
+    "aka": "Black Cherry, Blackcherry, Black Cherry Kush"
   },
   {
     "id": "s109",
@@ -4949,13 +4879,7 @@
       "Depression",
       "Muscle Spasms"
     ],
-    "aka": [
-      "King Louis",
-      "King Louie",
-      "King Louis OG",
-      "King Louie XIII",
-      "Louis XIII"
-    ],
+    "aka": "King Louis, King Louie, King Louis OG, King Louie XIII, Louis XIII",
     "parents": [
       "OG Kush",
       "LA Confidential"
@@ -5460,13 +5384,7 @@
       "Depression"
     ],
     "breeder": "The Cali Connection",
-    "aka": [
-      "San Fernando Valley OG",
-      "SFV O.G.",
-      "San Fernando Valley OG Kush",
-      "SFVOG",
-      "SFV OG"
-    ]
+    "aka": "San Fernando Valley OG, SFV O.G., San Fernando Valley OG Kush, SFVOG, SFV OG"
   },
   {
     "id": "s145",
@@ -5926,10 +5844,7 @@
       "Stress",
       "Muscle Spasms"
     ],
-    "aka": [
-      "Sticky Icky",
-      "Afghan Goo"
-    ]
+    "aka": "Sticky Icky, Afghan Goo"
   },
   {
     "id": "s157",
@@ -5968,11 +5883,7 @@
       "Lack of Appetite",
       "Pain"
     ],
-    "aka": [
-      "ATF",
-      "Alaskan Thunder",
-      "Alaskan Thunder F"
-    ]
+    "aka": "ATF, Alaskan Thunder, Alaskan Thunder F"
   },
   {
     "id": "s158",
@@ -6618,10 +6529,7 @@
       "Insomnia",
       "Depression"
     ],
-    "aka": [
-      "Purple Ape",
-      "Ape"
-    ]
+    "aka": "Purple Ape, Ape"
   },
   {
     "id": "s176",
@@ -6811,9 +6719,7 @@
       "Depression",
       "Pain"
     ],
-    "aka": [
-      "Cush"
-    ]
+    "aka": "Cush"
   },
   {
     "id": "s181",
@@ -7192,9 +7098,7 @@
       "Insomnia",
       "Nausea"
     ],
-    "aka": [
-      "Lavender Kush"
-    ]
+    "aka": "Lavender Kush"
   },
   {
     "id": "s191",
@@ -7424,9 +7328,7 @@
       "Nausea",
       "Inflammation"
     ],
-    "aka": [
-      "Pure Kush"
-    ]
+    "aka": "Pure Kush"
   },
   {
     "id": "s197",
@@ -7579,9 +7481,7 @@
       "Depression",
       "Inflammation"
     ],
-    "aka": [
-      "Purple Trainwreck"
-    ]
+    "aka": "Purple Trainwreck"
   },
   {
     "id": "s201",
@@ -7963,9 +7863,7 @@
       "Depression",
       "Pain"
     ],
-    "aka": [
-      "SLH"
-    ]
+    "aka": "SLH"
   },
   {
     "id": "s211",
@@ -8619,9 +8517,7 @@
       "Depression",
       "Insomnia"
     ],
-    "aka": [
-      "Skywalker Kush"
-    ]
+    "aka": "Skywalker Kush"
   },
   {
     "id": "s229",
@@ -8852,9 +8748,7 @@
       "Insomnia",
       "Lack of Appetite"
     ],
-    "aka": [
-      "Kosher OG"
-    ]
+    "aka": "Kosher OG"
   },
   {
     "id": "s235",
@@ -11026,9 +10920,7 @@
       "Depression",
       "Lack of Appetite"
     ],
-    "aka": [
-      "Abusive OG Kush"
-    ]
+    "aka": "Abusive OG Kush"
   },
   {
     "id": "s293",
@@ -12443,10 +12335,7 @@
       "Insomnia",
       "Inflammation"
     ],
-    "aka": [
-      "G-13",
-      "Government Indica Strain 13"
-    ]
+    "aka": "G-13, Government Indica Strain 13"
   },
   {
     "id": "s330",
@@ -12755,9 +12644,7 @@
       "Insomnia",
       "Depression"
     ],
-    "aka": [
-      "Hardcore OG Kush"
-    ]
+    "aka": "Hardcore OG Kush"
   },
   {
     "id": "s338",
@@ -13025,9 +12912,7 @@
       "Insomnia",
       "Depression"
     ],
-    "aka": [
-      "Mendo Breath F2"
-    ]
+    "aka": "Mendo Breath F2"
   },
   {
     "id": "s345",
@@ -13333,10 +13218,7 @@
       "Lack of Appetite",
       "Depression"
     ],
-    "aka": [
-      "OG Presidential",
-      "Presidential"
-    ]
+    "aka": "OG Presidential, Presidential"
   },
   {
     "id": "s353",
@@ -13945,9 +13827,7 @@
       "Lack of Appetite",
       "Stress"
     ],
-    "aka": [
-      "Strawberry Cake"
-    ]
+    "aka": "Strawberry Cake"
   },
   {
     "id": "s370",
@@ -14404,14 +14284,7 @@
       "Pain",
       "Muscle Spasms"
     ],
-    "aka": [
-      "Zkittles OG",
-      "Skittles",
-      "Zkittles",
-      "Z Skittles",
-      "Z",
-      "Original Z"
-    ]
+    "aka": "Zkittles OG, Skittles, Zkittles, Z Skittles, Z, Original Z"
   },
   {
     "id": "s382",
@@ -14900,11 +14773,7 @@
       "Depression",
       "Pain"
     ],
-    "aka": [
-      "Ivory Haze",
-      "Original Haze",
-      "Haze Brothers"
-    ]
+    "aka": "Ivory Haze, Original Haze, Haze Brothers"
   },
   {
     "id": "s395",
@@ -15242,13 +15111,7 @@
       "Insomnia",
       "Depression"
     ],
-    "aka": [
-      "Citrus Master Kush",
-      "Grandmaster Kush",
-      "Highrise",
-      "High Rise",
-      "Purple Socal Master Kush"
-    ]
+    "aka": "Citrus Master Kush, Grandmaster Kush, Highrise, High Rise, Purple Socal Master Kush"
   },
   {
     "id": "s404",
@@ -15436,9 +15299,7 @@
       "Insomnia",
       "Inflammation"
     ],
-    "aka": [
-      "Papaya Kush"
-    ]
+    "aka": "Papaya Kush"
   },
   {
     "id": "s409",
@@ -17613,10 +17474,7 @@
       "Depression",
       "Pain"
     ],
-    "aka": [
-      "Maui Waui",
-      "Mowie Wowie"
-    ]
+    "aka": "Maui Waui, Mowie Wowie"
   },
   {
     "id": "s468",
@@ -20547,9 +20405,7 @@
       "Stress",
       "Depression"
     ],
-    "aka": [
-      "Legendary OG Kush"
-    ]
+    "aka": "Legendary OG Kush"
   },
   {
     "id": "s546",
@@ -23430,9 +23286,7 @@
       "Depression",
       "Pain"
     ],
-    "aka": [
-      "Kandyland"
-    ]
+    "aka": "Kandyland"
   },
   {
     "id": "s623",
@@ -24283,9 +24137,7 @@
       "Stress",
       "Pain"
     ],
-    "aka": [
-      "Lemon Meringue Pie"
-    ]
+    "aka": "Lemon Meringue Pie"
   },
   {
     "id": "s646",
@@ -27149,10 +27001,7 @@
       "Depression",
       "Insomnia"
     ],
-    "aka": [
-      "Phantom",
-      "Wow Kush"
-    ]
+    "aka": "Phantom, Wow Kush"
   },
   {
     "id": "s723",
@@ -30332,9 +30181,7 @@
       "Insomnia",
       "Stress"
     ],
-    "aka": [
-      "Illuminati"
-    ]
+    "aka": "Illuminati"
   },
   {
     "id": "s809",
@@ -37696,9 +37543,7 @@
     "flavor": "Terpinolene-forward with a humulene undertone.",
     "icon": "🌿",
     "breeder": "White Label Co.",
-    "aka": [
-      "Afghani Kush"
-    ]
+    "aka": "Afghani Kush"
   },
   {
     "id": "s1020",
@@ -37822,10 +37667,7 @@
     "flavor": "Limonene-forward with a myrcene undertone.",
     "icon": "🌿",
     "breeder": "Serious Seeds",
-    "aka": [
-      "AK 47",
-      "AK"
-    ]
+    "aka": "AK 47, AK"
   },
   {
     "id": "s1024",
@@ -38135,9 +37977,7 @@
     "flavor": "Ocimene-forward with a pinene undertone.",
     "icon": "🌿",
     "breeder": "Crockett Family Farms",
-    "aka": [
-      "Crockett's Banana Kush"
-    ]
+    "aka": "Crockett's Banana Kush"
   },
   {
     "id": "s1035",
@@ -38296,10 +38136,7 @@
       "Jack Herer",
       "Black Domina"
     ],
-    "aka": [
-      "BlackJack",
-      "Blackjack"
-    ]
+    "aka": "BlackJack, Blackjack"
   },
   {
     "id": "s1040",
@@ -39124,9 +38961,7 @@
     ],
     "flavor": "Humulene-forward with a ocimene undertone.",
     "icon": "🌿",
-    "aka": [
-      "Charlotte's Web"
-    ]
+    "aka": "Charlotte's Web"
   },
   {
     "id": "s1068",
@@ -39188,14 +39023,7 @@
     "flavor": "Humulene-forward with a linalool undertone.",
     "icon": "🌿",
     "breeder": "Bud Rx Delivery",
-    "aka": [
-      "Chemdog",
-      "Chem 91",
-      "Chemdawg 91",
-      "Chem Dawg 91",
-      "Chem Dog 91",
-      "Chem Dawg"
-    ]
+    "aka": "Chemdog, Chem 91, Chemdawg 91, Chem Dawg 91, Chem Dog 91, Chem Dawg"
   },
   {
     "id": "s1070",
@@ -39411,11 +39239,7 @@
     "flavor": "Caryophyllene-forward with a myrcene undertone.",
     "icon": "🌿",
     "breeder": "Holistic Healing Collective",
-    "aka": [
-      "Cindy",
-      "C-99 Cindy",
-      "C99"
-    ]
+    "aka": "Cindy, C-99 Cindy, C99"
   },
   {
     "id": "s1077",
@@ -39874,9 +39698,7 @@
     "flavor": "Limonene-forward with a humulene undertone.",
     "icon": "🌿",
     "breeder": "Dark Heart Nursery",
-    "aka": [
-      "Fire OG Kush"
-    ]
+    "aka": "Fire OG Kush"
   },
   {
     "id": "s1093",
@@ -39938,12 +39760,7 @@
     ],
     "flavor": "Linalool-forward with a humulene undertone.",
     "icon": "🌿",
-    "aka": [
-      "FPOG",
-      "Fruity Peb OG",
-      "Fruity OG",
-      "Fruity Pebbles OG"
-    ]
+    "aka": "FPOG, Fruity Peb OG, Fruity OG, Fruity Pebbles OG"
   },
   {
     "id": "s1096",
@@ -40066,9 +39883,7 @@
     "flavor": "Linalool-forward with a myrcene undertone.",
     "icon": "🌿",
     "breeder": "Holistic Healing Collective",
-    "aka": [
-      "Grandaddy"
-    ]
+    "aka": "Grandaddy"
   },
   {
     "id": "s1100",
@@ -40370,9 +40185,7 @@
     ],
     "flavor": "Limonene-forward with a pinene undertone.",
     "icon": "🌿",
-    "aka": [
-      "HB"
-    ]
+    "aka": "HB"
   },
   {
     "id": "s1110",
@@ -40435,9 +40248,7 @@
     "flavor": "Caryophyllene-forward with a pinene undertone.",
     "icon": "🌿",
     "breeder": "StructuredHydro",
-    "aka": [
-      "Herojuana"
-    ]
+    "aka": "Herojuana"
   },
   {
     "id": "s1112",
@@ -40774,9 +40585,7 @@
     "flavor": "Humulene-forward with a pinene undertone.",
     "icon": "🌿",
     "breeder": "TGA",
-    "aka": [
-      "Jilly Bean"
-    ]
+    "aka": "Jilly Bean"
   },
   {
     "id": "s1123",
@@ -40808,9 +40617,7 @@
     "flavor": "Pinene-forward with a humulene undertone.",
     "icon": "🌿",
     "breeder": "Sensi Seeds",
-    "aka": [
-      "Fruity Juice"
-    ]
+    "aka": "Fruity Juice"
   },
   {
     "id": "s1124",
@@ -40903,9 +40710,7 @@
     "flavor": "Limonene-forward with a humulene undertone.",
     "icon": "🌿",
     "breeder": "Reserva Privada",
-    "aka": [
-      "Candy Kush"
-    ]
+    "aka": "Candy Kush"
   },
   {
     "id": "s1127",
@@ -41303,9 +41108,7 @@
     "flavor": "Linalool-forward with a pinene undertone.",
     "icon": "🌿",
     "breeder": "Emerald Triangle",
-    "aka": [
-      "Lemon Sour Diesel"
-    ]
+    "aka": "Lemon Sour Diesel"
   },
   {
     "id": "s1142",
@@ -41398,9 +41201,7 @@
     "flavor": "Myrcene-forward with a humulene undertone.",
     "icon": "🌿",
     "breeder": "Bud Rx Delivery",
-    "aka": [
-      "Lemon OG Kush"
-    ]
+    "aka": "Lemon OG Kush"
   },
   {
     "id": "s1145",
@@ -41858,14 +41659,7 @@
     "flavor": "Myrcene-forward with a caryophyllene undertone.",
     "icon": "🌿",
     "breeder": "Soma Seeds",
-    "aka": [
-      "NY Sour",
-      "NY Sr Diesel",
-      "New York Sour Diesel",
-      "NYC Sour Diesel",
-      "New York Diesel",
-      "Soma Sour Diesel"
-    ]
+    "aka": "NY Sour, NY Sr Diesel, New York Sour Diesel, NYC Sour Diesel, New York Diesel, Soma Sour Diesel"
   },
   {
     "id": "s1161",
@@ -42109,9 +41903,7 @@
     "flavor": "Myrcene-forward with a terpinolene undertone.",
     "icon": "🌿",
     "breeder": "BC Growers Association",
-    "aka": [
-      "Orange Krush"
-    ]
+    "aka": "Orange Krush"
   },
   {
     "id": "s1169",
@@ -43032,10 +42824,7 @@
       "Big Sur Holy",
       "Afghani"
     ],
-    "aka": [
-      "S.A.G.E.",
-      "Sativa Afghani Genetic Equilibrium"
-    ]
+    "aka": "S.A.G.E., Sativa Afghani Genetic Equilibrium"
   },
   {
     "id": "s1201",
@@ -43251,12 +43040,7 @@
     "flavor": "Terpinolene-forward with a humulene undertone.",
     "icon": "🌿",
     "breeder": "Sensi Seeds",
-    "aka": [
-      "Original Skunk #1",
-      "Skunk No. 1",
-      "Skunk",
-      "Skunk Number 1"
-    ]
+    "aka": "Original Skunk #1, Skunk No. 1, Skunk, Skunk Number 1"
   },
   {
     "id": "s1209",
@@ -43561,10 +43345,7 @@
     "flavor": "Pinene-forward with a caryophyllene undertone.",
     "icon": "🌿",
     "breeder": "The Cali Connection",
-    "aka": [
-      "818 Headband",
-      "Sour OG Kush"
-    ]
+    "aka": "818 Headband, Sour OG Kush"
   },
   {
     "id": "s1219",
@@ -43688,12 +43469,7 @@
     "flavor": "Limonene-forward with a ocimene undertone.",
     "icon": "🌿",
     "breeder": "Royal Dutch Genetics",
-    "aka": [
-      "OG Strawberry",
-      "Strawberry OGz",
-      "Strawberry OG",
-      "Strawberry OG Kush"
-    ]
+    "aka": "OG Strawberry, Strawberry OGz, Strawberry OG, Strawberry OG Kush"
   },
   {
     "id": "s1223",
@@ -44545,9 +44321,7 @@
     ],
     "flavor": "Myrcene-forward with a ocimene undertone.",
     "icon": "🌿",
-    "aka": [
-      "XJ13"
-    ]
+    "aka": "XJ13"
   },
   {
     "id": "s1252",
@@ -48050,12 +47824,7 @@
     "flavor": "Linalool-forward with a myrcene undertone.",
     "icon": "🌿",
     "breeder": "Federation Seed Company",
-    "aka": [
-      "Cotton Candy Kush",
-      "Gush Mintz",
-      "Gushmints",
-      "Cotton Kandy Kush"
-    ]
+    "aka": "Cotton Candy Kush, Gush Mintz, Gushmints, Cotton Kandy Kush"
   },
   {
     "id": "s1369",
@@ -52630,9 +52399,7 @@
     ],
     "flavor": "Sweet candy and tropical fruit with a smooth, gassy finish.",
     "icon": "🍬",
-    "aka": [
-      "RNTZ"
-    ]
+    "aka": "RNTZ"
   },
   {
     "id": "s1518",
@@ -52665,10 +52432,7 @@
     "flavor": "Pungent diesel and earth with a sour, chocolatey undertone.",
     "icon": "🦍",
     "breeder": "Joesy Whales",
-    "aka": [
-      "GG4",
-      "Original Glue"
-    ]
+    "aka": "GG4, Original Glue"
   },
   {
     "id": "s1519",
@@ -52795,10 +52559,7 @@
     "flavor": "Sweet berry and citrus with a creamy finish.",
     "icon": "🍨",
     "breeder": "AFFCO",
-    "aka": [
-      "Sherbet",
-      "Cookie Fam Sherbet"
-    ]
+    "aka": "Sherbet, Cookie Fam Sherbet"
   },
   {
     "id": "s1523",
@@ -52830,9 +52591,7 @@
     ],
     "flavor": "Sweet vanilla and earthy cookie notes.",
     "icon": "🍪",
-    "aka": [
-      "Cookies & Cream"
-    ]
+    "aka": "Cookies & Cream"
   },
   {
     "id": "s1524",
@@ -52864,9 +52623,7 @@
     ],
     "flavor": "Sweet, creamy vanilla with a doughy, earthy finish.",
     "icon": "🍰",
-    "aka": [
-      "Cake'n Cream"
-    ]
+    "aka": "Cake'n Cream"
   },
   {
     "id": "s1525",
@@ -52930,9 +52687,7 @@
     "flavor": "Sweet apple and pastry with an earthy, doughy finish.",
     "icon": "🍎",
     "breeder": "Lumpy Seeds",
-    "aka": [
-      "Apple Fritters"
-    ]
+    "aka": "Apple Fritters"
   },
   {
     "id": "s1527",
@@ -52964,11 +52719,7 @@
     ],
     "flavor": "Citrus and tropical orange with a sweet, gassy finish.",
     "icon": "🍊",
-    "aka": [
-      "Trop Cookies",
-      "Tropical Cookies",
-      "Tropicanna Cookies"
-    ]
+    "aka": "Trop Cookies, Tropical Cookies, Tropicanna Cookies"
   },
   {
     "id": "s1528",
@@ -53031,12 +52782,7 @@
     ],
     "flavor": "Cool mint and earthy kush with a sweet undertone.",
     "icon": "🌿",
-    "aka": [
-      "Mint Kush",
-      "Kush Mintz",
-      "Kush Mint",
-      "Mintz"
-    ],
+    "aka": "Mint Kush, Kush Mintz, Kush Mint, Mintz",
     "parents": [
       "Bubba Kush",
       "Animal Mints"
@@ -53105,9 +52851,7 @@
     ],
     "flavor": "Earthy and spicy with a sweet, gassy finish.",
     "icon": "🏀",
-    "aka": [
-      "GP"
-    ]
+    "aka": "GP"
   },
   {
     "id": "s1532",
@@ -53175,9 +52919,7 @@
       "Wedding Cake",
       "Purple Punch"
     ],
-    "aka": [
-      "Wedding Crashers"
-    ]
+    "aka": "Wedding Crashers"
   },
   {
     "id": "s1534",
@@ -53241,12 +52983,7 @@
     "flavor": "Pungent garlic and diesel over an earthy, savory base.",
     "icon": "🧄",
     "breeder": "Mamiko Seeds",
-    "aka": [
-      "Garlic Mushroom Onion",
-      "GMO 41",
-      "Garlic Cookies",
-      "GMO Cookies"
-    ]
+    "aka": "Garlic Mushroom Onion, GMO 41, Garlic Cookies, GMO Cookies"
   },
   {
     "id": "s1536",
@@ -53340,12 +53077,7 @@
     ],
     "flavor": "Dark chocolate cookie and vanilla with a diesel twang.",
     "icon": "🍫",
-    "aka": [
-      "Oooze",
-      "Ooze",
-      "Cream Cookiez",
-      "Ooz"
-    ]
+    "aka": "Oooze, Ooze, Cream Cookiez, Ooz"
   },
   {
     "id": "s1539",
@@ -53377,10 +53109,7 @@
     ],
     "flavor": "Candy-sweet gas with an inky, funky edge.",
     "icon": "🖊️",
-    "aka": [
-      "Adios MF",
-      "Gunnpowwder"
-    ]
+    "aka": "Adios MF, Gunnpowwder"
   },
   {
     "id": "s1540",
@@ -53412,9 +53141,7 @@
     ],
     "flavor": "Genuinely nutty and earthy, closer to real peanut butter than most food-named strains.",
     "icon": "🥜",
-    "aka": [
-      "PB Breath"
-    ]
+    "aka": "PB Breath"
   },
   {
     "id": "s1541",
@@ -53446,9 +53173,7 @@
     ],
     "flavor": "Sweet berries and lemon over an earthy pine base.",
     "icon": "🍰",
-    "aka": [
-      "Lemon Pound Cake"
-    ]
+    "aka": "Lemon Pound Cake"
   },
   {
     "id": "s1542",
@@ -53480,10 +53205,7 @@
     ],
     "flavor": "Bright lemon and sweet cherry with a creamy gelato finish.",
     "icon": "🍒",
-    "aka": [
-      "Cherry Lemon",
-      "Lemon Cherry"
-    ]
+    "aka": "Cherry Lemon, Lemon Cherry"
   },
   {
     "id": "s1543",
@@ -53547,10 +53269,7 @@
     "flavor": "Sweet strawberry and ripe banana with a tropical finish.",
     "icon": "🍓",
     "breeder": "Reserva Privada",
-    "aka": [
-      "Strawberry Banana OG",
-      "Strawnana"
-    ]
+    "aka": "Strawberry Banana OG, Strawnana"
   },
   {
     "id": "s1545",
@@ -53707,9 +53426,7 @@
     "flavor": "Lemon and pine over an earthy OG base.",
     "icon": "🍋",
     "breeder": "Carl D.",
-    "aka": [
-      "Lemon Lary"
-    ]
+    "aka": "Lemon Lary"
   },
   {
     "id": "s1550",
@@ -53773,9 +53490,7 @@
     "flavor": "Earthy citrus with a spicy, gassy edge.",
     "icon": "👽",
     "breeder": "The Rising Sun Farm",
-    "aka": [
-      "Alien OG Kush"
-    ]
+    "aka": "Alien OG Kush"
   },
   {
     "id": "s1552",
@@ -53869,9 +53584,7 @@
     ],
     "flavor": "Sweet mint and chocolate over an earthy cookie base.",
     "icon": "🍬",
-    "aka": [
-      "Thin Mint"
-    ]
+    "aka": "Thin Mint"
   },
   {
     "id": "s1556",
@@ -54027,9 +53740,7 @@
     ],
     "flavor": "Sweet vanilla frosting with a peppery, earthy base.",
     "icon": "🎂",
-    "aka": [
-      "Birthday Cake Kush"
-    ]
+    "aka": "Birthday Cake Kush"
   },
   {
     "id": "s1561",
@@ -54093,9 +53804,7 @@
     ],
     "flavor": "Minty cookie sweetness with a gassy, earthy finish.",
     "icon": "🐾",
-    "aka": [
-      "Animal Mintz"
-    ]
+    "aka": "Animal Mintz"
   },
   {
     "id": "s1563",
@@ -54221,9 +53930,7 @@
     ],
     "flavor": "Sweet berry and cream with a tart, fruity edge.",
     "icon": "🫐",
-    "aka": [
-      "Acai Berry"
-    ]
+    "aka": "Acai Berry"
   },
   {
     "id": "s1567",
@@ -54317,9 +54024,7 @@
     ],
     "flavor": "Sweet berry candy with a creamy, tropical finish.",
     "icon": "🍬",
-    "aka": [
-      "Pink RTZ"
-    ]
+    "aka": "Pink RTZ"
   },
   {
     "id": "s1570",
@@ -54382,11 +54087,7 @@
     ],
     "flavor": "Sweet watermelon candy with a tropical finish.",
     "icon": "🍉",
-    "aka": [
-      "Watermelon Z",
-      "Wmz",
-      "Watermelon Skittles"
-    ]
+    "aka": "Watermelon Z, Wmz, Watermelon Skittles"
   },
   {
     "id": "s1573",
@@ -54640,10 +54341,7 @@
     "flavor": "Sweet blueberry and baked dough with a creamy finish.",
     "icon": "🫐",
     "breeder": "Rebel Grown",
-    "aka": [
-      "Blueberry Java",
-      "Blueberry Muffins"
-    ]
+    "aka": "Blueberry Java, Blueberry Muffins"
   },
   {
     "id": "s1581",
@@ -54706,9 +54404,7 @@
     ],
     "flavor": "Sweet banana over an earthy, diesel OG base.",
     "icon": "🍌",
-    "aka": [
-      "OG Banana"
-    ]
+    "aka": "OG Banana"
   },
   {
     "id": "s1583",
@@ -54772,10 +54468,7 @@
     ],
     "flavor": "Tart lime and sweet cream over an earthy crust-like base.",
     "icon": "🥧",
-    "aka": [
-      "Key Lime",
-      "Key Lime Cookies"
-    ]
+    "aka": "Key Lime, Key Lime Cookies"
   },
   {
     "id": "s1585",
@@ -54869,12 +54562,7 @@
     ],
     "flavor": "Sharp lemon and pine over a heavy diesel base.",
     "icon": "🔥",
-    "aka": [
-      "WiFi OG",
-      "WiFi",
-      "White Fire",
-      "WiFi Kush"
-    ]
+    "aka": "WiFi OG, WiFi, White Fire, WiFi Kush"
   },
   {
     "id": "s1590",
@@ -55437,9 +55125,7 @@
     ],
     "flavor": "Sweet vanilla cake over a pungent kush base.",
     "icon": "🎂",
-    "aka": [
-      "Kush Cakes"
-    ]
+    "aka": "Kush Cakes"
   },
   {
     "id": "s1609",
@@ -55628,13 +55314,7 @@
     "flavor": "Sweet citrus and diesel with a creamy, floral undertone.",
     "icon": "🇺🇸",
     "breeder": "Capulator",
-    "aka": [
-      "Miracle Alien Cookies",
-      "M.A.C.",
-      "MAC #1",
-      "MAC1",
-      "Caps Cut"
-    ],
+    "aka": "Miracle Alien Cookies, M.A.C., MAC #1, MAC1, Caps Cut",
     "parents": [
       "Alien Cookies",
       "Colombian x Starfighter"
@@ -55732,9 +55412,7 @@
     ],
     "flavor": "Garlicky, earthy funk with a creamy, gassy undertone.",
     "icon": "🍄",
-    "aka": [
-      "White Truffles"
-    ]
+    "aka": "White Truffles"
   },
   {
     "id": "s1620",
@@ -55891,11 +55569,7 @@
     ],
     "flavor": "Sweet candy and berry with a tropical, tangy finish.",
     "icon": "🌈",
-    "aka": [
-      "Rainbow Beltz",
-      "Rainbow Belt",
-      "RaB"
-    ]
+    "aka": "Rainbow Beltz, Rainbow Belt, RaB"
   },
   {
     "id": "s1625",
@@ -55959,9 +55633,7 @@
     "flavor": "Sweet cookie dough with a sharp, fuely diesel edge.",
     "icon": "🔧",
     "breeder": "Exotic Genetix",
-    "aka": [
-      "Grease Bucket"
-    ]
+    "aka": "Grease Bucket"
   },
   {
     "id": "s1627",
@@ -55993,9 +55665,7 @@
     ],
     "flavor": "Sweet tropical fruit with a creamy, candy-like finish.",
     "icon": "🐯",
-    "aka": [
-      "Tigers Blood"
-    ]
+    "aka": "Tigers Blood"
   },
   {
     "id": "s1628",
@@ -56027,11 +55697,7 @@
     ],
     "flavor": "Sweet blueberry candy with a tropical, fruity finish.",
     "icon": "🫐",
-    "aka": [
-      "Blue Z",
-      "Blue Zkz",
-      "Blue Zkittles"
-    ]
+    "aka": "Blue Z, Blue Zkz, Blue Zkittles"
   },
   {
     "id": "s1629",
@@ -56282,12 +55948,7 @@
     ],
     "flavor": "Sweet tropical fruit candy with a creamy finish.",
     "icon": "🍬",
-    "aka": [
-      "Gusherz",
-      "White Gushers",
-      "White Gusherz",
-      "Fruit Gushers"
-    ]
+    "aka": "Gusherz, White Gushers, White Gusherz, Fruit Gushers"
   },
   {
     "id": "s1638",
@@ -56568,9 +56229,7 @@
     ],
     "flavor": "Sweet pineapple and coconut, tropical and bright.",
     "icon": "🍹",
-    "aka": [
-      "Piña Colada"
-    ]
+    "aka": "Piña Colada"
   },
   {
     "id": "s1648",
@@ -56666,9 +56325,7 @@
     "flavor": "Sweet dessert-like grape and vanilla cream.",
     "icon": "🍨",
     "breeder": "Cannarado Genetics",
-    "aka": [
-      "Sunday Driver"
-    ]
+    "aka": "Sunday Driver"
   },
   {
     "id": "s1652",
@@ -56762,9 +56419,7 @@
     "flavor": "Sugary berry sherbet with a minty exhale.",
     "icon": "🌈",
     "breeder": "Apothecary Genetics",
-    "aka": [
-      "Rainbow Sherbert"
-    ]
+    "aka": "Rainbow Sherbert"
   },
   {
     "id": "s1657",
@@ -56796,11 +56451,7 @@
     "flavor": "Bright floral rosé notes over sweet berry and citrus.",
     "icon": "🌹",
     "breeder": "Cookies",
-    "aka": [
-      "Pink Rose",
-      "Pink Rosay",
-      "Pink Rozay Kush"
-    ]
+    "aka": "Pink Rose, Pink Rosay, Pink Rozay Kush"
   },
   {
     "id": "s1658",
@@ -56863,10 +56514,7 @@
     "flavor": "Sour rotting fruit and diesel with peppery notes.",
     "icon": "🧢",
     "breeder": "Seed Junky Genetics / Capulator",
-    "aka": [
-      "Cap Junkie",
-      "Miracle Mints"
-    ]
+    "aka": "Cap Junkie, Miracle Mints"
   },
   {
     "id": "s1660",
@@ -56929,12 +56577,7 @@
     "flavor": "Heavy diesel and fuel with earthy, lemony notes.",
     "icon": "🚗",
     "breeder": "Pisces Genetics",
-    "aka": [
-      "Motor Breath OG",
-      "Motor Breath",
-      "Motorbreath 15",
-      "Motorbreath #15"
-    ]
+    "aka": "Motor Breath OG, Motor Breath, Motorbreath 15, Motorbreath #15"
   },
   {
     "id": "s1662",
@@ -56966,9 +56609,7 @@
     "flavor": "Sweet blueberry pastry with a doughy, fuel finish.",
     "icon": "🍪",
     "breeder": null,
-    "aka": [
-      "Blue GSC"
-    ]
+    "aka": "Blue GSC"
   },
   {
     "id": "s1663",
@@ -57031,10 +56672,7 @@
     "flavor": "Sweet chocolate and mint with a fruity twist.",
     "icon": "🍫",
     "breeder": "Cannarado Genetics",
-    "aka": [
-      "Black Rock Lava Cake",
-      "Lava Cake #11"
-    ]
+    "aka": "Black Rock Lava Cake, Lava Cake #11"
   },
   {
     "id": "s1667",
@@ -57066,11 +56704,7 @@
     "flavor": "Pungent diesel with sweet, skunky undertones.",
     "icon": "✈️",
     "breeder": "303 Seeds",
-    "aka": [
-      "G6",
-      "G6 OG",
-      "Jet Fuel OG"
-    ]
+    "aka": "G6, G6 OG, Jet Fuel OG"
   },
   {
     "id": "s1668",
@@ -57133,11 +56767,7 @@
     "flavor": "Sweet cherry and berry with a nutty, sour citrus finish.",
     "icon": "🍒",
     "breeder": "Blockhead",
-    "aka": [
-      "Frosted Boof",
-      "Superboof",
-      "Blockberry"
-    ]
+    "aka": "Frosted Boof, Superboof, Blockberry"
   },
   {
     "id": "s1670",
@@ -57169,9 +56799,7 @@
     "flavor": "Bright grapefruit and orange with a sweet tropical finish.",
     "icon": "🍈",
     "breeder": "Dutch Passion",
-    "aka": [
-      "Passionfruit Haze"
-    ]
+    "aka": "Passionfruit Haze"
   },
   {
     "id": "s1671",
@@ -59224,10 +58852,7 @@
       "Grape Pie",
       "Jet Fuel Gelato"
     ],
-    "aka": [
-      "Grape Gas",
-      "Grape Gasolina"
-    ]
+    "aka": "Grape Gas, Grape Gasolina"
   },
   {
     "id": "s1769",
@@ -61039,9 +60664,7 @@
       "The Soap"
     ],
     "id": "s1859",
-    "aka": [
-      "French Laundry"
-    ]
+    "aka": "French Laundry"
   },
   {
     "name": "Jack Of Diamonds",
@@ -61104,10 +60727,7 @@
       "Kosher Kush"
     ],
     "id": "s1862",
-    "aka": [
-      "Holy Grail OG",
-      "Holy Grail"
-    ]
+    "aka": "Holy Grail OG, Holy Grail"
   },
   {
     "name": "OG #18",
@@ -61126,9 +60746,7 @@
     "icon": "🌿",
     "breeder": "Reserva Privada",
     "id": "s1863",
-    "aka": [
-      "Private Reserve"
-    ]
+    "aka": "Private Reserve"
   },
   {
     "name": "Grape Pie",
@@ -61174,9 +60792,7 @@
       "Chemdawg Sour Diesel"
     ],
     "id": "s1865",
-    "aka": [
-      "Sour Grapes"
-    ]
+    "aka": "Sour Grapes"
   },
   {
     "name": "Khalifa Kush",
@@ -61197,10 +60813,7 @@
       "OG Kush"
     ],
     "id": "s1866",
-    "aka": [
-      "KK",
-      "Wiz Khalifa OG"
-    ]
+    "aka": "KK, Wiz Khalifa OG"
   },
   {
     "name": "Blue Raspberry",
@@ -61221,9 +60834,7 @@
       "Raspberry Kush"
     ],
     "id": "s1867",
-    "aka": [
-      "Blue Razz"
-    ]
+    "aka": "Blue Razz"
   },
   {
     "name": "Sherb Cream Pie",
@@ -61246,10 +60857,7 @@
       "Sherb BX1"
     ],
     "id": "s1868",
-    "aka": [
-      "Sherb Cream",
-      "SHERB PIE"
-    ]
+    "aka": "Sherb Cream, SHERB PIE"
   },
   {
     "name": "Blue Zushi",
@@ -61294,9 +60902,7 @@
       "Strawberry Diesel"
     ],
     "id": "s1870",
-    "aka": [
-      "Strawberry SC"
-    ]
+    "aka": "Strawberry SC"
   },
   {
     "name": "Glitter Bomb",
@@ -61318,10 +60924,7 @@
       "Grape Gasoline"
     ],
     "id": "s1871",
-    "aka": [
-      "El Chivo #5",
-      "El Chivo"
-    ]
+    "aka": "El Chivo #5, El Chivo"
   },
   {
     "name": "Cheetah Piss",
@@ -61338,9 +60941,7 @@
     "flavor": "Pungent ammonia and citrus with sour lemon and diesel.",
     "icon": "🌿",
     "id": "s1872",
-    "aka": [
-      "Funky Kitty"
-    ],
+    "aka": "Funky Kitty",
     "breeder": "Cookies",
     "parents": [
       "Lemonnade",
@@ -61412,11 +61013,7 @@
       "Afghani"
     ],
     "id": "s1875",
-    "aka": [
-      "Super Glue",
-      "Superglue OG",
-      "Tacky Glue"
-    ]
+    "aka": "Super Glue, Superglue OG, Tacky Glue"
   },
   {
     "name": "Lemonade OG",
@@ -61432,9 +61029,7 @@
     "flavor": "Bright lemon citrus with earthy peppery Kush undertones.",
     "icon": "🌿",
     "id": "s1876",
-    "aka": [
-      "Lemonade"
-    ]
+    "aka": "Lemonade"
   },
   {
     "name": "24K Gold",
@@ -61457,10 +61052,7 @@
       "Tangie"
     ],
     "id": "s1877",
-    "aka": [
-      "24K",
-      "Kosher Tangie"
-    ]
+    "aka": "24K, Kosher Tangie"
   },
   {
     "name": "Mai Tai",
@@ -61500,9 +61092,7 @@
       "Citral Glue"
     ],
     "id": "s1879",
-    "aka": [
-      "ITF Lilac Diesel"
-    ]
+    "aka": "ITF Lilac Diesel"
   },
   {
     "name": "Cadillac Rainbow",
@@ -61525,13 +61115,7 @@
       "Runtz"
     ],
     "id": "s1880",
-    "aka": [
-      "Caddy Rainbow",
-      "Cadillac Rainbows",
-      "Cadillac Rainbow #7",
-      "Cadillac Rainbowz",
-      "Rainbow Cadillac"
-    ]
+    "aka": "Caddy Rainbow, Cadillac Rainbows, Cadillac Rainbow #7, Cadillac Rainbowz, Rainbow Cadillac"
   },
   {
     "name": "Honeydew",
@@ -61549,9 +61133,7 @@
     "flavor": "Sweet melon with berries and woody earthiness.",
     "icon": "🌿",
     "id": "s1881",
-    "aka": [
-      "Honey Dew"
-    ]
+    "aka": "Honey Dew"
   },
   {
     "name": "Crunch Berry",
@@ -61574,14 +61156,7 @@
       "Blueberry"
     ],
     "id": "s1882",
-    "aka": [
-      "Crunch Berries",
-      "Captain Crunch",
-      "Crunch Berryz",
-      "Crunchberry",
-      "Crunch Berry Kush",
-      "Crunchberries"
-    ]
+    "aka": "Crunch Berries, Captain Crunch, Crunch Berryz, Crunchberry, Crunch Berry Kush, Crunchberries"
   },
   {
     "name": "Imperial Hash",
@@ -61627,11 +61202,7 @@
       "OZK"
     ],
     "id": "s1884",
-    "aka": [
-      "RS 11",
-      "RS-11",
-      "Rainbow Sherbert #11"
-    ]
+    "aka": "RS 11, RS-11, Rainbow Sherbert #11"
   },
   {
     "name": "Blueberry Cookies",
@@ -61654,9 +61225,7 @@
       "Thin Mint GSC"
     ],
     "id": "s1885",
-    "aka": [
-      "Blueberry Girl Scout Cookies"
-    ]
+    "aka": "Blueberry Girl Scout Cookies"
   },
   {
     "name": "Grape Soda",
@@ -61721,9 +61290,7 @@
       "Devil Driver"
     ],
     "id": "s1888",
-    "aka": [
-      "D Inferno"
-    ]
+    "aka": "D Inferno"
   },
   {
     "name": "Blood Orange",
@@ -61746,9 +61313,7 @@
       "Cali Orange Bud"
     ],
     "id": "s1889",
-    "aka": [
-      "BloodOrange"
-    ]
+    "aka": "BloodOrange"
   },
   {
     "name": "3 Kings",
@@ -61771,9 +61336,7 @@
       "OG Kush"
     ],
     "id": "s1890",
-    "aka": [
-      "Three Kings"
-    ]
+    "aka": "Three Kings"
   },
   {
     "name": "Premium Jack",
@@ -61816,9 +61379,7 @@
       "Eddy OG"
     ],
     "id": "s1892",
-    "aka": [
-      "Peach Rings"
-    ]
+    "aka": "Peach Rings"
   },
   {
     "name": "Gastro Pop",
@@ -61842,9 +61403,7 @@
       "Grape Gas"
     ],
     "id": "s1893",
-    "aka": [
-      "Gastropop"
-    ]
+    "aka": "Gastropop"
   },
   {
     "name": "Cherry Punch",
@@ -61867,9 +61426,7 @@
       "Purple Punch"
     ],
     "id": "s1894",
-    "aka": [
-      "Black Cherry Punch"
-    ]
+    "aka": "Black Cherry Punch"
   },
   {
     "name": "Banana Punch",
@@ -61909,9 +61466,7 @@
     "icon": "🌿",
     "breeder": "Green Apple Co-op",
     "id": "s1896",
-    "aka": [
-      "Green Apple OG"
-    ]
+    "aka": "Green Apple OG"
   },
   {
     "name": "Member Berry",
@@ -61934,9 +61489,7 @@
       "Mandarin Sunset"
     ],
     "id": "s1897",
-    "aka": [
-      "Member Berries"
-    ]
+    "aka": "Member Berries"
   },
   {
     "name": "Dulce De Uva",
@@ -62001,9 +61554,7 @@
       "Gelatti",
       "Kush Mints"
     ],
-    "aka": [
-      "Georgia Pie"
-    ],
+    "aka": "Georgia Pie",
     "id": "s1900"
   },
   {
@@ -62122,9 +61673,7 @@
       "Wedding Crasher",
       "Ice Cream Cake #5"
     ],
-    "aka": [
-      "GCC"
-    ],
+    "aka": "GCC",
     "id": "s1906"
   },
   {
@@ -62146,9 +61695,7 @@
       "Cookies & Cream",
       "Secret Weapon"
     ],
-    "aka": [
-      "Oreos"
-    ],
+    "aka": "Oreos",
     "id": "s1907"
   },
   {
@@ -62170,10 +61717,7 @@
       "Zkittlez",
       "Do-Si-Dos"
     ],
-    "aka": [
-      "Rainbow RZ",
-      "Rainbow Runts"
-    ],
+    "aka": "Rainbow RZ, Rainbow Runts",
     "id": "s1908"
   },
   {
@@ -62195,9 +61739,7 @@
     "parents": [
       "Skunk #1"
     ],
-    "aka": [
-      "Peaches & Cream"
-    ],
+    "aka": "Peaches & Cream",
     "id": "s1909"
   },
   {
@@ -62221,10 +61763,7 @@
       "GMO",
       "Legend OG"
     ],
-    "aka": [
-      "Fatso OG",
-      "Fatso Kush"
-    ],
+    "aka": "Fatso OG, Fatso Kush",
     "id": "s1910"
   },
   {
@@ -62246,9 +61785,7 @@
       "Sunset Sherbet",
       "Headbanger"
     ],
-    "aka": [
-      "Sherbanger OG"
-    ],
+    "aka": "Sherbanger OG",
     "id": "s1911"
   },
   {
@@ -62269,9 +61806,7 @@
       "Lemon Haze",
       "GSC"
     ],
-    "aka": [
-      "Lemon Cookie OG"
-    ],
+    "aka": "Lemon Cookie OG",
     "id": "s1912"
   },
   {
@@ -62293,9 +61828,7 @@
       "GMO",
       "Gush Mints"
     ],
-    "aka": [
-      "Northern Oasis"
-    ],
+    "aka": "Northern Oasis",
     "id": "s1913"
   },
   {
@@ -62341,9 +61874,7 @@
       "Runtz",
       "Zkittlez"
     ],
-    "aka": [
-      "Blue Nerdz"
-    ],
+    "aka": "Blue Nerdz",
     "id": "s1915"
   },
   {
@@ -62366,10 +61897,7 @@
       "Zkittlez",
       "Sherbanger"
     ],
-    "aka": [
-      "Fumez",
-      "Candy Fumes"
-    ],
+    "aka": "Fumez, Candy Fumes",
     "id": "s1916"
   },
   {
@@ -62528,9 +62056,7 @@
       "Super Boof",
       "Oreoz"
     ],
-    "aka": [
-      "SubZero"
-    ],
+    "aka": "SubZero",
     "id": "s1923"
   },
   {
@@ -62554,10 +62080,7 @@
       "Dancehall",
       "Blueberry"
     ],
-    "aka": [
-      "Rainbow",
-      "Rainbow Bud"
-    ],
+    "aka": "Rainbow, Rainbow Bud",
     "id": "s1924"
   },
   {
@@ -62580,9 +62103,7 @@
       "Skunk #1",
       "Jack Herer"
     ],
-    "aka": [
-      "J1"
-    ],
+    "aka": "J1",
     "id": "s1925"
   },
   {
@@ -62604,9 +62125,7 @@
       "London Pound Cake",
       "Project 4516"
     ],
-    "aka": [
-      "Project 007"
-    ],
+    "aka": "Project 007",
     "id": "s1926"
   },
   {
@@ -62619,9 +62138,7 @@
     "effects": [],
     "flavor": "Earthy citrus and diesel with pine and lemon.",
     "icon": "🌿",
-    "aka": [
-      "Gas '97"
-    ],
+    "aka": "Gas '97",
     "id": "s1927",
     "parents": [
       "OG Kush"
@@ -62691,9 +62208,7 @@
       "Thin Mint GSC",
       "Blueberry"
     ],
-    "aka": [
-      "Blueberry Gelato"
-    ],
+    "aka": "Blueberry Gelato",
     "id": "s1930"
   },
   {
@@ -62738,9 +62253,7 @@
       "Strawberry Banana",
       "Papaya"
     ],
-    "aka": [
-      "Strawguava"
-    ],
+    "aka": "Strawguava",
     "id": "s1932"
   },
   {
@@ -62763,10 +62276,7 @@
       "Lemonnade",
       "Cherry Pie"
     ],
-    "aka": [
-      "Lemoncello",
-      "Lemonchello 28"
-    ],
+    "aka": "Lemoncello, Lemonchello 28",
     "id": "s1933"
   },
   {
@@ -62810,9 +62320,7 @@
       "Black Cherry Funk",
       "Acai"
     ],
-    "aka": [
-      "Cherry Gelato"
-    ],
+    "aka": "Cherry Gelato",
     "id": "s1935"
   },
   {
@@ -62854,10 +62362,7 @@
       "Paris OG",
       "The Menthol"
     ],
-    "aka": [
-      "Pavé",
-      "Pav"
-    ],
+    "aka": "Pavé, Pav",
     "id": "s1937"
   },
   {
@@ -62874,9 +62379,7 @@
     ],
     "flavor": "Floral and sweet with herbs, citrus, and a hashy spice.",
     "icon": "🌿",
-    "aka": [
-      "Humboldt Kush"
-    ],
+    "aka": "Humboldt Kush",
     "id": "s1938"
   },
   {
@@ -62922,10 +62425,7 @@
       "White Fire OG",
       "Wedding Cake"
     ],
-    "aka": [
-      "Jungle",
-      "GMO Jungle Cake"
-    ],
+    "aka": "Jungle, GMO Jungle Cake",
     "id": "s1940"
   },
   {
@@ -62948,9 +62448,7 @@
       "Cherry Pie",
       "GSC"
     ],
-    "aka": [
-      "Cherry Cookie"
-    ],
+    "aka": "Cherry Cookie",
     "id": "s1941"
   },
   {
@@ -62973,9 +62471,7 @@
       "Tahoe OG",
       "GSC"
     ],
-    "aka": [
-      "Tahoe Cookies"
-    ],
+    "aka": "Tahoe Cookies",
     "id": "s1942"
   },
   {
@@ -62998,9 +62494,7 @@
       "Cherry Pie",
       "Sour Diesel"
     ],
-    "aka": [
-      "Sour Cherries"
-    ],
+    "aka": "Sour Cherries",
     "id": "s1943"
   },
   {
@@ -63020,10 +62514,7 @@
       "Wedding Cake",
       "Project 4516"
     ],
-    "aka": [
-      "Ethanol",
-      "E-85"
-    ],
+    "aka": "Ethanol, E-85",
     "id": "s1944"
   },
   {
@@ -63043,10 +62534,7 @@
     "parents": [
       "Chernobyl"
     ],
-    "aka": [
-      "Slymer",
-      "Golden Ticket"
-    ],
+    "aka": "Slymer, Golden Ticket",
     "id": "s1945"
   },
   {
@@ -63114,11 +62602,7 @@
       "Cannalope Haze",
       "OG #18"
     ],
-    "aka": [
-      "Cantaloupe Kush",
-      "Cannalope",
-      "Momma Kush"
-    ],
+    "aka": "Cantaloupe Kush, Cannalope, Momma Kush",
     "id": "s1948"
   },
   {
@@ -63140,9 +62624,7 @@
       "Black Cherry Pie",
       "Purple Punch"
     ],
-    "aka": [
-      "Black Cherry Pop"
-    ],
+    "aka": "Black Cherry Pop",
     "id": "s1949"
   },
   {
@@ -63164,9 +62646,7 @@
       "Strawberry Cough",
       "The White"
     ],
-    "aka": [
-      "Strawberries & Cream"
-    ],
+    "aka": "Strawberries & Cream",
     "id": "s1950"
   },
   {
@@ -63214,9 +62694,7 @@
       "Orange Blossom Trail"
     ],
     "id": "s1952",
-    "aka": [
-      "Mojito #1"
-    ]
+    "aka": "Mojito #1"
   },
   {
     "name": "Kiwi",
@@ -63235,10 +62713,7 @@
       "Ice Queen",
       "Blue Heron"
     ],
-    "aka": [
-      "Ghetto Bird",
-      "Kiwi Punch"
-    ],
+    "aka": "Ghetto Bird, Kiwi Punch",
     "id": "s1953"
   },
   {
@@ -63259,9 +62734,7 @@
       "OG Kush",
       "GSC"
     ],
-    "aka": [
-      "Cookie OG"
-    ],
+    "aka": "Cookie OG",
     "id": "s1954"
   },
   {
@@ -63304,9 +62777,7 @@
       "Biscotti",
       "Sherb Cake"
     ],
-    "aka": [
-      "Bolo RTZ"
-    ],
+    "aka": "Bolo RTZ",
     "id": "s1956"
   },
   {
@@ -63368,10 +62839,7 @@
     ],
     "flavor": "Sweet sugary creamy chocolate with minty vanilla and spice.",
     "icon": "🌿",
-    "aka": [
-      "Chocolate Milk",
-      "Chocolate Milkshake"
-    ],
+    "aka": "Chocolate Milk, Chocolate Milkshake",
     "id": "s1959"
   },
   {
@@ -63395,9 +62863,7 @@
       "Sour Diesel",
       "Ghost OG"
     ],
-    "aka": [
-      "Earth OG Kush"
-    ],
+    "aka": "Earth OG Kush",
     "id": "s1960"
   },
   {
@@ -63420,9 +62886,7 @@
       "Lemonade",
       "Raspberry Kush"
     ],
-    "aka": [
-      "Razzberry Lemonaid"
-    ],
+    "aka": "Razzberry Lemonaid",
     "id": "s1961"
   },
   {
@@ -63443,9 +62907,7 @@
     "parents": [
       "OG Kush"
     ],
-    "aka": [
-      "Gucci OG Kush"
-    ],
+    "aka": "Gucci OG Kush",
     "id": "s1962"
   },
   {
@@ -63745,9 +63207,7 @@
       "Platinum GSC",
       "Kosher Kush"
     ],
-    "aka": [
-      "BS"
-    ],
+    "aka": "BS",
     "id": "s1976"
   },
   {
@@ -63789,9 +63249,7 @@
       "GMO",
       "Black Banana"
     ],
-    "aka": [
-      "The Don Mega"
-    ],
+    "aka": "The Don Mega",
     "id": "s1978"
   },
   {
@@ -63904,9 +63362,7 @@
       "Pineapple Trainwreck",
       "Cookie Monster"
     ],
-    "aka": [
-      "Pineapple Upside Down Cake"
-    ],
+    "aka": "Pineapple Upside Down Cake",
     "id": "s1983"
   },
   {
@@ -63991,9 +63447,7 @@
       "OG Kush",
       "Master Kush"
     ],
-    "aka": [
-      "Yoda OG"
-    ],
+    "aka": "Yoda OG",
     "id": "s1987"
   },
   {
@@ -64035,12 +63489,7 @@
       "Do-Si-Dos",
       "Gelato #41"
     ],
-    "aka": [
-      "Dosi Latte",
-      "Dosi Lato",
-      "Do-Si-Lato",
-      "Dolato"
-    ],
+    "aka": "Dosi Latte, Dosi Lato, Do-Si-Lato, Dolato",
     "id": "s1989"
   },
   {
@@ -64086,10 +63535,7 @@
       "Tangie",
       "Guava Dawg"
     ],
-    "aka": [
-      "POG",
-      "P.O.G."
-    ],
+    "aka": "POG, P.O.G.",
     "id": "s1991"
   },
   {
@@ -64113,10 +63559,7 @@
       "Gelato #45",
       "Indiana Bubblegum"
     ],
-    "aka": [
-      "BG Gelato",
-      "Bubble Gum Gelato"
-    ],
+    "aka": "BG Gelato, Bubble Gum Gelato",
     "id": "s1992"
   },
   {
@@ -64139,9 +63582,7 @@
       "Blue Hawaiian",
       "Sensi Star"
     ],
-    "aka": [
-      "Sugar Cookies"
-    ],
+    "aka": "Sugar Cookies",
     "id": "s1993"
   },
   {
@@ -64186,9 +63627,7 @@
       "GMO",
       "Larry OG"
     ],
-    "aka": [
-      "Solo Burger"
-    ],
+    "aka": "Solo Burger",
     "id": "s1995"
   },
   {
@@ -64211,9 +63650,7 @@
       "OG Kush",
       "GSC"
     ],
-    "aka": [
-      "Naughty"
-    ],
+    "aka": "Naughty",
     "id": "s1996"
   },
   {
@@ -64346,10 +63783,7 @@
       "Mendocino Purps",
       "LA Confidential"
     ],
-    "aka": [
-      "California Kush",
-      "Kali Kush"
-    ],
+    "aka": "California Kush, Kali Kush",
     "id": "s2002"
   },
   {
@@ -64395,9 +63829,7 @@
       "Watermelon Zkittlez",
       "Gelato #45"
     ],
-    "aka": [
-      "Watermelon Gelato #36"
-    ],
+    "aka": "Watermelon Gelato #36",
     "id": "s2004"
   },
   {
@@ -64443,9 +63875,7 @@
       "Hindu Kush",
       "Hash Plant"
     ],
-    "aka": [
-      "Champagne"
-    ],
+    "aka": "Champagne",
     "id": "s2006"
   },
   {
@@ -64467,9 +63897,7 @@
     "parents": [
       "OG Kush"
     ],
-    "aka": [
-      "Los Angeles Kush"
-    ],
+    "aka": "Los Angeles Kush",
     "id": "s2007"
   },
   {
@@ -64516,9 +63944,7 @@
       "Super Lemon Cherry Gelato",
       "Runtz"
     ],
-    "aka": [
-      "Super Runts"
-    ],
+    "aka": "Super Runts",
     "id": "s2009"
   },
   {
@@ -64627,10 +64053,7 @@
       "Slurricane",
       "Purple Panty Dropper"
     ],
-    "aka": [
-      "Blueberry Pancake",
-      "BBP"
-    ],
+    "aka": "Blueberry Pancake, BBP",
     "id": "s2014"
   },
   {
@@ -64752,9 +64175,7 @@
       "Blueberry",
       "Cheese"
     ],
-    "aka": [
-      "Blue Cheesecake"
-    ],
+    "aka": "Blue Cheesecake",
     "id": "s2020"
   },
   {
@@ -64778,11 +64199,7 @@
       "The White",
       "Appalachia"
     ],
-    "aka": [
-      "Lucky Charmz",
-      "Bodhi's Charms",
-      "LC"
-    ],
+    "aka": "Lucky Charmz, Bodhi's Charms, LC",
     "id": "s2021"
   },
   {
@@ -64869,9 +64286,7 @@
       "Grape Diamonds",
       "Chem D-95"
     ],
-    "aka": [
-      "P.O.G."
-    ],
+    "aka": "P.O.G.",
     "id": "s2025"
   },
   {
@@ -64895,9 +64310,7 @@
       "Cherry OG",
       "Turbo Diesel"
     ],
-    "aka": [
-      "Cherry Turbo Diesel"
-    ],
+    "aka": "Cherry Turbo Diesel",
     "id": "s2026"
   },
   {
@@ -64942,9 +64355,7 @@
       "Lemon Cherry Gelato",
       "Sunset Sherbet"
     ],
-    "aka": [
-      "Lemon Cherry Sherbet"
-    ],
+    "aka": "Lemon Cherry Sherbet",
     "id": "s2028"
   },
   {
@@ -64967,10 +64378,7 @@
       "Alien Kush",
       "Tahoe OG"
     ],
-    "aka": [
-      "Purple Alien",
-      "Alien Purple OG"
-    ],
+    "aka": "Purple Alien, Alien Purple OG",
     "id": "s2029"
   },
   {
@@ -65016,10 +64424,7 @@
       "Banana Kush",
       "Miracle Alien Cookies"
     ],
-    "aka": [
-      "Banana Miracle Alien Cookies",
-      "BMAC"
-    ],
+    "aka": "Banana Miracle Alien Cookies, BMAC",
     "id": "s2031"
   },
   {
@@ -65085,9 +64490,7 @@
       "Lemon Cherry Gelato",
       "Pina Acai"
     ],
-    "aka": [
-      "Red Cake"
-    ],
+    "aka": "Red Cake",
     "id": "s2034"
   },
   {
@@ -65151,9 +64554,7 @@
       "Black Cherry Soda",
       "Gorilla Biscuit"
     ],
-    "aka": [
-      "Wild Berry"
-    ],
+    "aka": "Wild Berry",
     "id": "s2037"
   },
   {
@@ -65200,10 +64601,7 @@
       "Zkittlez",
       "Do-Si-Dos"
     ],
-    "aka": [
-      "Moon Bow",
-      "Moonbow #112"
-    ],
+    "aka": "Moon Bow, Moonbow #112",
     "id": "s2039"
   },
   {
@@ -65226,9 +64624,7 @@
       "OG Kush",
       "Tahoe OG"
     ],
-    "aka": [
-      "Better Than Yours OG"
-    ],
+    "aka": "Better Than Yours OG",
     "id": "s2040"
   },
   {
@@ -65319,9 +64715,7 @@
       "Pineapple Fruz",
       "Permanent Marker"
     ],
-    "aka": [
-      "Scented Marker #1"
-    ],
+    "aka": "Scented Marker #1",
     "id": "s2044"
   },
   {
@@ -65346,10 +64740,7 @@
       "Banana OG",
       "Do-Si-Dos"
     ],
-    "aka": [
-      "Tally Man",
-      "Tallyman"
-    ],
+    "aka": "Tally Man, Tallyman",
     "id": "s2045"
   },
   {
@@ -65385,9 +64776,7 @@
       "Biscotti",
       "Scotty2Hotty"
     ],
-    "aka": [
-      "Octane 91"
-    ],
+    "aka": "Octane 91",
     "id": "s2046"
   },
   {
@@ -65424,9 +64813,7 @@
       "Schrom",
       "Tangie"
     ],
-    "aka": [
-      "Afternoon Delite"
-    ],
+    "aka": "Afternoon Delite",
     "id": "s2047"
   },
   {
@@ -65462,9 +64849,7 @@
       "Khalifa Kush",
       "The Menthol"
     ],
-    "aka": [
-      "Grogu"
-    ],
+    "aka": "Grogu",
     "id": "s2048"
   },
   {
@@ -65566,9 +64951,7 @@
       "Sunset Sherbert",
       "Octane"
     ],
-    "aka": [
-      "Hi-Octane"
-    ],
+    "aka": "Hi-Octane",
     "id": "s2051"
   },
   {
@@ -65631,11 +65014,7 @@
       "Thin Mint GSC",
       "DJ Short Blueberry"
     ],
-    "aka": [
-      "Blue Andez",
-      "Blue Andeze",
-      "Blue Andeez"
-    ],
+    "aka": "Blue Andez, Blue Andeze, Blue Andeez",
     "id": "s2053"
   },
   {
@@ -65664,10 +65043,7 @@
     "icon": "🌿",
     "breeder": "Dark Heart Nursery",
     "id": "s2054",
-    "aka": [
-      "Boss",
-      "Boss Kush"
-    ]
+    "aka": "Boss, Boss Kush"
   },
   {
     "name": "Chocolope Kush",
@@ -65698,9 +65074,7 @@
       "Chocolope",
       "Kosher Kush"
     ],
-    "aka": [
-      "Chocolate Kush"
-    ],
+    "aka": "Chocolate Kush",
     "id": "s2055"
   },
   {
@@ -65869,9 +65243,7 @@
       "Animal Face",
       "Sin Mintz"
     ],
-    "aka": [
-      "Becky"
-    ],
+    "aka": "Becky",
     "id": "s2060"
   },
   {
@@ -65939,9 +65311,7 @@
       "Grapefruit",
       "White Widow"
     ],
-    "aka": [
-      "Fruit Loop"
-    ],
+    "aka": "Fruit Loop",
     "id": "s2062"
   },
   {
@@ -65973,10 +65343,7 @@
     "flavor": "Diesel, rubber, and zesty lemon over an earthy core.",
     "icon": "🌿",
     "breeder": "Greg \"Chemdog\" Krzanowski",
-    "aka": [
-      "Chemdog D",
-      "Chemdawg D"
-    ],
+    "aka": "Chemdog D, Chemdawg D",
     "id": "s2063"
   },
   {
@@ -66008,9 +65375,7 @@
       "Golden Goat",
       "Face Off OG"
     ],
-    "aka": [
-      "Mr. Dank"
-    ],
+    "aka": "Mr. Dank",
     "id": "s2064"
   },
   {
@@ -66148,9 +65513,7 @@
       "Lavender Kush",
       "Bubba Kush"
     ],
-    "aka": [
-      "Zombie OG"
-    ],
+    "aka": "Zombie OG",
     "id": "s2068"
   },
   {
@@ -66272,10 +65635,7 @@
       "Gelato 33",
       "Wedding Cake"
     ],
-    "aka": [
-      "ICC",
-      "Ice Cream Cookie"
-    ],
+    "aka": "ICC, Ice Cream Cookie",
     "id": "s2072"
   },
   {
@@ -66405,9 +65765,7 @@
       "Chemdawg",
       "Purple Candy Kush"
     ],
-    "aka": [
-      "Purple Raine"
-    ],
+    "aka": "Purple Raine",
     "id": "s2076"
   },
   {
@@ -66583,9 +65941,7 @@
       "Purple Punch",
       "Jungle Cake"
     ],
-    "aka": [
-      "Sharkleberry Fin"
-    ],
+    "aka": "Sharkleberry Fin",
     "id": "s2081"
   },
   {
@@ -66651,9 +66007,7 @@
       "Watermelon Zkittlez",
       "Mojito"
     ],
-    "aka": [
-      "Watermelon Mojito Zkittlez"
-    ],
+    "aka": "Watermelon Mojito Zkittlez",
     "id": "s2083"
   },
   {
@@ -66720,9 +66074,7 @@
       "White Widow",
       "Girl Scout Cookies"
     ],
-    "aka": [
-      "White Oreos"
-    ],
+    "aka": "White Oreos",
     "id": "s2085"
   },
   {
@@ -66758,9 +66110,7 @@
       "OG Blueberry",
       "Cookies and Cream"
     ],
-    "aka": [
-      "Big Smooth #3"
-    ],
+    "aka": "Big Smooth #3",
     "id": "s2086"
   },
   {
@@ -66823,9 +66173,7 @@
       "Orange Valley OG",
       "Cookies and Cream"
     ],
-    "aka": [
-      "Orange Cream #26"
-    ],
+    "aka": "Orange Cream #26",
     "id": "s2088"
   },
   {
@@ -66861,9 +66209,7 @@
       "Chemdawg Guava",
       "Blue Steel"
     ],
-    "aka": [
-      "Bomb Popz"
-    ],
+    "aka": "Bomb Popz",
     "id": "s2089"
   },
   {
@@ -66926,10 +66272,7 @@
       "Skywalker OG",
       "Rare Dankness #2"
     ],
-    "aka": [
-      "Star Killer",
-      "Starkiller"
-    ],
+    "aka": "Star Killer, Starkiller",
     "id": "s2091"
   },
   {
@@ -67028,10 +66371,7 @@
     "parents": [
       "Hindu Kush"
     ],
-    "aka": [
-      "Jager",
-      "Yager"
-    ],
+    "aka": "Jager, Yager",
     "id": "s2094"
   },
   {
@@ -67067,9 +66407,7 @@
       "Tropicanna",
       "Banana Kush"
     ],
-    "aka": [
-      "Tropicanna Banana"
-    ],
+    "aka": "Tropicanna Banana",
     "id": "s2095"
   },
   {
@@ -67128,9 +66466,7 @@
       "Chimera #2",
       "Permanent Marker"
     ],
-    "aka": [
-      "Permanent Chimera"
-    ],
+    "aka": "Permanent Chimera",
     "id": "s2097"
   },
   {
@@ -67302,11 +66638,7 @@
       "Sour Diesel",
       "Banana Sherbet"
     ],
-    "aka": [
-      "Sour Banana Sherbert",
-      "Banana Sherbet Kush",
-      "Sour Banana"
-    ],
+    "aka": "Sour Banana Sherbert, Banana Sherbet Kush, Sour Banana",
     "id": "s2102"
   },
   {
@@ -67338,9 +66670,7 @@
       "Kosher Kush",
       "Lemon Skunk"
     ],
-    "aka": [
-      "Golden Lemon"
-    ],
+    "aka": "Golden Lemon",
     "id": "s2103"
   },
   {
@@ -67372,9 +66702,7 @@
       "Pineapple Chunk",
       "Maui Wowie"
     ],
-    "aka": [
-      "Maui Pineapple Chunk"
-    ],
+    "aka": "Maui Pineapple Chunk",
     "id": "s2104"
   },
   {
@@ -67406,9 +66734,7 @@
       "Tangie",
       "Purple Punch F2"
     ],
-    "aka": [
-      "Orange Aid"
-    ],
+    "aka": "Orange Aid",
     "id": "s2105"
   },
   {
@@ -67440,9 +66766,7 @@
       "Spanish Barbara",
       "Lemon Tree Skorange"
     ],
-    "aka": [
-      "Moroccan Peach"
-    ],
+    "aka": "Moroccan Peach",
     "id": "s2106"
   },
   {
@@ -67473,11 +66797,7 @@
       "OG Kush",
       "Durban Poison"
     ],
-    "aka": [
-      "Thin Mint GSC",
-      "Thin Mint Girl Scout Cookies",
-      "Thin Mint Cookies"
-    ],
+    "aka": "Thin Mint GSC, Thin Mint Girl Scout Cookies, Thin Mint Cookies",
     "id": "s2107"
   },
   {
@@ -67507,9 +66827,7 @@
     "parents": [
       "OG Kush"
     ],
-    "aka": [
-      "OG Supreme"
-    ],
+    "aka": "OG Supreme",
     "id": "s2108"
   },
   {
@@ -67541,9 +66859,7 @@
       "GMO",
       "Fortune Cookies"
     ],
-    "aka": [
-      "Garlic Budder"
-    ],
+    "aka": "Garlic Budder",
     "id": "s2109"
   },
   {
@@ -67578,9 +66894,7 @@
       "Blueberry",
       "Durban Poison"
     ],
-    "aka": [
-      "Yum Yum"
-    ],
+    "aka": "Yum Yum",
     "id": "s2110"
   },
   {
@@ -67673,9 +66987,7 @@
     ],
     "flavor": "Earth, dough, vanilla, nuts, and chocolate with peppery herbs and diesel.",
     "icon": "🌿",
-    "aka": [
-      "OGKB"
-    ],
+    "aka": "OGKB",
     "id": "s2113"
   },
   {
@@ -67711,9 +67023,7 @@
       "Platinum",
       "OGKB V2.1"
     ],
-    "aka": [
-      "PKB"
-    ],
+    "aka": "PKB",
     "id": "s2114"
   },
   {
@@ -67779,10 +67089,7 @@
     "parents": [
       "OG Kush"
     ],
-    "aka": [
-      "Comatose",
-      "Coma Kush"
-    ],
+    "aka": "Comatose, Coma Kush",
     "id": "s2116"
   },
   {
@@ -67814,9 +67121,7 @@
       "Florida Kush",
       "The Y"
     ],
-    "aka": [
-      "The Fly"
-    ],
+    "aka": "The Fly",
     "id": "s2117"
   },
   {
@@ -67884,9 +67189,7 @@
       "Do-Si-Dos",
       "Lava Cake"
     ],
-    "aka": [
-      "PB Souffle"
-    ],
+    "aka": "PB Souffle",
     "id": "s2119"
   },
   {
@@ -67948,9 +67251,7 @@
       "Runtz",
       "Tropic Truffle"
     ],
-    "aka": [
-      "Tropical Runts"
-    ],
+    "aka": "Tropical Runts",
     "id": "s2121"
   },
   {
@@ -68361,9 +67662,7 @@
       "Mango Kush",
       "Sherbet"
     ],
-    "aka": [
-      "Mango Sherbert"
-    ],
+    "aka": "Mango Sherbert",
     "id": "s2134"
   },
   {
@@ -68515,9 +67814,7 @@
       "Irene OG",
       "Face Off OG BX1"
     ],
-    "aka": [
-      "Rude Boy"
-    ],
+    "aka": "Rude Boy",
     "id": "s2139"
   },
   {
@@ -68544,10 +67841,7 @@
     ],
     "flavor": "Woody pine with earth and forest floor.",
     "icon": "🌿",
-    "aka": [
-      "Chemo",
-      "Kemo"
-    ],
+    "aka": "Chemo, Kemo",
     "id": "s2140"
   },
   {
@@ -68583,9 +67877,7 @@
       "OGKB 2.1",
       "Candy Fumez"
     ],
-    "aka": [
-      "Swampwater Fumez"
-    ],
+    "aka": "Swampwater Fumez",
     "id": "s2141"
   },
   {
@@ -68703,10 +67995,7 @@
       "Nepali landrace",
       "Thai landrace"
     ],
-    "aka": [
-      "Chemdawg #4",
-      "Chemdog 4"
-    ],
+    "aka": "Chemdawg #4, Chemdog 4",
     "id": "s2145"
   },
   {
@@ -68738,10 +68027,7 @@
       "Blue Cookies",
       "Georgia Pie"
     ],
-    "aka": [
-      "Blue Slushie",
-      "Blue Slushee"
-    ],
+    "aka": "Blue Slushie, Blue Slushee",
     "id": "s2146"
   },
   {
@@ -68808,9 +68094,7 @@
       "GMO",
       "Purple Punch"
     ],
-    "aka": [
-      "Modified Grape"
-    ],
+    "aka": "Modified Grape",
     "id": "s2148"
   },
   {
@@ -68846,9 +68130,7 @@
       "Banana Cream Cake",
       "Jealousy"
     ],
-    "aka": [
-      "Banana Jealousy"
-    ],
+    "aka": "Banana Jealousy",
     "id": "s2149"
   },
   {
@@ -68870,9 +68152,7 @@
       "Super Silver Haze",
       "Blue Dream"
     ],
-    "aka": [
-      "Super Blue Dream"
-    ],
+    "aka": "Super Blue Dream",
     "id": "s2150"
   },
   {
@@ -68934,11 +68214,7 @@
       "Super Boof",
       "Tropicana Cherry"
     ],
-    "aka": [
-      "Super Boof Cherry",
-      "SB Cherry",
-      "SBC"
-    ],
+    "aka": "Super Boof Cherry, SB Cherry, SBC",
     "id": "s2152"
   },
   {
@@ -68970,10 +68246,7 @@
       "Chemdog D",
       "I-95"
     ],
-    "aka": [
-      "La Chem",
-      "CDLC"
-    ],
+    "aka": "La Chem, CDLC",
     "id": "s2153"
   },
   {
@@ -68994,9 +68267,7 @@
     "parents": [
       "Pink Kush"
     ],
-    "aka": [
-      "Island Pink Kush"
-    ],
+    "aka": "Island Pink Kush",
     "id": "s2154"
   },
   {
@@ -69019,10 +68290,7 @@
       "Triangle Kush BX2",
       "Z Animal"
     ],
-    "aka": [
-      "LA Pop Rockz",
-      "LA Pop Rockz #4"
-    ],
+    "aka": "LA Pop Rockz, LA Pop Rockz #4",
     "id": "s2155"
   },
   {
@@ -69084,9 +68352,7 @@
       "Triangle Kush",
       "GMO"
     ],
-    "aka": [
-      "T.K.O."
-    ],
+    "aka": "T.K.O.",
     "id": "s2157"
   },
   {
@@ -69140,11 +68406,7 @@
       "Tropicana Cookies",
       "Cherry Cookies F3"
     ],
-    "aka": [
-      "Tropicanna Cherries",
-      "Trop Cherry",
-      "Cherry Tropicana"
-    ],
+    "aka": "Tropicanna Cherries, Trop Cherry, Cherry Tropicana",
     "id": "s2159"
   },
   {
@@ -69265,9 +68527,7 @@
       "Pre '98 Bubba Kush",
       "Stardawg"
     ],
-    "aka": [
-      "Bubba F"
-    ],
+    "aka": "Bubba F",
     "id": "s2163"
   },
   {
@@ -69589,10 +68849,7 @@
       "Gorilla Glue #4",
       "Tahoe Kush"
     ],
-    "aka": [
-      "Gorilla Mango",
-      "Gorilla Mango OG"
-    ],
+    "aka": "Gorilla Mango, Gorilla Mango OG",
     "id": "s2174"
   },
   {
@@ -69706,9 +68963,7 @@
       "Jungle Spice",
       "Gorilla Diesel #3"
     ],
-    "aka": [
-      "LeF"
-    ],
+    "aka": "LeF",
     "id": "s2178"
   },
   {
@@ -69736,10 +68991,7 @@
       "Grape Pie",
       "Thin Mint GSC"
     ],
-    "aka": [
-      "Sugarberry Scones",
-      "Sugar Berry Scones"
-    ],
+    "aka": "Sugarberry Scones, Sugar Berry Scones",
     "id": "s2179"
   },
   {
@@ -69792,9 +69044,7 @@
       "Blueberry",
       "Sweet Tooth"
     ],
-    "aka": [
-      "The Boost"
-    ],
+    "aka": "The Boost",
     "id": "s2181"
   },
   {
@@ -69827,9 +69077,7 @@
       "Purple Urkle",
       "Cherry Pie"
     ],
-    "aka": [
-      "Orange Sherbert"
-    ],
+    "aka": "Orange Sherbert",
     "id": "s2182"
   },
   {
@@ -69866,10 +69114,7 @@
       "Bubble Berry",
       "Mexican Ruderalis"
     ],
-    "aka": [
-      "Jam Berry",
-      "Strawberry Jamz"
-    ],
+    "aka": "Jam Berry, Strawberry Jamz",
     "id": "s2183"
   },
   {
@@ -69901,9 +69146,7 @@
       "Stardawg",
       "Kosher Kush"
     ],
-    "aka": [
-      "Hebrew National"
-    ],
+    "aka": "Hebrew National",
     "id": "s2184"
   },
   {
@@ -69995,11 +69238,7 @@
       "Pink Kush",
       "Death Bubba"
     ],
-    "aka": [
-      "Tom Ford Pink Kush",
-      "TFPK",
-      "Pink Death"
-    ],
+    "aka": "Tom Ford Pink Kush, TFPK, Pink Death",
     "id": "s2187"
   },
   {
@@ -70031,9 +69270,7 @@
       "Cherry Pie",
       "Alien Kush F2"
     ],
-    "aka": [
-      "Gasmask"
-    ],
+    "aka": "Gasmask",
     "id": "s2188"
   },
   {
@@ -70098,10 +69335,7 @@
       "Ice Cream Cake",
       "Sunset Sherbet"
     ],
-    "aka": [
-      "Oreo Blizzard",
-      "Blizzie"
-    ],
+    "aka": "Oreo Blizzard, Blizzie",
     "id": "s2190"
   },
   {
@@ -70158,10 +69392,7 @@
       "Grape Ape",
       "Super Silver Haze"
     ],
-    "aka": [
-      "Silverback Gorilla",
-      "Silver Back Gorilla"
-    ],
+    "aka": "Silverback Gorilla, Silver Back Gorilla",
     "id": "s2192"
   },
   {
@@ -70198,9 +69429,7 @@
       "Blackberry Kush",
       "Purple Urkle"
     ],
-    "aka": [
-      "Cadillac Purple"
-    ],
+    "aka": "Cadillac Purple",
     "id": "s2193"
   },
   {
@@ -70267,10 +69496,7 @@
       "Big Skunk",
       "Haze"
     ],
-    "aka": [
-      "Tropicana Haze",
-      "Trop Haze"
-    ],
+    "aka": "Tropicana Haze, Trop Haze",
     "id": "s2195"
   },
   {
@@ -70306,9 +69532,7 @@
       "Blueberry",
       "OG Kush"
     ],
-    "aka": [
-      "Berry OG Kush"
-    ],
+    "aka": "Berry OG Kush",
     "id": "s2196"
   },
   {
@@ -70343,10 +69567,7 @@
       "Franken Cakes",
       "Gorilla Diesel #3"
     ],
-    "aka": [
-      "PiD",
-      "PiDo"
-    ],
+    "aka": "PiD, PiDo",
     "id": "s2197"
   },
   {
@@ -70377,10 +69598,7 @@
       "Gelato",
       "White Cherry"
     ],
-    "aka": [
-      "White Gelato",
-      "White Cherry"
-    ],
+    "aka": "White Gelato, White Cherry",
     "id": "s2198"
   },
   {
@@ -70584,9 +69802,7 @@
       "Wedding Cake",
       "Kush Mints"
     ],
-    "aka": [
-      "Hippy Crasher"
-    ],
+    "aka": "Hippy Crasher",
     "id": "s2204"
   },
   {
@@ -70622,9 +69838,7 @@
       "Grape Pie",
       "Tahoe OG"
     ],
-    "aka": [
-      "Grape Pie Hoe"
-    ],
+    "aka": "Grape Pie Hoe",
     "id": "s2205"
   },
   {
@@ -70686,9 +69900,7 @@
       "Ice Queen",
       "Huckleberry Diesel"
     ],
-    "aka": [
-      "Sour Peaches"
-    ],
+    "aka": "Sour Peaches",
     "id": "s2207"
   },
   {
@@ -70859,10 +70071,7 @@
       "Runtz",
       "Cap Junky"
     ],
-    "aka": [
-      "Gogurts",
-      "G Gurtz"
-    ],
+    "aka": "Gogurts, G Gurtz",
     "id": "s2212"
   },
   {
@@ -70958,11 +70167,7 @@
       "Purple Kush",
       "Chemdawg Special Reserve"
     ],
-    "aka": [
-      "Black Lime",
-      "Black Lime Special Reserve",
-      "Black Lime Special"
-    ],
+    "aka": "Black Lime, Black Lime Special Reserve, Black Lime Special",
     "id": "s2215"
   },
   {
@@ -70995,9 +70200,7 @@
       "Niagara",
       "Shiva"
     ],
-    "aka": [
-      "Millennium Bud"
-    ],
+    "aka": "Millennium Bud",
     "id": "s2216"
   },
   {
@@ -71135,9 +70338,7 @@
       "Cherry Pie",
       "Wedding Cake F4"
     ],
-    "aka": [
-      "Grape Cake Head"
-    ],
+    "aka": "Grape Cake Head",
     "id": "s2220"
   },
   {
@@ -71173,10 +70374,7 @@
       "Mimosa",
       "Orangeade"
     ],
-    "aka": [
-      "Orange Layer Cake",
-      "Orange Cake Pop"
-    ],
+    "aka": "Orange Layer Cake, Orange Cake Pop",
     "id": "s2221"
   },
   {
@@ -71212,9 +70410,7 @@
       "Gummiez",
       "Grape Gasoline"
     ],
-    "aka": [
-      "Jokerz Kandy"
-    ],
+    "aka": "Jokerz Kandy",
     "id": "s2222"
   },
   {
@@ -71264,10 +70460,7 @@
     "flavor": "Zesty lemon and sour citrus with a creamy finish.",
     "icon": "🌿",
     "breeder": "Wolf Genetics",
-    "aka": [
-      "Zest",
-      "Lemon Butter"
-    ],
+    "aka": "Zest, Lemon Butter",
     "id": "s2224"
   },
   {
@@ -71369,9 +70562,7 @@
       "Gelato #41",
       "Cookies and Cream"
     ],
-    "aka": [
-      "Sugar Cones"
-    ],
+    "aka": "Sugar Cones",
     "id": "s2227"
   },
   {
@@ -71434,10 +70625,7 @@
       "The White",
       "Space Queen"
     ],
-    "aka": [
-      "White Diamonds",
-      "White Diamond OG"
-    ],
+    "aka": "White Diamonds, White Diamond OG",
     "id": "s2229"
   },
   {
@@ -71666,9 +70854,7 @@
       "Gelonade",
       "Biscotti"
     ],
-    "aka": [
-      "Lemonotti"
-    ],
+    "aka": "Lemonotti",
     "id": "s2236"
   },
   {
@@ -71758,10 +70944,7 @@
       "Apples and Bananas",
       "Triple Scoop"
     ],
-    "aka": [
-      "Pink Passion Fruit",
-      "Pink Passion"
-    ],
+    "aka": "Pink Passion Fruit, Pink Passion",
     "id": "s2239"
   },
   {
@@ -71798,9 +70981,7 @@
       "GMO",
       "Triangle Kush"
     ],
-    "aka": [
-      "Lemon Royale"
-    ],
+    "aka": "Lemon Royale",
     "id": "s2240"
   },
   {
@@ -71832,9 +71013,7 @@
       "Ice Cream Cake",
       "Kush Mints"
     ],
-    "aka": [
-      "Ice Cream Mintz"
-    ],
+    "aka": "Ice Cream Mintz",
     "id": "s2241"
   },
   {
@@ -71857,9 +71036,7 @@
       "Strawberry Banana",
       "Honey Boo Boo"
     ],
-    "aka": [
-      "Honey Banana"
-    ],
+    "aka": "Honey Banana",
     "id": "s2242"
   },
   {
@@ -71913,10 +71090,7 @@
       "Girl Scout Cookies",
       "OG Kush"
     ],
-    "aka": [
-      "Cookies N Kush",
-      "Fortune Cookie"
-    ],
+    "aka": "Cookies N Kush, Fortune Cookie",
     "id": "s2244"
   },
   {
@@ -71944,10 +71118,7 @@
       "California Sour",
       "Lemon OG"
     ],
-    "aka": [
-      "Sour Lemon OG",
-      "OG Sour Lemon"
-    ],
+    "aka": "Sour Lemon OG, OG Sour Lemon",
     "id": "s2245"
   },
   {
@@ -71982,10 +71153,7 @@
       "Ice Cream Cake",
       "Gelato #41"
     ],
-    "aka": [
-      "Cherry Zlushee",
-      "Cherry Slushie"
-    ],
+    "aka": "Cherry Zlushee, Cherry Slushie",
     "id": "s2246"
   },
   {
@@ -72021,10 +71189,7 @@
       "Blue City Diesel",
       "Girl Scout Cookies"
     ],
-    "aka": [
-      "Smartiez",
-      "The Smarties"
-    ],
+    "aka": "Smartiez, The Smarties",
     "id": "s2247"
   },
   {
@@ -72060,10 +71225,7 @@
       "God Bud",
       "Green Crack"
     ],
-    "aka": [
-      "God's Crack",
-      "GCG"
-    ],
+    "aka": "God's Crack, GCG",
     "id": "s2248"
   },
   {
@@ -72108,9 +71270,7 @@
       "Prometheus",
       "Purple Dragon Kush"
     ],
-    "aka": [
-      "Dragon Fire"
-    ],
+    "aka": "Dragon Fire",
     "id": "s2250"
   },
   {
@@ -72199,12 +71359,7 @@
       "Girl Scout Cookies",
       "Blue Power"
     ],
-    "aka": [
-      "Sin Mint",
-      "SinMint",
-      "SMC",
-      "Sin Mintz"
-    ],
+    "aka": "Sin Mint, SinMint, SMC, Sin Mintz",
     "id": "s2253"
   },
   {
@@ -72240,9 +71395,7 @@
       "Jet Fuel OG",
       "Face Off OG Bx1"
     ],
-    "aka": [
-      "Rocket"
-    ],
+    "aka": "Rocket",
     "id": "s2254"
   },
   {
@@ -72300,9 +71453,7 @@
       "Tangie",
       "Blueberry Muffin"
     ],
-    "aka": [
-      "Dirty Squirt"
-    ],
+    "aka": "Dirty Squirt",
     "id": "s2256"
   },
   {
@@ -72338,9 +71489,7 @@
       "GMO",
       "OZ Kush BX2"
     ],
-    "aka": [
-      "HFCS"
-    ],
+    "aka": "HFCS",
     "id": "s2257"
   },
   {
@@ -72398,11 +71547,7 @@
       "OG Kush",
       "Lemon Thai"
     ],
-    "aka": [
-      "Assassin OG",
-      "Soul Assassin OG Kush",
-      "Soul Assassin Kush"
-    ],
+    "aka": "Assassin OG, Soul Assassin OG Kush, Soul Assassin Kush",
     "id": "s2259"
   },
   {
@@ -72470,9 +71615,7 @@
       "Mad Scientist",
       "Timewreck"
     ],
-    "aka": [
-      "Doctor Who"
-    ],
+    "aka": "Doctor Who",
     "id": "s2261"
   },
   {
@@ -72599,10 +71742,7 @@
     "parents": [
       "OG Kush"
     ],
-    "aka": [
-      "Michael Phelps OG",
-      "Michael Phelps OG Kush"
-    ],
+    "aka": "Michael Phelps OG, Michael Phelps OG Kush",
     "id": "s2265"
   },
   {
@@ -72653,9 +71793,7 @@
       "Forum Cut Girl Scout Cookies",
       "OG Kush Breath 2.0"
     ],
-    "aka": [
-      "Cookies Breath"
-    ],
+    "aka": "Cookies Breath",
     "id": "s2267"
   },
   {
@@ -72708,10 +71846,7 @@
       "Great White Shark",
       "OG Kush"
     ],
-    "aka": [
-      "Shark OG",
-      "OG Shark"
-    ],
+    "aka": "Shark OG, OG Shark",
     "id": "s2269"
   },
   {
@@ -72734,9 +71869,7 @@
       "Blue Frost",
       "Gorilla Princess"
     ],
-    "aka": [
-      "Dancing Flame"
-    ],
+    "aka": "Dancing Flame",
     "id": "s2270"
   },
   {
@@ -72794,9 +71927,7 @@
       "Barney's Vanilla Kush",
       "Purple Pig"
     ],
-    "aka": [
-      "Kashmir"
-    ],
+    "aka": "Kashmir",
     "id": "s2272"
   },
   {
@@ -72943,9 +72074,7 @@
       "Sour Diesel",
       "Biker Kush"
     ],
-    "aka": [
-      "Headbanger Kush"
-    ],
+    "aka": "Headbanger Kush",
     "id": "s2277"
   },
   {
@@ -72971,10 +72100,7 @@
     "parents": [
       "Jamaican Landrace"
     ],
-    "aka": [
-      "Lamb's Bread",
-      "Jahweed"
-    ],
+    "aka": "Lamb's Bread, Jahweed",
     "id": "s2278"
   },
   {
@@ -73030,10 +72156,7 @@
     "parents": [
       "AK-47"
     ],
-    "aka": [
-      "Tutankhamon",
-      "Pharaoh"
-    ],
+    "aka": "Tutankhamon, Pharaoh",
     "id": "s2280"
   },
   {
@@ -73124,9 +72247,7 @@
       "Very Cherry",
       "Notorious THC"
     ],
-    "aka": [
-      "Jelly Rancher"
-    ],
+    "aka": "Jelly Rancher",
     "id": "s2283"
   },
   {
@@ -73149,9 +72270,7 @@
       "Green Crack",
       "Blue Dream"
     ],
-    "aka": [
-      "Charlie Sheen OG"
-    ],
+    "aka": "Charlie Sheen OG",
     "id": "s2284"
   },
   {
@@ -73185,10 +72304,7 @@
     "parents": [
       "1970s California Landrace"
     ],
-    "aka": [
-      "Cali Orange",
-      "Cali-O"
-    ],
+    "aka": "Cali Orange, Cali-O",
     "id": "s2285"
   },
   {
@@ -73304,12 +72420,7 @@
       "Predator OG",
       "Afghan Ghost"
     ],
-    "aka": [
-      "Phoenix",
-      "Royal Phoenix",
-      "Phoenix OG Kush",
-      "Phoenix Kush"
-    ],
+    "aka": "Phoenix, Royal Phoenix, Phoenix OG Kush, Phoenix Kush",
     "id": "s2289"
   },
   {
@@ -73336,11 +72447,7 @@
       "GMO Cookies",
       "Sunset Sherbet"
     ],
-    "aka": [
-      "Super Sherb #4",
-      "Super Sherbert",
-      "Sunset Sherb #4"
-    ],
+    "aka": "Super Sherb #4, Super Sherbert, Sunset Sherb #4",
     "id": "s2290"
   },
   {
@@ -73405,11 +72512,7 @@
       "Chemdawg",
       "OG Kush"
     ],
-    "aka": [
-      "Chem OG",
-      "Chemdog OG",
-      "Chemdawg OG"
-    ],
+    "aka": "Chem OG, Chemdog OG, Chemdawg OG",
     "id": "s2292"
   },
   {
@@ -73498,9 +72601,7 @@
       "Runtz",
       "Apples and Bananas"
     ],
-    "aka": [
-      "Hair Heads"
-    ],
+    "aka": "Hair Heads",
     "id": "s2295"
   },
   {
@@ -73528,11 +72629,7 @@
       "OG Kush",
       "Durban Poison"
     ],
-    "aka": [
-      "Platinum GSC",
-      "Platinum Girl Scout Cookies",
-      "PGSC"
-    ],
+    "aka": "Platinum GSC, Platinum Girl Scout Cookies, PGSC",
     "id": "s2296"
   },
   {
@@ -73659,10 +72756,7 @@
       "Purple Haze",
       "Unknown Haze Phenotype"
     ],
-    "aka": [
-      "Uptown Haze",
-      "NYC Haze"
-    ],
+    "aka": "Uptown Haze, NYC Haze",
     "id": "s2300"
   },
   {
@@ -73698,10 +72792,7 @@
       "White Fire Alien OG",
       "Gorilla Glue #4"
     ],
-    "aka": [
-      "White Glue",
-      "White Gorilla Glue"
-    ],
+    "aka": "White Glue, White Gorilla Glue",
     "id": "s2301"
   },
   {
@@ -73779,9 +72870,7 @@
       "Agent Orange",
       "Zkittlez"
     ],
-    "aka": [
-      "Orange Zkittles"
-    ],
+    "aka": "Orange Zkittles",
     "id": "s2304"
   },
   {
@@ -73813,9 +72902,7 @@
       "Maui Wowie",
       "Brooklyn Mango"
     ],
-    "aka": [
-      "Maui Mango Diesel"
-    ],
+    "aka": "Maui Mango Diesel",
     "id": "s2305"
   },
   {
@@ -73841,9 +72928,7 @@
       "DJ Short Blueberry",
       "William's Wonder F2"
     ],
-    "aka": [
-      "Major League Bud"
-    ],
+    "aka": "Major League Bud",
     "id": "s2306"
   },
   {
@@ -73901,9 +72986,7 @@
       "Purple Thai",
       "Afghani"
     ],
-    "aka": [
-      "Flo"
-    ],
+    "aka": "Flo",
     "id": "s2308"
   },
   {
@@ -73926,9 +73009,7 @@
       "GMO",
       "Strawberry Guava"
     ],
-    "aka": [
-      "Melted Strawberries"
-    ],
+    "aka": "Melted Strawberries",
     "id": "s2309"
   },
   {
@@ -74014,9 +73095,7 @@
       "I-95",
       "Mandarin Cookies"
     ],
-    "aka": [
-      "Crescendo RBx1"
-    ],
+    "aka": "Crescendo RBx1",
     "id": "s2312"
   },
   {
@@ -74044,11 +73123,7 @@
       "Venom OG",
       "Humboldt OG"
     ],
-    "aka": [
-      "All Gas",
-      "Gas",
-      "Asphalt Plant"
-    ],
+    "aka": "All Gas, Gas, Asphalt Plant",
     "id": "s2313"
   },
   {
@@ -74129,9 +73204,7 @@
     "parents": [
       "OG Kush"
     ],
-    "aka": [
-      "Marathon Kush"
-    ],
+    "aka": "Marathon Kush",
     "id": "s2316"
   },
   {
@@ -74158,11 +73231,7 @@
       "Sour Diesel",
       "Zkittlez"
     ],
-    "aka": [
-      "Sour Z",
-      "Sour Skittles",
-      "Sour Zkittles"
-    ],
+    "aka": "Sour Z, Sour Skittles, Sour Zkittles",
     "id": "s2317"
   },
   {
@@ -74228,9 +73297,7 @@
       "I-95",
       "Girl Scout Cookies Forum Cut"
     ],
-    "aka": [
-      "95 Cookies"
-    ],
+    "aka": "95 Cookies",
     "id": "s2319"
   },
   {
@@ -74266,11 +73333,7 @@
       "GMO Cookies",
       "Zkittlez x OG Kush"
     ],
-    "aka": [
-      "GMOZK",
-      "GMO Z",
-      "GMO'Z"
-    ],
+    "aka": "GMOZK, GMO Z, GMO'Z",
     "id": "s2320"
   },
   {
@@ -74298,11 +73361,7 @@
       "Girl Scout Cookies Forum Cut",
       "Trainwreck BXII"
     ],
-    "aka": [
-      "Cookie Trainwreck",
-      "GSC Wreck",
-      "GSC Trainwreck"
-    ],
+    "aka": "Cookie Trainwreck, GSC Wreck, GSC Trainwreck",
     "id": "s2321"
   },
   {
@@ -74330,9 +73389,7 @@
       "GG4",
       "Super Silver Chemdawg Haze"
     ],
-    "aka": [
-      "Krazy Glue"
-    ],
+    "aka": "Krazy Glue",
     "id": "s2322"
   },
   {
@@ -74486,9 +73543,7 @@
       "Hibachi Supreme",
       "The Menthol"
     ],
-    "aka": [
-      "Tokyo Sno"
-    ],
+    "aka": "Tokyo Sno",
     "id": "s2328"
   },
   {
@@ -74660,9 +73715,7 @@
       "Gary Payton",
       "Red Pop"
     ],
-    "aka": [
-      "Strawberry Gary Payton"
-    ],
+    "aka": "Strawberry Gary Payton",
     "id": "s2335"
   },
   {
@@ -74690,9 +73743,7 @@
       "Cheese",
       "Querkle"
     ],
-    "aka": [
-      "Cheesequake"
-    ],
+    "aka": "Cheesequake",
     "id": "s2336"
   },
   {
@@ -74715,10 +73766,7 @@
       "LA Pure Kush",
       "Appalachia"
     ],
-    "aka": [
-      "Pure Vida",
-      "Pure Life"
-    ],
+    "aka": "Pure Vida, Pure Life",
     "id": "s2337"
   },
   {
@@ -74854,10 +73902,7 @@
       "Lemon Kush BX5",
       "Humboldt Gelato BX3"
     ],
-    "aka": [
-      "Lemon Grass",
-      "Lemon Gas"
-    ],
+    "aka": "Lemon Grass, Lemon Gas",
     "id": "s2342"
   },
   {
@@ -75057,10 +74102,7 @@
       "Gorilla Glue #4",
       "Rozay"
     ],
-    "aka": [
-      "Smuckers",
-      "Schmuckerz"
-    ],
+    "aka": "Smuckers, Schmuckerz",
     "id": "s2349"
   },
   {
@@ -75094,10 +74136,7 @@
     "parents": [
       "OG Kush"
     ],
-    "aka": [
-      "Yesca OG",
-      "Yesca OG Kush"
-    ],
+    "aka": "Yesca OG, Yesca OG Kush",
     "id": "s2350"
   },
   {
@@ -75133,10 +74172,7 @@
       "Sour Diesel",
       "Forum Cookies"
     ],
-    "aka": [
-      "This Is The Shit",
-      "Tits"
-    ],
+    "aka": "This Is The Shit, Tits",
     "id": "s2351"
   }
 ]

@@ -27,11 +27,11 @@ const storage = require('./lib/storage');
 const PORT = process.env.PORT || 3000;
 
 // ---------------------------------------------------------------- basic signup rate limiting
-// Persisted to the database (see db.js's rate_limit_attempts table) rather
-// than kept in memory, so the limit survives Render restarts and
-// redeploys instead of quietly resetting every time the free-tier
-// service spins down and back up. Max 5 signup attempts per IP per 15
-// minutes.
+// A simple in-memory per-IP throttle -- not bulletproof (resets on
+// restart, doesn't help behind a shared IP like a school or office), but
+// stops the easy case: a bot or script hammering /signup. Max 5 signup
+// attempts per IP per 15 minutes.
+const signupAttempts = new Map(); // ip -> array of timestamps (ms)
 const SIGNUP_WINDOW_MS = 15 * 60 * 1000;
 const SIGNUP_MAX_ATTEMPTS = 5;
 function clientIp(req) {
@@ -39,11 +39,13 @@ function clientIp(req) {
   if (fwd) return fwd.split(',')[0].trim();
   return req.socket.remoteAddress || 'unknown';
 }
-async function isSignupRateLimited(req) {
+function isSignupRateLimited(req) {
   const ip = clientIp(req);
-  const count = await db.pruneAndCountAttempts('signup', ip, SIGNUP_WINDOW_MS);
-  await db.recordRateLimitAttempt('signup', ip);
-  return count + 1 > SIGNUP_MAX_ATTEMPTS;
+  const now = Date.now();
+  const attempts = (signupAttempts.get(ip) || []).filter(t => now - t < SIGNUP_WINDOW_MS);
+  attempts.push(now);
+  signupAttempts.set(ip, attempts);
+  return attempts.length > SIGNUP_MAX_ATTEMPTS;
 }
 
 // ---------------------------------------------------------------- basic login rate limiting
@@ -51,24 +53,28 @@ async function isSignupRateLimited(req) {
 // brute-forcing one account's password, without penalizing everyone on a
 // shared network (school, office) for one person's typos. Only failed
 // attempts count -- a successful login clears the counter. Max 5 failed
-// attempts per 15 minutes per IP+username combination. Same
-// database-backed persistence as signup rate limiting, for the same reason.
+// attempts per 15 minutes per IP+username combination.
+const loginAttempts = new Map(); // "ip:username" -> array of failed-attempt timestamps
 const LOGIN_WINDOW_MS = 15 * 60 * 1000;
 const LOGIN_MAX_ATTEMPTS = 5;
 function loginAttemptKey(req, username) {
   return `${clientIp(req)}:${String(username || '').trim().toLowerCase()}`;
 }
-async function isLoginRateLimited(req, username) {
+function isLoginRateLimited(req, username) {
   const key = loginAttemptKey(req, username);
-  const count = await db.pruneAndCountAttempts('login', key, LOGIN_WINDOW_MS);
-  return count >= LOGIN_MAX_ATTEMPTS;
+  const now = Date.now();
+  const attempts = (loginAttempts.get(key) || []).filter(t => now - t < LOGIN_WINDOW_MS);
+  return attempts.length >= LOGIN_MAX_ATTEMPTS;
 }
-async function recordFailedLogin(req, username) {
+function recordFailedLogin(req, username) {
   const key = loginAttemptKey(req, username);
-  await db.recordRateLimitAttempt('login', key);
+  const now = Date.now();
+  const attempts = (loginAttempts.get(key) || []).filter(t => now - t < LOGIN_WINDOW_MS);
+  attempts.push(now);
+  loginAttempts.set(key, attempts);
 }
-async function clearLoginAttempts(req, username) {
-  await db.clearRateLimitAttempts('login', loginAttemptKey(req, username));
+function clearLoginAttempts(req, username) {
+  loginAttempts.delete(loginAttemptKey(req, username));
 }
 const PUBLIC_DIR = path.join(__dirname, 'public');
 const DOCS_DIR = path.join(__dirname, 'docs');
@@ -205,17 +211,9 @@ function kudosGiversLabel(checkinId) {
   // investigated further.
   const givers = db.listCheckinKudosGivers(checkinId).filter(u => u && u.username);
   if (!givers.length) return '';
-  // Each giver links to their profile so "who gave kudos" is something you
-  // can actually click into, not just a name -- same /friends/:id page used
-  // everywhere else in the app (gated the same way: friends and yourself).
-  const linkFor = (u) => `<a href="/friends/${u.id}" style="color:inherit;text-decoration:underline;">${esc(u.username)}</a>`;
-  const shown = givers.slice(0, 3);
-  const rest = givers.slice(3);
-  const shownHtml = shown.map(linkFor).join(', ');
-  const restHtml = rest.length
-    ? ` <details style="display:inline-block;vertical-align:top;"><summary style="display:inline;cursor:pointer;">and ${rest.length} more</summary> ${rest.map(linkFor).join(', ')}</details>`
-    : '';
-  return `<div class="empty-note kudos-givers-label" style="padding:2px 0 0;text-align:right;">🌿 ${shownHtml}${restHtml}</div>`;
+  const names = givers.slice(0, 3).map(u => esc(u.username));
+  const extra = givers.length - names.length;
+  return `<div class="empty-note kudos-givers-label" style="padding:2px 0 0;text-align:right;">🌿 ${names.join(', ')}${extra > 0 ? ` and ${extra} more` : ''}</div>`;
 }
 // The kudos button itself -- reflects whether the current viewer has
 // already given kudos on page load (not just after clicking), and is
@@ -264,169 +262,6 @@ function renderCheckinComments(c, userId, redirectPath) {
 // A small original cartoon-bud icon used on kudos buttons — hand-drawn SVG,
 // not a stock asset, so there's no licensing question about using it.
 function rarityLabel(r) { return { common: 'Common', uncommon: 'Uncommon', rare: 'Rare', legendary: 'Legendary' }[r] || r; }
-
-// Maps each mood/effect tag to a position on a calming <-> energizing
-// spectrum, from -1 (deeply calming) to +1 (highly energizing). Used to
-// compute the visual bar on a strain's detail page. Genuine side-effect
-// tags (Dry Mouth, Paranoid, Red-eyed...) and relief tags (Pain relief,
-// Nausea relief...) are left out of this map entirely rather than forced
-// into a direction they don't really have -- they're skipped when
-// averaging, not counted as neutral, since neutral would still be a
-// claim about them that isn't really true.
-const EFFECT_ENERGY_MAP = {
-  'Energetic': 1, 'Wired': 1, 'Alert': 1, 'Motivated': 1, 'Spirited': 1, 'Jittery': 1,
-  'Uplifted': 0.7, 'Talkative': 0.7, 'Focused': 0.7, 'Chatty': 0.7, 'Social': 0.7,
-  'Sociable': 0.7, 'Productive': 0.7, 'In-the-zone': 0.7, 'Adventurous': 0.7,
-  'Curious': 0.7, 'Sharp': 0.7, 'Confident': 0.7, 'Elevated': 0.7,
-  'Euphoric': 0.4, 'Creative': 0.4, 'Giggly': 0.4, 'Playful': 0.4, 'Silly': 0.4,
-  'Inspired': 0.4, 'Refreshed': 0.4, 'Rejuvenated': 0.4, 'Buzzy': 0.4, 'Loose': 0.4,
-  'Free-spirited': 0.4,
-  'Happy': 0, 'Blissful': 0, 'Present': 0, 'Grounded': 0, 'Warm': 0, 'Observant': 0,
-  'Airy': 0, 'Introspective': 0, 'Dreamy': 0, 'Nostalgic': 0, 'Cuddly': 0, 'Cozy': 0,
-  'Easygoing': 0, 'Clear-headed': 0,
-  'Calm': -0.4, 'Mellow': -0.4, 'Chill': -0.4, 'Peaceful': -0.4, 'Serene': -0.4,
-  'Tranquil': -0.4, 'Floaty': -0.4, 'Light-headed': -0.4,
-  'Relaxed': -0.7, 'Sedated': -0.7, 'Groggy': -0.7, 'Spacey': -0.7, 'Foggy': -0.7,
-  'Zoned-out': -0.7, 'Heavy-limbed': -0.7, 'Slowed-down': -0.7, 'Heavy-eyed': -0.7,
-  'Yawny': -0.7,
-  'Sleepy': -1, 'Couch-locked': -1,
-};
-// Returns 0-100 (0 = fully calming end, 100 = fully energizing end) or
-// null if none of the strain's tagged effects have a mapped direction --
-// showing no bar at all is more honest than a fake halfway point.
-function effectEnergyPercent(effects) {
-  const scores = (effects || []).map(e => EFFECT_ENERGY_MAP[e]).filter(v => v !== undefined);
-  if (!scores.length) return null;
-  const avg = scores.reduce((a, b) => a + b, 0) / scores.length;
-  return Math.round(((avg + 1) / 2) * 100);
-}
-// A condensed version of the calming/energizing spectrum bar for tight
-// spaces (comparison table cells, recommendation cards) -- just a thin
-// track with a single dot marker, no labels. Returns '' when a strain
-// has no usable effect data, same rule as the full-size bar.
-function renderMiniEnergyBar(effects) {
-  const pct = effectEnergyPercent(effects);
-  if (pct === null) return '';
-  return `<div class="mini-spectrum" title="Calming ↔ Energizing"><div class="track"><div class="dot" style="left:${pct}%;"></div></div></div>`;
-}
-// Parses a THC string like "20-25%", "23%", or "88-93%" into a 0-100 bar
-// position. Anything at or above THC_BAR_CEILING reads as fully "high" --
-// this is a flower-scaled bar, so a concentrate-potency strain (Live
-// Rosin, Liquid Diamonds...) simply pins to the right edge rather than
-// needing its own separate scale. Returns null for strains with no THC
-// data on file, rather than guessing a position.
-const THC_BAR_CEILING = 35;
-function thcBarPercent(thcStr) {
-  if (!thcStr) return null;
-  const nums = String(thcStr).match(/\d+(\.\d+)?/g);
-  if (!nums || !nums.length) return null;
-  const avg = nums.map(Number).reduce((a, b) => a + b, 0) / nums.length;
-  return Math.min(100, Math.round((avg / THC_BAR_CEILING) * 100));
-}
-
-// A short flavor-family tag + icon per terpene, used to build a "Top
-// Flavors" section directly from a strain's real, already-verified
-// terpene percentages -- rather than trying to re-derive flavor tags by
-// keyword-guessing the free-text flavor sentence, which risks reading
-// something into it that isn't really there. A strain with no terpene
-// data on file simply doesn't get this section, same principle as the
-// spectrum bars above.
-const TERPENE_FLAVOR_TAG = {
-  Myrcene: { label: 'Earthy', icon: '🌍' },
-  Linalool: { label: 'Floral', icon: '🌸' },
-  Limonene: { label: 'Citrus', icon: '🍋' },
-  Caryophyllene: { label: 'Peppery', icon: '🌶️' },
-  Pinene: { label: 'Piney', icon: '🌲' },
-  Humulene: { label: 'Woody', icon: '🪵' },
-  Terpinolene: { label: 'Herbal', icon: '🌿' },
-  Ocimene: { label: 'Sweet', icon: '🍯' },
-};
-// A consistent color per terpene, used for the small dot next to each
-// name in the "Top terpenes" line -- same terpene always gets the same
-// color everywhere it appears on a strain's page.
-const TERPENE_COLOR = {
-  Myrcene: '#4a5fc1', Caryophyllene: '#c0397a', Pinene: '#3d8b52', Limonene: '#d4a017',
-  Linalool: '#8a63c9', Humulene: '#8a6d4a', Terpinolene: '#2a9d8f', Ocimene: '#e07b39',
-};
-// The color of a strain's single most-dominant terpene (by percentage),
-// for a quick visual hint on cards where there's no room for a full
-// terpene breakdown. Returns null for a strain with no terpene data.
-function dominantTerpColor(terps) {
-  if (!terps || !terps.length) return null;
-  const top = [...terps].sort((a, b) => b.p - a.p)[0];
-  return TERPENE_COLOR[top.n] || null;
-}
-// Average of a THC range string like "20-25%" -> 22.5. Returns null if
-// the field is blank -- used only for the similarity score below, kept
-// separate from thcBarPercent() since that one needs a 0-100 bar
-// position, not a raw percentage.
-function thcAverage(thcStr) {
-  if (!thcStr) return null;
-  const nums = String(thcStr).match(/\d+(\.\d+)?/g);
-  if (!nums || !nums.length) return null;
-  return nums.map(Number).reduce((a, b) => a + b, 0) / nums.length;
-}
-// A transparent, explainable "how similar are these two strains"
-// percentage for the Compare page. Combines type match, effect overlap,
-// terpene overlap, and THC closeness -- each only counted if BOTH
-// strains actually have that data, with the remaining weights
-// renormalized so a strain missing one field isn't unfairly marked
-// "dissimilar" on it. Returns null only if there's no comparable data
-// between the two at all.
-function strainSimilarity(a, b) {
-  let totalWeight = 0, weightedScore = 0;
-
-  totalWeight += 20;
-  weightedScore += 20 * (a.type === b.type ? 1 : 0.3);
-
-  if (a.effects.length && b.effects.length) {
-    const setA = new Set(a.effects), setB = new Set(b.effects);
-    const intersection = [...setA].filter(x => setB.has(x)).length;
-    const union = new Set([...setA, ...setB]).size;
-    totalWeight += 35;
-    weightedScore += 35 * (union > 0 ? intersection / union : 0);
-  }
-
-  if (a.terps.length && b.terps.length) {
-    const setA = new Set(a.terps.map(t => t.n)), setB = new Set(b.terps.map(t => t.n));
-    const intersection = [...setA].filter(x => setB.has(x)).length;
-    const union = new Set([...setA, ...setB]).size;
-    totalWeight += 30;
-    weightedScore += 30 * (union > 0 ? intersection / union : 0);
-  }
-
-  const aThc = thcAverage(a.thc), bThc = thcAverage(b.thc);
-  if (aThc !== null && bThc !== null) {
-    totalWeight += 15;
-    weightedScore += 15 * Math.max(0, 1 - Math.abs(aThc - bThc) / 30);
-  }
-
-  if (totalWeight === 0) return null;
-  return Math.round((weightedScore / totalWeight) * 100);
-}
-// One small icon per mood/effect tag, shown next to the effect's name
-// wherever it's displayed on a strain's page.
-const EFFECT_ICON = {
-  Relaxed: '😌', Happy: '😊', Euphoric: '🤩', Uplifted: '🎈', Creative: '🎨',
-  Energetic: '⚡', Focused: '🎯', Talkative: '💬', Sleepy: '😴', Hungry: '🍕',
-  Calm: '🕊️', 'Clear-headed': '🧠', Giggly: '😄', Social: '👥', Tingly: '✨',
-  Aroused: '💗', Anxious: '😟', Paranoid: '👀', 'Dry Mouth': '🥤', 'Dry Eyes': '👁️',
-  Dizzy: '💫', Mellow: '🍃', Chill: '🧊', 'Zoned-out': '🌀', Introspective: '🪞',
-  Blissful: '😇', Sedated: '💤', 'Couch-locked': '🛋️', Buzzy: '🔋', Floaty: '🎈',
-  Grounded: '🌳', Present: '🧘', Warm: '☀️', 'Light-headed': '💫', 'Heavy-limbed': '🏋️',
-  Alert: '👀', Sharp: '🔪', Inspired: '💡', Playful: '🎉', Silly: '🤪',
-  Confident: '💪', Chatty: '🗣️', Cuddly: '🤗', Dreamy: '💭', Nostalgic: '📼',
-  Peaceful: '🕊️', Serene: '🌊', Refreshed: '🌿', Rejuvenated: '🌱', Cozy: '🧸',
-  Sociable: '🎊', Easygoing: '🌤️', Adventurous: '🧭', Curious: '🔍', Observant: '👁️',
-  'In-the-zone': '🎯', Productive: '✅', Wired: '🔌', Jittery: '⚡', Foggy: '🌫️',
-  Groggy: '🥱', Spacey: '🌌', Munchies: '🍔', Thirsty: '🥤', 'Red-eyed': '👁️',
-  Lightweight: '🪶', 'Heavy-eyed': '😑', Yawny: '🥱', Motivated: '🚀', Amorous: '💕',
-  Loose: '🎐', 'Free-spirited': '🦋', Tranquil: '🌅', Elevated: '🎈', Airy: '☁️',
-  'Slowed-down': '🐌', Spirited: '🔥', 'Numb (localized)': '🧊',
-  'Stress relief': '🧘', 'Pain relief': '💊', 'Sleep support': '🌙', 'Nausea relief': '🍵',
-  'Appetite boost': '🍽️', 'Inflammation relief': '❄️', 'Muscle relief': '💆', 'Mood lift': '☀️',
-};
-
 // A small original cartoon-bud icon used on kudos buttons — hand-drawn SVG,
 // not a stock asset, so there's no licensing question about using it.
 const KUDOS_BUD_ICON = `<img src="/docs/leaf-kudos.png" alt="" width="15" height="15" style="vertical-align:-3px;margin-right:4px;">`;
@@ -569,9 +404,6 @@ function pageHome(req, res) {
   const recentCheckins = db.filterVisibleCheckins(db.listCheckins({ userIds: feedUserIds, limit: 30 }), userId).slice(0, 15);
   const recs = getRecommendations(userId, 4);
   const hasFollowedDispensaries = db.anyDispensaryFollowed(userId);
-  const ownedForLegend = db.getCollection(userId);
-  const homeRarityCounts = { common: 0, uncommon: 0, rare: 0, legendary: 0 };
-  ownedForLegend.forEach(o => { if (homeRarityCounts[o.strain.rarity] != null) homeRarityCounts[o.strain.rarity]++; });
   // "Welcome back" doesn't make sense the very first time someone lands
   // here right after signing up -- check whether this account has ever
   // actually logged a check-in of its own before deciding which greeting
@@ -588,26 +420,15 @@ function pageHome(req, res) {
       ${recs.map(r => `
         <a class="rec-card rarity-${r.s.rarity}" href="/strains/${r.s.id}">
           ${strainPhotoTag(r.s, 'sm')}
-          <span class="n">${(() => { const c = dominantTerpColor(r.s.terps); return c ? `<span class="terp-dot" style="background:${c};"></span>` : ''; })()}${esc(r.s.name)}</span>
+          <span class="n">${esc(r.s.name)}</span>
           <span class="why">${r.why ? 'Because you like ' + esc(r.why) : 'New for you'}</span>
-          ${renderMiniEnergyBar(r.s.effects)}
         </a>`).join('')}
     </div>
 
     <div class="section-label">Dispensaries</div>
     <a class="btn secondary block" href="/dispensaries" style="text-decoration:none;margin-bottom:4px;">${hasFollowedDispensaries ? '📍 View your followed dispensaries →' : '📍 Find real dispensaries near you →'}</a>
 
-    ${ownedForLegend.length ? `
-      <a href="/collection" style="text-decoration:none;color:inherit;">
-        <div class="rarity-mini-legend" style="margin-top:20px;margin-bottom:2px;">
-          <span><span class="dot common"></span>Common ${homeRarityCounts.common}</span>
-          <span><span class="dot uncommon"></span>Uncommon ${homeRarityCounts.uncommon}</span>
-          <span><span class="dot rare"></span>Rare ${homeRarityCounts.rare}</span>
-          <span><span class="dot legendary"></span>Legendary ${homeRarityCounts.legendary}</span>
-        </div>
-      </a>
-    ` : ''}
-    <h2 class="screen-title" style="margin-top:${ownedForLegend.length ? '4px' : '20px'};">${friends.length ? 'Recent activity' : 'Recent check-ins'}</h2>
+    <h2 class="screen-title" style="margin-top:20px;">${friends.length ? 'Recent activity' : 'Recent check-ins'}</h2>
     ${friends.length && recentCheckins.every(c => c.user_id === userId) ? `<p class="empty-note">None of your friends have checked in yet — once they do, it'll show up here too.</p>` : ''}
     ${recentCheckins.length ? recentCheckins.map(c => {
       const s = db.getStrain(c.strain_id);
@@ -622,9 +443,9 @@ function pageHome(req, res) {
           ${strainPhotoTag(s, 'xs')}
           <span><b>${esc(s ? s.name : c.strain_id)}</b> ${s ? `<span class="rarity-tag rarity-${s.rarity}">${rarityLabel(s.rarity)}</span>` : ''}</span>
         </a>
-        <div class="sub" style="margin-top:8px;">${esc(c.method)} · ${starString(c.rating)}${c.brand ? ` · ${esc(c.brand)}` : ''}</div>
+        <div class="sub" style="margin-top:8px;">${esc(c.method)} · ${starString(c.rating)}</div>
         ${c.photo ? `<img class="photo-thumb" src="${esc(c.photo)}" alt="photo">` : ''}
-        ${(c.effects || []).length ? `<div class="effect-tags">${c.effects.map(e => `<span>${EFFECT_ICON[e] ? EFFECT_ICON[e] + ' ' : ''}${esc(e)}</span>`).join('')}</div>` : ''}
+        ${(c.effects || []).length ? `<div class="effect-tags">${c.effects.map(e => `<span>${esc(e)}</span>`).join('')}</div>` : ''}
         ${c.note ? `<div class="note">"${esc(c.note)}"</div>` : ''}
         ${renderCheckinPairings(c)}
         ${renderOnsetTimer(c)}
@@ -665,24 +486,22 @@ function pageStrains(req, res, query) {
   const body = `
     <h1 class="screen-title">Strain Library</h1>
     <p class="screen-sub">${total.toLocaleString()} strains — search by name, flavor, effect, THC level, terpene, or relief.</p>
-    ${query.get('submitted') ? `<p class="empty-note" style="color:var(--brand-green-dark);">Thanks — we've got it and will take a look.</p>` : ''}
-    <a href="/strains/submit" class="btn secondary block" style="text-decoration:none;margin-bottom:12px;">🔍 Can't find a strain? Tell us what's missing</a>
     <form method="GET" action="/strains" id="strain-search-form" style="margin-bottom:12px;">
       <input type="search" name="q" id="strain-search-input" value="${esc(q)}" placeholder="Search by name or flavor..." autocomplete="off">
     </form>
-    <div class="section-label" style="margin-top:2px;">Type</div>
-    <div id="strain-search-type-pills" style="margin-bottom:10px;">${typeOpts.map(t => `<button type="button" class="filter-pill ${type === t ? 'active' : ''}" data-value="${esc(t)}">${t}</button>`).join('')}</div>
-    <input type="hidden" id="strain-search-type" name="type" form="strain-search-form" value="${esc(type)}">
-    <div class="section-label">Rarity</div>
-    <div id="strain-search-rarity-pills" style="margin-bottom:10px;">${rarityOpts.map(r => `<button type="button" class="filter-pill ${rarity === r ? 'active' : ''}" data-value="${esc(r)}">${r === 'All' ? 'All' : rarityLabel(r)}</button>`).join('')}</div>
-    <input type="hidden" id="strain-search-rarity" name="rarity" form="strain-search-form" value="${esc(rarity)}">
-    <div class="section-label">THC level</div>
-    <div id="strain-search-thc-pills" style="margin-bottom:10px;">${thcOpts.map(t => `<button type="button" class="filter-pill ${thc === t ? 'active' : ''}" data-value="${esc(t)}">${thcLabel[t]}</button>`).join('')}</div>
-    <input type="hidden" id="strain-search-thc" name="thc" form="strain-search-form" value="${esc(thc)}">
-    <div class="section-label">Data quality</div>
-    <div id="strain-search-verified-pills" style="margin-bottom:12px;">${verifiedOpts.map(v => `<button type="button" class="filter-pill ${verified === v ? 'active' : ''}" data-value="${esc(v)}">${verifiedLabel[v]}</button>`).join('')}</div>
-    <input type="hidden" id="strain-search-verified" name="verified" form="strain-search-form" value="${esc(verified)}">
     <div class="filter-grid">
+      <div class="filter-group">
+        <div class="section-label" style="margin-bottom:4px;">Type</div>
+        <select id="strain-search-type" name="type" form="strain-search-form">${typeOpts.map(t => `<option value="${esc(t)}" ${type === t ? 'selected' : ''}>${t}</option>`).join('')}</select>
+      </div>
+      <div class="filter-group">
+        <div class="section-label" style="margin-bottom:4px;">Rarity</div>
+        <select id="strain-search-rarity" name="rarity" form="strain-search-form">${rarityOpts.map(r => `<option value="${esc(r)}" ${rarity === r ? 'selected' : ''}>${r === 'All' ? 'All rarities' : rarityLabel(r)}</option>`).join('')}</select>
+      </div>
+      <div class="filter-group">
+        <div class="section-label" style="margin-bottom:4px;">THC level</div>
+        <select id="strain-search-thc" name="thc" form="strain-search-form">${thcOpts.map(t => `<option value="${esc(t)}" ${thc === t ? 'selected' : ''}>${thcLabel[t]}</option>`).join('')}</select>
+      </div>
       <div class="filter-group">
         <div class="section-label" style="margin-bottom:4px;">Feeling like...</div>
         <select id="strain-search-effect" name="effect" form="strain-search-form">${effectOpts.map(e => `<option value="${esc(e)}" ${effect === e ? 'selected' : ''}>${e === 'All' ? 'Any effect' : e}</option>`).join('')}</select>
@@ -695,20 +514,23 @@ function pageStrains(req, res, query) {
         <div class="section-label" style="margin-bottom:4px;">Relief from...</div>
         <select id="strain-search-ailment" name="ailment" form="strain-search-form">${ailmentOpts.map(a => `<option value="${esc(a)}" ${ailment === a ? 'selected' : ''}>${a === 'All' ? 'Anything' : a}</option>`).join('')}</select>
       </div>
+      <div class="filter-group">
+        <div class="section-label" style="margin-bottom:4px;">Data quality</div>
+        <select id="strain-search-verified" name="verified" form="strain-search-form">${verifiedOpts.map(v => `<option value="${esc(v)}" ${verified === v ? 'selected' : ''}>${verifiedLabel[v]}</option>`).join('')}</select>
+      </div>
     </div>
     <p class="empty-note" style="margin-bottom:2px;">✅ Verified — THC, breeder, and flavor/terpene data all independently confirmed. &nbsp; 🔹 Partial — some details confirmed. &nbsp; ⚪ Listed only — seen on a dispensary menu, nothing independently confirmed yet.</p>
     <p class="empty-note" style="margin-bottom:10px;">User-reported associations, not medical advice — see a doctor for real guidance.</p>
-    <p class="empty-note" id="strain-search-count">${total.toLocaleString()} strain${total === 1 ? '' : 's'}</p>
+    <p class="empty-note" id="strain-search-count">${total > 60 ? `Showing 60 of ${total.toLocaleString()} — refine your search to narrow it down.` : `${total} strain${total === 1 ? '' : 's'}`}</p>
     <div id="strain-search-results">${results.map(s => `
-      <a class="library-row tier-${strainVerificationTier(s)}" href="/strains/${s.id}" style="text-decoration:none;color:inherit;">
+      <a class="library-row" href="/strains/${s.id}" style="text-decoration:none;color:inherit;">
         ${strainPhotoTag(s, 'sm')}
         <div class="info">
-          <div class="nm">${s.effects[0] && EFFECT_ICON[s.effects[0]] ? EFFECT_ICON[s.effects[0]] + ' ' : ''}${esc(s.name)} <span title="${esc(VERIFICATION_BADGE[strainVerificationTier(s)].label)}">${VERIFICATION_BADGE[strainVerificationTier(s)].icon}</span></div>
+          <div class="nm">${esc(s.name)} <span title="${esc(VERIFICATION_BADGE[strainVerificationTier(s)].label)}">${VERIFICATION_BADGE[strainVerificationTier(s)].icon}</span></div>
           <div class="sub">${esc(s.type)} · ${rarityLabel(s.rarity)} · THC ${esc(s.thc)}</div>
         </div>
         <span class="rarity-tag rarity-${s.rarity}">${rarityLabel(s.rarity)}</span>
       </a>`).join('') || `<div class="empty-note">No strains match your filters.</div>`}</div>
-    <div id="strain-load-more-container">${total > results.length ? `<button type="button" class="btn secondary block" id="strain-load-more-btn" style="margin-top:10px;">Load ${Math.min(60, total - results.length)} more (${results.length} of ${total.toLocaleString()} shown)</button>` : ''}</div>
   `;
   sendHtml(res, layout({ title: 'Strains', active: 'strains', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
@@ -778,6 +600,7 @@ function pageStrainDetail(req, res, id) {
         ${strainPhotoTag(s, 'lg')}
         <div>
           <h1 style="margin:0;font-size:19px;">${esc(s.name)}</h1>
+          ${s.aka ? `<div class="empty-note" style="padding:0;"><u>aka</u> ${esc(s.aka)}</div>` : ''}
           <div class="empty-note" style="padding:0;">${esc(s.type)}${s.lean ? ' · ' + esc(s.lean) : ''} · <span class="rarity-tag rarity-${s.rarity}">${rarityLabel(s.rarity)}</span></div>
           <div style="margin-top:2px;" title="${esc(VERIFICATION_BADGE[strainVerificationTier(s)].note)}"><span class="empty-note" style="padding:0;">${VERIFICATION_BADGE[strainVerificationTier(s)].icon} ${VERIFICATION_BADGE[strainVerificationTier(s)].label}</span></div>
           ${ratingStats.count ? `<div style="margin-top:2px;">${starString(Math.round(ratingStats.avg))} <span class="empty-note" style="padding:0;">${ratingStats.avg}★ from ${ratingStats.count} check-in${ratingStats.count === 1 ? '' : 's'}</span></div>` : `<div class="empty-note" style="padding:2px 0 0;">No community ratings yet — be the first to check in.</div>`}
@@ -786,51 +609,8 @@ function pageStrainDetail(req, res, id) {
       ${(s.thc || s.cbd) ? `<p style="margin:12px 0 4px;">${s.thc ? `<b>THC:</b> ${esc(s.thc)}` : ''}${s.thc && s.cbd ? ' &nbsp; ' : ''}${s.cbd ? `<b>CBD:</b> ${esc(s.cbd)}` : ''}</p>` : `<p class="empty-note" style="padding:0 0 4px;">No verified THC/CBD data for this strain yet.</p>`}
       ${s.breeder ? `<p class="empty-note" style="padding:0;"><b>Bred by:</b> ${esc(s.breeder)}</p>` : ''}
       ${s.flavor ? `<p style="font-style:italic;color:var(--ink-secondary);">"${esc(s.flavor)}"</p>` : ''}
-      <p>${s.effects.map(e => `<span class="filter-pill">${EFFECT_ICON[e] ? EFFECT_ICON[e] + ' ' : ''}${esc(e)}</span>`).join('')}</p>
-      ${s.terps.length ? `
-        <div style="margin-top:10px;">
-          <b style="font-size:13px;">Top terpenes</b>
-          ${(() => {
-            const maxP = Math.max(...s.terps.map(t => t.p));
-            return s.terps.map(t => {
-              const color = TERPENE_COLOR[t.n] || 'var(--ink-muted)';
-              const widthPct = maxP > 0 ? Math.round((t.p / maxP) * 100) : 0;
-              return `
-                <div style="display:flex;align-items:center;gap:8px;margin-top:6px;">
-                  <span style="width:92px;flex-shrink:0;font-size:12.5px;"><span class="terp-dot" style="background:${color};"></span>${esc(t.n)}</span>
-                  <div class="track" style="flex:1;height:7px;background:#e9e7dd;border-radius:99px;overflow:hidden;">
-                    <div style="height:100%;width:${widthPct}%;background:${color};border-radius:99px;"></div>
-                  </div>
-                  <span style="font-size:12px;color:var(--ink-secondary);width:34px;text-align:right;flex-shrink:0;">${Math.round(t.p * 100)}%</span>
-                </div>
-              `;
-            }).join('');
-          })()}
-        </div>
-      ` : ''}
-      ${(() => {
-        const topFlavorTerps = [...s.terps].sort((a, b) => b.p - a.p).filter(t => TERPENE_FLAVOR_TAG[t.n]).slice(0, 3);
-        if (!topFlavorTerps.length) return '';
-        return `<p><b>Top flavors:</b> ${topFlavorTerps.map(t => `<span class="filter-pill">${TERPENE_FLAVOR_TAG[t.n].icon} ${TERPENE_FLAVOR_TAG[t.n].label}</span>`).join('')}</p>`;
-      })()}
-      ${(() => {
-        const energyPct = effectEnergyPercent(s.effects);
-        const thcPct = thcBarPercent(s.thc);
-        return `
-          ${energyPct !== null ? `
-            <div class="spectrum-bar">
-              <div class="labels"><span>Calming</span><span>Energizing</span></div>
-              <div class="track"><div class="fill" style="width:${energyPct}%;"></div></div>
-            </div>
-          ` : ''}
-          ${thcPct !== null ? `
-            <div class="spectrum-bar">
-              <div class="labels"><span>Low THC</span><span>High THC</span></div>
-              <div class="track"><div class="fill" style="width:${thcPct}%;"></div></div>
-            </div>
-          ` : ''}
-        `;
-      })()}
+      <p>${s.effects.map(e => `<span class="filter-pill">${esc(e)}</span>`).join('')}</p>
+      ${s.terps.length ? `<p><b>Top terpenes:</b> ${s.terps.map(t => `${esc(t.n)} (${Math.round(t.p * 100)}%)`).join(', ')}</p>` : ''}
       ${Array.isArray(s.ailments) && s.ailments.length ? `
         <p style="margin:10px 0 2px;"><b>Users report relief from:</b> ${s.ailments.map(a => `<span class="filter-pill">${esc(a)}</span>`).join(' ')}</p>
         <p class="empty-note" style="padding:0;">User-reported, not medical advice — see a doctor for real guidance.</p>
@@ -876,9 +656,8 @@ function pageStrainDetail(req, res, id) {
         ${similar.map(r => `
           <a class="rec-card rarity-${r.s.rarity}" href="/strains/${r.s.id}">
             ${strainPhotoTag(r.s, 'sm')}
-            <span class="n">${(() => { const c = dominantTerpColor(r.s.terps); return c ? `<span class="terp-dot" style="background:${c};"></span>` : ''; })()}${esc(r.s.name)}</span>
+            <span class="n">${esc(r.s.name)}</span>
             <span class="why">${r.why ? 'Shares ' + esc(r.why) : 'Similar profile'}</span>
-            ${renderMiniEnergyBar(r.s.effects)}
           </a>`).join('')}
       </div>
     ` : ''}
@@ -889,12 +668,12 @@ function pageStrainDetail(req, res, id) {
         ${c.photo ? `<div class="checkin-photo-thumb"><img src="${esc(c.photo)}" alt="Your photo"></div>` : ''}
         <div style="flex:1;min-width:0;">
           <div style="display:flex;justify-content:space-between;align-items:baseline;">
-            <b>${esc(c.method)}${c.brand ? ` <span class="empty-note" style="padding:0;">· ${esc(c.brand)}</span>` : ''}</b>
+            <b>${esc(c.method)}</b>
             <a href="/checkin/${c.id}/edit" class="empty-note" style="padding:0;">Edit</a>
           </div>
           ${starString(c.rating)}
           <div class="empty-note" style="padding:2px 0 0;"><span class="local-time" data-utc="${c.created_at}Z">${esc(c.created_at)} UTC</span></div>
-          ${(c.effects || []).length ? `<p style="margin:6px 0 0;">${c.effects.map(e => `<span class="filter-pill">${EFFECT_ICON[e] ? EFFECT_ICON[e] + ' ' : ''}${esc(e)}</span>`).join('')}</p>` : ''}
+          ${(c.effects || []).length ? `<p style="margin:6px 0 0;">${c.effects.map(e => `<span class="filter-pill">${esc(e)}</span>`).join('')}</p>` : ''}
           ${c.note ? `<span class="empty-note" style="display:block;padding:4px 0 0;">${esc(c.note)}</span>` : ''}
         ${renderCheckinPairings(c)}
         ${renderOnsetTimer(c)}
@@ -1032,14 +811,8 @@ function pageCheckinForm(req, res, query, existing) {
       <select name="method" id="checkin-method-select" onchange="toggleEdibleWarning(this.value)">${METHOD_GROUPS.map(g => `<optgroup label="${esc(g.group)}">${g.items.map(m => `<option ${existing && existing.method === m ? 'selected' : ''}>${esc(m)}</option>`).join('')}</optgroup>`).join('')}</select>
       <div class="dosing-note" id="edible-warning" style="display:none;">⚠️ Edibles can take up to 2 hours to fully kick in. Redosing too early — before you feel the first dose — is the most common cause of an uncomfortable experience. Wait it out before taking more.</div>
 
-      <label class="field-label">Brand (optional)</label>
-      <input type="text" name="brand" placeholder="e.g. Cookies, Jungle Boys — same strain can differ by brand" value="${existing ? esc(existing.brand || '') : ''}">
-
       <label class="field-label">Rating</label>
-      <div class="star-picker" id="star-picker" data-value="${existing ? existing.rating : 5}">
-        ${[1, 2, 3, 4, 5].map(n => `<button type="button" class="star-btn" data-star="${n}" aria-label="Rate ${n} star${n === 1 ? '' : 's'}">★</button>`).join('')}
-      </div>
-      <input type="hidden" name="rating" id="star-picker-value" value="${existing ? existing.rating : 5}">
+      <select name="rating">${[5, 4, 3, 2, 1].map(n => `<option value="${n}" ${existing && existing.rating === n ? 'selected' : ''}>${starString(n)}</option>`).join('')}</select>
 
       <label class="field-label">Mood / Effects (pick up to 5, optional)</label>
       <div class="effect-picker" id="effect-picker">
@@ -1090,7 +863,6 @@ function pageCheckinForm(req, res, query, existing) {
     ` : ''}
     <script>
       window.EFFECT_VOCAB = ${JSON.stringify(EFFECT_VOCAB)};
-      window.EFFECT_ICON = ${JSON.stringify(EFFECT_ICON)};
       window.INITIAL_EFFECTS = ${JSON.stringify(existing ? existing.effects || [] : [])};
       window.INITIAL_PHOTO = ${JSON.stringify(existing ? existing.photo || '' : '')};
       window.EDIBLE_METHODS = ${JSON.stringify(METHOD_GROUPS.find(g => g.group === 'Edibles').items)};
@@ -1123,7 +895,7 @@ async function handleCheckinSubmit(req, res) {
   const photoUrl = await storage.uploadCheckinPhoto(fields.photo || null);
   await db.createCheckin({
     user_id: userId, strain_id: strainId, method: fields.method, rating: Number(fields.rating) || 0,
-    note: fields.note || '', effects, photo: photoUrl, brand: fields.brand || '',
+    note: fields.note || '', effects, photo: photoUrl,
     tasting_notes: fields.tasting_notes || '', pairing_food: fields.pairing_food || '',
     pairing_entertainment: fields.pairing_entertainment || '', pairing_activity: fields.pairing_activity || '',
     is_private: !!fields.is_private,
@@ -1141,7 +913,7 @@ async function handleCheckinEditSubmit(req, res, id) {
   const photoUrl = await storage.uploadCheckinPhoto(fields.photo || null);
   await db.updateCheckin(id, {
     method: fields.method, rating: Number(fields.rating) || 0,
-    note: fields.note || '', effects, photo: photoUrl, brand: fields.brand || '',
+    note: fields.note || '', effects, photo: photoUrl,
     tasting_notes: fields.tasting_notes || '', pairing_food: fields.pairing_food || '',
     pairing_entertainment: fields.pairing_entertainment || '', pairing_activity: fields.pairing_activity || '',
     is_private: !!fields.is_private,
@@ -1595,8 +1367,6 @@ function pageSignup(req, res, query) {
     invalid: 'Please fill in every field.',
     email_taken: 'That email is already in use.',
     rate_limited: 'Too many signup attempts from this connection. Try again in a few minutes.',
-    name: 'Please enter your first and last name.',
-    agree: 'You need to agree to the Terms of Service and Privacy Policy to create an account.',
   };
   const body = `
     <h1 class="screen-title">Create an Account</h1>
@@ -1609,12 +1379,8 @@ function pageSignup(req, res, query) {
     </a>
     <p class="empty-note" style="text-align:center;margin:0 0 14px;">or</p>
     <form method="POST" action="/signup">
-      <label class="field-label" style="margin-top:0;">First name</label>
-      <input type="text" name="first_name" id="signup-first-name" required minlength="1" maxlength="50" autocomplete="given-name">
-      <label class="field-label">Last name</label>
-      <input type="text" name="last_name" required minlength="1" maxlength="50" autocomplete="family-name">
-      <label class="field-label">Username</label>
-      <input type="text" name="username" required minlength="3" maxlength="24" autocomplete="username">
+      <label class="field-label" style="margin-top:0;">Username</label>
+      <input type="text" name="username" id="signup-username" required minlength="3" maxlength="24" autocomplete="username">
       <label class="field-label">Email</label>
       <input type="email" name="email" required autocomplete="email" placeholder="you@example.com">
       <label class="field-label">Date of birth</label>
@@ -1626,13 +1392,10 @@ function pageSignup(req, res, query) {
       </div>
       <label class="field-label">Confirm password</label>
       <input type="password" name="password2" id="signup-password2" required minlength="8" autocomplete="new-password">
-      <label style="display:flex;align-items:flex-start;gap:8px;margin-top:16px;cursor:pointer;">
-        <input type="checkbox" name="agree_tos" value="1" required style="width:auto;margin:3px 0 0;">
-        <span>I agree to the <a href="/terms" target="_blank" rel="noopener noreferrer">Terms of Service</a> and <a href="/privacy" target="_blank" rel="noopener noreferrer">Privacy Policy</a>.</span>
-      </label>
       <button class="btn block" type="submit" style="margin-top:14px;">Create Account</button>
     </form>
-    <script>document.getElementById('signup-first-name').focus();</script>
+    <script>document.getElementById('signup-username').focus();</script>
+    <p class="empty-note" style="margin-top:12px;">By creating an account, you agree to the <a href="/terms">Terms of Service</a> and <a href="/privacy">Privacy Policy</a>.</p>
     <p class="empty-note">Already have an account? <a href="/login">Log in</a></p>
   `;
   sendHtml(res, layout({ title: 'Sign Up', body, showBack: false }));
@@ -1759,14 +1522,7 @@ function pageGoogleFinish(req, res, query) {
   if (!raw) return redirect(res, '/signup');
   const profile = JSON.parse(raw);
   const err = query.get('err');
-  const errMessages = { taken: 'That username is already taken.', age: `You must be ${MIN_AGE} or older to create an account.`, invalid: 'Please fill in every field.', name: 'Please enter your first and last name.', agree: 'You need to agree to the Terms of Service and Privacy Policy to create an account.' };
-  // Google gives us a full name but not split into first/last -- a naive
-  // split on the first space is imperfect for multi-word first or last
-  // names, but it's a reasonable pre-filled starting point that the person
-  // can still correct before submitting.
-  const nameParts = (profile.name || '').trim().split(/\s+/);
-  const suggestedFirstName = nameParts[0] || '';
-  const suggestedLastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : '';
+  const errMessages = { taken: 'That username is already taken.', age: `You must be ${MIN_AGE} or older to create an account.`, invalid: 'Please fill in every field.' };
   // If the Google-derived suggestion collides with an existing username,
   // append a short random suffix so the pre-filled value in the form is
   // never one the person has to fix themselves just to get past a
@@ -1781,20 +1537,13 @@ function pageGoogleFinish(req, res, query) {
     <p class="screen-sub">Signed in as ${esc(profile.email)} with Google. Just need a couple more things.</p>
     ${err && errMessages[err] ? `<p style="color:#a13a3a;">${esc(errMessages[err])}</p>` : ''}
     <form method="POST" action="/auth/google/finish">
-      <label class="field-label" style="margin-top:0;">First name</label>
-      <input type="text" name="first_name" required minlength="1" maxlength="50" value="${esc(suggestedFirstName)}" autocomplete="given-name">
-      <label class="field-label">Last name</label>
-      <input type="text" name="last_name" required minlength="1" maxlength="50" value="${esc(suggestedLastName)}" autocomplete="family-name">
-      <label class="field-label">Username</label>
+      <label class="field-label" style="margin-top:0;">Username</label>
       <input type="text" name="username" required minlength="3" maxlength="24" value="${esc(suggestedUsername)}">
       <label class="field-label">Date of birth</label>
       <input type="date" name="birth_date" required>
-      <label style="display:flex;align-items:flex-start;gap:8px;margin-top:16px;cursor:pointer;">
-        <input type="checkbox" name="agree_tos" value="1" required style="width:auto;margin:3px 0 0;">
-        <span>I agree to the <a href="/terms" target="_blank" rel="noopener noreferrer">Terms of Service</a> and <a href="/privacy" target="_blank" rel="noopener noreferrer">Privacy Policy</a>.</span>
-      </label>
       <button class="btn block" type="submit" style="margin-top:14px;">Finish Creating Account</button>
     </form>
+    <p class="empty-note" style="margin-top:12px;">By creating an account, you agree to the <a href="/terms">Terms of Service</a> and <a href="/privacy">Privacy Policy</a>.</p>
   `;
   sendHtml(res, layout({ title: 'Finish Signing Up', body }));
 }
@@ -1806,14 +1555,10 @@ async function handleGoogleFinishSubmit(req, res) {
   const profile = JSON.parse(raw);
   const f = await parseForm(req);
   const username = String(f.username || '').trim();
-  const firstName = String(f.first_name || '').trim();
-  const lastName = String(f.last_name || '').trim();
   if (!username || !f.birth_date) return redirect(res, '/auth/google/finish?err=invalid');
-  if (!firstName || !lastName) return redirect(res, '/auth/google/finish?err=name');
-  if (!f.agree_tos) return redirect(res, '/auth/google/finish?err=agree');
   if (!isOldEnough(f.birth_date)) return redirect(res, '/auth/google/finish?err=age');
   if (db.getUserByUsername(username)) return redirect(res, '/auth/google/finish?err=taken');
-  const user = await db.createUserFromGoogle({ username, birth_date: f.birth_date, email: profile.email, google_id: profile.sub, first_name: firstName, last_name: lastName });
+  const user = await db.createUserFromGoogle({ username, birth_date: f.birth_date, email: profile.email, google_id: profile.sub });
   const token = auth.signUserSessionValue(user.id);
   res.setHeader('Set-Cookie', [
     `user_session=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000`,
@@ -1823,21 +1568,17 @@ async function handleGoogleFinishSubmit(req, res) {
 }
 
 async function handleSignupSubmit(req, res) {
-  if (await isSignupRateLimited(req)) return redirect(res, '/signup?err=rate_limited');
+  if (isSignupRateLimited(req)) return redirect(res, '/signup?err=rate_limited');
   const f = await parseForm(req);
   const username = String(f.username || '').trim();
   const email = String(f.email || '').trim().toLowerCase();
-  const firstName = String(f.first_name || '').trim();
-  const lastName = String(f.last_name || '').trim();
   if (!username || !email || !f.birth_date || !f.password || !f.password2) return redirect(res, '/signup?err=invalid');
-  if (!firstName || !lastName) return redirect(res, '/signup?err=name');
-  if (!f.agree_tos) return redirect(res, '/signup?err=agree');
   if (!isOldEnough(f.birth_date)) return redirect(res, '/signup?err=age');
   if (f.password !== f.password2) return redirect(res, '/signup?err=mismatch');
   if (f.password.length < 8) return redirect(res, '/signup?err=short');
   if (db.getUserByUsername(username)) return redirect(res, '/signup?err=taken');
   if (db.getUserByEmail(email)) return redirect(res, '/signup?err=email_taken');
-  const user = await db.createUser({ username, password: f.password, birth_date: f.birth_date, email, first_name: firstName, last_name: lastName });
+  const user = await db.createUser({ username, password: f.password, birth_date: f.birth_date, email });
   const token = auth.signUserSessionValue(user.id);
   res.setHeader('Set-Cookie', `user_session=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000`);
   redirect(res, '/onboarding');
@@ -1990,15 +1731,6 @@ function pageCompare(req, res, query) {
       ${pickerBox('a', a)}
       ${pickerBox('b', b)}
     </div>
-    ${a && b ? (() => {
-      const sim = strainSimilarity(a, b);
-      return sim === null ? '' : `
-        <div class="card" style="text-align:center;margin-bottom:12px;">
-          <div style="font-size:26px;font-weight:800;color:var(--brand-green-dark);">${sim}%</div>
-          <div class="empty-note" style="padding:2px 0 0;">similar vibe, based on type, effects, terpenes, and THC</div>
-        </div>
-      `;
-    })() : ''}
     ${a && b ? `
       <table style="width:100%;border-collapse:collapse;font-size:13px;">
         ${rows.map(([label, av, bv]) => `
@@ -2007,13 +1739,6 @@ function pageCompare(req, res, query) {
             <td style="padding:8px 6px;vertical-align:top;">${esc(av)}</td>
             <td style="padding:8px 6px;vertical-align:top;">${esc(bv)}</td>
           </tr>`).join('')}
-        ${(renderMiniEnergyBar(a.effects) || renderMiniEnergyBar(b.effects)) ? `
-          <tr style="border-bottom:1px solid var(--border);">
-            <td style="padding:8px 6px;font-weight:700;color:var(--ink-secondary);width:28%;vertical-align:top;">Feel</td>
-            <td style="padding:8px 6px;vertical-align:top;">${renderMiniEnergyBar(a.effects)}</td>
-            <td style="padding:8px 6px;vertical-align:top;">${renderMiniEnergyBar(b.effects)}</td>
-          </tr>
-        ` : ''}
       </table>
     ` : `<div class="empty-note">Pick a strain in each box above to compare them.</div>`}
   `;
@@ -2110,67 +1835,6 @@ function pageGrowJournal(req, res) {
   `;
   sendHtml(res, layout({ title: 'Grow Journal', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
-// "Can't find your strain?" -- a lightweight report a user can file
-// straight from the Strain Library, so a missing strain doesn't just
-// become a dead end. Deliberately simple: a name, an optional photo of
-// the packaging, an optional free-text description. Reviewed by hand in
-// admin before anything gets added to the real library -- see the
-// strain_submissions table comment in db.js for why this stays a
-// separate queue rather than writing directly into `strains`.
-function pageSubmitStrain(req, res) {
-  const userId = requireUser(req, res);
-  if (userId == null) return;
-  const body = `
-    <h1 class="screen-title">Report a Missing Strain</h1>
-    <p class="screen-sub">Can't find a strain in the library? Send us what you've got — a photo of the packaging is the fastest way, but a name alone still helps.</p>
-    <form method="POST" action="/strains/submit">
-      <label class="field-label" style="margin-top:0;">Strain name</label>
-      <input type="text" name="strain_name" placeholder="What's it called on the package?" required>
-      <label class="field-label">Anything else you know (optional)</label>
-      <textarea name="description" placeholder="Breeder, THC %, effects, where you got it — anything helps"></textarea>
-      <label class="field-label">Photo of the packaging (optional)</label>
-      <div class="photo-picker">
-        <div class="photo-upload-box" id="submit-strain-photo-box" onclick="document.getElementById('submit-strain-photo-input').click()">
-          <div class="up-ic">📷</div>
-          <div class="up-txt">Tap to snap or upload a photo of the label</div>
-        </div>
-        <input type="file" id="submit-strain-photo-input" accept="image/*" style="display:none;">
-        <input type="hidden" name="photo" id="submit-strain-photo-data">
-      </div>
-      <button class="btn block" type="submit" style="margin-top:14px;">Send It In</button>
-    </form>
-    <p class="empty-note" style="margin-top:12px;">We read every one of these — no promises on timing, but nothing gets ignored.</p>
-    <script>
-      (function() {
-        const fileInput = document.getElementById('submit-strain-photo-input');
-        const photoData = document.getElementById('submit-strain-photo-data');
-        const uploadBox = document.getElementById('submit-strain-photo-box');
-        fileInput.addEventListener('change', () => {
-          const file = fileInput.files && fileInput.files[0];
-          if (!file) return;
-          const reader = new FileReader();
-          reader.onload = () => {
-            photoData.value = reader.result;
-            uploadBox.innerHTML = '<div class="photo-preview-wrap"><img src="' + reader.result + '" alt="Preview"></div>';
-          };
-          reader.readAsDataURL(file);
-        });
-      })();
-    </script>
-  `;
-  sendHtml(res, layout({ title: 'Report a Missing Strain', active: 'strains', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
-}
-async function handleSubmitStrainSubmit(req, res) {
-  const userId = requireUser(req, res);
-  if (userId == null) return;
-  const f = await parseForm(req);
-  const strainName = String(f.strain_name || '').trim();
-  if (!strainName) return redirect(res, '/strains/submit');
-  const photoUrl = await storage.uploadPhoto(f.photo || null, 'strain-submissions');
-  await db.createStrainSubmission({ user_id: userId, strain_name: strainName, description: f.description || '', photo: photoUrl });
-  redirect(res, '/strains?submitted=1');
-}
-
 async function handleGrowJournalSubmit(req, res) {
   const userId = requireUser(req, res);
   if (userId == null) return;
@@ -2848,13 +2512,13 @@ async function handleResetPasswordSubmit(req, res) {
 async function handleLoginSubmit(req, res) {
   const f = await parseForm(req);
   const username = String(f.username || '').trim();
-  if (await isLoginRateLimited(req, username)) return redirect(res, '/login?err=rate_limited');
+  if (isLoginRateLimited(req, username)) return redirect(res, '/login?err=rate_limited');
   const user = db.verifyLogin(username, f.password || '');
   if (!user) {
-    await recordFailedLogin(req, username);
+    recordFailedLogin(req, username);
     return redirect(res, '/login?err=1');
   }
-  await clearLoginAttempts(req, username);
+  clearLoginAttempts(req, username);
   const token = auth.signUserSessionValue(user.id);
   res.setHeader('Set-Cookie', `user_session=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000`);
   redirect(res, '/');
@@ -2873,29 +2537,25 @@ function pageAdminHome(req, res) {
     <div class="card"><a href="/admin/faqs">📋 Manage FAQ (${db.listFaqs().length})</a></div>
     <div class="card"><a href="/admin/recipes">🍽️ Manage Recipes (${db.listRecipes({ status: null }).length}${pendingCount ? `, ${pendingCount} pending` : ''})</a></div>
     <div class="card"><a href="/admin/strains">🌿 Manage Strains (${db.countStrains().toLocaleString()})</a></div>
-    <div class="card"><a href="/admin/strain-submissions">🔍 Missing Strain Reports${db.listStrainSubmissions().filter(s => s.status === 'pending').length ? ` (${db.listStrainSubmissions().filter(s => s.status === 'pending').length} pending)` : ''}</a></div>
     <div class="card"><a href="/admin/users">👤 Manage Users (${db.listUsers().length})</a></div>
     <div class="card"><a href="/admin/logout">🚪 Log out</a></div>
   `;
   sendHtml(res, layout({ title: 'Admin', body, isAdmin: true }));
 }
 
-async function pageAdminUsers(req, res, query) {
+function pageAdminUsers(req, res, query) {
   if (!requireAdmin(req, res)) return;
   const deleted = query.get('deleted');
-  const users = await db.listUsersLive();
+  const users = db.listUsers();
   const body = `
     <h1 class="screen-title">Manage Users (${users.length})</h1>
     ${deleted ? `<p class="empty-note" style="color:var(--brand-green-dark);">User "${esc(deleted)}" was deleted.</p>` : ''}
     ${users.map(u => `
       <div class="admin-row">
-        <span>👤 <b>${esc(u.username)}</b>${(u.first_name || u.last_name) ? ` — ${esc([u.first_name, u.last_name].filter(Boolean).join(' '))}` : ' <span class="empty-note" style="padding:0;">(no name on file)</span>'}${u.email ? ` · ${esc(u.email)}` : ''}<br><span class="empty-note" style="padding:0;">Joined ${esc((u.created_at || '').slice(0, 10))}</span></span>
-        <div class="actions">
-          <a href="/admin/users/${u.id}/edit" class="btn secondary" style="text-decoration:none;">Edit</a>
-          <form method="POST" action="/admin/users/${u.id}/delete" onsubmit="return confirm('Permanently delete ${esc(u.username)}\\'s account, check-ins, messages, and friendships? This cannot be undone.')">
-            <button class="btn danger" style="color:#fff;" type="submit">Delete</button>
-          </form>
-        </div>
+        <span>👤 <b>${esc(u.username)}</b>${u.email ? ` · ${esc(u.email)}` : ''}<br><span class="empty-note" style="padding:0;">Joined ${esc((u.created_at || '').slice(0, 10))}</span></span>
+        <form method="POST" action="/admin/users/${u.id}/delete" onsubmit="return confirm('Permanently delete ${esc(u.username)}\\'s account, check-ins, messages, and friendships? This cannot be undone.')">
+          <button class="btn danger" style="color:#fff;" type="submit">Delete</button>
+        </form>
       </div>
     `).join('')}
   `;
@@ -2907,58 +2567,6 @@ async function handleAdminUserDelete(req, res, userId) {
   const username = user ? user.username : 'that user';
   await db.deleteUserAccount(userId);
   redirect(res, `/admin/users?deleted=${encodeURIComponent(username)}`);
-}
-// Edit page for an admin to correct a user's own-editable fields (same set
-// as Account Settings, minus password -- see adminUpdateUser in db.js for
-// why password stays out of admin reach). Reads live rather than from the
-// cache for the same staleness reason as the Users list itself.
-async function pageAdminUserEdit(req, res, userId, query) {
-  if (!requireAdmin(req, res)) return;
-  const users = await db.listUsersLive();
-  const user = users.find(u => u.id === userId);
-  if (!user) return notFound(res);
-  const error = query.get('error') || '';
-  const errMessages = {
-    taken: 'That username is already taken by another account.',
-    email_taken: 'That email is already in use by another account.',
-    invalid: 'Username and birth date are required.',
-  };
-  const body = `
-    <h1 class="screen-title">Edit User: ${esc(user.username)}</h1>
-    ${error && errMessages[error] ? `<p class="dosing-note">${esc(errMessages[error])}</p>` : ''}
-    <form method="POST" action="/admin/users/${user.id}/edit">
-      <label class="field-label" style="margin-top:0;">First name</label>
-      <input type="text" name="first_name" value="${esc(user.first_name || '')}" maxlength="50">
-      <label class="field-label">Last name</label>
-      <input type="text" name="last_name" value="${esc(user.last_name || '')}" maxlength="50">
-      <label class="field-label">Username</label>
-      <input type="text" name="username" value="${esc(user.username)}" required minlength="3" maxlength="24">
-      <label class="field-label">Email</label>
-      <input type="email" name="email" value="${esc(user.email || '')}">
-      <label class="field-label">Birth date</label>
-      <input type="date" name="birth_date" value="${esc(user.birth_date)}" required>
-      <p class="empty-note" style="padding:8px 0;">Password can't be changed here — that has to go through the normal "Forgot Password" email flow, so the account owner is always notified.</p>
-      <button class="btn block" type="submit">Save Changes</button>
-    </form>
-    <p class="empty-note" style="margin-top:12px;"><a href="/admin/users">← Back to Manage Users</a></p>
-  `;
-  sendHtml(res, layout({ title: 'Edit User', body, isAdmin: true }));
-}
-async function handleAdminUserEditSubmit(req, res, userId) {
-  if (!requireAdmin(req, res)) return;
-  const f = await parseForm(req);
-  const username = String(f.username || '').trim();
-  const email = String(f.email || '').trim().toLowerCase();
-  const firstName = String(f.first_name || '').trim();
-  const lastName = String(f.last_name || '').trim();
-  if (!username || !f.birth_date) return redirect(res, `/admin/users/${userId}/edit?error=invalid`);
-  try {
-    await db.adminUpdateUser(userId, { username, email, first_name: firstName, last_name: lastName, birth_date: f.birth_date });
-    redirect(res, '/admin/users');
-  } catch (err) {
-    const code = /username/i.test(err.message) ? 'taken' : /email/i.test(err.message) ? 'email_taken' : 'invalid';
-    redirect(res, `/admin/users/${userId}/edit?error=${code}`);
-  }
 }
 
 
@@ -2976,40 +2584,6 @@ function pageAdminFeedback(req, res) {
     }).join('')}
   `;
   sendHtml(res, layout({ title: 'Feedback', body, isAdmin: true }));
-}
-
-function pageAdminStrainSubmissions(req, res) {
-  if (!requireAdmin(req, res)) return;
-  const items = db.listStrainSubmissions();
-  const pending = items.filter(s => s.status === 'pending');
-  const body = `
-    <h1 class="screen-title" style="margin-top:8px;">Missing Strain Reports (${pending.length} pending)</h1>
-    ${items.length === 0 ? `<p class="empty-note">No reports submitted yet.</p>` : items.map(s => {
-      const user = s.user_id != null ? db.getUserById(s.user_id) : null;
-      return `<div class="admin-row" style="flex-direction:column;align-items:stretch;${s.status === 'reviewed' ? 'opacity:0.5;' : ''}">
-        <div style="display:flex;justify-content:space-between;align-items:baseline;">
-          <b>${esc(s.strain_name)}</b>
-          <span class="empty-note" style="padding:0;">${user ? esc(user.username) : 'Anonymous'} · <span class="local-time" data-utc="${esc(s.created_at)}Z">${esc(s.created_at)}</span></span>
-        </div>
-        ${s.description ? `<p style="margin:6px 0 0;white-space:pre-wrap;">${esc(s.description)}</p>` : ''}
-        ${s.photo ? `<div class="checkin-photo-thumb" style="margin:8px 0;"><img src="${esc(s.photo)}" alt="Submitted photo"></div>` : ''}
-        <div class="actions" style="margin-top:8px;">
-          <a href="/admin/strains?name=${encodeURIComponent(s.strain_name)}" class="btn secondary" style="text-decoration:none;">Add to Library</a>
-          ${s.status !== 'reviewed' ? `
-            <form method="POST" action="/admin/strain-submissions/${s.id}/reviewed" style="display:inline;">
-              <button type="submit" class="btn secondary">Mark Reviewed</button>
-            </form>
-          ` : ''}
-        </div>
-      </div>`;
-    }).join('')}
-  `;
-  sendHtml(res, layout({ title: 'Missing Strain Reports', body, isAdmin: true }));
-}
-async function handleAdminStrainSubmissionReviewed(req, res, id) {
-  if (!requireAdmin(req, res)) return;
-  await db.markStrainSubmissionReviewed(Number(id));
-  redirect(res, '/admin/strain-submissions');
 }
 
 function pageAdminFaqs(req, res) {
@@ -3106,6 +2680,8 @@ function strainFormFields(s) {
   return `
     <label class="field-label" style="margin-top:0;">Name</label>
     <input type="text" name="name" value="${v(s && s.name)}" required>
+    <label class="field-label">Also known as (AKA) — comma-separated, e.g. "GG4, Original Glue" (leave blank if none)</label>
+    <input type="text" name="aka" value="${v(s && s.aka)}">
     <label class="field-label">Type</label>
     <select name="type">${opt('Indica', 'Indica')}${opt('Sativa', 'Sativa')}${opt('Hybrid', 'Hybrid')}</select>
     <label class="field-label">Lean (optional, e.g. "Sativa-leaning")</label>
@@ -3130,7 +2706,6 @@ function strainFormFields(s) {
 function pageAdminStrains(req, res, query) {
   if (!requireAdmin(req, res)) return;
   const q = (query && query.get('q')) || '';
-  const prefillName = (query && query.get('name')) || '';
   const results = q ? db.listStrains({ q, limit: 50 }) : db.listStrains({ limit: 50 });
   const total = db.countStrains();
   const body = `
@@ -3139,7 +2714,7 @@ function pageAdminStrains(req, res, query) {
     <div class="card">
       <h2 style="margin-top:0;font-size:16px;">Add a strain</h2>
       <form method="POST" action="/admin/strains/new">
-        ${strainFormFields(prefillName ? { name: prefillName } : null)}
+        ${strainFormFields(null)}
         <button class="btn block" type="submit">Add Strain</button>
       </form>
     </div>
@@ -3171,6 +2746,7 @@ async function handleAdminStrainNew(req, res) {
   await db.insertStrain({
     id, name: f.name, type: f.type, lean: f.lean, rarity: f.rarity, thc: f.thc, cbd: f.cbd,
     flavor: f.flavor, icon: f.icon || '🌿', effects: parseEffectsInput(f.effects), terps: parseTerpsInput(f.terps),
+    aka: f.aka || '',
   });
   redirect(res, '/admin/strains');
 }
@@ -3193,6 +2769,7 @@ async function handleAdminStrainEditSubmit(req, res, id) {
   await db.insertStrain({
     id, name: f.name, type: f.type, lean: f.lean, rarity: f.rarity, thc: f.thc, cbd: f.cbd,
     flavor: f.flavor, icon: f.icon || '🌿', effects: parseEffectsInput(f.effects), terps: parseTerpsInput(f.terps),
+    aka: f.aka || '',
   });
   redirect(res, '/admin/strains');
 }
@@ -3281,10 +2858,9 @@ function apiListStrains(req, res, query) {
   const breeder = query.get('breeder') || 'All';
   const verified = query.get('verified') || 'All';
   const limit = Math.min(Number(query.get('limit')) || 60, 200);
-  const offset = Math.max(Number(query.get('offset')) || 0, 0);
   sendJson(res, {
     total: db.countStrains({ q, type, rarity, effect, thc, terpene, ailment, breeder, verified }),
-    results: db.listStrains({ q, type, rarity, effect, thc, terpene, ailment, breeder, verified, limit, offset }),
+    results: db.listStrains({ q, type, rarity, effect, thc, terpene, ailment, breeder, verified, limit }),
   });
 }
 async function apiKudos(req, res, id) {
@@ -3435,26 +3011,24 @@ function pageTerms(req, res) {
     <h1 class="screen-title">Terms of Service</h1>
     <p class="empty-note">Last updated: ${new Date().toISOString().slice(0, 10)}. This expanded draft is currently being reviewed by an attorney and may change before it's finalized.</p>
     <div class="card">
-      <p><b>1. Acceptance of terms.</b> By creating an account, checking a box, clicking "Create Account," or otherwise accessing or using StrainDex (the "Service"), you acknowledge that you have read, understood, and agree to be bound by these Terms and our <a href="/privacy">Privacy Policy</a>, which is incorporated by reference. If you do not agree, do not create an account or use the Service. We may update these Terms from time to time; for material changes, we'll make reasonable efforts to notify active accounts (e.g. in-app notice or email), and continued use after an update means you accept the revised Terms.</p>
-      <p><b>2. Eligibility.</b> The Service is intended solely for adults 21 and older. By creating an account, you represent and warrant that you are at least 21 years old, that the birth date you provide is accurate, and that your access to and use of the Service complies with the laws of your jurisdiction, including any laws regarding cannabis. Age is self-attested via the birth date you provide at signup — we do not independently verify government-issued ID. Misrepresenting your age or eligibility is a material breach of these Terms and grounds for immediate account termination.</p>
-      <p><b>3. What StrainDex is (and is not).</b> StrainDex is a personal cannabis journal and informational reference app: check-ins, a strain library, community recipes and growing tips, and a dispensary locator. StrainDex does not sell, deliver, broker, list for sale, process payment for, or otherwise facilitate the purchase or transfer of cannabis or cannabis products, and nothing in the app is a marketplace, storefront, or point of sale. Cannabis remains illegal under U.S. federal law regardless of state or local law; you are solely responsible for understanding and complying with the law that applies to you.</p>
-      <p><b>4. Accounts.</b> You must provide accurate registration information, including a genuine first and last name, and keep it current. You're responsible for keeping your credentials confidential and for all activity under your account, whether or not authorized by you. One account per person — accounts can't be sold, transferred, shared, or used by anyone other than the person who registered them. We may require additional verification at our discretion, and may suspend or terminate accounts that violate these Terms, engage in fraud, or misrepresent age or eligibility, with or without prior notice.</p>
-      <p><b>5. Your content and license grant.</b> You retain ownership of what you submit — check-ins, notes, tasting notes, photos, ratings, pairings, recipes, and grow tips ("Your Content"). By submitting Your Content, you grant StrainDex a worldwide, non-exclusive, royalty-free, sublicensable license to host, store, reproduce, display, and distribute it solely for the purposes of operating, maintaining, and improving the Service (for example, showing your check-in to friends who view your profile, or displaying a recipe you submitted to other users once approved). You represent that you own or have the necessary rights to everything you upload, and that it doesn't infringe anyone else's rights.</p>
-      <p><b>6. Community-submitted content.</b> Recipes and growing tips are reviewed before publishing, but this is a basic appropriateness check, not a professional, medical, or safety certification of any kind. Dosing suggestions and techniques reflect individual contributors' personal opinions and experience, not StrainDex's endorsement or verification. You assume all risk in following any community-submitted instructions, especially anything involving dosing, ingestion, or home cultivation.</p>
-      <p><b>7. Prohibited conduct.</b> You agree not to: violate any applicable law; harass, threaten, stalk, or abuse another user; impersonate any person or entity; upload content that infringes someone else's intellectual property or privacy rights; upload malware or attempt to disrupt or gain unauthorized access to the Service; misrepresent your age or identity; scrape, data-mine, or reverse-engineer the Service; circumvent any rate limit, security control, or access restriction; or use StrainDex to actually advertise, sell, buy, trade, or distribute cannabis or any controlled substance.</p>
-      <p><b>8. Not medical advice.</b> STRAINDEX DOES NOT PROVIDE MEDICAL ADVICE. Strain effects, THC/CBD percentages, and terpene info come from user reports and published third-party sources, may be incomplete or inaccurate, and may not reflect the actual composition or effect of anything you actually encounter or consume. Nothing in the Service is intended to diagnose, treat, cure, or prevent any disease or condition, and nothing here should be relied on as a substitute for professional medical advice. Always talk to a qualified healthcare provider about your own situation before making decisions about cannabis use, especially regarding dosing, drug interactions, pregnancy, or any existing health condition.</p>
-      <p><b>9. Third-party services and links.</b> Dispensary information comes from third-party data providers (currently OpenStreetMap, or Google Places if enabled) and may be incomplete, outdated, or wrong — always confirm licensing, inventory, pricing, and hours with the dispensary directly. The Service may also link to other third-party websites or services we don't control (e.g. a source cited in the FAQ). We aren't responsible for the content, accuracy, or practices of any third-party site or service.</p>
-      <p><b>10. Intellectual property.</b> The StrainDex name, logo, and underlying software belong to StrainDex and its licensors and may not be used without permission. Strain photography is used under the Unsplash License and credited to its photographers where applicable. If you believe content on StrainDex infringes your copyright, contact us through <a href="/feedback">Send Feedback</a> with enough detail to locate the material and confirm your ownership claim, and we will investigate and remove infringing content we control.</p>
-      <p><b>11. No warranties.</b> THE SERVICE IS PROVIDED "AS IS" AND "AS AVAILABLE," WITHOUT WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, NON-INFRINGEMENT, OR THAT THE SERVICE WILL BE ACCURATE, COMPLETE, SECURE, UNINTERRUPTED, OR ERROR-FREE. StrainDex is an actively developed beta product and may change, break, or be unavailable at times without notice.</p>
-      <p><b>12. Limitation of liability.</b> TO THE MAXIMUM EXTENT PERMITTED BY LAW, STRAINDEX AND ITS OPERATOR WILL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, EXEMPLARY, OR PUNITIVE DAMAGES, OR ANY LOSS OF DATA, PROFITS, OR GOODWILL, ARISING FROM YOUR USE OF OR INABILITY TO USE THE SERVICE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES. BECAUSE THE SERVICE IS PROVIDED FREE OF CHARGE, STRAINDEX'S TOTAL AGGREGATE LIABILITY FOR ANY CLAIM ARISING OUT OF OR RELATING TO THESE TERMS OR THE SERVICE WILL NOT EXCEED ONE HUNDRED DOLLARS ($100). Some jurisdictions don't allow certain limitations, so some of the above may not apply to you.</p>
-      <p><b>13. Indemnification.</b> You agree to defend, indemnify, and hold harmless StrainDex and its operator from any claims, damages, losses, liabilities, and expenses (including reasonable attorneys' fees) arising from your use of the Service, Your Content, your violation of these Terms, or your violation of any law or third-party right.</p>
-      <p><b>14. Termination.</b> You can delete your account anytime from Account Settings. We can suspend or terminate your access for violating these Terms, with or without notice, and without liability to you. Sections that by their nature should survive termination (including Content license as to already-hosted content, Intellectual Property, No Warranties, Limitation of Liability, Indemnification, and Governing Law) will survive.</p>
-      <p><b>15. Changes to the Service.</b> We may modify, suspend, add to, or discontinue any part of the Service, temporarily or permanently, at any time, with or without notice.</p>
-      <p><b>16. Dispute resolution.</b> The specific governing law and forum for disputes are still being finalized with counsel and will be added here once confirmed. In the interim, we encourage you to first try to resolve any concern informally by contacting us through <a href="/feedback">Send Feedback</a>.</p>
-      <p><b>17. Force majeure.</b> StrainDex isn't liable for any failure or delay in performance resulting from causes beyond its reasonable control, including hosting/infrastructure outages, natural disasters, or acts of government.</p>
-      <p><b>18. No waiver; assignment.</b> Our failure to enforce any provision of these Terms isn't a waiver of that provision. You may not assign or transfer these Terms or your account without our consent; we may assign these Terms in connection with a merger, acquisition, or sale of assets.</p>
-      <p><b>19. Severability.</b> If any part of these Terms is found unenforceable, that part will be limited or severed to the minimum extent necessary, and the rest stays in effect.</p>
-      <p><b>20. Entire agreement.</b> These Terms plus the Privacy Policy make up the whole agreement between you and StrainDex about the Service, and supersede any prior agreements on the same subject.</p>
+      <p><b>1. Acceptance of terms.</b> By creating an account or otherwise using StrainDex (the "Service"), you agree to be bound by these Terms. If you do not agree, do not use the Service. We may update these Terms from time to time; continued use after an update means you accept the revised Terms.</p>
+      <p><b>2. Eligibility.</b> The Service is intended solely for adults 21 and older. By creating an account, you represent that you're at least 21 and that your use of the Service complies with the laws of your jurisdiction. We don't verify the legal status of cannabis where you live — that's on you.</p>
+      <p><b>3. What StrainDex is.</b> StrainDex is a personal cannabis journal and informational reference app: check-ins, a strain library, community recipes and growing tips, and a dispensary locator. StrainDex does not sell, deliver, broker, or otherwise facilitate the purchase or transfer of cannabis or cannabis products, and nothing in the app is a marketplace or point of sale.</p>
+      <p><b>4. Accounts.</b> You're responsible for keeping your credentials confidential and for all activity under your account. Provide accurate registration information. One account per person — accounts can't be sold, transferred, or shared. We can suspend or terminate accounts that violate these Terms, engage in fraud, or misrepresent age or eligibility.</p>
+      <p><b>5. Your content.</b> You keep ownership of what you submit — check-ins, notes, tasting notes, photos, ratings, pairings. By submitting it, you give StrainDex permission to host, store, and display it within the app. You confirm you have the rights to anything you upload.</p>
+      <p><b>6. Community-submitted content.</b> Recipes and growing tips are reviewed before publishing, but this is a basic appropriateness check, not a professional or medical certification. Dosing suggestions and techniques reflect individual contributors' opinions, not StrainDex's. You take on the risk of following any community-submitted instructions, especially around dosing.</p>
+      <p><b>7. Prohibited conduct.</b> Don't: break applicable law; harass or threaten other users; upload content that infringes someone else's rights; misrepresent your age; scrape or reverse-engineer the Service; or use StrainDex to actually sell, buy, or distribute cannabis or any controlled substance.</p>
+      <p><b>8. Not medical advice.</b> Strain effects, THC/CBD percentages, and terpene info come from user reports and published third-party sources, and may not reflect the actual composition of anything you encounter. Nothing here is medical advice or intended to diagnose, treat, cure, or prevent any condition. Talk to a healthcare provider about your own situation.</p>
+      <p><b>9. Third-party services.</b> Dispensary information comes from third-party data providers and may be incomplete, outdated, or wrong. We don't verify dispensary licensing, inventory, pricing, or hours — always confirm with the dispensary directly.</p>
+      <p><b>10. Intellectual property.</b> The StrainDex name, logo, and underlying software belong to StrainDex and its licensors. Strain photography is used under the Unsplash License and credited to its photographers where applicable.</p>
+      <p><b>11. No warranties.</b> The Service is provided "as is" and "as available," without warranties of any kind — including accuracy of strain data, uninterrupted availability, or fitness for a particular purpose.</p>
+      <p><b>12. Limitation of liability.</b> To the maximum extent permitted by law, StrainDex is not liable for indirect, incidental, special, consequential, or punitive damages, or loss of data, arising from your use of the Service.</p>
+      <p><b>13. Indemnification.</b> You agree to cover StrainDex for claims, damages, or expenses arising from your use of the Service, your content, or your violation of these Terms.</p>
+      <p><b>14. Termination.</b> You can delete your account anytime from Account Settings. We can suspend or terminate your access for violating these Terms, with or without notice.</p>
+      <p><b>15. Changes.</b> We may modify, suspend, or discontinue any part of the Service, and may revise these Terms, at any time.</p>
+      <p><b>16. Governing law.</b> The governing jurisdiction for these Terms is still being finalized with counsel.</p>
+      <p><b>17. Severability.</b> If any part of these Terms is found unenforceable, the rest stays in effect.</p>
+      <p><b>18. Entire agreement.</b> These Terms plus the Privacy Policy make up the whole agreement between you and StrainDex about the Service.</p>
     </div>
     <p class="empty-note">Questions about these terms? Reach out through <a href="/feedback">Send Feedback</a>.</p>
   `;
@@ -3466,19 +3040,18 @@ function pagePrivacy(req, res) {
     <h1 class="screen-title">Privacy Policy</h1>
     <p class="empty-note">Last updated: ${new Date().toISOString().slice(0, 10)}. This expanded draft is currently being reviewed by an attorney and may change before it's finalized, particularly around jurisdiction-specific requirements (CCPA, GDPR, etc.).</p>
     <div class="card">
-      <p><b>1. Overview.</b> This explains what StrainDex collects, how it's used, who it's shared with, and your choices. We collect only what's needed to run the app and don't sell personal information to advertisers or data brokers.</p>
-      <p><b>2. What we collect.</b> Account info (first and last name, username, email, a securely hashed password, birth date to confirm age, and — if you sign in with Google — the profile info Google provides during that process). User content (check-ins, tasting notes, food/drink/entertainment/activity pairings, photos, recipes, grow tips). Location, only when you use "find dispensaries near me" — not stored after the search. Basic technical/security logs, including IP address, used for things like rate-limiting signup and login attempts to prevent abuse. A single first-party session cookie to keep you logged in — no third-party ad-tracking cookies, and we do not currently respond to browser "Do Not Track" signals.</p>
-      <p><b>3. How we use it.</b> To run check-ins, the strain library, recipes, growing tips, dispensary search, and friends features; to keep your account secure and prevent abuse (including automated rate-limiting of repeated signup/login attempts); to send account-related emails like password resets; to respond to feedback you submit; to fix bugs through error monitoring; and to generate aggregate, non-identifying usage stats and internal business reporting.</p>
-      <p><b>4. Who we share it with.</b> We don't sell your personal information, and we don't share it with advertisers. We use service providers who each process data only to provide their service to us: our database host, our app host, our photo storage provider, our transactional email provider, our error-monitoring provider, and a dispensary-location lookup service. <b>We also maintain an internal spreadsheet, accessible only to StrainDex's operator, containing basic account contact information (name, username, email, birth date, signup date) used for account administration and business reporting.</b> We may also disclose information if required by law, subpoena, or to protect the rights, property, or safety of StrainDex, our users, or the public.</p>
-      <p><b>5. How long we keep it.</b> As long as your account is active, plus a limited period afterward in routine backups. If you delete your account, your personal data is removed from the live app; any recipe or grow tip you shared publicly stays up but is reattributed to "Former user." Data already removed from the internal spreadsheet described above at the time of your deletion request will also be deleted from that spreadsheet within a reasonable time.</p>
-      <p><b>6. Your rights.</b> You can access, correct, export, or permanently delete your account and data anytime from Account Settings. Depending on where you live, you may also have additional rights — for example, California residents have rights under the CCPA to know what personal information is collected, request deletion, and opt out of "sale" or "sharing" of personal information (we don't sell or share personal information as those terms are defined by the CCPA, so there is nothing to opt out of today, but you can still make a request). To exercise any of these rights, use the in-app tools above or contact us through <a href="/feedback">Send Feedback</a>. We won't discriminate against you for exercising any privacy right.</p>
-      <p><b>7. Not for minors.</b> The Service is for adults 21+ only and isn't directed at children. We don't knowingly collect personal information from anyone under 21, and if we learn we've done so, we'll delete it. If you believe a minor has provided us information, contact us through <a href="/feedback">Send Feedback</a>.</p>
-      <p><b>8. Security.</b> We use industry-standard measures — hashed passwords, encrypted connections — but no method of transmission or storage is perfectly secure, and we can't guarantee absolute security. In the event of a data breach affecting your personal information, we will notify affected users as required by applicable law.</p>
-      <p><b>9. International users.</b> StrainDex's infrastructure is currently hosted in the United States. If you access the Service from outside the U.S., your information will be transferred to and processed in the U.S., which may have different data protection laws than your home country.</p>
-      <p><b>10. State/international privacy laws.</b> Specific disclosures required under laws like the CCPA or GDPR beyond what's described above are being finalized with counsel and will be added here once confirmed.</p>
-      <p><b>11. Changes.</b> We may update this policy; for material changes, we'll make reasonable efforts to notify active accounts, and the "last updated" date above will always reflect the current version.</p>
+      <p><b>1. Overview.</b> This explains what StrainDex collects, how it's used, and your choices. We collect only what's needed to run the app and don't sell personal information to advertisers or data brokers.</p>
+      <p><b>2. What we collect.</b> Account info (username, email, a securely hashed password, birth date to confirm age). User content (check-ins, tasting notes, food/drink/entertainment/activity pairings, photos, recipes, grow tips). Location, only when you use "find dispensaries near me" — not stored after the search. Basic technical/error logs. A single first-party session cookie to keep you logged in — no third-party ad-tracking cookies.</p>
+      <p><b>3. How we use it.</b> To run check-ins, the strain library, recipes, growing tips, dispensary search, and friends features; to keep your account secure; to send account emails like password resets; to respond to feedback you submit; to fix bugs through error monitoring; and to generate aggregate, non-identifying usage stats.</p>
+      <p><b>4. Who we share it with.</b> We don't sell your data. We use service providers who each process data only to provide their service to us: our database host, our app host, our photo storage provider, our transactional email provider, our error-monitoring provider, and a dispensary-location lookup service. We may also disclose information if required by law.</p>
+      <p><b>5. How long we keep it.</b> As long as your account is active. If you delete your account, your personal data is removed; any recipe or grow tip you shared publicly stays up but is reattributed to "Former user."</p>
+      <p><b>6. Your rights.</b> Export your data or permanently delete your account anytime from Account Settings. Update your info directly in the app.</p>
+      <p><b>7. Not for minors.</b> The Service is for adults 21+ only and isn't directed at children. We don't knowingly collect data from anyone under 21.</p>
+      <p><b>8. Security.</b> We use industry-standard measures — hashed passwords, encrypted connections — but no method of transmission or storage is perfectly secure.</p>
+      <p><b>9. State/international privacy laws.</b> Specific disclosures required under laws like the CCPA or GDPR are being finalized with counsel and will be added here once confirmed.</p>
+      <p><b>10. Changes.</b> We may update this policy; meaningful changes will be reflected here with a new "last updated" date.</p>
     </div>
-    <p class="empty-note">Questions about this policy, or want to make a privacy request? Reach out through <a href="/feedback">Send Feedback</a>.</p>
+    <p class="empty-note">Questions about this policy? Reach out through <a href="/feedback">Send Feedback</a>.</p>
   `;
   sendHtml(res, layout({ title: 'Privacy Policy', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
@@ -3493,20 +3066,6 @@ function pageAccount(req, res, query) {
     <h1 class="screen-title" style="margin-top:8px;">Account Settings</h1>
 
     <div class="card">
-      <h2 style="margin:0 0 10px;font-size:15px;">Full Name</h2>
-      ${!user.first_name || !user.last_name ? `<p class="empty-note" style="padding:0 0 10px;">We didn't have this on file for your account yet — add it below.</p>` : ''}
-      ${error === 'name_invalid' ? `<p class="dosing-note">Please enter both a first and last name.</p>` : ''}
-      ${success === 'name' ? `<p class="empty-note" style="color:var(--brand-green-dark);">Name updated.</p>` : ''}
-      <form method="POST" action="/account/name">
-        <label class="field-label" style="margin-top:0;">First name</label>
-        <input type="text" name="first_name" value="${esc(user.first_name || '')}" required minlength="1" maxlength="50" autocomplete="given-name">
-        <label class="field-label">Last name</label>
-        <input type="text" name="last_name" value="${esc(user.last_name || '')}" required minlength="1" maxlength="50" autocomplete="family-name">
-        <button class="btn block" type="submit" style="margin-top:10px;">Update Name</button>
-      </form>
-    </div>
-
-    <div class="card" style="margin-top:14px;">
       <h2 style="margin:0 0 10px;font-size:15px;">Username</h2>
       ${error === 'username_taken' ? `<p class="dosing-note">That username is already taken — try another.</p>` : ''}
       ${success === 'username' ? `<p class="empty-note" style="color:var(--brand-green-dark);">Username updated.</p>` : ''}
@@ -3596,16 +3155,6 @@ async function handleAccountUsername(req, res) {
     redirect(res, '/account?error=username_taken');
   }
 }
-async function handleAccountName(req, res) {
-  const userId = requireUser(req, res);
-  if (userId == null) return;
-  const fields = await parseForm(req);
-  const firstName = String(fields.first_name || '').trim();
-  const lastName = String(fields.last_name || '').trim();
-  if (!firstName || !lastName) return redirect(res, '/account?error=name_invalid');
-  await db.updateName(userId, firstName, lastName);
-  redirect(res, '/account?ok=name');
-}
 async function handleAccountEmail(req, res) {
   const userId = requireUser(req, res);
   if (userId == null) return;
@@ -3636,32 +3185,18 @@ async function handleAccountPassword(req, res) {
 
 // ---------------------------------------------------------------- collection / binder
 
-function pageCollection(req, res, query) {
+function pageCollection(req, res) {
   const userId = requireUser(req, res);
   if (userId == null) return;
-  const q = query.get('q') || '';
-  const type = query.get('type') || 'All';
-  const rarity = query.get('rarity') || 'All';
-  const effect = query.get('effect') || 'All';
-  const thc = query.get('thc') || 'All';
-  const hasFilters = q || type !== 'All' || rarity !== 'All' || effect !== 'All' || thc !== 'All';
-
-  const allOwned = db.getCollection(userId).sort((a, b) => a.strain.name.localeCompare(b.strain.name));
-  const owned = allOwned.filter(o => db.matchesFilters(o.strain, { q, type, rarity, effect, thc }));
+  const owned = db.getCollection(userId).sort((a, b) => a.strain.name.localeCompare(b.strain.name));
   const uniqueCount = db.getUniqueOwnedCount(userId);
   const totalStrains = db.countStrains();
   const pct = totalStrains ? Math.round((100 * uniqueCount) / totalStrains) : 0;
 
   const rarityOrder = ['legendary', 'rare', 'uncommon', 'common'];
   const rarityCounts = { common: 0, uncommon: 0, rare: 0, legendary: 0 };
-  allOwned.forEach(o => { if (rarityCounts[o.strain.rarity] != null) rarityCounts[o.strain.rarity]++; });
-  const rarestOwned = rarityOrder.map(r => allOwned.find(o => o.strain.rarity === r)).find(Boolean);
-
-  const typeOpts = ['All', 'Indica', 'Sativa', 'Hybrid'];
-  const rarityOpts = ['All', 'common', 'uncommon', 'rare', 'legendary'];
-  const effectOpts = ['All', 'Happy', 'Relaxed', 'Euphoric', 'Uplifted', 'Sleepy', 'Energetic', 'Creative', 'Focused', 'Hungry', 'Talkative', 'Calm', 'Social'];
-  const thcOpts = ['All', 'Low', 'Medium', 'High'];
-  const thcLabel = { All: 'Any THC', Low: 'Low (≤15%)', Medium: 'Medium (15–25%)', High: 'High (25%+)' };
+  owned.forEach(o => { if (rarityCounts[o.strain.rarity] != null) rarityCounts[o.strain.rarity]++; });
+  const rarestOwned = rarityOrder.map(r => owned.find(o => o.strain.rarity === r)).find(Boolean);
 
   const body = `
     <h1 class="screen-title">My Collection</h1>
@@ -3675,43 +3210,21 @@ function pageCollection(req, res, query) {
       <div class="stat-tile"><div class="num">${rarestOwned ? esc(rarityLabel(rarestOwned.strain.rarity)) : '—'}</div><div class="lbl">Rarest catch</div></div>
     </div>
     <div class="progress-bar"><div class="fill" style="width:${pct}%;"></div></div>
-    <div class="rarity-mini-legend">
-      <span><span class="dot common"></span>Common ${rarityCounts.common}</span>
-      <span><span class="dot uncommon"></span>Uncommon ${rarityCounts.uncommon}</span>
-      <span><span class="dot rare"></span>Rare ${rarityCounts.rare}</span>
-      <span><span class="dot legendary"></span>Legendary ${rarityCounts.legendary}</span>
+
+    <div class="badge-row" style="margin-bottom:16px;">
+      <div class="badge-chip rarity-common" style="background:none;color:var(--ink-secondary);">Common: ${rarityCounts.common}</div>
+      <div class="badge-chip rarity-uncommon" style="background:none;color:var(--ink-secondary);">Uncommon: ${rarityCounts.uncommon}</div>
+      <div class="badge-chip rarity-rare" style="background:none;color:var(--ink-secondary);">Rare: ${rarityCounts.rare}</div>
+      <div class="badge-chip rarity-legendary" style="background:none;color:var(--ink-secondary);">Legendary: ${rarityCounts.legendary}</div>
     </div>
 
-    ${allOwned.length ? `
-      <form method="GET" action="/collection" id="collection-search-form" style="margin-bottom:12px;">
-        <input type="search" name="q" value="${esc(q)}" placeholder="Search your collection..." autocomplete="off">
-      </form>
-      ${(() => {
-        const mk = (params) => '/collection?' + new URLSearchParams({ q, type, rarity, thc, effect, ...params }).toString();
-        return `
-        <div class="section-label" style="margin-top:2px;">Type</div>
-        <div style="margin-bottom:10px;">${typeOpts.map(t => `<a class="filter-pill ${type === t ? 'active' : ''}" href="${mk({ type: t })}">${t}</a>`).join('')}</div>
-        <div class="section-label">Rarity</div>
-        <div style="margin-bottom:10px;">${rarityOpts.map(r => `<a class="filter-pill ${rarity === r ? 'active' : ''}" href="${mk({ rarity: r })}">${r === 'All' ? 'All' : rarityLabel(r)}</a>`).join('')}</div>
-        <div class="section-label">THC level</div>
-        <div style="margin-bottom:10px;">${thcOpts.map(t => `<a class="filter-pill ${thc === t ? 'active' : ''}" href="${mk({ thc: t })}">${thcLabel[t]}</a>`).join('')}</div>
-        `;
-      })()}
-      <div class="filter-group" style="max-width:220px;">
-        <div class="section-label" style="margin-bottom:4px;">Feeling like...</div>
-        <select name="effect" form="collection-search-form" onchange="this.form.submit()">${effectOpts.map(e => `<option value="${esc(e)}" ${effect === e ? 'selected' : ''}>${e === 'All' ? 'Any effect' : e}</option>`).join('')}</select>
-      </div>
-      ${hasFilters ? `<p class="empty-note" style="margin:8px 0 0;">${owned.length} of ${allOwned.length} cards match${owned.length !== allOwned.length ? ` — <a href="/collection">clear filters</a>` : ''}</p>` : ''}
-    ` : ''}
-
-    ${allOwned.length ? `<div class="binder-grid" style="margin-top:12px;">
+    ${owned.length ? `<div class="binder-grid">
       ${owned.map(o => `
         <a class="card-slot rarity-${o.strain.rarity}" href="/strains/${o.strain.id}">
           ${o.copies > 1 ? `<div class="copies">×${o.copies}</div>` : ''}
-          <div class="card-rarity-tag">${rarityLabel(o.strain.rarity)}</div>
           ${strainPhotoTag(o.strain, 'md')}
-          <div class="name">${(() => { const c = dominantTerpColor(o.strain.terps); return c ? `<span class="terp-dot" style="background:${c};"></span>` : ''; })()}${esc(o.strain.name)}</div>
-        </a>`).join('') || `<div class="empty-note">No cards match those filters.</div>`}
+          <div class="name">${esc(o.strain.name)}</div>
+        </a>`).join('')}
     </div>` : `<div class="empty-note">No cards caught yet — <a href="/checkin">log a check-in</a> to unlock your first one.</div>`}
   `;
   sendHtml(res, layout({ title: 'My Collection', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
@@ -3731,7 +3244,7 @@ function pageHistory(req, res) {
           ${strainPhotoTag(s, 'sm')}
           <div class="info">
             <div class="nm">${esc(s ? s.name : c.strain_id)}</div>
-            <div class="sub">${esc(c.method)}${c.brand ? ` · ${esc(c.brand)}` : ''} · ${starString(c.rating)} · <span class="local-time" data-utc="${c.created_at}Z">${esc(c.created_at)} UTC</span></div>
+            <div class="sub">${esc(c.method)} · ${starString(c.rating)} · <span class="local-time" data-utc="${c.created_at}Z">${esc(c.created_at)} UTC</span></div>
           </div>
         </a>
         <a href="/checkin/${c.id}/edit" class="empty-note" style="padding:0 4px;">Edit</a>
@@ -3925,7 +3438,7 @@ function pageConversation(req, res, friendId) {
   const thread = db.listConversation(userId, friendId);
   const body = `
     <h1 class="screen-title">${esc(friend.username)}</h1>
-    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:80px;">
+    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px;">
       ${thread.length ? thread.map(m => {
         const mine = m.sender_id === userId;
         const strain = m.shared_strain_id ? db.getStrain(m.shared_strain_id) : null;
@@ -3943,7 +3456,7 @@ function pageConversation(req, res, friendId) {
         </div>`;
       }).join('') : `<div class="empty-note">Say hi to ${esc(friend.username)} 👋</div>`}
     </div>
-    <form method="POST" action="/messages/${friend.id}/send" class="compose-bar">
+    <form method="POST" action="/messages/${friend.id}/send" style="display:flex;gap:8px;">
       <input type="text" name="body" placeholder="Message ${esc(friend.username)}..." autocomplete="off" style="flex:1;">
       <button class="btn" type="submit">Send</button>
     </form>
@@ -4016,9 +3529,9 @@ function pageFriendProfile(req, res, friendId) {
           ${strainPhotoTag(s, 'xs')}
           <span><b>${esc(s ? s.name : c.strain_id)}</b> ${s ? `<span class="rarity-tag rarity-${s.rarity}">${rarityLabel(s.rarity)}</span>` : ''}</span>
         </a>
-        <div class="sub" style="margin-top:8px;">${esc(c.method)} · ${starString(c.rating)}${c.brand ? ` · ${esc(c.brand)}` : ''}</div>
+        <div class="sub" style="margin-top:8px;">${esc(c.method)} · ${starString(c.rating)}</div>
         ${c.photo ? `<img class="photo-thumb" src="${esc(c.photo)}" alt="photo">` : ''}
-        ${(c.effects || []).length ? `<div class="effect-tags">${c.effects.map(e => `<span>${EFFECT_ICON[e] ? EFFECT_ICON[e] + ' ' : ''}${esc(e)}</span>`).join('')}</div>` : ''}
+        ${(c.effects || []).length ? `<div class="effect-tags">${c.effects.map(e => `<span>${esc(e)}</span>`).join('')}</div>` : ''}
         ${c.note ? `<div class="note">"${esc(c.note)}"</div>` : ''}
         ${renderCheckinPairings(c)}
         ${renderOnsetTimer(c)}
@@ -4444,8 +3957,6 @@ const server = http.createServer(async (req, res) => {
     let m;
     if (method === 'GET' && pathname === '/') return pageHome(req, res);
     if (method === 'GET' && pathname === '/strains') return pageStrains(req, res, url.searchParams);
-    if (method === 'GET' && pathname === '/strains/submit') return pageSubmitStrain(req, res);
-    if (method === 'POST' && pathname === '/strains/submit') return await handleSubmitStrainSubmit(req, res);
     if (method === 'GET' && (m = pathname.match(/^\/strains\/([^/]+)$/))) return pageStrainDetail(req, res, m[1]);
     if (method === 'GET' && pathname === '/checkin') return pageCheckinForm(req, res, url.searchParams);
     if (method === 'POST' && pathname === '/checkin') return await handleCheckinSubmit(req, res);
@@ -4488,19 +3999,14 @@ const server = http.createServer(async (req, res) => {
     if (method === 'GET' && pathname === '/support-the-app') return pageSupportTheApp(req, res);
     if (method === 'GET' && pathname === '/reset-password') return pageResetPassword(req, res, url.searchParams);
     if (method === 'POST' && pathname === '/reset-password') return await handleResetPasswordSubmit(req, res);
-    if (method === 'POST' && pathname === '/account/name') return await handleAccountName(req, res);
     if (method === 'POST' && pathname === '/account/username') return await handleAccountUsername(req, res);
     if (method === 'POST' && pathname === '/account/email') return await handleAccountEmail(req, res);
     if (method === 'POST' && pathname === '/account/password') return await handleAccountPassword(req, res);
     if (method === 'GET' && pathname === '/admin/logout') return handleAdminLogout(req, res);
     if (method === 'GET' && pathname === '/admin') return pageAdminHome(req, res);
-    if (method === 'GET' && pathname === '/admin/users') return await pageAdminUsers(req, res, url.searchParams);
-    if (method === 'GET' && (m = pathname.match(/^\/admin\/users\/(\d+)\/edit$/))) return await pageAdminUserEdit(req, res, Number(m[1]), url.searchParams);
-    if (method === 'POST' && (m = pathname.match(/^\/admin\/users\/(\d+)\/edit$/))) return await handleAdminUserEditSubmit(req, res, Number(m[1]));
+    if (method === 'GET' && pathname === '/admin/users') return pageAdminUsers(req, res, url.searchParams);
     if (method === 'POST' && (m = pathname.match(/^\/admin\/users\/(\d+)\/delete$/))) return await handleAdminUserDelete(req, res, Number(m[1]));
     if (method === 'GET' && pathname === '/admin/feedback') return pageAdminFeedback(req, res);
-    if (method === 'GET' && pathname === '/admin/strain-submissions') return pageAdminStrainSubmissions(req, res);
-    if (method === 'POST' && (m = pathname.match(/^\/admin\/strain-submissions\/(\d+)\/reviewed$/))) return await handleAdminStrainSubmissionReviewed(req, res, m[1]);
     if (method === 'GET' && pathname === '/admin/faqs') return pageAdminFaqs(req, res);
     if (method === 'POST' && pathname === '/admin/faqs/new') return await handleAdminFaqNew(req, res);
     if (method === 'GET' && (m = pathname.match(/^\/admin\/faqs\/(\d+)\/edit$/))) return pageAdminFaqEdit(req, res, Number(m[1]));
@@ -4524,7 +4030,7 @@ const server = http.createServer(async (req, res) => {
     if (method === 'GET' && pathname === '/api/analytics-snapshot') return apiAnalyticsSnapshot(req, res, url.searchParams);
 
     if (method === 'GET' && pathname === '/more') return pageMore(req, res);
-    if (method === 'GET' && pathname === '/collection') return pageCollection(req, res, url.searchParams);
+    if (method === 'GET' && pathname === '/collection') return pageCollection(req, res);
     if (method === 'GET' && pathname === '/history') return pageHistory(req, res);
     if (method === 'GET' && pathname === '/trade') return pageTrade(req, res, url.searchParams);
     if (method === 'GET' && pathname === '/friends') return pageFriends(req, res, url.searchParams);
