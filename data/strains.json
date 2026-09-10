@@ -75723,5 +75723,46 @@
       "Rare Dankness #1"
     ],
     "id": "s2422"
+  },
+  {
+    "name": "Goober (Square One Genetics)",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Calm"
+    ],
+    "flavor": "Nutty and grape with hints of anise spice.",
+    "icon": "🌿",
+    "aka": "Goober",
+    "breeder": "Square One Genetics",
+    "parents": [
+      "Granddaddy Purple",
+      "Peanut Butter Breath"
+    ],
+    "id": "s2423"
+  },
+  {
+    "name": "Goober (Green Wolf Genetics)",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Sweet, fruity Runtz notes paired with hints of peanut.",
+    "icon": "🌿",
+    "aka": "Goober",
+    "breeder": "Green Wolf Genetics",
+    "parents": [
+      "PB&J Runtz",
+      "Slurricane"
+    ],
+    "id": "s2424"
   }
 ]
