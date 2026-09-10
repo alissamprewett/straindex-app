@@ -76795,5 +76795,72 @@
       "Original Z (Zkittlez)"
     ],
     "id": "s2472"
+  },
+  {
+    "name": "3 Chems",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-24%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed"
+    ],
+    "flavor": "Sharp chemical spicy flavor with earthy pungent exhale.",
+    "icon": "🌿",
+    "aka": "Three Chems",
+    "breeder": "Top Dawg Seeds",
+    "parents": [
+      "Chem 91",
+      "Chemdog",
+      "Tres Dawg"
+    ],
+    "id": "s2473"
+  },
+  {
+    "name": "309 OG",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "19-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Focused"
+    ],
+    "flavor": "Sage, grapefruit, and flowery.",
+    "icon": "🌿",
+    "aka": "309, 309 Kush, 309 OG Kush",
+    "breeder": "Nature's Grace and Wellness",
+    "parents": [
+      "Grimace OG",
+      "OG Kush"
+    ],
+    "id": "s2474"
+  },
+  {
+    "name": "5G's",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Focused",
+      "Energetic",
+      "Relaxed"
+    ],
+    "flavor": "",
+    "icon": "🌿",
+    "aka": "5 G OGSD",
+    "breeder": "Ganja Rebel Seeds",
+    "parents": [
+      "Sour Diesel x F13",
+      "(OG x Chemdawg) x C99"
+    ],
+    "id": "s2475"
   }
 ]
