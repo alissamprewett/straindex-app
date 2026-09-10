@@ -75318,5 +75318,69 @@
       "Orange Zkittlez"
     ],
     "id": "s2403"
+  },
+  {
+    "name": "Michigan Cherries",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "18-22%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed"
+    ],
+    "flavor": "Tart red cherry and maraschino-cordial notes over a cookies base.",
+    "icon": "🌿",
+    "breeder": "FLWRpot",
+    "parents": [
+      "Modified Mints",
+      "Tropicana Cherry"
+    ],
+    "id": "s2404"
+  },
+  {
+    "name": "Mint Lemonade",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "13-19%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Giggly",
+      "Relaxed"
+    ],
+    "flavor": "Sweet citrusy lemon with a punch of sharp mint.",
+    "icon": "🌿",
+    "breeder": "Sin City Seeds",
+    "parents": [
+      "SinMint Cookies",
+      "Lemon G"
+    ],
+    "id": "s2405"
+  },
+  {
+    "name": "Nooner",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Hungry",
+      "Sleepy"
+    ],
+    "flavor": "Patchouli, cinnamon, and pepper.",
+    "icon": "🌿",
+    "parents": [
+      "Panda Snax",
+      "Trophy Wife"
+    ],
+    "id": "s2406"
   }
 ]
