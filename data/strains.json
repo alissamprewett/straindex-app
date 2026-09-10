@@ -75229,5 +75229,94 @@
       "3 Bears OG"
     ],
     "id": "s2399"
+  },
+  {
+    "name": "Jungle Fruit",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "18-22%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric"
+    ],
+    "flavor": "Pineapple, lemon, and apple.",
+    "icon": "🌿",
+    "breeder": "Exotic Genetix",
+    "parents": [
+      "Green Crack",
+      "Phantom Cookies"
+    ],
+    "id": "s2400"
+  },
+  {
+    "name": "MAC 10",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "32%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Creative"
+    ],
+    "flavor": "Creamy oranges with gassy apples.",
+    "icon": "🌿",
+    "aka": "MAC #10, Miracle Alien Cookies #10",
+    "parents": [
+      "MAC (Miracle Alien Cookies)",
+      "Columbian Gold",
+      "Starfighter"
+    ],
+    "id": "s2401"
+  },
+  {
+    "name": "Mandarin Jack",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "14-19%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Calm"
+    ],
+    "flavor": "Sweet bubblegum with a tropical exhale.",
+    "icon": "🌿",
+    "breeder": "Ethos Genetics",
+    "parents": [
+      "Jack Herer",
+      "Mandarin Sunset"
+    ],
+    "id": "s2402"
+  },
+  {
+    "name": "Mango Mints",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "30-32%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Giggly",
+      "Sedated"
+    ],
+    "flavor": "Juicy tropical pineapples and sour mangoes with woody pine.",
+    "icon": "🌿",
+    "aka": "Mango Mintz",
+    "parents": [
+      "Animal Mints",
+      "Orange Zkittlez"
+    ],
+    "id": "s2403"
   }
 ]
