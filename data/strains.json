@@ -74486,5 +74486,590 @@
       "Kush Mints"
     ],
     "id": "s2365"
+  },
+  {
+    "name": "Petrol Pine",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "24%+",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Sleepy",
+      "Relaxed",
+      "Creative"
+    ],
+    "flavor": "Sweet, sour citrusy orange with spicy sage and woody pine.",
+    "icon": "🌿",
+    "parents": [
+      "MAC",
+      "Gelato #2"
+    ],
+    "id": "s2366"
+  },
+  {
+    "name": "Pipe Dream",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "23-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Talkative",
+      "Giggly",
+      "Aroused"
+    ],
+    "flavor": "Blueberry, cedar, and fuel notes with a hint of haze.",
+    "icon": "🌿",
+    "breeder": "Broken Coast",
+    "parents": [
+      "Blue Dream",
+      "Acapulco Gold",
+      "Cinderella 99"
+    ],
+    "id": "s2367"
+  },
+  {
+    "name": "Runtz Punch",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Creative"
+    ],
+    "flavor": "Sweet sugary berries, sharp cherries, and tropical candy.",
+    "icon": "🌿",
+    "parents": [
+      "Purple Punch",
+      "Runtz"
+    ],
+    "id": "s2368"
+  },
+  {
+    "name": "Strawberry Glue",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "up to 25%+",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Relaxed",
+      "Happy"
+    ],
+    "flavor": "Sweet strawberry with a touch of savory diesel.",
+    "icon": "🌿",
+    "breeder": "Dark Horse Genetics",
+    "aka": "Strawberry Adhesive",
+    "parents": [
+      "GG4 (Gorilla Glue #4)",
+      "Strawberry Diesel"
+    ],
+    "id": "s2369"
+  },
+  {
+    "name": "Super Silver Grapefruit",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Uplifted",
+      "Focused"
+    ],
+    "flavor": "Grapefruit citrus with a spicy, haze-forward aroma.",
+    "icon": "🌿",
+    "parents": [
+      "Super Silver Haze",
+      "Grapefruit"
+    ],
+    "id": "s2370"
+  },
+  {
+    "name": "The Bizz",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "26%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Relaxed",
+      "Focused"
+    ],
+    "flavor": "Sweet and earthy with fruity, lemony notes.",
+    "icon": "🌿",
+    "aka": "The Biz",
+    "parents": [
+      "Albert Walker OG",
+      "Chemdawg 91"
+    ],
+    "id": "s2371"
+  },
+  {
+    "name": "Torrone",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Calm"
+    ],
+    "flavor": "Sweet, buttery, and gassy with an Apple Fritter-like sweetness.",
+    "icon": "🌿",
+    "parents": [
+      "Cream Cookiez",
+      "Apple Fritter"
+    ],
+    "id": "s2372"
+  },
+  {
+    "name": "Vapor Fuel",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "23%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Creative",
+      "Relaxed"
+    ],
+    "flavor": "Heavy, psychedelic aroma with menthol and diesel notes.",
+    "icon": "🌿",
+    "breeder": "Compound Genetics",
+    "parents": [
+      "ChemD I95",
+      "The Menthol"
+    ],
+    "id": "s2373"
+  },
+  {
+    "name": "Y Life",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Happy"
+    ],
+    "flavor": "Doughy sugar-cookie sweetness with a hint of cherry funk.",
+    "icon": "🌿",
+    "breeder": "Cookies",
+    "parents": [
+      "Girl Scout Cookies",
+      "Cherry Pie"
+    ],
+    "id": "s2374"
+  },
+  {
+    "name": "2 Scoops",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "17-26%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Talkative",
+      "Creative",
+      "Happy"
+    ],
+    "flavor": "Creamy citrusy gelato with fruity berries and blueberries.",
+    "icon": "🌿",
+    "aka": "Two Scoops, Double Scoop, Double Scoops",
+    "breeder": "T-Fly Genetics",
+    "parents": [
+      "Grape Sherbet",
+      "Orange Sherbet"
+    ],
+    "id": "s2375"
+  },
+  {
+    "name": "3Peat",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Sleepy",
+      "Relaxed"
+    ],
+    "flavor": "Earthy, spicy herbal, and peppery aroma with pine and fruit.",
+    "icon": "🌿",
+    "breeder": "DNA Genetics",
+    "parents": [
+      "Kosher Kush",
+      "Holy Grail Kush",
+      "RP 43"
+    ],
+    "id": "s2376"
+  },
+  {
+    "name": "After Dark",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Uplifted"
+    ],
+    "flavor": "Sweet sherbet sweetness with cooling menthol notes.",
+    "icon": "🌿",
+    "parents": [
+      "Sunset Sherbet",
+      "Gush Mints"
+    ],
+    "id": "s2377"
+  },
+  {
+    "name": "Apple Rock Candy",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "24%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Aroused",
+      "Happy",
+      "Giggly"
+    ],
+    "flavor": "Earthy apple with a punch of pepper.",
+    "icon": "🌿",
+    "breeder": "Alien Genetics",
+    "parents": [
+      "Alien Rock Candy",
+      "Sour Apple"
+    ],
+    "id": "s2378"
+  },
+  {
+    "name": "Bermuda Punch",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "17-24%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Focused",
+      "Creative",
+      "Relaxed"
+    ],
+    "flavor": "Sweet citrusy candy with a punch of sharp mint.",
+    "icon": "🌿",
+    "parents": [
+      "Triangle Kush",
+      "Purple Punch"
+    ],
+    "id": "s2379"
+  },
+  {
+    "name": "Big League Sherb",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "19-25%",
+    "cbd": "1%",
+    "terps": [],
+    "effects": [
+      "Creative",
+      "Happy",
+      "Talkative"
+    ],
+    "flavor": "Sweet citrusy berry strawberry with sour citrus.",
+    "icon": "🌿",
+    "aka": "Big League Sherbet",
+    "parents": [
+      "Sherbert",
+      "Rainbow Chip"
+    ],
+    "id": "s2380"
+  },
+  {
+    "name": "Biscotti Sherbet",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "27-29%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Relaxed",
+      "Creative"
+    ],
+    "flavor": "Sweet, creamy vanilla ice cream with sour berry candies.",
+    "icon": "🌿",
+    "aka": "Sherbet Biscotti, Biscotti Sherb, Biscotti Sherbert",
+    "parents": [
+      "Biscotti",
+      "Sunset Sherbet"
+    ],
+    "id": "s2381"
+  },
+  {
+    "name": "Black Cherry Gushers",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "26-30%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Relaxed",
+      "Talkative"
+    ],
+    "flavor": "Sweet fruity cherry with spicy, sugary candies and apricot.",
+    "icon": "🌿",
+    "breeder": "The Standard Cannabis Co",
+    "parents": [
+      "Acai",
+      "Black Cherry Funk"
+    ],
+    "id": "s2382"
+  },
+  {
+    "name": "Blue Cherry Gelato",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "25-26%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Calm",
+      "Relaxed"
+    ],
+    "flavor": "Berry-blasted, dough-laced blueberry with cherry.",
+    "icon": "🌿",
+    "breeder": "THC Design",
+    "parents": [
+      "Blue Nerdz",
+      "Lemon Cherry Gelato"
+    ],
+    "id": "s2383"
+  },
+  {
+    "name": "Blue Flame",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "24-28%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Creative",
+      "Focused",
+      "Relaxed"
+    ],
+    "flavor": "Spicy berries with pungent earth, peppery on the exhale.",
+    "icon": "🌿",
+    "breeder": "Gage Green Group",
+    "parents": [
+      "Super Blue Dream",
+      "Inferno Haze"
+    ],
+    "id": "s2384"
+  },
+  {
+    "name": "Blue Sugar Cookies",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "24%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Relaxed"
+    ],
+    "flavor": "Sweet nutty flavor with pungent berry kush and smooth earth.",
+    "icon": "🌿",
+    "parents": [
+      "Sugar Cookies",
+      "Blueberry"
+    ],
+    "id": "s2385"
+  },
+  {
+    "name": "Cadillac Rainbowz",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "32%+",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Euphoric",
+      "Hungry"
+    ],
+    "flavor": "Gassy and fruity with lemon and diesel, hints of cherry and mint.",
+    "icon": "🌿",
+    "breeder": "3rd Coast Genetics",
+    "aka": "Caddie Rainbowz, Cadillac Rainbow, Cadillac Rainbows",
+    "parents": [
+      "Pure Michigan",
+      "Runtz"
+    ],
+    "id": "s2386"
+  },
+  {
+    "name": "Cheese Berry",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "19%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Creative",
+      "Social"
+    ],
+    "flavor": "Sweet and fruity berry blueberry with rich creamy cheese.",
+    "icon": "🌿",
+    "breeder": "00 Seeds",
+    "aka": "Cheeseberry",
+    "parents": [
+      "UK Cheese",
+      "Blueberry"
+    ],
+    "id": "s2387"
+  },
+  {
+    "name": "Cherry Gushers",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "29-30%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Creative",
+      "Sedated"
+    ],
+    "flavor": "Sweet fruity cherry berry with a bright citrusy candy exhale.",
+    "icon": "🌿",
+    "parents": [
+      "Acai",
+      "Black Cherry Funk"
+    ],
+    "id": "s2388"
+  },
+  {
+    "name": "Cherry Tart",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "19-21%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Creative",
+      "Talkative",
+      "Focused"
+    ],
+    "flavor": "Sweet, juicy cherries, fruity berries, and spicy citrus.",
+    "icon": "🌿",
+    "breeder": "42",
+    "parents": [
+      "Cherry Pie",
+      "Very Cherry"
+    ],
+    "id": "s2389"
+  },
+  {
+    "name": "Chocolate Oranges",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "21-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Talkative",
+      "Relaxed",
+      "Sleepy"
+    ],
+    "flavor": "Sweet and savory spicy orange with rich milky chocolate.",
+    "icon": "🌿",
+    "breeder": "Exotic Genetix",
+    "parents": [
+      "Mint Chocolate Chip",
+      "Orange Valley OG"
+    ],
+    "id": "s2390"
+  },
+  {
+    "name": "Chroma",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "30-32%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Calm"
+    ],
+    "flavor": "Zesty lemon with creamy, sugary vanilla cake and sharp mint.",
+    "icon": "🌿",
+    "breeder": "Maven Genetics",
+    "parents": [
+      "Prizm",
+      "Black Diamond X"
+    ],
+    "id": "s2391"
+  },
+  {
+    "name": "Cookie Face",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "23-26%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Aroused"
+    ],
+    "flavor": "Sweet vanilla cookie with fresh fruity berries and spicy anise.",
+    "icon": "🌿",
+    "parents": [
+      "Girl Scout Cookies",
+      "Do-Si-Dos"
+    ],
+    "id": "s2392"
   }
 ]
