@@ -82057,5 +82057,157 @@
       "Lemon G"
     ],
     "id": "s2724"
+  },
+  {
+    "name": "Lemon Brulee",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "21%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Uplifted",
+      "Creative"
+    ],
+    "flavor": "Sweet and creamy sugary lemon cake flavor with a notable hint of spicy grapefruit.",
+    "icon": "🍋",
+    "breeder": "Covert Genetics",
+    "parents": [
+      "Death by Lemons (Death Star x Lemon Skunk)",
+      "Sensiburn OG"
+    ],
+    "id": "s2725"
+  },
+  {
+    "name": "Lemon Garlic OG",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed"
+    ],
+    "flavor": "Super citrusy and garlicky herbal taste with a pungent garlic overtone accented by earthy herbs and sour spices.",
+    "icon": "🧄",
+    "aka": "LGOG",
+    "parents": [
+      "OG Kush",
+      "Chemdawg",
+      "Lemon Thai",
+      "Hindu Kush",
+      "Pakistani"
+    ],
+    "id": "s2726"
+  },
+  {
+    "name": "Lemon Granita",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "17-26.5%",
+    "cbd": "0.07%",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Happy"
+    ],
+    "flavor": "Sweet and sour, citrusy lemon taste accented by hints of spicy skunk and earthy, woody pine.",
+    "icon": "🍋",
+    "breeder": "Hytiva",
+    "parents": [
+      "Lemon Jack",
+      "Frozen Margy"
+    ],
+    "id": "s2727"
+  },
+  {
+    "name": "Lemon Ice Pucker",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "23-24%",
+    "cbd": "1%",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Focused",
+      "Creative"
+    ],
+    "flavor": "Creamy tangerines accented by sour lemon-lime and fresh spicy flowers.",
+    "icon": "🍋",
+    "aka": "Lemon Ice Pucker #4",
+    "breeder": "Cannarado Genetics",
+    "parents": [
+      "Lemon G",
+      "Sunset Sherbet"
+    ],
+    "id": "s2728"
+  },
+  {
+    "name": "Lemon Larry Lavender",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Happy"
+    ],
+    "flavor": "Sweet citrus aromas overlaid by velvety floral terpenes.",
+    "icon": "💜",
+    "aka": "Lemon Lavender",
+    "breeder": "Big Buddy Seeds",
+    "parents": [
+      "Lemon Larry OG Kush",
+      "Lavender"
+    ],
+    "id": "s2729"
+  },
+  {
+    "name": "Lemon Oasis",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "16-26%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Creative",
+      "Relaxed"
+    ],
+    "flavor": "Super mouthwatering sour citrus flavor with hints of fresh lemon and tropical fruits.",
+    "icon": "🍋",
+    "breeder": "Rare Dankness Seeds",
+    "parents": [
+      "'05 Lemon Skunk (clone-only)",
+      "Rare Dankness #2"
+    ],
+    "id": "s2730"
+  },
+  {
+    "name": "Lemon Poison",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Lip-puckering tastes with sour citrus and spicy lemon.",
+    "icon": "🍋",
+    "breeder": "The Bank Genetics",
+    "parents": [
+      "Lemon G-13",
+      "Durban Poison"
+    ],
+    "id": "s2731"
   }
 ]
