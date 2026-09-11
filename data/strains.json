@@ -82209,5 +82209,288 @@
       "Durban Poison"
     ],
     "id": "s2731"
+  },
+  {
+    "name": "Lemongrass Gas",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "24%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Euphoric",
+      "Creative"
+    ],
+    "flavor": "Explosive blend of lemony notes, underlined by a sharp diesel hint.",
+    "icon": "🍋",
+    "breeder": "Doja Seeds",
+    "parents": [
+      "Gelonade",
+      "Duke's Crumpets"
+    ],
+    "id": "s2732"
+  },
+  {
+    "name": "LFG",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "30-32%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Creative",
+      "Relaxed"
+    ],
+    "flavor": "Sweet berries and creamy citrus with earthy pine undertones.",
+    "icon": "🌿",
+    "aka": "Let's Fckn Go",
+    "breeder": "Barney's Farm",
+    "parents": [
+      "Lemon Cherry Gelato",
+      "Gelato #41"
+    ],
+    "id": "s2733"
+  },
+  {
+    "name": "Lilikoi",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "19-20%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Happy",
+      "Relaxed"
+    ],
+    "flavor": "Sugary sweet strawberry flavor accented by hints of fresh blueberries and freshly picked cherry blossoms.",
+    "icon": "🌺",
+    "aka": "Lilikoi Blossom",
+    "breeder": "Raw Garden",
+    "parents": [
+      "Strawberry Cloud",
+      "Lychee Blossom"
+    ],
+    "id": "s2734"
+  },
+  {
+    "name": "Lit OG",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed"
+    ],
+    "flavor": "Fruity aroma with a creamy and smooth smoke.",
+    "icon": "🔥",
+    "breeder": "Lit Farms",
+    "parents": [
+      "Tahoe OG",
+      "Runtz"
+    ],
+    "id": "s2735"
+  },
+  {
+    "name": "London Bridge",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Dessert gas and creamy fruit.",
+    "icon": "🌉",
+    "breeder": "42",
+    "parents": [
+      "Sunset Sherbet",
+      "London Pound Cake"
+    ],
+    "id": "s2736"
+  },
+  {
+    "name": "London Jealousy",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Creative",
+      "Relaxed",
+      "Euphoric"
+    ],
+    "flavor": "Delightful sugary lemon and herb aroma and a fruity cake flavor profile.",
+    "icon": "🎂",
+    "aka": "London Jealousy 1812",
+    "parents": [
+      "London Pound Cake",
+      "Jealousy"
+    ],
+    "id": "s2737"
+  },
+  {
+    "name": "Loud Cake",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "24%",
+    "cbd": "0.05%",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Euphoric"
+    ],
+    "flavor": "Sweet and creamy vanilla cake taste with just a touch of spicy diesel upon exhale.",
+    "icon": "🎂",
+    "breeder": "In House Genetics",
+    "parents": [
+      "Project 4516 (S1)",
+      "Pancakes"
+    ],
+    "id": "s2738"
+  },
+  {
+    "name": "Love Affair",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "22-28%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Sleepy"
+    ],
+    "flavor": "Sweet and fruity berry candy flavor with a lightly flowery lavender exhale.",
+    "icon": "💕",
+    "breeder": "Proper Cannabis",
+    "parents": [
+      "Alien Rock Candy (ARC)",
+      "Gorilla Glue #4 (GG4)"
+    ],
+    "id": "s2739"
+  },
+  {
+    "name": "Lung Buster",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "23%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Happy",
+      "Relaxed"
+    ],
+    "flavor": "Diesel, garlic, and creamy vanilla notes with hints of banana.",
+    "icon": "🌬️",
+    "breeder": "Solfire Gardens",
+    "parents": [
+      "Don Mega",
+      "Udder Madness"
+    ],
+    "id": "s2740"
+  },
+  {
+    "name": "Lyon King",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "16-20%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Energetic",
+      "Creative"
+    ],
+    "flavor": "Sour and spicy nutty diesel aroma with an earthy and hashy aroma.",
+    "icon": "🦁",
+    "aka": "Lion King",
+    "parents": [
+      "Sour Diesel",
+      "Animal Cookies"
+    ],
+    "id": "s2741"
+  },
+  {
+    "name": "Mac #7",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "22%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Euphoric"
+    ],
+    "flavor": "Cinnamon, orange, and lavender.",
+    "icon": "🍊",
+    "breeder": "Capulator",
+    "parents": [
+      "Alien Cookies",
+      "Colombian Gold",
+      "Starfighter"
+    ],
+    "id": "s2742"
+  },
+  {
+    "name": "Mac 69",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "22-32%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed"
+    ],
+    "flavor": "Super spicy fruity berry flavor with a heavily gassy exhale.",
+    "icon": "🍇",
+    "aka": "Miracle Alien Cookies 69",
+    "breeder": "Capulator",
+    "parents": [
+      "MAC 6",
+      "MAC 9"
+    ],
+    "id": "s2743"
+  },
+  {
+    "name": "Mad Max",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "11%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Creative",
+      "Relaxed",
+      "Focused"
+    ],
+    "flavor": "Spicy herbal smell with hints of peach and citrus.",
+    "icon": "🌿",
+    "aka": "Mad Max #33",
+    "breeder": "DutchFem",
+    "parents": [
+      "Amnesia Haze",
+      "Top44"
+    ],
+    "id": "s2744"
   }
 ]
