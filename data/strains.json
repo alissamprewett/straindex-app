@@ -89274,5 +89274,201 @@
       "Fire Alien White"
     ],
     "id": "s3064"
+  },
+  {
+    "name": "Allen Iverson (Iverson '01)",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed"
+    ],
+    "flavor": "Flowers, pine, orange, and hops.",
+    "icon": "🏀",
+    "breeder": "Viola Brands",
+    "parents": [
+      "F1 Durban",
+      "Gushers",
+      "Runtz"
+    ],
+    "id": "s3065"
+  },
+  {
+    "name": "Alley Cat",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "24-28%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Focused",
+      "Creative",
+      "Relaxed"
+    ],
+    "flavor": "Jet-fuel core with zesty citrus and dessert-like sweetness.",
+    "icon": "🐈",
+    "breeder": "IC Collective",
+    "parents": [
+      "T.I.T.S",
+      "Diablo OG"
+    ],
+    "id": "s3066"
+  },
+  {
+    "name": "Aloha Grape Stomper",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "rare",
+    "thc": "18-26%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Clear-headed",
+      "Relaxed"
+    ],
+    "flavor": "Sweet yet pungent, like a fruity aged tropical wine.",
+    "icon": "🍇",
+    "breeder": "Gage Green Genetics",
+    "parents": [
+      "Grape Stomper",
+      "'98 Aloha White Widow"
+    ],
+    "id": "s3067"
+  },
+  {
+    "name": "Aloha Limone",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "24%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Chatty",
+      "Aroused"
+    ],
+    "flavor": "Overripe tropical fruits, sour citrus, and subtle floral undertones.",
+    "icon": "🍋",
+    "breeder": "Colorado Seed Inc.",
+    "parents": [
+      "Hawaiian Sunrise",
+      "Nina Limone"
+    ],
+    "id": "s3068"
+  },
+  {
+    "name": "Aloha Punch (Made By A Farmer)",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Creative",
+      "Relaxed"
+    ],
+    "flavor": "Creamy dessert-like sweetness with fruity, calming notes.",
+    "icon": "🍹",
+    "breeder": "Made By A Farmer",
+    "parents": [
+      "Mochi Gelato",
+      "Purple Punch"
+    ],
+    "id": "s3069"
+  },
+  {
+    "name": "Alpenglow",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "23%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Peaceful",
+      "Aware"
+    ],
+    "flavor": "Vanilla cream, lavender, black currants, dark red wine.",
+    "icon": "🌄",
+    "breeder": "Dynasty Genetics",
+    "parents": [
+      "Cherry Vanilla Cookies",
+      "Oregon Huckleberry 2017 #5"
+    ],
+    "id": "s3070"
+  },
+  {
+    "name": "Alpha Dawg",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "15-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Creative",
+      "Sedated"
+    ],
+    "flavor": "Diesel, chemicals, and musk.",
+    "icon": "🐕",
+    "breeder": "Alphakronik Genes",
+    "parents": [
+      "Chemdawg D",
+      "Snowdawg BX"
+    ],
+    "id": "s3071"
+  },
+  {
+    "name": "Alpine Blue",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "13-20%",
+    "cbd": "1-4%",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Euphoric",
+      "Creative"
+    ],
+    "flavor": "Sweet and spicy woody berry with a touch of pine.",
+    "icon": "🏔️",
+    "parents": [
+      "Blue Mystic",
+      "Power Plant"
+    ],
+    "id": "s3072"
+  },
+  {
+    "name": "Alpine OG",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "27%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Hungry"
+    ],
+    "flavor": "Earthy and citrusy with a spicy herbal, lemon-coffee overtone.",
+    "icon": "🏔️",
+    "breeder": "Moxie 710",
+    "parents": [
+      "Tahoe OG",
+      "Viper City OG"
+    ],
+    "id": "s3073"
   }
 ]
