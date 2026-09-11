@@ -165,17 +165,30 @@ function isOldEnough(birthDateStr) {
   return age >= MIN_AGE;
 }
 function starString(n) { n = Number(n) || 0; return '★'.repeat(n) + '☆'.repeat(5 - n); }
+// The pairing types a check-in can log. Each has its own DB column
+// (pairing_food, pairing_entertainment, etc.) but the check-in form shows
+// only one at a time via a type dropdown + a single text box, rather than
+// five separate fields always on screen -- key is used as the option
+// value client-side, field is the actual form field name / db.js column,
+// icon+label are shown in the dropdown and on the resulting chip, and
+// placeholder guides what to type for that type.
+const PAIRING_TYPES = [
+  { key: 'food', field: 'pairing_food', icon: '🍽️', label: 'Food / Drink', placeholder: 'What went really well with it?' },
+  { key: 'entertainment', field: 'pairing_entertainment', icon: '🎵', label: 'Music / Entertainment', placeholder: 'What you listened to or watched' },
+  { key: 'activity', field: 'pairing_activity', icon: '🎯', label: 'Activity', placeholder: 'What you did while enjoying it' },
+  { key: 'setting', field: 'pairing_setting', icon: '📍', label: 'Setting / Location', placeholder: 'Where you were' },
+  { key: 'occasion', field: 'pairing_occasion', icon: '✨', label: 'Mood / Occasion', placeholder: 'What made it worth logging' },
+];
 // Shared renderer for the optional "pairings" a user can log with a
-// check-in -- tasting notes plus food/drink, music/entertainment, and
-// activity pairings. Each is independently optional, so only show what's
-// actually filled in.
+// check-in -- brand, tasting notes, plus whichever of the pairing types
+// above they filled in. Each is independently optional, so only show
+// what's actually filled in.
 function renderCheckinPairings(c) {
   return `
     ${c.is_private ? `<div class="empty-note" style="padding:4px 0 0;font-weight:700;">🔒 Private — only visible to you</div>` : ''}
+    ${c.brand ? `<div class="empty-note" style="padding:4px 0 0;">🏷️ Brand: ${esc(c.brand)}</div>` : ''}
     ${c.tasting_notes ? `<div class="empty-note" style="padding:4px 0 0;">🍃 Tasting notes: ${esc(c.tasting_notes)}</div>` : ''}
-    ${c.pairing_food ? `<div class="empty-note" style="padding:2px 0 0;">🍽️ Paired with: ${esc(c.pairing_food)}</div>` : ''}
-    ${c.pairing_entertainment ? `<div class="empty-note" style="padding:2px 0 0;">🎵 Listening/watching: ${esc(c.pairing_entertainment)}</div>` : ''}
-    ${c.pairing_activity ? `<div class="empty-note" style="padding:2px 0 0;">🎯 Doing: ${esc(c.pairing_activity)}</div>` : ''}
+    ${PAIRING_TYPES.map(p => c[p.field] ? `<div class="empty-note" style="padding:2px 0 0;">${p.icon} ${esc(p.label)}: ${esc(c[p.field])}</div>` : '').join('')}
   `;
 }
 // Shows a live "started Xh Ym ago" onset reminder under any check-in logged
@@ -808,6 +821,9 @@ function pageCheckinForm(req, res, query, existing) {
       <input type="hidden" name="strain_id" id="strain-picker-hidden" value="${s ? s.id : ''}">
       ${isEdit ? '' : `<p class="empty-note" id="strain-picker-hint" ${s ? 'style="display:none;"' : ''}>Tip: search from <a href="/strains">the Strain Library</a> and tap "Check in" on the strain page for a pre-filled form.</p>`}
 
+      <label class="field-label">Brand</label>
+      <input type="text" name="brand" placeholder="e.g. the dispensary or grower's brand" value="${existing ? esc(existing.brand || '') : ''}">
+
       <label class="field-label">Method</label>
       <select name="method" id="checkin-method-select" onchange="toggleEdibleWarning(this.value)">${METHOD_GROUPS.map(g => `<optgroup label="${esc(g.group)}">${g.items.map(m => `<option ${existing && existing.method === m ? 'selected' : ''}>${esc(m)}</option>`).join('')}</optgroup>`).join('')}</select>
       <div class="dosing-note" id="edible-warning" style="display:none;">⚠️ Edibles can take up to 2 hours to fully kick in. Redosing too early — before you feel the first dose — is the most common cause of an uncomfortable experience. Wait it out before taking more.</div>
@@ -840,14 +856,18 @@ function pageCheckinForm(req, res, query, existing) {
       <label class="field-label">Tasting Notes</label>
       <textarea name="tasting_notes" placeholder="Flavor, smell, smoothness — what stood out?">${existing ? esc(existing.tasting_notes || '') : ''}</textarea>
 
-      <label class="field-label">Food / Drink Pairing</label>
-      <input type="text" name="pairing_food" placeholder="What went really well with it?" value="${existing ? esc(existing.pairing_food || '') : ''}">
-
-      <label class="field-label">Music / Entertainment Pairing</label>
-      <input type="text" name="pairing_entertainment" placeholder="What you listened to or watched" value="${existing ? esc(existing.pairing_entertainment || '') : ''}">
-
-      <label class="field-label">Activity Pairing</label>
-      <input type="text" name="pairing_activity" placeholder="What you did while enjoying it" value="${existing ? esc(existing.pairing_activity || '') : ''}">
+      <label class="field-label">Pairing (optional)</label>
+      <div class="pairing-picker" id="pairing-picker">
+        <select id="pairing-type-select">
+          ${PAIRING_TYPES.map(p => `<option value="${p.key}">${p.icon} ${esc(p.label)}</option>`).join('')}
+        </select>
+        <div style="display:flex;gap:8px;margin-top:8px;">
+          <input type="text" id="pairing-value-input" style="flex:1;margin:0;" autocomplete="off">
+          <button type="button" class="btn secondary" id="pairing-add-btn" style="white-space:nowrap;">+ Add</button>
+        </div>
+        <div class="effect-chips" id="pairing-chips"></div>
+      </div>
+      <div id="pairing-hidden-inputs"></div>
 
       <label style="display:flex;align-items:center;gap:8px;margin-top:16px;cursor:pointer;">
         <input type="checkbox" name="is_private" value="1" ${existing && existing.is_private ? 'checked' : ''} style="width:auto;margin:0;">
@@ -872,6 +892,72 @@ function pageCheckinForm(req, res, query, existing) {
         if (box) box.style.display = window.EDIBLE_METHODS.includes(method) ? 'block' : 'none';
       }
       toggleEdibleWarning(document.getElementById('checkin-method-select').value);
+
+      // Pairing picker: one type dropdown + one text box, rather than
+      // showing all pairing types at once. Selecting a type shows its own
+      // placeholder and (if editing a check-in that already has a value
+      // for that type) pre-fills the box with it. "+ Add" commits that
+      // value as a chip and writes it into a hidden input under the DB
+      // column name (pairing_food, pairing_setting, etc.) so the plain
+      // form POST carries every pairing that's been set, even though only
+      // one text box is ever visible at a time.
+      window.PAIRING_TYPES = ${JSON.stringify(PAIRING_TYPES)};
+      window.INITIAL_PAIRINGS = ${JSON.stringify(
+        existing
+          ? Object.fromEntries(PAIRING_TYPES.filter(p => existing[p.field]).map(p => [p.key, existing[p.field]]))
+          : {}
+      )};
+      (function initPairingPicker() {
+        const typeSelect = document.getElementById('pairing-type-select');
+        const valueInput = document.getElementById('pairing-value-input');
+        const addBtn = document.getElementById('pairing-add-btn');
+        const chipsBox = document.getElementById('pairing-chips');
+        const hiddenBox = document.getElementById('pairing-hidden-inputs');
+        if (!typeSelect) return;
+        const pairings = Object.assign({}, window.INITIAL_PAIRINGS || {});
+
+        function typeByKey(key) { return window.PAIRING_TYPES.find(p => p.key === key); }
+
+        function renderPairings() {
+          const keys = Object.keys(pairings).filter(k => pairings[k]);
+          chipsBox.innerHTML = keys.map(k => {
+            const t = typeByKey(k);
+            return \`<span class="tag-chip">\${t ? t.icon + ' ' : ''}\${t ? escHtmlLocal(t.label) + ': ' : ''}\${escHtmlLocal(pairings[k])} <button type="button" data-remove="\${k}">✕</button></span>\`;
+          }).join('');
+          hiddenBox.innerHTML = keys.map(k => {
+            const t = typeByKey(k);
+            return t ? \`<input type="hidden" name="\${t.field}" value="\${escAttrLocal(pairings[k])}">\` : '';
+          }).join('');
+          chipsBox.querySelectorAll('button[data-remove]').forEach(btn => {
+            btn.onclick = () => { delete pairings[btn.dataset.remove]; renderPairings(); updateInputForSelection(); };
+          });
+        }
+        function escHtmlLocal(str) { return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+        function escAttrLocal(str) { return escHtmlLocal(str).replace(/"/g, '&quot;'); }
+
+        function updateInputForSelection() {
+          const t = typeByKey(typeSelect.value);
+          valueInput.placeholder = t ? t.placeholder : '';
+          valueInput.value = pairings[typeSelect.value] || '';
+        }
+
+        typeSelect.addEventListener('change', updateInputForSelection);
+        addBtn.addEventListener('click', () => {
+          const val = valueInput.value.trim();
+          if (!val) return;
+          pairings[typeSelect.value] = val;
+          renderPairings();
+          const next = window.PAIRING_TYPES.find(p => !pairings[p.key]);
+          if (next) typeSelect.value = next.key;
+          updateInputForSelection();
+        });
+        valueInput.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') { e.preventDefault(); addBtn.click(); }
+        });
+
+        updateInputForSelection();
+        renderPairings();
+      })();
     </script>
   `;
   sendHtml(res, layout({ title: isEdit ? 'Edit Check-In' : 'Check In', active: 'strains', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
@@ -896,9 +982,10 @@ async function handleCheckinSubmit(req, res) {
   const photoUrl = await storage.uploadCheckinPhoto(fields.photo || null);
   await db.createCheckin({
     user_id: userId, strain_id: strainId, method: fields.method, rating: Number(fields.rating) || 0,
-    note: fields.note || '', effects, photo: photoUrl,
+    note: fields.note || '', effects, photo: photoUrl, brand: fields.brand || '',
     tasting_notes: fields.tasting_notes || '', pairing_food: fields.pairing_food || '',
     pairing_entertainment: fields.pairing_entertainment || '', pairing_activity: fields.pairing_activity || '',
+    pairing_setting: fields.pairing_setting || '', pairing_occasion: fields.pairing_occasion || '',
     is_private: !!fields.is_private,
   });
   redirect(res, `/strains/${strainId}`);
@@ -914,9 +1001,10 @@ async function handleCheckinEditSubmit(req, res, id) {
   const photoUrl = await storage.uploadCheckinPhoto(fields.photo || null);
   await db.updateCheckin(id, {
     method: fields.method, rating: Number(fields.rating) || 0,
-    note: fields.note || '', effects, photo: photoUrl,
+    note: fields.note || '', effects, photo: photoUrl, brand: fields.brand || '',
     tasting_notes: fields.tasting_notes || '', pairing_food: fields.pairing_food || '',
     pairing_entertainment: fields.pairing_entertainment || '', pairing_activity: fields.pairing_activity || '',
+    pairing_setting: fields.pairing_setting || '', pairing_occasion: fields.pairing_occasion || '',
     is_private: !!fields.is_private,
   });
   redirect(res, `/strains/${existing.strain_id}`);
@@ -2859,10 +2947,9 @@ function apiListStrains(req, res, query) {
   const breeder = query.get('breeder') || 'All';
   const verified = query.get('verified') || 'All';
   const limit = Math.min(Number(query.get('limit')) || 60, 200);
-  const offset = Math.max(Number(query.get('offset')) || 0, 0);
   sendJson(res, {
     total: db.countStrains({ q, type, rarity, effect, thc, terpene, ailment, breeder, verified }),
-    results: db.listStrains({ q, type, rarity, effect, thc, terpene, ailment, breeder, verified, limit, offset }),
+    results: db.listStrains({ q, type, rarity, effect, thc, terpene, ailment, breeder, verified, limit }),
   });
 }
 async function apiKudos(req, res, id) {
