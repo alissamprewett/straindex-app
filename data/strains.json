@@ -80559,5 +80559,311 @@
       "Lemon Puff"
     ],
     "id": "s2652"
+  },
+  {
+    "name": "Grand Prix",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "30%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Creative",
+      "Giggly",
+      "Relaxed"
+    ],
+    "flavor": "Coffee, pungent, and sweet notes with a slight tang on the exhale.",
+    "icon": "🏎️",
+    "breeder": "Lit Farms",
+    "parents": [
+      "Runtz x E85",
+      "Grandi Candi"
+    ],
+    "id": "s2653"
+  },
+  {
+    "name": "Granddaddy Grape",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "16-20%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Happy"
+    ],
+    "flavor": "Super sweet flavor of fruity grapes topped with spicy dank musk.",
+    "icon": "🍇",
+    "parents": [
+      "Granddaddy Purps",
+      "Grape Ape"
+    ],
+    "id": "s2654"
+  },
+  {
+    "name": "Grape Blow",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "24-34%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed"
+    ],
+    "flavor": "Sweet fruity grape candy flavor with hints of sour citrusy lemon upon exhale.",
+    "icon": "🍇",
+    "breeder": "Envy Genetics",
+    "parents": [
+      "Grape Pie",
+      "Blow Pops"
+    ],
+    "id": "s2655"
+  },
+  {
+    "name": "Grape Galena",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "22-29%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Sleepy"
+    ],
+    "flavor": "Sweet and sugary, with a blend of fruity berries, fresh flowers and tangy grape candies.",
+    "icon": "🍇",
+    "breeder": "Tommy's Craft Cannabis",
+    "parents": [
+      "OG Kush Breath x Lost Sailor",
+      "Platinum Kush"
+    ],
+    "id": "s2656"
+  },
+  {
+    "name": "Grape Gary",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "23-28%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Energetic",
+      "Talkative"
+    ],
+    "flavor": "Bold grape candied sweetness with a gassy, diesel backed herbal tone.",
+    "icon": "🍇",
+    "breeder": "Exotic Genetix",
+    "parents": [
+      "Gary Payton",
+      "Grape Jubilee"
+    ],
+    "id": "s2657"
+  },
+  {
+    "name": "Grape Jelly Donut (Grouse Valley Farms)",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-26%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Euphoric",
+      "Giggly"
+    ],
+    "flavor": "Sweet fruity grape flavor with hints of fresh vanilla and light touches of earth.",
+    "icon": "🍩",
+    "breeder": "Grouse Valley Farms",
+    "parents": [
+      "Birthday Cake OG",
+      "Grape Sherbet"
+    ],
+    "id": "s2658"
+  },
+  {
+    "name": "Grape Jelly Donut (Raw Genetics)",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "19.5%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Giggly",
+      "Hungry",
+      "Sleepy"
+    ],
+    "flavor": "Grape, sage, and berry.",
+    "icon": "🍩",
+    "breeder": "Raw Genetics",
+    "parents": [
+      "Purple Punch",
+      "French Toast"
+    ],
+    "id": "s2659"
+  },
+  {
+    "name": "Grape Lime Ricky",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "14%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed"
+    ],
+    "flavor": "Tart and tangy citrus flavors with sugary sweet undertones.",
+    "icon": "🍇",
+    "aka": "GLR",
+    "breeder": "SubCool (TGA Genetics)",
+    "parents": [
+      "Purple Urkle",
+      "Jack the Ripper"
+    ],
+    "id": "s2660"
+  },
+  {
+    "name": "Grape Mints (Sin City Seeds)",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Bold grape flavor with a cool minty finish.",
+    "icon": "🍇",
+    "breeder": "Sin City Seeds",
+    "parents": [
+      "Granddaddy Purple",
+      "SinMint Cookies"
+    ],
+    "id": "s2661"
+  },
+  {
+    "name": "Grape Mints (Grape Ape x Thin Mints)",
+    "type": "Indica",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🍇",
+    "breeder": "High Tide Organics",
+    "parents": [
+      "Grape Ape",
+      "Thin Mints"
+    ],
+    "id": "s2662"
+  },
+  {
+    "name": "Grape Noir",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed"
+    ],
+    "flavor": "Skunky and sweet flavor that resembles a grape milkshake with a hint of garlic.",
+    "icon": "🍇",
+    "parents": [
+      "Grape Pie",
+      "GMO (Garlic Cookies)"
+    ],
+    "id": "s2663"
+  },
+  {
+    "name": "Grape Sorbet (ThugPug Genetics)",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "15-22%",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🍧",
+    "breeder": "ThugPug Genetics",
+    "parents": [
+      "Sunset Sherbet",
+      "Mendo Montage"
+    ],
+    "id": "s2664"
+  },
+  {
+    "name": "Grape Sorbet (Dutchgrown Seeds)",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "15%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Focused"
+    ],
+    "flavor": "Sweet fruity berry taste with hints of tangy grape and vanilla upon exhale.",
+    "icon": "🍧",
+    "breeder": "Dutchgrown Seeds",
+    "parents": [
+      "Blue Satellite",
+      "Cinderella 99"
+    ],
+    "id": "s2665"
+  },
+  {
+    "name": "Grapefruit Gelato (Archive Seedbank)",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed"
+    ],
+    "flavor": "Sharp, zesty grapefruit blended with creamy dessert sweetness.",
+    "icon": "🍊",
+    "breeder": "Archive Seedbank",
+    "parents": [
+      "Gelato 33",
+      "Lemon Lime"
+    ],
+    "id": "s2666"
+  },
+  {
+    "name": "Grapefruit Gelato (Precursor Genetics)",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Creamy grapefruit fuel.",
+    "icon": "🍊",
+    "breeder": "Precursor Genetics",
+    "parents": [
+      "Secret Donor",
+      "Wedding Crasher"
+    ],
+    "id": "s2667"
   }
 ]
