@@ -3982,8 +3982,50 @@ function serveStatic(req, res, pathname) {
 
 // ---------------------------------------------------------------- router
 
+// Transparent gzip for every dynamic response (HTML pages, JSON API
+// results), applied once here rather than editing every sendHtml/sendJson
+// call site. Wraps res.end so any handler's normal res.writeHead(...) +
+// res.end(string) still works exactly as before -- this only compresses
+// the bytes in flight if the browser said it accepts gzip and the body is
+// worth compressing (skip tiny bodies and things that are already
+// binary/compressed, like image responses from serveStatic, which sets
+// its own headers directly and calls the real res.end via a different
+// path before this wrapping would even apply here).
+function wrapResponseWithGzip(req, res) {
+  const acceptsGzip = (req.headers['accept-encoding'] || '').includes('gzip');
+  if (!acceptsGzip) return;
+  const originalWriteHead = res.writeHead.bind(res);
+  const originalEnd = res.end.bind(res);
+  let headersSent = false;
+  let statusCode = 200;
+  let headersArg = {};
+  res.writeHead = (code, headers) => {
+    statusCode = code;
+    headersArg = headers || {};
+    headersSent = true;
+    return res;
+  };
+  res.end = (body) => {
+    // Only gzip text bodies worth the CPU cost; skip empty bodies (304s,
+    // redirects) and anything the handler already compressed/streamed.
+    if (!headersSent || !body || typeof body !== 'string' || body.length < 512 || headersArg['Content-Encoding']) {
+      if (headersSent) originalWriteHead(statusCode, headersArg);
+      return originalEnd(body);
+    }
+    zlib.gzip(Buffer.from(body, 'utf8'), (err, compressed) => {
+      if (err) {
+        originalWriteHead(statusCode, headersArg);
+        return originalEnd(body);
+      }
+      originalWriteHead(statusCode, { ...headersArg, 'Content-Encoding': 'gzip', Vary: 'Accept-Encoding' });
+      originalEnd(compressed);
+    });
+  };
+}
+
 const server = http.createServer(async (req, res) => {
   try {
+    wrapResponseWithGzip(req, res);
     const url = new URL(req.url, `http://${req.headers.host}`);
     const { pathname } = url;
     const method = req.method;
