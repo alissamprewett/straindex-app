@@ -14,6 +14,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { URL } = require('node:url');
 const crypto = require('node:crypto');
+const zlib = require('node:zlib');
 
 const db = require('./lib/db');
 const auth = require('./lib/auth');
@@ -165,30 +166,17 @@ function isOldEnough(birthDateStr) {
   return age >= MIN_AGE;
 }
 function starString(n) { n = Number(n) || 0; return '★'.repeat(n) + '☆'.repeat(5 - n); }
-// The pairing types a check-in can log. Each has its own DB column
-// (pairing_food, pairing_entertainment, etc.) but the check-in form shows
-// only one at a time via a type dropdown + a single text box, rather than
-// five separate fields always on screen -- key is used as the option
-// value client-side, field is the actual form field name / db.js column,
-// icon+label are shown in the dropdown and on the resulting chip, and
-// placeholder guides what to type for that type.
-const PAIRING_TYPES = [
-  { key: 'food', field: 'pairing_food', icon: '🍽️', label: 'Food / Drink', placeholder: 'What went really well with it?' },
-  { key: 'entertainment', field: 'pairing_entertainment', icon: '🎵', label: 'Music / Entertainment', placeholder: 'What you listened to or watched' },
-  { key: 'activity', field: 'pairing_activity', icon: '🎯', label: 'Activity', placeholder: 'What you did while enjoying it' },
-  { key: 'setting', field: 'pairing_setting', icon: '📍', label: 'Setting / Location', placeholder: 'Where you were' },
-  { key: 'occasion', field: 'pairing_occasion', icon: '✨', label: 'Mood / Occasion', placeholder: 'What made it worth logging' },
-];
 // Shared renderer for the optional "pairings" a user can log with a
-// check-in -- brand, tasting notes, plus whichever of the pairing types
-// above they filled in. Each is independently optional, so only show
-// what's actually filled in.
+// check-in -- tasting notes plus food/drink, music/entertainment, and
+// activity pairings. Each is independently optional, so only show what's
+// actually filled in.
 function renderCheckinPairings(c) {
   return `
     ${c.is_private ? `<div class="empty-note" style="padding:4px 0 0;font-weight:700;">🔒 Private — only visible to you</div>` : ''}
-    ${c.brand ? `<div class="empty-note" style="padding:4px 0 0;">🏷️ Brand: ${esc(c.brand)}</div>` : ''}
     ${c.tasting_notes ? `<div class="empty-note" style="padding:4px 0 0;">🍃 Tasting notes: ${esc(c.tasting_notes)}</div>` : ''}
-    ${PAIRING_TYPES.map(p => c[p.field] ? `<div class="empty-note" style="padding:2px 0 0;">${p.icon} ${esc(p.label)}: ${esc(c[p.field])}</div>` : '').join('')}
+    ${c.pairing_food ? `<div class="empty-note" style="padding:2px 0 0;">🍽️ Paired with: ${esc(c.pairing_food)}</div>` : ''}
+    ${c.pairing_entertainment ? `<div class="empty-note" style="padding:2px 0 0;">🎵 Listening/watching: ${esc(c.pairing_entertainment)}</div>` : ''}
+    ${c.pairing_activity ? `<div class="empty-note" style="padding:2px 0 0;">🎯 Doing: ${esc(c.pairing_activity)}</div>` : ''}
   `;
 }
 // Shows a live "started Xh Ym ago" onset reminder under any check-in logged
@@ -534,7 +522,7 @@ function pageStrains(req, res, query) {
     </div>
     <p class="empty-note" style="margin-bottom:2px;">✅ Verified — THC, breeder, and flavor/terpene data all independently confirmed. &nbsp; 🔹 Partial — some details confirmed. &nbsp; ⚪ Listed only — seen on a dispensary menu, nothing independently confirmed yet.</p>
     <p class="empty-note" style="margin-bottom:10px;">User-reported associations, not medical advice — see a doctor for real guidance.</p>
-    <p class="empty-note" id="strain-search-count">${total.toLocaleString()} strain${total === 1 ? '' : 's'}</p>
+    <p class="empty-note" id="strain-search-count">${total > 60 ? `Showing 60 of ${total.toLocaleString()} — refine your search to narrow it down.` : `${total} strain${total === 1 ? '' : 's'}`}</p>
     <div id="strain-search-results">${results.map(s => `
       <a class="library-row" href="/strains/${s.id}" style="text-decoration:none;color:inherit;">
         ${strainPhotoTag(s, 'sm')}
@@ -544,7 +532,6 @@ function pageStrains(req, res, query) {
         </div>
         <span class="rarity-tag rarity-${s.rarity}">${rarityLabel(s.rarity)}</span>
       </a>`).join('') || `<div class="empty-note">No strains match your filters.</div>`}</div>
-    <div id="strain-load-more-container">${total > 60 ? `<button type="button" class="btn secondary block" id="strain-load-more-btn" style="margin-top:10px;">Load ${Math.min(60, total - 60)} more (60 of ${total.toLocaleString()} shown)</button>` : ''}</div>
   `;
   sendHtml(res, layout({ title: 'Strains', active: 'strains', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
@@ -614,7 +601,6 @@ function pageStrainDetail(req, res, id) {
         ${strainPhotoTag(s, 'lg')}
         <div>
           <h1 style="margin:0;font-size:19px;">${esc(s.name)}</h1>
-          ${s.aka ? `<div class="empty-note" style="padding:0;"><u>aka</u> ${esc(s.aka)}</div>` : ''}
           <div class="empty-note" style="padding:0;">${esc(s.type)}${s.lean ? ' · ' + esc(s.lean) : ''} · <span class="rarity-tag rarity-${s.rarity}">${rarityLabel(s.rarity)}</span></div>
           <div style="margin-top:2px;" title="${esc(VERIFICATION_BADGE[strainVerificationTier(s)].note)}"><span class="empty-note" style="padding:0;">${VERIFICATION_BADGE[strainVerificationTier(s)].icon} ${VERIFICATION_BADGE[strainVerificationTier(s)].label}</span></div>
           ${ratingStats.count ? `<div style="margin-top:2px;">${starString(Math.round(ratingStats.avg))} <span class="empty-note" style="padding:0;">${ratingStats.avg}★ from ${ratingStats.count} check-in${ratingStats.count === 1 ? '' : 's'}</span></div>` : `<div class="empty-note" style="padding:2px 0 0;">No community ratings yet — be the first to check in.</div>`}
@@ -821,9 +807,6 @@ function pageCheckinForm(req, res, query, existing) {
       <input type="hidden" name="strain_id" id="strain-picker-hidden" value="${s ? s.id : ''}">
       ${isEdit ? '' : `<p class="empty-note" id="strain-picker-hint" ${s ? 'style="display:none;"' : ''}>Tip: search from <a href="/strains">the Strain Library</a> and tap "Check in" on the strain page for a pre-filled form.</p>`}
 
-      <label class="field-label">Brand</label>
-      <input type="text" name="brand" placeholder="e.g. the dispensary or grower's brand" value="${existing ? esc(existing.brand || '') : ''}">
-
       <label class="field-label">Method</label>
       <select name="method" id="checkin-method-select" onchange="toggleEdibleWarning(this.value)">${METHOD_GROUPS.map(g => `<optgroup label="${esc(g.group)}">${g.items.map(m => `<option ${existing && existing.method === m ? 'selected' : ''}>${esc(m)}</option>`).join('')}</optgroup>`).join('')}</select>
       <div class="dosing-note" id="edible-warning" style="display:none;">⚠️ Edibles can take up to 2 hours to fully kick in. Redosing too early — before you feel the first dose — is the most common cause of an uncomfortable experience. Wait it out before taking more.</div>
@@ -856,18 +839,14 @@ function pageCheckinForm(req, res, query, existing) {
       <label class="field-label">Tasting Notes</label>
       <textarea name="tasting_notes" placeholder="Flavor, smell, smoothness — what stood out?">${existing ? esc(existing.tasting_notes || '') : ''}</textarea>
 
-      <label class="field-label">Pairing (optional)</label>
-      <div class="pairing-picker" id="pairing-picker">
-        <select id="pairing-type-select">
-          ${PAIRING_TYPES.map(p => `<option value="${p.key}">${p.icon} ${esc(p.label)}</option>`).join('')}
-        </select>
-        <div style="display:flex;gap:8px;margin-top:8px;">
-          <input type="text" id="pairing-value-input" style="flex:1;margin:0;" autocomplete="off">
-          <button type="button" class="btn secondary" id="pairing-add-btn" style="white-space:nowrap;">+ Add</button>
-        </div>
-        <div class="effect-chips" id="pairing-chips"></div>
-      </div>
-      <div id="pairing-hidden-inputs"></div>
+      <label class="field-label">Food / Drink Pairing</label>
+      <input type="text" name="pairing_food" placeholder="What went really well with it?" value="${existing ? esc(existing.pairing_food || '') : ''}">
+
+      <label class="field-label">Music / Entertainment Pairing</label>
+      <input type="text" name="pairing_entertainment" placeholder="What you listened to or watched" value="${existing ? esc(existing.pairing_entertainment || '') : ''}">
+
+      <label class="field-label">Activity Pairing</label>
+      <input type="text" name="pairing_activity" placeholder="What you did while enjoying it" value="${existing ? esc(existing.pairing_activity || '') : ''}">
 
       <label style="display:flex;align-items:center;gap:8px;margin-top:16px;cursor:pointer;">
         <input type="checkbox" name="is_private" value="1" ${existing && existing.is_private ? 'checked' : ''} style="width:auto;margin:0;">
@@ -892,72 +871,6 @@ function pageCheckinForm(req, res, query, existing) {
         if (box) box.style.display = window.EDIBLE_METHODS.includes(method) ? 'block' : 'none';
       }
       toggleEdibleWarning(document.getElementById('checkin-method-select').value);
-
-      // Pairing picker: one type dropdown + one text box, rather than
-      // showing all pairing types at once. Selecting a type shows its own
-      // placeholder and (if editing a check-in that already has a value
-      // for that type) pre-fills the box with it. "+ Add" commits that
-      // value as a chip and writes it into a hidden input under the DB
-      // column name (pairing_food, pairing_setting, etc.) so the plain
-      // form POST carries every pairing that's been set, even though only
-      // one text box is ever visible at a time.
-      window.PAIRING_TYPES = ${JSON.stringify(PAIRING_TYPES)};
-      window.INITIAL_PAIRINGS = ${JSON.stringify(
-        existing
-          ? Object.fromEntries(PAIRING_TYPES.filter(p => existing[p.field]).map(p => [p.key, existing[p.field]]))
-          : {}
-      )};
-      (function initPairingPicker() {
-        const typeSelect = document.getElementById('pairing-type-select');
-        const valueInput = document.getElementById('pairing-value-input');
-        const addBtn = document.getElementById('pairing-add-btn');
-        const chipsBox = document.getElementById('pairing-chips');
-        const hiddenBox = document.getElementById('pairing-hidden-inputs');
-        if (!typeSelect) return;
-        const pairings = Object.assign({}, window.INITIAL_PAIRINGS || {});
-
-        function typeByKey(key) { return window.PAIRING_TYPES.find(p => p.key === key); }
-
-        function renderPairings() {
-          const keys = Object.keys(pairings).filter(k => pairings[k]);
-          chipsBox.innerHTML = keys.map(k => {
-            const t = typeByKey(k);
-            return \`<span class="tag-chip">\${t ? t.icon + ' ' : ''}\${t ? escHtmlLocal(t.label) + ': ' : ''}\${escHtmlLocal(pairings[k])} <button type="button" data-remove="\${k}">✕</button></span>\`;
-          }).join('');
-          hiddenBox.innerHTML = keys.map(k => {
-            const t = typeByKey(k);
-            return t ? \`<input type="hidden" name="\${t.field}" value="\${escAttrLocal(pairings[k])}">\` : '';
-          }).join('');
-          chipsBox.querySelectorAll('button[data-remove]').forEach(btn => {
-            btn.onclick = () => { delete pairings[btn.dataset.remove]; renderPairings(); updateInputForSelection(); };
-          });
-        }
-        function escHtmlLocal(str) { return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
-        function escAttrLocal(str) { return escHtmlLocal(str).replace(/"/g, '&quot;'); }
-
-        function updateInputForSelection() {
-          const t = typeByKey(typeSelect.value);
-          valueInput.placeholder = t ? t.placeholder : '';
-          valueInput.value = pairings[typeSelect.value] || '';
-        }
-
-        typeSelect.addEventListener('change', updateInputForSelection);
-        addBtn.addEventListener('click', () => {
-          const val = valueInput.value.trim();
-          if (!val) return;
-          pairings[typeSelect.value] = val;
-          renderPairings();
-          const next = window.PAIRING_TYPES.find(p => !pairings[p.key]);
-          if (next) typeSelect.value = next.key;
-          updateInputForSelection();
-        });
-        valueInput.addEventListener('keydown', (e) => {
-          if (e.key === 'Enter') { e.preventDefault(); addBtn.click(); }
-        });
-
-        updateInputForSelection();
-        renderPairings();
-      })();
     </script>
   `;
   sendHtml(res, layout({ title: isEdit ? 'Edit Check-In' : 'Check In', active: 'strains', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
@@ -982,10 +895,9 @@ async function handleCheckinSubmit(req, res) {
   const photoUrl = await storage.uploadCheckinPhoto(fields.photo || null);
   await db.createCheckin({
     user_id: userId, strain_id: strainId, method: fields.method, rating: Number(fields.rating) || 0,
-    note: fields.note || '', effects, photo: photoUrl, brand: fields.brand || '',
+    note: fields.note || '', effects, photo: photoUrl,
     tasting_notes: fields.tasting_notes || '', pairing_food: fields.pairing_food || '',
     pairing_entertainment: fields.pairing_entertainment || '', pairing_activity: fields.pairing_activity || '',
-    pairing_setting: fields.pairing_setting || '', pairing_occasion: fields.pairing_occasion || '',
     is_private: !!fields.is_private,
   });
   redirect(res, `/strains/${strainId}`);
@@ -1001,10 +913,9 @@ async function handleCheckinEditSubmit(req, res, id) {
   const photoUrl = await storage.uploadCheckinPhoto(fields.photo || null);
   await db.updateCheckin(id, {
     method: fields.method, rating: Number(fields.rating) || 0,
-    note: fields.note || '', effects, photo: photoUrl, brand: fields.brand || '',
+    note: fields.note || '', effects, photo: photoUrl,
     tasting_notes: fields.tasting_notes || '', pairing_food: fields.pairing_food || '',
     pairing_entertainment: fields.pairing_entertainment || '', pairing_activity: fields.pairing_activity || '',
-    pairing_setting: fields.pairing_setting || '', pairing_occasion: fields.pairing_occasion || '',
     is_private: !!fields.is_private,
   });
   redirect(res, `/strains/${existing.strain_id}`);
@@ -2769,8 +2680,6 @@ function strainFormFields(s) {
   return `
     <label class="field-label" style="margin-top:0;">Name</label>
     <input type="text" name="name" value="${v(s && s.name)}" required>
-    <label class="field-label">Also known as (AKA) — comma-separated, e.g. "GG4, Original Glue" (leave blank if none)</label>
-    <input type="text" name="aka" value="${v(s && s.aka)}">
     <label class="field-label">Type</label>
     <select name="type">${opt('Indica', 'Indica')}${opt('Sativa', 'Sativa')}${opt('Hybrid', 'Hybrid')}</select>
     <label class="field-label">Lean (optional, e.g. "Sativa-leaning")</label>
@@ -2835,7 +2744,6 @@ async function handleAdminStrainNew(req, res) {
   await db.insertStrain({
     id, name: f.name, type: f.type, lean: f.lean, rarity: f.rarity, thc: f.thc, cbd: f.cbd,
     flavor: f.flavor, icon: f.icon || '🌿', effects: parseEffectsInput(f.effects), terps: parseTerpsInput(f.terps),
-    aka: f.aka || '',
   });
   redirect(res, '/admin/strains');
 }
@@ -2858,7 +2766,6 @@ async function handleAdminStrainEditSubmit(req, res, id) {
   await db.insertStrain({
     id, name: f.name, type: f.type, lean: f.lean, rarity: f.rarity, thc: f.thc, cbd: f.cbd,
     flavor: f.flavor, icon: f.icon || '🌿', effects: parseEffectsInput(f.effects), terps: parseTerpsInput(f.terps),
-    aka: f.aka || '',
   });
   redirect(res, '/admin/strains');
 }
@@ -4003,6 +3910,27 @@ function pageConcentrates(req, res) {
   sendHtml(res, layout({ title: 'Concentrates & Extracts', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
+// Bandwidth-saving static file serving. Two things drive most of a
+// low-traffic app's egress: (1) the same images and CSS/JS being
+// re-downloaded on every single page view because nothing tells the
+// browser it can cache them, and (2) sending full-size text/image bytes
+// when a compressed version would do. Both are essentially free fixes
+// for a file server that never changes its own files at runtime:
+//   - Cache-Control + ETag: the browser caches the file and, on repeat
+//     visits, sends `If-None-Match`; if it still matches we reply 304
+//     with an empty body instead of re-sending the whole file. For a
+//     photo referenced on every strain card, home feed post, and
+//     collection binder slot, this turns "re-download every time" into
+//     "download once per browser."
+//   - gzip for text assets (CSS/JS/SVG): these compress 60-80% smaller
+//     and virtually every browser advertises gzip support, so this is
+//     pure savings with no compatibility downside.
+// Photos are versioned by filename (a new upload gets a new key), so a
+// long max-age is safe here -- nothing needs cache-busting because we
+// never overwrite an existing filename in place.
+const COMPRESSIBLE_EXTS = new Set(['.css', '.js', '.json', '.svg', '.manifest']);
+const STATIC_CACHE_SECONDS = 60 * 60 * 24 * 30; // 30 days
+
 function serveStatic(req, res, pathname) {
   // The strain bud photos ended up committed under /docs (repo root) rather
   // than /public/images — rather than requiring a re-upload, serve requests
@@ -4015,8 +3943,39 @@ function serveStatic(req, res, pathname) {
   if (!filePath.startsWith(baseDir)) return notFound(res);
   fs.readFile(filePath, (err, data) => {
     if (err) return notFound(res);
+
+    // ETag from a content hash -- cheap to compute, and correctly changes
+    // if a file's actual bytes ever change (e.g. app.css gets redeployed),
+    // so this never risks serving someone a stale stylesheet forever.
+    const etag = '"' + crypto.createHash('sha1').update(data).digest('hex') + '"';
+    const headers = {
+      'Content-Type': MIME[path.extname(filePath)] || 'application/octet-stream',
+      'Cache-Control': `public, max-age=${STATIC_CACHE_SECONDS}`,
+      ETag: etag,
+    };
+
+    // Conditional request: if the browser already has this exact file
+    // cached, tell it so with an empty 304 instead of re-sending the
+    // bytes. This is the single biggest lever here -- a returning visitor
+    // effectively costs zero bandwidth for unchanged assets.
+    if (req.headers['if-none-match'] === etag) {
+      res.writeHead(304, headers);
+      return res.end();
+    }
+
     const ext = path.extname(filePath);
-    res.writeHead(200, { 'Content-Type': MIME[ext] || 'application/octet-stream' });
+    const acceptsGzip = (req.headers['accept-encoding'] || '').includes('gzip');
+    if (COMPRESSIBLE_EXTS.has(ext) && acceptsGzip) {
+      headers['Content-Encoding'] = 'gzip';
+      headers.Vary = 'Accept-Encoding';
+      return zlib.gzip(data, (gzErr, compressed) => {
+        if (gzErr) { res.writeHead(200, headers); return res.end(data); }
+        res.writeHead(200, headers);
+        res.end(compressed);
+      });
+    }
+
+    res.writeHead(200, headers);
     res.end(data);
   });
 }
