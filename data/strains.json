@@ -57110,34 +57110,6 @@
     ]
   },
   {
-    "id": "s1683",
-    "name": "Forbidden GMO",
-    "type": "Hybrid",
-    "lean": null,
-    "rarity": "uncommon",
-    "thc": null,
-    "cbd": null,
-    "terps": [],
-    "effects": [],
-    "flavor": null,
-    "icon": "🚫",
-    "breeder": null
-  },
-  {
-    "id": "s1684",
-    "name": "Presha OG",
-    "type": "Hybrid",
-    "lean": null,
-    "rarity": "uncommon",
-    "thc": null,
-    "cbd": null,
-    "terps": [],
-    "effects": [],
-    "flavor": null,
-    "icon": "🌿",
-    "breeder": null
-  },
-  {
     "id": "s1685",
     "name": "Purple Carbonite",
     "type": "Hybrid",
@@ -57181,20 +57153,6 @@
     "flavor": null,
     "icon": "☮️",
     "breeder": "Moon Made Farms"
-  },
-  {
-    "id": "s1687",
-    "name": "Vegas ODB",
-    "type": "Hybrid",
-    "lean": null,
-    "rarity": "uncommon",
-    "thc": null,
-    "cbd": null,
-    "terps": [],
-    "effects": [],
-    "flavor": null,
-    "icon": "🎲",
-    "breeder": null
   },
   {
     "id": "s1688",
@@ -57306,20 +57264,6 @@
     "flavor": "Pungent lemon fuel with sweet, kushy notes and earthy spice.",
     "icon": "❄️",
     "breeder": "Gold Coast Collection"
-  },
-  {
-    "id": "s1693",
-    "name": "Tropicana Cherry Pie",
-    "type": "Hybrid",
-    "lean": null,
-    "rarity": "uncommon",
-    "thc": null,
-    "cbd": null,
-    "terps": [],
-    "effects": [],
-    "flavor": null,
-    "icon": "🥧",
-    "breeder": null
   },
   {
     "id": "s1694",
@@ -57467,20 +57411,6 @@
     ]
   },
   {
-    "id": "s1699",
-    "name": "Snoozeberry",
-    "type": "Hybrid",
-    "lean": null,
-    "rarity": "uncommon",
-    "thc": null,
-    "cbd": null,
-    "terps": [],
-    "effects": [],
-    "flavor": null,
-    "icon": "🫐",
-    "breeder": null
-  },
-  {
     "id": "s1700",
     "name": "Grand Master",
     "type": "Hybrid",
@@ -57501,20 +57431,6 @@
     "flavor": "Piney, earthy kush with gasoline-soaked OG notes.",
     "icon": "🌿",
     "breeder": "CBX Cannabiotix"
-  },
-  {
-    "id": "s1701",
-    "name": "Cherry Royale",
-    "type": "Hybrid",
-    "lean": null,
-    "rarity": "uncommon",
-    "thc": null,
-    "cbd": null,
-    "terps": [],
-    "effects": [],
-    "flavor": null,
-    "icon": "🍒",
-    "breeder": null
   },
   {
     "id": "s1702",
@@ -58278,20 +58194,6 @@
     "breeder": "CBX Cannabiotix"
   },
   {
-    "id": "s1735",
-    "name": "Lemon ZaZa",
-    "type": "Hybrid",
-    "lean": null,
-    "rarity": "uncommon",
-    "thc": null,
-    "cbd": null,
-    "terps": [],
-    "effects": [],
-    "flavor": null,
-    "icon": "🍋",
-    "breeder": null
-  },
-  {
     "id": "s1736",
     "name": "Mango Cult",
     "type": "Hybrid",
@@ -58552,20 +58454,6 @@
     "flavor": null,
     "icon": "🍌",
     "breeder": "Claybourne Co."
-  },
-  {
-    "id": "s1751",
-    "name": "Tang Gang",
-    "type": "Hybrid",
-    "lean": null,
-    "rarity": "uncommon",
-    "thc": null,
-    "cbd": null,
-    "terps": [],
-    "effects": [],
-    "flavor": null,
-    "icon": "🍊",
-    "breeder": null
   },
   {
     "id": "s1752",
@@ -123285,5 +123173,1192 @@
       "Big Buns"
     ],
     "id": "s4440"
+  },
+  {
+    "name": "Goat Head",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "25-32%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Creative",
+      "Relaxed"
+    ],
+    "flavor": "Sweet and spicy earth, spicy lemony.",
+    "icon": "🐐",
+    "breeder": "The Farm Genetics",
+    "parents": [
+      "Golden Goat",
+      "Headband"
+    ],
+    "id": "s4441"
+  },
+  {
+    "name": "Goat Milk",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "23-27%",
+    "cbd": "",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Energized",
+      "Uplifted",
+      "Euphoric"
+    ],
+    "flavor": "Sweet creamy vanilla milk, fruity berries.",
+    "icon": "🥛",
+    "breeder": "Fiore Genetics",
+    "parents": [
+      "Cereal Milk",
+      "Georgia Pie #50"
+    ],
+    "id": "s4442"
+  },
+  {
+    "name": "Goblin Eggs",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-24%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Social",
+      "Relaxed"
+    ],
+    "flavor": "Smooth sweet strawberry, cherry, woody pine.",
+    "icon": "🥚",
+    "breeder": "Early Grave",
+    "parents": [
+      "Raindance",
+      "Sorbetto"
+    ],
+    "id": "s4443"
+  },
+  {
+    "name": "God Lemon",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Sharp lemon, earthy kush, diesel.",
+    "icon": "🍋",
+    "breeder": "Massive Creations",
+    "parents": [
+      "Lemon Verzace",
+      "Adonai"
+    ],
+    "id": "s4444"
+  },
+  {
+    "name": "God's Glue",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "25-30%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Sedated"
+    ],
+    "flavor": "Diesel, chocolate, earthy.",
+    "icon": "🔗",
+    "breeder": "Ministry of Cannabis",
+    "parents": [
+      "Gorilla Glue #4 (US)",
+      "Gorilla Glue #4 (Amsterdam clone)"
+    ],
+    "id": "s4445"
+  },
+  {
+    "name": "Goddess OG",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "18-25%",
+    "cbd": "",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Focused"
+    ],
+    "flavor": "Sweet, spicy, diesel, rose, ruby red grapefruit.",
+    "icon": "✨",
+    "breeder": "Cabin Fever Seed Breeders",
+    "parents": [
+      "OG Kush",
+      "Skunk #1"
+    ],
+    "id": "s4446"
+  },
+  {
+    "name": "Godzilla Blood",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "22%+",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Calm"
+    ],
+    "flavor": "Tropical earth, spicy, hashy.",
+    "icon": "🦖",
+    "breeder": "Pua Mana 1st Hawaiian Pakalolo Seed Bank",
+    "parents": [
+      "Godzilla Glue",
+      "The Blood BX2"
+    ],
+    "id": "s4447"
+  },
+  {
+    "name": "Gog",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "Beyond Top Shelf",
+    "parents": [
+      "Thee Stars Fire",
+      "Crunchberries"
+    ],
+    "id": "s4448"
+  },
+  {
+    "name": "Goji Berry Runtz",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "30%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Focused",
+      "Uplifted"
+    ],
+    "flavor": "Tart and sweet, citrus, woodsy.",
+    "icon": "🍇",
+    "breeder": "Maven Genetics",
+    "parents": [
+      "Kiwi Sorbet",
+      "Runtz"
+    ],
+    "id": "s4449"
+  },
+  {
+    "name": "Goji DC",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "5-10%",
+    "cbd": "15-20%",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Tingly",
+      "Calm"
+    ],
+    "flavor": "Mellow woody spicy, flowery.",
+    "icon": "🫐",
+    "breeder": "Moxie 710",
+    "parents": [
+      "Goji",
+      "ACDC"
+    ],
+    "id": "s4450"
+  },
+  {
+    "name": "Goji Diesel",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "20-24%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Focused",
+      "Creative"
+    ],
+    "flavor": "Diesel, earthy.",
+    "icon": "🍇",
+    "breeder": "The Blowing Tree",
+    "parents": [
+      "Goji OG",
+      "CBDiesel"
+    ],
+    "id": "s4451"
+  },
+  {
+    "name": "Goji Margy",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-21%",
+    "cbd": "",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Calm"
+    ],
+    "flavor": "Sweet fruity goji berry, woody pine.",
+    "icon": "🍇",
+    "breeder": "Cannarado Genetics",
+    "parents": [
+      "Pine Soul (Goji OG)",
+      "Frozen Margy"
+    ],
+    "id": "s4452"
+  },
+  {
+    "name": "Gold Digger",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "17%",
+    "cbd": "",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Hungry",
+      "Aroused"
+    ],
+    "flavor": "Chocolate, cantaloupe, flowery.",
+    "icon": "💰",
+    "breeder": "Highsmen",
+    "parents": [
+      "Purple OG Kush",
+      "Cantaloupe"
+    ],
+    "id": "s4453"
+  },
+  {
+    "name": "Gold Runtz Cake",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "22%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "",
+    "icon": "🎂",
+    "parents": [
+      "24K",
+      "Runtz Cake"
+    ],
+    "id": "s4454"
+  },
+  {
+    "name": "Gold Star",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energized",
+      "Creative"
+    ],
+    "flavor": "Menthol, pine, fresh flowers.",
+    "icon": "⭐",
+    "breeder": "Bodhi Seeds",
+    "parents": [
+      "Sensi Star",
+      "Malawi Gold"
+    ],
+    "id": "s4455"
+  },
+  {
+    "name": "Golden Applez",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "30%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Creative",
+      "Relaxed"
+    ],
+    "flavor": "Lemon, apple, hops, earth.",
+    "icon": "🍎",
+    "breeder": "Maven Genetics",
+    "parents": [
+      "Golden Hour",
+      "Fried Applez"
+    ],
+    "id": "s4456"
+  },
+  {
+    "name": "Golden Bean",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "20-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Creative",
+      "Focused"
+    ],
+    "flavor": "Citrusy lemon candy, strawberries, woody pine.",
+    "icon": "🫘",
+    "parents": [
+      "Jilly Bean",
+      "Golden Diesel F3"
+    ],
+    "id": "s4457"
+  },
+  {
+    "name": "Golden Calyx",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.2
+      },
+      {
+        "n": "Linalool",
+        "p": 0.1
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Uplifted",
+      "Aroused"
+    ],
+    "flavor": "Sweet pineapple, lavender.",
+    "icon": "🍍",
+    "breeder": "Calyx Garden",
+    "parents": [
+      "Grape Calyx",
+      "Golden Goat"
+    ],
+    "id": "s4458"
+  },
+  {
+    "name": "Golden Crisp",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "26%",
+    "cbd": "",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.1
+      }
+    ],
+    "effects": [],
+    "flavor": "Garlic, cream, diesel.",
+    "icon": "🌾",
+    "breeder": "Elev8 Seeds",
+    "parents": [
+      "GMO",
+      "Cereal Milk"
+    ],
+    "id": "s4459"
+  },
+  {
+    "name": "Golden Dragon",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "14-20%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Sleepy"
+    ],
+    "flavor": "Lemon, pine.",
+    "icon": "🐉",
+    "parents": [
+      "Tomki Goo (phenotype)"
+    ],
+    "id": "s4460"
+  },
+  {
+    "name": "Golden Gate",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Creative",
+      "Calm"
+    ],
+    "flavor": "Sweet citrusy lemons, fruity berries, spicy hashy.",
+    "icon": "🌉",
+    "parents": [
+      "Funky Bitch",
+      "Very Berry Kush"
+    ],
+    "id": "s4461"
+  },
+  {
+    "name": "Golden Grapes",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "30%+",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Calm",
+      "Creative"
+    ],
+    "flavor": "Sweet fruity grape berry, woody flowers.",
+    "icon": "🍇",
+    "parents": [
+      "Kosher Kush",
+      "Grape Pie"
+    ],
+    "id": "s4462"
+  },
+  {
+    "name": "Golden Healing",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Sweet citrus, berry, sour, piney.",
+    "icon": "🌿",
+    "breeder": "Larimer Seed Co.",
+    "parents": [
+      "The Sense of Healing CBD",
+      "Swazi Gold"
+    ],
+    "id": "s4463"
+  },
+  {
+    "name": "Golden S.A.G.E.",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "20-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Energized",
+      "Talkative"
+    ],
+    "flavor": "Pine, sage, sandalwood, fruity sweet.",
+    "icon": "🌾",
+    "breeder": "The Bank",
+    "parents": [
+      "Golden Goat",
+      "S.A.G.E."
+    ],
+    "id": "s4464"
+  },
+  {
+    "name": "Golden Soda",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "14-15%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Uplifted"
+    ],
+    "flavor": "Sweet earthy grapes, fresh pine, florals.",
+    "icon": "🥤",
+    "parents": [
+      "Golden Goat",
+      "Grape Soda"
+    ],
+    "id": "s4465"
+  },
+  {
+    "name": "Golden Triangle",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Citrus, pine, florals, fuel.",
+    "icon": "📐",
+    "breeder": "Bodhi Seeds",
+    "parents": [
+      "Triangle Kush",
+      "Appalachia"
+    ],
+    "id": "s4466"
+  },
+  {
+    "name": "Golden Tuxedo",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "20%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Focused",
+      "Creative",
+      "Uplifted"
+    ],
+    "flavor": "Cookies and OG terps, earthy sweet citrus.",
+    "icon": "🎩",
+    "breeder": "Katsu Seeds / Raw Genetics",
+    "parents": [
+      "OGKB 2.0",
+      "Burnt Toast"
+    ],
+    "id": "s4467"
+  },
+  {
+    "name": "Goldie",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "26-30%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Energized",
+      "Motivated"
+    ],
+    "flavor": "Sugary lemon cookie, light herbs.",
+    "icon": "✨",
+    "parents": [
+      "London Pound Cake #75",
+      "Kush Mints #11"
+    ],
+    "id": "s4468"
+  },
+  {
+    "name": "Goldmine",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "22%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Happy",
+      "Relaxed"
+    ],
+    "flavor": "Wild berries, honey.",
+    "icon": "⛏️",
+    "breeder": "Heavyweight Seeds",
+    "parents": [
+      "AK-49",
+      "Mazar"
+    ],
+    "id": "s4469"
+  },
+  {
+    "name": "Goliath",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.2
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.1
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.1
+      }
+    ],
+    "effects": [
+      "Euphoric",
+      "Relaxed"
+    ],
+    "flavor": "Sharp pungent pepper, spicy blueberries.",
+    "icon": "💪",
+    "breeder": "In House Genetics",
+    "parents": [
+      "Platinum",
+      "Gorilla Gloo",
+      "Grateful Breath"
+    ],
+    "id": "s4470"
+  },
+  {
+    "name": "Gooberry Moonshine",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Grape, gassy, earthy.",
+    "icon": "🍇",
+    "breeder": "D.C. Pharmhouse",
+    "parents": [
+      "Glueberry",
+      "Wowzers"
+    ],
+    "id": "s4471"
+  },
+  {
+    "name": "Good Dawg",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "25-27%",
+    "cbd": "",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Talkative",
+      "Sleepy"
+    ],
+    "flavor": "Nutty chestnut, tropical.",
+    "icon": "🐕",
+    "parents": [
+      "Good Medicine",
+      "Stardawg"
+    ],
+    "id": "s4472"
+  },
+  {
+    "name": "Good Medicine",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "up to 9%",
+    "terps": [],
+    "effects": [],
+    "flavor": "Sweet tropical fruit, herbs.",
+    "icon": "💊",
+    "breeder": "Bodhi Seeds",
+    "parents": [
+      "Harlequin",
+      "Appalachia"
+    ],
+    "id": "s4473"
+  },
+  {
+    "name": "Gooey Mendo Haze",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "12-14%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Creative",
+      "Relaxed",
+      "Sedated"
+    ],
+    "flavor": "Sweet flowery woody pine, earthy spicy.",
+    "icon": "🌸",
+    "parents": [
+      "Old Mendo Haze",
+      "Pure Gooey"
+    ],
+    "id": "s4474"
+  },
+  {
+    "name": "Gorgon",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Sedated",
+      "Sleepy"
+    ],
+    "flavor": "Sweet sugary blueberries, grape wine, earthy herbs.",
+    "icon": "🐍",
+    "breeder": "Uprising Seed Co",
+    "parents": [
+      "Purple Punch",
+      "Dosidos F2"
+    ],
+    "id": "s4475"
+  },
+  {
+    "name": "Gorilla Auto",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "24%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Calm"
+    ],
+    "flavor": "Pine, pepper, diesel, lemon.",
+    "icon": "🦍",
+    "breeder": "Fast Buds",
+    "parents": [
+      "Gorilla Glue",
+      "FB Auto #1"
+    ],
+    "id": "s4476"
+  },
+  {
+    "name": "Gorilla Balls",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "17-30%",
+    "cbd": "",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.1
+      }
+    ],
+    "effects": [
+      "Uplifted",
+      "Giggly",
+      "Happy"
+    ],
+    "flavor": "Sweet nutty fruity, spicy coffee, earthy diesel.",
+    "icon": "🦍",
+    "parents": [
+      "GG4",
+      "Cheese"
+    ],
+    "id": "s4477"
+  },
+  {
+    "name": "Gorilla Banana",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Relaxed"
+    ],
+    "flavor": "Pungent skunky, banana, diesel.",
+    "icon": "🍌",
+    "breeder": "BSF Seeds",
+    "parents": [
+      "Gorilla Glue #4",
+      "Banana Punch"
+    ],
+    "id": "s4478"
+  },
+  {
+    "name": "Gorilla Berries",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-24%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Creative",
+      "Sociable",
+      "Relaxed"
+    ],
+    "flavor": "Sweet fruity berry grape, tangy lemon-lime.",
+    "icon": "🫐",
+    "parents": [
+      "Gorilla Glue",
+      "Blueberry"
+    ],
+    "id": "s4479"
+  },
+  {
+    "name": "Gorilla Cheese",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Elevated"
+    ],
+    "flavor": "Cheesy, earthy.",
+    "icon": "🧀",
+    "breeder": "Rev Genetics",
+    "parents": [
+      "Gorilla Glue",
+      "Clementine"
+    ],
+    "id": "s4480"
+  },
+  {
+    "name": "Gorilla Chem",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.1
+      }
+    ],
+    "effects": [
+      "Energized",
+      "Creative",
+      "Euphoric"
+    ],
+    "flavor": "Gasoline, diesel, coffee, cocoa butter.",
+    "icon": "🐒",
+    "parents": [
+      "Gorilla Glue #4",
+      "Chem #4",
+      "Chem D BX2"
+    ],
+    "id": "s4481"
+  },
+  {
+    "name": "Gorilla Cookies Auto",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "27-30%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Happy"
+    ],
+    "flavor": "Earthy nutty, cheese, berries, mint.",
+    "icon": "🍪",
+    "breeder": "Fast Buds",
+    "parents": [
+      "Gorilla Auto",
+      "Cookies Auto"
+    ],
+    "id": "s4482"
+  },
+  {
+    "name": "Gorilla Diesel",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "18.5-28%",
+    "cbd": "",
+    "terps": [
+      {
+        "n": "Pinene",
+        "p": 0.2
+      },
+      {
+        "n": "Limonene",
+        "p": 0.1
+      }
+    ],
+    "effects": [
+      "Energized",
+      "Creative",
+      "Focused"
+    ],
+    "flavor": "Pungent diesel, earthy, citrus.",
+    "icon": "⛽",
+    "parents": [
+      "GG4",
+      "Sour Diesel"
+    ],
+    "id": "s4483"
+  },
+  {
+    "name": "Gorilla Face",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed"
+    ],
+    "flavor": "Earthy sweet dessert, citrus, pine.",
+    "icon": "🦍",
+    "breeder": "Advanced Seeds",
+    "parents": [
+      "Gorilla Glue #4",
+      "Face Off OG"
+    ],
+    "id": "s4484"
+  },
+  {
+    "name": "Gorilla Fighter",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "15-20%",
+    "cbd": "",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Hungry"
+    ],
+    "flavor": "Sweet spicy chocolate, fruity berries, skunky woodiness.",
+    "icon": "🦍",
+    "parents": [
+      "Gorilla Glue #4",
+      "Starfighter F2"
+    ],
+    "id": "s4485"
+  },
+  {
+    "name": "Gorilla Fingers",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "20-25%",
+    "cbd": "",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Sleepy",
+      "Relaxed",
+      "Uplifted"
+    ],
+    "flavor": "Blueberry, grape, skunk.",
+    "icon": "🦍",
+    "parents": [
+      "Gorilla OG",
+      "Gorilla Grips"
+    ],
+    "id": "s4486"
+  },
+  {
+    "name": "Gorilla Frost",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "25-28%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Relaxed",
+      "Sleepy"
+    ],
+    "flavor": "Sweet citrusy lemon diesel, spicy flowers.",
+    "icon": "❄️",
+    "breeder": "Silent Seeds",
+    "parents": [
+      "Gorilla Glue #4",
+      "Gorilla Glue #5"
+    ],
+    "id": "s4487"
+  },
+  {
+    "name": "Gorilla Grip",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "22-28%",
+    "cbd": "",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Happy",
+      "Relaxed"
+    ],
+    "flavor": "Grape, blueberry, skunky finish.",
+    "icon": "🦍",
+    "breeder": "Sin City Seeds",
+    "parents": [
+      "Gorilla Glue #4",
+      "Blue Power"
+    ],
+    "id": "s4488"
+  },
+  {
+    "name": "Gorilla Ice Cream",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-25%",
+    "cbd": "1-2%",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Sedative"
+    ],
+    "flavor": "Sweet creamy sugary vanilla ice cream, spice.",
+    "icon": "🍦",
+    "breeder": "Expert Seeds",
+    "parents": [
+      "Gorilla Glue #4",
+      "Ice Cream"
+    ],
+    "id": "s4489"
+  },
+  {
+    "name": "Gorilla Juice",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "19-20%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Relaxed",
+      "Creative"
+    ],
+    "flavor": "Sweet fruity cherry berry, herbal sage.",
+    "icon": "🧃",
+    "parents": [
+      "Meatbreath",
+      "Cherry Gorilla"
+    ],
+    "id": "s4490"
+  },
+  {
+    "name": "Gorilla King",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Hungry"
+    ],
+    "flavor": "Sweetness, hash, spices, diesel.",
+    "icon": "👑",
+    "breeder": "Third Eye Genetics",
+    "parents": [
+      "Kong",
+      "Gorilla Glue #4",
+      "Jet Fuel G6"
+    ],
+    "id": "s4491"
+  },
+  {
+    "name": "Gorilla Mints",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "10-12%",
+    "cbd": "10-12%",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed"
+    ],
+    "flavor": "Sweet sugary grapes, creamy minty kush.",
+    "icon": "🍬",
+    "breeder": "Ananda Seeds",
+    "parents": [
+      "Gorilla Cookies",
+      "Calisson Candy"
+    ],
+    "id": "s4492"
   }
 ]
