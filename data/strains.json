@@ -128106,5 +128106,2640 @@
       "Sour Diesel"
     ],
     "id": "s4652"
+  },
+  {
+    "name": "Heady Betty",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "19-27%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Creative",
+      "Talkative"
+    ],
+    "flavor": "Sweet sour citrusy lemon, melon.",
+    "icon": "🍈",
+    "breeder": "Cresco Labs",
+    "parents": [
+      "Alien Cookies",
+      "Colombian",
+      "Starfighter"
+    ],
+    "id": "s4653"
+  },
+  {
+    "name": "Heady Eddy",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Energetic"
+    ],
+    "flavor": "Fresh-squeezed citrus gas, tropical, spicy.",
+    "icon": "🍊",
+    "breeder": "Terp Fi3nd",
+    "parents": [
+      "Pineapple Tart",
+      "Orange Headrush"
+    ],
+    "id": "s4654"
+  },
+  {
+    "name": "Heat Locker",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "20-30%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Energetic",
+      "Happy"
+    ],
+    "flavor": "Spicy sweet lemon-lime, earthy gassy diesel.",
+    "icon": "🔥",
+    "breeder": "Tahoe Nugz & Ogloudest",
+    "parents": [
+      "Ice Cream Cake",
+      "Chemdawg",
+      "Fire OG",
+      "MAC 1"
+    ],
+    "id": "s4655"
+  },
+  {
+    "name": "Heaven Mountain",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "15-28%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Sedated",
+      "Happy"
+    ],
+    "flavor": "Berry, pine, sour lemons.",
+    "icon": "⛰️",
+    "breeder": "Bodhi Seeds",
+    "parents": [
+      "Goji OG",
+      "Appalachia"
+    ],
+    "id": "s4656"
+  },
+  {
+    "name": "Heavenly OG (aka Heavenly)",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "22-27%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Sedated"
+    ],
+    "flavor": "Sweet flowery woody, spicy pine.",
+    "icon": "🙏",
+    "breeder": "Archive Seed Bank",
+    "parents": [
+      "Tahoe OG",
+      "Face Off OG BX1"
+    ],
+    "id": "s4657"
+  },
+  {
+    "name": "Heavy Eye",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "24%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Euphoric",
+      "Calm"
+    ],
+    "flavor": "Earthy, menthol, diesel.",
+    "icon": "😴",
+    "breeder": "Seed Junky Genetics",
+    "parents": [
+      "Jealousy",
+      "Kush Mints"
+    ],
+    "id": "s4658"
+  },
+  {
+    "name": "Helato de Platano",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed"
+    ],
+    "flavor": "Gelato and sweet banana kush notes.",
+    "icon": "🍌",
+    "parents": [
+      "Gelato",
+      "Banana OG (Correy's Cut)"
+    ],
+    "id": "s4659"
+  },
+  {
+    "name": "Helen Back",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "20%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Aroused",
+      "Happy"
+    ],
+    "flavor": "Cherry licorice, sweet nutty, anise.",
+    "icon": "🍒",
+    "breeder": "Swamp Boys Seeds",
+    "parents": [
+      "Animal Cookies",
+      "Georgia Pine"
+    ],
+    "id": "s4660"
+  },
+  {
+    "name": "Helen Beck",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "21%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Uplifted",
+      "Relaxed"
+    ],
+    "flavor": "Pear, strawberry, grape.",
+    "icon": "🍐",
+    "parents": [
+      "Animal Cookies",
+      "Georgia Pine"
+    ],
+    "id": "s4661"
+  },
+  {
+    "name": "Helium",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "18-33%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Relaxed",
+      "Creative"
+    ],
+    "flavor": "Diesel, citrus, tropical.",
+    "icon": "🎈",
+    "breeder": "Cookies",
+    "parents": [
+      "Sour Cookies",
+      "Cheetah Piss"
+    ],
+    "id": "s4662"
+  },
+  {
+    "name": "Hell's Bells (Swamp Boys Seeds)",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Relaxed"
+    ],
+    "flavor": "Funky, musty, citrus peel.",
+    "icon": "🔔",
+    "breeder": "Swamp Boys Seeds",
+    "parents": [
+      "Legend OG",
+      "GMO",
+      "TK Skunk"
+    ],
+    "id": "s4663"
+  },
+  {
+    "name": "High Desert Sour Sage",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "22-23%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Creative",
+      "Social"
+    ],
+    "flavor": "Sweet fruity tropical citrus, herbal sage.",
+    "icon": "🌿",
+    "parents": [
+      "Sour Diesel",
+      "S.A.G.E."
+    ],
+    "id": "s4664"
+  },
+  {
+    "name": "High Five",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Sedated",
+      "Happy"
+    ],
+    "flavor": "Sweet sour tangy, nutty peanut butter.",
+    "icon": "🖐️",
+    "breeder": "Archive Seed Bank",
+    "parents": [
+      "Tahoe OG",
+      "Do-Si-Dos"
+    ],
+    "id": "s4665"
+  },
+  {
+    "name": "High MAC",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "20-24%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Happy",
+      "Relaxed"
+    ],
+    "flavor": "Gassy-pine, lemon-citrus.",
+    "icon": "🍋",
+    "breeder": "Green Life Productions",
+    "parents": [
+      "MAC Stomper",
+      "High School Sweetheart"
+    ],
+    "id": "s4666"
+  },
+  {
+    "name": "High Score",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Sedated",
+      "Happy"
+    ],
+    "flavor": "Tropical fruit, citrus, sugary candy, funky gas.",
+    "icon": "🎮",
+    "breeder": "Wonderbrett's Byrd Seed Genetics",
+    "parents": [
+      "Guava OZK",
+      "GM3 Gak"
+    ],
+    "id": "s4667"
+  },
+  {
+    "name": "High Voltage",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "20%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Social",
+      "Relaxed"
+    ],
+    "flavor": "Rich slightly sweet, earthy.",
+    "icon": "⚡",
+    "parents": [
+      "Pure Power Plant",
+      "Acapulco Gold",
+      "Cinderella 99"
+    ],
+    "id": "s4668"
+  },
+  {
+    "name": "HighLo (aka High Lo)",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "0-1%",
+    "cbd": "11-15%",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Creative",
+      "Calm"
+    ],
+    "flavor": "Sweet sour citrusy herbal.",
+    "icon": "🌸",
+    "breeder": "House of the Great Green Gardener",
+    "parents": [
+      "Cannatonic"
+    ],
+    "id": "s4669"
+  },
+  {
+    "name": "Hindu Mints",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "20-26%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Sedated",
+      "Calm"
+    ],
+    "flavor": "Sweet fruity berries, nutty minty cookies, spicy grape.",
+    "icon": "🌿",
+    "breeder": "Equilibrium Genetics",
+    "parents": [
+      "Kush Mints",
+      "Andarab Afghani"
+    ],
+    "id": "s4670"
+  },
+  {
+    "name": "Hindu Sour",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Relaxed"
+    ],
+    "flavor": "Pungently earthy, sour and spicy.",
+    "icon": "🍋",
+    "breeder": "Burnwell Farms",
+    "parents": [
+      "Hindu Kush",
+      "Sour Diesel"
+    ],
+    "id": "s4671"
+  },
+  {
+    "name": "Hippy Crasher (aka Hippie Crasher)",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "25-27%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Sedated"
+    ],
+    "flavor": "Sweet fruity berry cake, nutty minty cookie.",
+    "icon": "🎂",
+    "parents": [
+      "Wedding Cake",
+      "Kush Mints"
+    ],
+    "id": "s4672"
+  },
+  {
+    "name": "Hippy Slayer",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "25-29%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Calm",
+      "Sedated"
+    ],
+    "flavor": "Sweet spicy skunky citrus, dank.",
+    "icon": "🦨",
+    "breeder": "Bodhi Seeds",
+    "parents": [
+      "Dirty Hippy",
+      "Road Kill Skunk"
+    ],
+    "id": "s4673"
+  },
+  {
+    "name": "Hoarfrost",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "20-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Focused",
+      "Energetic",
+      "Euphoric"
+    ],
+    "flavor": "Fuel and hash, tart fruit undercurrent.",
+    "icon": "❄️",
+    "breeder": "Cabin Fever Seed Breeders",
+    "parents": [
+      "White Forest",
+      "White Fire"
+    ],
+    "id": "s4674"
+  },
+  {
+    "name": "Hollywood Ghost",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "25-30%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Euphoric",
+      "Calm"
+    ],
+    "flavor": "Earthy pine, citrus.",
+    "icon": "👻",
+    "breeder": "Aficionado",
+    "parents": [
+      "Hollywood Pure Kush",
+      "Ghost OG BX1"
+    ],
+    "id": "s4675"
+  },
+  {
+    "name": "Hollywood Reunion",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "19-20%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Sedated",
+      "Sleepy"
+    ],
+    "flavor": "Sweet spicy flowery citrus, peppery kush.",
+    "icon": "🎬",
+    "breeder": "Skunk House Genetics",
+    "parents": [
+      "LA Pure Kush",
+      "Reunion OG"
+    ],
+    "id": "s4676"
+  },
+  {
+    "name": "Holy Ghost",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "28%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Relaxed",
+      "Energetic"
+    ],
+    "flavor": "Diesel, citrus, spiced sandalwood.",
+    "icon": "👻",
+    "parents": [
+      "Satori",
+      "Amnesia Haze",
+      "Pitbull",
+      "Durban Poison"
+    ],
+    "id": "s4677"
+  },
+  {
+    "name": "Holy Ghost Fiyah",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "25-26%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Calm"
+    ],
+    "flavor": "Sweet fruity citrusy lemon, peppery herbs.",
+    "icon": "🔥",
+    "breeder": "Happy Eddie",
+    "parents": [
+      "Primus",
+      "Voodoo"
+    ],
+    "id": "s4678"
+  },
+  {
+    "name": "Holy Goat",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "14-27%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Energetic",
+      "Focused"
+    ],
+    "flavor": "Sweet sugary lemon-lime, nutty cookies.",
+    "icon": "🐐",
+    "breeder": "The Farm Genetics",
+    "parents": [
+      "Golden Goat",
+      "LSD"
+    ],
+    "id": "s4679"
+  },
+  {
+    "name": "Holy Moly (Fig Farms)",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "20-33%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Giggly",
+      "Relaxed"
+    ],
+    "flavor": "Musky banana, earthy sweet mint.",
+    "icon": "🍌",
+    "breeder": "Fig Farms",
+    "parents": [
+      "Banana Fig",
+      "Animal Mints"
+    ],
+    "id": "s4680"
+  },
+  {
+    "name": "Holy Punch",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Social",
+      "Euphoric"
+    ],
+    "flavor": "Sweet and spicy, grape notes.",
+    "icon": "🍇",
+    "breeder": "Green House Seed Co.",
+    "parents": [
+      "The Church",
+      "Grape"
+    ],
+    "id": "s4681"
+  },
+  {
+    "name": "Holy Roller (Archive Seed Bank)",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "12-19%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Creative",
+      "Energetic"
+    ],
+    "flavor": "Bright sour lemon lime, nutty.",
+    "icon": "🎳",
+    "breeder": "Archive Seed Bank",
+    "parents": [
+      "Big Sur Holy Weed",
+      "Do-Si-Dos"
+    ],
+    "id": "s4682"
+  },
+  {
+    "name": "Honey Badger Haze",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "20-22%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Energetic",
+      "Focused"
+    ],
+    "flavor": "Sweet spicy fruity peach, lime and honey.",
+    "icon": "🦡",
+    "breeder": "Dynasty Genetics",
+    "parents": [
+      "C99",
+      "White Widow",
+      "Ms. Universe #10"
+    ],
+    "id": "s4683"
+  },
+  {
+    "name": "Honey Banana Zuava",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Calm"
+    ],
+    "flavor": "Creamy tropical banana, sharp citrus.",
+    "icon": "🍌",
+    "breeder": "Terphogz",
+    "parents": [
+      "Honey Banana",
+      "Zuava"
+    ],
+    "id": "s4684"
+  },
+  {
+    "name": "Honey Bear (Humboldt Seed Company)",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "28-31%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Uplifted",
+      "Creative"
+    ],
+    "flavor": "Overripe bananas, fermented papaya, honey.",
+    "icon": "🍯",
+    "breeder": "Humboldt Seed Company",
+    "parents": [
+      "Honey Banana UKC S1",
+      "Papaya Tallyman"
+    ],
+    "id": "s4685"
+  },
+  {
+    "name": "Honey Bunny",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "15-18%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Focused",
+      "Happy",
+      "Sleepy"
+    ],
+    "flavor": "Sweet creamy honey, fresh butter, citrusy oranges.",
+    "icon": "🐰",
+    "breeder": "Oni Seed Co",
+    "parents": [
+      "Honey Banana",
+      "Tropicanna Cookies F1"
+    ],
+    "id": "s4686"
+  },
+  {
+    "name": "Honey Child",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "15-23%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Relaxed",
+      "Sedated"
+    ],
+    "flavor": "Sweet sugary honey, tropical fruits, spice.",
+    "icon": "🍯",
+    "parents": [
+      "White OG",
+      "GMO"
+    ],
+    "id": "s4687"
+  },
+  {
+    "name": "Honey Cream",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "15-20%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Uplifted"
+    ],
+    "flavor": "Sweet honey, creamy vanilla, blueberries.",
+    "icon": "🍯",
+    "breeder": "Royal Queen Seeds",
+    "parents": [
+      "BlueBlack",
+      "Maple Leaf Indica",
+      "White Rhino"
+    ],
+    "id": "s4688"
+  },
+  {
+    "name": "Honey Lemon Hibiscus",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "31%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Focused",
+      "Uplifted",
+      "Creative"
+    ],
+    "flavor": "Lemon and berry, herbal, diesel.",
+    "icon": "🍋",
+    "breeder": "Maven Genetics",
+    "parents": [
+      "Sour Sangria",
+      "Lemon Pastries"
+    ],
+    "id": "s4689"
+  },
+  {
+    "name": "Honey Wine (West Coast Cure)",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "19-26%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Relaxed",
+      "Hungry"
+    ],
+    "flavor": "Sweet sugary honey, woody grape wine, banana.",
+    "icon": "🍷",
+    "breeder": "West Coast Cure",
+    "parents": [
+      "Honey Bananas",
+      "Grape Pie"
+    ],
+    "id": "s4690"
+  },
+  {
+    "name": "Honeycomb",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "23-30%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Cerebral",
+      "Cozy",
+      "Uplifted"
+    ],
+    "flavor": "Sticky-sweet honey, oats, citrus, glue.",
+    "icon": "🍯",
+    "breeder": "Dewey Cannabis",
+    "parents": [
+      "Original Glue #4 (GG#4)",
+      "Dosidos"
+    ],
+    "id": "s4691"
+  },
+  {
+    "name": "Honeycomb Pave",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "23-27%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Happy",
+      "Relaxed"
+    ],
+    "flavor": "Sweet fruity, zesty lemon, gassy diesel, honey.",
+    "icon": "🍯",
+    "breeder": "Compound Genetics",
+    "parents": [
+      "Big Face",
+      "Pave"
+    ],
+    "id": "s4692"
+  },
+  {
+    "name": "Honeysuckle",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "13-17%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Creative",
+      "Relaxed"
+    ],
+    "flavor": "Sweet floral, sage, baked apples, honey.",
+    "icon": "🌸",
+    "breeder": "In House Genetics",
+    "parents": [
+      "Starburst OG",
+      "Black Cherry Honey"
+    ],
+    "id": "s4693"
+  },
+  {
+    "name": "Honolulu Strangler",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "23-29%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Happy",
+      "Relaxed"
+    ],
+    "flavor": "Sweet sour tropical citrus, spicy pineapple.",
+    "icon": "🌺",
+    "breeder": "Pollen Nation Elite Genetics",
+    "parents": [
+      "Island Sweet Skunk",
+      "Skwurl Killer"
+    ],
+    "id": "s4694"
+  },
+  {
+    "name": "Hoof",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "20-27%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Relaxed",
+      "Sedated"
+    ],
+    "flavor": "Sweet fruity berry grape, spicy gassy diesel.",
+    "icon": "🐎",
+    "breeder": "Scapegoat Genetics",
+    "parents": [
+      "Nom Nom",
+      "Thug Pug"
+    ],
+    "id": "s4695"
+  },
+  {
+    "name": "Horace",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "25-30%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Focused",
+      "Sedated"
+    ],
+    "flavor": "Sweet fruity banana candy, sour exhale.",
+    "icon": "🍌",
+    "breeder": "Swamp Boys Seeds",
+    "parents": [
+      "Banana OG",
+      "Nigerian"
+    ],
+    "id": "s4696"
+  },
+  {
+    "name": "Hot Lanta (aka Hotlanta)",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "26%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Energetic",
+      "Relaxed"
+    ],
+    "flavor": "Pungent, earthy and fruity.",
+    "icon": "🔥",
+    "breeder": "Raw Genetics",
+    "parents": [
+      "Georgia Pie",
+      "Pave"
+    ],
+    "id": "s4697"
+  },
+  {
+    "name": "Hot Mints",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "26-28%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Giggly",
+      "Relaxed",
+      "Hungry"
+    ],
+    "flavor": "Sweet sugary lemony citrus, sharp mint.",
+    "icon": "🌿",
+    "breeder": "Jungle Boys",
+    "parents": [
+      "WiFi Mints",
+      "TK BX1"
+    ],
+    "id": "s4698"
+  },
+  {
+    "name": "Hot Stuff (Cresco Labs)",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Creative",
+      "Sleepy"
+    ],
+    "flavor": "Citrus, hops, cinnamon.",
+    "icon": "🔥",
+    "breeder": "Cresco Labs",
+    "parents": [
+      "Tina #3",
+      "Grease Monkey"
+    ],
+    "id": "s4699"
+  },
+  {
+    "name": "Hotspot",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Social",
+      "Creative"
+    ],
+    "flavor": "Tropical fruit, citrus, diesel, lavender.",
+    "icon": "🔥",
+    "breeder": "Cannarado Genetics",
+    "parents": [
+      "White Fire OG (WiFi OG)",
+      "Sundae Driver"
+    ],
+    "id": "s4700"
+  },
+  {
+    "name": "Houndstooth (Tweed, aka Candyland)",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "18-23%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Energetic",
+      "Creative"
+    ],
+    "flavor": "Sweet, spicy, citrusy.",
+    "icon": "🍬",
+    "breeder": "Tweed",
+    "parents": [
+      "Granddaddy Purple",
+      "Platinum Cookies"
+    ],
+    "id": "s4701"
+  },
+  {
+    "name": "House Margy",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "20-24%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Creative",
+      "Sleepy"
+    ],
+    "flavor": "Sweet sugary citrus, red fruits, tequila margarita.",
+    "icon": "🍹",
+    "breeder": "Cannarado Genetics",
+    "parents": [
+      "Forum Girl Scout Cookies",
+      "Frozen Margy"
+    ],
+    "id": "s4702"
+  },
+  {
+    "name": "Howling Diablo (Midnight Roots Genetics)",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Creative"
+    ],
+    "flavor": "Sweet pine and gas.",
+    "icon": "😈",
+    "breeder": "Midnight Roots Genetics",
+    "parents": [
+      "Ghost OG",
+      "Fire18"
+    ],
+    "id": "s4703"
+  },
+  {
+    "name": "Hubba Bubba Kush",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "12-24%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Relaxed",
+      "Sedated"
+    ],
+    "flavor": "Sweet fruity watermelon, grape bubblegum.",
+    "icon": "🍬",
+    "breeder": "Jinxproof Genetics",
+    "parents": [
+      "Fudo",
+      "Bubba Kush"
+    ],
+    "id": "s4704"
+  },
+  {
+    "name": "Huckleberry Cough",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "17-18%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Creative"
+    ],
+    "flavor": "Sweet fruity blueberry, rose.",
+    "icon": "🫐",
+    "breeder": "Dynasty Seeds",
+    "parents": [
+      "The Cough",
+      "Oregon Huckleberry"
+    ],
+    "id": "s4705"
+  },
+  {
+    "name": "Huckleberry Punch (Elev8 Seeds)",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "30-35%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Relaxed",
+      "Hungry"
+    ],
+    "flavor": "Sweet fruity berry grape, nutty spicy cookie.",
+    "icon": "🍇",
+    "breeder": "Elev8 Seeds",
+    "parents": [
+      "Purple Punch",
+      "Platinum Huckleberry Cookies"
+    ],
+    "id": "s4706"
+  },
+  {
+    "name": "Huckleberry Web",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "high (2:1 CBD:THC)",
+    "terps": [],
+    "effects": [
+      "Calm",
+      "Uplifted",
+      "Focused"
+    ],
+    "flavor": "Sweet fruity berry anise, spicy.",
+    "icon": "🫐",
+    "breeder": "Dynasty Genetics",
+    "parents": [
+      "Charlotte's Web",
+      "Oregon Huckleberry #5"
+    ],
+    "id": "s4707"
+  },
+  {
+    "name": "Hulk Angry (aka Bruce Banner, Hulk Angry IBL)",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "13-24%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Relaxed",
+      "Focused"
+    ],
+    "flavor": "Sweet sour citrusy lemon, strawberries, diesel.",
+    "icon": "💪",
+    "breeder": "Ethos Genetics",
+    "parents": [
+      "Strawberry Diesel",
+      "OG Kush"
+    ],
+    "id": "s4708"
+  },
+  {
+    "name": "Hulk Smash",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "20-30%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Focused",
+      "Relaxed"
+    ],
+    "flavor": "Sweet citrusy lemon kush, fruity berries, diesel.",
+    "icon": "👊",
+    "breeder": "Dark Horse Genetics",
+    "parents": [
+      "Bruce Banner #3",
+      "Strawberry Diesel"
+    ],
+    "id": "s4709"
+  },
+  {
+    "name": "Hulkberry",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "27-28%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Energetic",
+      "Creative"
+    ],
+    "flavor": "Fruity berry, lemon-lime, diesel.",
+    "icon": "💚",
+    "breeder": "Royal Queen Seeds",
+    "parents": [
+      "Strawberry Diesel",
+      "OG Kush (Ghost OG)"
+    ],
+    "id": "s4710"
+  },
+  {
+    "name": "Humboldt Frost",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "18-20%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Giggly",
+      "Relaxed"
+    ],
+    "flavor": "Spicy fragrant flowers, woody pine, black pepper.",
+    "icon": "❄️",
+    "breeder": "Happy Dreams Genetics",
+    "parents": [
+      "Sunset Sherbert",
+      "Humboldt Reserve OG"
+    ],
+    "id": "s4711"
+  },
+  {
+    "name": "Humboldt Snow",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18-24%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Hungry"
+    ],
+    "flavor": "Fruity blueberry, spicy bananas.",
+    "icon": "❄️",
+    "parents": [
+      "Humboldt",
+      "Snow White"
+    ],
+    "id": "s4712"
+  },
+  {
+    "name": "Humboldt Sour Diesel",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "21-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Creative",
+      "Relaxed"
+    ],
+    "flavor": "Gassy diesel, sweet fruity citrus.",
+    "icon": "⛽",
+    "breeder": "Humboldt Seed Company",
+    "parents": [
+      "Sour Diesel BX3",
+      "Humboldt Headband"
+    ],
+    "id": "s4713"
+  },
+  {
+    "name": "Humdinger (aka Humdinger OG)",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18-28%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Focused",
+      "Relaxed"
+    ],
+    "flavor": "Sour lemon-lime, spicy coffee.",
+    "icon": "🎯",
+    "breeder": "The Farm Genetics",
+    "parents": [
+      "Chuckles OG",
+      "Sour Bubble"
+    ],
+    "id": "s4714"
+  },
+  {
+    "name": "Hustler Kush",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "19%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Happy",
+      "Relaxed"
+    ],
+    "flavor": "Sweet pine, earthy, blueberry, coffee.",
+    "icon": "💰",
+    "breeder": "Greenworks",
+    "parents": [
+      "Chemdawg 91",
+      "OG Kush"
+    ],
+    "id": "s4715"
+  },
+  {
+    "name": "Hyper Fuel",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "20%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Sleepy"
+    ],
+    "flavor": "Gassy, fuel-forward.",
+    "icon": "⛽",
+    "breeder": "Archive Seed Bank",
+    "parents": [
+      "Rocket Fuel",
+      "Dosidos"
+    ],
+    "id": "s4716"
+  },
+  {
+    "name": "Hyperdrive",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "19-23%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Relaxed",
+      "Sleepy"
+    ],
+    "flavor": "Sweet sour citrusy lemon-lime, savory skunk.",
+    "icon": "🚀",
+    "parents": [
+      "Lime Skunk",
+      "Outer Space"
+    ],
+    "id": "s4717"
+  },
+  {
+    "name": "Ice Bomb",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "17-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Sedated"
+    ],
+    "flavor": "Sweet creamy chocolate, vanilla.",
+    "icon": "🧊",
+    "breeder": "Bomb Seeds",
+    "parents": [
+      "Vanilla Kush",
+      "White Rhino",
+      "Bomb #1"
+    ],
+    "id": "s4718"
+  },
+  {
+    "name": "Ice Cream Banana Dog",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Uplifted",
+      "Relaxed"
+    ],
+    "flavor": "Creamy vanilla, sweet banana, earthy.",
+    "icon": "🍌",
+    "breeder": "Made By A Farmer",
+    "parents": [
+      "Ice Cream Cake",
+      "Banana OG",
+      "Stardawg"
+    ],
+    "id": "s4719"
+  },
+  {
+    "name": "Ice Cream Haze (Dutch Passion)",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "18-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "Spicy hazy, sweet fruity creamy.",
+    "icon": "🍦",
+    "breeder": "Dutch Passion",
+    "parents": [
+      "Crockett's Haze",
+      "Ice Cream Cake"
+    ],
+    "id": "s4720"
+  },
+  {
+    "name": "Ice Cream Sherbet",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "19-23%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Talkative",
+      "Relaxed"
+    ],
+    "flavor": "Sweet creamy vanilla, tangy fruit sherbet.",
+    "icon": "🍨",
+    "breeder": "Motherland Genetics",
+    "parents": [
+      "Gelato 33",
+      "Sunset Sherbert"
+    ],
+    "id": "s4721"
+  },
+  {
+    "name": "Ice Cream Truck",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Calming",
+      "Relaxed",
+      "Sleepy"
+    ],
+    "flavor": "Sugary vanilla, dark chocolate, citrus.",
+    "icon": "🚚",
+    "parents": [
+      "Gelato",
+      "Larry Bird"
+    ],
+    "id": "s4722"
+  },
+  {
+    "name": "Ice Milk",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "20-26%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Focused",
+      "Relaxed"
+    ],
+    "flavor": "Sweet creamy vanilla, minty cookies.",
+    "icon": "🥛",
+    "breeder": "WY East Farms",
+    "parents": [
+      "Cereal Killer",
+      "The Menthol"
+    ],
+    "id": "s4723"
+  },
+  {
+    "name": "Ice Pop",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "18%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Creative",
+      "Relaxed"
+    ],
+    "flavor": "Citrus, peach, mint.",
+    "icon": "🍭",
+    "breeder": "Lovin' in Her Eyes",
+    "parents": [
+      "Tangie",
+      "Peach Crescendo"
+    ],
+    "id": "s4724"
+  },
+  {
+    "name": "Ice Wine",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "20%+",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Creative",
+      "Calm"
+    ],
+    "flavor": "Diesel, earthy.",
+    "icon": "🍷",
+    "parents": [
+      "Skunk",
+      "Northern Lights",
+      "Shiva",
+      "Afghani Landrace"
+    ],
+    "id": "s4725"
+  },
+  {
+    "name": "Iceberg",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "26-27%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Sedated"
+    ],
+    "flavor": "Sour citrus, fruity grape.",
+    "icon": "🧊",
+    "breeder": "Anesia Seeds",
+    "parents": [
+      "Master Kush",
+      "Granddaddy Purple"
+    ],
+    "id": "s4726"
+  },
+  {
+    "name": "ICED Grapefruit (Female Seeds)",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "17-18%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Relaxed",
+      "Cerebral"
+    ],
+    "flavor": "Hashy sweet citrus, grapefruit.",
+    "icon": "🍊",
+    "breeder": "Female Seeds",
+    "parents": [
+      "ICE",
+      "Grapefruit"
+    ],
+    "id": "s4727"
+  },
+  {
+    "name": "Iced Out",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "14-18%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Relaxed",
+      "Calm"
+    ],
+    "flavor": "Sweet fruity berries, creamy vanilla.",
+    "icon": "❄️",
+    "breeder": "In House Genetics",
+    "parents": [
+      "Slurricane #7",
+      "Purple Punch"
+    ],
+    "id": "s4728"
+  },
+  {
+    "name": "Icelato",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Relaxed",
+      "Sedated"
+    ],
+    "flavor": "Fruity lemon, creamy vanilla cake.",
+    "icon": "🍨",
+    "parents": [
+      "Wedding Cake",
+      "Gelato #33"
+    ],
+    "id": "s4729"
+  },
+  {
+    "name": "Icicles",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "22-24%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Sedated"
+    ],
+    "flavor": "Sweet sugary grapes, pungent diesel, sharp citrus.",
+    "icon": "❄️",
+    "parents": [
+      "White Sherbet",
+      "Jet Fuel Gelato"
+    ],
+    "id": "s4730"
+  },
+  {
+    "name": "IFC OG",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-27%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Relaxed",
+      "Hungry"
+    ],
+    "flavor": "Dank chemical herbal, sharp skunk.",
+    "icon": "🌌",
+    "breeder": "Intergalatikz",
+    "parents": [
+      "Stardust OG",
+      "OG Kush"
+    ],
+    "id": "s4731"
+  },
+  {
+    "name": "IG Kush (aka Imperial Genetics Kush)",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "20-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Sedated",
+      "Sleepy"
+    ],
+    "flavor": "Sweet grape candy, sour citrus earth.",
+    "icon": "👑",
+    "breeder": "Imperial Genetics",
+    "parents": [
+      "Deadhead OG",
+      "'92 OG Kush"
+    ],
+    "id": "s4732"
+  },
+  {
+    "name": "Incredible Power",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "10-13%",
+    "cbd": "high (1:1 THC:CBD)",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Sedated",
+      "Sleepy"
+    ],
+    "flavor": "Fresh floral grassy, earthy woody.",
+    "icon": "⚡",
+    "breeder": "Sin City Seeds",
+    "parents": [
+      "AC/DC",
+      "Omrita",
+      "Blue Power"
+    ],
+    "id": "s4733"
+  },
+  {
+    "name": "Indiana Bubblegum",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "20-30%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Focused",
+      "Uplifted",
+      "Relaxed"
+    ],
+    "flavor": "Sweet fruity berry bubblegum, spicy pepper.",
+    "icon": "🍬",
+    "parents": [
+      "Afghani landrace",
+      "Bubblegum"
+    ],
+    "id": "s4734"
+  },
+  {
+    "name": "Indigo Daydream",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "17-20%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Giggly",
+      "Calm"
+    ],
+    "flavor": "Sweet fruity blueberries, sour citrus.",
+    "icon": "💜",
+    "breeder": "High Country Genetics",
+    "parents": [
+      "Blue Dream",
+      "Berry G'oood"
+    ],
+    "id": "s4735"
+  },
+  {
+    "name": "Indigo Eclipse (aka Canna Country #26, WTF, Royal, Diggidy Dank, Night Nurse)",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Creative"
+    ],
+    "flavor": "Citrus, watermelon rind, pepper.",
+    "icon": "🌒",
+    "parents": [
+      "Forbidden Fruit",
+      "Cherimoya"
+    ],
+    "id": "s4736"
+  },
+  {
+    "name": "Industrial Plant",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "10-15%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Uplifted",
+      "Calm"
+    ],
+    "flavor": "Skunky citrus, wood, spice, bubblegum.",
+    "icon": "🏭",
+    "breeder": "Dinafem Seeds",
+    "parents": [
+      "Afghani",
+      "Thai"
+    ],
+    "id": "s4737"
+  },
+  {
+    "name": "Inner Chi",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "rare",
+    "thc": "20-24%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Focused",
+      "Creative",
+      "Sleepy"
+    ],
+    "flavor": "Sweet lemony citrus, spicy earth.",
+    "icon": "☯️",
+    "breeder": "King Klone Brand Genetics",
+    "parents": [
+      "Larry OG Kush",
+      "OG Kush"
+    ],
+    "id": "s4738"
+  },
+  {
+    "name": "Insane Kush (aka Insane, Insane OG, Insane OG Kush)",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "27%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Energetic"
+    ],
+    "flavor": "",
+    "icon": "🔥",
+    "parents": [
+      "OG Kush",
+      "Bubba Kush"
+    ],
+    "id": "s4739"
+  },
+  {
+    "name": "Insane Punch",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "26-35%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Giggly",
+      "Relaxed"
+    ],
+    "flavor": "Sweet fruity blueberry, sugary grapes.",
+    "icon": "👊",
+    "parents": [
+      "Purple Punch",
+      "Purple Train"
+    ],
+    "id": "s4740"
+  },
+  {
+    "name": "Intergalactic",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18-36.5%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Creative",
+      "Relaxed",
+      "Uplifted"
+    ],
+    "flavor": "Dank spicy fuel.",
+    "icon": "🌌",
+    "breeder": "Exotic Genetix",
+    "parents": [
+      "Constantine",
+      "The Cube"
+    ],
+    "id": "s4741"
+  },
+  {
+    "name": "Interspecies Erotica",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "30-35%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Aroused"
+    ],
+    "flavor": "Sweet nutty, spicy coffee, rich woods.",
+    "icon": "🐒",
+    "parents": [
+      "Scooby Snacks",
+      "Gorilla Snacks"
+    ],
+    "id": "s4742"
+  },
+  {
+    "name": "Intimidator OG",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "13-17%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Sedated"
+    ],
+    "flavor": "Pine, diesel fuel.",
+    "icon": "💪",
+    "breeder": "Sin City Seeds",
+    "parents": [
+      "High Octane OG",
+      "White Nightmare"
+    ],
+    "id": "s4743"
+  },
+  {
+    "name": "Invisible Ink",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "21.3%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Happy",
+      "Focused"
+    ],
+    "flavor": "OG, sweet, gassy.",
+    "icon": "🖋️",
+    "breeder": "First Class Genetics",
+    "parents": [
+      "Ghost OG (Ghost Pk1)",
+      "Permanent Marker"
+    ],
+    "id": "s4744"
+  },
+  {
+    "name": "Irie OG (Gage Green Genetics)",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "17-24%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Creative",
+      "Focused",
+      "Euphoric"
+    ],
+    "flavor": "Cherries, skunk, citrus.",
+    "icon": "🇯🇲",
+    "breeder": "Gage Green Group",
+    "parents": [
+      "Lamb's Bread",
+      "Joseph OG"
+    ],
+    "id": "s4745"
+  },
+  {
+    "name": "Iron Lotus",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "22-23%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Sedated",
+      "Relaxed"
+    ],
+    "flavor": "Cheesy, musky citrus, pine.",
+    "icon": "🪷",
+    "breeder": "Bodhi Seeds",
+    "parents": [
+      "Bubba Kush",
+      "Master Kush"
+    ],
+    "id": "s4746"
+  },
+  {
+    "name": "Island Chill (aka Island Chill Chocolatina, Chocolatina)",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "17-23%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Relaxed",
+      "Calm"
+    ],
+    "flavor": "Sweet sour tropical citrus, peppery.",
+    "icon": "🏝️",
+    "breeder": "Exotic Genetix",
+    "parents": [
+      "Mint Chocolate Chip",
+      "Tina"
+    ],
+    "id": "s4747"
+  },
+  {
+    "name": "Island Honey",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "13-23%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Happy",
+      "Energetic"
+    ],
+    "flavor": "Sweet honey citrus.",
+    "icon": "🍯",
+    "parents": [
+      "Jack Herer (phenotype)",
+      "Early Pearl"
+    ],
+    "id": "s4748"
+  },
+  {
+    "name": "Island Poison",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "21-22%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Energetic",
+      "Creative"
+    ],
+    "flavor": "Sweet fruity tropical, woods, earth.",
+    "icon": "🏝️",
+    "breeder": "Treehawk Farms",
+    "parents": [
+      "Durban Poison",
+      "Trainwreck",
+      "Afghan"
+    ],
+    "id": "s4749"
+  },
+  {
+    "name": "It's It",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Relaxed",
+      "Uplifted"
+    ],
+    "flavor": "Sweet spicy minty cookie, sour citrus.",
+    "icon": "🍦",
+    "breeder": "Exotic Genetix",
+    "parents": [
+      "Gelato",
+      "Mint Chocolate Chip"
+    ],
+    "id": "s4750"
+  },
+  {
+    "name": "Iverson 96 (aka Iverson '96, Iverson 1996)",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "31-32%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Relaxed",
+      "Energetic"
+    ],
+    "flavor": "Sweet fruity grape candy, spicy flowers.",
+    "icon": "🏀",
+    "parents": [
+      "Grape Stomper",
+      "Kush Mints"
+    ],
+    "id": "s4751"
+  },
+  {
+    "name": "J Mag",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "18-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Relaxed"
+    ],
+    "flavor": "Sweet citrusy, spicy cherries.",
+    "icon": "🌍",
+    "parents": [
+      "Jet Lag",
+      "Mag Landrace"
+    ],
+    "id": "s4752"
+  },
+  {
+    "name": "Jabberwocky (303 Seeds)",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "20-30%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Focused",
+      "Creative"
+    ],
+    "flavor": "Earthy, flowery, pine, spicy.",
+    "icon": "🐉",
+    "breeder": "303 Seeds",
+    "parents": [
+      "Lucky Charms",
+      "Bio-Diesel F1"
+    ],
+    "id": "s4753"
+  },
+  {
+    "name": "Jack And Jill",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "12-23%",
+    "cbd": "3-5%",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Giggly",
+      "Uplifted"
+    ],
+    "flavor": "Blueberry, citrus peel, peppery pine.",
+    "icon": "⛰️",
+    "parents": [
+      "Jack Herer",
+      "Trophy Wife"
+    ],
+    "id": "s4754"
+  },
+  {
+    "name": "Jack Cake",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "25-26%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Happy",
+      "Relaxed"
+    ],
+    "flavor": "Sweet creamy vanilla cake, sour citrus lemon.",
+    "icon": "🍰",
+    "breeder": "Ember Valley",
+    "parents": [
+      "Jack Herer",
+      "Wedding Cake"
+    ],
+    "id": "s4755"
+  },
+  {
+    "name": "Jack's Clone",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "31-32%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Relaxed",
+      "Sleepy"
+    ],
+    "flavor": "Sweet skunky citrusy grapefruit.",
+    "icon": "🍇",
+    "parents": [
+      "Starkiller",
+      "Grapefruit Durban"
+    ],
+    "id": "s4756"
+  },
+  {
+    "name": "Jack's Dream",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "18-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Creative",
+      "Relaxed"
+    ],
+    "flavor": "Piney, hazy, earthy.",
+    "icon": "💭",
+    "parents": [
+      "Jack Herer",
+      "AMS"
+    ],
+    "id": "s4757"
+  },
+  {
+    "name": "Jack's Unicorn (aka Unicorn Jack, Jack Unicorn)",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "15-21%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Focused",
+      "Energetic",
+      "Uplifted"
+    ],
+    "flavor": "Spicy pine, sherbet, grapefruit.",
+    "icon": "🦄",
+    "parents": [
+      "Jack Herer",
+      "Grapefruit",
+      "Chernobyl"
+    ],
+    "id": "s4758"
+  },
+  {
+    "name": "Jacked-Up",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "19-23%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Creative",
+      "Relaxed"
+    ],
+    "flavor": "Spicy woody, berry, citrus, peaches, apricots.",
+    "icon": "⚡",
+    "breeder": "SubCool's The Dank",
+    "parents": [
+      "Jack Herer",
+      "Timewreck"
+    ],
+    "id": "s4759"
+  },
+  {
+    "name": "Jackfruit",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "18-22%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Happy",
+      "Euphoric"
+    ],
+    "flavor": "Sweet tropical citrus, mango, musky.",
+    "icon": "🍈",
+    "parents": [
+      "Juicy Fruit",
+      "Jack Herer"
+    ],
+    "id": "s4760"
+  },
+  {
+    "name": "Jacky Girl (aka Jack's Girlfriend, Jackie Girl, Jacky G)",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "16-20%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Focused",
+      "Relaxed",
+      "Euphoric"
+    ],
+    "flavor": "Minty cookie, sour pine.",
+    "icon": "🍪",
+    "breeder": "Rebel Spirit Cannabis",
+    "parents": [
+      "Jack Herer",
+      "Girl Scout Cookies"
+    ],
+    "id": "s4761"
+  },
+  {
+    "name": "Jah Cheesecake",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Happy"
+    ],
+    "flavor": "Cream, hops, gas.",
+    "icon": "🧀",
+    "breeder": "Grassroots Cannabis",
+    "parents": [
+      "Jah Kush",
+      "Cheesecake"
+    ],
+    "id": "s4762"
+  },
+  {
+    "name": "Jam Session (aka Jam Sesh)",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "25-29%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Creative",
+      "Focused",
+      "Relaxed"
+    ],
+    "flavor": "Fruity apple jam, citrusy pineapple, oranges.",
+    "icon": "🎷",
+    "parents": [
+      "Apple Fritter",
+      "Orange Tree"
+    ],
+    "id": "s4763"
+  },
+  {
+    "name": "Jamba Juice",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "17-20%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Giggly",
+      "Aroused"
+    ],
+    "flavor": "Sweet fruity candy, berry, diesel.",
+    "icon": "🥤",
+    "breeder": "Golden State Genetics",
+    "parents": [
+      "Strawberry Cough",
+      "Banana OG"
+    ],
+    "id": "s4764"
+  },
+  {
+    "name": "Jawa Kush (aka Jawa OG, Jawa OG Kush)",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "17%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Focused",
+      "Creative",
+      "Relaxed"
+    ],
+    "flavor": "Sugar cake, lemon gas.",
+    "icon": "🛸",
+    "breeder": "Ocean Grown Seeds",
+    "parents": [
+      "Ghost OG",
+      "Jawa Pie"
+    ],
+    "id": "s4765"
+  },
+  {
+    "name": "Jealous Banana (aka Banana Jealousy, Banana Jealousy Cake)",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "19-30%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Euphoric",
+      "Giggly"
+    ],
+    "flavor": "Banana, diesel, honey, strawberry.",
+    "icon": "🍌",
+    "breeder": "Seed Junky Genetics",
+    "parents": [
+      "Jealousy",
+      "Banana Cream Cake"
+    ],
+    "id": "s4766"
+  },
+  {
+    "name": "Jealous Cheesecake",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Euphoric",
+      "Sleepy"
+    ],
+    "flavor": "Creamy, cheesy, earthy, berry.",
+    "icon": "🍰",
+    "breeder": "LIT Farms",
+    "parents": [
+      "Jealousy",
+      "Cherry Cheesecake"
+    ],
+    "id": "s4767"
+  },
+  {
+    "name": "Jealousy F3",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "23-35%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Energetic",
+      "Creative"
+    ],
+    "flavor": "Sweet creamy candy, sour citrus.",
+    "icon": "💔",
+    "breeder": "Seed Junky Genetics",
+    "parents": [
+      "Gelato #41",
+      "Sherbert Bx1"
+    ],
+    "id": "s4768"
+  },
+  {
+    "name": "Jelly Cocktail",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "21-26%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Focused",
+      "Creative"
+    ],
+    "flavor": "Tart blueberry, sweet jam, pepper.",
+    "icon": "🍸",
+    "breeder": "In House Genetics",
+    "parents": [
+      "Jelly Breath",
+      "Slurricane"
+    ],
+    "id": "s4769"
+  },
+  {
+    "name": "Jelly Cookies (aka Jelly Biscuits)",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "22%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric"
+    ],
+    "flavor": "Berry, lavender, tar, doughy.",
+    "icon": "🍪",
+    "breeder": "In House Genetics",
+    "parents": [
+      "Jelly Breath",
+      "GSC"
+    ],
+    "id": "s4770"
+  },
+  {
+    "name": "Jelly MAC (aka MAC and Jelly, MAC Jelly, MAC'N Jelly)",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "15-26%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed"
+    ],
+    "flavor": "Sour citrus, flowery lavender.",
+    "icon": "🍇",
+    "parents": [
+      "MAC",
+      "Jelly Breath"
+    ],
+    "id": "s4771"
+  },
+  {
+    "name": "Jelly Mints (aka Mint Jelly)",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-22%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Hungry"
+    ],
+    "flavor": "Mint, sweet, earthy.",
+    "icon": "🌿",
+    "breeder": "In House Genetics",
+    "parents": [
+      "Animal Mints",
+      "Jelly Breath"
+    ],
+    "id": "s4772"
+  },
+  {
+    "name": "Jelly Sherbet",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "17-21%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Calm"
+    ],
+    "flavor": "Sweet cherry berry, sour citrus lemon.",
+    "icon": "🍧",
+    "breeder": "In House Genetics",
+    "parents": [
+      "Divine Sherbet #22",
+      "Jelly Breath"
+    ],
+    "id": "s4773"
   }
 ]
