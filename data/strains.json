@@ -138121,5 +138121,476 @@
       "Royal Madre"
     ],
     "id": "s5116"
+  },
+  {
+    "name": "Mega Runtz",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "28%",
+    "cbd": "",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      }
+    ],
+    "effects": [
+      "Uplifted",
+      "Euphoric",
+      "Relaxed"
+    ],
+    "flavor": "Sweet fruity tropical citrus, sour berries.",
+    "icon": "🍬",
+    "parents": [
+      "Don Mega",
+      "Runtz"
+    ],
+    "id": "s5117"
+  },
+  {
+    "name": "Mega Wellness OG",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "18-33%",
+    "cbd": "",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Focused"
+    ],
+    "flavor": "Sweet spicy fruity, heavy diesel.",
+    "icon": "🏆",
+    "breeder": "Nameless Genetics",
+    "parents": [
+      "Chemdawg",
+      "OG Kush"
+    ],
+    "id": "s5118"
+  },
+  {
+    "name": "Mellowz 17",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "25-29%",
+    "cbd": "",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Focused",
+      "Creative"
+    ],
+    "flavor": "Concord grape, dark plum, marshmallow, candy gas.",
+    "icon": "🍇",
+    "breeder": "Compound Genetics",
+    "parents": [
+      "Spritzer",
+      "Grape Gas"
+    ],
+    "id": "s5119"
+  },
+  {
+    "name": "Melon Juice",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "18-28%",
+    "cbd": "0.5-1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Linalool",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Sleepy",
+      "Happy"
+    ],
+    "flavor": "Sweet fruity cantaloupe, floral funk.",
+    "icon": "🍈",
+    "parents": [
+      "Big Apple",
+      "Kush Mints BX2"
+    ],
+    "id": "s5120"
+  },
+  {
+    "name": "Melon Pop",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Uplifted",
+      "Relaxed"
+    ],
+    "flavor": "Sweet candy watermelon, creamy dough.",
+    "icon": "🍉",
+    "breeder": "Pruf Cultivar",
+    "parents": [
+      "Forbidden Fruit",
+      "Watermelon Zkittlez"
+    ],
+    "id": "s5121"
+  },
+  {
+    "name": "Melonwreck",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "16-26%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Sleepy"
+    ],
+    "flavor": "Sweet fruity sugary melon, spicy black pepper.",
+    "icon": "🍉",
+    "parents": [
+      "Trainwreck",
+      "unspecified Melon-family strain"
+    ],
+    "id": "s5122"
+  },
+  {
+    "name": "Melted Sherb",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "30-32%",
+    "cbd": "",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Euphoric",
+      "Creative"
+    ],
+    "flavor": "Fruit musk, mint, soft rubber, berry custard.",
+    "icon": "🍨",
+    "breeder": "Cookies",
+    "parents": [
+      "Gelato #41",
+      "Sunset Sherbet"
+    ],
+    "id": "s5123"
+  },
+  {
+    "name": "Mendo Berry",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "19-29%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Sleepy"
+    ],
+    "flavor": "Sweet creamy sugary berry, spicy earthiness.",
+    "icon": "🫐",
+    "parents": [
+      "Berry White",
+      "Purple Punch F2",
+      "Mendo Breath"
+    ],
+    "id": "s5124"
+  },
+  {
+    "name": "Mendo Bubba",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-26%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Sedated",
+      "Sleepy"
+    ],
+    "flavor": "Sweet creamy vanilla candy, mocha coffee, hash.",
+    "icon": "☕",
+    "parents": [
+      "Mendo Breath",
+      "Bubba Kush"
+    ],
+    "id": "s5125"
+  },
+  {
+    "name": "Mendo Cheese",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "28%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Uplifted",
+      "Giggly"
+    ],
+    "flavor": "Creamy cheesy herbal earthy, skunky.",
+    "icon": "🧀",
+    "breeder": "707 Seed Bank",
+    "parents": [
+      "UK Cheese",
+      "707 Chemdawg"
+    ],
+    "id": "s5126"
+  },
+  {
+    "name": "Mendo Chocolate Cookies",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "17-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Giggly",
+      "Relaxed",
+      "Creative"
+    ],
+    "flavor": "Sweet fruity berry grape, nutty cookie.",
+    "icon": "🍪",
+    "parents": [
+      "Mendo Purps",
+      "Girl Scout Cookies"
+    ],
+    "id": "s5127"
+  },
+  {
+    "name": "Mendo Crumble",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18-25%",
+    "cbd": "1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Sedated",
+      "Happy"
+    ],
+    "flavor": "Earthy, sweet, spicy pine.",
+    "icon": "🍪",
+    "breeder": "Kushfly",
+    "parents": [
+      "Mendo Breath",
+      "Crumble"
+    ],
+    "id": "s5128"
+  },
+  {
+    "name": "Mendo Dope",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Sedated"
+    ],
+    "flavor": "Earthy sweet, purple grape.",
+    "icon": "🎸",
+    "breeder": "Mendo Dope Farms (Subcool/TGA)",
+    "parents": [
+      "Locomotion",
+      "Querkle"
+    ],
+    "id": "s5129"
+  },
+  {
+    "name": "Mendo OG",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "24-27%",
+    "cbd": "",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      },
+      {
+        "n": "Linalool",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Sedated",
+      "Happy"
+    ],
+    "flavor": "Sweet candy vanilla, warm wood, spice.",
+    "icon": "🍫",
+    "breeder": "Gage Green Genetics",
+    "parents": [
+      "Mendo Montage",
+      "OGKB (OG Kush Breath)"
+    ],
+    "id": "s5130"
+  },
+  {
+    "name": "Mendo Queen",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "rare",
+    "thc": "13-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Social",
+      "Hungry"
+    ],
+    "flavor": "Sweet fruity grape, earthy flowers, woody pine.",
+    "icon": "👑",
+    "breeder": "Gage Green Group",
+    "parents": [
+      "Mendocino Purps",
+      "Crystal Locomotive"
+    ],
+    "id": "s5131"
+  },
+  {
+    "name": "Mendocino Purple Kush",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "16-23%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Sedated"
+    ],
+    "flavor": "Earthy, sweet, narcotic.",
+    "icon": "🍇",
+    "breeder": "Medical Seeds Co.",
+    "parents": [
+      "Mendocino Purple",
+      "Purple Kush"
+    ],
+    "id": "s5132"
+  },
+  {
+    "name": "Mendodawg",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "10-20%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Relaxed"
+    ],
+    "flavor": "Sweet diesel, fruity earth.",
+    "icon": "🐕",
+    "breeder": "Gage Green Group",
+    "parents": [
+      "Chemdawg OG",
+      "Mendo Montage"
+    ],
+    "id": "s5133"
+  },
+  {
+    "name": "Mercy Fruit Haze",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "20%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed"
+    ],
+    "flavor": "Sweet fruity berry, bubblegum, spicy diesel.",
+    "icon": "🍒",
+    "breeder": "Colin Koenig (Mercy Tree of Alaska)",
+    "parents": [
+      "Cherry Lime Haze",
+      "Gorilla Glue #4"
+    ],
+    "id": "s5134"
+  },
+  {
+    "name": "Meringue",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-26%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Sedated"
+    ],
+    "flavor": "Sweet candy-like, hints of lime.",
+    "icon": "🍰",
+    "breeder": "Dutch Passion",
+    "parents": [
+      "Wedding Cake",
+      "Animal Cookies"
+    ],
+    "id": "s5135"
   }
 ]
