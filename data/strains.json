@@ -132634,5 +132634,2849 @@
       "J1"
     ],
     "id": "s4861"
+  },
+  {
+    "name": "LA Punk",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "24-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Giggly",
+      "Relaxed"
+    ],
+    "flavor": "Sour creamy citrusy blueberry.",
+    "icon": "🍇",
+    "breeder": "22Red",
+    "parents": [
+      "Sunset Sherbet"
+    ],
+    "id": "s4862"
+  },
+  {
+    "name": "LA Pure Kush (aka LA Pure, LAPK, Los Angeles Pure Kush, Hollywood Pure Kush)",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18-28%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Sleepy"
+    ],
+    "flavor": "Spicy peppery earthy.",
+    "icon": "🌿",
+    "parents": [
+      "OG Kush",
+      "Afghan Kush"
+    ],
+    "id": "s4863"
+  },
+  {
+    "name": "LA Purp",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed"
+    ],
+    "flavor": "Sweet earth, subtle mint.",
+    "icon": "🍇",
+    "breeder": "Seed Junky",
+    "parents": [
+      "LA Pop Rock",
+      "Purple Push Pop"
+    ],
+    "id": "s4864"
+  },
+  {
+    "name": "La Sunshine (aka L.A. Sunshine)",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "16-27%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Focused",
+      "Happy"
+    ],
+    "flavor": "Sweet fruity, pungent chemical.",
+    "icon": "☀️",
+    "breeder": "Dark Horse Genetics",
+    "parents": [
+      "Chem Soda F1",
+      "Starfighter (Tahoe pheno)",
+      "Coal Creek Kush",
+      "Strawberry Diesel"
+    ],
+    "id": "s4865"
+  },
+  {
+    "name": "Lab Leak",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Sleepy"
+    ],
+    "flavor": "Gassy diesel, lemony chemical, black pepper.",
+    "icon": "🧪",
+    "breeder": "MassMedicalStrains",
+    "parents": [
+      "Chemdawg (Chem 1)",
+      "Sunshine Daydream",
+      "Star Pupil"
+    ],
+    "id": "s4866"
+  },
+  {
+    "name": "Lady Luck",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "22-26%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed"
+    ],
+    "flavor": "Earthy, spicy, citrus, pine.",
+    "icon": "🍀",
+    "breeder": "Penthouse Cannabis Co",
+    "parents": [
+      "Permafrost",
+      "Cherry Diesel"
+    ],
+    "id": "s4867"
+  },
+  {
+    "name": "Lady Zaza (aka Lady Z)",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Euphoric",
+      "Relaxed"
+    ],
+    "flavor": "Candy, apple, pastry.",
+    "icon": "👑",
+    "breeder": "Green Therapy NYC",
+    "parents": [
+      "Gelato",
+      "Zkittlez"
+    ],
+    "id": "s4868"
+  },
+  {
+    "name": "Lambs in Space (aka Space Lambs)",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "13-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Focused",
+      "Relaxed"
+    ],
+    "flavor": "Sweet sour tropical mango.",
+    "icon": "🐑",
+    "breeder": "Pilot Farms",
+    "parents": [
+      "Lamb's Sour Diesel",
+      "Space Candy"
+    ],
+    "id": "s4869"
+  },
+  {
+    "name": "Landslide",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "23-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Relaxed",
+      "Sedated"
+    ],
+    "flavor": "Sweet chocolatey doughy cake.",
+    "icon": "🍫",
+    "breeder": "Lit Farms",
+    "parents": [
+      "Lava Cake #11 (Tahoe Hydro Cut)",
+      "Fleetwood Mac #100"
+    ],
+    "id": "s4870"
+  },
+  {
+    "name": "Lap Dance",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Aroused"
+    ],
+    "flavor": "",
+    "icon": "💃",
+    "parents": [
+      "Titty Sprinkles",
+      "Purple Pebbles"
+    ],
+    "id": "s4871"
+  },
+  {
+    "name": "Larry Bird Wood",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18-19%",
+    "cbd": "0-1%",
+    "terps": [],
+    "effects": [
+      "Giggly",
+      "Sedated"
+    ],
+    "flavor": "Sour citrusy creamy fruity.",
+    "icon": "🏀",
+    "breeder": "Uprising Seed Co",
+    "parents": [
+      "Gelato #33",
+      "Kirkwood OG"
+    ],
+    "id": "s4872"
+  },
+  {
+    "name": "Larry's Breath (aka Larry Bird Breath)",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "15-23%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Euphoric"
+    ],
+    "flavor": "Creamy lemons, ripe fruits, vanilla.",
+    "icon": "🍋",
+    "breeder": "ThugPug Genetics",
+    "parents": [
+      "Gelato #33",
+      "Mendo Breath F2"
+    ],
+    "id": "s4873"
+  },
+  {
+    "name": "Las Vegas Lemon Skunk",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "20-22%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Euphoric",
+      "Relaxed"
+    ],
+    "flavor": "Bright sour lemon, skunky earthy.",
+    "icon": "🍋",
+    "parents": [
+      "SFV OG (Kush)",
+      "Skunk #1"
+    ],
+    "id": "s4874"
+  },
+  {
+    "name": "LAST DANCE (aka The Last Dance)",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Focused",
+      "Creative"
+    ],
+    "flavor": "Diesel, exotic terps.",
+    "icon": "💃",
+    "breeder": "Wizard Trees Genetics",
+    "parents": [
+      "Black Magic",
+      "Zangria"
+    ],
+    "id": "s4875"
+  },
+  {
+    "name": "Lato Pop (aka Lato-Pop)",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "19-27%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Giggly"
+    ],
+    "flavor": "Fruity, candy-like, like Blow Pop.",
+    "icon": "🍬",
+    "breeder": "High Tolerance x Joke's Up",
+    "parents": [
+      "Wedding Pie",
+      "Jungle Cake"
+    ],
+    "id": "s4876"
+  },
+  {
+    "name": "Laundry List",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-28%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Euphoric",
+      "Relaxed"
+    ],
+    "flavor": "Tropical fruit salad, gas, mango, guava.",
+    "icon": "🧺",
+    "breeder": "Atlas Seed",
+    "parents": [
+      "Galactic Guava",
+      "Grapes n Cream"
+    ],
+    "id": "s4877"
+  },
+  {
+    "name": "Lava Breath",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "21-26%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Focused",
+      "Relaxed"
+    ],
+    "flavor": "Spicy peppery, sugary mint.",
+    "icon": "🌋",
+    "parents": [
+      "Mendo Breath",
+      "Lava Cake"
+    ],
+    "id": "s4878"
+  },
+  {
+    "name": "Lava Dawg",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "28-30%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Sleepy"
+    ],
+    "flavor": "Spicy fruity chemical grape.",
+    "icon": "🌋",
+    "parents": [
+      "Chemdawg",
+      "Lava Cake"
+    ],
+    "id": "s4879"
+  },
+  {
+    "name": "Lava Fuel",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "20-32%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Sleepy"
+    ],
+    "flavor": "Sweet chocolate cake, creamy vanilla, dank diesel.",
+    "icon": "🌋",
+    "breeder": "Compound Genetics",
+    "parents": [
+      "Lava Cake",
+      "Jet Fuel Gelato"
+    ],
+    "id": "s4880"
+  },
+  {
+    "name": "Lavender Aura",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18-32%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Euphoric",
+      "Calm"
+    ],
+    "flavor": "Earthy, sweet, herbal.",
+    "icon": "💜",
+    "breeder": "Bodhi Seeds",
+    "parents": [
+      "Purple Urkle",
+      "Wookie #15"
+    ],
+    "id": "s4881"
+  },
+  {
+    "name": "Lavender Cake (aka Lavender, Lavender Kush)",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-28%",
+    "cbd": "1-2%",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Euphoric",
+      "Relaxed"
+    ],
+    "flavor": "Sweet flowery lavender, creamy vanilla cake.",
+    "icon": "💜",
+    "breeder": "Soma (Soma Seeds)",
+    "parents": [
+      "Big Skunk Korean",
+      "Afghani Hawaiian",
+      "Super Skunk"
+    ],
+    "id": "s4882"
+  },
+  {
+    "name": "Lavender Cookies",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20%+",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Creative",
+      "Relaxed",
+      "Sleepy"
+    ],
+    "flavor": "Sweet floral cookie, nutty pine.",
+    "icon": "🍪",
+    "breeder": "S&M Seeds",
+    "parents": [
+      "Lavender (Soma Lavender male)",
+      "Girl Scout Cookies (Forum Cut)"
+    ],
+    "id": "s4883"
+  },
+  {
+    "name": "Lavender Daydream",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "21-22%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Sleepy"
+    ],
+    "flavor": "Sweet creamy flowery blueberry, citrusy lemon.",
+    "icon": "💜",
+    "breeder": "Big Buddy Seeds",
+    "parents": [
+      "Lemon Larry Lavender",
+      "Sunshine Daydream"
+    ],
+    "id": "s4884"
+  },
+  {
+    "name": "Lavender Gelato",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "20-32%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Relaxed",
+      "Creative"
+    ],
+    "flavor": "Sweet fruity gelato, flowery lavender.",
+    "icon": "🍦",
+    "breeder": "RYTHM (Green Thumb Industries)",
+    "parents": [
+      "Lavender",
+      "Gelato"
+    ],
+    "id": "s4885"
+  },
+  {
+    "name": "Lavender Goo",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Euphoric"
+    ],
+    "flavor": "Sweet lemony, floral, fuel, spice.",
+    "icon": "💜",
+    "breeder": "UpNorth Humboldt",
+    "parents": [
+      "Afghani",
+      "Purple Kush"
+    ],
+    "id": "s4886"
+  },
+  {
+    "name": "Lavender Jack",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "15-24%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Sedated"
+    ],
+    "flavor": "Cinnamon and lavender.",
+    "icon": "💜",
+    "breeder": "Bodhi Seeds",
+    "parents": [
+      "Jack Herer",
+      "Wookie #15"
+    ],
+    "id": "s4887"
+  },
+  {
+    "name": "Lazy Lightning",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "22-28%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Energetic"
+    ],
+    "flavor": "Earthy herbs, sharp citrus, sour lime.",
+    "icon": "⚡",
+    "breeder": "Bodhi Seeds",
+    "parents": [
+      "Headband Loompa",
+      "'88 G13",
+      "Hash Plant"
+    ],
+    "id": "s4888"
+  },
+  {
+    "name": "Lazy Susan CBD (aka Lazy Susan)",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "3-5%",
+    "cbd": "7-10%",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Happy"
+    ],
+    "flavor": "Sweet spicy lemony citrus, grassy woodiness.",
+    "icon": "🌼",
+    "breeder": "Plantworks",
+    "parents": [
+      "Stashsquatch",
+      "Unknown CBD cultivar"
+    ],
+    "id": "s4889"
+  },
+  {
+    "name": "LCG BX1",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "22%",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Fruity, citrusy.",
+    "icon": "🍋",
+    "breeder": "LOLO",
+    "parents": [
+      "Lemon Cherry Gelato (backcross)"
+    ],
+    "id": "s4890"
+  },
+  {
+    "name": "Le Silver Royale (aka Silver Royal)",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "rare",
+    "thc": "20-21%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed"
+    ],
+    "flavor": "Creamy cheese, sweet skunky haze.",
+    "icon": "⚪",
+    "breeder": "Kleen Karma Gardens",
+    "parents": [
+      "Green Queen",
+      "Super Silver Haze"
+    ],
+    "id": "s4891"
+  },
+  {
+    "name": "Lechera (aka Blue Lechera)",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "22-28%",
+    "cbd": "1%",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Happy"
+    ],
+    "flavor": "Sweet fruity, blueberry.",
+    "icon": "🥛",
+    "parents": [
+      "Blue Sherbet",
+      "Zkittlez"
+    ],
+    "id": "s4892"
+  },
+  {
+    "name": "Legend Moonarc",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric"
+    ],
+    "flavor": "Citrus zest, pine, candy sweetness.",
+    "icon": "🌙",
+    "breeder": "Alien Genetics",
+    "parents": [
+      "Legend OG",
+      "MoonArc (Moonbow 112 IX x Alien Rock Candy)"
+    ],
+    "id": "s4893"
+  },
+  {
+    "name": "Legend Of 91",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "20-24%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Relaxed"
+    ],
+    "flavor": "Pungent earthy herbal, vanilla spice.",
+    "icon": "🌿",
+    "parents": [
+      "OG Kush",
+      "Chem 91 (Skunk VA)"
+    ],
+    "id": "s4894"
+  },
+  {
+    "name": "Legend Of Brulee",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "12-19%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Relaxed",
+      "Sleepy"
+    ],
+    "flavor": "Sweet sour fruity lemon.",
+    "icon": "🍮",
+    "breeder": "Covert Genetics",
+    "parents": [
+      "OG Kush",
+      "Chem 91",
+      "Lemon Brulee"
+    ],
+    "id": "s4895"
+  },
+  {
+    "name": "Legend Orange Apricot",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "16-19%",
+    "cbd": "0-2%",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Creative",
+      "Aroused"
+    ],
+    "flavor": "Citrus and apricot.",
+    "icon": "🍑",
+    "breeder": "Capulator, Obsoul33t, and Compound Genetics",
+    "parents": [
+      "Legend OG",
+      "Orange Apricot"
+    ],
+    "id": "s4896"
+  },
+  {
+    "name": "Leia Og (aka Leia Kush, Princess Leia OG)",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "17-24%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Creative",
+      "Sedated"
+    ],
+    "flavor": "Sweet fruity blueberries, spicy grape candies.",
+    "icon": "👑",
+    "breeder": "Gage Green Genetics",
+    "parents": [
+      "Skywalker OG",
+      "Grape Stomper",
+      "OG (F1)"
+    ],
+    "id": "s4897"
+  },
+  {
+    "name": "Lem Chem",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "20-24%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Focused",
+      "Uplifted"
+    ],
+    "flavor": "Sour citrus, chemical diesel.",
+    "icon": "🍋",
+    "breeder": "Connoisseur Genetics",
+    "parents": [
+      "Lemon Larry OG",
+      "Chemdog (bx2)"
+    ],
+    "id": "s4898"
+  },
+  {
+    "name": "Lembas Dough",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "28-31%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Creative",
+      "Focused",
+      "Relaxed"
+    ],
+    "flavor": "Bright fruity, creamy peanut butter cookies.",
+    "icon": "🍞",
+    "breeder": "Yggdrasil Genetics",
+    "parents": [
+      "Electric Peanut Butter Cookies",
+      "Mimosa",
+      "Crescendo"
+    ],
+    "id": "s4899"
+  },
+  {
+    "name": "Lemon Apricot",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "20-28%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Euphoric",
+      "Relaxed"
+    ],
+    "flavor": "Sweet sour lemony citrus, fresh apricot.",
+    "icon": "🍋",
+    "breeder": "Compound Genetics",
+    "parents": [
+      "Lemon Jack",
+      "Legend Orange Apricot F2"
+    ],
+    "id": "s4900"
+  },
+  {
+    "name": "Lemon Berry Candy OG",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "20-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Creative",
+      "Euphoric"
+    ],
+    "flavor": "Sugary citric, sweet berries, petrol.",
+    "icon": "🍬",
+    "breeder": "Ethos Genetics",
+    "parents": [
+      "Las Vegas Lemon Skunk",
+      "L.G.B.T. (Lemon Grape Bubba Temple)"
+    ],
+    "id": "s4901"
+  },
+  {
+    "name": "Lemon Blossom",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "27-28%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Euphoric"
+    ],
+    "flavor": "Lemon tea, spicy kush.",
+    "icon": "🍋",
+    "parents": [
+      "SFV OG Kush",
+      "Lemon Thai"
+    ],
+    "id": "s4902"
+  },
+  {
+    "name": "Lemon Breath",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "23%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Creative"
+    ],
+    "flavor": "Citrus, minty cookie.",
+    "icon": "🍋",
+    "breeder": "ThugPug Genetics",
+    "parents": [
+      "Lemon OG (Warrior Extraction Cut)",
+      "Mendo Breath F2"
+    ],
+    "id": "s4903"
+  },
+  {
+    "name": "Lemon Bundt Cake",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Lemon and cherry.",
+    "icon": "🍋",
+    "breeder": "Lit Farms",
+    "parents": [
+      "Lemonchello #28",
+      "Runtz"
+    ],
+    "id": "s4904"
+  },
+  {
+    "name": "Lemon Cherry Cookies",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "22-29%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Focused"
+    ],
+    "flavor": "Lemon, cherry, sweet dough.",
+    "icon": "🍪",
+    "breeder": "Fast Buds",
+    "parents": [
+      "Lemonade",
+      "Cherry Pie",
+      "Girl Scout Cookies"
+    ],
+    "id": "s4905"
+  },
+  {
+    "name": "Lemon Cherry Dulce (aka Lemon Cherry Dolce)",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "25-32%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Relaxed",
+      "Sedated"
+    ],
+    "flavor": "Sweet fruity cherries, creamy vanilla.",
+    "icon": "🍒",
+    "breeder": "Mad Cow",
+    "parents": [
+      "Lemon Cherry Gelato",
+      "Dulce de Leche"
+    ],
+    "id": "s4906"
+  },
+  {
+    "name": "Lemon Cherry Gushers",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Sedated"
+    ],
+    "flavor": "Sweet fruity cherry citrus, tangy creamy lemon.",
+    "icon": "🍒",
+    "parents": [
+      "Lemon Cherry Gelato",
+      "Gushers"
+    ],
+    "id": "s4907"
+  },
+  {
+    "name": "Lemon Cherry Spritz",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "27-36%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Tranquil",
+      "Happy"
+    ],
+    "flavor": "Citrus, vanilla, funk.",
+    "icon": "🍋",
+    "breeder": "Good Day Farm",
+    "parents": [
+      "Lemonchello",
+      "Jet Fuel Gelato"
+    ],
+    "id": "s4908"
+  },
+  {
+    "name": "Lemon Cherry Zkittlez",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "21-27%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Focused"
+    ],
+    "flavor": "Candy profile, citrus notes.",
+    "icon": "🍬",
+    "breeder": "Clout King",
+    "parents": [
+      "Lemon Cherry Terdz",
+      "Zkittlez"
+    ],
+    "id": "s4909"
+  },
+  {
+    "name": "Lemon Citrine",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "22%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Focused",
+      "Relaxed"
+    ],
+    "flavor": "Citrus, cream, pine.",
+    "icon": "🍋",
+    "breeder": "Wonderbrett",
+    "parents": [
+      "OZK (OG Zkittlez Kush)",
+      "Clementine"
+    ],
+    "id": "s4910"
+  },
+  {
+    "name": "Lemon Cooler",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "19-29%",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Sweet sugary sour lemony citrus, creamy tropical fruit.",
+    "icon": "🍋",
+    "parents": [
+      "Ecto Cooler",
+      "Unknown lemon strain"
+    ],
+    "id": "s4911"
+  },
+  {
+    "name": "Lemon Cream",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric"
+    ],
+    "flavor": "Sweet, citrus, creamy blend.",
+    "icon": "🍋",
+    "breeder": "Dark Horse Genetics",
+    "parents": [
+      "Cookies and Cream",
+      "Joe's Lemonade"
+    ],
+    "id": "s4912"
+  },
+  {
+    "name": "Lemon Cream Pie",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Sweet lemon, creamy cake, white chocolate.",
+    "icon": "🥧",
+    "breeder": "Cannabella Genetics",
+    "parents": [
+      "Sour Lemon Haze",
+      "Chocolate Rain"
+    ],
+    "id": "s4913"
+  },
+  {
+    "name": "Lemon Crumb",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "16-22%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Sedated",
+      "Happy"
+    ],
+    "flavor": "Cereal milk, fruity, tart lemon.",
+    "icon": "🍋",
+    "breeder": "Green Team Genetics",
+    "parents": [
+      "Lockjaw",
+      "Cookie Pebbles"
+    ],
+    "id": "s4914"
+  },
+  {
+    "name": "Lemon Dough",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "18-27%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Focused",
+      "Euphoric",
+      "Energetic"
+    ],
+    "flavor": "Doughy lemony citrus, creamy vanilla.",
+    "icon": "🍋",
+    "parents": [
+      "Lemon Skunk",
+      "OG #18"
+    ],
+    "id": "s4915"
+  },
+  {
+    "name": "Lemon Drizzle",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "20-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Tingly",
+      "Energetic",
+      "Hungry"
+    ],
+    "flavor": "Lemon, tea, sweet notes.",
+    "icon": "🍋",
+    "breeder": "Real Gorilla Seeds",
+    "parents": [
+      "Super Lemon Haze",
+      "WiFi OG"
+    ],
+    "id": "s4916"
+  },
+  {
+    "name": "Lemon Fields",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "27%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Energetic"
+    ],
+    "flavor": "Vibrant citrus, sweet lemon, tangy orange.",
+    "icon": "🍋",
+    "breeder": "Greenline",
+    "parents": [
+      "Sunset Sherbert",
+      "Orange Tahoe"
+    ],
+    "id": "s4917"
+  },
+  {
+    "name": "Lemon Fire MAC",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "22-27%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Creative",
+      "Uplifted"
+    ],
+    "flavor": "Lemon, earthy, spicy.",
+    "icon": "🍋",
+    "breeder": "Capulator",
+    "parents": [
+      "Lemon Fire",
+      "MAC (Miracle Alien Cookies)"
+    ],
+    "id": "s4918"
+  },
+  {
+    "name": "Lemon Fizz",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric"
+    ],
+    "flavor": "Sweet citrusy, zesty lemon, dank diesel.",
+    "icon": "🍋",
+    "breeder": "Calyx Bros. Seed Co.",
+    "parents": [
+      "Kakalak Kush",
+      "Super Lemon Haze"
+    ],
+    "id": "s4919"
+  },
+  {
+    "name": "Lemon Freeze Pop",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "20-34%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Energetic",
+      "Creative"
+    ],
+    "flavor": "Creamy citrusy lemon, sweet vanilla, pine.",
+    "icon": "🍋",
+    "breeder": "Clearwater Genetics",
+    "parents": [
+      "Lemon Tree",
+      "Creamsicle #4"
+    ],
+    "id": "s4920"
+  },
+  {
+    "name": "Lemon Fritter",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Sleepy"
+    ],
+    "flavor": "Sweet earthy pastry, citrus and mint.",
+    "icon": "🍩",
+    "parents": [
+      "Apple Fritter",
+      "Lemon Mints"
+    ],
+    "id": "s4921"
+  },
+  {
+    "name": "Lemon Frost",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Creative"
+    ],
+    "flavor": "Zesty lemon, cool minty.",
+    "icon": "🍋",
+    "breeder": "True Fire Cannabis",
+    "parents": [
+      "Frozen Lemons",
+      "Kush Mints"
+    ],
+    "id": "s4922"
+  },
+  {
+    "name": "Lemon Gelato Cookies",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "19-28%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Focused"
+    ],
+    "flavor": "Sweet cherry, bright lemon.",
+    "icon": "🍦",
+    "breeder": "RYTHM",
+    "parents": [
+      "Lemon Cookies",
+      "Gelato #1"
+    ],
+    "id": "s4923"
+  },
+  {
+    "name": "Lemon Gelato Pop",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "22-28%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Sleepy",
+      "Hungry"
+    ],
+    "flavor": "Lemon, floral.",
+    "icon": "🍦",
+    "parents": [
+      "Lemon Haze",
+      "Thin Mint Girl Scout Cookies"
+    ],
+    "id": "s4924"
+  },
+  {
+    "name": "Lemon Gorilla",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "19-23%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Relaxed",
+      "Sleepy"
+    ],
+    "flavor": "Sweet sour lemony citrus, spicy sage.",
+    "icon": "🦍",
+    "parents": [
+      "Super Lemon Haze",
+      "Gorilla Glue #4"
+    ],
+    "id": "s4925"
+  },
+  {
+    "name": "Lemon Grapefruit Banana Tangerine (Duffy's)",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "30%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Creative",
+      "Happy"
+    ],
+    "flavor": "Sweet banana, tangy tangerine, grapefruit citrus.",
+    "icon": "🍊",
+    "breeder": "Duffy's (Fig Farms)",
+    "parents": [
+      "Strawberry Banana",
+      "Backpack Boyz cultivar"
+    ],
+    "id": "s4926"
+  },
+  {
+    "name": "Lemon Grenade",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "14-19%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Motivated",
+      "Focused"
+    ],
+    "flavor": "Sweet pungent tropical fruit, skunk.",
+    "icon": "💣",
+    "parents": [
+      "Super Lemon Haze",
+      "Pineapple Grenade"
+    ],
+    "id": "s4927"
+  },
+  {
+    "name": "Lemon Ice Cream",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Relaxed"
+    ],
+    "flavor": "Bitter lemon, earthy diesel, sweet lemon orange.",
+    "icon": "🍦",
+    "breeder": "Lit Farms",
+    "parents": [
+      "Lemon Tree",
+      "Watermelon Gelato"
+    ],
+    "id": "s4928"
+  },
+  {
+    "name": "Lemon Kush Headband",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "19-23%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Sedated"
+    ],
+    "flavor": "Sour citrus, lemony diesel.",
+    "icon": "🍋",
+    "breeder": "Humboldt Seed Organization",
+    "parents": [
+      "215 Super Bud",
+      "Headband",
+      "True OG"
+    ],
+    "id": "s4929"
+  },
+  {
+    "name": "Lemon Kush Mints",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Sleepy"
+    ],
+    "flavor": "Zesty citrus, earthy gas, sweet berry, nutty lemon.",
+    "icon": "🍬",
+    "parents": [
+      "Lemonade",
+      "Kush Mints"
+    ],
+    "id": "s4930"
+  },
+  {
+    "name": "Lemon Larry (aka Larry OG)",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "20-26%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Relaxed"
+    ],
+    "flavor": "Sweet earthy, lemony pine, grassy herbs.",
+    "icon": "🍋",
+    "breeder": "The Cali Connection",
+    "parents": [
+      "OG Kush",
+      "SFV OG"
+    ],
+    "id": "s4931"
+  },
+  {
+    "name": "Lemon Lava",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "19-22%",
+    "cbd": "1-2%",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Euphoric",
+      "Relaxed"
+    ],
+    "flavor": "Citrus zest, sage, fresh mint, grape.",
+    "icon": "🌋",
+    "breeder": "pHinest Cannabis",
+    "parents": [
+      "Lemon Heads",
+      "Lava Cake"
+    ],
+    "id": "s4932"
+  },
+  {
+    "name": "Lemon Lime Punch",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "15-18%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Focused",
+      "Happy"
+    ],
+    "flavor": "Sweet citrusy lemon-lime, sugary fruity berry.",
+    "icon": "🍋",
+    "breeder": "In-House Genetics",
+    "parents": [
+      "Purple Punch",
+      "Schrom"
+    ],
+    "id": "s4933"
+  },
+  {
+    "name": "Lemon Melon (aka Lemon Melons)",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "18-22%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric"
+    ],
+    "flavor": "Fruity lemon and watermelon.",
+    "icon": "🍉",
+    "breeder": "Dying Breed Seeds",
+    "parents": [
+      "Banana",
+      "Watermelon Zkittlez"
+    ],
+    "id": "s4934"
+  },
+  {
+    "name": "Lemon Meringue Kush (aka Lemon Meringue, Lemon Meringue Pie)",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "20-24%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energizing",
+      "Calm"
+    ],
+    "flavor": "Citrus, nutty lemon.",
+    "icon": "🥧",
+    "breeder": "Exotic Genetix",
+    "parents": [
+      "Lemon Skunk",
+      "Cookies and Cream"
+    ],
+    "id": "s4935"
+  },
+  {
+    "name": "Lemon Mist",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Citrus, floral, creamy.",
+    "icon": "🍋",
+    "breeder": "Flower Power Cannabis",
+    "parents": [
+      "Lemon Tree x Cream Smoothie",
+      "Sweet Retreat x Zkittlez"
+    ],
+    "id": "s4936"
+  },
+  {
+    "name": "Lemon Orange",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "29%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Uplifted",
+      "Euphoric"
+    ],
+    "flavor": "Sweet tangy lemon, juicy orange, earthy.",
+    "icon": "🍊",
+    "breeder": "Green House Seeds",
+    "parents": [
+      "Super Lemon Haze",
+      "Clementine (Crockett Family Farm cut)"
+    ],
+    "id": "s4937"
+  },
+  {
+    "name": "Lemon Oz (aka Lemon OZ Kush)",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "20-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Energetic"
+    ],
+    "flavor": "Sweet creamy sour citrus.",
+    "icon": "🍋",
+    "breeder": "Lemonnade team",
+    "parents": [
+      "Exotikz OZ Kush",
+      "Original Lemonnade"
+    ],
+    "id": "s4938"
+  },
+  {
+    "name": "Lemon Ozium",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "24-26%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Sedated"
+    ],
+    "flavor": "Sweet sour sugary lemon, flowery kush.",
+    "icon": "🍋",
+    "breeder": "Full Moon Genetics",
+    "parents": [
+      "Lemon Kush",
+      "OZ Kush Bx1"
+    ],
+    "id": "s4939"
+  },
+  {
+    "name": "Lemon Pebblez",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "19-29%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Relaxed",
+      "Sociable"
+    ],
+    "flavor": "Sweet sour citrusy lemon, sugary grapefruit.",
+    "icon": "🍋",
+    "breeder": "Lemonnade team",
+    "parents": [
+      "FPOG",
+      "Original Lemonnade"
+    ],
+    "id": "s4940"
+  },
+  {
+    "name": "Lemon Pineapple",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Happy",
+      "Focused"
+    ],
+    "flavor": "Sweet fruity citrusy lemon, sour tropical pineapple.",
+    "icon": "🍍",
+    "breeder": "710 Genetics",
+    "parents": [
+      "Lemon Diesel",
+      "Pineapple"
+    ],
+    "id": "s4941"
+  },
+  {
+    "name": "Lemon Puff",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "15-23%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Focused"
+    ],
+    "flavor": "Super sour lemon, savory pungent diesel.",
+    "icon": "🍋",
+    "breeder": "Gage Green Group",
+    "parents": [
+      "Lemon Diesel",
+      "Joseph OG"
+    ],
+    "id": "s4942"
+  },
+  {
+    "name": "Lemon Punch",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Focused",
+      "Uplifted"
+    ],
+    "flavor": "Tangy lemon and lime, grape.",
+    "icon": "🍋",
+    "parents": [
+      "Purple Punch",
+      "Lemon G"
+    ],
+    "id": "s4943"
+  },
+  {
+    "name": "Lemon Scone",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Creative",
+      "Focused"
+    ],
+    "flavor": "Sweet, smooth, creamy, zest.",
+    "icon": "🥐",
+    "breeder": "West Coast Cure",
+    "parents": [
+      "Lemon Skunk",
+      "Cookies & Cream"
+    ],
+    "id": "s4944"
+  },
+  {
+    "name": "Lemon Shandy",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Refreshing citrus.",
+    "icon": "🍋",
+    "breeder": "Curio Wellness",
+    "parents": [
+      "Ya Hemi",
+      "Melonatta"
+    ],
+    "id": "s4945"
+  },
+  {
+    "name": "Lemon Shiv",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "20-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Alert"
+    ],
+    "flavor": "Zesty musky lemon, forest of lemon trees.",
+    "icon": "🍋",
+    "breeder": "Capulator",
+    "parents": [
+      "Cap's Frozen Lemons",
+      "Shiver Me Timbers"
+    ],
+    "id": "s4946"
+  },
+  {
+    "name": "Lemon Skittles (aka Lemon Zkittle, Lemon Zkittlez)",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "20-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Energetic",
+      "Creative"
+    ],
+    "flavor": "Lemon zest, citrus-candy sweetness.",
+    "icon": "🍬",
+    "breeder": "Dutch Passion",
+    "parents": [
+      "Las Vegas Lemon Skunk",
+      "Zkittlez"
+    ],
+    "id": "s4947"
+  },
+  {
+    "name": "Lemon Skunk OG (aka Lemon Skunk)",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "15-22%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Uplifted",
+      "Happy"
+    ],
+    "flavor": "Skunky aroma, zesty lemon.",
+    "icon": "🍋",
+    "breeder": "DNA Genetics",
+    "parents": [
+      "Two selected Skunk #1 phenotypes"
+    ],
+    "id": "s4948"
+  },
+  {
+    "name": "Lemon Slam",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "24-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Focused",
+      "Relaxed"
+    ],
+    "flavor": "Loud lemon tree terps, sharp citrus zest, creamy undertones.",
+    "icon": "🍋",
+    "breeder": "Tiki Madman",
+    "parents": [
+      "Gelonade",
+      "Oreo Blizzard"
+    ],
+    "id": "s4949"
+  },
+  {
+    "name": "Lemon Splash",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "28-31%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Focused",
+      "Sociable"
+    ],
+    "flavor": "Sour lemon inhale, silky cream exhale.",
+    "icon": "🍋",
+    "breeder": "Wyeast Farms",
+    "parents": [
+      "Lemon Tree",
+      "Horchata"
+    ],
+    "id": "s4950"
+  },
+  {
+    "name": "Lemon Stomper",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "18-20%",
+    "cbd": "1-3%",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Creative"
+    ],
+    "flavor": "Vibrant lemony, spicy.",
+    "icon": "🍋",
+    "breeder": "Gage Green Genetics",
+    "parents": [
+      "Lemon Thai #2",
+      "Chemdawg",
+      "Sour Diesel (Snowman)"
+    ],
+    "id": "s4951"
+  },
+  {
+    "name": "Lemon Strawz (aka Lemon Ztrawz)",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "30%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "Lemon candy, bright sweet notes.",
+    "icon": "🍓",
+    "breeder": "Four54",
+    "parents": [
+      "Lemon Up",
+      "Sour Strawz"
+    ],
+    "id": "s4952"
+  },
+  {
+    "name": "Lemon Sugar",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "26.5%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Creative",
+      "Happy"
+    ],
+    "flavor": "Lemon citrus candy, diesel.",
+    "icon": "🍋",
+    "breeder": "Cresco",
+    "parents": [
+      "Lemon Bean",
+      "Sugar Daddy"
+    ],
+    "id": "s4953"
+  },
+  {
+    "name": "Lemon Rocks",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "30-31%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Focused",
+      "Creative"
+    ],
+    "flavor": "Creamy sugary lemon, mellow spicy flowers.",
+    "icon": "🍋",
+    "parents": [
+      "Lemon Rock Candy",
+      "Lemon OG",
+      "Lemon Thai"
+    ],
+    "id": "s4954"
+  },
+  {
+    "name": "Lemon Swirl",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "20-26%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Focused"
+    ],
+    "flavor": "Fruity, peppery, creamy vanilla lemon.",
+    "icon": "🍋",
+    "parents": [
+      "Lemon Skunk",
+      "Vanilla Kush"
+    ],
+    "id": "s4955"
+  },
+  {
+    "name": "Lemon Tag",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "19-20%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Focused",
+      "Creative"
+    ],
+    "flavor": "Citrus-forward, sweet aftertaste.",
+    "icon": "🍋",
+    "parents": [
+      "Lemon Skunk",
+      "Lemon OG Kush"
+    ],
+    "id": "s4956"
+  },
+  {
+    "name": "Lemon Tangie",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "13-18%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Creative",
+      "Energetic"
+    ],
+    "flavor": "Sour citrusy lemon, woody exhale.",
+    "icon": "🍋",
+    "breeder": "Calyx Gardens",
+    "parents": [
+      "SFV OG (Kush)",
+      "Tangie"
+    ],
+    "id": "s4957"
+  },
+  {
+    "name": "Lemon Tini (aka LemonTini)",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric"
+    ],
+    "flavor": "Tart lemon fuel terps.",
+    "icon": "🍸",
+    "breeder": "Karma Genetics",
+    "parents": [
+      "Lemon Tree",
+      "Karma Sour D BX"
+    ],
+    "id": "s4958"
+  },
+  {
+    "name": "Lemon Tree BX3",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Sour lemon, skunky diesel.",
+    "icon": "🌳",
+    "breeder": "Uncle X",
+    "parents": [
+      "Lemon Tree (BX3 backcross)"
+    ],
+    "id": "s4959"
+  },
+  {
+    "name": "Lemon Tree Kush (aka Lemon Tree)",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "20-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Happy",
+      "Relaxed"
+    ],
+    "flavor": "Fresh lemons, diesel undertones.",
+    "icon": "🌳",
+    "parents": [
+      "Lemon Skunk",
+      "Sour Diesel"
+    ],
+    "id": "s4960"
+  },
+  {
+    "name": "Lemon Triangle Kush",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "19-26%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Heady",
+      "Uplifted",
+      "Relaxed"
+    ],
+    "flavor": "Sweet lemon grapefruit, earthy herbal.",
+    "icon": "🔺",
+    "breeder": "Cresco",
+    "parents": [
+      "Triangle Kush",
+      "Las Vegas Lemon Skunk"
+    ],
+    "id": "s4961"
+  },
+  {
+    "name": "Lemon Trill",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "17-22%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Relaxed"
+    ],
+    "flavor": "Sweet citrus, tangy fruit pulp, bubblegum.",
+    "icon": "🍋",
+    "parents": [
+      "Lemonade",
+      "Reckless Rainbow"
+    ],
+    "id": "s4962"
+  },
+  {
+    "name": "Lemon Truffles",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "20-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Focused"
+    ],
+    "flavor": "Citrus, earthy.",
+    "icon": "🍫",
+    "parents": [
+      "Lemon OG",
+      "White Truffle"
+    ],
+    "id": "s4963"
+  },
+  {
+    "name": "Lemon Wooder Ice",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted"
+    ],
+    "flavor": "Freshly squeezed lemons, citrus zest, creamy vanilla.",
+    "icon": "🍋",
+    "breeder": "The Botanist",
+    "parents": [
+      "Lemon Tree S1 #4",
+      "Face Off OG"
+    ],
+    "id": "s4964"
+  },
+  {
+    "name": "Lemonade Dream",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "27-28%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Motivated",
+      "Soothed"
+    ],
+    "flavor": "Spicy blueberries, sour citrus, black pepper.",
+    "icon": "🍋",
+    "parents": [
+      "Blue Dream",
+      "Lemon Kush"
+    ],
+    "id": "s4965"
+  },
+  {
+    "name": "Lemonberry Kush (aka Lemonberry, Lemon Berry)",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "19-22%",
+    "cbd": "1%",
+    "terps": [],
+    "effects": [
+      "Giggly",
+      "Happy",
+      "Tingly"
+    ],
+    "flavor": "Blueberry, lemony citrus, vanilla.",
+    "icon": "🫐",
+    "breeder": "Fusion Seeds",
+    "parents": [
+      "Dabney Blue",
+      "Lemon Thai"
+    ],
+    "id": "s4966"
+  },
+  {
+    "name": "Lemoncello Runtz",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed"
+    ],
+    "flavor": "Sweet gassy limonene, petrol.",
+    "icon": "🍋",
+    "breeder": "West Coast Cure",
+    "parents": [
+      "Lemoncello",
+      "Runtz"
+    ],
+    "id": "s4967"
+  },
+  {
+    "name": "Lemonge",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Creative",
+      "Energetic",
+      "Focused"
+    ],
+    "flavor": "Tangy zingy lemon and orange.",
+    "icon": "🍊",
+    "parents": [
+      "Agent Orange",
+      "Super Lemon Haze"
+    ],
+    "id": "s4968"
+  },
+  {
+    "name": "Leo Stone's Tourbillon (Leo's Cut)",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Cerebral"
+    ],
+    "flavor": "Gassy, lemon rind, fuel.",
+    "icon": "🌀",
+    "breeder": "Leo Stone (Aficionado Seeds)",
+    "parents": [
+      "Biscotti hybrid (recessive OG, Triangle Kush, Cherry Pie Kush traits)"
+    ],
+    "id": "s4969"
+  },
+  {
+    "name": "Lexikan (aka CPS Lexican, Lexikhan)",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "31%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed"
+    ],
+    "flavor": "Lemon, skunk, citrus.",
+    "icon": "🍋",
+    "parents": [
+      "Skunk x Skunk cross"
+    ],
+    "id": "s4970"
+  },
+  {
+    "name": "LGBT (Lemon Grape Bubba Temple)",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "23-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Tingly"
+    ],
+    "flavor": "Citrus, floral, gassy.",
+    "icon": "🍇",
+    "breeder": "Ethos Genetics",
+    "parents": [
+      "Lemon OG Haze",
+      "Grape God x Katsu Bubba",
+      "Temple Kush F2"
+    ],
+    "id": "s4971"
+  },
+  {
+    "name": "Lift Ticket",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "20-24%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Sleepy"
+    ],
+    "flavor": "Sweet sour lemony citrus, creamy cheesy exhale.",
+    "icon": "🍋",
+    "breeder": "Good Chemistry Nurseries",
+    "parents": [
+      "Ingrid",
+      "Frozen Lemons"
+    ],
+    "id": "s4972"
+  },
+  {
+    "name": "Lifted OG (aka Lifted OG Kush, Lifted Kush)",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "22-24%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Creative"
+    ],
+    "flavor": "Sweet spicy flowery woody.",
+    "icon": "🍪",
+    "breeder": "Lifted Cannabis Co",
+    "parents": [
+      "501st OG",
+      "Cookies N Cream"
+    ],
+    "id": "s4973"
+  },
+  {
+    "name": "Lil Diamond (aka Lil Diamonds)",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "21-22%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Focused",
+      "Happy",
+      "Calm"
+    ],
+    "flavor": "Citrus, clove, mint.",
+    "icon": "💎",
+    "breeder": "LivWell Flower",
+    "parents": [
+      "Grape Diamonds",
+      "Pink Grapefruit pheno of Memberberry"
+    ],
+    "id": "s4974"
+  },
+  {
+    "name": "Lil Sebastian",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "19-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Sleepy"
+    ],
+    "flavor": "Sweet honey berry.",
+    "icon": "🐴",
+    "breeder": "Deep Roots Harvest",
+    "parents": [
+      "Casper OG",
+      "Fruity Pebbles OG (FPOG)"
+    ],
+    "id": "s4975"
+  },
+  {
+    "name": "Lilac Cookies",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "20-30%",
+    "cbd": "1%",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Giggly",
+      "Relaxed"
+    ],
+    "flavor": "Sweet citrus lemons, floral, sour cream, fuel.",
+    "icon": "🍪",
+    "breeder": "Ethos Genetics",
+    "parents": [
+      "Lilac Diesel x Forum Cut Cookies",
+      "Mandarin Cookies x Lilac Diesel BX3"
+    ],
+    "id": "s4976"
+  },
+  {
+    "name": "Lilac Cookies BX2",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed"
+    ],
+    "flavor": "Musky, creamy, almond, floral/citrusy.",
+    "icon": "🍪",
+    "breeder": "Ethos Genetics",
+    "parents": [
+      "Lilac Diesel x Forum Cut Cookies",
+      "Mandarin Cookies x Lilac Diesel BX3"
+    ],
+    "id": "s4977"
+  },
+  {
+    "name": "Lilac Diesel BX4",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "25-30%",
+    "cbd": "3%",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Relaxed"
+    ],
+    "flavor": "Lemon cake, petrol, floral.",
+    "icon": "⛽",
+    "breeder": "Ethos Genetics",
+    "parents": [
+      "Lilac Diesel",
+      "Lilac Diesel BX3"
+    ],
+    "id": "s4978"
+  },
+  {
+    "name": "Lilac GMO (aka Lilac Diesel GMO)",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "21-22%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Calm"
+    ],
+    "flavor": "Flowery lavender, nutty coffee.",
+    "icon": "🌸",
+    "breeder": "Good Chemistry Nurseries",
+    "parents": [
+      "Lilac",
+      "GMO Cookies"
+    ],
+    "id": "s4979"
+  },
+  {
+    "name": "Lilikoi Blossom (aka Lilikoi)",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "20%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Balanced",
+      "Uplifted",
+      "Euphoric"
+    ],
+    "flavor": "Tropical, floral, citrus.",
+    "icon": "🌺",
+    "breeder": "Raw Garden",
+    "parents": [
+      "Strawberry Cloud",
+      "Slymer",
+      "Lychee Blossom"
+    ],
+    "id": "s4980"
+  },
+  {
+    "name": "Lime Cake",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "15-22%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Sleepy",
+      "Creative"
+    ],
+    "flavor": "Lime cake, sour cream cheese frosting.",
+    "icon": "🍰",
+    "breeder": "Swamp Boys Seeds",
+    "parents": [
+      "Lime Kush",
+      "Triangle Mints"
+    ],
+    "id": "s4981"
+  },
+  {
+    "name": "Lime Dawg (aka Lime Dog, Lime Dog OG, Limedog OG)",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Munchies"
+    ],
+    "flavor": "Sweet sour citrusy lime.",
+    "icon": "🍈",
+    "breeder": "Umami",
+    "parents": [
+      "Underdog OG (Headband)",
+      "Key Lime"
+    ],
+    "id": "s4982"
+  },
+  {
+    "name": "Lime Gelato",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted"
+    ],
+    "flavor": "Tart citrus, sweet cream, damp earth.",
+    "icon": "🍋",
+    "breeder": "Raw Garden",
+    "parents": [
+      "Key Lime",
+      "Gelato"
+    ],
+    "id": "s4983"
+  },
+  {
+    "name": "Lime Glow",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Relaxed"
+    ],
+    "flavor": "Tangy lime, skunky undertones.",
+    "icon": "🍈",
+    "breeder": "Phylos Bioscience",
+    "parents": [
+      "OG Kush",
+      "Skunk #1",
+      "EZBake AF"
+    ],
+    "id": "s4984"
+  },
+  {
+    "name": "Lime Street",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "30%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Happy",
+      "Relaxed"
+    ],
+    "flavor": "Bright citrus, lemon, lime, woody pine.",
+    "icon": "🍈",
+    "breeder": "Purple City Genetics",
+    "parents": [
+      "Key Lime Pie",
+      "Street Guru"
+    ],
+    "id": "s4985"
+  },
+  {
+    "name": "Limed Out",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "20-22%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Buzzy"
+    ],
+    "flavor": "Bright citrusy lime, black pepper, skunk.",
+    "icon": "🍈",
+    "id": "s4986"
+  },
+  {
+    "name": "Limesicle",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "21-23%",
+    "cbd": "11-12%",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Focused",
+      "Sociable"
+    ],
+    "flavor": "Lemon-lime candy, musky earth.",
+    "icon": "🍧",
+    "breeder": "Coastal Cannabis",
+    "parents": [
+      "Super Lemon Haze",
+      "Chernobyl"
+    ],
+    "id": "s4987"
+  },
+  {
+    "name": "Limon Verde",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Focused",
+      "Calm"
+    ],
+    "flavor": "Earthy, fruity, pungent.",
+    "icon": "🌿",
+    "parents": [
+      "Colombian landrace"
+    ],
+    "id": "s4988"
+  },
+  {
+    "name": "Limoncello Haze",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "18-21%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energizing",
+      "Uplifted"
+    ],
+    "flavor": "Sweet sour citrusy lemon, spicy flowery herbal.",
+    "icon": "🍋",
+    "parents": [
+      "Lemon Ice",
+      "Super Silver Haze"
+    ],
+    "id": "s4989"
+  },
+  {
+    "name": "Limoncello Runtz",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric"
+    ],
+    "flavor": "Fruit basket nose, citrus.",
+    "icon": "🍋",
+    "breeder": "Zamnesia/Cookies (grown by Phinest Cannabis)",
+    "parents": [
+      "Cherry Pie x Original Lemonade",
+      "Runtz"
+    ],
+    "id": "s4990"
+  },
+  {
+    "name": "Lindsay OG (aka Lindsay, Lindsay Kush, Lindsay OG Kush)",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "18-23%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed"
+    ],
+    "flavor": "Earthy, pungent, woodsy.",
+    "icon": "🌲",
+    "breeder": "Liberty Farms",
+    "parents": [
+      "OG Kush",
+      "undisclosed mystery strain"
+    ],
+    "id": "s4991"
+  },
+  {
+    "name": "Lion's Milk",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "20-24%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed"
+    ],
+    "flavor": "Sweet creamy chocolate, spicy coffee.",
+    "icon": "🦁",
+    "breeder": "Bodhi Seeds",
+    "parents": [
+      "Pure Kush (Suge cut)",
+      "Appalachia"
+    ],
+    "id": "s4992"
+  },
+  {
+    "name": "Liquid Imagination",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "23-27%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Relaxed",
+      "Euphoric"
+    ],
+    "flavor": "Sweet fruity blueberry cream, citrus.",
+    "icon": "💧",
+    "breeder": "Compound Genetics",
+    "parents": [
+      "Blue Zkittlez",
+      "Jet Fuel Gelato"
+    ],
+    "id": "s4993"
+  },
+  {
+    "name": "Liquid Sunshine",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "18-24%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Creative"
+    ],
+    "flavor": "Citrus, fruit, lemon, orange.",
+    "icon": "☀️",
+    "breeder": "Tree1Four",
+    "parents": [
+      "Cutiez (Mimosa x ZFace)",
+      "Cactus Breath (Northern Lights x Afghan x Mendo Breath)"
+    ],
+    "id": "s4994"
+  },
+  {
+    "name": "Litterbox (aka Litter Box, The Litter Box, Literbox)",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "20-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Sedated",
+      "Giggly"
+    ],
+    "flavor": "Sour citrusy ammonia, spicy black coffee.",
+    "icon": "🐈",
+    "parents": [
+      "GMO",
+      "Chem de la Chem"
+    ],
+    "id": "s4995"
+  },
+  {
+    "name": "Little Dragon",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "rare",
+    "thc": "26%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Focused"
+    ],
+    "flavor": "Spicy citrus, black pepper, herbs.",
+    "icon": "🐉",
+    "parents": [
+      "OG Kush",
+      "Colombian",
+      "Thai"
+    ],
+    "id": "s4996"
   }
 ]
