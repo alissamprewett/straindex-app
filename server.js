@@ -14,7 +14,6 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { URL } = require('node:url');
 const crypto = require('node:crypto');
-const zlib = require('node:zlib');
 
 const db = require('./lib/db');
 const auth = require('./lib/auth');
@@ -522,7 +521,7 @@ function pageStrains(req, res, query) {
     </div>
     <p class="empty-note" style="margin-bottom:2px;">✅ Verified — THC, breeder, and flavor/terpene data all independently confirmed. &nbsp; 🔹 Partial — some details confirmed. &nbsp; ⚪ Listed only — seen on a dispensary menu, nothing independently confirmed yet.</p>
     <p class="empty-note" style="margin-bottom:10px;">User-reported associations, not medical advice — see a doctor for real guidance.</p>
-    <p class="empty-note" id="strain-search-count">${total.toLocaleString()} strain${total === 1 ? '' : 's'}</p>
+    <p class="empty-note" id="strain-search-count">${total > 60 ? `Showing 60 of ${total.toLocaleString()} — refine your search to narrow it down.` : `${total} strain${total === 1 ? '' : 's'}`}</p>
     <div id="strain-search-results">${results.map(s => `
       <a class="library-row" href="/strains/${s.id}" style="text-decoration:none;color:inherit;">
         ${strainPhotoTag(s, 'sm')}
@@ -532,7 +531,6 @@ function pageStrains(req, res, query) {
         </div>
         <span class="rarity-tag rarity-${s.rarity}">${rarityLabel(s.rarity)}</span>
       </a>`).join('') || `<div class="empty-note">No strains match your filters.</div>`}</div>
-    <div id="strain-load-more-container">${total > 60 ? `<button type="button" class="btn secondary block" id="strain-load-more-btn" style="margin-top:10px;">Load ${Math.min(60, total - 60)} more (60 of ${total.toLocaleString()} shown)</button>` : ''}</div>
   `;
   sendHtml(res, layout({ title: 'Strains', active: 'strains', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
@@ -719,59 +717,121 @@ const EFFECT_VOCAB = [
 // itself carries a strong "verify locally" disclaimer rather than presenting this
 // as a legal guarantee. Marijuana remains illegal under federal law everywhere in
 // the US regardless of state status.
+//
+// possession/purchase/homeGrow fields added 2026-09: figures are the recreational
+// limits for recreational states and the medical-patient limits for medical/cbd_only
+// states (there is no other legal figure to show there). Compiled from Budpedia's
+// how-much-weed-can-I-buy tool, cross-checked against IndicaOnline's state-by-state
+// retail limits guide and Marijuana and the Law's possession/cultivation guides.
+// Where sources disagreed (e.g. Pennsylvania's "30-day" vs "90-day" framing) we went
+// with the more detailed dispensary-compliance sources. LIMITS_LAST_VERIFIED tracks
+// this sub-set separately since it was compiled at a different time than the base
+// legal-status list above.
 const LEGAL_STATUS_LAST_VERIFIED = '2026-06-01';
+const LIMITS_LAST_VERIFIED = '2026-09-14';
 const LEGAL_STATUS = [
-  { state: 'Alabama', status: 'medical', note: 'Medical program for qualifying conditions; no recreational sales.' },
-  { state: 'Alaska', status: 'recreational', note: 'Adult-use legal since 2015; licensed retail available.' },
-  { state: 'Arizona', status: 'recreational', note: 'Adult-use legal since 2020.' },
-  { state: 'Arkansas', status: 'medical', note: 'Medical program for qualifying conditions; no recreational sales.' },
-  { state: 'California', status: 'recreational', note: 'Adult-use legal since 2016.' },
-  { state: 'Colorado', status: 'recreational', note: 'One of the first two adult-use states, legal since 2012.' },
-  { state: 'Connecticut', status: 'recreational', note: 'Adult-use legal since 2021.' },
-  { state: 'Delaware', status: 'recreational', note: 'Adult-use legal since 2023.' },
-  { state: 'Florida', status: 'medical', note: 'Medical program only; a 2024 recreational ballot measure fell short of the required supermajority.' },
-  { state: 'Georgia', status: 'cbd_only', note: 'Low-THC medical program only, not full-plant medical or recreational.' },
-  { state: 'Hawaii', status: 'medical', note: 'Medical program for qualifying conditions; no recreational sales.' },
-  { state: 'Idaho', status: 'illegal', note: 'No legal program of any kind, medical or recreational.' },
-  { state: 'Illinois', status: 'recreational', note: 'Adult-use legal since 2020.' },
-  { state: 'Indiana', status: 'cbd_only', note: 'Low-THC CBD products only; no medical or recreational program.' },
-  { state: 'Iowa', status: 'cbd_only', note: 'Very restrictive low-THC medical program only.' },
-  { state: 'Kansas', status: 'illegal', note: 'No legal program of any kind, medical or recreational.' },
-  { state: 'Kentucky', status: 'medical', note: 'Medical program for qualifying conditions; no recreational sales.' },
-  { state: 'Louisiana', status: 'medical', note: 'Medical program for qualifying conditions; no recreational sales.' },
-  { state: 'Maine', status: 'recreational', note: 'Adult-use legal since 2016.' },
-  { state: 'Maryland', status: 'recreational', note: 'Adult-use legal since 2022.' },
-  { state: 'Massachusetts', status: 'recreational', note: 'Adult-use legal since 2016.' },
-  { state: 'Michigan', status: 'recreational', note: 'Adult-use legal since 2018.' },
-  { state: 'Minnesota', status: 'recreational', note: 'Adult-use legal since 2023.' },
-  { state: 'Mississippi', status: 'medical', note: 'Medical program for qualifying conditions; no recreational sales.' },
-  { state: 'Missouri', status: 'recreational', note: 'Adult-use legal since 2022.' },
-  { state: 'Montana', status: 'recreational', note: 'Adult-use legal since 2020.' },
-  { state: 'Nebraska', status: 'medical', note: 'Medical program approved by voters; implementation has faced legal challenges, so confirm current availability locally.' },
-  { state: 'Nevada', status: 'recreational', note: 'Adult-use legal since 2016.' },
-  { state: 'New Hampshire', status: 'medical', note: 'Medical program only; recreational proposals have repeatedly failed to pass.' },
-  { state: 'New Jersey', status: 'recreational', note: 'Adult-use legal since 2020; among the higher possession limits nationally.' },
-  { state: 'New Mexico', status: 'recreational', note: 'Adult-use legal since 2021.' },
-  { state: 'New York', status: 'recreational', note: 'Adult-use legal since 2021.' },
-  { state: 'North Carolina', status: 'illegal', note: 'No medical or recreational program, though small possession has been decriminalized to a civil fine since 1977.' },
-  { state: 'North Dakota', status: 'medical', note: 'Medical program for qualifying conditions; no recreational sales.' },
-  { state: 'Ohio', status: 'recreational', note: 'Adult-use legal since 2023; retail sales began in 2024.' },
-  { state: 'Oklahoma', status: 'medical', note: 'Broad medical program with relatively accessible qualifying conditions; no recreational sales.' },
-  { state: 'Oregon', status: 'recreational', note: 'Adult-use legal since 2014.' },
-  { state: 'Pennsylvania', status: 'medical', note: 'Medical program only; often cited as the most likely next state to pursue recreational legalization.' },
-  { state: 'Rhode Island', status: 'recreational', note: 'Adult-use legal since 2022.' },
-  { state: 'South Carolina', status: 'illegal', note: 'No legal program of any kind, medical or recreational.' },
-  { state: 'South Dakota', status: 'medical', note: 'Medical program for qualifying conditions; a recreational ballot measure did not pass.' },
-  { state: 'Tennessee', status: 'cbd_only', note: 'Low-THC CBD products only; no medical or recreational program.' },
-  { state: 'Texas', status: 'cbd_only', note: "Compassionate Use Program covers specific conditions with a strict 0.5% THC cap; not full medical or recreational." },
-  { state: 'Utah', status: 'medical', note: 'Medical program for qualifying conditions; no recreational sales.' },
-  { state: 'Vermont', status: 'recreational', note: 'Adult-use legal since 2018; first state to legalize via legislature rather than ballot measure.' },
-  { state: 'Virginia', status: 'recreational', note: 'Adult-use possession legal since 2021, though retail sales have lagged behind legalization.' },
-  { state: 'Washington', status: 'recreational', note: 'One of the first two adult-use states, legal since 2012.' },
-  { state: 'West Virginia', status: 'medical', note: 'Medical program for qualifying conditions; no recreational sales.' },
-  { state: 'Wisconsin', status: 'cbd_only', note: 'Low-THC CBD products only; no medical or recreational program.' },
-  { state: 'Wyoming', status: 'illegal', note: 'No legal program of any kind, medical or recreational.' },
-  { state: 'Washington, D.C.', status: 'recreational', note: 'Adult possession and home cultivation are legal, but D.C. is barred by Congress from regulating commercial sales.' },
+  { state: 'Alabama', status: 'medical', note: 'Medical program for qualifying conditions; no recreational sales.',
+    possession: '70-day supply, physician-set (no smokable flower or food-form edibles — tablets, capsules, gummies, tinctures, patches, and suppositories only)', purchase: 'Same 70-day supply cap', homeGrow: 'Not allowed — any cultivation is a felony' },
+  { state: 'Alaska', status: 'recreational', note: 'Adult-use legal since 2015; licensed retail available.',
+    possession: '1 oz flower / 7g concentrate', purchase: '1 oz flower, 7g concentrate, 5,600mg total THC per day', homeGrow: '6 plants per adult (max 3 flowering)' },
+  { state: 'Arizona', status: 'recreational', note: 'Adult-use legal since 2020.',
+    possession: '1 oz flower (no more than 5g as concentrate)', purchase: '1 oz flower, 5g concentrate', homeGrow: '6 plants/adult, 12/household — medical patients only if 25+ miles from a dispensary' },
+  { state: 'Arkansas', status: 'medical', note: 'Medical program for qualifying conditions; no recreational sales.',
+    possession: '2.5 oz per 14-day period', purchase: 'Same', homeGrow: 'Not allowed' },
+  { state: 'California', status: 'recreational', note: 'Adult-use legal since 2016.',
+    possession: '28.5g flower / 8g concentrate', purchase: '28.5g flower, 8g concentrate, 6 immature plants per day', homeGrow: '6 plants per residence (not per person)' },
+  { state: 'Colorado', status: 'recreational', note: 'One of the first two adult-use states, legal since 2012.',
+    possession: '1 oz flower / 8g concentrate', purchase: '1 oz flower, 8g concentrate, 800mg edible THC per day', homeGrow: '6 plants/adult (max 3 mature), 12-plant hard cap per residence' },
+  { state: 'Connecticut', status: 'recreational', note: 'Adult-use legal since 2021.',
+    possession: '1.5 oz', purchase: '0.5 oz per transaction', homeGrow: '6 plants/adult (3 mature + 3 immature), 12-plant cap per home' },
+  { state: 'Delaware', status: 'recreational', note: 'Adult-use legal since 2023.',
+    possession: '1 oz (no more than 5g as concentrate)', purchase: 'Same', homeGrow: 'Not allowed — even for medical patients' },
+  { state: 'Florida', status: 'medical', note: 'Medical program only; a 2024 recreational ballot measure fell short of the required supermajority.',
+    possession: '70-day supply (rolling)', purchase: '35-day supply (2.5 oz) per visit; up to three 70-day supplies at once with a doctor\u2019s note', homeGrow: 'Not allowed, even for medical patients' },
+  { state: 'Georgia', status: 'cbd_only', note: 'Low-THC medical program only, not full-plant medical or recreational.',
+    possession: '20 fl oz of low-THC (0.3%) oil', purchase: 'Same', homeGrow: 'Not allowed' },
+  { state: 'Hawaii', status: 'medical', note: 'Medical program for qualifying conditions; no recreational sales.',
+    possession: '4 oz', purchase: '4 oz per 15-day period', homeGrow: '10 plants (max 4 mature) for registered patients who register the grow site' },
+  { state: 'Idaho', status: 'illegal', note: 'No legal program of any kind, medical or recreational.',
+    possession: 'Illegal — any amount', purchase: 'N/A — no legal market', homeGrow: 'Not allowed — felony regardless of amount' },
+  { state: 'Illinois', status: 'recreational', note: 'Adult-use legal since 2020.',
+    possession: '30g flower / 5g concentrate / 500mg THC in edibles (residents); half that for non-residents', purchase: 'Same as possession', homeGrow: 'Only registered medical patients may grow (5 plants); not legal for recreational users' },
+  { state: 'Indiana', status: 'cbd_only', note: 'Low-THC CBD products only; no medical or recreational program.',
+    possession: 'Low-THC (0.3%) CBD oil only', purchase: 'Same', homeGrow: 'Not allowed' },
+  { state: 'Iowa', status: 'cbd_only', note: 'Very restrictive low-THC medical program only.',
+    possession: '4.5g total THC per rolling 90 days (no smokable flower)', purchase: 'Same', homeGrow: 'Not allowed' },
+  { state: 'Kansas', status: 'illegal', note: 'No legal program of any kind, medical or recreational.',
+    possession: 'Illegal — any amount', purchase: 'N/A — no legal market', homeGrow: 'Not allowed' },
+  { state: 'Kentucky', status: 'medical', note: 'Medical program for qualifying conditions; no recreational sales.',
+    possession: 'Per physician recommendation (no fixed statewide figure)', purchase: 'Same', homeGrow: 'Not allowed' },
+  { state: 'Louisiana', status: 'medical', note: 'Medical program for qualifying conditions; no recreational sales.',
+    possession: 'One-month supply (non-smokable forms only), physician-set', purchase: '2.5 oz raw flower per 14-day period; other forms per physician', homeGrow: 'Not allowed' },
+  { state: 'Maine', status: 'recreational', note: 'Adult-use legal since 2016.',
+    possession: '2.5 oz flower/concentrate combined', purchase: '2.5 oz per day, up to 12 immature plants per transaction', homeGrow: '6 mature + 12 immature + unlimited seedlings per adult' },
+  { state: 'Maryland', status: 'recreational', note: 'Adult-use legal since 2022.',
+    possession: '1.5 oz flower / 12g concentrate / 750mg edibles', purchase: 'Same', homeGrow: '2 plants per household (4 if a registered medical patient lives there)' },
+  { state: 'Massachusetts', status: 'recreational', note: 'Adult-use legal since 2016.',
+    possession: '1 oz in public, up to 10 oz at home', purchase: '1 oz flower per day (5g active THC in concentrate or 500mg in edibles as equivalents)', homeGrow: '6 plants per adult, 12-plant cap per household' },
+  { state: 'Michigan', status: 'recreational', note: 'Adult-use legal since 2018.',
+    possession: '2.5 oz in public, up to 10 oz at home', purchase: '2.5 oz flower (up to 15g as concentrate) per day', homeGrow: '12 plants per household' },
+  { state: 'Minnesota', status: 'recreational', note: 'Adult-use legal since 2023.',
+    possession: '2 oz flower / 8g concentrate / 800mg edibles', purchase: 'Same', homeGrow: '8 plants per household (max 4 mature)' },
+  { state: 'Mississippi', status: 'medical', note: 'Medical program for qualifying conditions; no recreational sales.',
+    possession: '6 units per rolling 7 days, 24 units per rolling 30 days (1 unit = 3.5g flower, 1g concentrate, or 100mg edible)', purchase: 'Same', homeGrow: 'Not allowed, even for patients' },
+  { state: 'Missouri', status: 'recreational', note: 'Adult-use legal since 2022.',
+    possession: '3 oz', purchase: '3 oz per transaction', homeGrow: 'Up to 18 plants with an annual state cultivation license ($100/yr recreational, $50/yr medical)' },
+  { state: 'Montana', status: 'recreational', note: 'Adult-use legal since 2020.',
+    possession: '1 oz flower / 8g concentrate / 800mg edibles', purchase: 'Same', homeGrow: '4 plants per household (max 2 mature), regardless of number of adults' },
+  { state: 'Nebraska', status: 'medical', note: 'Medical program approved by voters; implementation has faced legal challenges, so confirm current availability locally.',
+    possession: 'Not yet set — program still in rulemaking as of 2026', purchase: 'TBD', homeGrow: 'Not allowed' },
+  { state: 'Nevada', status: 'recreational', note: 'Adult-use legal since 2016.',
+    possession: '1 oz flower / \u215b oz concentrate', purchase: 'Same', homeGrow: '6 plants/adult, 12/household — only permitted if 25+ miles from an operating dispensary' },
+  { state: 'New Hampshire', status: 'medical', note: 'Medical program only; recreational proposals have repeatedly failed to pass.',
+    possession: '2 oz per 10-day period', purchase: 'Same', homeGrow: 'Not allowed' },
+  { state: 'New Jersey', status: 'recreational', note: 'Adult-use legal since 2020; among the higher possession limits nationally.',
+    possession: '6 oz — the highest recreational public-possession limit in the country', purchase: '1 oz flower, or 4g concentrate, or 1,000mg edibles per transaction (combinations allowed)', homeGrow: 'Not allowed, even for registered medical patients' },
+  { state: 'New Mexico', status: 'recreational', note: 'Adult-use legal since 2021.',
+    possession: '2 oz in public; no state cap on what\u2019s stored at home', purchase: '2 oz, 16g concentrate, or 800mg edibles per transaction — no daily/weekly caps', homeGrow: '6 mature + 6 immature plants per adult, 12+12 cap per household' },
+  { state: 'New York', status: 'recreational', note: 'Adult-use legal since 2021.',
+    possession: '3 oz flower / 24g concentrate', purchase: 'Same, per day', homeGrow: '6 plants per adult (max 3 mature), 12-plant cap per household' },
+  { state: 'North Carolina', status: 'illegal', note: 'No medical or recreational program, though small possession has been decriminalized to a civil fine since 1977.',
+    possession: 'Decriminalized to a civil fine under 0.5 oz; larger amounts remain criminal', purchase: 'N/A — no legal market', homeGrow: 'Not allowed — felony regardless of amount' },
+  { state: 'North Dakota', status: 'medical', note: 'Medical program for qualifying conditions; no recreational sales.',
+    possession: '2.5 oz per 30 days (up to 6 oz for cancer patients on an enhanced card)', purchase: 'Same', homeGrow: 'Not allowed' },
+  { state: 'Ohio', status: 'recreational', note: 'Adult-use legal since 2023; retail sales began in 2024.',
+    possession: '2.5 oz flower / 15g extract', purchase: 'Same, per day (THC capped at 35% flower / 70% concentrate under 2026\u2019s SB 56)', homeGrow: '6 plants per adult, 12-plant cap per household' },
+  { state: 'Oklahoma', status: 'medical', note: 'Broad medical program with relatively accessible qualifying conditions; no recreational sales.',
+    possession: '3 oz on your person, 8 oz at home, 1 oz concentrate, 72 oz edibles', purchase: 'Same', homeGrow: '6 mature + 6 immature plants for registered patients (caregivers may grow for up to 5 patients)' },
+  { state: 'Oregon', status: 'recreational', note: 'Adult-use legal since 2014.',
+    possession: '1 oz flower in public, up to 8 oz at home', purchase: '2 oz flower per day plus separate concentrate/edible allowances', homeGrow: '4 plants per household (6 for registered medical patients)' },
+  { state: 'Pennsylvania', status: 'medical', note: 'Medical program only; often cited as the most likely next state to pursue recreational legalization.',
+    possession: '90-day supply cap overall', purchase: 'Dispensed in up to 30-day increments per visit against the 90-day cap', homeGrow: 'Not allowed, even for registered patients' },
+  { state: 'Rhode Island', status: 'recreational', note: 'Adult-use legal since 2022.',
+    possession: '1 oz in public, up to 10 oz at home', purchase: '1 oz, or 7.7g concentrate, or about eighty-three 10mg edible servings', homeGrow: '6 plants per household (3 mature); registered medical patients get 12 mature + 12 seedlings' },
+  { state: 'South Carolina', status: 'illegal', note: 'No legal program of any kind, medical or recreational.',
+    possession: 'Illegal — any amount', purchase: 'N/A — no legal market', homeGrow: 'Not allowed — felony regardless of amount' },
+  { state: 'South Dakota', status: 'medical', note: 'Medical program for qualifying conditions; a recreational ballot measure did not pass.',
+    possession: '3 oz on a rolling 14-day basis', purchase: 'Same', homeGrow: '2 mature + 2 immature plants for registered patients' },
+  { state: 'Tennessee', status: 'cbd_only', note: 'Low-THC CBD products only; no medical or recreational program.',
+    possession: 'No cannabis program — only hemp-derived products under 0.3% THC', purchase: 'Same', homeGrow: 'Not allowed' },
+  { state: 'Texas', status: 'cbd_only', note: "Compassionate Use Program covers specific conditions with a strict 0.5% THC cap; not full medical or recreational.",
+    possession: 'Low-THC (1%) oil for qualifying conditions only', purchase: 'Same', homeGrow: 'Not allowed' },
+  { state: 'Utah', status: 'medical', note: 'Medical program for qualifying conditions; no recreational sales.',
+    possession: '113g unprocessed flower and/or 20g composite THC per 30-day period', purchase: 'Same', homeGrow: 'Not allowed' },
+  { state: 'Vermont', status: 'recreational', note: 'Adult-use legal since 2018; first state to legalize via legislature rather than ballot measure.',
+    possession: '1 oz (cannabis harvested from your own legal plants doesn\u2019t count toward this cap)', purchase: '1 oz per transaction', homeGrow: '6 plants per dwelling unit (max 2 mature), not per person' },
+  { state: 'Virginia', status: 'recreational', note: 'Adult-use possession legal since 2021, though retail sales have lagged behind legalization.',
+    possession: '1 oz today; rising to 2.5 oz once retail sales begin', purchase: 'No retail market yet — sales are set to launch Jan 1, 2027 under 2026\u2019s HB 642', homeGrow: '4 plants per household regardless of number of adult residents' },
+  { state: 'Washington', status: 'recreational', note: 'One of the first two adult-use states, legal since 2012.',
+    possession: '1 oz flower / 7g concentrate', purchase: 'Same, per day', homeGrow: 'Not allowed for recreational users — only registered medical patients may grow (6 plants)' },
+  { state: 'West Virginia', status: 'medical', note: 'Medical program for qualifying conditions; no recreational sales.',
+    possession: '30-day supply, physician-set', purchase: 'Same', homeGrow: 'Not allowed' },
+  { state: 'Wisconsin', status: 'cbd_only', note: 'Low-THC CBD products only; no medical or recreational program.',
+    possession: 'Physician-recommended CBD oil only', purchase: 'Same', homeGrow: 'Not allowed' },
+  { state: 'Wyoming', status: 'illegal', note: 'No legal program of any kind, medical or recreational.',
+    possession: 'Illegal — any amount', purchase: 'N/A — no legal market', homeGrow: 'Not allowed' },
+  { state: 'Washington, D.C.', status: 'recreational', note: 'Adult possession and home cultivation are legal, but D.C. is barred by Congress from regulating commercial sales.',
+    possession: '2 oz (adults may gift up to 1 oz to another adult with no money or goods exchanged)', purchase: 'No legal retail sales — federal restrictions block commercial licensing; only possession and gifting are legal', homeGrow: '6 plants per adult (max 3 flowering), 12-plant cap per household' },
 ];
 const LEGAL_STATUS_LABELS = {
   recreational: { label: 'Recreational (21+)', color: '#1b5e3a' },
@@ -2855,16 +2915,9 @@ function apiListStrains(req, res, query) {
   const breeder = query.get('breeder') || 'All';
   const verified = query.get('verified') || 'All';
   const limit = Math.min(Number(query.get('limit')) || 60, 200);
-  // Load More on /strains pages this same endpoint forward with an
-  // increasing offset instead of re-fetching everything from the start --
-  // without this, the client-side search JS (public/app.js) has nowhere
-  // to tell the server "give me the next 60," so it silently just gets
-  // the first 60 again every time. Clamped to >= 0 so a malformed or
-  // negative value can't be used to walk the list backwards.
-  const offset = Math.max(Number(query.get('offset')) || 0, 0);
   sendJson(res, {
     total: db.countStrains({ q, type, rarity, effect, thc, terpene, ailment, breeder, verified }),
-    results: db.listStrains({ q, type, rarity, effect, thc, terpene, ailment, breeder, verified, limit, offset }),
+    results: db.listStrains({ q, type, rarity, effect, thc, terpene, ailment, breeder, verified, limit }),
   });
 }
 async function apiKudos(req, res, id) {
@@ -3874,7 +3927,7 @@ function pageLegalStatus(req, res, query) {
   const body = `
     <h1 class="screen-title">Is It Legal Near Me?</h1>
     <p class="screen-sub">Cannabis law is a fast-moving patchwork that changes with little notice. This is a starting point, not legal advice — always verify with your state's official government site before relying on it. Regardless of state law, cannabis remains illegal under federal law everywhere in the US.</p>
-    <p class="empty-note">Last checked against current sources: ${esc(LEGAL_STATUS_LAST_VERIFIED)}.</p>
+    <p class="empty-note">Legal status last checked: ${esc(LEGAL_STATUS_LAST_VERIFIED)}. Possession/purchase/home-grow figures last checked: ${esc(LIMITS_LAST_VERIFIED)}, compiled from Budpedia's state cannabis-limits lookup, cross-checked against IndicaOnline and Marijuana and the Law.</p>
     <form method="GET" action="/legal-status" style="margin-bottom:16px;">
       <label class="field-label" style="margin-top:0;">Pick your state</label>
       <select name="state" onchange="this.form.submit()">
@@ -3886,7 +3939,14 @@ function pageLegalStatus(req, res, query) {
       <div class="card" style="border-left:4px solid ${LEGAL_STATUS_LABELS[current.status].color};margin-bottom:20px;">
         <h2 style="margin:0 0 4px;font-size:17px;">${esc(current.state)}</h2>
         <div style="font-weight:700;color:${LEGAL_STATUS_LABELS[current.status].color};margin-bottom:6px;">${esc(LEGAL_STATUS_LABELS[current.status].label)}</div>
-        <p style="margin:0;">${esc(current.note)}</p>
+        <p style="margin:0 0 10px;">${esc(current.note)}</p>
+        ${current.possession ? `
+          <div style="border-top:1px solid rgba(0,0,0,0.08);padding-top:10px;display:grid;gap:8px;">
+            <div><b style="font-size:12px;text-transform:uppercase;letter-spacing:0.03em;opacity:0.7;">Possession limit</b><p style="margin:2px 0 0;">${esc(current.possession)}</p></div>
+            <div><b style="font-size:12px;text-transform:uppercase;letter-spacing:0.03em;opacity:0.7;">Purchase limit</b><p style="margin:2px 0 0;">${esc(current.purchase)}</p></div>
+            <div><b style="font-size:12px;text-transform:uppercase;letter-spacing:0.03em;opacity:0.7;">Home grow</b><p style="margin:2px 0 0;">${esc(current.homeGrow)}</p></div>
+          </div>
+        ` : ''}
       </div>
     ` : ''}
     <h2 class="screen-title" style="margin-top:8px;">Full list</h2>
@@ -3918,27 +3978,6 @@ function pageConcentrates(req, res) {
   sendHtml(res, layout({ title: 'Concentrates & Extracts', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
-// Bandwidth-saving static file serving. Two things drive most of a
-// low-traffic app's egress: (1) the same images and CSS/JS being
-// re-downloaded on every single page view because nothing tells the
-// browser it can cache them, and (2) sending full-size text/image bytes
-// when a compressed version would do. Both are essentially free fixes
-// for a file server that never changes its own files at runtime:
-//   - Cache-Control + ETag: the browser caches the file and, on repeat
-//     visits, sends `If-None-Match`; if it still matches we reply 304
-//     with an empty body instead of re-sending the whole file. For a
-//     photo referenced on every strain card, home feed post, and
-//     collection binder slot, this turns "re-download every time" into
-//     "download once per browser."
-//   - gzip for text assets (CSS/JS/SVG): these compress 60-80% smaller
-//     and virtually every browser advertises gzip support, so this is
-//     pure savings with no compatibility downside.
-// Photos are versioned by filename (a new upload gets a new key), so a
-// long max-age is safe here -- nothing needs cache-busting because we
-// never overwrite an existing filename in place.
-const COMPRESSIBLE_EXTS = new Set(['.css', '.js', '.json', '.svg', '.manifest']);
-const STATIC_CACHE_SECONDS = 60 * 60 * 24 * 30; // 30 days
-
 function serveStatic(req, res, pathname) {
   // The strain bud photos ended up committed under /docs (repo root) rather
   // than /public/images — rather than requiring a re-upload, serve requests
@@ -3951,89 +3990,16 @@ function serveStatic(req, res, pathname) {
   if (!filePath.startsWith(baseDir)) return notFound(res);
   fs.readFile(filePath, (err, data) => {
     if (err) return notFound(res);
-
-    // ETag from a content hash -- cheap to compute, and correctly changes
-    // if a file's actual bytes ever change (e.g. app.css gets redeployed),
-    // so this never risks serving someone a stale stylesheet forever.
-    const etag = '"' + crypto.createHash('sha1').update(data).digest('hex') + '"';
-    const headers = {
-      'Content-Type': MIME[path.extname(filePath)] || 'application/octet-stream',
-      'Cache-Control': `public, max-age=${STATIC_CACHE_SECONDS}`,
-      ETag: etag,
-    };
-
-    // Conditional request: if the browser already has this exact file
-    // cached, tell it so with an empty 304 instead of re-sending the
-    // bytes. This is the single biggest lever here -- a returning visitor
-    // effectively costs zero bandwidth for unchanged assets.
-    if (req.headers['if-none-match'] === etag) {
-      res.writeHead(304, headers);
-      return res.end();
-    }
-
     const ext = path.extname(filePath);
-    const acceptsGzip = (req.headers['accept-encoding'] || '').includes('gzip');
-    if (COMPRESSIBLE_EXTS.has(ext) && acceptsGzip) {
-      headers['Content-Encoding'] = 'gzip';
-      headers.Vary = 'Accept-Encoding';
-      return zlib.gzip(data, (gzErr, compressed) => {
-        if (gzErr) { res.writeHead(200, headers); return res.end(data); }
-        res.writeHead(200, headers);
-        res.end(compressed);
-      });
-    }
-
-    res.writeHead(200, headers);
+    res.writeHead(200, { 'Content-Type': MIME[ext] || 'application/octet-stream' });
     res.end(data);
   });
 }
 
 // ---------------------------------------------------------------- router
 
-// Transparent gzip for every dynamic response (HTML pages, JSON API
-// results), applied once here rather than editing every sendHtml/sendJson
-// call site. Wraps res.end so any handler's normal res.writeHead(...) +
-// res.end(string) still works exactly as before -- this only compresses
-// the bytes in flight if the browser said it accepts gzip and the body is
-// worth compressing (skip tiny bodies and things that are already
-// binary/compressed, like image responses from serveStatic, which sets
-// its own headers directly and calls the real res.end via a different
-// path before this wrapping would even apply here).
-function wrapResponseWithGzip(req, res) {
-  const acceptsGzip = (req.headers['accept-encoding'] || '').includes('gzip');
-  if (!acceptsGzip) return;
-  const originalWriteHead = res.writeHead.bind(res);
-  const originalEnd = res.end.bind(res);
-  let headersSent = false;
-  let statusCode = 200;
-  let headersArg = {};
-  res.writeHead = (code, headers) => {
-    statusCode = code;
-    headersArg = headers || {};
-    headersSent = true;
-    return res;
-  };
-  res.end = (body) => {
-    // Only gzip text bodies worth the CPU cost; skip empty bodies (304s,
-    // redirects) and anything the handler already compressed/streamed.
-    if (!headersSent || !body || typeof body !== 'string' || body.length < 512 || headersArg['Content-Encoding']) {
-      if (headersSent) originalWriteHead(statusCode, headersArg);
-      return originalEnd(body);
-    }
-    zlib.gzip(Buffer.from(body, 'utf8'), (err, compressed) => {
-      if (err) {
-        originalWriteHead(statusCode, headersArg);
-        return originalEnd(body);
-      }
-      originalWriteHead(statusCode, { ...headersArg, 'Content-Encoding': 'gzip', Vary: 'Accept-Encoding' });
-      originalEnd(compressed);
-    });
-  };
-}
-
 const server = http.createServer(async (req, res) => {
   try {
-    wrapResponseWithGzip(req, res);
     const url = new URL(req.url, `http://${req.headers.host}`);
     const { pathname } = url;
     const method = req.method;
