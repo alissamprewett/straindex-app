@@ -351,7 +351,7 @@ function pageLandingPage(req, res) {
       <p class="screen-sub" style="margin:0 0 20px;">Your personal cannabis companion — track what you actually experience, stay informed on dosing and safety, discover your next favorite strain, and compare notes with real friends. All in one place.</p>
       <a href="/signup" class="btn block" style="text-decoration:none;max-width:280px;margin:0 auto;">Create Free Account</a>
       <p class="empty-note" style="margin-top:10px;">Already have an account? <a href="/login">Log in</a></p>
-      <p class="empty-note" style="margin-top:4px;">Beta · For adults 21+ where legal · Not medical advice</p>
+      <p class="empty-note" style="margin-top:4px;">For adults 21+ where legal · Not medical advice</p>
     </div>
 
     <div class="more-grid" style="margin-top:8px;">
@@ -1280,20 +1280,17 @@ async function handleRecipeNewSubmit(req, res) {
   redirect(res, '/recipes?submitted=1');
 }
 
-function pageGrowing(req, res, query) {
-  const viewerId = auth.currentUserId(req);
-  const CATEGORIES = ['Plant Life Cycle', 'Watering', 'Lighting', 'Nutrients & Feeding', 'Pests & Disease', 'Training', 'Harvest & Curing', 'Genetics & Seeds', 'Indoor Setup', 'Outdoor Growing', 'Cleaning & Gear Care'];
-  const cat = query.get('cat') || 'All';
-  const tips = db.listGrowTips({ category: cat, viewerId });
-  const body = `
-    <h1 class="screen-title">Growing</h1>
-    <p class="screen-sub">Tips &amp; tricks from home growers. Home cultivation laws vary by location — check yours first.</p>
-    <a class="btn block lilac" href="/growing/new" style="margin-bottom:14px;">🌱 Share a Grow Tip</a>
-    <div>
-      <a class="filter-pill ${cat === 'All' ? 'active' : ''}" href="/growing?cat=All">All</a>
-      ${CATEGORIES.map(c => `<a class="filter-pill ${cat === c ? 'active' : ''}" href="/growing?cat=${encodeURIComponent(c)}">${c}</a>`).join('')}
-    </div>
-    ${tips.map(g => `
+// "Cleaning & Gear Care" tips (pipes, bongs, grinders, storage) aren't
+// really about growing a plant, so they get their own page (/gear-care)
+// instead of living inside Growing's category list. Both pages still share
+// the same underlying grow_tips table and submission form -- only the
+// browsing surface is split.
+const GEAR_CARE_CATEGORY = 'Cleaning & Gear Care';
+const GROWING_ONLY_CATEGORIES = ['Plant Life Cycle', 'Watering', 'Lighting', 'Nutrients & Feeding', 'Pests & Disease', 'Training', 'Harvest & Curing', 'Genetics & Seeds', 'Indoor Setup', 'Outdoor Growing'];
+const ALL_GROW_TIP_CATEGORIES = [...GROWING_ONLY_CATEGORIES, GEAR_CARE_CATEGORY];
+
+function renderGrowTipCard(g, viewerId, redirectTo) {
+  return `
       <div class="card grow-tip-card">
         <b>${esc(g.title)}</b>
         <div class="gcat">${esc(g.category)}</div>
@@ -1305,39 +1302,75 @@ function pageGrowing(req, res, query) {
               <form method="POST" action="/report" style="display:inline;" onsubmit="return confirm('Report this grow tip for review?')">
                 <input type="hidden" name="content_type" value="grow_tip">
                 <input type="hidden" name="content_id" value="${g.id}">
-                <input type="hidden" name="redirect_to" value="/growing">
+                <input type="hidden" name="redirect_to" value="${esc(redirectTo)}">
                 <button type="submit" style="background:none;border:none;padding:0;margin-left:6px;color:inherit;text-decoration:underline;cursor:pointer;font-size:inherit;">Report</button>
               </form>
               <form method="POST" action="/block/${g.user_id}" style="display:inline;" onsubmit="return confirm('Block ${esc(g.author || 'this person')}? You will no longer see their comments, check-ins, or grow tips, and any friendship will end.')">
-                <input type="hidden" name="redirect_to" value="/growing">
+                <input type="hidden" name="redirect_to" value="${esc(redirectTo)}">
                 <button type="submit" style="background:none;border:none;padding:0;margin-left:6px;color:inherit;text-decoration:underline;cursor:pointer;font-size:inherit;">Block</button>
               </form>
             ` : ''}
           </span>
           <button class="kudos-btn" onclick="likeGrowTip(${g.id}, this)">${KUDOS_BUD_ICON}Kudos (${g.likes})</button>
         </div>
-      </div>`).join('') || `<div class="empty-note">No tips in this category yet — be the first to <a href="/growing">share one</a>.</div>`}
+      </div>`;
+}
+
+function pageGrowing(req, res, query) {
+  const viewerId = auth.currentUserId(req);
+  const cat = query.get('cat') || 'All';
+  // Gear-care tips live on their own page now -- exclude them here even if
+  // someone lands on ?cat=Cleaning... directly (an old bookmark, say),
+  // falling back to the full list minus gear-care in that case.
+  const effectiveCat = cat === GEAR_CARE_CATEGORY ? 'All' : cat;
+  const tips = db.listGrowTips({ category: effectiveCat, viewerId }).filter(g => g.category !== GEAR_CARE_CATEGORY);
+  const body = `
+    <h1 class="screen-title">Growing</h1>
+    <p class="screen-sub">Tips &amp; tricks from home growers. Home cultivation laws vary by location — check yours first.</p>
+    <a class="btn block lilac" href="/growing/new" style="margin-bottom:14px;">🌱 Share a Grow Tip</a>
+    <div>
+      <a class="filter-pill ${cat === 'All' ? 'active' : ''}" href="/growing?cat=All">All</a>
+      ${GROWING_ONLY_CATEGORIES.map(c => `<a class="filter-pill ${cat === c ? 'active' : ''}" href="/growing?cat=${encodeURIComponent(c)}">${c}</a>`).join('')}
+    </div>
+    <p class="empty-note" style="margin:10px 0 0;">Looking for pipe, bong, or grinder cleaning tips? See <a href="/gear-care">Gear &amp; Cleaning</a>.</p>
+    ${tips.map(g => renderGrowTipCard(g, viewerId, '/growing')).join('') || `<div class="empty-note">No tips in this category yet — be the first to <a href="/growing">share one</a>.</div>`}
   `;
   sendHtml(res, layout({ title: 'Growing', active: 'growing', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
-function pageGrowingNew(req, res) {
-  const CATEGORIES = ['Plant Life Cycle', 'Watering', 'Lighting', 'Nutrients & Feeding', 'Pests & Disease', 'Training', 'Harvest & Curing', 'Genetics & Seeds', 'Indoor Setup', 'Outdoor Growing', 'Cleaning & Gear Care'];
+// Gear & Cleaning -- pipes, bongs, grinders, storage. Broken out of Growing
+// since cleaning your gear has nothing to do with cultivating a plant, and
+// applies just as much to someone who's never grown anything.
+function pageGearCare(req, res) {
+  const viewerId = auth.currentUserId(req);
+  const tips = db.listGrowTips({ category: GEAR_CARE_CATEGORY, viewerId });
   const body = `
-    <h1 class="screen-title">Share a Grow Tip</h1>
+    <h1 class="screen-title">Gear &amp; Cleaning</h1>
+    <p class="screen-sub">Keeping pipes, bongs, grinders, and storage in good shape.</p>
+    <a class="btn block lilac" href="/growing/new?cat=${encodeURIComponent(GEAR_CARE_CATEGORY)}" style="margin-bottom:14px;">🧼 Share a Tip</a>
+    ${tips.map(g => renderGrowTipCard(g, viewerId, '/gear-care')).join('') || `<div class="empty-note">No tips yet — be the first to <a href="/growing/new?cat=${encodeURIComponent(GEAR_CARE_CATEGORY)}">share one</a>.</div>`}
+  `;
+  sendHtml(res, layout({ title: 'Gear & Cleaning', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
+}
+
+function pageGrowingNew(req, res, query) {
+  const preselected = (query && query.get('cat')) || '';
+  const isGearCare = preselected === GEAR_CARE_CATEGORY;
+  const body = `
+    <h1 class="screen-title">${isGearCare ? 'Share a Gear & Cleaning Tip' : 'Share a Grow Tip'}</h1>
     <form method="POST" action="/growing/new">
       <label class="field-label">Your name</label>
       <input type="text" name="author" placeholder="e.g. Sam" required>
       <label class="field-label">Title</label>
       <input type="text" name="title" required>
       <label class="field-label">Category</label>
-      <select name="category">${CATEGORIES.map(c => `<option>${c}</option>`).join('')}</select>
+      <select name="category">${ALL_GROW_TIP_CATEGORIES.map(c => `<option ${preselected === c ? 'selected' : ''}>${c}</option>`).join('')}</select>
       <label class="field-label">Your tip</label>
       <textarea name="body" required></textarea>
       <button class="btn block" type="submit">Post Tip</button>
     </form>
   `;
-  sendHtml(res, layout({ title: 'Share a Grow Tip', active: 'growing', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: isGearCare ? 'Share a Gear & Cleaning Tip' : 'Share a Grow Tip', active: isGearCare ? 'more' : 'growing', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
 async function handleGrowingNewSubmit(req, res) {
@@ -1345,7 +1378,7 @@ async function handleGrowingNewSubmit(req, res) {
   if (userId == null) return;
   const f = await parseForm(req);
   await db.createGrowTip({ title: f.title, category: f.category, author: f.author, user_id: userId, body: f.body });
-  redirect(res, '/growing');
+  redirect(res, f.category === GEAR_CARE_CATEGORY ? '/gear-care' : '/growing');
 }
 
 function pageChat(req, res) {
@@ -2468,7 +2501,7 @@ function pageFeedback(req, res, query) {
   const sent = query.get('sent');
   const body = `
     <h1 class="screen-title">Send Feedback</h1>
-    <p class="screen-sub">StrainDex is in beta — bugs, ideas, confusing screens, anything at all. This goes straight to the person building the app.</p>
+    <p class="screen-sub">Bugs, ideas, confusing screens — anything at all. This goes straight to the person building the app.</p>
     <p class="empty-note">For anything urgent — a compromised account, a safety concern, or a bad actor on the app — email <a href="mailto:${SUPPORT_EMAIL}">${SUPPORT_EMAIL}</a> directly instead of using the form below, since it's monitored more closely.</p>
     ${sent ? `<p class="empty-note" style="color:var(--brand-green-dark);">Thanks — your feedback was sent.</p>` : ''}
     <form method="POST" action="/feedback">
@@ -2986,16 +3019,6 @@ function pageMore(req, res) {
   // not deleted, just not surfaced here until they're real.
   const sections = [
     {
-      title: 'Discover',
-      tiles: [
-        { href: '/quiz', icon: '🧭', t: 'Find Your First Strain', s: '3-question strain matcher' },
-        { href: '/mood-finder', icon: '🎯', t: 'Mood Finder', s: 'Pick a goal, get matched strains' },
-        { href: '/compare', icon: '🆚', t: 'Compare Strains', s: 'Side-by-side lookup' },
-        { href: '/surprise-me', icon: '🎲', t: 'Surprise Me', s: 'One random strain you haven\u2019t tried' },
-        { href: '/trending', icon: '🔥', t: 'Trending This Week', s: 'Most checked-into right now' },
-      ],
-    },
-    {
       title: 'Your Journey',
       tiles: [
         { href: '/collection', icon: '/docs/leaf-kudos.png', t: 'My Collection', s: 'Your binder & rarity progress' },
@@ -3008,10 +3031,21 @@ function pageMore(req, res) {
       ],
     },
     {
+      title: 'Discover',
+      tiles: [
+        { href: '/quiz', icon: '🧭', t: 'Find Your First Strain', s: '3-question strain matcher' },
+        { href: '/mood-finder', icon: '🎯', t: 'Mood Finder', s: 'Pick a goal, get matched strains' },
+        { href: '/compare', icon: '🆚', t: 'Compare Strains', s: 'Side-by-side lookup' },
+        { href: '/surprise-me', icon: '🎲', t: 'Surprise Me', s: 'One random strain you haven\u2019t tried' },
+        { href: '/trending', icon: '🔥', t: 'Trending This Week', s: 'Most checked-into right now' },
+      ],
+    },
+    {
       title: 'Learn & Stay Safe',
       tiles: [
         { href: '/methods', icon: '/docs/joint-icon.png', t: 'Ways to Enjoy It', s: 'Every method, explained' },
         { href: '/concentrates', icon: '💠', t: 'Concentrates & Extracts', s: 'Kief, rosin, live resin & more' },
+        { href: '/gear-care', icon: '🧼', t: 'Gear & Cleaning', s: 'Keeping your pieces & tools in shape' },
         { href: '/legal-status', icon: '🏛️', t: 'Is It Legal Near Me?', s: 'State-by-state cannabis law' },
         { href: '/mixing-cautions', icon: '⚠️', t: 'Mixing With Other Substances', s: 'General cautions, not medical advice' },
         { href: '/faq', icon: '❓', t: 'FAQ', s: 'Strain school' },
@@ -3043,7 +3077,7 @@ function pageMore(req, res) {
     ${user ? `
       <div class="card" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
         <span>👤 Logged in as <b>${esc(user.username)}</b></span>
-        <div style="display:flex;gap:8px;">
+        <div style="display:flex;gap:8px;align-items:center;">
           <a href="/account" class="btn secondary" style="text-decoration:none;">Settings</a>
           <form method="POST" action="/logout"><button class="btn secondary" type="submit">Log out</button></form>
         </div>
@@ -3953,10 +3987,10 @@ function pageLegalStatus(req, res, query) {
     ${Object.entries(LEGAL_STATUS_LABELS).map(([key, meta]) => `
       <h3 style="font-size:13px;color:${meta.color};margin:16px 0 6px;">${esc(meta.label)}</h3>
       ${(grouped[key] || []).map(s => `
-        <div class="card" style="padding:10px 14px;margin-bottom:6px;">
+        <a href="/legal-status?state=${encodeURIComponent(s.state)}" class="card" style="padding:10px 14px;margin-bottom:6px;display:block;text-decoration:none;color:inherit;${selected === s.state ? `border-left:4px solid ${meta.color};` : ''}">
           <b>${esc(s.state)}</b>
           <p class="empty-note" style="padding:2px 0 0;">${esc(s.note)}</p>
-        </div>
+        </a>
       `).join('')}
     `).join('')}
   `;
@@ -4034,8 +4068,9 @@ const server = http.createServer(async (req, res) => {
     if (method === 'GET' && pathname === '/recipes/new') return pageRecipeNew(req, res);
     if (method === 'POST' && pathname === '/recipes/new') return await handleRecipeNewSubmit(req, res);
     if (method === 'GET' && pathname === '/growing') return pageGrowing(req, res, url.searchParams);
-    if (method === 'GET' && pathname === '/growing/new') return pageGrowingNew(req, res);
+    if (method === 'GET' && pathname === '/growing/new') return pageGrowingNew(req, res, url.searchParams);
     if (method === 'POST' && pathname === '/growing/new') return await handleGrowingNewSubmit(req, res);
+    if (method === 'GET' && pathname === '/gear-care') return pageGearCare(req, res);
     if (method === 'GET' && pathname === '/chat') return pageChat(req, res);
     if (method === 'POST' && pathname === '/api/chat') return await handleChatApi(req, res);
 
