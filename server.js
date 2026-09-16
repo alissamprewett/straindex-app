@@ -191,6 +191,7 @@ function renderCheckinPairings(c) {
   const pairings = Array.isArray(c.pairings) ? c.pairings : [];
   return `
     ${c.is_private ? `<div class="empty-note" style="padding:4px 0 0;font-weight:700;">🔒 Private — only visible to you</div>` : ''}
+    ${c.brand ? `<div class="empty-note" style="padding:4px 0 0;">🏷️ Brand: ${esc(c.brand)}</div>` : ''}
     ${c.tasting_notes ? `<div class="empty-note" style="padding:4px 0 0;">🍃 Tasting notes: ${esc(c.tasting_notes)}</div>` : ''}
     ${pairings.map(p => {
       const meta = PAIRING_TYPE_MAP[p.type];
@@ -881,6 +882,9 @@ function pageCheckinForm(req, res, query, existing) {
       <label class="field-label">Tasting Notes</label>
       <textarea name="tasting_notes" placeholder="Flavor, smell, smoothness — what stood out?">${existing ? esc(existing.tasting_notes || '') : ''}</textarea>
 
+      <label class="field-label">Brand <span class="empty-note" style="padding:0;">(optional — whose version was it?)</span></label>
+      <input type="text" name="brand" placeholder="e.g. Cookies, Jungle Boys, a local grower..." value="${existing ? esc(existing.brand || '') : ''}">
+
       <label class="field-label">Pairings <span class="empty-note" style="padding:0;">(optional — log as many as you want)</span></label>
       <div class="pairing-list" id="pairing-list">
         ${initialPairings.map(p => renderPairingRow(p.type, p.note)).join('')}
@@ -954,7 +958,7 @@ async function handleCheckinSubmit(req, res) {
   await db.createCheckin({
     user_id: userId, strain_id: strainId, method: fields.method, rating: Number(fields.rating) || 0,
     note: fields.note || '', effects, photo: photoUrl,
-    tasting_notes: fields.tasting_notes || '', pairings: parsePairingsFromForm(fields),
+    tasting_notes: fields.tasting_notes || '', brand: fields.brand || '', pairings: parsePairingsFromForm(fields),
     is_private: !!fields.is_private,
   });
   redirect(res, `/strains/${strainId}`);
@@ -971,7 +975,7 @@ async function handleCheckinEditSubmit(req, res, id) {
   await db.updateCheckin(id, {
     method: fields.method, rating: Number(fields.rating) || 0,
     note: fields.note || '', effects, photo: photoUrl,
-    tasting_notes: fields.tasting_notes || '', pairings: parsePairingsFromForm(fields),
+    tasting_notes: fields.tasting_notes || '', brand: fields.brand || '', pairings: parsePairingsFromForm(fields),
     is_private: !!fields.is_private,
   });
   redirect(res, `/strains/${existing.strain_id}`);
@@ -2754,6 +2758,14 @@ function strainFormFields(s) {
     <input type="text" name="effects" value="${v(effectsToInput(s && s.effects))}">
     <label class="field-label">Top terpenes (comma-separated "Name:Percent", e.g. "Myrcene:30, Limonene:25")</label>
     <input type="text" name="terps" value="${v(terpsToInput(s && s.terps))}">
+    <label class="field-label">Breeder</label>
+    <input type="text" name="breeder" value="${v(s && s.breeder)}">
+    <label class="field-label">Users report relief from (comma-separated, e.g. "Stress, Pain, Insomnia")</label>
+    <input type="text" name="ailments" value="${v(effectsToInput(s && s.ailments))}">
+    <label class="field-label">Parents / cross (comma-separated, e.g. "OG Kush, Durban Poison")</label>
+    <input type="text" name="parents" value="${v(effectsToInput(s && s.parents))}">
+    <label class="field-label">Also known as (comma-separated nicknames)</label>
+    <input type="text" name="aka" value="${v(s && s.aka)}">
   `;
 }
 
@@ -2800,6 +2812,7 @@ async function handleAdminStrainNew(req, res) {
   await db.insertStrain({
     id, name: f.name, type: f.type, lean: f.lean, rarity: f.rarity, thc: f.thc, cbd: f.cbd,
     flavor: f.flavor, icon: f.icon || '🌿', effects: parseEffectsInput(f.effects), terps: parseTerpsInput(f.terps),
+    breeder: f.breeder || '', ailments: parseEffectsInput(f.ailments), parents: parseEffectsInput(f.parents), aka: f.aka || '',
   });
   redirect(res, '/admin/strains');
 }
@@ -2822,6 +2835,7 @@ async function handleAdminStrainEditSubmit(req, res, id) {
   await db.insertStrain({
     id, name: f.name, type: f.type, lean: f.lean, rarity: f.rarity, thc: f.thc, cbd: f.cbd,
     flavor: f.flavor, icon: f.icon || '🌿', effects: parseEffectsInput(f.effects), terps: parseTerpsInput(f.terps),
+    breeder: f.breeder || '', ailments: parseEffectsInput(f.ailments), parents: parseEffectsInput(f.parents), aka: f.aka || '',
   });
   redirect(res, '/admin/strains');
 }
