@@ -142027,5 +142027,667 @@
       "mystery Kush male"
     ],
     "id": "s5269"
+  },
+  {
+    "name": "Nuclear S'mores",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Hungry",
+      "Calm"
+    ],
+    "flavor": "Sweet creamy, dark chocolate, vanilla, cherries.",
+    "icon": "🔥",
+    "breeder": "GreenlabelRx x Burb",
+    "parents": [
+      "Gelato #41",
+      "Wedding Cake"
+    ],
+    "id": "s5270"
+  },
+  {
+    "name": "Nuketown",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "24-29%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Sedated"
+    ],
+    "flavor": "Sweet spicy fruity berry, creamy chocolate, hash.",
+    "icon": "☢️",
+    "breeder": "Flight Time Genetics",
+    "parents": [
+      "Chernobyl",
+      "MK Ultra"
+    ],
+    "id": "s5271"
+  },
+  {
+    "name": "Numbskull",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "35%",
+    "cbd": "1-2%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.2
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.15
+      },
+      {
+        "n": "Linalool",
+        "p": 0.1
+      }
+    ],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Sleepy"
+    ],
+    "flavor": "Diesel, citrus, cool mint.",
+    "icon": "💀",
+    "breeder": "Maven Genetics",
+    "parents": [
+      "Kush Mints",
+      "Medusa"
+    ],
+    "id": "s5272"
+  },
+  {
+    "name": "Oakland Purp",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "15-18%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Sociable"
+    ],
+    "flavor": "Sweet berry, spicy grape wine, lemon.",
+    "icon": "🍇",
+    "breeder": "Grandiflora Genetics",
+    "parents": [
+      "Grand Daddy Purple",
+      "Gelato #33"
+    ],
+    "id": "s5273"
+  },
+  {
+    "name": "Oakland Runtz",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "26-31%",
+    "cbd": "",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Euphoric",
+      "Relaxed"
+    ],
+    "flavor": "Sweet fruity candy gas.",
+    "icon": "🍬",
+    "breeder": "Oakland Seed Co.",
+    "parents": [
+      "Obama Runtz",
+      "Burzt"
+    ],
+    "id": "s5274"
+  },
+  {
+    "name": "Oaxacan",
+    "type": "Sativa",
+    "lean": "Sativa (landrace)",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Focused"
+    ],
+    "flavor": "Piney, citrusy, herbal.",
+    "icon": "🌵",
+    "parents": [],
+    "id": "s5275"
+  },
+  {
+    "name": "Ob Ripper",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed"
+    ],
+    "flavor": "Lemon pine to grape kush, vanilla cookies.",
+    "icon": "🔪",
+    "breeder": "Gage Green Genetics",
+    "parents": [
+      "Ocean Beach OG",
+      "Grape Stomper OG"
+    ],
+    "id": "s5276"
+  },
+  {
+    "name": "Obi Wan OG",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Sedated"
+    ],
+    "flavor": "Gassy OG, lemon pledge.",
+    "icon": "🧙",
+    "breeder": "Ocean Grown Seeds",
+    "parents": [
+      "Alien Rift",
+      "Ghost OG"
+    ],
+    "id": "s5277"
+  },
+  {
+    "name": "Offwhite OG",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "25%+",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Sedated"
+    ],
+    "flavor": "Pine, spice.",
+    "icon": "👻",
+    "breeder": "Aficionado Seed Collection",
+    "parents": [
+      "Ghost OG",
+      "Ghost OG x Creme Brulee"
+    ],
+    "id": "s5278"
+  },
+  {
+    "name": "OG Glue Sniffer",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "18-22%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Euphoric",
+      "Sedated"
+    ],
+    "flavor": "Nutty vanilla, chemical, herbs.",
+    "icon": "🧴",
+    "breeder": "Matanuska Thunder Seeds",
+    "parents": [
+      "Gorilla Glue #4",
+      "Grateful Breath"
+    ],
+    "id": "s5279"
+  },
+  {
+    "name": "OG Shark",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "20-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Euphoric",
+      "Relaxed"
+    ],
+    "flavor": "Bold blueberry, diesel, earthy pine.",
+    "icon": "🦈",
+    "parents": [
+      "OG Kush",
+      "Great White Shark"
+    ],
+    "id": "s5280"
+  },
+  {
+    "name": "Og Sin",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-24%",
+    "cbd": "",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.2
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.15
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.1
+      }
+    ],
+    "effects": [
+      "Euphoric",
+      "Calm"
+    ],
+    "flavor": "Citrus, skunky, spicy herbal, piney.",
+    "icon": "😈",
+    "breeder": "Veritas Fine Cannabis",
+    "parents": [
+      "OG Kush",
+      "Sour Diesel",
+      "Cinderella 99"
+    ],
+    "id": "s5281"
+  },
+  {
+    "name": "Og Twist",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "30-35%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Creative",
+      "Sociable"
+    ],
+    "flavor": "Citrusy dank, spicy diesel, sharp chemicals.",
+    "icon": "🌀",
+    "breeder": "Humboldt",
+    "parents": [
+      "Chem Dog #4",
+      "OG Kush"
+    ],
+    "id": "s5282"
+  },
+  {
+    "name": "Og13",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-26%",
+    "cbd": "0-1%",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Creative"
+    ],
+    "flavor": "Citrus, floral, earthy.",
+    "icon": "🌿",
+    "breeder": "G13 Labs",
+    "parents": [
+      "OG Kush",
+      "G13"
+    ],
+    "id": "s5283"
+  },
+  {
+    "name": "Ojos Rojos",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "21.6%",
+    "cbd": "",
+    "terps": [
+      {
+        "n": "Pinene",
+        "p": 0.2
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.15
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.1
+      }
+    ],
+    "effects": [
+      "Euphoric",
+      "Calm"
+    ],
+    "flavor": "Grape bubblegum, sour cherry, lemon-lime, pine.",
+    "icon": "👀",
+    "breeder": "Josh D Kustom Shop",
+    "parents": [
+      "Studio 54 (Rainbow Sherbet #54)",
+      "RB/Après (Chem D x OG Kush x Ice Cream Cake)"
+    ],
+    "id": "s5284"
+  },
+  {
+    "name": "Old Growth OG",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "17-28%",
+    "cbd": "",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.2
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.15
+      },
+      {
+        "n": "Pinene",
+        "p": 0.1
+      }
+    ],
+    "effects": [
+      "Happy",
+      "Sociable"
+    ],
+    "flavor": "Lemon, pine, dense diesel, pepper.",
+    "icon": "🌲",
+    "breeder": "Humboldt Seed Company",
+    "parents": [
+      "Chem Dawg",
+      "OG Kush"
+    ],
+    "id": "s5285"
+  },
+  {
+    "name": "Olive Wagyu",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "35-40%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Happy"
+    ],
+    "flavor": "Savory olives, dank meats, fruity candy.",
+    "icon": "🥩",
+    "parents": [
+      "Biscotti",
+      "Gushers"
+    ],
+    "id": "s5286"
+  },
+  {
+    "name": "One Love",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "18-22%",
+    "cbd": "0.8%",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Energetic",
+      "Aroused"
+    ],
+    "flavor": "Exotic, mahogany, incense.",
+    "icon": "💚",
+    "parents": [
+      "Haze #1",
+      "Haze #9"
+    ],
+    "id": "s5287"
+  },
+  {
+    "name": "One Trick Pony",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "20-21%",
+    "cbd": "0-1%",
+    "terps": [
+      {
+        "n": "Terpinolene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Happy",
+      "Giggly",
+      "Relaxed"
+    ],
+    "flavor": "Citrus, lemon, pine.",
+    "icon": "🐴",
+    "breeder": "Cannarado Genetics",
+    "parents": [
+      "Gorilla Glue #4",
+      "Triangle Kush 91"
+    ],
+    "id": "s5288"
+  },
+  {
+    "name": "Oompa Loompa",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "21-29%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Sleepy"
+    ],
+    "flavor": "Sweet fruity candy, nutty vanilla, earth.",
+    "icon": "🍬",
+    "parents": [
+      "Girl Scout Cookies",
+      "Blue Dream"
+    ],
+    "id": "s5289"
+  },
+  {
+    "name": "Orange Bellini",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "28-33%",
+    "cbd": "",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      },
+      {
+        "n": "Humulene",
+        "p": 0.15
+      },
+      {
+        "n": "Limonene",
+        "p": 0.1
+      }
+    ],
+    "effects": [
+      "Creative",
+      "Energetic",
+      "Euphoric",
+      "Focused",
+      "Relaxed"
+    ],
+    "flavor": "Sweet orange citrus, grapefruit, pine.",
+    "icon": "🍹",
+    "breeder": "Maven Genetics",
+    "parents": [
+      "Orange Truffle Souffle",
+      "Peach Creme Gelato"
+    ],
+    "id": "s5290"
+  },
+  {
+    "name": "Orange Biscotti",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "23-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Relaxed"
+    ],
+    "flavor": "Bright orange citrus, nutty vanilla cookie.",
+    "icon": "🍊",
+    "breeder": "Cannarado Genetics",
+    "parents": [
+      "Orange Cookies",
+      "Biscotti"
+    ],
+    "id": "s5291"
+  },
+  {
+    "name": "Orange Chai Latte",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "23-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Creative",
+      "Sociable"
+    ],
+    "flavor": "Creamy spicy black coffee latte, citrusy orange.",
+    "icon": "☕",
+    "parents": [
+      "Agent Orange",
+      "Chai Latte"
+    ],
+    "id": "s5292"
+  },
+  {
+    "name": "Orange Gelato",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "22-32%",
+    "cbd": "0-2%",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Sociable",
+      "Focused"
+    ],
+    "flavor": "Sweet creamy orange gelato, chocolate.",
+    "icon": "🍨",
+    "breeder": "Promenade",
+    "parents": [
+      "Sunset Sherbet",
+      "Thin Mint Girl Scout Cookies"
+    ],
+    "id": "s5293"
+  },
+  {
+    "name": "Orange Juice Kush",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Happy"
+    ],
+    "flavor": "Zested orange, herbal earth, diesel.",
+    "icon": "🍊",
+    "breeder": "Gage Green Genetics",
+    "parents": [
+      "California Orange x OG Kush",
+      "Joseph (Underdog OG bag seed)"
+    ],
+    "id": "s5294"
+  },
+  {
+    "name": "Orange Peel OG",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "21-25%",
+    "cbd": "",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.15
+      },
+      {
+        "n": "Pinene",
+        "p": 0.1
+      }
+    ],
+    "effects": [
+      "Talkative",
+      "Happy",
+      "Relaxed"
+    ],
+    "flavor": "Peppery blood orange, sweet tangerine, blueberry.",
+    "icon": "🍊",
+    "breeder": "Franchise Genetics",
+    "parents": [
+      "Girl Scout Cookies",
+      "Orange Juice"
+    ],
+    "id": "s5295"
+  },
+  {
+    "name": "Orangesicle",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "18-24%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Focused",
+      "Energetic",
+      "Euphoric",
+      "Uplifted",
+      "Creative"
+    ],
+    "flavor": "Bright creamy citrusy orange, nutty, sour lemon-lime.",
+    "icon": "🍦",
+    "breeder": "T.H.Seeds",
+    "parents": [
+      "Purple Tangie",
+      "French Cookies"
+    ],
+    "id": "s5296"
   }
 ]
