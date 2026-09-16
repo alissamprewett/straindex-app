@@ -144,6 +144,14 @@ a.library-row:active{transform:scale(0.98);}
 .photo-preview-wrap img{width:100%;max-height:260px;object-fit:contain;display:block;border-radius:12px;}
 .photo-preview-wrap button, .clear-photo{position:absolute;top:8px;right:8px;background:rgba(0,0,0,.6);color:#fff;border:none;width:26px;height:26px;border-radius:50%;font-size:13px;cursor:pointer;}
 
+/* ---------------------------------------------------------------- check-in: pairings */
+.pairing-list{display:flex;flex-direction:column;gap:8px;}
+.pairing-row{display:flex;gap:8px;align-items:center;}
+.pairing-row select{flex:0 0 40%;}
+.pairing-row input[type=text]{flex:1;min-width:0;}
+.pairing-remove-btn{flex-shrink:0;background:none;border:none;color:var(--ink-muted);font-size:14px;cursor:pointer;padding:6px;line-height:1;}
+.pairing-remove-btn:active{color:#a13a3a;}
+
 /* ---------------------------------------------------------------- strain detail: check-in history */
 .checkin-history-row{display:flex;gap:12px;align-items:flex-start;}
 .checkin-photo-thumb{width:52px;height:52px;border-radius:10px;overflow:hidden;flex-shrink:0;background:var(--bg-card);display:flex;align-items:center;justify-content:center;}

@@ -507,6 +507,42 @@ if ('serviceWorker' in navigator) {
   }
 })();
 
+// Check-in "Pairings" -- an open-ended list of (type, note) rows. The
+// first row is always rendered server-side (see renderPairingRow in
+// server.js); this just wires up "+ Add Another Pairing" to append more
+// of the same row markup, built from the same PAIRING_TYPES vocabulary
+// the server used, so a newly-added row's dropdown matches exactly.
+// Removing a row is handled by an inline onclick baked into the row markup
+// itself (works the same whether the row came from the server or from
+// here), so there's nothing to wire up for that direction.
+(function initCheckinPairings() {
+  const addBtn = document.getElementById('pairing-add-btn');
+  const list = document.getElementById('pairing-list');
+  if (!addBtn || !list || !Array.isArray(window.PAIRING_TYPES)) return;
+
+  function renderPairingRow() {
+    const options = window.PAIRING_TYPES.map(p =>
+      `<option value="${p.key}">${p.icon} ${p.label}</option>`
+    ).join('');
+    const row = document.createElement('div');
+    row.className = 'pairing-row';
+    row.innerHTML = `
+      <select name="pairing_type">
+        <option value="">Add a pairing...</option>
+        ${options}
+      </select>
+      <input type="text" name="pairing_note" placeholder="Optional note...">
+      <button type="button" class="pairing-remove-btn" aria-label="Remove pairing">✕</button>
+    `;
+    row.querySelector('.pairing-remove-btn').onclick = () => row.remove();
+    return row;
+  }
+
+  addBtn.addEventListener('click', () => {
+    list.appendChild(renderPairingRow());
+  });
+})();
+
 // Custom tap-to-rate star widget -- replaces what used to be a plain
 // <select> showing "★★★★★" as text. A hidden input still carries the
 // actual value on submit, so the server-side form handling needed zero
