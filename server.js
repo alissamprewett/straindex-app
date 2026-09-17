@@ -383,7 +383,7 @@ function pageLandingPage(req, res) {
       <div class="more-tile">
         <span class="ic">📍</span>
         <div class="t">Dispensaries</div>
-        <div class="s">Find real dispensaries near you</div>
+        <div class="s">Find dispensaries near you</div>
       </div>
     </div>
 
@@ -426,7 +426,7 @@ function pageHome(req, res) {
     </div>
 
     <div class="section-label">Dispensaries</div>
-    <a class="btn secondary block" href="/dispensaries" style="text-decoration:none;margin-bottom:4px;">${hasFollowedDispensaries ? '📍 View your followed dispensaries →' : '📍 Find real dispensaries near you →'}</a>
+    <a class="btn secondary block" href="/dispensaries" style="text-decoration:none;margin-bottom:4px;">${hasFollowedDispensaries ? '📍 View your followed dispensaries →' : '📍 Find dispensaries near you →'}</a>
 
     <h2 class="screen-title" style="margin-top:20px;">${friends.length ? 'Recent activity' : 'Recent check-ins'}</h2>
     ${friends.length && recentCheckins.every(c => c.user_id === userId) ? `<p class="empty-note">None of your friends have checked in yet — once they do, it'll show up here too.</p>` : ''}
@@ -2997,7 +2997,7 @@ function pageMore(req, res) {
     {
       title: 'Your Journey',
       tiles: [
-        { href: '/collection', icon: '/docs/leaf-kudos.png', t: 'My Collection', s: 'Your binder & rarity progress' },
+        { href: '/collection', icon: '🗂️', t: 'My Collection', s: 'Your binder & rarity progress' },
         { href: '/wishlist', icon: '⭐', t: 'Wishlist', s: 'Strains you want to try next' },
         { href: '/grow-journal', icon: '📔', t: 'Grow Journal', s: 'Your private plant photo log' },
         { href: '/lists', icon: '📋', t: 'Your Lists', s: 'Custom groupings — Morning, Sleep, anything' },
@@ -3009,7 +3009,7 @@ function pageMore(req, res) {
     {
       title: 'Learn & Stay Safe',
       tiles: [
-        { href: '/methods', icon: '/docs/joint-icon.png', t: 'Ways to Enjoy It', s: 'Every method, explained' },
+        { href: '/methods', icon: '💨', t: 'Ways to Enjoy It', s: 'Every method, explained' },
         { href: '/concentrates', icon: '💠', t: 'Concentrates & Extracts', s: 'Kief, rosin, live resin & more' },
         { href: '/legal-status', icon: '🏛️', t: 'Is It Legal Near Me?', s: 'State-by-state cannabis law' },
         { href: '/mixing-cautions', icon: '⚠️', t: 'Mixing With Other Substances', s: 'General cautions, not medical advice' },
@@ -3050,7 +3050,7 @@ function pageMore(req, res) {
     ${sections.map(sec => `
       <div class="section-label" style="margin-top:18px;">${esc(sec.title)}</div>
       <div class="more-grid">
-        ${sec.tiles.map(t => `<a class="more-tile" href="${t.href}"><span class="ic">${t.icon.startsWith('/') ? `<img src="${t.icon}" alt="" class="ic-img-lg">` : t.icon}</span><div class="t">${esc(t.t)}</div><div class="s">${esc(t.s)}</div></a>`).join('')}
+        ${sec.tiles.map(t => `<a class="more-tile" href="${t.href}"><span class="ic">${t.icon}</span><div class="t">${esc(t.t)}</div><div class="s">${esc(t.s)}</div></a>`).join('')}
       </div>
     `).join('')}
   `;
@@ -3777,7 +3777,7 @@ async function pageDispensaries(req, res, searchParams) {
     body = `
       <h1 class="screen-title">Dispensaries</h1>
       <div class="locate-banner">
-        <div style="font-weight:700;font-size:13px;">📍 Find real dispensaries near you</div>
+        <div style="font-weight:700;font-size:13px;">📍 Find dispensaries near you</div>
         <div class="dsub" style="margin:3px 0 10px;">${realError ? esc(realError) : "Search by ZIP code, or share your location — nothing is sent anywhere else."}</div>
         <div class="locate-row">
           <form method="GET" action="/dispensaries" class="zip-form">
@@ -3787,7 +3787,7 @@ async function pageDispensaries(req, res, searchParams) {
           <button type="button" id="use-location-btn" class="follow-btn">Use my location</button>
         </div>
       </div>
-      ${zipParam || realError ? `<div class="empty-note" style="margin-top:16px;">${realError ? 'Nothing to show right now — try again in a moment, or try a different ZIP code.' : 'No dispensaries found for that ZIP code.'}</div>` : `<div class="empty-note" style="margin-top:16px;">Enter a ZIP code or share your location above to find real dispensaries near you.</div>`}
+      ${zipParam || realError ? `<div class="empty-note" style="margin-top:16px;">${realError ? 'Nothing to show right now — try again in a moment, or try a different ZIP code.' : 'No dispensaries found for that ZIP code.'}</div>` : `<div class="empty-note" style="margin-top:16px;">Enter a ZIP code or share your location above to find dispensaries near you.</div>`}
     `;
   }
   sendHtml(res, layout({ title: 'Dispensaries', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
