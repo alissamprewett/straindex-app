@@ -1284,14 +1284,14 @@ async function handleRecipeNewSubmit(req, res) {
     steps: String(f.steps || '').split('\n').map(s => s.trim()).filter(Boolean),
     dosing: f.dosing || '', category,
   });
-  await sendEmail({
+  sendEmail({
     to: SUPPORT_EMAIL,
     subject: `StrainDex: recipe submitted — ${f.title}`,
     html: `<p><b>${esc(f.author || 'Someone')}</b> submitted a recipe for review:</p>
       <p style="font-size:16px;"><b>${esc(f.title)}</b> <span style="color:#888;">(${esc(category)})</span></p>
       <p>${esc(f.desc)}</p>
       <p><a href="https://${req.headers.host}/admin/recipes">Review it in the admin panel</a></p>`,
-  });
+  }).catch(err => console.error('[email] recipe submission notification failed:', err));
   redirect(res, '/recipes?submitted=1');
 }
 
@@ -1362,14 +1362,14 @@ async function handleGrowingNewSubmit(req, res) {
   if (userId == null) return;
   const f = await parseForm(req);
   await db.createGrowTip({ title: f.title, category: f.category, author: f.author, user_id: userId, body: f.body, status: 'pending' });
-  await sendEmail({
+  sendEmail({
     to: SUPPORT_EMAIL,
     subject: `StrainDex: grow tip submitted — ${f.title}`,
     html: `<p><b>${esc(f.author || 'Someone')}</b> submitted a grow tip for review:</p>
       <p style="font-size:16px;"><b>${esc(f.title)}</b> <span style="color:#888;">(${esc(f.category)})</span></p>
       <p style="white-space:pre-wrap;">${esc(f.body)}</p>
       <p><a href="https://${req.headers.host}/admin/grow-tips">Review it in the admin panel</a></p>`,
-  });
+  }).catch(err => console.error('[email] grow tip submission notification failed:', err));
   redirect(res, '/growing?submitted=1');
 }
 
@@ -1430,14 +1430,14 @@ async function handleAdminLoginSubmit(req, res) {
   const f = await parseForm(req);
   if (auth.checkPassword(f.password)) {
     const token = auth.sign('admin');
-    res.setHeader('Set-Cookie', `admin_session=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=2592000`);
+    res.setHeader('Set-Cookie', `admin_session=${encodeURIComponent(token)}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=2592000`);
     redirect(res, '/admin');
   } else {
     redirect(res, '/admin/login?err=1');
   }
 }
 function handleAdminLogout(req, res) {
-  res.setHeader('Set-Cookie', `admin_session=; Path=/; HttpOnly; Max-Age=0`);
+  res.setHeader('Set-Cookie', `admin_session=; Path=/; HttpOnly; Secure; Max-Age=0`);
   redirect(res, '/');
 }
 
@@ -1507,7 +1507,7 @@ function pageGoogleStart(req, res, query) {
   // on the callback before we trust anything else in that request.
   const state = crypto.randomBytes(16).toString('hex');
   const isRetry = query && query.get('retry') === '1';
-  res.setHeader('Set-Cookie', `google_oauth_state=${state}; Path=/; HttpOnly; SameSite=Lax; Max-Age=600`);
+  res.setHeader('Set-Cookie', `google_oauth_state=${state}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=600`);
   const params = new URLSearchParams({
     client_id: GOOGLE_CLIENT_ID,
     redirect_uri: GOOGLE_REDIRECT_URI,
@@ -1589,7 +1589,7 @@ async function handleGoogleCallback(req, res, query) {
     }
     if (user) {
       const token = auth.signUserSessionValue(user.id);
-      res.setHeader('Set-Cookie', `user_session=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000`);
+      res.setHeader('Set-Cookie', `user_session=${encodeURIComponent(token)}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=31536000`);
       return redirect(res, '/');
     }
     // 3) Genuinely new person -- Google doesn't give us a birth date, and
@@ -1597,7 +1597,7 @@ async function handleGoogleCallback(req, res, query) {
     // short-lived signed cookie and send them to a small finishing form
     // rather than creating an incomplete account.
     const pending = auth.sign(JSON.stringify({ sub: profile.sub, email: profile.email, name: profile.name || '', given_name: profile.given_name || '', family_name: profile.family_name || '' }));
-    res.setHeader('Set-Cookie', `google_pending=${encodeURIComponent(pending)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=600`);
+    res.setHeader('Set-Cookie', `google_pending=${encodeURIComponent(pending)}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=600`);
     redirect(res, '/auth/google/finish');
   } catch (e) {
     console.error('Google sign-in: unexpected error in callback', e);
@@ -1657,8 +1657,8 @@ async function handleGoogleFinishSubmit(req, res) {
   const user = await db.createUserFromGoogle({ username, birth_date: f.birth_date, email: profile.email, google_id: profile.sub, first_name: firstName, last_name: lastName });
   const token = auth.signUserSessionValue(user.id);
   res.setHeader('Set-Cookie', [
-    `user_session=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000`,
-    `google_pending=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0`,
+    `user_session=${encodeURIComponent(token)}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=31536000`,
+    `google_pending=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0`,
   ]);
   redirect(res, '/onboarding');
 }
@@ -1678,7 +1678,7 @@ async function handleSignupSubmit(req, res) {
   if (db.getUserByEmail(email)) return redirect(res, '/signup?err=email_taken');
   const user = await db.createUser({ username, password: f.password, birth_date: f.birth_date, email, first_name: firstName, last_name: lastName });
   const token = auth.signUserSessionValue(user.id);
-  res.setHeader('Set-Cookie', `user_session=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000`);
+  res.setHeader('Set-Cookie', `user_session=${encodeURIComponent(token)}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=31536000`);
   redirect(res, '/onboarding');
 }
 function pageLogin(req, res, query) {
@@ -2014,7 +2014,7 @@ async function handleStrainSuggestSubmit(req, res) {
 
   const user = db.getUserById(userId);
   const photoAbsUrl = photoUrl && !/^https?:\/\//.test(photoUrl) ? `${req.headers['x-forwarded-proto'] || 'https'}://${req.headers.host}${photoUrl}` : photoUrl;
-  await sendEmail({
+  sendEmail({
     to: SUPPORT_EMAIL,
     subject: `StrainDex: strain suggestion — ${strainName}`,
     html: `<p><b>${esc(user ? user.username : 'A user')}</b> suggested a strain that's not in the library yet:</p>
@@ -2022,7 +2022,7 @@ async function handleStrainSuggestSubmit(req, res) {
       ${description ? `<p style="white-space:pre-wrap;">${esc(description)}</p>` : ''}
       ${photoAbsUrl ? `<p><img src="${esc(photoAbsUrl)}" alt="Submitted photo" style="max-width:300px;"></p>` : ''}
       <p><a href="https://${req.headers.host}/admin/strain-submissions">Review it in the admin panel</a></p>`,
-  });
+  }).catch(err => console.error('[email] strain suggestion notification failed:', err));
 
   redirect(res, '/strains/suggest?sent=1');
 }
@@ -2736,13 +2736,13 @@ async function handleFeedbackSubmit(req, res) {
   const feedback = await db.createFeedback({ user_id: userId, message });
 
   const user = db.getUserById(userId);
-  await sendEmail({
+  sendEmail({
     to: SUPPORT_EMAIL,
     subject: `StrainDex feedback from ${user ? user.username : 'a user'}`,
     html: `<p><b>${esc(user ? user.username : 'Unknown user')}</b> (${user && user.email ? esc(user.email) : 'no email on file'}) sent this feedback:</p>
       <p style="white-space:pre-wrap;">${esc(message)}</p>
       <p><a href="https://${req.headers.host}/admin/feedback">View all feedback in the admin panel</a></p>`,
-  });
+  }).catch(err => console.error('[email] feedback notification failed:', err));
 
   redirect(res, '/feedback?sent=1');
 }
@@ -2773,13 +2773,13 @@ async function handleForgotPasswordSubmit(req, res) {
   if (user) {
     const token = await db.createPasswordResetToken(user.id);
     const resetUrl = `${req.headers['x-forwarded-proto'] || 'https'}://${req.headers.host}/reset-password?token=${token}`;
-    await sendEmail({
+    sendEmail({
       to: email,
       subject: 'Reset your StrainDex password',
       html: `<p>Someone requested a password reset for your StrainDex account.</p>
         <p><a href="${esc(resetUrl)}">Click here to set a new password</a> — this link expires in 1 hour.</p>
         <p>If you didn't request this, you can safely ignore this email.</p>`,
-    });
+    }).catch(err => console.error('[email] password reset notification failed:', err));
   }
   redirect(res, '/forgot-password?sent=1');
 }
@@ -2827,11 +2827,11 @@ async function handleLoginSubmit(req, res) {
   }
   await clearLoginAttempts(req, username);
   const token = auth.signUserSessionValue(user.id);
-  res.setHeader('Set-Cookie', `user_session=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000`);
+  res.setHeader('Set-Cookie', `user_session=${encodeURIComponent(token)}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=31536000`);
   redirect(res, '/');
 }
 function handleLogout(req, res) {
-  res.setHeader('Set-Cookie', `user_session=; Path=/; HttpOnly; Max-Age=0`);
+  res.setHeader('Set-Cookie', `user_session=; Path=/; HttpOnly; Secure; Max-Age=0`);
   redirect(res, '/login');
 }
 
@@ -3692,7 +3692,7 @@ async function handleAccountDelete(req, res) {
   const userId = requireUser(req, res);
   if (userId == null) return;
   await db.deleteUserAccount(userId);
-  res.setHeader('Set-Cookie', `user_session=; Path=/; HttpOnly; Max-Age=0`);
+  res.setHeader('Set-Cookie', `user_session=; Path=/; HttpOnly; Secure; Max-Age=0`);
   redirect(res, '/signup?deleted=1');
 }
 async function handleAccountUsername(req, res) {

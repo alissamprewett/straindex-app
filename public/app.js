@@ -241,7 +241,7 @@ async function likeGrowTip(id, btn) {
     const effectIcon = s.effects && s.effects[0] && EFFECT_ICON[s.effects[0]] ? EFFECT_ICON[s.effects[0]] + ' ' : '';
     return `
       <a class="library-row tier-${tier}" href="/strains/${s.id}" style="text-decoration:none;color:inherit;">
-        <span class="icon">${s.icon}</span>
+        <span class="icon">${escHtml(s.icon)}</span>
         <div class="info">
           <div class="nm">${effectIcon}${escHtml(s.name)} <span title="${escHtml(badge.label)}">${badge.icon}</span></div>
           <div class="sub">${escHtml(s.type)} · ${rarityLabel(s.rarity)} · THC ${escHtml(s.thc)}</div>
@@ -375,7 +375,7 @@ if ('serviceWorker' in navigator) {
 
   function selectStrain(s) {
     hiddenInput.value = s.id;
-    selectedBox.innerHTML = `${s.icon} <b>${escHtml(s.name)}</b> <button type="button" id="strain-picker-change" class="btn secondary" style="float:right;padding:2px 10px;">Change</button>`;
+    selectedBox.innerHTML = `${escHtml(s.icon)} <b>${escHtml(s.name)}</b> <button type="button" id="strain-picker-change" class="btn secondary" style="float:right;padding:2px 10px;">Change</button>`;
     selectedBox.style.display = '';
     picker.style.display = 'none';
     hintBox.style.display = 'none';
@@ -403,7 +403,7 @@ if ('serviceWorker' in navigator) {
       if (!res.ok) return;
       const data = await res.json();
       resultsBox.innerHTML = data.results.length
-        ? data.results.map(s => `<div class="search-result-row" data-id="${s.id}">${s.icon} ${escHtml(s.name)} <span class="empty-note" style="padding:0;">— ${escHtml(s.type)}</span></div>`).join('')
+        ? data.results.map(s => `<div class="search-result-row" data-id="${s.id}">${escHtml(s.icon)} ${escHtml(s.name)} <span class="empty-note" style="padding:0;">— ${escHtml(s.type)}</span></div>`).join('')
         : `<div class="search-no-results">No matches — try a different spelling, or <a href="/strains">browse the library</a>.</div>`;
       resultsBox.classList.add('open');
       resultsBox.querySelectorAll('[data-id]').forEach(row => {
@@ -575,8 +575,8 @@ if ('serviceWorker' in navigator) {
       const atMax = selected.length >= max;
       searchInput.disabled = atMax;
       searchInput.placeholder = atMax ? `Max ${max} selected — remove one to add another` : searchInput.dataset.placeholder || 'Search...';
-      chipsBox.innerHTML = selected.map(v => `<span class="tag-chip">${v} <button type="button" data-remove="${v}">✕</button></span>`).join('');
-      hiddenBox.innerHTML = selected.map(v => `<input type="hidden" name="${fieldName}" value="${v}">`).join('');
+      chipsBox.innerHTML = selected.map(v => `<span class="tag-chip">${escHtml(v)} <button type="button" data-remove="${escHtml(v)}">✕</button></span>`).join('');
+      hiddenBox.innerHTML = selected.map(v => `<input type="hidden" name="${fieldName}" value="${escHtml(v)}">`).join('');
       chipsBox.querySelectorAll('button[data-remove]').forEach(btn => {
         btn.onclick = () => { selected = selected.filter(x => x !== btn.dataset.remove); render(); };
       });
@@ -586,7 +586,7 @@ if ('serviceWorker' in navigator) {
       if (!q) { resultsBox.classList.remove('open'); resultsBox.innerHTML = ''; return; }
       const matches = vocab.filter(v => !selected.includes(v) && v.toLowerCase().includes(q)).slice(0, 8);
       resultsBox.innerHTML = matches.length
-        ? matches.map(v => `<div class="search-result-row" data-add="${v}">${v}</div>`).join('')
+        ? matches.map(v => `<div class="search-result-row" data-add="${escHtml(v)}">${escHtml(v)}</div>`).join('')
         : `<div class="search-no-results">No matches</div>`;
       resultsBox.classList.add('open');
       resultsBox.querySelectorAll('[data-add]').forEach(row => {
@@ -614,6 +614,9 @@ if ('serviceWorker' in navigator) {
 // the server (data-search-url) for matches to whatever's been typed after
 // the last comma, and clicking a result replaces just that trailing
 // fragment -- the rest of the comma-separated list stays untouched.
+function escHtml(str) {
+  return String(str ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
 (function initCommaAutocomplete() {
   document.querySelectorAll('.comma-autocomplete').forEach(input => {
     const wrap = input.closest('.autocomplete-wrap') || input.parentElement;
@@ -640,8 +643,15 @@ if ('serviceWorker' in navigator) {
         .then(r => r.json())
         .then(data => {
           const matches = (data && data.results) || [];
+          // Names come from the server, but strain names increasingly flow
+          // in from less-trusted sources (e.g. "Suggest a Strain"), so
+          // they're escaped here the same as any other untrusted content
+          // rendered into innerHTML -- both the visible text and the
+          // data-add attribute, since an unescaped quote in the attribute
+          // would be just as capable of breaking out of it as an
+          // unescaped angle bracket would be in the text.
           resultsBox.innerHTML = matches.length
-            ? matches.map(name => `<div class="search-result-row" data-add="${name}">${name}</div>`).join('')
+            ? matches.map(name => `<div class="search-result-row" data-add="${escHtml(name)}">${escHtml(name)}</div>`).join('')
             : `<div class="search-no-results">No matches</div>`;
           resultsBox.classList.add('open');
           resultsBox.querySelectorAll('[data-add]').forEach(row => {
@@ -750,7 +760,7 @@ if ('serviceWorker' in navigator) {
         if (!res.ok) return;
         const data = await res.json();
         resultsBox.innerHTML = data.results.length
-          ? data.results.map(s => `<div class="search-result-row" data-id="${s.id}">${s.icon} ${escHtml(s.name)} <span class="empty-note" style="padding:0;">— ${escHtml(s.type)}</span></div>`).join('')
+          ? data.results.map(s => `<div class="search-result-row" data-id="${s.id}">${escHtml(s.icon)} ${escHtml(s.name)} <span class="empty-note" style="padding:0;">— ${escHtml(s.type)}</span></div>`).join('')
           : `<div class="search-no-results">No matches — try a different spelling.</div>`;
         resultsBox.classList.add('open');
         resultsBox.querySelectorAll('[data-id]').forEach(row => {
