@@ -519,7 +519,11 @@ function pageStrains(req, res, query) {
         <select id="strain-search-verified" name="verified" form="strain-search-form">${verifiedOpts.map(v => `<option value="${esc(v)}" ${verified === v ? 'selected' : ''}>${verifiedLabel[v]}</option>`).join('')}</select>
       </div>
     </div>
-    <p class="empty-note" style="margin-bottom:2px;">✅ Verified — THC, breeder, and flavor/terpene data all independently confirmed. &nbsp; 🔹 Partial — some details confirmed. &nbsp; ⚪ Listed only — seen on a dispensary menu, nothing independently confirmed yet.</p>
+    <div class="empty-note" style="margin-bottom:6px;line-height:1.6;">
+      <div>✅ Verified — THC, breeder, and flavor/terpene data all independently confirmed.</div>
+      <div>🔹 Partial — some details confirmed.</div>
+      <div>⚪ Listed only — seen on a dispensary menu, nothing independently confirmed yet.</div>
+    </div>
     <p class="empty-note" style="margin-bottom:10px;">User-reported associations, not medical advice — see a doctor for real guidance.</p>
     <p class="empty-note" id="strain-search-count">${total > 60 ? `Showing 60 of ${total.toLocaleString()} — refine your search to narrow it down.` : `${total} strain${total === 1 ? '' : 's'}`}</p>
     <div id="strain-search-results">${results.map(s => `
@@ -607,8 +611,8 @@ function pageStrainDetail(req, res, id) {
           </div>
         </div>
         <div style="display:flex;gap:6px;flex-shrink:0;">
-          <button type="button" onclick="shareStrainLink(${JSON.stringify(s.name)})" title="Share" aria-label="Share" style="background:var(--bg-card,#fff);border:1px solid var(--border);border-radius:50%;width:34px;height:34px;font-size:15px;cursor:pointer;padding:0;">📤</button>
-          ${userId != null ? `<button type="button" onclick="focusShareToFriend()" title="Send to a friend" aria-label="Send to a friend" style="background:var(--bg-card,#fff);border:1px solid var(--border);border-radius:50%;width:34px;height:34px;font-size:15px;cursor:pointer;padding:0;">✉️</button>` : ''}
+          <button type="button" onclick="openShareModal()" title="Share" aria-label="Share" style="background:var(--bg-card,#fff);border:1px solid var(--border);border-radius:50%;width:34px;height:34px;font-size:15px;cursor:pointer;padding:0;">📤</button>
+          <a href="/compare?a=${s.id}" title="Compare this strain" aria-label="Compare this strain" style="background:var(--bg-card,#fff);border:1px solid var(--border);border-radius:50%;width:34px;height:34px;font-size:15px;cursor:pointer;padding:0;display:flex;align-items:center;justify-content:center;text-decoration:none;">🆚</a>
         </div>
       </div>
       ${(s.thc || s.cbd) ? `<p style="margin:12px 0 4px;">${s.thc ? `<b>THC:</b> ${esc(s.thc)}` : ''}${s.thc && s.cbd ? ' &nbsp; ' : ''}${s.cbd ? `<b>CBD:</b> ${esc(s.cbd)}` : ''}</p>` : `<p class="empty-note" style="padding:0 0 4px;">No verified THC/CBD data for this strain yet.</p>`}
@@ -621,66 +625,71 @@ function pageStrainDetail(req, res, id) {
         <p class="empty-note" style="padding:0;">User-reported, not medical advice — see a doctor for real guidance.</p>
       ` : ''}
     </div>
-    <script>
-      function shareStrainLink(name) {
-        const url = window.location.href;
-        if (navigator.share) {
-          navigator.share({ title: name, url: url }).catch(function() {});
-        } else if (navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText(url).then(function() { alert('Link copied to clipboard!'); }).catch(function() { window.prompt('Copy this link:', url); });
-        } else {
-          window.prompt('Copy this link:', url);
-        }
-      }
-      function focusShareToFriend() {
-        const section = document.getElementById('share-section');
-        if (!section) return;
-        section.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        setTimeout(function() {
-          const input = document.getElementById('share-friend-input');
-          if (input) input.focus();
-        }, 400);
-      }
-    </script>
-    ${renderFamilyTree(s)}
-    <a class="btn block" href="/checkin?strain=${s.id}">＋ Check in this strain</a>
-    <a class="btn secondary block" href="/compare?a=${s.id}" style="margin-top:8px;">🆚 Compare this strain</a>
-    ${userId != null ? `
-      <div class="card" id="share-section" style="margin-top:8px;">
-        <b style="font-size:13px;">✉️ Send to a friend</b>
-        ${db.listFriends(userId).length ? `
-          <form method="POST" action="/strains/${s.id}/share" id="share-friend-form" style="display:flex;gap:8px;margin-top:8px;" onsubmit="return validateShareForm(event)">
+    <div id="share-modal-backdrop" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:1000;" onclick="closeShareModal(event)">
+      <div style="background:var(--bg-card,#fff);max-width:360px;width:calc(100% - 40px);margin:15vh auto 0;border-radius:14px;padding:20px;position:relative;" onclick="event.stopPropagation()">
+        <button type="button" onclick="closeShareModal()" aria-label="Close" style="position:absolute;top:10px;right:12px;background:none;border:none;font-size:18px;cursor:pointer;color:var(--ink-secondary);">✕</button>
+        <h3 style="margin:0 0 12px;font-size:16px;">Share ${esc(s.name)}</h3>
+        <button type="button" class="btn secondary block" onclick="copyShareLink()" style="margin-bottom:8px;">🔗 Copy link</button>
+        <button type="button" class="btn secondary block" id="native-share-btn" onclick="nativeShare(${JSON.stringify(s.name)})" style="display:none;margin-bottom:8px;">📤 Share via...</button>
+        ${userId != null && db.listFriends(userId).length ? `
+          <label class="field-label" style="margin-top:14px;">Send to a friend</label>
+          <form method="POST" action="/strains/${s.id}/share" id="share-friend-form" style="display:flex;gap:8px;" onsubmit="return validateShareForm(event)">
             <input type="text" id="share-friend-input" list="share-friend-list" placeholder="Type a friend's username..." autocomplete="off" style="flex:1;margin:0;">
             <datalist id="share-friend-list">
               ${db.listFriends(userId).map(f => `<option value="${esc(f.username)}" data-id="${f.id}">`).join('')}
             </datalist>
             <input type="hidden" name="friend_id" id="share-friend-id">
-            <button class="btn secondary" type="submit" style="white-space:nowrap;">Send</button>
+            <button class="btn" type="submit" style="white-space:nowrap;">Send</button>
           </form>
-          <script>
-            (function() {
-              const input = document.getElementById('share-friend-input');
-              const hidden = document.getElementById('share-friend-id');
-              const list = document.getElementById('share-friend-list');
-              function syncId() {
-                const match = Array.from(list.options).find(o => o.value.toLowerCase() === input.value.trim().toLowerCase());
-                hidden.value = match ? match.dataset.id : '';
-              }
-              input.addEventListener('input', syncId);
-            })();
-            function validateShareForm(evt) {
-              const hidden = document.getElementById('share-friend-id');
-              if (!hidden.value) {
-                evt.preventDefault();
-                alert("Pick a friend from the list first — type their username and choose the match that appears.");
-                return false;
-              }
-              return true;
-            }
-          </script>
-        ` : `<p class="empty-note" style="padding:6px 0 0;"><a href="/friends">Add friends</a> to share strains with them.</p>`}
+        ` : userId != null ? `<p class="empty-note" style="margin-top:14px;padding:0;"><a href="/friends">Add friends</a> to share strains with them.</p>` : ''}
       </div>
-    ` : ''}
+    </div>
+    <script>
+      function openShareModal() {
+        const el = document.getElementById('share-modal-backdrop');
+        if (el) el.style.display = 'block';
+        const nativeBtn = document.getElementById('native-share-btn');
+        if (nativeBtn && navigator.share) nativeBtn.style.display = 'block';
+      }
+      function closeShareModal() {
+        const el = document.getElementById('share-modal-backdrop');
+        if (el) el.style.display = 'none';
+      }
+      function copyShareLink() {
+        const url = window.location.href;
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(url).then(function() { alert('Link copied to clipboard!'); }).catch(function() { window.prompt('Copy this link:', url); });
+        } else {
+          window.prompt('Copy this link:', url);
+        }
+      }
+      function nativeShare(name) {
+        const url = window.location.href;
+        if (navigator.share) navigator.share({ title: name, url: url }).catch(function() {});
+      }
+      (function() {
+        const input = document.getElementById('share-friend-input');
+        if (!input) return;
+        const hidden = document.getElementById('share-friend-id');
+        const list = document.getElementById('share-friend-list');
+        function syncId() {
+          const match = Array.from(list.options).find(o => o.value.toLowerCase() === input.value.trim().toLowerCase());
+          hidden.value = match ? match.dataset.id : '';
+        }
+        input.addEventListener('input', syncId);
+      })();
+      function validateShareForm(evt) {
+        const hidden = document.getElementById('share-friend-id');
+        if (!hidden.value) {
+          evt.preventDefault();
+          alert("Pick a friend from the list first — type their username and choose the match that appears.");
+          return false;
+        }
+        return true;
+      }
+    </script>
+    ${renderFamilyTree(s)}
+    <a class="btn block" href="/checkin?strain=${s.id}">＋ Check in this strain</a>
     ${userId != null ? `
       <form method="POST" action="/wishlist/${s.id}/toggle" style="margin-top:8px;">
         <input type="hidden" name="redirect_to" value="/strains/${s.id}">
