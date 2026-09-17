@@ -1275,11 +1275,20 @@ async function handleRecipeNewSubmit(req, res) {
   const userId = requireUser(req, res);
   if (userId == null) return;
   const f = await parseForm(req);
+  const category = RECIPE_CATEGORIES.includes(f.category) ? f.category : 'Baked Goods';
   await db.createRecipe({
     title: f.title, desc: f.desc, author: f.author, user_id: userId, source: 'community', status: 'pending',
     ingredients: String(f.ingredients || '').split('\n').map(s => s.trim()).filter(Boolean),
     steps: String(f.steps || '').split('\n').map(s => s.trim()).filter(Boolean),
-    dosing: f.dosing || '', category: RECIPE_CATEGORIES.includes(f.category) ? f.category : 'Baked Goods',
+    dosing: f.dosing || '', category,
+  });
+  await sendEmail({
+    to: SUPPORT_EMAIL,
+    subject: `StrainDex: recipe submitted — ${f.title}`,
+    html: `<p><b>${esc(f.author || 'Someone')}</b> submitted a recipe for review:</p>
+      <p style="font-size:16px;"><b>${esc(f.title)}</b> <span style="color:#888;">(${esc(category)})</span></p>
+      <p>${esc(f.desc)}</p>
+      <p><a href="https://${req.headers.host}/admin/recipes">Review it in the admin panel</a></p>`,
   });
   redirect(res, '/recipes?submitted=1');
 }
@@ -1349,6 +1358,14 @@ async function handleGrowingNewSubmit(req, res) {
   if (userId == null) return;
   const f = await parseForm(req);
   await db.createGrowTip({ title: f.title, category: f.category, author: f.author, user_id: userId, body: f.body });
+  await sendEmail({
+    to: SUPPORT_EMAIL,
+    subject: `StrainDex: grow tip submitted — ${f.title}`,
+    html: `<p><b>${esc(f.author || 'Someone')}</b> shared a grow tip:</p>
+      <p style="font-size:16px;"><b>${esc(f.title)}</b> <span style="color:#888;">(${esc(f.category)})</span></p>
+      <p style="white-space:pre-wrap;">${esc(f.body)}</p>
+      <p><a href="https://${req.headers.host}/growing">View it on the Growing page</a></p>`,
+  });
   redirect(res, '/growing');
 }
 
@@ -1988,7 +2005,21 @@ async function handleStrainSuggestSubmit(req, res) {
   const strainName = (f.strain_name || '').trim();
   if (!strainName) return redirect(res, '/strains/suggest');
   const photoUrl = await storage.uploadPhoto(f.photo || null, 'strain-suggestions');
-  await db.createStrainSubmission({ user_id: userId, strain_name: strainName, description: f.description || '', photo: photoUrl });
+  const description = f.description || '';
+  await db.createStrainSubmission({ user_id: userId, strain_name: strainName, description, photo: photoUrl });
+
+  const user = db.getUserById(userId);
+  const photoAbsUrl = photoUrl && !/^https?:\/\//.test(photoUrl) ? `${req.headers['x-forwarded-proto'] || 'https'}://${req.headers.host}${photoUrl}` : photoUrl;
+  await sendEmail({
+    to: SUPPORT_EMAIL,
+    subject: `StrainDex: strain suggestion — ${strainName}`,
+    html: `<p><b>${esc(user ? user.username : 'A user')}</b> suggested a strain that's not in the library yet:</p>
+      <p style="font-size:16px;"><b>${esc(strainName)}</b></p>
+      ${description ? `<p style="white-space:pre-wrap;">${esc(description)}</p>` : ''}
+      ${photoAbsUrl ? `<p><img src="${esc(photoAbsUrl)}" alt="Submitted photo" style="max-width:300px;"></p>` : ''}
+      <p><a href="https://${req.headers.host}/admin/strain-submissions">Review it in the admin panel</a></p>`,
+  });
+
   redirect(res, '/strains/suggest?sent=1');
 }
 
@@ -2698,16 +2729,14 @@ async function handleFeedbackSubmit(req, res) {
   if (!message) return redirect(res, '/feedback');
   const feedback = await db.createFeedback({ user_id: userId, message });
 
-  if (process.env.FEEDBACK_NOTIFY_EMAIL) {
-    const user = db.getUserById(userId);
-    await sendEmail({
-      to: process.env.FEEDBACK_NOTIFY_EMAIL,
-      subject: `StrainDex feedback from ${user ? user.username : 'a user'}`,
-      html: `<p><b>${esc(user ? user.username : 'Unknown user')}</b> (${user && user.email ? esc(user.email) : 'no email on file'}) sent this feedback:</p>
-        <p style="white-space:pre-wrap;">${esc(message)}</p>
-        <p><a href="https://${req.headers.host}/admin/feedback">View all feedback in the admin panel</a></p>`,
-    });
-  }
+  const user = db.getUserById(userId);
+  await sendEmail({
+    to: SUPPORT_EMAIL,
+    subject: `StrainDex feedback from ${user ? user.username : 'a user'}`,
+    html: `<p><b>${esc(user ? user.username : 'Unknown user')}</b> (${user && user.email ? esc(user.email) : 'no email on file'}) sent this feedback:</p>
+      <p style="white-space:pre-wrap;">${esc(message)}</p>
+      <p><a href="https://${req.headers.host}/admin/feedback">View all feedback in the admin panel</a></p>`,
+  });
 
   redirect(res, '/feedback?sent=1');
 }
@@ -3007,7 +3036,6 @@ function strainFormFields(s) {
   const v = (val) => esc(val ?? '');
   const opt = (val, label) => `<option value="${v(val)}" ${s && s.type === val ? 'selected' : ''}>${label}</option>`;
   const ropt = (val, label) => `<option value="${v(val)}" ${s && s.rarity === val ? 'selected' : ''}>${label}</option>`;
-  const allStrainNames = db.listStrains({ limit: 6000 }).map(x => x.name).filter(n => !s || n !== s.name);
   return `
     <label class="field-label" style="margin-top:0;">Name</label>
     <input type="text" name="name" value="${v(s && s.name)}" required>
@@ -3043,9 +3071,11 @@ function strainFormFields(s) {
       <div class="effect-chips tag-picker-chips"></div>
       <div class="tag-picker-hidden"></div>
     </div>
-    <label class="field-label">Parents / cross (comma-separated, e.g. "OG Kush, Durban Poison") <span class="empty-note" style="padding:0;">— autocompletes against existing strains, but you can type any name</span></label>
-    <input type="text" name="parents" value="${v(effectsToInput(s && s.parents))}" list="strain-names-datalist">
-    <datalist id="strain-names-datalist">${allStrainNames.map(n => `<option value="${esc(n)}">`).join('')}</datalist>
+    <label class="field-label">Parents / cross (comma-separated, e.g. "OG Kush, Durban Poison") <span class="empty-note" style="padding:0;">— type to search existing strains, or type any name</span></label>
+    <div class="autocomplete-wrap" style="position:relative;">
+      <input type="text" name="parents" id="parents-input" class="comma-autocomplete" data-search-url="/api/admin/strain-search" data-exclude="${v(s && s.name)}" value="${v(effectsToInput(s && s.parents))}" autocomplete="off">
+      <div class="effect-results" id="parents-results"></div>
+    </div>
     <script>
       window.EFFECT_VOCAB = ${JSON.stringify(EFFECT_VOCAB)};
       window.AILMENT_VOCAB = ${JSON.stringify(AILMENT_VOCAB)};
@@ -3253,6 +3283,22 @@ function apiListStrains(req, res, query) {
     total: db.countStrains({ q, type, rarity, effect, thc, terpene, ailment, breeder, verified }),
     results: db.listStrains({ q, type, rarity, effect, thc, terpene, ailment, breeder, verified, limit }),
   });
+}
+// Backs the live-search Parents field on the admin strain form -- returns
+// just a handful of matching strain names instead of shipping the whole
+// library to the page up front. Reads from the already-in-memory strain
+// cache (via listStrains), so this is cheap even though it runs on every
+// keystroke.
+function apiAdminStrainNameSearch(req, res, query) {
+  if (!requireAdmin(req, res)) return;
+  const q = (query.get('q') || '').trim().toLowerCase();
+  const exclude = (query.get('exclude') || '').trim().toLowerCase();
+  if (q.length < 2) return sendJson(res, { results: [] });
+  const results = db.listStrains({ limit: 6000 })
+    .map(x => x.name)
+    .filter(n => n.toLowerCase().includes(q) && n.toLowerCase() !== exclude)
+    .slice(0, 8);
+  sendJson(res, { results });
 }
 async function apiKudos(req, res, id) {
   const r = await db.addKudos(id);
@@ -4482,6 +4528,7 @@ const server = http.createServer(async (req, res) => {
     if (method === 'POST' && (m = pathname.match(/^\/admin\/recipes\/(\d+)\/delete$/))) return await handleAdminRecipeDelete(req, res, Number(m[1]));
 
     if (method === 'GET' && pathname === '/api/strains') return apiListStrains(req, res, url.searchParams);
+    if (method === 'GET' && pathname === '/api/admin/strain-search') return apiAdminStrainNameSearch(req, res, url.searchParams);
     if (method === 'POST' && (m = pathname.match(/^\/api\/recipes\/(\d+)\/kudos$/))) return await apiKudos(req, res, Number(m[1]));
     if (method === 'POST' && (m = pathname.match(/^\/api\/growtips\/(\d+)\/like$/))) return await apiGrowLike(req, res, Number(m[1]));
     if (method === 'POST' && (m = pathname.match(/^\/api\/checkins\/(\d+)\/kudos$/))) return await apiCheckinKudos(req, res, Number(m[1]));

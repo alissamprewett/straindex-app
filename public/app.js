@@ -606,6 +606,59 @@ if ('serviceWorker' in navigator) {
   });
 })();
 
+// Comma-separated free-text autocomplete -- for fields like the admin
+// strain form's Parents field, where the value is a comma-separated list
+// of names but any of them can be a name that doesn't exist in the
+// library yet (a landrace, an unreleased cross, etc.), so this can't be a
+// closed-vocabulary tag picker like effects/ailments. Instead it searches
+// the server (data-search-url) for matches to whatever's been typed after
+// the last comma, and clicking a result replaces just that trailing
+// fragment -- the rest of the comma-separated list stays untouched.
+(function initCommaAutocomplete() {
+  document.querySelectorAll('.comma-autocomplete').forEach(input => {
+    const wrap = input.closest('.autocomplete-wrap') || input.parentElement;
+    const resultsBox = wrap.querySelector('.effect-results') || input.nextElementSibling;
+    if (!resultsBox) return;
+    const searchUrl = input.dataset.searchUrl;
+    const exclude = input.dataset.exclude || '';
+    let debounceTimer = null;
+
+    function currentFragment() {
+      const parts = input.value.split(',');
+      return parts[parts.length - 1].trim();
+    }
+    function replaceFragmentWith(name) {
+      const parts = input.value.split(',');
+      input.value = parts.slice(0, -1).map(p => p.trim()).filter(Boolean).concat([name]).join(', ') + ', ';
+      resultsBox.classList.remove('open');
+      resultsBox.innerHTML = '';
+      input.focus();
+    }
+    function search(fragment) {
+      if (fragment.length < 2) { resultsBox.classList.remove('open'); resultsBox.innerHTML = ''; return; }
+      fetch(`${searchUrl}?q=${encodeURIComponent(fragment)}&exclude=${encodeURIComponent(exclude)}`)
+        .then(r => r.json())
+        .then(data => {
+          const matches = (data && data.results) || [];
+          resultsBox.innerHTML = matches.length
+            ? matches.map(name => `<div class="search-result-row" data-add="${name}">${name}</div>`).join('')
+            : `<div class="search-no-results">No matches</div>`;
+          resultsBox.classList.add('open');
+          resultsBox.querySelectorAll('[data-add]').forEach(row => {
+            row.onclick = () => replaceFragmentWith(row.dataset.add);
+          });
+        })
+        .catch(() => {});
+    }
+    input.addEventListener('input', () => {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => search(currentFragment()), 200);
+    });
+    input.addEventListener('focus', () => search(currentFragment()));
+    document.addEventListener('click', (e) => { if (!wrap.contains(e.target)) resultsBox.classList.remove('open'); });
+  });
+})();
+
 (function initStarPicker() {
   const picker = document.getElementById('star-picker');
   const hidden = document.getElementById('star-picker-value');
