@@ -547,6 +547,65 @@ if ('serviceWorker' in navigator) {
 // <select> showing "★★★★★" as text. A hidden input still carries the
 // actual value on submit, so the server-side form handling needed zero
 // changes for this.
+// Generic multi-select "tag picker" -- search box, dropdown results, and
+// removable chips, same interaction as the check-in effect picker above
+// but written to work on any element with the .tag-picker class rather
+// than one specific hardcoded set of IDs, so it can be reused anywhere
+// (currently: the admin strain form's Effects and Ailments fields)
+// without copy-pasting the whole widget again. Configuration comes from
+// data attributes plus two window globals per instance:
+//   data-vocab-key    -> window[key] is the array of all possible tags
+//   data-initial-key  -> window[key] is the array of already-selected tags
+//   data-field-name   -> the form field name for the hidden inputs
+//   data-max          -> optional cap on how many can be selected
+(function initTagPickers() {
+  document.querySelectorAll('.tag-picker').forEach(picker => {
+    const vocab = window[picker.dataset.vocabKey];
+    if (!Array.isArray(vocab)) return;
+    const initial = Array.isArray(window[picker.dataset.initialKey]) ? window[picker.dataset.initialKey] : [];
+    const fieldName = picker.dataset.fieldName;
+    const max = picker.dataset.max ? Number(picker.dataset.max) : Infinity;
+    const searchInput = picker.querySelector('.tag-picker-search');
+    const resultsBox = picker.querySelector('.tag-picker-results');
+    const chipsBox = picker.querySelector('.tag-picker-chips');
+    const hiddenBox = picker.querySelector('.tag-picker-hidden');
+    let selected = initial.slice(0, max);
+
+    function render() {
+      const atMax = selected.length >= max;
+      searchInput.disabled = atMax;
+      searchInput.placeholder = atMax ? `Max ${max} selected — remove one to add another` : searchInput.dataset.placeholder || 'Search...';
+      chipsBox.innerHTML = selected.map(v => `<span class="tag-chip">${v} <button type="button" data-remove="${v}">✕</button></span>`).join('');
+      hiddenBox.innerHTML = selected.map(v => `<input type="hidden" name="${fieldName}" value="${v}">`).join('');
+      chipsBox.querySelectorAll('button[data-remove]').forEach(btn => {
+        btn.onclick = () => { selected = selected.filter(x => x !== btn.dataset.remove); render(); };
+      });
+    }
+    function showResults(query) {
+      const q = query.trim().toLowerCase();
+      if (!q) { resultsBox.classList.remove('open'); resultsBox.innerHTML = ''; return; }
+      const matches = vocab.filter(v => !selected.includes(v) && v.toLowerCase().includes(q)).slice(0, 8);
+      resultsBox.innerHTML = matches.length
+        ? matches.map(v => `<div class="search-result-row" data-add="${v}">${v}</div>`).join('')
+        : `<div class="search-no-results">No matches</div>`;
+      resultsBox.classList.add('open');
+      resultsBox.querySelectorAll('[data-add]').forEach(row => {
+        row.onclick = () => {
+          if (selected.length >= max) return;
+          selected.push(row.dataset.add);
+          searchInput.value = '';
+          resultsBox.classList.remove('open');
+          render();
+        };
+      });
+    }
+    searchInput.addEventListener('input', () => showResults(searchInput.value));
+    searchInput.addEventListener('focus', () => showResults(searchInput.value));
+    document.addEventListener('click', (e) => { if (!picker.contains(e.target)) resultsBox.classList.remove('open'); });
+    render();
+  });
+})();
+
 (function initStarPicker() {
   const picker = document.getElementById('star-picker');
   const hidden = document.getElementById('star-picker-value');

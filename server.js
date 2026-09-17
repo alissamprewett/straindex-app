@@ -27,11 +27,13 @@ const storage = require('./lib/storage');
 const PORT = process.env.PORT || 3000;
 
 // ---------------------------------------------------------------- basic signup rate limiting
-// A simple in-memory per-IP throttle -- not bulletproof (resets on
-// restart, doesn't help behind a shared IP like a school or office), but
-// stops the easy case: a bot or script hammering /signup. Max 5 signup
-// attempts per IP per 15 minutes.
-const signupAttempts = new Map(); // ip -> array of timestamps (ms)
+// Backed by the persistent rate_limit_attempts table (see db.js) rather
+// than an in-memory Map, specifically so this survives a server restart or
+// redeploy -- a Map-based limiter resets every time Render restarts the
+// process, which on a free/hobby tier can happen often enough to make the
+// protection meaningless. Not bulletproof (doesn't help behind a shared IP
+// like a school or office), but stops the easy case: a bot or script
+// hammering /signup. Max 5 signup attempts per IP per 15 minutes.
 const SIGNUP_WINDOW_MS = 15 * 60 * 1000;
 const SIGNUP_MAX_ATTEMPTS = 5;
 function clientIp(req) {
@@ -39,13 +41,11 @@ function clientIp(req) {
   if (fwd) return fwd.split(',')[0].trim();
   return req.socket.remoteAddress || 'unknown';
 }
-function isSignupRateLimited(req) {
+async function isSignupRateLimited(req) {
   const ip = clientIp(req);
-  const now = Date.now();
-  const attempts = (signupAttempts.get(ip) || []).filter(t => now - t < SIGNUP_WINDOW_MS);
-  attempts.push(now);
-  signupAttempts.set(ip, attempts);
-  return attempts.length > SIGNUP_MAX_ATTEMPTS;
+  const existing = await db.pruneAndCountAttempts('signup', ip, SIGNUP_WINDOW_MS);
+  await db.recordRateLimitAttempt('signup', ip);
+  return (existing + 1) > SIGNUP_MAX_ATTEMPTS;
 }
 
 // ---------------------------------------------------------------- basic login rate limiting
@@ -53,28 +53,23 @@ function isSignupRateLimited(req) {
 // brute-forcing one account's password, without penalizing everyone on a
 // shared network (school, office) for one person's typos. Only failed
 // attempts count -- a successful login clears the counter. Max 5 failed
-// attempts per 15 minutes per IP+username combination.
-const loginAttempts = new Map(); // "ip:username" -> array of failed-attempt timestamps
+// attempts per 15 minutes per IP+username combination. Same persistent
+// storage as signup, for the same restart-survival reason.
 const LOGIN_WINDOW_MS = 15 * 60 * 1000;
 const LOGIN_MAX_ATTEMPTS = 5;
 function loginAttemptKey(req, username) {
   return `${clientIp(req)}:${String(username || '').trim().toLowerCase()}`;
 }
-function isLoginRateLimited(req, username) {
+async function isLoginRateLimited(req, username) {
   const key = loginAttemptKey(req, username);
-  const now = Date.now();
-  const attempts = (loginAttempts.get(key) || []).filter(t => now - t < LOGIN_WINDOW_MS);
-  return attempts.length >= LOGIN_MAX_ATTEMPTS;
+  const count = await db.pruneAndCountAttempts('login', key, LOGIN_WINDOW_MS);
+  return count >= LOGIN_MAX_ATTEMPTS;
 }
-function recordFailedLogin(req, username) {
-  const key = loginAttemptKey(req, username);
-  const now = Date.now();
-  const attempts = (loginAttempts.get(key) || []).filter(t => now - t < LOGIN_WINDOW_MS);
-  attempts.push(now);
-  loginAttempts.set(key, attempts);
+async function recordFailedLogin(req, username) {
+  await db.recordRateLimitAttempt('login', loginAttemptKey(req, username));
 }
-function clearLoginAttempts(req, username) {
-  loginAttempts.delete(loginAttemptKey(req, username));
+async function clearLoginAttempts(req, username) {
+  await db.clearRateLimitAttempts('login', loginAttemptKey(req, username));
 }
 const PUBLIC_DIR = path.join(__dirname, 'public');
 const DOCS_DIR = path.join(__dirname, 'docs');
@@ -500,9 +495,9 @@ function pageStrains(req, res, query) {
   const effectOpts = ['All', 'Happy', 'Relaxed', 'Euphoric', 'Uplifted', 'Sleepy', 'Energetic', 'Creative', 'Focused', 'Hungry', 'Talkative', 'Calm', 'Social'];
   const thcOpts = ['All', 'Low', 'Medium', 'High'];
   const terpeneOpts = ['All', 'Myrcene', 'Limonene', 'Caryophyllene', 'Pinene', 'Linalool', 'Terpinolene', 'Humulene', 'Ocimene'];
-  const ailmentOpts = ['All', 'Stress', 'Pain', 'Depression', 'Insomnia', 'Lack of Appetite', 'Nausea', 'Inflammation', 'Muscle Spasms', 'Seizures'];
-  const verifiedOpts = ['All', 'verified', 'partial', 'listed'];
-  const verifiedLabel = { All: 'Any data quality', verified: '✅ Verified', partial: '🔹 Partially verified', listed: '⚪ Listed only' };
+  const ailmentOpts = ['All', ...AILMENT_VOCAB];
+  const verifiedOpts = ['All', 'fully-verified', 'verified', 'partial', 'listed'];
+  const verifiedLabel = { All: 'Any data quality', 'fully-verified': '🌟 Fully documented', verified: '✅ Verified', partial: '🔹 Partially verified', listed: '⚪ Listed only' };
   const thcLabel = { All: 'Any THC', Low: 'Low (≤15%)', Medium: 'Medium (15–25%)', High: 'High (25%+)' };
   const mk = (params) => '/strains?' + new URLSearchParams({ q, type, rarity, effect, thc, terpene, ailment, ...params }).toString();
 
@@ -542,7 +537,7 @@ function pageStrains(req, res, query) {
         <select id="strain-search-verified" name="verified" form="strain-search-form">${verifiedOpts.map(v => `<option value="${esc(v)}" ${verified === v ? 'selected' : ''}>${verifiedLabel[v]}</option>`).join('')}</select>
       </div>
     </div>
-    <p class="empty-note" style="margin-bottom:2px;">✅ Verified — THC, breeder, and flavor/terpene data all independently confirmed. &nbsp; 🔹 Partial — some details confirmed. &nbsp; ⚪ Listed only — seen on a dispensary menu, nothing independently confirmed yet.</p>
+    <p class="empty-note" style="margin-bottom:2px;">🌟 Fully documented — verified plus a confirmed cross/genetics. &nbsp; ✅ Verified — THC, breeder, and flavor/terpene data all independently confirmed. &nbsp; 🔹 Partial — some details confirmed. &nbsp; ⚪ Listed only — seen on a dispensary menu, nothing independently confirmed yet.</p>
     <p class="empty-note" style="margin-bottom:10px;">User-reported associations, not medical advice — see a doctor for real guidance.</p>
     <p class="empty-note" id="strain-search-count">${total > 60 ? `Showing 60 of ${total.toLocaleString()} — refine your search to narrow it down.` : `${total} strain${total === 1 ? '' : 's'}`}</p>
     <div id="strain-search-results">${results.map(s => `
@@ -553,7 +548,7 @@ function pageStrains(req, res, query) {
           <div class="sub">${esc(s.type)} · ${rarityLabel(s.rarity)} · THC ${esc(s.thc)}</div>
         </div>
         <span class="rarity-tag rarity-${s.rarity}">${rarityLabel(s.rarity)}</span>
-      </a>`).join('') || `<div class="empty-note">No strains match your filters.</div>`}</div>
+      </a>`).join('') || `<div class="empty-note">No strains match your filters. <a href="/strains/suggest${q ? `?name=${encodeURIComponent(q)}` : ''}">Can't find it? Suggest it →</a></div>`}</div>
   `;
   sendHtml(res, layout({ title: 'Strains', active: 'strains', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
@@ -566,12 +561,14 @@ function strainVerificationTier(s) {
   const hasThc = !!s.thc;
   const hasBreeder = !!s.breeder;
   const hasDetail = !!s.flavor || (Array.isArray(s.terps) && s.terps.length > 0);
-  const score = [hasThc, hasBreeder, hasDetail].filter(Boolean).length;
-  if (score === 3) return 'verified';
+  const hasGenetics = Array.isArray(s.parents) && s.parents.length > 0;
+  if (hasThc && hasBreeder && hasDetail) return hasGenetics ? 'fully-verified' : 'verified';
+  const score = [hasThc, hasBreeder, hasDetail, hasGenetics].filter(Boolean).length;
   if (score >= 1) return 'partial';
   return 'listed';
 }
 const VERIFICATION_BADGE = {
+  'fully-verified': { icon: '🌟', label: 'Fully documented', note: 'THC, breeder, flavor/terpene data, and a documented cross — all independently confirmed.' },
   verified: { icon: '✅', label: 'Verified', note: 'THC, breeder, and flavor/terpene data all independently confirmed.' },
   partial: { icon: '🔹', label: 'Partially verified', note: 'Some details confirmed; the rest wasn\u2019t independently found.' },
   listed: { icon: '⚪', label: 'Listed only', note: 'Seen on a dispensary menu, but no independent data was found for it.' },
@@ -724,6 +721,11 @@ const EFFECT_VOCAB = [
   'Loose', 'Free-spirited', 'Tranquil', 'Elevated', 'Airy', 'Slowed-down', 'Spirited', 'Numb (localized)',
   'Stress relief', 'Pain relief', 'Sleep support', 'Nausea relief', 'Appetite boost', 'Inflammation relief', 'Muscle relief', 'Mood lift',
 ];
+// The fixed set of ailments a strain can be tagged as offering relief
+// from -- kept as a single shared list (rather than duplicated inline)
+// so the strain search filter and the admin strain form's ailment picker
+// can never quietly drift apart.
+const AILMENT_VOCAB = ['Stress', 'Pain', 'Depression', 'Insomnia', 'Lack of Appetite', 'Nausea', 'Inflammation', 'Muscle Spasms', 'Seizures'];
 
 // Every ingestion method the original research turned up, grouped exactly
 // like the prototype (rendered here as <optgroup>s so it stays a plain,
@@ -1204,7 +1206,7 @@ function pageRecipes(req, res, query) {
   const category = (query && query.get('category')) || 'All';
   const q = (query && query.get('q')) || '';
   const recipes = db.listRecipes({ status: 'approved', category, q });
-  const categories = ['All', 'Infusion Base', 'Baked Goods', 'Gummies & Candy', 'Drinks', 'Topicals', 'Savory & Snacks'];
+  const categories = ['All', ...RECIPE_CATEGORIES];
   const mk = (params) => '/recipes?' + new URLSearchParams({ category, q, ...params }).toString();
   const body = `
     <h1 class="screen-title">Infused Recipes</h1>
@@ -1243,6 +1245,7 @@ function pageRecipes(req, res, query) {
   sendHtml(res, layout({ title: 'Recipes', active: 'recipes', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
+const RECIPE_CATEGORIES = ['Infusion Base', 'Baked Goods', 'Gummies & Candy', 'Drinks', 'Topicals', 'Savory & Snacks'];
 function pageRecipeNew(req, res) {
   const body = `
     <h1 class="screen-title">Submit a Recipe</h1>
@@ -1251,6 +1254,8 @@ function pageRecipeNew(req, res) {
       <input type="text" name="author" placeholder="e.g. Jordan" required>
       <label class="field-label">Recipe title</label>
       <input type="text" name="title" required>
+      <label class="field-label">Category</label>
+      <select name="category">${RECIPE_CATEGORIES.map(c => `<option value="${c}">${c}</option>`).join('')}</select>
       <label class="field-label">Short description</label>
       <input type="text" name="desc" required>
       <label class="field-label">Ingredients (one per line)</label>
@@ -1274,7 +1279,7 @@ async function handleRecipeNewSubmit(req, res) {
     title: f.title, desc: f.desc, author: f.author, user_id: userId, source: 'community', status: 'pending',
     ingredients: String(f.ingredients || '').split('\n').map(s => s.trim()).filter(Boolean),
     steps: String(f.steps || '').split('\n').map(s => s.trim()).filter(Boolean),
-    dosing: f.dosing || '',
+    dosing: f.dosing || '', category: RECIPE_CATEGORIES.includes(f.category) ? f.category : 'Baked Goods',
   });
   redirect(res, '/recipes?submitted=1');
 }
@@ -1441,6 +1446,10 @@ function pageSignup(req, res, query) {
     <form method="POST" action="/signup">
       <label class="field-label" style="margin-top:0;">Username</label>
       <input type="text" name="username" id="signup-username" required minlength="3" maxlength="24" autocomplete="username">
+      <label class="field-label">First name</label>
+      <input type="text" name="first_name" required autocomplete="given-name">
+      <label class="field-label">Last name</label>
+      <input type="text" name="last_name" required autocomplete="family-name">
       <label class="field-label">Email</label>
       <input type="email" name="email" required autocomplete="email" placeholder="you@example.com">
       <label class="field-label">Date of birth</label>
@@ -1566,7 +1575,7 @@ async function handleGoogleCallback(req, res, query) {
     // this app legally requires one, so stash the verified profile in a
     // short-lived signed cookie and send them to a small finishing form
     // rather than creating an incomplete account.
-    const pending = auth.sign(JSON.stringify({ sub: profile.sub, email: profile.email, name: profile.name || '' }));
+    const pending = auth.sign(JSON.stringify({ sub: profile.sub, email: profile.email, name: profile.name || '', given_name: profile.given_name || '', family_name: profile.family_name || '' }));
     res.setHeader('Set-Cookie', `google_pending=${encodeURIComponent(pending)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=600`);
     redirect(res, '/auth/google/finish');
   } catch (e) {
@@ -1599,6 +1608,10 @@ function pageGoogleFinish(req, res, query) {
     <form method="POST" action="/auth/google/finish">
       <label class="field-label" style="margin-top:0;">Username</label>
       <input type="text" name="username" required minlength="3" maxlength="24" value="${esc(suggestedUsername)}">
+      <label class="field-label">First name</label>
+      <input type="text" name="first_name" required value="${esc(profile.given_name || '')}">
+      <label class="field-label">Last name</label>
+      <input type="text" name="last_name" required value="${esc(profile.family_name || '')}">
       <label class="field-label">Date of birth</label>
       <input type="date" name="birth_date" required>
       <button class="btn block" type="submit" style="margin-top:14px;">Finish Creating Account</button>
@@ -1615,10 +1628,12 @@ async function handleGoogleFinishSubmit(req, res) {
   const profile = JSON.parse(raw);
   const f = await parseForm(req);
   const username = String(f.username || '').trim();
-  if (!username || !f.birth_date) return redirect(res, '/auth/google/finish?err=invalid');
+  const firstName = String(f.first_name || '').trim();
+  const lastName = String(f.last_name || '').trim();
+  if (!username || !firstName || !lastName || !f.birth_date) return redirect(res, '/auth/google/finish?err=invalid');
   if (!isOldEnough(f.birth_date)) return redirect(res, '/auth/google/finish?err=age');
   if (db.getUserByUsername(username)) return redirect(res, '/auth/google/finish?err=taken');
-  const user = await db.createUserFromGoogle({ username, birth_date: f.birth_date, email: profile.email, google_id: profile.sub });
+  const user = await db.createUserFromGoogle({ username, birth_date: f.birth_date, email: profile.email, google_id: profile.sub, first_name: firstName, last_name: lastName });
   const token = auth.signUserSessionValue(user.id);
   res.setHeader('Set-Cookie', [
     `user_session=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000`,
@@ -1628,17 +1643,19 @@ async function handleGoogleFinishSubmit(req, res) {
 }
 
 async function handleSignupSubmit(req, res) {
-  if (isSignupRateLimited(req)) return redirect(res, '/signup?err=rate_limited');
+  if (await isSignupRateLimited(req)) return redirect(res, '/signup?err=rate_limited');
   const f = await parseForm(req);
   const username = String(f.username || '').trim();
   const email = String(f.email || '').trim().toLowerCase();
-  if (!username || !email || !f.birth_date || !f.password || !f.password2) return redirect(res, '/signup?err=invalid');
+  const firstName = String(f.first_name || '').trim();
+  const lastName = String(f.last_name || '').trim();
+  if (!username || !email || !firstName || !lastName || !f.birth_date || !f.password || !f.password2) return redirect(res, '/signup?err=invalid');
   if (!isOldEnough(f.birth_date)) return redirect(res, '/signup?err=age');
   if (f.password !== f.password2) return redirect(res, '/signup?err=mismatch');
   if (f.password.length < 8) return redirect(res, '/signup?err=short');
   if (db.getUserByUsername(username)) return redirect(res, '/signup?err=taken');
   if (db.getUserByEmail(email)) return redirect(res, '/signup?err=email_taken');
-  const user = await db.createUser({ username, password: f.password, birth_date: f.birth_date, email });
+  const user = await db.createUser({ username, password: f.password, birth_date: f.birth_date, email, first_name: firstName, last_name: lastName });
   const token = auth.signUserSessionValue(user.id);
   res.setHeader('Set-Cookie', `user_session=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000`);
   redirect(res, '/onboarding');
@@ -1914,6 +1931,193 @@ async function handleGrowJournalDelete(req, res, id) {
 
 // Social discovery: strains friends love that you haven't tried, using
 // data already collected -- no new tracking, just a new lens on it.
+// "Suggest a Strain" -- lets someone report a strain they've actually seen
+// (at a dispensary, on a menu, wherever) that isn't in the library yet.
+// Goes into its own review queue rather than straight into the real strain
+// table, so nothing unverified ever shows up in search before a human's
+// looked at it -- see the strain_submissions table comment in db.js.
+function pageStrainSuggest(req, res, query) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const sent = query.get('sent');
+  const prefill = query.get('name') || '';
+  const body = `
+    <h1 class="screen-title">Suggest a Strain</h1>
+    <p class="screen-sub">Seen something at a dispensary that's not in the library yet? Tell us about it and we'll research it and add it.</p>
+    ${sent ? `<p class="empty-note" style="color:var(--brand-green-dark);">Thanks — your suggestion was sent for review.</p>` : ''}
+    <form method="POST" action="/strains/suggest">
+      <label class="field-label" style="margin-top:0;">Strain name</label>
+      <input type="text" name="strain_name" value="${esc(prefill)}" required placeholder="e.g. Cherry Hearts">
+      <label class="field-label">Anything you know about it (optional)</label>
+      <textarea name="description" placeholder="Breeder, dispensary, flavor, anything on the label..."></textarea>
+      <label class="field-label">Photo of the label or menu (optional)</label>
+      <div class="photo-picker">
+        <div class="photo-upload-box" id="ss-photo-upload-box" onclick="document.getElementById('ss-photo-file-input').click()">
+          <div class="up-ic">📷</div>
+          <div class="up-txt">Tap to snap or upload a photo (optional)</div>
+        </div>
+        <input type="file" id="ss-photo-file-input" accept="image/*" style="display:none;">
+        <input type="hidden" name="photo" id="ss-photo-data-input">
+      </div>
+      <button class="btn block" type="submit" style="margin-top:14px;">Submit Suggestion</button>
+    </form>
+    <script>
+      (function() {
+        const fileInput = document.getElementById('ss-photo-file-input');
+        const photoData = document.getElementById('ss-photo-data-input');
+        const uploadBox = document.getElementById('ss-photo-upload-box');
+        fileInput.addEventListener('change', () => {
+          const file = fileInput.files && fileInput.files[0];
+          if (!file) return;
+          const reader = new FileReader();
+          reader.onload = () => {
+            photoData.value = reader.result;
+            uploadBox.innerHTML = '<div class="photo-preview-wrap"><img src="' + reader.result + '" alt="Preview"></div>';
+          };
+          reader.readAsDataURL(file);
+        });
+      })();
+    </script>
+  `;
+  sendHtml(res, layout({ title: 'Suggest a Strain', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
+}
+async function handleStrainSuggestSubmit(req, res) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const f = await parseForm(req);
+  const strainName = (f.strain_name || '').trim();
+  if (!strainName) return redirect(res, '/strains/suggest');
+  const photoUrl = await storage.uploadPhoto(f.photo || null, 'strain-suggestions');
+  await db.createStrainSubmission({ user_id: userId, strain_name: strainName, description: f.description || '', photo: photoUrl });
+  redirect(res, '/strains/suggest?sent=1');
+}
+
+// Admin review queue for suggested strains -- see what's come in, mark it
+// reviewed once it's been researched and either added (via the normal Add
+// Strain form) or discarded as not corroborated. Deliberately doesn't
+// auto-add anything -- every suggestion still goes through the same
+// research standard as everything else in the library.
+function pageAdminStrainSubmissions(req, res) {
+  if (!requireAdmin(req, res)) return;
+  const submissions = db.listStrainSubmissions();
+  const pending = submissions.filter(s => s.status !== 'reviewed');
+  const reviewed = submissions.filter(s => s.status === 'reviewed');
+  const renderSubmission = (s) => {
+    const user = s.user_id != null ? db.getUserById(s.user_id) : null;
+    return `
+      <div class="admin-row" style="flex-direction:column;align-items:stretch;${s.status === 'reviewed' ? 'opacity:0.5;' : ''}">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;">
+          <b>${esc(s.strain_name)}</b>
+          <span class="empty-note" style="padding:0;">${user ? esc(user.username) : 'Anonymous'} · <span class="local-time" data-utc="${esc(s.created_at)}Z">${esc(s.created_at)}</span></span>
+        </div>
+        ${s.description ? `<p style="margin:6px 0 0;">${esc(s.description)}</p>` : ''}
+        ${s.photo ? `<div class="checkin-photo-thumb" style="margin:8px 0;max-width:200px;"><img src="${esc(s.photo)}" alt="Submitted photo"></div>` : ''}
+        <div class="actions" style="margin-top:8px;">
+          <a href="/admin/strains?q=${encodeURIComponent(s.strain_name)}" class="btn secondary" style="text-decoration:none;">Research &amp; Add</a>
+          ${s.status !== 'reviewed' ? `<form method="POST" action="/admin/strain-submissions/${s.id}/reviewed" style="display:inline;"><button class="btn" type="submit">Mark Reviewed</button></form>` : ''}
+        </div>
+      </div>`;
+  };
+  const body = `
+    <h1 class="screen-title">Suggested Strains</h1>
+    ${pending.length ? `<h2 class="screen-title">Pending (${pending.length})</h2>${pending.map(renderSubmission).join('')}` : `<div class="empty-note">No pending suggestions.</div>`}
+    ${reviewed.length ? `<h2 class="screen-title" style="margin-top:20px;">Reviewed (${reviewed.length})</h2>${reviewed.map(renderSubmission).join('')}` : ''}
+  `;
+  sendHtml(res, layout({ title: 'Suggested Strains', body, isAdmin: true }));
+}
+async function handleAdminStrainSubmissionReviewed(req, res, id) {
+  if (!requireAdmin(req, res)) return;
+  await db.markStrainSubmissionReviewed(Number(id));
+  redirect(res, '/admin/strain-submissions');
+}
+
+// "Your Year in StrainDex" -- a shareable-feeling recap pulled entirely
+// from data already tracked elsewhere (Insights, Collection, Trades,
+// Friends). Not a true exportable image (no image-generation library
+// available in this environment) -- styled to look good as a screenshot
+// instead, which is a fine substitute and a lot less to maintain.
+function pageYearInReview(req, res) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const insights = db.getUserInsights(userId);
+  if (!insights) {
+    return sendHtml(res, layout({
+      title: 'Your Year in StrainDex', active: 'more',
+      body: `<h1 class="screen-title">Your Year in StrainDex</h1><div class="empty-note">No check-ins logged yet — <a href="/checkin">log your first one</a> and come back here.</div>`,
+      isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)),
+    }));
+  }
+  const uniqueCount = db.getUniqueOwnedCount(userId);
+  const totalStrains = db.countStrains();
+  const totalDupes = db.getTotalDupes(userId);
+  const friendCount = db.listFriends(userId).length;
+  const tradeCount = db.countTrades(userId);
+  const owned = db.getCollection(userId);
+  const rarityOrder = ['legendary', 'rare', 'uncommon', 'common'];
+  const rarestOwned = rarityOrder.map(r => owned.find(o => o.strain.rarity === r)).find(Boolean);
+  const allCheckins = db.listCheckins({ userId, limit: 5000 });
+  const firstCheckin = allCheckins[allCheckins.length - 1];
+
+  const statTile = (num, label) => `<div class="stat-tile"><div class="num">${esc(String(num))}</div><div class="lbl">${esc(label)}</div></div>`;
+  const body = `
+    <h1 class="screen-title">🎁 Your Year in StrainDex</h1>
+    <p class="screen-sub">${firstCheckin ? `Since your first check-in on <span class="local-time" data-utc="${firstCheckin.created_at}Z">${esc(firstCheckin.created_at)}</span> UTC.` : ''} Screenshot this to share.</p>
+
+    <div class="card" style="text-align:center;padding:24px 16px;background:linear-gradient(135deg,var(--brand-green-dark),var(--brand-green));color:#fff;">
+      <div style="font-size:13px;opacity:.85;">Total check-ins</div>
+      <div style="font-size:44px;font-weight:800;line-height:1.1;">${insights.totalCheckins}</div>
+    </div>
+
+    <div class="collection-stats" style="margin-top:14px;">
+      ${statTile(`${uniqueCount}/${totalStrains.toLocaleString()}`, 'Strains caught')}
+      ${statTile(totalDupes, 'Tradeable dupes')}
+      ${statTile(tradeCount, 'Trades made')}
+    </div>
+
+    ${insights.mostLoggedStrain ? `
+      <div class="section-label" style="margin-top:18px;">Your most-logged strain</div>
+      <a class="library-row" href="/strains/${insights.mostLoggedStrain.strain.id}" style="text-decoration:none;color:inherit;">
+        ${strainPhotoTag(insights.mostLoggedStrain.strain, 'md')}
+        <div class="info">
+          <div class="nm">${esc(insights.mostLoggedStrain.strain.name)}</div>
+          <div class="sub">${insights.mostLoggedStrain.count} check-in${insights.mostLoggedStrain.count === 1 ? '' : 's'}</div>
+        </div>
+      </a>
+    ` : ''}
+    ${insights.topRatedStrain ? `
+      <div class="section-label" style="margin-top:14px;">Your highest rated</div>
+      <a class="library-row" href="/strains/${insights.topRatedStrain.strain.id}" style="text-decoration:none;color:inherit;">
+        ${strainPhotoTag(insights.topRatedStrain.strain, 'md')}
+        <div class="info">
+          <div class="nm">${esc(insights.topRatedStrain.strain.name)}</div>
+          <div class="sub">${starString(Math.round(insights.topRatedStrain.avg))} (${insights.topRatedStrain.avg}★ average)</div>
+        </div>
+      </a>
+    ` : ''}
+    ${rarestOwned ? `
+      <div class="section-label" style="margin-top:14px;">Rarest catch</div>
+      <a class="library-row" href="/strains/${rarestOwned.strain.id}" style="text-decoration:none;color:inherit;">
+        ${strainPhotoTag(rarestOwned.strain, 'md')}
+        <div class="info">
+          <div class="nm">${esc(rarestOwned.strain.name)}</div>
+          <div class="sub"><span class="rarity-tag rarity-${rarestOwned.strain.rarity}">${rarityLabel(rarestOwned.strain.rarity)}</span></div>
+        </div>
+      </a>
+    ` : ''}
+
+    <div class="card" style="margin-top:16px;">
+      <h2 style="margin:0 0 8px;font-size:15px;">Your leanings</h2>
+      ${insights.topType ? `<p class="empty-note" style="padding:2px 0;">You gravitate toward <b>${esc(insights.topType.name)}</b> strains.</p>` : ''}
+      ${insights.topMethod ? `<p class="empty-note" style="padding:2px 0;">Your go-to method is <b>${esc(insights.topMethod.name)}</b>.</p>` : ''}
+      ${insights.topTerpene ? `<p class="empty-note" style="padding:2px 0;">Your check-ins lean heaviest on <b>${esc(insights.topTerpene)}</b> as a terpene.</p>` : ''}
+      ${insights.topEffects.length ? `<p style="margin:8px 0 0;">${insights.topEffects.map(e => `<span class="filter-pill">${esc(e.name)}</span>`).join('')}</p>` : ''}
+    </div>
+
+    ${friendCount ? `<p class="empty-note" style="margin-top:14px;text-align:center;">Plus ${friendCount} friend${friendCount === 1 ? '' : 's'} along for the ride. 🌿</p>` : ''}
+  `;
+  sendHtml(res, layout({ title: 'Your Year in StrainDex', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
+}
+
 function pageFriendsPicks(req, res) {
   const userId = requireUser(req, res);
   if (userId == null) return;
@@ -2378,7 +2582,9 @@ function pageInsights(req, res) {
   if (userId == null) return;
   const insights = db.getUserInsights(userId);
   const activeBreak = db.getActiveBreak(userId);
+  const pastBreaks = db.listToleranceBreaks(userId).filter(b => b.ended_at);
   const daysSince = (dateStr) => Math.max(0, Math.floor((Date.now() - new Date(dateStr + 'Z').getTime()) / 86400000));
+  const daysBetween = (start, end) => Math.max(1, Math.round((new Date(end + 'Z').getTime() - new Date(start + 'Z').getTime()) / 86400000));
   const body = `
     <h1 class="screen-title">Your Patterns</h1>
     <div class="card" style="margin-bottom:14px;">
@@ -2393,6 +2599,12 @@ function pageInsights(req, res) {
           <button class="btn block" type="submit">Start a Tolerance Break</button>
         </form>
       `}
+      ${pastBreaks.length ? `
+        <details style="margin-top:10px;">
+          <summary style="cursor:pointer;font-size:12.5px;font-weight:700;color:var(--brand-green-dark);">Past breaks (${pastBreaks.length})</summary>
+          ${pastBreaks.map(b => `<div class="empty-note" style="padding:4px 0 0;">${daysBetween(b.started_at, b.ended_at)} day${daysBetween(b.started_at, b.ended_at) === 1 ? '' : 's'} — <span class="local-time" data-utc="${b.started_at}Z">${esc(b.started_at)}</span>${b.note ? `: "${esc(b.note)}"` : ''}</div>`).join('')}
+        </details>
+      ` : ''}
     </div>
     ${!insights ? `<div class="empty-note">No check-ins logged yet — <a href="/checkin">log your first one</a> to start seeing your patterns here.</div>` : `
       <p class="screen-sub">Based on your ${insights.totalCheckins} check-in${insights.totalCheckins === 1 ? '' : 's'} so far.</p>
@@ -2572,13 +2784,13 @@ async function handleResetPasswordSubmit(req, res) {
 async function handleLoginSubmit(req, res) {
   const f = await parseForm(req);
   const username = String(f.username || '').trim();
-  if (isLoginRateLimited(req, username)) return redirect(res, '/login?err=rate_limited');
+  if (await isLoginRateLimited(req, username)) return redirect(res, '/login?err=rate_limited');
   const user = db.verifyLogin(username, f.password || '');
   if (!user) {
-    recordFailedLogin(req, username);
+    await recordFailedLogin(req, username);
     return redirect(res, '/login?err=1');
   }
-  clearLoginAttempts(req, username);
+  await clearLoginAttempts(req, username);
   const token = auth.signUserSessionValue(user.id);
   res.setHeader('Set-Cookie', `user_session=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000`);
   redirect(res, '/');
@@ -2591,12 +2803,14 @@ function handleLogout(req, res) {
 function pageAdminHome(req, res) {
   if (!requireAdmin(req, res)) return;
   const pendingCount = db.listRecipes({ status: 'pending' }).length;
+  const pendingSubmissions = db.listStrainSubmissions().filter(s => s.status !== 'reviewed').length;
   const body = `
     <h1 class="screen-title">Admin</h1>
     <div class="card"><a href="/admin/feedback">💬 Feedback (${db.listFeedback().length})</a></div>
     <div class="card"><a href="/admin/faqs">📋 Manage FAQ (${db.listFaqs().length})</a></div>
     <div class="card"><a href="/admin/recipes">🍽️ Manage Recipes (${db.listRecipes({ status: null }).length}${pendingCount ? `, ${pendingCount} pending` : ''})</a></div>
     <div class="card"><a href="/admin/strains">🌿 Manage Strains (${db.countStrains().toLocaleString()})</a></div>
+    <div class="card"><a href="/admin/strain-submissions">💡 Suggested Strains${pendingSubmissions ? ` (${pendingSubmissions} pending)` : ''}</a></div>
     <div class="card"><a href="/admin/users">👤 Manage Users (${db.listUsers().length})</a></div>
     <div class="card"><a href="/admin/logout">🚪 Log out</a></div>
   `;
@@ -2613,13 +2827,60 @@ function pageAdminUsers(req, res, query) {
     ${users.map(u => `
       <div class="admin-row">
         <span>👤 <b>${esc(u.username)}</b>${u.email ? ` · ${esc(u.email)}` : ''}<br><span class="empty-note" style="padding:0;">Joined ${esc((u.created_at || '').slice(0, 10))}</span></span>
-        <form method="POST" action="/admin/users/${u.id}/delete" onsubmit="return confirm('Permanently delete ${esc(u.username)}\\'s account, check-ins, messages, and friendships? This cannot be undone.')">
-          <button class="btn danger" style="color:#fff;" type="submit">Delete</button>
-        </form>
+        <div class="actions">
+          <a href="/admin/users/${u.id}/edit" class="btn secondary" style="text-decoration:none;">Edit</a>
+          <form method="POST" action="/admin/users/${u.id}/delete" onsubmit="return confirm('Permanently delete ${esc(u.username)}\\'s account, check-ins, messages, and friendships? This cannot be undone.')">
+            <button class="btn danger" style="color:#fff;" type="submit">Delete</button>
+          </form>
+        </div>
       </div>
     `).join('')}
   `;
   sendHtml(res, layout({ title: 'Manage Users', body, isAdmin: true }));
+}
+// Admin correction tool for a mistyped username/email/name/birth date, or
+// filling in an old account that predates first/last name being collected.
+// Deliberately has no password field -- see adminUpdateUser in db.js for
+// why that's a hard line rather than an oversight.
+function pageAdminUserEdit(req, res, id, query) {
+  if (!requireAdmin(req, res)) return;
+  const u = db.getUserById(Number(id));
+  if (!u) return notFound(res);
+  const error = query.get('error') || '';
+  const errMessages = { username_taken: 'That username is already taken.', email_taken: 'That email is already in use by another account.' };
+  const body = `
+    <h1 class="screen-title">Edit User</h1>
+    ${error && errMessages[error] ? `<p style="color:#a13a3a;">${esc(errMessages[error])}</p>` : ''}
+    <form method="POST" action="/admin/users/${u.id}/edit">
+      <label class="field-label" style="margin-top:0;">Username</label>
+      <input type="text" name="username" value="${esc(u.username)}" required>
+      <label class="field-label">Email</label>
+      <input type="email" name="email" value="${esc(u.email || '')}">
+      <label class="field-label">First name</label>
+      <input type="text" name="first_name" value="${esc(u.first_name || '')}">
+      <label class="field-label">Last name</label>
+      <input type="text" name="last_name" value="${esc(u.last_name || '')}">
+      <label class="field-label">Date of birth</label>
+      <input type="date" name="birth_date" value="${esc((u.birth_date || '').slice(0, 10))}" required>
+      <button class="btn block" type="submit" style="margin-top:14px;">Save Changes</button>
+    </form>
+    <p class="empty-note" style="margin-top:12px;">Password changes still have to go through the normal "Forgot Password" email flow — an admin can't set someone else's password directly.</p>
+  `;
+  sendHtml(res, layout({ title: 'Edit User', body, isAdmin: true }));
+}
+async function handleAdminUserEditSubmit(req, res, id) {
+  if (!requireAdmin(req, res)) return;
+  const f = await parseForm(req);
+  try {
+    await db.adminUpdateUser(Number(id), {
+      username: (f.username || '').trim(), email: (f.email || '').trim().toLowerCase() || null,
+      first_name: f.first_name || null, last_name: f.last_name || null, birth_date: f.birth_date,
+    });
+    redirect(res, '/admin/users');
+  } catch (err) {
+    const code = /username/i.test(err.message) ? 'username_taken' : /email/i.test(err.message) ? 'email_taken' : '';
+    redirect(res, `/admin/users/${id}/edit${code ? `?error=${code}` : ''}`);
+  }
 }
 async function handleAdminUserDelete(req, res, userId) {
   if (!requireAdmin(req, res)) return;
@@ -2724,6 +2985,15 @@ async function handleAdminFaqDelete(req, res, id) {
 function parseEffectsInput(str) {
   return String(str || '').split(',').map(s => s.trim()).filter(Boolean);
 }
+// The Effects/Ailments fields on the admin strain form are now tag-pickers
+// (repeated hidden inputs, same convention as check-in effects) rather
+// than comma-separated text, so they arrive as either an array or a lone
+// string depending on how many were picked -- this normalizes either
+// shape to an array. Parents stays on parseEffectsInput/comma-split since
+// it's still a plain freeform text field.
+function parseMultiInput(val) {
+  return (Array.isArray(val) ? val : (val ? [val] : [])).filter(Boolean);
+}
 function parseTerpsInput(str) {
   return String(str || '').split(',').map(s => s.trim()).filter(Boolean).map(pair => {
     const [n, p] = pair.split(':').map(x => (x || '').trim());
@@ -2737,6 +3007,7 @@ function strainFormFields(s) {
   const v = (val) => esc(val ?? '');
   const opt = (val, label) => `<option value="${v(val)}" ${s && s.type === val ? 'selected' : ''}>${label}</option>`;
   const ropt = (val, label) => `<option value="${v(val)}" ${s && s.rarity === val ? 'selected' : ''}>${label}</option>`;
+  const allStrainNames = db.listStrains({ limit: 6000 }).map(x => x.name).filter(n => !s || n !== s.name);
   return `
     <label class="field-label" style="margin-top:0;">Name</label>
     <input type="text" name="name" value="${v(s && s.name)}" required>
@@ -2754,16 +3025,33 @@ function strainFormFields(s) {
     <input type="text" name="flavor" value="${v(s && s.flavor)}">
     <label class="field-label">Icon (a single emoji)</label>
     <input type="text" name="icon" value="${v(s ? s.icon : '🌿')}" maxlength="4">
-    <label class="field-label">Effects (comma-separated, e.g. "Relaxed, Happy, Euphoric")</label>
-    <input type="text" name="effects" value="${v(effectsToInput(s && s.effects))}">
+    <label class="field-label">Effects (pick from the list, or type to search)</label>
+    <div class="tag-picker" data-vocab-key="EFFECT_VOCAB" data-initial-key="INITIAL_STRAIN_EFFECTS" data-field-name="effects" data-max="12">
+      <input type="text" class="tag-picker-search" data-placeholder="Search effects..." placeholder="Search effects..." autocomplete="off">
+      <div class="effect-results tag-picker-results"></div>
+      <div class="effect-chips tag-picker-chips"></div>
+      <div class="tag-picker-hidden"></div>
+    </div>
     <label class="field-label">Top terpenes (comma-separated "Name:Percent", e.g. "Myrcene:30, Limonene:25")</label>
     <input type="text" name="terps" value="${v(terpsToInput(s && s.terps))}">
     <label class="field-label">Breeder</label>
     <input type="text" name="breeder" value="${v(s && s.breeder)}">
-    <label class="field-label">Users report relief from (comma-separated, e.g. "Stress, Pain, Insomnia")</label>
-    <input type="text" name="ailments" value="${v(effectsToInput(s && s.ailments))}">
-    <label class="field-label">Parents / cross (comma-separated, e.g. "OG Kush, Durban Poison")</label>
-    <input type="text" name="parents" value="${v(effectsToInput(s && s.parents))}">
+    <label class="field-label">Users report relief from (pick from the list, or type to search)</label>
+    <div class="tag-picker" data-vocab-key="AILMENT_VOCAB" data-initial-key="INITIAL_STRAIN_AILMENTS" data-field-name="ailments" data-max="9">
+      <input type="text" class="tag-picker-search" data-placeholder="Search ailments..." placeholder="Search ailments..." autocomplete="off">
+      <div class="effect-results tag-picker-results"></div>
+      <div class="effect-chips tag-picker-chips"></div>
+      <div class="tag-picker-hidden"></div>
+    </div>
+    <label class="field-label">Parents / cross (comma-separated, e.g. "OG Kush, Durban Poison") <span class="empty-note" style="padding:0;">— autocompletes against existing strains, but you can type any name</span></label>
+    <input type="text" name="parents" value="${v(effectsToInput(s && s.parents))}" list="strain-names-datalist">
+    <datalist id="strain-names-datalist">${allStrainNames.map(n => `<option value="${esc(n)}">`).join('')}</datalist>
+    <script>
+      window.EFFECT_VOCAB = ${JSON.stringify(EFFECT_VOCAB)};
+      window.AILMENT_VOCAB = ${JSON.stringify(AILMENT_VOCAB)};
+      window.INITIAL_STRAIN_EFFECTS = ${JSON.stringify((s && s.effects) || [])};
+      window.INITIAL_STRAIN_AILMENTS = ${JSON.stringify((s && s.ailments) || [])};
+    </script>
     <label class="field-label">Also known as (comma-separated nicknames)</label>
     <input type="text" name="aka" value="${v(s && s.aka)}">
   `;
@@ -2811,8 +3099,8 @@ async function handleAdminStrainNew(req, res) {
   const id = db.nextStrainId();
   await db.insertStrain({
     id, name: f.name, type: f.type, lean: f.lean, rarity: f.rarity, thc: f.thc, cbd: f.cbd,
-    flavor: f.flavor, icon: f.icon || '🌿', effects: parseEffectsInput(f.effects), terps: parseTerpsInput(f.terps),
-    breeder: f.breeder || '', ailments: parseEffectsInput(f.ailments), parents: parseEffectsInput(f.parents), aka: f.aka || '',
+    flavor: f.flavor, icon: f.icon || '🌿', effects: parseMultiInput(f.effects), terps: parseTerpsInput(f.terps),
+    breeder: f.breeder || '', ailments: parseMultiInput(f.ailments), parents: parseEffectsInput(f.parents), aka: f.aka || '',
   });
   redirect(res, '/admin/strains');
 }
@@ -2834,8 +3122,8 @@ async function handleAdminStrainEditSubmit(req, res, id) {
   const f = await parseForm(req);
   await db.insertStrain({
     id, name: f.name, type: f.type, lean: f.lean, rarity: f.rarity, thc: f.thc, cbd: f.cbd,
-    flavor: f.flavor, icon: f.icon || '🌿', effects: parseEffectsInput(f.effects), terps: parseTerpsInput(f.terps),
-    breeder: f.breeder || '', ailments: parseEffectsInput(f.ailments), parents: parseEffectsInput(f.parents), aka: f.aka || '',
+    flavor: f.flavor, icon: f.icon || '🌿', effects: parseMultiInput(f.effects), terps: parseTerpsInput(f.terps),
+    breeder: f.breeder || '', ailments: parseMultiInput(f.ailments), parents: parseEffectsInput(f.parents), aka: f.aka || '',
   });
   redirect(res, '/admin/strains');
 }
@@ -2858,7 +3146,7 @@ function pageAdminRecipes(req, res) {
         <label class="field-label">Description</label>
         <input type="text" name="desc" required>
         <label class="field-label">Category</label>
-        <select name="category">${['Infusion Base', 'Baked Goods', 'Gummies & Candy', 'Drinks', 'Topicals', 'Savory & Snacks'].map(c => `<option value="${c}">${c}</option>`).join('')}</select>
+        <select name="category">${RECIPE_CATEGORIES.map(c => `<option value="${c}">${c}</option>`).join('')}</select>
         <label class="field-label">Ingredients (one per line)</label>
         <textarea name="ingredients" required></textarea>
         <label class="field-label">Steps (one per line)</label>
@@ -2870,9 +3158,10 @@ function pageAdminRecipes(req, res) {
     </div>
     ${pending.length ? `<h2 class="screen-title">Pending review (${pending.length})</h2>` + pending.map(r => `
       <div class="admin-row" style="flex-direction:column;align-items:stretch;">
-        <b>${esc(r.title)}</b> <span class="empty-note">by ${esc(r.author || 'Anonymous')}</span>
+        <b>${esc(r.title)}</b> <span class="empty-note">by ${esc(r.author || 'Anonymous')} · ${esc(r.category || '')}</span>
         <p class="empty-note">${esc(r.desc)}</p>
         <div class="actions">
+          <a href="/admin/recipes/${r.id}/edit" class="btn secondary" style="text-decoration:none;">Edit</a>
           <form method="POST" action="/admin/recipes/${r.id}/approve" style="display:inline;"><button class="btn" type="submit">Approve</button></form>
           <form method="POST" action="/admin/recipes/${r.id}/delete" style="display:inline;" onsubmit="return confirm('Reject and delete?')"><button class="btn danger" style="color:#fff;" type="submit">Reject</button></form>
         </div>
@@ -2882,6 +3171,7 @@ function pageAdminRecipes(req, res) {
       <div class="admin-row">
         <span>${esc(r.title)} <span class="recipe-source-tag ${r.source}">${r.status}</span> <span class="empty-note">${esc(r.category || '')}</span></span>
         <div class="actions">
+          <a href="/admin/recipes/${r.id}/edit" class="btn secondary" style="text-decoration:none;">Edit</a>
           <form method="POST" action="/admin/recipes/${r.id}/delete" style="display:inline;" onsubmit="return confirm('Delete this recipe?')">
             <button class="btn danger" style="color:#fff;" type="submit">Delete</button>
           </form>
@@ -2889,6 +3179,41 @@ function pageAdminRecipes(req, res) {
       </div>`).join('')}
   `;
   sendHtml(res, layout({ title: 'Manage Recipes', body, isAdmin: true }));
+}
+function pageAdminRecipeEdit(req, res, id) {
+  if (!requireAdmin(req, res)) return;
+  const r = db.getRecipe(Number(id));
+  if (!r) return notFound(res);
+  const body = `
+    <h1 class="screen-title">Edit Recipe</h1>
+    <form method="POST" action="/admin/recipes/${r.id}/edit">
+      <label class="field-label" style="margin-top:0;">Title</label>
+      <input type="text" name="title" value="${esc(r.title)}" required>
+      <label class="field-label">Description</label>
+      <input type="text" name="desc" value="${esc(r.desc)}" required>
+      <label class="field-label">Category</label>
+      <select name="category">${RECIPE_CATEGORIES.map(c => `<option value="${c}" ${r.category === c ? 'selected' : ''}>${c}</option>`).join('')}</select>
+      <label class="field-label">Ingredients (one per line)</label>
+      <textarea name="ingredients" required>${esc((r.ingredients || []).join('\n'))}</textarea>
+      <label class="field-label">Steps (one per line)</label>
+      <textarea name="steps" required>${esc((r.steps || []).join('\n'))}</textarea>
+      <label class="field-label">Dosing note</label>
+      <input type="text" name="dosing" value="${esc(r.dosing || '')}">
+      <button class="btn block" type="submit" style="margin-top:14px;">Save Changes</button>
+    </form>
+  `;
+  sendHtml(res, layout({ title: 'Edit Recipe', body, isAdmin: true }));
+}
+async function handleAdminRecipeEditSubmit(req, res, id) {
+  if (!requireAdmin(req, res)) return;
+  const f = await parseForm(req);
+  await db.updateRecipe(Number(id), {
+    title: f.title, desc: f.desc, category: RECIPE_CATEGORIES.includes(f.category) ? f.category : 'Baked Goods',
+    ingredients: String(f.ingredients || '').split('\n').map(s => s.trim()).filter(Boolean),
+    steps: String(f.steps || '').split('\n').map(s => s.trim()).filter(Boolean),
+    dosing: f.dosing || '',
+  });
+  redirect(res, '/admin/recipes');
 }
 async function handleAdminRecipeNew(req, res) {
   if (!requireAdmin(req, res)) return;
@@ -3002,6 +3327,7 @@ function pageMore(req, res) {
         { href: '/compare', icon: '🆚', t: 'Compare Strains', s: 'Side-by-side lookup' },
         { href: '/surprise-me', icon: '🎲', t: 'Surprise Me', s: 'One random strain you haven\u2019t tried' },
         { href: '/trending', icon: '🔥', t: 'Trending This Week', s: 'Most checked-into right now' },
+        { href: '/strains/suggest', icon: '💡', t: 'Suggest a Strain', s: 'Seen one we don\\u2019t have yet?' },
       ],
     },
     {
@@ -3014,6 +3340,7 @@ function pageMore(req, res) {
         { href: '/history', icon: '🕐', t: 'Check-In History', s: 'Your full timeline' },
         { href: '/insights', icon: '📊', t: 'Your Patterns', s: 'What your check-ins say about you' },
         { href: '/insights', icon: '🌿', t: 'Tolerance Break', s: 'Start, track, or end a break' },
+        { href: '/year-in-review', icon: '🎁', t: 'Your Year in StrainDex', s: 'A shareable recap of your year' },
       ],
     },
     {
@@ -3035,6 +3362,7 @@ function pageMore(req, res) {
       tiles: [
         { href: '/messages', icon: '💬', t: 'Messages', s: userId != null && db.countUnreadMessages(userId) > 0 ? `${db.countUnreadMessages(userId)} unread` : 'Chat with friends & shared strains' },
         { href: '/trade', icon: '🔁', t: 'Trade', s: 'Swap dupes with real friends' },
+        { href: '/trade-history', icon: '📜', t: 'Trade History', s: 'Every trade you\\u2019ve made' },
         { href: '/friends-picks', icon: '🤝', t: "Friends' Picks", s: 'What your circle loves that you haven\u2019t tried' },
         { href: '/dispensaries', icon: '📍', t: 'Dispensaries', s: 'Locator & live menus' },
       ],
@@ -3155,6 +3483,20 @@ function pageAccount(req, res, query) {
     </div>
 
     <div class="card" style="margin-top:14px;">
+      <h2 style="margin:0 0 10px;font-size:15px;">Name</h2>
+      <p class="empty-note" style="padding:0 0 10px;">Not shown to other users, just yours to keep accurate.</p>
+      ${error === 'name_invalid' ? `<p class="dosing-note">First and last name are both required.</p>` : ''}
+      ${success === 'name' ? `<p class="empty-note" style="color:var(--brand-green-dark);">Name updated.</p>` : ''}
+      <form method="POST" action="/account/name">
+        <label class="field-label" style="margin-top:0;">First name</label>
+        <input type="text" name="first_name" value="${esc(user.first_name || '')}" required autocomplete="given-name">
+        <label class="field-label">Last name</label>
+        <input type="text" name="last_name" value="${esc(user.last_name || '')}" required autocomplete="family-name">
+        <button class="btn block" type="submit" style="margin-top:10px;">Update Name</button>
+      </form>
+    </div>
+
+    <div class="card" style="margin-top:14px;">
       <h2 style="margin:0 0 10px;font-size:15px;">Password</h2>
       ${error === 'wrong_password' ? `<p class="dosing-note">Current password is incorrect.</p>` : ''}
       ${error === 'password_mismatch' ? `<p class="dosing-note">New password and confirmation don't match.</p>` : ''}
@@ -3233,6 +3575,16 @@ async function handleAccountEmail(req, res) {
   } catch (err) {
     redirect(res, '/account?error=email_taken');
   }
+}
+async function handleAccountName(req, res) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const fields = await parseForm(req);
+  const firstName = (fields.first_name || '').trim();
+  const lastName = (fields.last_name || '').trim();
+  if (!firstName || !lastName) return redirect(res, '/account?error=name_invalid');
+  await db.updateName(userId, firstName, lastName);
+  redirect(res, '/account?ok=name');
 }
 async function handleAccountPassword(req, res) {
   const userId = requireUser(req, res);
@@ -3644,6 +3996,40 @@ async function handleFriendCancel(req, res, addresseeId) {
 
 // ---------------------------------------------------------------- trading (real friends, or demo)
 
+// A simple newest-first log of every trade a person has completed --
+// createTrade already saves everything needed for this, it just never had
+// anywhere to be read back from before now.
+function pageTradeHistory(req, res) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const trades = db.listTrades(userId);
+  const body = `
+    <h1 class="screen-title">Trade History</h1>
+    <p class="screen-sub">${db.countTrades(userId)} trade${db.countTrades(userId) === 1 ? '' : 's'} total.</p>
+    ${trades.length ? trades.map(t => {
+      const gave = db.getStrain(t.gave_strain_id);
+      const got = db.getStrain(t.got_strain_id);
+      return `
+      <div class="card" style="margin-bottom:10px;">
+        <div class="empty-note" style="padding:0 0 6px;">With ${esc(t.friend_name)} · <span class="local-time" data-utc="${t.created_at}Z">${esc(t.created_at)}</span> UTC</div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="flex:1;min-width:0;text-align:center;">
+            <div class="empty-note" style="padding:0 0 4px;">You gave</div>
+            ${strainPhotoTag(gave, 'sm')}
+            <div style="font-weight:700;font-size:12.5px;margin-top:4px;">${esc(gave ? gave.name : t.gave_strain_id)}</div>
+          </div>
+          <div style="font-size:18px;">⇄</div>
+          <div style="flex:1;min-width:0;text-align:center;">
+            <div class="empty-note" style="padding:0 0 4px;">You got</div>
+            ${strainPhotoTag(got, 'sm')}
+            <div style="font-weight:700;font-size:12.5px;margin-top:4px;">${esc(got ? got.name : t.got_strain_id)}</div>
+          </div>
+        </div>
+      </div>`;
+    }).join('') : `<div class="empty-note">No trades yet — head to <a href="/trade">Trade</a> to swap dupes with a friend.</div>`}
+  `;
+  sendHtml(res, layout({ title: 'Trade History', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
+}
 function pageTrade(req, res, query) {
   const userId = requireUser(req, res);
   if (userId == null) return;
@@ -3672,7 +4058,7 @@ function pageTrade(req, res, query) {
   const mk = (params) => '/trade?' + new URLSearchParams({ friend: friendId, your: yourPick, their: theirPick, ...params }).toString();
 
   const body = `
-    <h1 class="screen-title">Trade</h1>
+    <h1 class="screen-title">Trade <a href="/trade-history" class="empty-note" style="padding:0;font-size:13px;font-weight:normal;">History →</a></h1>
     ${usingReal
       ? `<div class="trade-caveat">Trading against ${esc(friend.name)}'s real collection.</div>`
       : `<div class="trade-caveat">Demo feature: you don't have any real friends added yet, so this trades against sample collections. <a href="/friends">Add a real friend</a> to trade for real.</div>`}
@@ -4023,6 +4409,8 @@ const server = http.createServer(async (req, res) => {
     let m;
     if (method === 'GET' && pathname === '/') return pageHome(req, res);
     if (method === 'GET' && pathname === '/strains') return pageStrains(req, res, url.searchParams);
+    if (method === 'GET' && pathname === '/strains/suggest') return pageStrainSuggest(req, res, url.searchParams);
+    if (method === 'POST' && pathname === '/strains/suggest') return await handleStrainSuggestSubmit(req, res);
     if (method === 'GET' && (m = pathname.match(/^\/strains\/([^/]+)$/))) return pageStrainDetail(req, res, m[1]);
     if (method === 'GET' && pathname === '/checkin') return pageCheckinForm(req, res, url.searchParams);
     if (method === 'POST' && pathname === '/checkin') return await handleCheckinSubmit(req, res);
@@ -4067,10 +4455,13 @@ const server = http.createServer(async (req, res) => {
     if (method === 'POST' && pathname === '/reset-password') return await handleResetPasswordSubmit(req, res);
     if (method === 'POST' && pathname === '/account/username') return await handleAccountUsername(req, res);
     if (method === 'POST' && pathname === '/account/email') return await handleAccountEmail(req, res);
+    if (method === 'POST' && pathname === '/account/name') return await handleAccountName(req, res);
     if (method === 'POST' && pathname === '/account/password') return await handleAccountPassword(req, res);
     if (method === 'GET' && pathname === '/admin/logout') return handleAdminLogout(req, res);
     if (method === 'GET' && pathname === '/admin') return pageAdminHome(req, res);
     if (method === 'GET' && pathname === '/admin/users') return pageAdminUsers(req, res, url.searchParams);
+    if (method === 'GET' && (m = pathname.match(/^\/admin\/users\/(\d+)\/edit$/))) return pageAdminUserEdit(req, res, m[1], url.searchParams);
+    if (method === 'POST' && (m = pathname.match(/^\/admin\/users\/(\d+)\/edit$/))) return await handleAdminUserEditSubmit(req, res, m[1]);
     if (method === 'POST' && (m = pathname.match(/^\/admin\/users\/(\d+)\/delete$/))) return await handleAdminUserDelete(req, res, Number(m[1]));
     if (method === 'GET' && pathname === '/admin/feedback') return pageAdminFeedback(req, res);
     if (method === 'GET' && pathname === '/admin/faqs') return pageAdminFaqs(req, res);
@@ -4085,6 +4476,8 @@ const server = http.createServer(async (req, res) => {
     if (method === 'POST' && (m = pathname.match(/^\/admin\/strains\/([^/]+)\/delete$/))) return await handleAdminStrainDelete(req, res, m[1]);
     if (method === 'GET' && pathname === '/admin/recipes') return pageAdminRecipes(req, res);
     if (method === 'POST' && pathname === '/admin/recipes/new') return await handleAdminRecipeNew(req, res);
+    if (method === 'GET' && (m = pathname.match(/^\/admin\/recipes\/(\d+)\/edit$/))) return pageAdminRecipeEdit(req, res, m[1]);
+    if (method === 'POST' && (m = pathname.match(/^\/admin\/recipes\/(\d+)\/edit$/))) return await handleAdminRecipeEditSubmit(req, res, m[1]);
     if (method === 'POST' && (m = pathname.match(/^\/admin\/recipes\/(\d+)\/approve$/))) return await handleAdminRecipeApprove(req, res, Number(m[1]));
     if (method === 'POST' && (m = pathname.match(/^\/admin\/recipes\/(\d+)\/delete$/))) return await handleAdminRecipeDelete(req, res, Number(m[1]));
 
@@ -4099,6 +4492,7 @@ const server = http.createServer(async (req, res) => {
     if (method === 'GET' && pathname === '/collection') return pageCollection(req, res);
     if (method === 'GET' && pathname === '/history') return pageHistory(req, res);
     if (method === 'GET' && pathname === '/trade') return pageTrade(req, res, url.searchParams);
+    if (method === 'GET' && pathname === '/trade-history') return pageTradeHistory(req, res);
     if (method === 'GET' && pathname === '/friends') return pageFriends(req, res, url.searchParams);
     if (method === 'GET' && (m = pathname.match(/^\/friends\/(\d+)$/))) return pageFriendProfile(req, res, Number(m[1]));
     if (method === 'POST' && (m = pathname.match(/^\/friends\/(\d+)\/request$/))) return await handleFriendRequest(req, res, Number(m[1]));
@@ -4135,6 +4529,9 @@ const server = http.createServer(async (req, res) => {
     if (method === 'POST' && pathname === '/grow-journal') return await handleGrowJournalSubmit(req, res);
     if (method === 'POST' && (m = pathname.match(/^\/grow-journal\/(\d+)\/delete$/))) return await handleGrowJournalDelete(req, res, m[1]);
     if (method === 'GET' && pathname === '/friends-picks') return pageFriendsPicks(req, res);
+    if (method === 'GET' && pathname === '/year-in-review') return pageYearInReview(req, res);
+    if (method === 'GET' && pathname === '/admin/strain-submissions') return pageAdminStrainSubmissions(req, res);
+    if (method === 'POST' && (m = pathname.match(/^\/admin\/strain-submissions\/(\d+)\/reviewed$/))) return await handleAdminStrainSubmissionReviewed(req, res, m[1]);
     if (method === 'GET' && pathname === '/lists') return pageLists(req, res);
     if (method === 'POST' && pathname === '/lists') return await handleListCreate(req, res);
     if (method === 'GET' && (m = pathname.match(/^\/lists\/(\d+)$/))) return pageListDetail(req, res, m[1]);
