@@ -165,16 +165,6 @@ function isOldEnough(birthDateStr) {
   return age >= MIN_AGE;
 }
 function starString(n) { n = Number(n) || 0; return '★'.repeat(n) + '☆'.repeat(5 - n); }
-// Guards the `next` redirect used by login/signup (e.g. coming from a
-// shared strain link) so it can only ever point somewhere on this same
-// site -- never an absolute URL or a scheme like "javascript:", which is
-// the classic open-redirect trap of trusting a query param at face value.
-function isSafeRedirectTarget(next) {
-  if (!next || typeof next !== 'string') return false;
-  if (!next.startsWith('/') || next.startsWith('//')) return false;
-  if (next.includes('\\')) return false;
-  return true;
-}
 // Shared renderer for the optional "pairings" a user can log with a
 // check-in -- tasting notes plus food/drink, music/entertainment, and
 // activity pairings. Each is independently optional, so only show what's
@@ -529,14 +519,7 @@ function pageStrains(req, res, query) {
         <select id="strain-search-verified" name="verified" form="strain-search-form">${verifiedOpts.map(v => `<option value="${esc(v)}" ${verified === v ? 'selected' : ''}>${verifiedLabel[v]}</option>`).join('')}</select>
       </div>
     </div>
-    <div style="margin-bottom:10px;">
-      ${Object.values(VERIFICATION_BADGE).map(v => `
-        <div style="display:flex;gap:8px;align-items:flex-start;padding:2px 0;">
-          <span style="flex:0 0 20px;font-size:14px;line-height:1.5;">${v.icon}</span>
-          <span class="empty-note" style="padding:0;line-height:1.5;"><b>${esc(v.label)}</b> — ${esc(v.note)}</span>
-        </div>
-      `).join('')}
-    </div>
+    <p class="empty-note" style="margin-bottom:2px;">✅ Verified — THC, breeder, and flavor/terpene data all independently confirmed. &nbsp; 🔹 Partial — some details confirmed. &nbsp; ⚪ Listed only — seen on a dispensary menu, nothing independently confirmed yet.</p>
     <p class="empty-note" style="margin-bottom:10px;">User-reported associations, not medical advice — see a doctor for real guidance.</p>
     <p class="empty-note" id="strain-search-count">${total > 60 ? `Showing 60 of ${total.toLocaleString()} — refine your search to narrow it down.` : `${total} strain${total === 1 ? '' : 's'}`}</p>
     <div id="strain-search-results">${results.map(s => `
@@ -608,24 +591,24 @@ function pageStrainDetail(req, res, id) {
   const s = db.getStrain(id);
   if (!s) return notFound(res);
   const userId = auth.currentUserId(req);
-  // Anonymous visitors (arriving via a shared link, now that this page is
-  // viewable without an account) never get check-in history rendered back
-  // at them -- it's login-gated everywhere else in the app and stays that
-  // way here too, rather than trusting listCheckins to scope a null userId
-  // itself.
-  const history = userId != null ? db.listCheckins({ userId, strain_id: id, limit: 10 }) : [];
+  const history = db.listCheckins({ userId, strain_id: id, limit: 10 });
   const ratingStats = db.getStrainRatingStats(id);
   const similar = db.getSimilarStrains(s, 4);
-  const nextParam = encodeURIComponent(`/strains/${s.id}`);
   const body = `
     <div class="card" style="margin-top:10px;">
-      <div style="display:flex;align-items:center;gap:12px;">
-        ${strainPhotoTag(s, 'lg')}
-        <div>
-          <h1 style="margin:0;font-size:19px;">${esc(s.name)}</h1>
-          <div class="empty-note" style="padding:0;">${esc(s.type)}${s.lean ? ' · ' + esc(s.lean) : ''} · <span class="rarity-tag rarity-${s.rarity}">${rarityLabel(s.rarity)}</span></div>
-          <div style="margin-top:2px;" title="${esc(VERIFICATION_BADGE[strainVerificationTier(s)].note)}"><span class="empty-note" style="padding:0;">${VERIFICATION_BADGE[strainVerificationTier(s)].icon} ${VERIFICATION_BADGE[strainVerificationTier(s)].label}</span></div>
-          ${ratingStats.count ? `<div style="margin-top:2px;">${starString(Math.round(ratingStats.avg))} <span class="empty-note" style="padding:0;">${ratingStats.avg}★ from ${ratingStats.count} check-in${ratingStats.count === 1 ? '' : 's'}</span></div>` : `<div class="empty-note" style="padding:2px 0 0;">No community ratings yet — be the first to check in.</div>`}
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;">
+        <div style="display:flex;align-items:center;gap:12px;min-width:0;">
+          ${strainPhotoTag(s, 'lg')}
+          <div>
+            <h1 style="margin:0;font-size:19px;">${esc(s.name)}</h1>
+            <div class="empty-note" style="padding:0;">${esc(s.type)}${s.lean ? ' · ' + esc(s.lean) : ''} · <span class="rarity-tag rarity-${s.rarity}">${rarityLabel(s.rarity)}</span></div>
+            <div style="margin-top:2px;" title="${esc(VERIFICATION_BADGE[strainVerificationTier(s)].note)}"><span class="empty-note" style="padding:0;">${VERIFICATION_BADGE[strainVerificationTier(s)].icon} ${VERIFICATION_BADGE[strainVerificationTier(s)].label}</span></div>
+            ${ratingStats.count ? `<div style="margin-top:2px;">${starString(Math.round(ratingStats.avg))} <span class="empty-note" style="padding:0;">${ratingStats.avg}★ from ${ratingStats.count} check-in${ratingStats.count === 1 ? '' : 's'}</span></div>` : `<div class="empty-note" style="padding:2px 0 0;">No community ratings yet — be the first to check in.</div>`}
+          </div>
+        </div>
+        <div style="display:flex;gap:6px;flex-shrink:0;">
+          <button type="button" onclick="shareStrainLink(${JSON.stringify(s.name)})" title="Share" aria-label="Share" style="background:var(--bg-card,#fff);border:1px solid var(--border);border-radius:50%;width:34px;height:34px;font-size:15px;cursor:pointer;padding:0;">📤</button>
+          ${userId != null ? `<button type="button" onclick="focusShareToFriend()" title="Send to a friend" aria-label="Send to a friend" style="background:var(--bg-card,#fff);border:1px solid var(--border);border-radius:50%;width:34px;height:34px;font-size:15px;cursor:pointer;padding:0;">✉️</button>` : ''}
         </div>
       </div>
       ${(s.thc || s.cbd) ? `<p style="margin:12px 0 4px;">${s.thc ? `<b>THC:</b> ${esc(s.thc)}` : ''}${s.thc && s.cbd ? ' &nbsp; ' : ''}${s.cbd ? `<b>CBD:</b> ${esc(s.cbd)}` : ''}</p>` : `<p class="empty-note" style="padding:0 0 4px;">No verified THC/CBD data for this strain yet.</p>`}
@@ -638,44 +621,66 @@ function pageStrainDetail(req, res, id) {
         <p class="empty-note" style="padding:0;">User-reported, not medical advice — see a doctor for real guidance.</p>
       ` : ''}
     </div>
-    ${renderFamilyTree(s)}
-    ${userId == null ? `
-      <div class="card" style="margin-top:10px;text-align:center;">
-        <p class="empty-note" style="padding:0 0 8px;">Someone shared this strain with you — sign up free to check in, save it, and see what your friends think.</p>
-        <a class="btn block" href="/signup?next=${nextParam}" style="text-decoration:none;">Create Free Account</a>
-        <p class="empty-note" style="margin-top:8px;">Already have an account? <a href="/login?next=${nextParam}">Log in</a></p>
-      </div>
-    ` : ''}
-    <a class="btn block" href="/checkin?strain=${s.id}">＋ Check in this strain</a>
-    <a class="btn secondary block" href="/compare?a=${s.id}" style="margin-top:8px;">🆚 Compare this strain</a>
-    <button type="button" class="btn secondary block" style="margin-top:8px;" onclick="shareStrainPage(${JSON.stringify(s.name)})">📤 Share</button>
-    ${userId != null && db.listFriends(userId).length ? `
-      <form method="POST" action="/strains/${s.id}/share" style="display:flex;gap:8px;margin-top:8px;">
-        <select name="friend_id" style="flex:1;">
-          ${db.listFriends(userId).map(f => `<option value="${f.id}">${esc(f.username)}</option>`).join('')}
-        </select>
-        <button class="btn secondary" type="submit">🌿 Send to a friend</button>
-      </form>
-    ` : ''}
     <script>
-      // Real device share sheet (Messages, Mail, WhatsApp, etc.) where
-      // supported, so sharing a strain isn't limited to friends who
-      // already have a StrainDex account. Falls back to copying the link
-      // on browsers without the Web Share API (most desktop browsers).
-      function shareStrainPage(name) {
-        const url = window.location.href.split('?')[0].split('#')[0];
-        const shareData = { title: name + ' — StrainDex', text: 'Check out ' + name + ' on StrainDex:', url };
+      function shareStrainLink(name) {
+        const url = window.location.href;
         if (navigator.share) {
-          navigator.share(shareData).catch(() => {});
-          return;
-        }
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText(url).then(() => alert('Link copied to clipboard!')).catch(() => window.prompt('Copy this link:', url));
+          navigator.share({ title: name, url: url }).catch(function() {});
+        } else if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(url).then(function() { alert('Link copied to clipboard!'); }).catch(function() { window.prompt('Copy this link:', url); });
         } else {
           window.prompt('Copy this link:', url);
         }
       }
+      function focusShareToFriend() {
+        const section = document.getElementById('share-section');
+        if (!section) return;
+        section.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        setTimeout(function() {
+          const input = document.getElementById('share-friend-input');
+          if (input) input.focus();
+        }, 400);
+      }
     </script>
+    ${renderFamilyTree(s)}
+    <a class="btn block" href="/checkin?strain=${s.id}">＋ Check in this strain</a>
+    <a class="btn secondary block" href="/compare?a=${s.id}" style="margin-top:8px;">🆚 Compare this strain</a>
+    ${userId != null ? `
+      <div class="card" id="share-section" style="margin-top:8px;">
+        <b style="font-size:13px;">✉️ Send to a friend</b>
+        ${db.listFriends(userId).length ? `
+          <form method="POST" action="/strains/${s.id}/share" id="share-friend-form" style="display:flex;gap:8px;margin-top:8px;" onsubmit="return validateShareForm(event)">
+            <input type="text" id="share-friend-input" list="share-friend-list" placeholder="Type a friend's username..." autocomplete="off" style="flex:1;margin:0;">
+            <datalist id="share-friend-list">
+              ${db.listFriends(userId).map(f => `<option value="${esc(f.username)}" data-id="${f.id}">`).join('')}
+            </datalist>
+            <input type="hidden" name="friend_id" id="share-friend-id">
+            <button class="btn secondary" type="submit" style="white-space:nowrap;">Send</button>
+          </form>
+          <script>
+            (function() {
+              const input = document.getElementById('share-friend-input');
+              const hidden = document.getElementById('share-friend-id');
+              const list = document.getElementById('share-friend-list');
+              function syncId() {
+                const match = Array.from(list.options).find(o => o.value.toLowerCase() === input.value.trim().toLowerCase());
+                hidden.value = match ? match.dataset.id : '';
+              }
+              input.addEventListener('input', syncId);
+            })();
+            function validateShareForm(evt) {
+              const hidden = document.getElementById('share-friend-id');
+              if (!hidden.value) {
+                evt.preventDefault();
+                alert("Pick a friend from the list first — type their username and choose the match that appears.");
+                return false;
+              }
+              return true;
+            }
+          </script>
+        ` : `<p class="empty-note" style="padding:6px 0 0;"><a href="/friends">Add friends</a> to share strains with them.</p>`}
+      </div>
+    ` : ''}
     ${userId != null ? `
       <form method="POST" action="/wishlist/${s.id}/toggle" style="margin-top:8px;">
         <input type="hidden" name="redirect_to" value="/strains/${s.id}">
@@ -683,18 +688,24 @@ function pageStrainDetail(req, res, id) {
       </form>
       ${(() => {
         const myLists = db.listCustomLists(userId);
+        const inAnyList = myLists.some(l => db.isStrainInList(l.id, s.id));
         return myLists.length ? `
           <div class="card" style="margin-top:8px;">
-            <b style="font-size:13px;">Add to a list</b>
-            <p style="margin:6px 0 0;display:flex;flex-wrap:wrap;gap:6px;">
-              ${myLists.map(l => `
-                <form method="POST" action="/lists/${l.id}/items/${s.id}/toggle" style="display:inline;">
-                  <input type="hidden" name="redirect_to" value="/strains/${s.id}">
-                  <button type="submit" class="filter-pill ${db.isStrainInList(l.id, s.id) ? 'active' : ''}" style="border:none;cursor:pointer;">${db.isStrainInList(l.id, s.id) ? '✓ ' : '+ '}${esc(l.name)}</button>
-                </form>
-              `).join('')}
-            </p>
-            <p class="empty-note" style="padding:6px 0 0;"><a href="/lists">Manage your lists →</a></p>
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <b style="font-size:13px;">Add to a list</b>
+              <a href="/lists" class="empty-note" style="padding:0;">Manage your lists →</a>
+            </div>
+            <details style="margin-top:6px;" ${inAnyList ? 'open' : ''}>
+              <summary style="cursor:pointer;font-size:12.5px;font-weight:700;color:var(--brand-green-dark);">${inAnyList ? 'Your lists' : 'Show your lists'}</summary>
+              <p style="margin:6px 0 0;display:flex;flex-wrap:wrap;gap:6px;">
+                ${myLists.map(l => `
+                  <form method="POST" action="/lists/${l.id}/items/${s.id}/toggle" style="display:inline;">
+                    <input type="hidden" name="redirect_to" value="/strains/${s.id}">
+                    <button type="submit" class="filter-pill ${db.isStrainInList(l.id, s.id) ? 'active' : ''}" style="border:none;cursor:pointer;">${db.isStrainInList(l.id, s.id) ? '✓ ' : '+ '}${esc(l.name)}</button>
+                  </form>
+                `).join('')}
+              </p>
+            </details>
           </div>
         ` : `<p class="empty-note" style="margin-top:8px;"><a href="/lists">Create a list</a> to organize strains your own way.</p>`;
       })()}
@@ -1270,13 +1281,7 @@ async function handleRecipeNewSubmit(req, res) {
 
 function pageGrowing(req, res, query) {
   const viewerId = auth.currentUserId(req);
-  // Cleaning & Gear Care lives on its own page now (More > Gear Care) --
-  // caring for a bong or vape isn't a growing tip, it's about consumption
-  // gear. Any existing tips already tagged with that category still show
-  // up under "All" here (nothing was deleted), they just no longer get
-  // their own filter pill, and new tips can't be filed under it going
-  // forward.
-  const CATEGORIES = ['Plant Life Cycle', 'Watering', 'Lighting', 'Nutrients & Feeding', 'Pests & Disease', 'Training', 'Harvest & Curing', 'Genetics & Seeds', 'Indoor Setup', 'Outdoor Growing'];
+  const CATEGORIES = ['Plant Life Cycle', 'Watering', 'Lighting', 'Nutrients & Feeding', 'Pests & Disease', 'Training', 'Harvest & Curing', 'Genetics & Seeds', 'Indoor Setup', 'Outdoor Growing', 'Cleaning & Gear Care'];
   const cat = query.get('cat') || 'All';
   const tips = db.listGrowTips({ category: cat, viewerId });
   const body = `
@@ -1316,7 +1321,7 @@ function pageGrowing(req, res, query) {
 }
 
 function pageGrowingNew(req, res) {
-  const CATEGORIES = ['Plant Life Cycle', 'Watering', 'Lighting', 'Nutrients & Feeding', 'Pests & Disease', 'Training', 'Harvest & Curing', 'Genetics & Seeds', 'Indoor Setup', 'Outdoor Growing'];
+  const CATEGORIES = ['Plant Life Cycle', 'Watering', 'Lighting', 'Nutrients & Feeding', 'Pests & Disease', 'Training', 'Harvest & Curing', 'Genetics & Seeds', 'Indoor Setup', 'Outdoor Growing', 'Cleaning & Gear Care'];
   const body = `
     <h1 class="screen-title">Share a Grow Tip</h1>
     <form method="POST" action="/growing/new">
@@ -1414,9 +1419,6 @@ function handleAdminLogout(req, res) {
 function pageSignup(req, res, query) {
   const err = query.get('err');
   const deleted = query.get('deleted');
-  // See pageLogin for what this is -- same same-site-only redirect target,
-  // just threaded through the signup form instead.
-  const next = query.get('next') || '';
   const errMessages = {
     taken: 'That username is already taken.',
     age: `You must be ${MIN_AGE} or older to create an account.`,
@@ -1437,7 +1439,6 @@ function pageSignup(req, res, query) {
     </a>
     <p class="empty-note" style="text-align:center;margin:0 0 14px;">or</p>
     <form method="POST" action="/signup">
-      <input type="hidden" name="next" value="${esc(next)}">
       <label class="field-label" style="margin-top:0;">Username</label>
       <input type="text" name="username" id="signup-username" required minlength="3" maxlength="24" autocomplete="username">
       <label class="field-label">Email</label>
@@ -1455,7 +1456,7 @@ function pageSignup(req, res, query) {
     </form>
     <script>document.getElementById('signup-username').focus();</script>
     <p class="empty-note" style="margin-top:12px;">By creating an account, you agree to the <a href="/terms">Terms of Service</a> and <a href="/privacy">Privacy Policy</a>.</p>
-    <p class="empty-note">Already have an account? <a href="/login${next ? `?next=${encodeURIComponent(next)}` : ''}">Log in</a></p>
+    <p class="empty-note">Already have an account? <a href="/login">Log in</a></p>
   `;
   sendHtml(res, layout({ title: 'Sign Up', body, showBack: false }));
 }
@@ -1631,29 +1632,19 @@ async function handleSignupSubmit(req, res) {
   const f = await parseForm(req);
   const username = String(f.username || '').trim();
   const email = String(f.email || '').trim().toLowerCase();
-  const nextQ = f.next ? `&next=${encodeURIComponent(f.next)}` : '';
-  if (!username || !email || !f.birth_date || !f.password || !f.password2) return redirect(res, `/signup?err=invalid${nextQ}`);
-  if (!isOldEnough(f.birth_date)) return redirect(res, `/signup?err=age${nextQ}`);
-  if (f.password !== f.password2) return redirect(res, `/signup?err=mismatch${nextQ}`);
-  if (f.password.length < 8) return redirect(res, `/signup?err=short${nextQ}`);
-  if (db.getUserByUsername(username)) return redirect(res, `/signup?err=taken${nextQ}`);
-  if (db.getUserByEmail(email)) return redirect(res, `/signup?err=email_taken${nextQ}`);
+  if (!username || !email || !f.birth_date || !f.password || !f.password2) return redirect(res, '/signup?err=invalid');
+  if (!isOldEnough(f.birth_date)) return redirect(res, '/signup?err=age');
+  if (f.password !== f.password2) return redirect(res, '/signup?err=mismatch');
+  if (f.password.length < 8) return redirect(res, '/signup?err=short');
+  if (db.getUserByUsername(username)) return redirect(res, '/signup?err=taken');
+  if (db.getUserByEmail(email)) return redirect(res, '/signup?err=email_taken');
   const user = await db.createUser({ username, password: f.password, birth_date: f.birth_date, email });
   const token = auth.signUserSessionValue(user.id);
   res.setHeader('Set-Cookie', `user_session=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000`);
-  // A share-link signup should land back on the strain (or wherever else)
-  // that got them here, not the generic onboarding flow -- but only ever
-  // somewhere on this same site, never an arbitrary URL (see isSafeRedirectTarget).
-  const safeNext = isSafeRedirectTarget(f.next) ? f.next : null;
-  redirect(res, safeNext || '/onboarding');
+  redirect(res, '/onboarding');
 }
 function pageLogin(req, res, query) {
   const err = query.get('err');
-  // Where to send the person after they log in -- set by the global login
-  // wall when it redirected them here, e.g. from a shared strain link. Only
-  // ever a same-site relative path (see isSafeRedirectTarget), and it's
-  // re-checked again at submit time rather than trusted blindly.
-  const next = query.get('next') || '';
   const errMessages = {
     '1': 'Wrong username or password.',
     rate_limited: 'Too many failed attempts for this account. Try again in a few minutes, or reset your password.',
@@ -1671,7 +1662,6 @@ function pageLogin(req, res, query) {
     </a>
     <p class="empty-note" style="text-align:center;margin:0 0 14px;">or</p>
     <form method="POST" action="/login">
-      <input type="hidden" name="next" value="${esc(next)}">
       <label class="field-label" style="margin-top:0;">Username or email</label>
       <input type="text" name="username" id="login-username" required autocomplete="username">
       <label class="field-label">Password</label>
@@ -1683,7 +1673,7 @@ function pageLogin(req, res, query) {
     </form>
     <script>document.getElementById('login-username').focus();</script>
     <p class="empty-note" style="margin-top:12px;">Forgot your password? <a href="/forgot-password">Reset it</a></p>
-    <p class="empty-note">New here? <a href="/signup${next ? `?next=${encodeURIComponent(next)}` : ''}">Create an account</a></p>
+    <p class="empty-note">New here? <a href="/signup">Create an account</a></p>
   `;
   sendHtml(res, layout({ title: 'Log In', body, showBack: false }));
 }
@@ -2315,33 +2305,6 @@ function pageMixingCautions(req, res) {
   sendHtml(res, layout({ title: 'Mixing With Other Substances', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
-// Gear Care -- keeping bongs, pipes, rigs, and vapes clean, split out into
-// its own page rather than living as a "Cleaning & Gear Care" category
-// under Growing Tips, since caring for consumption gear isn't a growing
-// tip. Static reference content, same pattern as Mixing Cautions and
-// Concentrates & Extracts, rather than user-submitted.
-function pageGearCare(req, res) {
-  const gear = [
-    { title: 'Glass bongs & bubblers', body: 'Empty and rinse after every session so resin doesn\u2019t harden. For a deeper clean, use isopropyl alcohol (91%+) with coarse salt as an abrasive: add both, cover the openings, and shake gently for a minute or two before rinsing thoroughly with warm water. Never run isopropyl through while it\u2019s anywhere near a flame or hot surface.' },
-    { title: 'Hand pipes & one-hitters', body: 'A pipe cleaner or cotton swab dipped in isopropyl alcohol handles the stem and bowl between uses. For a buildup that\u2019s harder to reach, a resealable bag with isopropyl and salt works the same way as with glass — shake, then rinse and let fully air-dry before the next use.' },
-    { title: 'Dab rigs & nails', body: 'Wipe the nail or banger with a cotton swab right after each dab, while it\u2019s still warm, before residue has a chance to carbonize. The rig itself follows the same isopropyl-and-salt soak as any other glass. A quick torch-and-cool cycle (\u201cflash cleaning\u201d) can help burn off light residue on quartz or titanium, but don\u2019t rely on it as a substitute for an actual clean.' },
-    { title: 'Vape cartridges & batteries', body: 'Wipe the battery\u2019s connection threads with a dry cotton swab regularly — buildup there is a common cause of a cart that suddenly stops firing. Never submerge a cartridge or battery in liquid. If a cart is clogged, gently warming it (in your hands, or a few seconds in a warm — not hot — water bath with the mouthpiece kept dry) can loosen it enough to clear.' },
-    { title: 'Dry herb vaporizers', body: 'Clean the chamber after every few sessions with a soft brush to clear ash and spent material, since buildup affects both flavor and airflow. Check your specific model\u2019s manual before using any liquid near the heating element — some chambers are fine with an isopropyl wipe-down, others aren\u2019t.' },
-    { title: 'Grinders', body: 'A stiff, dry brush (an old toothbrush works well) clears out kief and stuck flower from the teeth and screen. If it\u2019s especially gummed up, a freezer stint firms up the resin first, making it easier to knock loose. Avoid soaking a grinder with a kief catcher, since water can damage the collected kief.' },
-  ];
-  const body = `
-    <h1 class="screen-title">Gear Care</h1>
-    <p class="screen-sub">Keeping your glass, rigs, and vapes clean — better flavor, smoother hits, and gear that lasts longer.</p>
-    ${gear.map(g => `
-      <div class="card" style="margin-bottom:10px;">
-        <h2 style="margin:0 0 6px;font-size:15px;">${esc(g.title)}</h2>
-        <p style="margin:0;">${esc(g.body)}</p>
-      </div>
-    `).join('')}
-  `;
-  sendHtml(res, layout({ title: 'Gear Care', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
-}
-
 function pageQuiz(req, res, query) {
   const exp = query.get('exp') || '';
   const feel = query.get('feel') || '';
@@ -2609,18 +2572,16 @@ async function handleResetPasswordSubmit(req, res) {
 async function handleLoginSubmit(req, res) {
   const f = await parseForm(req);
   const username = String(f.username || '').trim();
-  const nextQ = f.next ? `&next=${encodeURIComponent(f.next)}` : '';
-  if (isLoginRateLimited(req, username)) return redirect(res, `/login?err=rate_limited${nextQ}`);
+  if (isLoginRateLimited(req, username)) return redirect(res, '/login?err=rate_limited');
   const user = db.verifyLogin(username, f.password || '');
   if (!user) {
     recordFailedLogin(req, username);
-    return redirect(res, `/login?err=1${nextQ}`);
+    return redirect(res, '/login?err=1');
   }
   clearLoginAttempts(req, username);
   const token = auth.signUserSessionValue(user.id);
   res.setHeader('Set-Cookie', `user_session=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000`);
-  const safeNext = isSafeRedirectTarget(f.next) ? f.next : null;
-  redirect(res, safeNext || '/');
+  redirect(res, '/');
 }
 function handleLogout(req, res) {
   res.setHeader('Set-Cookie', `user_session=; Path=/; HttpOnly; Max-Age=0`);
@@ -3049,7 +3010,6 @@ function pageMore(req, res) {
       title: 'Learn & Stay Safe',
       tiles: [
         { href: '/methods', icon: '/docs/joint-icon.png', t: 'Ways to Enjoy It', s: 'Every method, explained' },
-        { href: '/gear-care', icon: '🧼', t: 'Gear Care', s: 'Keeping your glass, rigs & vapes clean' },
         { href: '/concentrates', icon: '💠', t: 'Concentrates & Extracts', s: 'Kief, rosin, live resin & more' },
         { href: '/legal-status', icon: '🏛️', t: 'Is It Legal Near Me?', s: 'State-by-state cannabis law' },
         { href: '/mixing-cautions', icon: '⚠️', t: 'Mixing With Other Substances', s: 'General cautions, not medical advice' },
@@ -3360,15 +3320,6 @@ function pageFriends(req, res, query) {
   const incoming = db.listIncomingRequests(userId);
   const outgoing = db.listOutgoingRequests(userId);
 
-  // Shared layout for every row on this page (search results, incoming
-  // requests, outgoing requests, friends list) so alignment can't drift
-  // between sections: name on the left vertically centered against
-  // whatever's on the right, buttons and status text all sitting on the
-  // same baseline regardless of which of the four blocks they're in.
-  const rowStyle = 'align-items:center;';
-  const actionsStyle = 'display:flex;align-items:center;flex-wrap:wrap;gap:8px;';
-  const statusStyle = 'padding:0;white-space:nowrap;';
-
   const body = `
     <h1 class="screen-title">Friends</h1>
     <p class="screen-sub">Find people by username, then trade dupes once you're connected.</p>
@@ -3381,13 +3332,13 @@ function pageFriends(req, res, query) {
       <div class="section-label">Search results</div>
       ${results.length ? results.map(u => {
         const status = db.getFriendshipStatus(userId, u.id);
-        return `<div class="admin-row" style="${rowStyle}">
+        return `<div class="admin-row">
           <span>👤 ${esc(u.username)}</span>
-          <div class="actions" style="${actionsStyle}">
-            ${status === 'none' ? `<form method="POST" action="/friends/${u.id}/request" style="display:inline;"><button class="btn" type="submit">Add Friend</button></form>` : ''}
-            ${status === 'pending_sent' ? `<span class="empty-note" style="${statusStyle}">Request sent</span>` : ''}
-            ${status === 'pending_received' ? `<span class="empty-note" style="${statusStyle}">Check your requests below</span>` : ''}
-            ${status === 'friends' ? `<span class="empty-note" style="${statusStyle}">Already friends</span>` : ''}
+          <div class="actions">
+            ${status === 'none' ? `<form method="POST" action="/friends/${u.id}/request"><button class="btn" type="submit">Add Friend</button></form>` : ''}
+            ${status === 'pending_sent' ? `<span class="empty-note">Request sent</span>` : ''}
+            ${status === 'pending_received' ? `<span class="empty-note">Check your requests below</span>` : ''}
+            ${status === 'friends' ? `<span class="empty-note">Already friends</span>` : ''}
           </div>
         </div>`;
       }).join('') : `<div class="empty-note">No users found matching "${esc(q)}".</div>`}
@@ -3396,9 +3347,9 @@ function pageFriends(req, res, query) {
     ${incoming.length ? `
       <div class="section-label" style="margin-top:20px;color:var(--brand-green-dark);">🔔 Friend requests (${incoming.length})</div>
       ${incoming.map(u => `
-        <div class="admin-row" style="${rowStyle}">
+        <div class="admin-row">
           <span>👤 ${esc(u.username)}</span>
-          <div class="actions" style="${actionsStyle}">
+          <div class="actions">
             <form method="POST" action="/friends/${u.id}/accept" style="display:inline;"><button class="btn" type="submit">Accept</button></form>
             <form method="POST" action="/friends/${u.id}/decline" style="display:inline;"><button class="btn danger" style="color:#fff;" type="submit">Decline</button></form>
           </div>
@@ -3408,10 +3359,10 @@ function pageFriends(req, res, query) {
     ${outgoing.length ? `
       <div class="section-label" style="margin-top:20px;">Pending sent (${outgoing.length})</div>
       ${outgoing.map(u => `
-        <div class="admin-row" style="${rowStyle}">
+        <div class="admin-row">
           <span>👤 ${esc(u.username)}</span>
-          <div class="actions" style="${actionsStyle}">
-            <span class="empty-note" style="${statusStyle}">Waiting for response</span>
+          <div class="actions">
+            <span class="empty-note" style="padding:0;">Waiting for response</span>
             <form method="POST" action="/friends/${u.id}/cancel" style="display:inline;" onsubmit="return confirm('Cancel your friend request to ${esc(u.username)}?')">
               <button class="btn secondary" type="submit">Cancel</button>
             </form>
@@ -3422,9 +3373,9 @@ function pageFriends(req, res, query) {
 
     <div class="section-label" style="margin-top:20px;">Your friends (${friends.length})</div>
     ${friends.length ? friends.map(u => `
-      <div class="admin-row" style="${rowStyle}">
+      <div class="admin-row">
         <a href="/friends/${u.id}" style="text-decoration:none;color:inherit;">👤 ${esc(u.username)}</a>
-        <div class="actions" style="${actionsStyle}">
+        <div class="actions">
           <a href="/messages/${u.id}" class="btn secondary" style="text-decoration:none;">Message</a>
           <a href="/trade?friend=${u.id}" class="btn secondary" style="text-decoration:none;">Trade</a>
           <form method="POST" action="/friends/${u.id}/remove" style="display:inline;" onsubmit="return confirm('Remove this friend?')">
@@ -4055,21 +4006,8 @@ const server = http.createServer(async (req, res) => {
     // signup/login/logout routes themselves and the separate admin panel
     // (which has its own, unrelated password gate below).
     const PUBLIC_PATHS = new Set(['/', '/signup', '/login', '/logout', '/terms', '/privacy', '/forgot-password', '/reset-password', '/api/analytics-snapshot', '/auth/google', '/auth/google/callback', '/auth/google/finish']);
-    // A single strain's page is left viewable without an account -- it's
-    // the page the "Share" button on that page points at, and a shared
-    // link that just bounces an unauthenticated visitor to a login wall
-    // (with no way back to the strain they were shown) defeats the point
-    // of sharing in the first place. pageStrainDetail() itself still hides
-    // anything personal -- check-in history, wishlist state, friend-share --
-    // behind its own `userId != null` checks.
-    const isPublicStrainDetail = method === 'GET' && /^\/strains\/[^/]+$/.test(pathname);
-    if (!PUBLIC_PATHS.has(pathname) && !isPublicStrainDetail && !pathname.startsWith('/admin') && auth.currentUserId(req) == null) {
-      // Remember where the visitor was headed so login/signup can send them
-      // right back afterward -- e.g. tapping "Check in" on a shared strain
-      // page as a logged-out visitor should land back on that same page
-      // post-signup, not on generic onboarding with no memory of why they came.
-      const next = encodeURIComponent(pathname + (url.search || ''));
-      return redirect(res, `/login?next=${next}`);
+    if (!PUBLIC_PATHS.has(pathname) && !pathname.startsWith('/admin') && auth.currentUserId(req) == null) {
+      return redirect(res, '/login');
     }
 
     let m;
@@ -4183,7 +4121,6 @@ const server = http.createServer(async (req, res) => {
     if (method === 'POST' && (m = pathname.match(/^\/wishlist\/([^/]+)\/toggle$/))) return await handleWishlistToggle(req, res, m[1]);
     if (method === 'GET' && pathname === '/trending') return pageTrending(req, res);
     if (method === 'GET' && pathname === '/mixing-cautions') return pageMixingCautions(req, res);
-    if (method === 'GET' && pathname === '/gear-care') return pageGearCare(req, res);
     if (method === 'GET' && pathname === '/grow-journal') return pageGrowJournal(req, res);
     if (method === 'POST' && pathname === '/grow-journal') return await handleGrowJournalSubmit(req, res);
     if (method === 'POST' && (m = pathname.match(/^\/grow-journal\/(\d+)\/delete$/))) return await handleGrowJournalDelete(req, res, m[1]);
