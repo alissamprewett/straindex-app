@@ -35,7 +35,6 @@ nav.tabbar{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px
 .compose-bar{position:fixed;bottom:calc(58px + env(safe-area-inset-bottom));left:0;right:0;max-width:520px;margin:0 auto;background:#fff;border-top:1px solid var(--border);padding:10px 16px;display:flex;gap:8px;z-index:40;}
 nav.tabbar a{flex:1;text-align:center;padding:10px 2px 8px;display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--ink-muted);font-size:10.5px;text-decoration:none;}
 nav.tabbar a .ic{font-size:19px;display:flex;align-items:center;justify-content:center;height:22px;line-height:1;}
-nav.tabbar a .ic-img{width:19px;height:22px;object-fit:contain;display:block;}
 nav.tabbar a.active{color:var(--brand-green);}
 .nav-badge{position:absolute;top:4px;right:20%;background:#d64545;color:#fff;font-size:9px;font-weight:700;line-height:1;padding:2px 4px;border-radius:999px;min-width:14px;text-align:center;}
 .card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:12px;margin-bottom:10px;box-shadow:var(--shadow);}
@@ -216,7 +215,6 @@ a.library-row:active{transform:scale(0.98);}
 .more-tile{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:12px 6px;text-align:center;box-shadow:var(--shadow);text-decoration:none;color:inherit;display:block;transition:transform 0.12s,box-shadow 0.12s;}
 .more-tile:active{transform:scale(0.97);}
 .more-tile .ic{font-size:20px;margin-bottom:5px;display:block;}
-.more-tile .ic-img-lg{width:20px;height:20px;object-fit:contain;display:inline-block;}
 .more-tile .t{font-weight:700;font-size:11px;line-height:1.2;}
 .more-tile .s{font-size:9px;color:var(--ink-muted);margin-top:2px;line-height:1.25;}
 
@@ -293,7 +291,6 @@ p.screen-sub.geo-live a{color:inherit;text-decoration:underline;font-weight:600;
 /* ---------------------------------------------------------------- method guide */
 .method-guide-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:10px;box-shadow:var(--shadow);}
 .method-guide-card .mgtitle{font-weight:800;font-size:14px;display:flex;align-items:center;gap:8px;}
-.mg-icon-photo{width:32px;height:32px;object-fit:cover;border-radius:8px;flex-shrink:0;}
 .method-guide-card .mgstats{display:flex;gap:14px;margin-top:6px;font-size:11px;color:var(--ink-muted);}
 .method-guide-card .mgdesc{font-size:12.5px;color:var(--ink-secondary);margin-top:7px;line-height:1.5;}
 

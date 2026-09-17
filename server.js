@@ -277,12 +277,12 @@ function renderCheckinComments(c, userId, redirectPath) {
     ` : ''}
   `;
 }
-// A small original cartoon-bud icon used on kudos buttons — hand-drawn SVG,
-// not a stock asset, so there's no licensing question about using it.
 function rarityLabel(r) { return { common: 'Common', uncommon: 'Uncommon', rare: 'Rare', legendary: 'Legendary' }[r] || r; }
-// A small original cartoon-bud icon used on kudos buttons — hand-drawn SVG,
-// not a stock asset, so there's no licensing question about using it.
-const KUDOS_BUD_ICON = `<img src="/docs/leaf-kudos.png" alt="" width="15" height="15" style="vertical-align:-3px;margin-right:4px;">`;
+// A leaf emoji used consistently on kudos buttons everywhere they appear
+// (check-ins, recipes, grow tips) -- previously a custom hand-drawn image,
+// switched to a plain emoji so every icon in the app comes from the same
+// consistent set rather than mixing in one-off image assets.
+const KUDOS_BUD_ICON = '🌿 ';
 
 // Real cannabis bud photos, all free-for-commercial-use / no-attribution-required
 // under the Unsplash License (https://unsplash.com/license). These are generic
@@ -369,7 +369,7 @@ function pageLandingPage(req, res) {
       <p class="screen-sub" style="margin:0 0 20px;">Your personal cannabis companion — track what you actually experience, stay informed on dosing and safety, discover your next favorite strain, and compare notes with real friends. All in one place.</p>
       <a href="/signup" class="btn block" style="text-decoration:none;max-width:280px;margin:0 auto;">Create Free Account</a>
       <p class="empty-note" style="margin-top:10px;">Already have an account? <a href="/login">Log in</a></p>
-      <p class="empty-note" style="margin-top:4px;">Beta · For adults 21+ where legal · Not medical advice</p>
+      <p class="empty-note" style="margin-top:4px;">For adults 21+ where legal · Not medical advice</p>
     </div>
 
     <div class="more-grid" style="margin-top:8px;">
@@ -611,7 +611,8 @@ function pageStrainDetail(req, res, id) {
   const s = db.getStrain(id);
   if (!s) return notFound(res);
   const userId = auth.currentUserId(req);
-  const history = db.listCheckins({ userId, strain_id: id, limit: 10 });
+  const fullHistory = db.listCheckins({ userId, strain_id: id, limit: 100000 });
+  const history = fullHistory.slice(0, 10);
   const ratingStats = db.getStrainRatingStats(id);
   const similar = db.getSimilarStrains(s, 4);
   const body = `
@@ -703,6 +704,7 @@ function pageStrainDetail(req, res, id) {
           </div>
         </div>
       </div>`).join('')}
+      ${fullHistory.length > history.length ? `<p class="empty-note" style="text-align:center;margin-top:8px;"><a href="/history?strain=${s.id}">See all ${fullHistory.length} check-ins with this strain →</a></p>` : ''}
     ` : `<div class="empty-note">You haven't checked this one in yet.</div>`}
   `;
   sendHtml(res, layout({ title: s.name, active: 'strains', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
@@ -1297,10 +1299,12 @@ function pageGrowing(req, res, query) {
   const viewerId = auth.currentUserId(req);
   const CATEGORIES = ['Plant Life Cycle', 'Watering', 'Lighting', 'Nutrients & Feeding', 'Pests & Disease', 'Training', 'Harvest & Curing', 'Genetics & Seeds', 'Indoor Setup', 'Outdoor Growing', 'Cleaning & Gear Care'];
   const cat = query.get('cat') || 'All';
+  const submitted = query.get('submitted');
   const tips = db.listGrowTips({ category: cat, viewerId });
   const body = `
     <h1 class="screen-title">Growing</h1>
     <p class="screen-sub">Tips &amp; tricks from home growers. Home cultivation laws vary by location — check yours first.</p>
+    ${submitted ? `<p class="empty-note" style="color:var(--brand-green-dark);">Thanks — your tip was submitted for review and will show up here once approved.</p>` : ''}
     <a class="btn block lilac" href="/growing/new" style="margin-bottom:14px;">🌱 Share a Grow Tip</a>
     <div>
       <a class="filter-pill ${cat === 'All' ? 'active' : ''}" href="/growing?cat=All">All</a>
@@ -1357,16 +1361,16 @@ async function handleGrowingNewSubmit(req, res) {
   const userId = requireUser(req, res);
   if (userId == null) return;
   const f = await parseForm(req);
-  await db.createGrowTip({ title: f.title, category: f.category, author: f.author, user_id: userId, body: f.body });
+  await db.createGrowTip({ title: f.title, category: f.category, author: f.author, user_id: userId, body: f.body, status: 'pending' });
   await sendEmail({
     to: SUPPORT_EMAIL,
     subject: `StrainDex: grow tip submitted — ${f.title}`,
-    html: `<p><b>${esc(f.author || 'Someone')}</b> shared a grow tip:</p>
+    html: `<p><b>${esc(f.author || 'Someone')}</b> submitted a grow tip for review:</p>
       <p style="font-size:16px;"><b>${esc(f.title)}</b> <span style="color:#888;">(${esc(f.category)})</span></p>
       <p style="white-space:pre-wrap;">${esc(f.body)}</p>
-      <p><a href="https://${req.headers.host}/growing">View it on the Growing page</a></p>`,
+      <p><a href="https://${req.headers.host}/admin/grow-tips">Review it in the admin panel</a></p>`,
   });
-  redirect(res, '/growing');
+  redirect(res, '/growing?submitted=1');
 }
 
 function pageChat(req, res) {
@@ -1714,7 +1718,7 @@ function pageLogin(req, res, query) {
 
 // ---------------------------------------------------------------- forgot / reset password
 // ---------------------------------------------------------------- feedback
-// Free-text feedback while in beta -- deliberately simple (one textarea,
+// Free-text feedback -- deliberately simple (one textarea,
 // no categories/ratings) so it's low-friction to actually use. Stored in
 // the DB (readable from the admin panel) and, if RESEND_API_KEY and
 // FEEDBACK_NOTIFY_EMAIL are both set, also emailed immediately so it
@@ -2710,7 +2714,7 @@ function pageFeedback(req, res, query) {
   const sent = query.get('sent');
   const body = `
     <h1 class="screen-title">Send Feedback</h1>
-    <p class="screen-sub">StrainDex is in beta — bugs, ideas, confusing screens, anything at all. This goes straight to the person building the app.</p>
+    <p class="screen-sub">Bugs, ideas, confusing screens, anything at all. This goes straight to the person building the app.</p>
     <p class="empty-note">For anything urgent — a compromised account, a safety concern, or a bad actor on the app — email <a href="mailto:${SUPPORT_EMAIL}">${SUPPORT_EMAIL}</a> directly instead of using the form below, since it's monitored more closely.</p>
     ${sent ? `<p class="empty-note" style="color:var(--brand-green-dark);">Thanks — your feedback was sent.</p>` : ''}
     <form method="POST" action="/feedback">
@@ -2833,11 +2837,13 @@ function pageAdminHome(req, res) {
   if (!requireAdmin(req, res)) return;
   const pendingCount = db.listRecipes({ status: 'pending' }).length;
   const pendingSubmissions = db.listStrainSubmissions().filter(s => s.status !== 'reviewed').length;
+  const pendingGrowTips = db.listGrowTips({ status: 'pending' }).length;
   const body = `
     <h1 class="screen-title">Admin</h1>
     <div class="card"><a href="/admin/feedback">💬 Feedback (${db.listFeedback().length})</a></div>
     <div class="card"><a href="/admin/faqs">📋 Manage FAQ (${db.listFaqs().length})</a></div>
     <div class="card"><a href="/admin/recipes">🍽️ Manage Recipes (${db.listRecipes({ status: null }).length}${pendingCount ? `, ${pendingCount} pending` : ''})</a></div>
+    <div class="card"><a href="/admin/grow-tips">🌱 Manage Grow Tips (${db.listGrowTips({ status: null }).length}${pendingGrowTips ? `, ${pendingGrowTips} pending` : ''})</a></div>
     <div class="card"><a href="/admin/strains">🌿 Manage Strains (${db.countStrains().toLocaleString()})</a></div>
     <div class="card"><a href="/admin/strain-submissions">💡 Suggested Strains${pendingSubmissions ? ` (${pendingSubmissions} pending)` : ''}</a></div>
     <div class="card"><a href="/admin/users">👤 Manage Users (${db.listUsers().length})</a></div>
@@ -3266,6 +3272,48 @@ async function handleAdminRecipeDelete(req, res, id) {
   redirect(res, '/admin/recipes');
 }
 
+// Grow tip review queue -- same shape as recipe review: pending tips wait
+// here until approved, only then do they show up on the public Growing
+// page (see listGrowTips's default status='approved' filter).
+function pageAdminGrowTips(req, res) {
+  if (!requireAdmin(req, res)) return;
+  const pending = db.listGrowTips({ status: 'pending' });
+  const all = db.listGrowTips({ status: null });
+  const body = `
+    <h1 class="screen-title">Manage Grow Tips</h1>
+    ${pending.length ? `<h2 class="screen-title">Pending review (${pending.length})</h2>` + pending.map(g => `
+      <div class="admin-row" style="flex-direction:column;align-items:stretch;">
+        <b>${esc(g.title)}</b> <span class="empty-note">by ${esc(g.author || 'Anonymous')} · ${esc(g.category)}</span>
+        <p class="empty-note">${esc(g.body)}</p>
+        <div class="actions">
+          <form method="POST" action="/admin/grow-tips/${g.id}/approve" style="display:inline;"><button class="btn" type="submit">Approve</button></form>
+          <form method="POST" action="/admin/grow-tips/${g.id}/delete" style="display:inline;" onsubmit="return confirm('Reject and delete?')"><button class="btn danger" style="color:#fff;" type="submit">Reject</button></form>
+        </div>
+      </div>`).join('') : `<div class="empty-note">No pending grow tips.</div>`}
+    <h2 class="screen-title" style="margin-top:20px;">All grow tips (${all.length})</h2>
+    ${all.map(g => `
+      <div class="admin-row">
+        <span>${esc(g.title)} <span class="recipe-source-tag ${g.status === 'approved' ? 'official' : 'community'}">${g.status}</span> <span class="empty-note">${esc(g.category)}</span></span>
+        <div class="actions">
+          <form method="POST" action="/admin/grow-tips/${g.id}/delete" style="display:inline;" onsubmit="return confirm('Delete this grow tip?')">
+            <button class="btn danger" style="color:#fff;" type="submit">Delete</button>
+          </form>
+        </div>
+      </div>`).join('')}
+  `;
+  sendHtml(res, layout({ title: 'Manage Grow Tips', body, isAdmin: true }));
+}
+async function handleAdminGrowTipApprove(req, res, id) {
+  if (!requireAdmin(req, res)) return;
+  await db.updateGrowTipStatus(Number(id), 'approved');
+  redirect(res, '/admin/grow-tips');
+}
+async function handleAdminGrowTipDelete(req, res, id) {
+  if (!requireAdmin(req, res)) return;
+  await db.deleteGrowTip(Number(id));
+  redirect(res, '/admin/grow-tips');
+}
+
 // ---------------------------------------------------------------- API
 
 function apiListStrains(req, res, query) {
@@ -3366,20 +3414,9 @@ function pageMore(req, res) {
   // not deleted, just not surfaced here until they're real.
   const sections = [
     {
-      title: 'Discover',
-      tiles: [
-        { href: '/quiz', icon: '🧭', t: 'Find Your First Strain', s: '3-question strain matcher' },
-        { href: '/mood-finder', icon: '🎯', t: 'Mood Finder', s: 'Pick a goal, get matched strains' },
-        { href: '/compare', icon: '🆚', t: 'Compare Strains', s: 'Side-by-side lookup' },
-        { href: '/surprise-me', icon: '🎲', t: 'Surprise Me', s: 'One random strain you haven\u2019t tried' },
-        { href: '/trending', icon: '🔥', t: 'Trending This Week', s: 'Most checked-into right now' },
-        { href: '/strains/suggest', icon: '💡', t: 'Suggest a Strain', s: 'Seen one we don\\u2019t have yet?' },
-      ],
-    },
-    {
       title: 'Your Journey',
       tiles: [
-        { href: '/collection', icon: '/docs/leaf-kudos.png', t: 'My Collection', s: 'Your binder & rarity progress' },
+        { href: '/collection', icon: '📖', t: 'My Collection', s: 'Your binder & rarity progress' },
         { href: '/wishlist', icon: '⭐', t: 'Wishlist', s: 'Strains you want to try next' },
         { href: '/grow-journal', icon: '📔', t: 'Grow Journal', s: 'Your private plant photo log' },
         { href: '/lists', icon: '📋', t: 'Your Lists', s: 'Custom groupings — Morning, Sleep, anything' },
@@ -3390,9 +3427,20 @@ function pageMore(req, res) {
       ],
     },
     {
+      title: 'Discover',
+      tiles: [
+        { href: '/quiz', icon: '🧭', t: 'Find Your First Strain', s: '3-question strain matcher' },
+        { href: '/mood-finder', icon: '🎯', t: 'Mood Finder', s: 'Pick a goal, get matched strains' },
+        { href: '/compare', icon: '🆚', t: 'Compare Strains', s: 'Side-by-side lookup' },
+        { href: '/surprise-me', icon: '🎲', t: 'Surprise Me', s: 'One random strain you haven\u2019t tried' },
+        { href: '/trending', icon: '🔥', t: 'Trending This Week', s: 'Most checked-into right now' },
+        { href: '/strains/suggest', icon: '💡', t: 'Suggest a Strain', s: 'Seen one we don\u2019t have yet?' },
+      ],
+    },
+    {
       title: 'Learn & Stay Safe',
       tiles: [
-        { href: '/methods', icon: '/docs/joint-icon.png', t: 'Ways to Enjoy It', s: 'Every method, explained' },
+        { href: '/methods', icon: '🔥', t: 'Ways to Enjoy It', s: 'Every method, explained' },
         { href: '/concentrates', icon: '💠', t: 'Concentrates & Extracts', s: 'Kief, rosin, live resin & more' },
         { href: '/legal-status', icon: '🏛️', t: 'Is It Legal Near Me?', s: 'State-by-state cannabis law' },
         { href: '/mixing-cautions', icon: '⚠️', t: 'Mixing With Other Substances', s: 'General cautions, not medical advice' },
@@ -3434,7 +3482,7 @@ function pageMore(req, res) {
     ${sections.map(sec => `
       <div class="section-label" style="margin-top:18px;">${esc(sec.title)}</div>
       <div class="more-grid">
-        ${sec.tiles.map(t => `<a class="more-tile" href="${t.href}"><span class="ic">${t.icon.startsWith('/') ? `<img src="${t.icon}" alt="" class="ic-img-lg">` : t.icon}</span><div class="t">${esc(t.t)}</div><div class="s">${esc(t.s)}</div></a>`).join('')}
+        ${sec.tiles.map(t => `<a class="more-tile" href="${t.href}"><span class="ic">${t.icon}</span><div class="t">${esc(t.t)}</div><div class="s">${esc(t.s)}</div></a>`).join('')}
       </div>
     `).join('')}
   `;
@@ -3694,13 +3742,16 @@ function pageCollection(req, res) {
   sendHtml(res, layout({ title: 'My Collection', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
-function pageHistory(req, res) {
+function pageHistory(req, res, query) {
   const userId = requireUser(req, res);
   if (userId == null) return;
-  const history = db.listCheckins({ userId, limit: 200 });
+  const strainId = query ? query.get('strain') : null;
+  const filterStrain = strainId ? db.getStrain(strainId) : null;
+  const history = db.listCheckins({ userId, strain_id: strainId || undefined, limit: 100000 });
   const body = `
-    <h1 class="screen-title">Check-In History</h1>
-    <p class="screen-sub">Your full timeline, newest first.</p>
+    <h1 class="screen-title">${filterStrain ? `Check-Ins: ${esc(filterStrain.name)}` : 'Check-In History'}</h1>
+    <p class="screen-sub">${filterStrain ? `Every check-in you've logged for this strain, newest first.` : 'Your full timeline, newest first.'}</p>
+    ${filterStrain ? `<p class="empty-note"><a href="/history">← All strains</a></p>` : ''}
     ${history.length ? history.map(c => {
       const s = db.getStrain(c.strain_id);
       return `<div class="library-row">
@@ -3715,7 +3766,7 @@ function pageHistory(req, res) {
       </div>`;
     }).join('') : `<div class="empty-note">No check-ins logged yet — <a href="/checkin">log your first one</a>.</div>`}
   `;
-  sendHtml(res, layout({ title: 'Check-In History', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: filterStrain ? `Check-Ins: ${filterStrain.name}` : 'Check-In History', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
 // ---------------------------------------------------------------- friends
@@ -4340,7 +4391,7 @@ function pageMethods(req, res) {
     <p class="screen-sub">Every ingestion method, with realistic onset and duration windows.</p>
     ${mock.methodGuide.map(m => `
       <div class="method-guide-card">
-        <div class="mgtitle">${m.icon.startsWith('/') ? `<img src="${m.icon}" alt="" class="mg-icon-photo">` : m.icon} ${esc(m.name)}</div>
+        <div class="mgtitle">${m.icon} ${esc(m.name)}</div>
         <div class="mgstats"><span>Onset: ${esc(m.onset)}</span><span>Lasts: ${esc(m.duration)}</span></div>
         <div class="mgdesc">${esc(m.desc)}</div>
       </div>`).join('')}
@@ -4526,6 +4577,9 @@ const server = http.createServer(async (req, res) => {
     if (method === 'POST' && (m = pathname.match(/^\/admin\/recipes\/(\d+)\/edit$/))) return await handleAdminRecipeEditSubmit(req, res, m[1]);
     if (method === 'POST' && (m = pathname.match(/^\/admin\/recipes\/(\d+)\/approve$/))) return await handleAdminRecipeApprove(req, res, Number(m[1]));
     if (method === 'POST' && (m = pathname.match(/^\/admin\/recipes\/(\d+)\/delete$/))) return await handleAdminRecipeDelete(req, res, Number(m[1]));
+    if (method === 'GET' && pathname === '/admin/grow-tips') return pageAdminGrowTips(req, res);
+    if (method === 'POST' && (m = pathname.match(/^\/admin\/grow-tips\/(\d+)\/approve$/))) return await handleAdminGrowTipApprove(req, res, m[1]);
+    if (method === 'POST' && (m = pathname.match(/^\/admin\/grow-tips\/(\d+)\/delete$/))) return await handleAdminGrowTipDelete(req, res, m[1]);
 
     if (method === 'GET' && pathname === '/api/strains') return apiListStrains(req, res, url.searchParams);
     if (method === 'GET' && pathname === '/api/admin/strain-search') return apiAdminStrainNameSearch(req, res, url.searchParams);
@@ -4537,7 +4591,7 @@ const server = http.createServer(async (req, res) => {
 
     if (method === 'GET' && pathname === '/more') return pageMore(req, res);
     if (method === 'GET' && pathname === '/collection') return pageCollection(req, res);
-    if (method === 'GET' && pathname === '/history') return pageHistory(req, res);
+    if (method === 'GET' && pathname === '/history') return pageHistory(req, res, url.searchParams);
     if (method === 'GET' && pathname === '/trade') return pageTrade(req, res, url.searchParams);
     if (method === 'GET' && pathname === '/trade-history') return pageTradeHistory(req, res);
     if (method === 'GET' && pathname === '/friends') return pageFriends(req, res, url.searchParams);
