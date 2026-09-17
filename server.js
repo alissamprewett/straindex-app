@@ -27,13 +27,11 @@ const storage = require('./lib/storage');
 const PORT = process.env.PORT || 3000;
 
 // ---------------------------------------------------------------- basic signup rate limiting
-// Backed by the persistent rate_limit_attempts table (see db.js) rather
-// than an in-memory Map, specifically so this survives a server restart or
-// redeploy -- a Map-based limiter resets every time Render restarts the
-// process, which on a free/hobby tier can happen often enough to make the
-// protection meaningless. Not bulletproof (doesn't help behind a shared IP
-// like a school or office), but stops the easy case: a bot or script
-// hammering /signup. Max 5 signup attempts per IP per 15 minutes.
+// A simple in-memory per-IP throttle -- not bulletproof (resets on
+// restart, doesn't help behind a shared IP like a school or office), but
+// stops the easy case: a bot or script hammering /signup. Max 5 signup
+// attempts per IP per 15 minutes.
+const signupAttempts = new Map(); // ip -> array of timestamps (ms)
 const SIGNUP_WINDOW_MS = 15 * 60 * 1000;
 const SIGNUP_MAX_ATTEMPTS = 5;
 function clientIp(req) {
@@ -41,11 +39,13 @@ function clientIp(req) {
   if (fwd) return fwd.split(',')[0].trim();
   return req.socket.remoteAddress || 'unknown';
 }
-async function isSignupRateLimited(req) {
+function isSignupRateLimited(req) {
   const ip = clientIp(req);
-  const existing = await db.pruneAndCountAttempts('signup', ip, SIGNUP_WINDOW_MS);
-  await db.recordRateLimitAttempt('signup', ip);
-  return (existing + 1) > SIGNUP_MAX_ATTEMPTS;
+  const now = Date.now();
+  const attempts = (signupAttempts.get(ip) || []).filter(t => now - t < SIGNUP_WINDOW_MS);
+  attempts.push(now);
+  signupAttempts.set(ip, attempts);
+  return attempts.length > SIGNUP_MAX_ATTEMPTS;
 }
 
 // ---------------------------------------------------------------- basic login rate limiting
@@ -53,47 +53,29 @@ async function isSignupRateLimited(req) {
 // brute-forcing one account's password, without penalizing everyone on a
 // shared network (school, office) for one person's typos. Only failed
 // attempts count -- a successful login clears the counter. Max 5 failed
-// attempts per 15 minutes per IP+username combination. Same persistent
-// storage as signup, for the same restart-survival reason.
+// attempts per 15 minutes per IP+username combination.
+const loginAttempts = new Map(); // "ip:username" -> array of failed-attempt timestamps
 const LOGIN_WINDOW_MS = 15 * 60 * 1000;
 const LOGIN_MAX_ATTEMPTS = 5;
 function loginAttemptKey(req, username) {
   return `${clientIp(req)}:${String(username || '').trim().toLowerCase()}`;
 }
-async function isLoginRateLimited(req, username) {
+function isLoginRateLimited(req, username) {
   const key = loginAttemptKey(req, username);
-  const count = await db.pruneAndCountAttempts('login', key, LOGIN_WINDOW_MS);
-  return count >= LOGIN_MAX_ATTEMPTS;
+  const now = Date.now();
+  const attempts = (loginAttempts.get(key) || []).filter(t => now - t < LOGIN_WINDOW_MS);
+  return attempts.length >= LOGIN_MAX_ATTEMPTS;
 }
-async function recordFailedLogin(req, username) {
-  await db.recordRateLimitAttempt('login', loginAttemptKey(req, username));
+function recordFailedLogin(req, username) {
+  const key = loginAttemptKey(req, username);
+  const now = Date.now();
+  const attempts = (loginAttempts.get(key) || []).filter(t => now - t < LOGIN_WINDOW_MS);
+  attempts.push(now);
+  loginAttempts.set(key, attempts);
 }
-async function clearLoginAttempts(req, username) {
-  await db.clearRateLimitAttempts('login', loginAttemptKey(req, username));
+function clearLoginAttempts(req, username) {
+  loginAttempts.delete(loginAttemptKey(req, username));
 }
-
-// ---------------------------------------------------------------- submission rate limiting
-// A generous per-account limit on the four authenticated submission
-// endpoints (feedback, recipes, grow tips, strain suggestions) -- every
-// one of them now sends an email to SUPPORT_EMAIL the moment it's used,
-// so without this, a bored or malicious logged-in user could spam
-// dozens of emails in seconds and burn through the transactional email
-// provider's sending quota. Reuses the same persistent rate_limit_attempts
-// table built for signup/login, just keyed by user id instead of IP,
-// since these actions always require being logged in already -- no need
-// to worry about one shared IP (a school, an office) penalizing everyone
-// on it the way login's IP-based limiting has to. The threshold is
-// deliberately generous: this exists to stop an obvious burst, not to
-// second-guess someone submitting a handful of genuine reports in one
-// sitting.
-const SUBMISSION_WINDOW_MS = 15 * 60 * 1000;
-const SUBMISSION_MAX_ATTEMPTS = 10;
-async function isSubmissionRateLimited(bucket, userId) {
-  const existing = await db.pruneAndCountAttempts(bucket, String(userId), SUBMISSION_WINDOW_MS);
-  await db.recordRateLimitAttempt(bucket, String(userId));
-  return (existing + 1) > SUBMISSION_MAX_ATTEMPTS;
-}
-
 const PUBLIC_DIR = path.join(__dirname, 'public');
 const DOCS_DIR = path.join(__dirname, 'docs');
 
@@ -183,40 +165,27 @@ function isOldEnough(birthDateStr) {
   return age >= MIN_AGE;
 }
 function starString(n) { n = Number(n) || 0; return '★'.repeat(n) + '☆'.repeat(5 - n); }
-// The pairing categories someone can tag onto a check-in -- open-ended in
-// count (log as many as you want) but each one picks from this fixed,
-// small vocabulary rather than free-typing a category, so the feed stays
-// scannable and icons stay consistent. Shared between the server-rendered
-// first row and the client-side "add another" rows in app.js, so this is
-// the single source of truth for the list.
-const PAIRING_TYPES = [
-  { key: 'food', icon: '🍽️', label: 'Food' },
-  { key: 'drink', icon: '🍹', label: 'Drink' },
-  { key: 'music', icon: '🎵', label: 'Music' },
-  { key: 'movie', icon: '🎬', label: 'Movie / TV' },
-  { key: 'game', icon: '🎮', label: 'Game' },
-  { key: 'activity', icon: '🎨', label: 'Activity' },
-  { key: 'location', icon: '📍', label: 'Location' },
-  { key: 'occasion', icon: '🎉', label: 'Occasion' },
-  { key: 'company', icon: '👥', label: 'Company' },
-];
-const PAIRING_TYPE_MAP = Object.fromEntries(PAIRING_TYPES.map(p => [p.key, p]));
+// Guards the `next` redirect used by login/signup (e.g. coming from a
+// shared strain link) so it can only ever point somewhere on this same
+// site -- never an absolute URL or a scheme like "javascript:", which is
+// the classic open-redirect trap of trusting a query param at face value.
+function isSafeRedirectTarget(next) {
+  if (!next || typeof next !== 'string') return false;
+  if (!next.startsWith('/') || next.startsWith('//')) return false;
+  if (next.includes('\\')) return false;
+  return true;
+}
 // Shared renderer for the optional "pairings" a user can log with a
-// check-in -- as many as they want, each one a (type, note) pair. Only
-// ever renders what's actually there; an empty pairings list renders
-// nothing beyond the private/tasting-notes lines above it.
+// check-in -- tasting notes plus food/drink, music/entertainment, and
+// activity pairings. Each is independently optional, so only show what's
+// actually filled in.
 function renderCheckinPairings(c) {
-  const pairings = Array.isArray(c.pairings) ? c.pairings : [];
   return `
     ${c.is_private ? `<div class="empty-note" style="padding:4px 0 0;font-weight:700;">🔒 Private — only visible to you</div>` : ''}
-    ${c.brand ? `<div class="empty-note" style="padding:4px 0 0;">🏷️ Brand: ${esc(c.brand)}</div>` : ''}
     ${c.tasting_notes ? `<div class="empty-note" style="padding:4px 0 0;">🍃 Tasting notes: ${esc(c.tasting_notes)}</div>` : ''}
-    ${pairings.map(p => {
-      const meta = PAIRING_TYPE_MAP[p.type];
-      const icon = meta ? meta.icon : '🔗';
-      const label = meta ? meta.label : p.type;
-      return `<div class="empty-note" style="padding:2px 0 0;">${icon} ${esc(label)}${p.note ? `: ${esc(p.note)}` : ''}</div>`;
-    }).join('')}
+    ${c.pairing_food ? `<div class="empty-note" style="padding:2px 0 0;">🍽️ Paired with: ${esc(c.pairing_food)}</div>` : ''}
+    ${c.pairing_entertainment ? `<div class="empty-note" style="padding:2px 0 0;">🎵 Listening/watching: ${esc(c.pairing_entertainment)}</div>` : ''}
+    ${c.pairing_activity ? `<div class="empty-note" style="padding:2px 0 0;">🎯 Doing: ${esc(c.pairing_activity)}</div>` : ''}
   `;
 }
 // Shows a live "started Xh Ym ago" onset reminder under any check-in logged
@@ -300,12 +269,12 @@ function renderCheckinComments(c, userId, redirectPath) {
     ` : ''}
   `;
 }
+// A small original cartoon-bud icon used on kudos buttons — hand-drawn SVG,
+// not a stock asset, so there's no licensing question about using it.
 function rarityLabel(r) { return { common: 'Common', uncommon: 'Uncommon', rare: 'Rare', legendary: 'Legendary' }[r] || r; }
-// A leaf emoji used consistently on kudos buttons everywhere they appear
-// (check-ins, recipes, grow tips) -- previously a custom hand-drawn image,
-// switched to a plain emoji so every icon in the app comes from the same
-// consistent set rather than mixing in one-off image assets.
-const KUDOS_BUD_ICON = '🌿 ';
+// A small original cartoon-bud icon used on kudos buttons — hand-drawn SVG,
+// not a stock asset, so there's no licensing question about using it.
+const KUDOS_BUD_ICON = `<img src="/docs/leaf-kudos.png" alt="" width="15" height="15" style="vertical-align:-3px;margin-right:4px;">`;
 
 // Real cannabis bud photos, all free-for-commercial-use / no-attribution-required
 // under the Unsplash License (https://unsplash.com/license). These are generic
@@ -392,7 +361,7 @@ function pageLandingPage(req, res) {
       <p class="screen-sub" style="margin:0 0 20px;">Your personal cannabis companion — track what you actually experience, stay informed on dosing and safety, discover your next favorite strain, and compare notes with real friends. All in one place.</p>
       <a href="/signup" class="btn block" style="text-decoration:none;max-width:280px;margin:0 auto;">Create Free Account</a>
       <p class="empty-note" style="margin-top:10px;">Already have an account? <a href="/login">Log in</a></p>
-      <p class="empty-note" style="margin-top:4px;">For adults 21+ where legal · Not medical advice</p>
+      <p class="empty-note" style="margin-top:4px;">Beta · For adults 21+ where legal · Not medical advice</p>
     </div>
 
     <div class="more-grid" style="margin-top:8px;">
@@ -428,22 +397,12 @@ function pageLandingPage(req, res) {
       </div>
     </div>
 
-    <div class="card" style="margin-top:20px;">
-      <div style="display:flex;align-items:flex-start;gap:10px;">
-        <span style="font-size:22px;">🔒</span>
-        <div>
-          <div style="font-weight:700;font-size:14px;margin-bottom:4px;">We don't sell your data. Ever.</div>
-          <p class="empty-note" style="padding:0;">Cannabis use is legally sensitive in most of the country, and you shouldn't have to worry about a permanent, sellable record of it. StrainDex is a paid-when-you-want-it app, not an ad business — we don't need to sell what you check in to make money. <a href="/privacy">Read the full privacy policy →</a></p>
-        </div>
-      </div>
-    </div>
-
     <div class="card" style="margin-top:20px;text-align:center;">
       <p class="empty-note" style="padding:0 0 10px;">Already checking in with friends? See what StrainDex looks like inside.</p>
       <a href="/signup" class="btn secondary block" style="text-decoration:none;">Get Started →</a>
     </div>
   `;
-  sendHtml(res, layout({ title: 'StrainDex', body, isAdmin: false, showBack: false, metaDescription: `Track what you actually experience with cannabis, discover your next favorite strain from ${totalStrains.toLocaleString()}+ real strains, and compare notes with real friends — all in one place.`, canonicalPath: '/' }));
+  sendHtml(res, layout({ title: 'StrainDex', body, isAdmin: false, showBack: false }));
 }
 
 function pageHome(req, res) {
@@ -488,7 +447,7 @@ function pageHome(req, res) {
       return `<div class="feed-post">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
           ${friends.length ? `<div class="empty-note" style="padding:0;font-weight:${isMine ? 'normal' : '700'};">${isMine ? 'You' : `<a href="/friends/${c.user_id}" style="color:inherit;">${esc(posterName)}</a>`}</div>` : '<div></div>'}
-          ${isMine ? `<span><a href="/checkin/${c.id}/card" class="empty-note" style="padding:0;">Share</a> · <a href="/checkin/${c.id}/edit" class="empty-note" style="padding:0;">Edit</a></span>` : ''}
+          ${isMine ? `<a href="/checkin/${c.id}/edit" class="empty-note" style="padding:0;">Edit</a>` : ''}
         </div>
         <a class="strain-chip" href="/strains/${c.strain_id}">
           ${strainPhotoTag(s, 'xs')}
@@ -528,9 +487,9 @@ function pageStrains(req, res, query) {
   const effectOpts = ['All', 'Happy', 'Relaxed', 'Euphoric', 'Uplifted', 'Sleepy', 'Energetic', 'Creative', 'Focused', 'Hungry', 'Talkative', 'Calm', 'Social'];
   const thcOpts = ['All', 'Low', 'Medium', 'High'];
   const terpeneOpts = ['All', 'Myrcene', 'Limonene', 'Caryophyllene', 'Pinene', 'Linalool', 'Terpinolene', 'Humulene', 'Ocimene'];
-  const ailmentOpts = ['All', ...AILMENT_VOCAB];
-  const verifiedOpts = ['All', 'fully-verified', 'verified', 'partial', 'listed'];
-  const verifiedLabel = { All: 'Any data quality', 'fully-verified': '🌟 Fully documented', verified: '✅ Verified', partial: '🔹 Partially verified', listed: '⚪ Listed only' };
+  const ailmentOpts = ['All', 'Stress', 'Pain', 'Depression', 'Insomnia', 'Lack of Appetite', 'Nausea', 'Inflammation', 'Muscle Spasms', 'Seizures'];
+  const verifiedOpts = ['All', 'verified', 'partial', 'listed'];
+  const verifiedLabel = { All: 'Any data quality', verified: '✅ Verified', partial: '🔹 Partially verified', listed: '⚪ Listed only' };
   const thcLabel = { All: 'Any THC', Low: 'Low (≤15%)', Medium: 'Medium (15–25%)', High: 'High (25%+)' };
   const mk = (params) => '/strains?' + new URLSearchParams({ q, type, rarity, effect, thc, terpene, ailment, ...params }).toString();
 
@@ -570,7 +529,14 @@ function pageStrains(req, res, query) {
         <select id="strain-search-verified" name="verified" form="strain-search-form">${verifiedOpts.map(v => `<option value="${esc(v)}" ${verified === v ? 'selected' : ''}>${verifiedLabel[v]}</option>`).join('')}</select>
       </div>
     </div>
-    <p class="empty-note" style="margin-bottom:2px;">🌟 Fully documented — verified plus a confirmed cross/genetics. &nbsp; ✅ Verified — THC, breeder, and flavor/terpene data all independently confirmed. &nbsp; 🔹 Partial — some details confirmed. &nbsp; ⚪ Listed only — seen on a dispensary menu, nothing independently confirmed yet.</p>
+    <div style="margin-bottom:10px;">
+      ${Object.values(VERIFICATION_BADGE).map(v => `
+        <div style="display:flex;gap:8px;align-items:flex-start;padding:2px 0;">
+          <span style="flex:0 0 20px;font-size:14px;line-height:1.5;">${v.icon}</span>
+          <span class="empty-note" style="padding:0;line-height:1.5;"><b>${esc(v.label)}</b> — ${esc(v.note)}</span>
+        </div>
+      `).join('')}
+    </div>
     <p class="empty-note" style="margin-bottom:10px;">User-reported associations, not medical advice — see a doctor for real guidance.</p>
     <p class="empty-note" id="strain-search-count">${total > 60 ? `Showing 60 of ${total.toLocaleString()} — refine your search to narrow it down.` : `${total} strain${total === 1 ? '' : 's'}`}</p>
     <div id="strain-search-results">${results.map(s => `
@@ -581,9 +547,9 @@ function pageStrains(req, res, query) {
           <div class="sub">${esc(s.type)} · ${rarityLabel(s.rarity)} · THC ${esc(s.thc)}</div>
         </div>
         <span class="rarity-tag rarity-${s.rarity}">${rarityLabel(s.rarity)}</span>
-      </a>`).join('') || `<div class="empty-note">No strains match your filters. <a href="/strains/suggest${q ? `?name=${encodeURIComponent(q)}` : ''}">Can't find it? Suggest it →</a></div>`}</div>
+      </a>`).join('') || `<div class="empty-note">No strains match your filters.</div>`}</div>
   `;
-  sendHtml(res, layout({ title: 'Strains', active: 'strains', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)), metaDescription: `Browse ${total.toLocaleString()} cannabis strains with real THC data, effects, terpenes, and relief tags — search by name, flavor, or how you want to feel.`, canonicalPath: '/strains' }));
+  sendHtml(res, layout({ title: 'Strains', active: 'strains', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
 // Verification tier is computed live from how complete a strain's actual
@@ -594,14 +560,12 @@ function strainVerificationTier(s) {
   const hasThc = !!s.thc;
   const hasBreeder = !!s.breeder;
   const hasDetail = !!s.flavor || (Array.isArray(s.terps) && s.terps.length > 0);
-  const hasGenetics = Array.isArray(s.parents) && s.parents.length > 0;
-  if (hasThc && hasBreeder && hasDetail) return hasGenetics ? 'fully-verified' : 'verified';
-  const score = [hasThc, hasBreeder, hasDetail, hasGenetics].filter(Boolean).length;
+  const score = [hasThc, hasBreeder, hasDetail].filter(Boolean).length;
+  if (score === 3) return 'verified';
   if (score >= 1) return 'partial';
   return 'listed';
 }
 const VERIFICATION_BADGE = {
-  'fully-verified': { icon: '🌟', label: 'Fully documented', note: 'THC, breeder, flavor/terpene data, and a documented cross — all independently confirmed.' },
   verified: { icon: '✅', label: 'Verified', note: 'THC, breeder, and flavor/terpene data all independently confirmed.' },
   partial: { icon: '🔹', label: 'Partially verified', note: 'Some details confirmed; the rest wasn\u2019t independently found.' },
   listed: { icon: '⚪', label: 'Listed only', note: 'Seen on a dispensary menu, but no independent data was found for it.' },
@@ -644,10 +608,15 @@ function pageStrainDetail(req, res, id) {
   const s = db.getStrain(id);
   if (!s) return notFound(res);
   const userId = auth.currentUserId(req);
-  const fullHistory = db.listCheckins({ userId, strain_id: id, limit: 100000 });
-  const history = fullHistory.slice(0, 10);
+  // Anonymous visitors (arriving via a shared link, now that this page is
+  // viewable without an account) never get check-in history rendered back
+  // at them -- it's login-gated everywhere else in the app and stays that
+  // way here too, rather than trusting listCheckins to scope a null userId
+  // itself.
+  const history = userId != null ? db.listCheckins({ userId, strain_id: id, limit: 10 }) : [];
   const ratingStats = db.getStrainRatingStats(id);
   const similar = db.getSimilarStrains(s, 4);
+  const nextParam = encodeURIComponent(`/strains/${s.id}`);
   const body = `
     <div class="card" style="margin-top:10px;">
       <div style="display:flex;align-items:center;gap:12px;">
@@ -662,24 +631,51 @@ function pageStrainDetail(req, res, id) {
       ${(s.thc || s.cbd) ? `<p style="margin:12px 0 4px;">${s.thc ? `<b>THC:</b> ${esc(s.thc)}` : ''}${s.thc && s.cbd ? ' &nbsp; ' : ''}${s.cbd ? `<b>CBD:</b> ${esc(s.cbd)}` : ''}</p>` : `<p class="empty-note" style="padding:0 0 4px;">No verified THC/CBD data for this strain yet.</p>`}
       ${s.breeder ? `<p class="empty-note" style="padding:0;"><b>Bred by:</b> ${esc(s.breeder)}</p>` : ''}
       ${s.flavor ? `<p style="font-style:italic;color:var(--ink-secondary);">"${esc(s.flavor)}"</p>` : ''}
-      <p>${s.effects.map(e => `<a class="filter-pill" href="/strains?effect=${encodeURIComponent(e)}" style="text-decoration:none;">${esc(e)}</a>`).join('')}</p>
+      <p>${s.effects.map(e => `<span class="filter-pill">${esc(e)}</span>`).join('')}</p>
       ${s.terps.length ? `<p><b>Top terpenes:</b> ${s.terps.map(t => `${esc(t.n)} (${Math.round(t.p * 100)}%)`).join(', ')}</p>` : ''}
       ${Array.isArray(s.ailments) && s.ailments.length ? `
-        <p style="margin:10px 0 2px;"><b>Users report relief from:</b> ${s.ailments.map(a => `<a class="filter-pill" href="/strains?ailment=${encodeURIComponent(a)}" style="text-decoration:none;">${esc(a)}</a>`).join(' ')}</p>
+        <p style="margin:10px 0 2px;"><b>Users report relief from:</b> ${s.ailments.map(a => `<span class="filter-pill">${esc(a)}</span>`).join(' ')}</p>
         <p class="empty-note" style="padding:0;">User-reported, not medical advice — see a doctor for real guidance.</p>
       ` : ''}
     </div>
     ${renderFamilyTree(s)}
+    ${userId == null ? `
+      <div class="card" style="margin-top:10px;text-align:center;">
+        <p class="empty-note" style="padding:0 0 8px;">Someone shared this strain with you — sign up free to check in, save it, and see what your friends think.</p>
+        <a class="btn block" href="/signup?next=${nextParam}" style="text-decoration:none;">Create Free Account</a>
+        <p class="empty-note" style="margin-top:8px;">Already have an account? <a href="/login?next=${nextParam}">Log in</a></p>
+      </div>
+    ` : ''}
     <a class="btn block" href="/checkin?strain=${s.id}">＋ Check in this strain</a>
     <a class="btn secondary block" href="/compare?a=${s.id}" style="margin-top:8px;">🆚 Compare this strain</a>
+    <button type="button" class="btn secondary block" style="margin-top:8px;" onclick="shareStrainPage(${JSON.stringify(s.name)})">📤 Share</button>
     ${userId != null && db.listFriends(userId).length ? `
       <form method="POST" action="/strains/${s.id}/share" style="display:flex;gap:8px;margin-top:8px;">
         <select name="friend_id" style="flex:1;">
           ${db.listFriends(userId).map(f => `<option value="${f.id}">${esc(f.username)}</option>`).join('')}
         </select>
-        <button class="btn secondary" type="submit">🌿 Share</button>
+        <button class="btn secondary" type="submit">🌿 Send to a friend</button>
       </form>
     ` : ''}
+    <script>
+      // Real device share sheet (Messages, Mail, WhatsApp, etc.) where
+      // supported, so sharing a strain isn't limited to friends who
+      // already have a StrainDex account. Falls back to copying the link
+      // on browsers without the Web Share API (most desktop browsers).
+      function shareStrainPage(name) {
+        const url = window.location.href.split('?')[0].split('#')[0];
+        const shareData = { title: name + ' — StrainDex', text: 'Check out ' + name + ' on StrainDex:', url };
+        if (navigator.share) {
+          navigator.share(shareData).catch(() => {});
+          return;
+        }
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(url).then(() => alert('Link copied to clipboard!')).catch(() => window.prompt('Copy this link:', url));
+        } else {
+          window.prompt('Copy this link:', url);
+        }
+      }
+    </script>
     ${userId != null ? `
       <form method="POST" action="/wishlist/${s.id}/toggle" style="margin-top:8px;">
         <input type="hidden" name="redirect_to" value="/strains/${s.id}">
@@ -722,7 +718,7 @@ function pageStrainDetail(req, res, id) {
         <div style="flex:1;min-width:0;">
           <div style="display:flex;justify-content:space-between;align-items:baseline;">
             <b>${esc(c.method)}</b>
-            <span><a href="/checkin/${c.id}/card" class="empty-note" style="padding:0;">Share</a> · <a href="/checkin/${c.id}/edit" class="empty-note" style="padding:0;">Edit</a></span>
+            <a href="/checkin/${c.id}/edit" class="empty-note" style="padding:0;">Edit</a>
           </div>
           ${starString(c.rating)}
           <div class="empty-note" style="padding:2px 0 0;"><span class="local-time" data-utc="${c.created_at}Z">${esc(c.created_at)} UTC</span></div>
@@ -737,11 +733,9 @@ function pageStrainDetail(req, res, id) {
           </div>
         </div>
       </div>`).join('')}
-      ${fullHistory.length > history.length ? `<p class="empty-note" style="text-align:center;margin-top:8px;"><a href="/history?strain=${s.id}">See all ${fullHistory.length} check-ins with this strain →</a></p>` : ''}
     ` : `<div class="empty-note">You haven't checked this one in yet.</div>`}
   `;
-  const seoDescription = `${s.name} — ${s.type}${s.lean ? ` (${s.lean})` : ''} strain${s.thc ? ` with ${s.thc} THC` : ''}${s.effects && s.effects.length ? `. Reported effects: ${s.effects.slice(0, 3).join(', ')}` : ''}${s.flavor ? `. ${s.flavor}` : ''}`.slice(0, 300);
-  sendHtml(res, layout({ title: s.name, active: 'strains', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)), metaDescription: seoDescription, canonicalPath: `/strains/${s.id}` }));
+  sendHtml(res, layout({ title: s.name, active: 'strains', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
 // Full 85-term mood/effects/relief vocabulary — matched against the
@@ -757,11 +751,6 @@ const EFFECT_VOCAB = [
   'Loose', 'Free-spirited', 'Tranquil', 'Elevated', 'Airy', 'Slowed-down', 'Spirited', 'Numb (localized)',
   'Stress relief', 'Pain relief', 'Sleep support', 'Nausea relief', 'Appetite boost', 'Inflammation relief', 'Muscle relief', 'Mood lift',
 ];
-// The fixed set of ailments a strain can be tagged as offering relief
-// from -- kept as a single shared list (rather than duplicated inline)
-// so the strain search filter and the admin strain form's ailment picker
-// can never quietly drift apart.
-const AILMENT_VOCAB = ['Stress', 'Pain', 'Depression', 'Insomnia', 'Lack of Appetite', 'Nausea', 'Inflammation', 'Muscle Spasms', 'Seizures'];
 
 // Every ingestion method the original research turned up, grouped exactly
 // like the prototype (rendered here as <optgroup>s so it stays a plain,
@@ -848,31 +837,10 @@ const METHOD_GROUPS = [
   { group: 'Topicals & Other', items: ['Topical Cream / Balm', 'Transdermal Patch', 'Suppository', 'RSO (Rick Simpson Oil)', 'Cannabis Bath Soak'] },
 ];
 
-// Renders one pairing row: a type dropdown plus an optional free-text note.
-// Used both for the row(s) rendered on first page load and, via the
-// PAIRING_TYPES data stashed on window, replicated client-side in app.js
-// when someone taps "+ Add Another Pairing".
-function renderPairingRow(selectedType, note) {
-  const options = PAIRING_TYPES.map(p => `<option value="${esc(p.key)}" ${selectedType === p.key ? 'selected' : ''}>${p.icon} ${esc(p.label)}</option>`).join('');
-  return `
-    <div class="pairing-row">
-      <select name="pairing_type">
-        <option value="">Add a pairing...</option>
-        ${options}
-      </select>
-      <input type="text" name="pairing_note" placeholder="Optional note..." value="${esc(note || '')}">
-      <button type="button" class="pairing-remove-btn" onclick="this.closest('.pairing-row').remove()" aria-label="Remove pairing">✕</button>
-    </div>`;
-}
 function pageCheckinForm(req, res, query, existing) {
   const strainId = existing ? existing.strain_id : (query.get('strain') || '');
   const s = strainId ? db.getStrain(strainId) : null;
   const isEdit = !!existing;
-  // A brand-new check-in starts with exactly one empty pairing row -- most
-  // people logging quickly won't touch it at all, so keeping it to one
-  // avoids the form looking more involved than it needs to be. Editing an
-  // existing check-in that already has several pairings shows all of them.
-  const initialPairings = (existing && Array.isArray(existing.pairings) && existing.pairings.length) ? existing.pairings : [{ type: '', note: '' }];
   const body = `
     <h1 class="screen-title">${isEdit ? 'Edit Check-In' : 'Check In'}</h1>
     ${isEdit ? `<p class="empty-note">Thoughts changed after the fact? That's normal, especially with edibles — update it below.</p>` : ''}
@@ -920,14 +888,14 @@ function pageCheckinForm(req, res, query, existing) {
       <label class="field-label">Tasting Notes</label>
       <textarea name="tasting_notes" placeholder="Flavor, smell, smoothness — what stood out?">${existing ? esc(existing.tasting_notes || '') : ''}</textarea>
 
-      <label class="field-label">Brand <span class="empty-note" style="padding:0;">(optional — whose version was it?)</span></label>
-      <input type="text" name="brand" placeholder="e.g. Cookies, Jungle Boys, a local grower..." value="${existing ? esc(existing.brand || '') : ''}">
+      <label class="field-label">Food / Drink Pairing</label>
+      <input type="text" name="pairing_food" placeholder="What went really well with it?" value="${existing ? esc(existing.pairing_food || '') : ''}">
 
-      <label class="field-label">Pairings <span class="empty-note" style="padding:0;">(optional — log as many as you want)</span></label>
-      <div class="pairing-list" id="pairing-list">
-        ${initialPairings.map(p => renderPairingRow(p.type, p.note)).join('')}
-      </div>
-      <button type="button" class="btn secondary" id="pairing-add-btn" style="margin-top:6px;padding:6px 14px;font-size:13px;">+ Add Another Pairing</button>
+      <label class="field-label">Music / Entertainment Pairing</label>
+      <input type="text" name="pairing_entertainment" placeholder="What you listened to or watched" value="${existing ? esc(existing.pairing_entertainment || '') : ''}">
+
+      <label class="field-label">Activity Pairing</label>
+      <input type="text" name="pairing_activity" placeholder="What you did while enjoying it" value="${existing ? esc(existing.pairing_activity || '') : ''}">
 
       <label style="display:flex;align-items:center;gap:8px;margin-top:16px;cursor:pointer;">
         <input type="checkbox" name="is_private" value="1" ${existing && existing.is_private ? 'checked' : ''} style="width:auto;margin:0;">
@@ -945,7 +913,6 @@ function pageCheckinForm(req, res, query, existing) {
     <script>
       window.EFFECT_VOCAB = ${JSON.stringify(EFFECT_VOCAB)};
       window.INITIAL_EFFECTS = ${JSON.stringify(existing ? existing.effects || [] : [])};
-      window.PAIRING_TYPES = ${JSON.stringify(PAIRING_TYPES)};
       window.INITIAL_PHOTO = ${JSON.stringify(existing ? existing.photo || '' : '')};
       window.EDIBLE_METHODS = ${JSON.stringify(METHOD_GROUPS.find(g => g.group === 'Edibles').items)};
       function toggleEdibleWarning(method) {
@@ -965,64 +932,7 @@ function pageCheckinEditForm(req, res, id) {
   if (!existing || existing.user_id !== userId) return notFound(res);
   pageCheckinForm(req, res, new URLSearchParams(), existing);
 }
-// A single check-in rendered as a self-contained, screenshot-worthy card --
-// big strain photo, rating, and a StrainDex watermark, sized to look right
-// as an Instagram Story or a text to a friend. Not a real image export (no
-// image-generation library available in this environment), but it's a
-// distraction-free view specifically designed to be screenshotted, which
-// gets the same organic-sharing result without needing server-side image
-// rendering. Same ownership check as editing -- this can include private
-// tasting notes, so it's not something anyone else's check-in should
-// expose.
-function pageCheckinCard(req, res, id) {
-  const userId = requireUser(req, res);
-  if (userId == null) return;
-  const c = db.getCheckin(id);
-  if (!c || c.user_id !== userId) return notFound(res);
-  const s = db.getStrain(c.strain_id);
-  const pairings = Array.isArray(c.pairings) ? c.pairings : [];
-  const body = `
-    <div class="share-card">
-      <div class="share-card-photo">${strainPhotoTag(s, 'card')}</div>
-      <div class="share-card-body">
-        <div class="share-card-name">${esc(s ? s.name : c.strain_id)}</div>
-        ${s ? `<div class="share-card-sub">${esc(s.type)}${s.lean ? ' · ' + esc(s.lean) : ''} · <span class="rarity-tag rarity-${s.rarity}">${rarityLabel(s.rarity)}</span></div>` : ''}
-        <div class="share-card-stars">${starString(c.rating)}</div>
-        <div class="share-card-method">${esc(c.method)}</div>
-        ${(c.effects || []).length ? `<div class="effect-tags" style="justify-content:center;">${c.effects.map(e => `<span>${esc(e)}</span>`).join('')}</div>` : ''}
-        ${c.note ? `<div class="share-card-note">"${esc(c.note)}"</div>` : ''}
-        ${c.tasting_notes ? `<div class="share-card-note">🍃 ${esc(c.tasting_notes)}</div>` : ''}
-        ${pairings.length ? `<div class="share-card-pairings">${pairings.map(p => {
-          const meta = PAIRING_TYPE_MAP[p.type];
-          return `<span>${meta ? meta.icon : '🔗'} ${p.note ? esc(p.note) : esc(meta ? meta.label : p.type)}</span>`;
-        }).join('')}</div>` : ''}
-        <div class="share-card-brand">🌿 StrainDex</div>
-      </div>
-    </div>
-    <p class="empty-note" style="text-align:center;margin-top:14px;">Screenshot this to share — press and hold the card, or use your device's screenshot shortcut.</p>
-    <a href="/strains/${c.strain_id}" class="btn secondary block" style="text-decoration:none;margin-top:8px;">Back to strain</a>
-  `;
-  sendHtml(res, layout({ title: `${s ? s.name : 'Check-in'} — Shareable Card`, body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
-}
 
-// The pairing type/note rows submit as same-name repeated fields (one
-// <select name="pairing_type"> + <input name="pairing_note"> per row, in
-// matching order), the same convention already used for effects. A single
-// row comes through as a lone string rather than a 1-item array, so both
-// shapes have to be normalized the same way. Rows where no type was chosen
-// are dropped entirely -- a note with nothing to attach it to isn't
-// something later display code (renderCheckinPairings) has a place to put.
-function parsePairingsFromForm(fields) {
-  const types = Array.isArray(fields.pairing_type) ? fields.pairing_type : (fields.pairing_type != null ? [fields.pairing_type] : []);
-  const notes = Array.isArray(fields.pairing_note) ? fields.pairing_note : (fields.pairing_note != null ? [fields.pairing_note] : []);
-  const pairings = [];
-  for (let i = 0; i < types.length; i++) {
-    const type = (types[i] || '').trim();
-    if (!type) continue;
-    pairings.push({ type, note: (notes[i] || '').trim() });
-  }
-  return pairings;
-}
 async function handleCheckinSubmit(req, res) {
   const userId = requireUser(req, res);
   if (userId == null) return;
@@ -1035,7 +945,8 @@ async function handleCheckinSubmit(req, res) {
   await db.createCheckin({
     user_id: userId, strain_id: strainId, method: fields.method, rating: Number(fields.rating) || 0,
     note: fields.note || '', effects, photo: photoUrl,
-    tasting_notes: fields.tasting_notes || '', brand: fields.brand || '', pairings: parsePairingsFromForm(fields),
+    tasting_notes: fields.tasting_notes || '', pairing_food: fields.pairing_food || '',
+    pairing_entertainment: fields.pairing_entertainment || '', pairing_activity: fields.pairing_activity || '',
     is_private: !!fields.is_private,
   });
   redirect(res, `/strains/${strainId}`);
@@ -1052,7 +963,8 @@ async function handleCheckinEditSubmit(req, res, id) {
   await db.updateCheckin(id, {
     method: fields.method, rating: Number(fields.rating) || 0,
     note: fields.note || '', effects, photo: photoUrl,
-    tasting_notes: fields.tasting_notes || '', brand: fields.brand || '', pairings: parsePairingsFromForm(fields),
+    tasting_notes: fields.tasting_notes || '', pairing_food: fields.pairing_food || '',
+    pairing_entertainment: fields.pairing_entertainment || '', pairing_activity: fields.pairing_activity || '',
     is_private: !!fields.is_private,
   });
   redirect(res, `/strains/${existing.strain_id}`);
@@ -1281,7 +1193,7 @@ function pageRecipes(req, res, query) {
   const category = (query && query.get('category')) || 'All';
   const q = (query && query.get('q')) || '';
   const recipes = db.listRecipes({ status: 'approved', category, q });
-  const categories = ['All', ...RECIPE_CATEGORIES];
+  const categories = ['All', 'Infusion Base', 'Baked Goods', 'Gummies & Candy', 'Drinks', 'Topicals', 'Savory & Snacks'];
   const mk = (params) => '/recipes?' + new URLSearchParams({ category, q, ...params }).toString();
   const body = `
     <h1 class="screen-title">Infused Recipes</h1>
@@ -1320,19 +1232,14 @@ function pageRecipes(req, res, query) {
   sendHtml(res, layout({ title: 'Recipes', active: 'recipes', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
-const RECIPE_CATEGORIES = ['Infusion Base', 'Baked Goods', 'Gummies & Candy', 'Drinks', 'Topicals', 'Savory & Snacks'];
-function pageRecipeNew(req, res, query) {
-  const error = query ? query.get('error') : null;
+function pageRecipeNew(req, res) {
   const body = `
     <h1 class="screen-title">Submit a Recipe</h1>
-    ${error === 'rate_limited' ? `<p class="dosing-note">You've submitted a lot of recipes in a short time — give it a few minutes and try again.</p>` : ''}
     <form method="POST" action="/recipes/new">
       <label class="field-label">Your name</label>
       <input type="text" name="author" placeholder="e.g. Jordan" required>
       <label class="field-label">Recipe title</label>
       <input type="text" name="title" required>
-      <label class="field-label">Category</label>
-      <select name="category">${RECIPE_CATEGORIES.map(c => `<option value="${c}">${c}</option>`).join('')}</select>
       <label class="field-label">Short description</label>
       <input type="text" name="desc" required>
       <label class="field-label">Ingredients (one per line)</label>
@@ -1351,36 +1258,30 @@ function pageRecipeNew(req, res, query) {
 async function handleRecipeNewSubmit(req, res) {
   const userId = requireUser(req, res);
   if (userId == null) return;
-  if (await isSubmissionRateLimited('recipe_submit', userId)) return redirect(res, '/recipes/new?error=rate_limited');
   const f = await parseForm(req);
-  const category = RECIPE_CATEGORIES.includes(f.category) ? f.category : 'Baked Goods';
   await db.createRecipe({
     title: f.title, desc: f.desc, author: f.author, user_id: userId, source: 'community', status: 'pending',
     ingredients: String(f.ingredients || '').split('\n').map(s => s.trim()).filter(Boolean),
     steps: String(f.steps || '').split('\n').map(s => s.trim()).filter(Boolean),
-    dosing: f.dosing || '', category,
+    dosing: f.dosing || '',
   });
-  sendEmail({
-    to: SUPPORT_EMAIL,
-    subject: `StrainDex: recipe submitted — ${f.title}`,
-    html: `<p><b>${esc(f.author || 'Someone')}</b> submitted a recipe for review:</p>
-      <p style="font-size:16px;"><b>${esc(f.title)}</b> <span style="color:#888;">(${esc(category)})</span></p>
-      <p>${esc(f.desc)}</p>
-      <p><a href="https://${req.headers.host}/admin/recipes">Review it in the admin panel</a></p>`,
-  }).catch(err => console.error('[email] recipe submission notification failed:', err));
   redirect(res, '/recipes?submitted=1');
 }
 
 function pageGrowing(req, res, query) {
   const viewerId = auth.currentUserId(req);
-  const CATEGORIES = ['Plant Life Cycle', 'Watering', 'Lighting', 'Nutrients & Feeding', 'Pests & Disease', 'Training', 'Harvest & Curing', 'Genetics & Seeds', 'Indoor Setup', 'Outdoor Growing', 'Cleaning & Gear Care'];
+  // Cleaning & Gear Care lives on its own page now (More > Gear Care) --
+  // caring for a bong or vape isn't a growing tip, it's about consumption
+  // gear. Any existing tips already tagged with that category still show
+  // up under "All" here (nothing was deleted), they just no longer get
+  // their own filter pill, and new tips can't be filed under it going
+  // forward.
+  const CATEGORIES = ['Plant Life Cycle', 'Watering', 'Lighting', 'Nutrients & Feeding', 'Pests & Disease', 'Training', 'Harvest & Curing', 'Genetics & Seeds', 'Indoor Setup', 'Outdoor Growing'];
   const cat = query.get('cat') || 'All';
-  const submitted = query.get('submitted');
   const tips = db.listGrowTips({ category: cat, viewerId });
   const body = `
     <h1 class="screen-title">Growing</h1>
     <p class="screen-sub">Tips &amp; tricks from home growers. Home cultivation laws vary by location — check yours first.</p>
-    ${submitted ? `<p class="empty-note" style="color:var(--brand-green-dark);">Thanks — your tip was submitted for review and will show up here once approved.</p>` : ''}
     <a class="btn block lilac" href="/growing/new" style="margin-bottom:14px;">🌱 Share a Grow Tip</a>
     <div>
       <a class="filter-pill ${cat === 'All' ? 'active' : ''}" href="/growing?cat=All">All</a>
@@ -1414,12 +1315,10 @@ function pageGrowing(req, res, query) {
   sendHtml(res, layout({ title: 'Growing', active: 'growing', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
-function pageGrowingNew(req, res, query) {
-  const error = query ? query.get('error') : null;
-  const CATEGORIES = ['Plant Life Cycle', 'Watering', 'Lighting', 'Nutrients & Feeding', 'Pests & Disease', 'Training', 'Harvest & Curing', 'Genetics & Seeds', 'Indoor Setup', 'Outdoor Growing', 'Cleaning & Gear Care'];
+function pageGrowingNew(req, res) {
+  const CATEGORIES = ['Plant Life Cycle', 'Watering', 'Lighting', 'Nutrients & Feeding', 'Pests & Disease', 'Training', 'Harvest & Curing', 'Genetics & Seeds', 'Indoor Setup', 'Outdoor Growing'];
   const body = `
     <h1 class="screen-title">Share a Grow Tip</h1>
-    ${error === 'rate_limited' ? `<p class="dosing-note">You've shared a lot of tips in a short time — give it a few minutes and try again.</p>` : ''}
     <form method="POST" action="/growing/new">
       <label class="field-label">Your name</label>
       <input type="text" name="author" placeholder="e.g. Sam" required>
@@ -1438,18 +1337,9 @@ function pageGrowingNew(req, res, query) {
 async function handleGrowingNewSubmit(req, res) {
   const userId = requireUser(req, res);
   if (userId == null) return;
-  if (await isSubmissionRateLimited('grow_tip_submit', userId)) return redirect(res, '/growing/new?error=rate_limited');
   const f = await parseForm(req);
-  await db.createGrowTip({ title: f.title, category: f.category, author: f.author, user_id: userId, body: f.body, status: 'pending' });
-  sendEmail({
-    to: SUPPORT_EMAIL,
-    subject: `StrainDex: grow tip submitted — ${f.title}`,
-    html: `<p><b>${esc(f.author || 'Someone')}</b> submitted a grow tip for review:</p>
-      <p style="font-size:16px;"><b>${esc(f.title)}</b> <span style="color:#888;">(${esc(f.category)})</span></p>
-      <p style="white-space:pre-wrap;">${esc(f.body)}</p>
-      <p><a href="https://${req.headers.host}/admin/grow-tips">Review it in the admin panel</a></p>`,
-  }).catch(err => console.error('[email] grow tip submission notification failed:', err));
-  redirect(res, '/growing?submitted=1');
+  await db.createGrowTip({ title: f.title, category: f.category, author: f.author, user_id: userId, body: f.body });
+  redirect(res, '/growing');
 }
 
 function pageChat(req, res) {
@@ -1509,14 +1399,14 @@ async function handleAdminLoginSubmit(req, res) {
   const f = await parseForm(req);
   if (auth.checkPassword(f.password)) {
     const token = auth.sign('admin');
-    res.setHeader('Set-Cookie', `admin_session=${encodeURIComponent(token)}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=2592000`);
+    res.setHeader('Set-Cookie', `admin_session=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=2592000`);
     redirect(res, '/admin');
   } else {
     redirect(res, '/admin/login?err=1');
   }
 }
 function handleAdminLogout(req, res) {
-  res.setHeader('Set-Cookie', `admin_session=; Path=/; HttpOnly; Secure; Max-Age=0`);
+  res.setHeader('Set-Cookie', `admin_session=; Path=/; HttpOnly; Max-Age=0`);
   redirect(res, '/');
 }
 
@@ -1524,6 +1414,9 @@ function handleAdminLogout(req, res) {
 function pageSignup(req, res, query) {
   const err = query.get('err');
   const deleted = query.get('deleted');
+  // See pageLogin for what this is -- same same-site-only redirect target,
+  // just threaded through the signup form instead.
+  const next = query.get('next') || '';
   const errMessages = {
     taken: 'That username is already taken.',
     age: `You must be ${MIN_AGE} or older to create an account.`,
@@ -1544,12 +1437,9 @@ function pageSignup(req, res, query) {
     </a>
     <p class="empty-note" style="text-align:center;margin:0 0 14px;">or</p>
     <form method="POST" action="/signup">
+      <input type="hidden" name="next" value="${esc(next)}">
       <label class="field-label" style="margin-top:0;">Username</label>
       <input type="text" name="username" id="signup-username" required minlength="3" maxlength="24" autocomplete="username">
-      <label class="field-label">First name</label>
-      <input type="text" name="first_name" required autocomplete="given-name">
-      <label class="field-label">Last name</label>
-      <input type="text" name="last_name" required autocomplete="family-name">
       <label class="field-label">Email</label>
       <input type="email" name="email" required autocomplete="email" placeholder="you@example.com">
       <label class="field-label">Date of birth</label>
@@ -1565,7 +1455,7 @@ function pageSignup(req, res, query) {
     </form>
     <script>document.getElementById('signup-username').focus();</script>
     <p class="empty-note" style="margin-top:12px;">By creating an account, you agree to the <a href="/terms">Terms of Service</a> and <a href="/privacy">Privacy Policy</a>.</p>
-    <p class="empty-note">Already have an account? <a href="/login">Log in</a></p>
+    <p class="empty-note">Already have an account? <a href="/login${next ? `?next=${encodeURIComponent(next)}` : ''}">Log in</a></p>
   `;
   sendHtml(res, layout({ title: 'Sign Up', body, showBack: false }));
 }
@@ -1575,7 +1465,7 @@ function pageSignup(req, res, query) {
 // fetch built in, same as the Resend email calls elsewhere in this file).
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
-const GOOGLE_REDIRECT_URI = 'https://www.strain-dex.com/auth/google/callback';
+const GOOGLE_REDIRECT_URI = 'https://strain-dex.com/auth/google/callback';
 
 function pageGoogleStart(req, res, query) {
   if (!GOOGLE_CLIENT_ID) {
@@ -1586,7 +1476,7 @@ function pageGoogleStart(req, res, query) {
   // on the callback before we trust anything else in that request.
   const state = crypto.randomBytes(16).toString('hex');
   const isRetry = query && query.get('retry') === '1';
-  res.setHeader('Set-Cookie', `google_oauth_state=${state}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=600`);
+  res.setHeader('Set-Cookie', `google_oauth_state=${state}; Path=/; HttpOnly; SameSite=Lax; Max-Age=600`);
   const params = new URLSearchParams({
     client_id: GOOGLE_CLIENT_ID,
     redirect_uri: GOOGLE_REDIRECT_URI,
@@ -1668,15 +1558,15 @@ async function handleGoogleCallback(req, res, query) {
     }
     if (user) {
       const token = auth.signUserSessionValue(user.id);
-      res.setHeader('Set-Cookie', `user_session=${encodeURIComponent(token)}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=31536000`);
+      res.setHeader('Set-Cookie', `user_session=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000`);
       return redirect(res, '/');
     }
     // 3) Genuinely new person -- Google doesn't give us a birth date, and
     // this app legally requires one, so stash the verified profile in a
     // short-lived signed cookie and send them to a small finishing form
     // rather than creating an incomplete account.
-    const pending = auth.sign(JSON.stringify({ sub: profile.sub, email: profile.email, name: profile.name || '', given_name: profile.given_name || '', family_name: profile.family_name || '' }));
-    res.setHeader('Set-Cookie', `google_pending=${encodeURIComponent(pending)}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=600`);
+    const pending = auth.sign(JSON.stringify({ sub: profile.sub, email: profile.email, name: profile.name || '' }));
+    res.setHeader('Set-Cookie', `google_pending=${encodeURIComponent(pending)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=600`);
     redirect(res, '/auth/google/finish');
   } catch (e) {
     console.error('Google sign-in: unexpected error in callback', e);
@@ -1708,10 +1598,6 @@ function pageGoogleFinish(req, res, query) {
     <form method="POST" action="/auth/google/finish">
       <label class="field-label" style="margin-top:0;">Username</label>
       <input type="text" name="username" required minlength="3" maxlength="24" value="${esc(suggestedUsername)}">
-      <label class="field-label">First name</label>
-      <input type="text" name="first_name" required value="${esc(profile.given_name || '')}">
-      <label class="field-label">Last name</label>
-      <input type="text" name="last_name" required value="${esc(profile.family_name || '')}">
       <label class="field-label">Date of birth</label>
       <input type="date" name="birth_date" required>
       <button class="btn block" type="submit" style="margin-top:14px;">Finish Creating Account</button>
@@ -1728,40 +1614,46 @@ async function handleGoogleFinishSubmit(req, res) {
   const profile = JSON.parse(raw);
   const f = await parseForm(req);
   const username = String(f.username || '').trim();
-  const firstName = String(f.first_name || '').trim();
-  const lastName = String(f.last_name || '').trim();
-  if (!username || !firstName || !lastName || !f.birth_date) return redirect(res, '/auth/google/finish?err=invalid');
+  if (!username || !f.birth_date) return redirect(res, '/auth/google/finish?err=invalid');
   if (!isOldEnough(f.birth_date)) return redirect(res, '/auth/google/finish?err=age');
   if (db.getUserByUsername(username)) return redirect(res, '/auth/google/finish?err=taken');
-  const user = await db.createUserFromGoogle({ username, birth_date: f.birth_date, email: profile.email, google_id: profile.sub, first_name: firstName, last_name: lastName });
+  const user = await db.createUserFromGoogle({ username, birth_date: f.birth_date, email: profile.email, google_id: profile.sub });
   const token = auth.signUserSessionValue(user.id);
   res.setHeader('Set-Cookie', [
-    `user_session=${encodeURIComponent(token)}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=31536000`,
-    `google_pending=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0`,
+    `user_session=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000`,
+    `google_pending=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0`,
   ]);
   redirect(res, '/onboarding');
 }
 
 async function handleSignupSubmit(req, res) {
-  if (await isSignupRateLimited(req)) return redirect(res, '/signup?err=rate_limited');
+  if (isSignupRateLimited(req)) return redirect(res, '/signup?err=rate_limited');
   const f = await parseForm(req);
   const username = String(f.username || '').trim();
   const email = String(f.email || '').trim().toLowerCase();
-  const firstName = String(f.first_name || '').trim();
-  const lastName = String(f.last_name || '').trim();
-  if (!username || !email || !firstName || !lastName || !f.birth_date || !f.password || !f.password2) return redirect(res, '/signup?err=invalid');
-  if (!isOldEnough(f.birth_date)) return redirect(res, '/signup?err=age');
-  if (f.password !== f.password2) return redirect(res, '/signup?err=mismatch');
-  if (f.password.length < 8) return redirect(res, '/signup?err=short');
-  if (db.getUserByUsername(username)) return redirect(res, '/signup?err=taken');
-  if (db.getUserByEmail(email)) return redirect(res, '/signup?err=email_taken');
-  const user = await db.createUser({ username, password: f.password, birth_date: f.birth_date, email, first_name: firstName, last_name: lastName });
+  const nextQ = f.next ? `&next=${encodeURIComponent(f.next)}` : '';
+  if (!username || !email || !f.birth_date || !f.password || !f.password2) return redirect(res, `/signup?err=invalid${nextQ}`);
+  if (!isOldEnough(f.birth_date)) return redirect(res, `/signup?err=age${nextQ}`);
+  if (f.password !== f.password2) return redirect(res, `/signup?err=mismatch${nextQ}`);
+  if (f.password.length < 8) return redirect(res, `/signup?err=short${nextQ}`);
+  if (db.getUserByUsername(username)) return redirect(res, `/signup?err=taken${nextQ}`);
+  if (db.getUserByEmail(email)) return redirect(res, `/signup?err=email_taken${nextQ}`);
+  const user = await db.createUser({ username, password: f.password, birth_date: f.birth_date, email });
   const token = auth.signUserSessionValue(user.id);
-  res.setHeader('Set-Cookie', `user_session=${encodeURIComponent(token)}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=31536000`);
-  redirect(res, '/onboarding');
+  res.setHeader('Set-Cookie', `user_session=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000`);
+  // A share-link signup should land back on the strain (or wherever else)
+  // that got them here, not the generic onboarding flow -- but only ever
+  // somewhere on this same site, never an arbitrary URL (see isSafeRedirectTarget).
+  const safeNext = isSafeRedirectTarget(f.next) ? f.next : null;
+  redirect(res, safeNext || '/onboarding');
 }
 function pageLogin(req, res, query) {
   const err = query.get('err');
+  // Where to send the person after they log in -- set by the global login
+  // wall when it redirected them here, e.g. from a shared strain link. Only
+  // ever a same-site relative path (see isSafeRedirectTarget), and it's
+  // re-checked again at submit time rather than trusted blindly.
+  const next = query.get('next') || '';
   const errMessages = {
     '1': 'Wrong username or password.',
     rate_limited: 'Too many failed attempts for this account. Try again in a few minutes, or reset your password.',
@@ -1779,6 +1671,7 @@ function pageLogin(req, res, query) {
     </a>
     <p class="empty-note" style="text-align:center;margin:0 0 14px;">or</p>
     <form method="POST" action="/login">
+      <input type="hidden" name="next" value="${esc(next)}">
       <label class="field-label" style="margin-top:0;">Username or email</label>
       <input type="text" name="username" id="login-username" required autocomplete="username">
       <label class="field-label">Password</label>
@@ -1790,14 +1683,14 @@ function pageLogin(req, res, query) {
     </form>
     <script>document.getElementById('login-username').focus();</script>
     <p class="empty-note" style="margin-top:12px;">Forgot your password? <a href="/forgot-password">Reset it</a></p>
-    <p class="empty-note">New here? <a href="/signup">Create an account</a></p>
+    <p class="empty-note">New here? <a href="/signup${next ? `?next=${encodeURIComponent(next)}` : ''}">Create an account</a></p>
   `;
   sendHtml(res, layout({ title: 'Log In', body, showBack: false }));
 }
 
 // ---------------------------------------------------------------- forgot / reset password
 // ---------------------------------------------------------------- feedback
-// Free-text feedback -- deliberately simple (one textarea,
+// Free-text feedback while in beta -- deliberately simple (one textarea,
 // no categories/ratings) so it's low-friction to actually use. Stored in
 // the DB (readable from the admin panel) and, if RESEND_API_KEY and
 // FEEDBACK_NOTIFY_EMAIL are both set, also emailed immediately so it
@@ -1817,10 +1710,6 @@ function pageOnboarding(req, res) {
     { icon: '📊', title: 'See your own patterns', body: 'Your Patterns reflects your check-in history back at you — favorite effects, top strain type, even a tolerance break tracker.' },
     { icon: '🧑\u200d🤝\u200d🧑', title: 'Bring your friends', body: 'Add friends to see their check-ins, message them, share strains, and trade duplicate cards.' },
     { icon: '⭐', title: 'A lot more in "More"', body: 'Compare strains side by side, check what’s trending, look up your state’s cannabis laws, keep a wishlist, and more — it’s all grouped by category in the More tab.' },
-    { icon: '📲', title: 'Add StrainDex to your phone', body: 'Get the full-screen, no-browser-bar experience — opens right from your home screen, just like a real app.', extra: `
-      <button type="button" id="onboarding-install-btn" class="btn block" style="margin-top:16px;display:none;" data-install-trigger>📲 Install Now</button>
-      <p class="empty-note" style="margin-top:10px;">On an iPhone? <a href="/add-to-home-screen">See the 3-tap instructions →</a></p>
-    ` },
   ];
   const body = `
     <div class="card" style="text-align:center;padding:32px 20px;">
@@ -1830,7 +1719,6 @@ function pageOnboarding(req, res) {
             <div style="font-size:44px;margin-bottom:16px;">${s.icon}</div>
             <h2 style="margin:0 0 8px;font-size:18px;">${esc(s.title)}</h2>
             <p style="color:var(--ink-secondary);font-size:13.5px;line-height:1.6;margin:0;">${esc(s.body)}</p>
-            ${s.extra || ''}
           </div>`).join('')}
       </div>
       <div style="display:flex;justify-content:center;gap:6px;margin:22px 0 6px;">
@@ -1860,51 +1748,6 @@ function pageOnboarding(req, res) {
   sendHtml(res, layout({ title: 'Welcome', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)), showBack: false }));
 }
 
-// "Add to Home Screen" guide -- always-available manual instructions for
-// every platform, since iOS Safari has no programmatic install API at all
-// (Apple doesn't expose one to any website, by design) and always needs
-// the manual steps. Where the browser *does* support a real one-tap
-// install (Android Chrome, desktop Chrome/Edge), the button up top does
-// that instead -- see initInstallPrompt in app.js, which only reveals it
-// when the browser has actually offered installability.
-function pageAddToHomeScreen(req, res) {
-  const body = `
-    <h1 class="screen-title">📲 Add StrainDex to Your Home Screen</h1>
-    <p class="screen-sub">StrainDex isn't in the App Store or Play Store — it doesn't need to be. Adding it to your home screen gives you the same full-screen, no-browser-bar experience, straight from your phone.</p>
-    <button type="button" id="add-home-install-btn" class="btn block" style="display:none;margin-bottom:18px;" data-install-trigger>📲 Install Now</button>
-
-    <div class="card" style="margin-bottom:12px;">
-      <h2 style="margin:0 0 10px;font-size:15px;">🍎 iPhone &amp; iPad (Safari)</h2>
-      <p class="empty-note" style="padding:0 0 8px;">Apple doesn't allow any website to trigger this automatically — these three taps in Safari are the only way.</p>
-      <ol style="margin:0;padding-left:20px;font-size:13.5px;line-height:1.9;">
-        <li>Tap the <b>Share</b> icon (the square with an arrow pointing up) in Safari's toolbar.</li>
-        <li>Scroll down and tap <b>Add to Home Screen</b>.</li>
-        <li>Tap <b>Add</b> in the top right.</li>
-      </ol>
-      <p class="empty-note" style="padding:8px 0 0;">Must be opened in Safari, not Chrome or another browser — iOS only allows this from Safari itself.</p>
-    </div>
-
-    <div class="card" style="margin-bottom:12px;">
-      <h2 style="margin:0 0 10px;font-size:15px;">🤖 Android (Chrome)</h2>
-      <ol style="margin:0;padding-left:20px;font-size:13.5px;line-height:1.9;">
-        <li>Tap the <b>⋮</b> menu (three dots) in the top right of Chrome.</li>
-        <li>Tap <b>Install app</b> (or <b>Add to Home screen</b>).</li>
-        <li>Confirm by tapping <b>Install</b>.</li>
-      </ol>
-      <p class="empty-note" style="padding:8px 0 0;">If the "Install Now" button above is visible, that does the same thing in one tap.</p>
-    </div>
-
-    <div class="card">
-      <h2 style="margin:0 0 10px;font-size:15px;">💻 Desktop (Chrome or Edge)</h2>
-      <ol style="margin:0;padding-left:20px;font-size:13.5px;line-height:1.9;">
-        <li>Look for a small install icon (a monitor with a down arrow) at the right edge of the address bar.</li>
-        <li>Click it, then click <b>Install</b>.</li>
-      </ol>
-      <p class="empty-note" style="padding:8px 0 0;">StrainDex opens in its own window after that, separate from your regular browser tabs.</p>
-    </div>
-  `;
-  sendHtml(res, layout({ title: 'Add to Home Screen', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
-}
 // "Find your first strain" quiz -- a lightweight 3-question filter over the
 // same THC-bucket logic already used by the Strain Library's filters, plus
 // simple effect-tag scoring. Not a medical tool, just a starting point for
@@ -2081,212 +1924,6 @@ async function handleGrowJournalDelete(req, res, id) {
 
 // Social discovery: strains friends love that you haven't tried, using
 // data already collected -- no new tracking, just a new lens on it.
-// "Suggest a Strain" -- lets someone report a strain they've actually seen
-// (at a dispensary, on a menu, wherever) that isn't in the library yet.
-// Goes into its own review queue rather than straight into the real strain
-// table, so nothing unverified ever shows up in search before a human's
-// looked at it -- see the strain_submissions table comment in db.js.
-function pageStrainSuggest(req, res, query) {
-  const userId = requireUser(req, res);
-  if (userId == null) return;
-  const sent = query.get('sent');
-  const error = query.get('error');
-  const prefill = query.get('name') || '';
-  const body = `
-    <h1 class="screen-title">Suggest a Strain</h1>
-    <p class="screen-sub">Seen something at a dispensary that's not in the library yet? Tell us about it and we'll research it and add it.</p>
-    ${error === 'rate_limited' ? `<p class="dosing-note">You've suggested a lot of strains in a short time — give it a few minutes and try again.</p>` : ''}
-    ${sent ? `<p class="empty-note" style="color:var(--brand-green-dark);">Thanks — your suggestion was sent for review.</p>` : ''}
-    <form method="POST" action="/strains/suggest">
-      <label class="field-label" style="margin-top:0;">Strain name</label>
-      <input type="text" name="strain_name" value="${esc(prefill)}" required placeholder="e.g. Cherry Hearts">
-      <label class="field-label">Anything you know about it (optional)</label>
-      <textarea name="description" placeholder="Breeder, dispensary, flavor, anything on the label..."></textarea>
-      <label class="field-label">Photo of the label or menu (optional)</label>
-      <div class="photo-picker">
-        <div class="photo-upload-box" id="ss-photo-upload-box" onclick="document.getElementById('ss-photo-file-input').click()">
-          <div class="up-ic">📷</div>
-          <div class="up-txt">Tap to snap or upload a photo (optional)</div>
-        </div>
-        <input type="file" id="ss-photo-file-input" accept="image/*" style="display:none;">
-        <input type="hidden" name="photo" id="ss-photo-data-input">
-      </div>
-      <button class="btn block" type="submit" style="margin-top:14px;">Submit Suggestion</button>
-    </form>
-    <script>
-      (function() {
-        const fileInput = document.getElementById('ss-photo-file-input');
-        const photoData = document.getElementById('ss-photo-data-input');
-        const uploadBox = document.getElementById('ss-photo-upload-box');
-        fileInput.addEventListener('change', () => {
-          const file = fileInput.files && fileInput.files[0];
-          if (!file) return;
-          const reader = new FileReader();
-          reader.onload = () => {
-            photoData.value = reader.result;
-            uploadBox.innerHTML = '<div class="photo-preview-wrap"><img src="' + reader.result + '" alt="Preview"></div>';
-          };
-          reader.readAsDataURL(file);
-        });
-      })();
-    </script>
-  `;
-  sendHtml(res, layout({ title: 'Suggest a Strain', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
-}
-async function handleStrainSuggestSubmit(req, res) {
-  const userId = requireUser(req, res);
-  if (userId == null) return;
-  if (await isSubmissionRateLimited('strain_suggest', userId)) return redirect(res, '/strains/suggest?error=rate_limited');
-  const f = await parseForm(req);
-  const strainName = (f.strain_name || '').trim();
-  if (!strainName) return redirect(res, '/strains/suggest');
-  const photoUrl = await storage.uploadPhoto(f.photo || null, 'strain-suggestions');
-  const description = f.description || '';
-  await db.createStrainSubmission({ user_id: userId, strain_name: strainName, description, photo: photoUrl });
-
-  const user = db.getUserById(userId);
-  const photoAbsUrl = photoUrl && !/^https?:\/\//.test(photoUrl) ? `${req.headers['x-forwarded-proto'] || 'https'}://${req.headers.host}${photoUrl}` : photoUrl;
-  sendEmail({
-    to: SUPPORT_EMAIL,
-    subject: `StrainDex: strain suggestion — ${strainName}`,
-    html: `<p><b>${esc(user ? user.username : 'A user')}</b> suggested a strain that's not in the library yet:</p>
-      <p style="font-size:16px;"><b>${esc(strainName)}</b></p>
-      ${description ? `<p style="white-space:pre-wrap;">${esc(description)}</p>` : ''}
-      ${photoAbsUrl ? `<p><img src="${esc(photoAbsUrl)}" alt="Submitted photo" style="max-width:300px;"></p>` : ''}
-      <p><a href="https://${req.headers.host}/admin/strain-submissions">Review it in the admin panel</a></p>`,
-  }).catch(err => console.error('[email] strain suggestion notification failed:', err));
-
-  redirect(res, '/strains/suggest?sent=1');
-}
-
-// Admin review queue for suggested strains -- see what's come in, mark it
-// reviewed once it's been researched and either added (via the normal Add
-// Strain form) or discarded as not corroborated. Deliberately doesn't
-// auto-add anything -- every suggestion still goes through the same
-// research standard as everything else in the library.
-// Shared row renderer for a suggested strain -- same reasoning as the
-// recipe/grow-tip row renderers above.
-function renderStrainSubmissionRow(s) {
-  const user = s.user_id != null ? db.getUserById(s.user_id) : null;
-  return `
-    <div class="admin-row" style="flex-direction:column;align-items:stretch;${s.status === 'reviewed' ? 'opacity:0.5;' : ''}">
-      <div style="display:flex;justify-content:space-between;align-items:baseline;">
-        <b>${esc(s.strain_name)}</b>
-        <span class="empty-note" style="padding:0;">${user ? esc(user.username) : 'Anonymous'} · <span class="local-time" data-utc="${esc(s.created_at)}Z">${esc(s.created_at)}</span></span>
-      </div>
-      ${s.description ? `<p style="margin:6px 0 0;">${esc(s.description)}</p>` : ''}
-      ${s.photo ? `<div class="checkin-photo-thumb" style="margin:8px 0;max-width:200px;"><img src="${esc(s.photo)}" alt="Submitted photo"></div>` : ''}
-      <div class="actions" style="margin-top:8px;">
-        <a href="/admin/strains?q=${encodeURIComponent(s.strain_name)}" class="btn secondary" style="text-decoration:none;">Research &amp; Add</a>
-        ${s.status !== 'reviewed' ? `<form method="POST" action="/admin/strain-submissions/${s.id}/reviewed" style="display:inline;"><button class="btn" type="submit">Mark Reviewed</button></form>` : ''}
-      </div>
-    </div>`;
-}
-function pageAdminStrainSubmissions(req, res) {
-  if (!requireAdmin(req, res)) return;
-  const submissions = db.listStrainSubmissions();
-  const pending = submissions.filter(s => s.status !== 'reviewed');
-  const reviewed = submissions.filter(s => s.status === 'reviewed');
-  const body = `
-    <h1 class="screen-title">Suggested Strains</h1>
-    ${pending.length ? `<h2 class="screen-title">Pending (${pending.length})</h2>${pending.map(renderStrainSubmissionRow).join('')}` : `<div class="empty-note">No pending suggestions.</div>`}
-    ${reviewed.length ? `<h2 class="screen-title" style="margin-top:20px;">Reviewed (${reviewed.length})</h2>${reviewed.map(renderStrainSubmissionRow).join('')}` : ''}
-  `;
-  sendHtml(res, layout({ title: 'Suggested Strains', body, isAdmin: true }));
-}
-async function handleAdminStrainSubmissionReviewed(req, res, id) {
-  if (!requireAdmin(req, res)) return;
-  await db.markStrainSubmissionReviewed(Number(id));
-  redirect(res, '/admin/strain-submissions');
-}
-
-// "Your Year in StrainDex" -- a shareable-feeling recap pulled entirely
-// from data already tracked elsewhere (Insights, Collection, Trades,
-// Friends). Not a true exportable image (no image-generation library
-// available in this environment) -- styled to look good as a screenshot
-// instead, which is a fine substitute and a lot less to maintain.
-function pageYearInReview(req, res) {
-  const userId = requireUser(req, res);
-  if (userId == null) return;
-  const insights = db.getUserInsights(userId);
-  if (!insights) {
-    return sendHtml(res, layout({
-      title: 'Your Year in StrainDex', active: 'more',
-      body: `<h1 class="screen-title">Your Year in StrainDex</h1><div class="empty-note">No check-ins logged yet — <a href="/checkin">log your first one</a> and come back here.</div>`,
-      isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)),
-    }));
-  }
-  const uniqueCount = db.getUniqueOwnedCount(userId);
-  const totalStrains = db.countStrains();
-  const totalDupes = db.getTotalDupes(userId);
-  const friendCount = db.listFriends(userId).length;
-  const tradeCount = db.countTrades(userId);
-  const owned = db.getCollection(userId);
-  const rarityOrder = ['legendary', 'rare', 'uncommon', 'common'];
-  const rarestOwned = rarityOrder.map(r => owned.find(o => o.strain.rarity === r)).find(Boolean);
-  const allCheckins = db.listCheckins({ userId, limit: 5000 });
-  const firstCheckin = allCheckins[allCheckins.length - 1];
-
-  const statTile = (num, label) => `<div class="stat-tile"><div class="num">${esc(String(num))}</div><div class="lbl">${esc(label)}</div></div>`;
-  const body = `
-    <h1 class="screen-title">🎁 Your Year in StrainDex</h1>
-    <p class="screen-sub">${firstCheckin ? `Since your first check-in on <span class="local-time" data-utc="${firstCheckin.created_at}Z">${esc(firstCheckin.created_at)}</span> UTC.` : ''} Screenshot this to share.</p>
-
-    <div class="card" style="text-align:center;padding:24px 16px;background:linear-gradient(135deg,var(--brand-green-dark),var(--brand-green));color:#fff;">
-      <div style="font-size:13px;opacity:.85;">Total check-ins</div>
-      <div style="font-size:44px;font-weight:800;line-height:1.1;">${insights.totalCheckins}</div>
-    </div>
-
-    <div class="collection-stats" style="margin-top:14px;">
-      ${statTile(`${uniqueCount}/${totalStrains.toLocaleString()}`, 'Strains caught')}
-      ${statTile(totalDupes, 'Tradeable dupes')}
-      ${statTile(tradeCount, 'Trades made')}
-    </div>
-
-    ${insights.mostLoggedStrain ? `
-      <div class="section-label" style="margin-top:18px;">Your most-logged strain</div>
-      <a class="library-row" href="/strains/${insights.mostLoggedStrain.strain.id}" style="text-decoration:none;color:inherit;">
-        ${strainPhotoTag(insights.mostLoggedStrain.strain, 'md')}
-        <div class="info">
-          <div class="nm">${esc(insights.mostLoggedStrain.strain.name)}</div>
-          <div class="sub">${insights.mostLoggedStrain.count} check-in${insights.mostLoggedStrain.count === 1 ? '' : 's'}</div>
-        </div>
-      </a>
-    ` : ''}
-    ${insights.topRatedStrain ? `
-      <div class="section-label" style="margin-top:14px;">Your highest rated</div>
-      <a class="library-row" href="/strains/${insights.topRatedStrain.strain.id}" style="text-decoration:none;color:inherit;">
-        ${strainPhotoTag(insights.topRatedStrain.strain, 'md')}
-        <div class="info">
-          <div class="nm">${esc(insights.topRatedStrain.strain.name)}</div>
-          <div class="sub">${starString(Math.round(insights.topRatedStrain.avg))} (${insights.topRatedStrain.avg}★ average)</div>
-        </div>
-      </a>
-    ` : ''}
-    ${rarestOwned ? `
-      <div class="section-label" style="margin-top:14px;">Rarest catch</div>
-      <a class="library-row" href="/strains/${rarestOwned.strain.id}" style="text-decoration:none;color:inherit;">
-        ${strainPhotoTag(rarestOwned.strain, 'md')}
-        <div class="info">
-          <div class="nm">${esc(rarestOwned.strain.name)}</div>
-          <div class="sub"><span class="rarity-tag rarity-${rarestOwned.strain.rarity}">${rarityLabel(rarestOwned.strain.rarity)}</span></div>
-        </div>
-      </a>
-    ` : ''}
-
-    <div class="card" style="margin-top:16px;">
-      <h2 style="margin:0 0 8px;font-size:15px;">Your leanings</h2>
-      ${insights.topType ? `<p class="empty-note" style="padding:2px 0;">You gravitate toward <b>${esc(insights.topType.name)}</b> strains.</p>` : ''}
-      ${insights.topMethod ? `<p class="empty-note" style="padding:2px 0;">Your go-to method is <b>${esc(insights.topMethod.name)}</b>.</p>` : ''}
-      ${insights.topTerpene ? `<p class="empty-note" style="padding:2px 0;">Your check-ins lean heaviest on <b>${esc(insights.topTerpene)}</b> as a terpene.</p>` : ''}
-      ${insights.topEffects.length ? `<p style="margin:8px 0 0;">${insights.topEffects.map(e => `<span class="filter-pill">${esc(e.name)}</span>`).join('')}</p>` : ''}
-    </div>
-
-    ${friendCount ? `<p class="empty-note" style="margin-top:14px;text-align:center;">Plus ${friendCount} friend${friendCount === 1 ? '' : 's'} along for the ride. 🌿</p>` : ''}
-  `;
-  sendHtml(res, layout({ title: 'Your Year in StrainDex', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
-}
-
 function pageFriendsPicks(req, res) {
   const userId = requireUser(req, res);
   if (userId == null) return;
@@ -2678,6 +2315,33 @@ function pageMixingCautions(req, res) {
   sendHtml(res, layout({ title: 'Mixing With Other Substances', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
+// Gear Care -- keeping bongs, pipes, rigs, and vapes clean, split out into
+// its own page rather than living as a "Cleaning & Gear Care" category
+// under Growing Tips, since caring for consumption gear isn't a growing
+// tip. Static reference content, same pattern as Mixing Cautions and
+// Concentrates & Extracts, rather than user-submitted.
+function pageGearCare(req, res) {
+  const gear = [
+    { title: 'Glass bongs & bubblers', body: 'Empty and rinse after every session so resin doesn\u2019t harden. For a deeper clean, use isopropyl alcohol (91%+) with coarse salt as an abrasive: add both, cover the openings, and shake gently for a minute or two before rinsing thoroughly with warm water. Never run isopropyl through while it\u2019s anywhere near a flame or hot surface.' },
+    { title: 'Hand pipes & one-hitters', body: 'A pipe cleaner or cotton swab dipped in isopropyl alcohol handles the stem and bowl between uses. For a buildup that\u2019s harder to reach, a resealable bag with isopropyl and salt works the same way as with glass — shake, then rinse and let fully air-dry before the next use.' },
+    { title: 'Dab rigs & nails', body: 'Wipe the nail or banger with a cotton swab right after each dab, while it\u2019s still warm, before residue has a chance to carbonize. The rig itself follows the same isopropyl-and-salt soak as any other glass. A quick torch-and-cool cycle (\u201cflash cleaning\u201d) can help burn off light residue on quartz or titanium, but don\u2019t rely on it as a substitute for an actual clean.' },
+    { title: 'Vape cartridges & batteries', body: 'Wipe the battery\u2019s connection threads with a dry cotton swab regularly — buildup there is a common cause of a cart that suddenly stops firing. Never submerge a cartridge or battery in liquid. If a cart is clogged, gently warming it (in your hands, or a few seconds in a warm — not hot — water bath with the mouthpiece kept dry) can loosen it enough to clear.' },
+    { title: 'Dry herb vaporizers', body: 'Clean the chamber after every few sessions with a soft brush to clear ash and spent material, since buildup affects both flavor and airflow. Check your specific model\u2019s manual before using any liquid near the heating element — some chambers are fine with an isopropyl wipe-down, others aren\u2019t.' },
+    { title: 'Grinders', body: 'A stiff, dry brush (an old toothbrush works well) clears out kief and stuck flower from the teeth and screen. If it\u2019s especially gummed up, a freezer stint firms up the resin first, making it easier to knock loose. Avoid soaking a grinder with a kief catcher, since water can damage the collected kief.' },
+  ];
+  const body = `
+    <h1 class="screen-title">Gear Care</h1>
+    <p class="screen-sub">Keeping your glass, rigs, and vapes clean — better flavor, smoother hits, and gear that lasts longer.</p>
+    ${gear.map(g => `
+      <div class="card" style="margin-bottom:10px;">
+        <h2 style="margin:0 0 6px;font-size:15px;">${esc(g.title)}</h2>
+        <p style="margin:0;">${esc(g.body)}</p>
+      </div>
+    `).join('')}
+  `;
+  sendHtml(res, layout({ title: 'Gear Care', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
+}
+
 function pageQuiz(req, res, query) {
   const exp = query.get('exp') || '';
   const feel = query.get('feel') || '';
@@ -2751,9 +2415,7 @@ function pageInsights(req, res) {
   if (userId == null) return;
   const insights = db.getUserInsights(userId);
   const activeBreak = db.getActiveBreak(userId);
-  const pastBreaks = db.listToleranceBreaks(userId).filter(b => b.ended_at);
   const daysSince = (dateStr) => Math.max(0, Math.floor((Date.now() - new Date(dateStr + 'Z').getTime()) / 86400000));
-  const daysBetween = (start, end) => Math.max(1, Math.round((new Date(end + 'Z').getTime() - new Date(start + 'Z').getTime()) / 86400000));
   const body = `
     <h1 class="screen-title">Your Patterns</h1>
     <div class="card" style="margin-bottom:14px;">
@@ -2768,12 +2430,6 @@ function pageInsights(req, res) {
           <button class="btn block" type="submit">Start a Tolerance Break</button>
         </form>
       `}
-      ${pastBreaks.length ? `
-        <details style="margin-top:10px;">
-          <summary style="cursor:pointer;font-size:12.5px;font-weight:700;color:var(--brand-green-dark);">Past breaks (${pastBreaks.length})</summary>
-          ${pastBreaks.map(b => `<div class="empty-note" style="padding:4px 0 0;">${daysBetween(b.started_at, b.ended_at)} day${daysBetween(b.started_at, b.ended_at) === 1 ? '' : 's'} — <span class="local-time" data-utc="${b.started_at}Z">${esc(b.started_at)}</span>${b.note ? `: "${esc(b.note)}"` : ''}</div>`).join('')}
-        </details>
-      ` : ''}
     </div>
     ${!insights ? `<div class="empty-note">No check-ins logged yet — <a href="/checkin">log your first one</a> to start seeing your patterns here.</div>` : `
       <p class="screen-sub">Based on your ${insights.totalCheckins} check-in${insights.totalCheckins === 1 ? '' : 's'} so far.</p>
@@ -2846,12 +2502,10 @@ function pageFeedback(req, res, query) {
   const userId = requireUser(req, res);
   if (userId == null) return;
   const sent = query.get('sent');
-  const error = query.get('error');
   const body = `
     <h1 class="screen-title">Send Feedback</h1>
-    <p class="screen-sub">Bugs, ideas, confusing screens, anything at all. This goes straight to the person building the app.</p>
+    <p class="screen-sub">StrainDex is in beta — bugs, ideas, confusing screens, anything at all. This goes straight to the person building the app.</p>
     <p class="empty-note">For anything urgent — a compromised account, a safety concern, or a bad actor on the app — email <a href="mailto:${SUPPORT_EMAIL}">${SUPPORT_EMAIL}</a> directly instead of using the form below, since it's monitored more closely.</p>
-    ${error === 'rate_limited' ? `<p class="dosing-note">You've sent a lot of feedback in a short time — give it a few minutes and try again.</p>` : ''}
     ${sent ? `<p class="empty-note" style="color:var(--brand-green-dark);">Thanks — your feedback was sent.</p>` : ''}
     <form method="POST" action="/feedback">
       <label class="field-label" style="margin-top:0;">Your feedback</label>
@@ -2864,20 +2518,21 @@ function pageFeedback(req, res, query) {
 async function handleFeedbackSubmit(req, res) {
   const userId = requireUser(req, res);
   if (userId == null) return;
-  if (await isSubmissionRateLimited('feedback', userId)) return redirect(res, '/feedback?error=rate_limited');
   const fields = await parseForm(req);
   const message = String(fields.message || '').trim();
   if (!message) return redirect(res, '/feedback');
   const feedback = await db.createFeedback({ user_id: userId, message });
 
-  const user = db.getUserById(userId);
-  sendEmail({
-    to: SUPPORT_EMAIL,
-    subject: `StrainDex feedback from ${user ? user.username : 'a user'}`,
-    html: `<p><b>${esc(user ? user.username : 'Unknown user')}</b> (${user && user.email ? esc(user.email) : 'no email on file'}) sent this feedback:</p>
-      <p style="white-space:pre-wrap;">${esc(message)}</p>
-      <p><a href="https://${req.headers.host}/admin/feedback">View all feedback in the admin panel</a></p>`,
-  }).catch(err => console.error('[email] feedback notification failed:', err));
+  if (process.env.FEEDBACK_NOTIFY_EMAIL) {
+    const user = db.getUserById(userId);
+    await sendEmail({
+      to: process.env.FEEDBACK_NOTIFY_EMAIL,
+      subject: `StrainDex feedback from ${user ? user.username : 'a user'}`,
+      html: `<p><b>${esc(user ? user.username : 'Unknown user')}</b> (${user && user.email ? esc(user.email) : 'no email on file'}) sent this feedback:</p>
+        <p style="white-space:pre-wrap;">${esc(message)}</p>
+        <p><a href="https://${req.headers.host}/admin/feedback">View all feedback in the admin panel</a></p>`,
+    });
+  }
 
   redirect(res, '/feedback?sent=1');
 }
@@ -2908,13 +2563,13 @@ async function handleForgotPasswordSubmit(req, res) {
   if (user) {
     const token = await db.createPasswordResetToken(user.id);
     const resetUrl = `${req.headers['x-forwarded-proto'] || 'https'}://${req.headers.host}/reset-password?token=${token}`;
-    sendEmail({
+    await sendEmail({
       to: email,
       subject: 'Reset your StrainDex password',
       html: `<p>Someone requested a password reset for your StrainDex account.</p>
         <p><a href="${esc(resetUrl)}">Click here to set a new password</a> — this link expires in 1 hour.</p>
         <p>If you didn't request this, you can safely ignore this email.</p>`,
-    }).catch(err => console.error('[email] password reset notification failed:', err));
+    });
   }
   redirect(res, '/forgot-password?sent=1');
 }
@@ -2954,73 +2609,33 @@ async function handleResetPasswordSubmit(req, res) {
 async function handleLoginSubmit(req, res) {
   const f = await parseForm(req);
   const username = String(f.username || '').trim();
-  if (await isLoginRateLimited(req, username)) return redirect(res, '/login?err=rate_limited');
+  const nextQ = f.next ? `&next=${encodeURIComponent(f.next)}` : '';
+  if (isLoginRateLimited(req, username)) return redirect(res, `/login?err=rate_limited${nextQ}`);
   const user = db.verifyLogin(username, f.password || '');
   if (!user) {
-    await recordFailedLogin(req, username);
-    return redirect(res, '/login?err=1');
+    recordFailedLogin(req, username);
+    return redirect(res, `/login?err=1${nextQ}`);
   }
-  await clearLoginAttempts(req, username);
+  clearLoginAttempts(req, username);
   const token = auth.signUserSessionValue(user.id);
-  res.setHeader('Set-Cookie', `user_session=${encodeURIComponent(token)}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=31536000`);
-  redirect(res, '/');
+  res.setHeader('Set-Cookie', `user_session=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000`);
+  const safeNext = isSafeRedirectTarget(f.next) ? f.next : null;
+  redirect(res, safeNext || '/');
 }
 function handleLogout(req, res) {
-  res.setHeader('Set-Cookie', `user_session=; Path=/; HttpOnly; Secure; Max-Age=0`);
+  res.setHeader('Set-Cookie', `user_session=; Path=/; HttpOnly; Max-Age=0`);
   redirect(res, '/login');
 }
 
-// A single screen combining everything waiting on admin action --
-// pending recipes, pending grow tips, pending strain suggestions, and the
-// most recent feedback -- so a routine check-in doesn't mean clicking
-// through four separate pages just to see if anything's new. Each item
-// reuses the exact same row renderer as its dedicated management page, so
-// approving/rejecting from here behaves identically either way. Feedback
-// has no pending/reviewed concept of its own (it's just a running log),
-// so it's shown here for visibility with a link to the full history
-// rather than folded into the "needs action" count.
-function pageAdminInbox(req, res) {
-  if (!requireAdmin(req, res)) return;
-  const pendingRecipes = db.listRecipes({ status: 'pending' });
-  const pendingGrowTips = db.listGrowTips({ status: 'pending' });
-  const pendingStrainSubmissions = db.listStrainSubmissions().filter(s => s.status !== 'reviewed');
-  const recentFeedback = db.listFeedback().slice(0, 5);
-  const totalPending = pendingRecipes.length + pendingGrowTips.length + pendingStrainSubmissions.length;
-  const body = `
-    <h1 class="screen-title">Inbox</h1>
-    <p class="screen-sub">${totalPending ? `${totalPending} item${totalPending === 1 ? '' : 's'} need${totalPending === 1 ? 's' : ''} your attention.` : 'Nothing pending — you\u2019re all caught up.'}</p>
-
-    ${pendingStrainSubmissions.length ? `<h2 class="screen-title">💡 Suggested Strains (${pendingStrainSubmissions.length})</h2>${pendingStrainSubmissions.map(renderStrainSubmissionRow).join('')}` : ''}
-    ${pendingRecipes.length ? `<h2 class="screen-title" style="margin-top:20px;">🍽️ Recipes (${pendingRecipes.length})</h2>${pendingRecipes.map(renderPendingRecipeRow).join('')}` : ''}
-    ${pendingGrowTips.length ? `<h2 class="screen-title" style="margin-top:20px;">🌱 Grow Tips (${pendingGrowTips.length})</h2>${pendingGrowTips.map(renderPendingGrowTipRow).join('')}` : ''}
-
-    <h2 class="screen-title" style="margin-top:20px;">💬 Recent Feedback</h2>
-    ${recentFeedback.length ? recentFeedback.map(f => {
-      const user = f.user_id != null ? db.getUserById(f.user_id) : null;
-      return `<div class="admin-row" style="flex-direction:column;align-items:stretch;">
-        <span class="empty-note" style="padding:0;">${user ? esc(user.username) : 'Anonymous'} · <span class="local-time" data-utc="${esc(f.created_at)}Z">${esc(f.created_at)}</span></span>
-        <p style="margin:6px 0 0;white-space:pre-wrap;">${esc(f.message)}</p>
-      </div>`;
-    }).join('') : `<div class="empty-note">No feedback yet.</div>`}
-    <p class="empty-note" style="padding:6px 0 0;"><a href="/admin/feedback">See all feedback →</a></p>
-  `;
-  sendHtml(res, layout({ title: 'Inbox', body, isAdmin: true }));
-}
 function pageAdminHome(req, res) {
   if (!requireAdmin(req, res)) return;
   const pendingCount = db.listRecipes({ status: 'pending' }).length;
-  const pendingSubmissions = db.listStrainSubmissions().filter(s => s.status !== 'reviewed').length;
-  const pendingGrowTips = db.listGrowTips({ status: 'pending' }).length;
-  const totalPending = pendingCount + pendingSubmissions + pendingGrowTips;
   const body = `
     <h1 class="screen-title">Admin</h1>
-    <div class="card" style="background:${totalPending ? 'var(--brand-green-dark)' : 'var(--bg-card)'};${totalPending ? 'color:#fff;' : ''}"><a href="/admin/inbox" style="color:inherit;">📥 Inbox${totalPending ? ` — ${totalPending} pending` : ' — all caught up'}</a></div>
     <div class="card"><a href="/admin/feedback">💬 Feedback (${db.listFeedback().length})</a></div>
     <div class="card"><a href="/admin/faqs">📋 Manage FAQ (${db.listFaqs().length})</a></div>
     <div class="card"><a href="/admin/recipes">🍽️ Manage Recipes (${db.listRecipes({ status: null }).length}${pendingCount ? `, ${pendingCount} pending` : ''})</a></div>
-    <div class="card"><a href="/admin/grow-tips">🌱 Manage Grow Tips (${db.listGrowTips({ status: null }).length}${pendingGrowTips ? `, ${pendingGrowTips} pending` : ''})</a></div>
     <div class="card"><a href="/admin/strains">🌿 Manage Strains (${db.countStrains().toLocaleString()})</a></div>
-    <div class="card"><a href="/admin/strain-submissions">💡 Suggested Strains${pendingSubmissions ? ` (${pendingSubmissions} pending)` : ''}</a></div>
     <div class="card"><a href="/admin/users">👤 Manage Users (${db.listUsers().length})</a></div>
     <div class="card"><a href="/admin/logout">🚪 Log out</a></div>
   `;
@@ -3037,60 +2652,13 @@ function pageAdminUsers(req, res, query) {
     ${users.map(u => `
       <div class="admin-row">
         <span>👤 <b>${esc(u.username)}</b>${u.email ? ` · ${esc(u.email)}` : ''}<br><span class="empty-note" style="padding:0;">Joined ${esc((u.created_at || '').slice(0, 10))}</span></span>
-        <div class="actions">
-          <a href="/admin/users/${u.id}/edit" class="btn secondary" style="text-decoration:none;">Edit</a>
-          <form method="POST" action="/admin/users/${u.id}/delete" onsubmit="return confirm('Permanently delete ${esc(u.username)}\\'s account, check-ins, messages, and friendships? This cannot be undone.')">
-            <button class="btn danger" style="color:#fff;" type="submit">Delete</button>
-          </form>
-        </div>
+        <form method="POST" action="/admin/users/${u.id}/delete" onsubmit="return confirm('Permanently delete ${esc(u.username)}\\'s account, check-ins, messages, and friendships? This cannot be undone.')">
+          <button class="btn danger" style="color:#fff;" type="submit">Delete</button>
+        </form>
       </div>
     `).join('')}
   `;
   sendHtml(res, layout({ title: 'Manage Users', body, isAdmin: true }));
-}
-// Admin correction tool for a mistyped username/email/name/birth date, or
-// filling in an old account that predates first/last name being collected.
-// Deliberately has no password field -- see adminUpdateUser in db.js for
-// why that's a hard line rather than an oversight.
-function pageAdminUserEdit(req, res, id, query) {
-  if (!requireAdmin(req, res)) return;
-  const u = db.getUserById(Number(id));
-  if (!u) return notFound(res);
-  const error = query.get('error') || '';
-  const errMessages = { username_taken: 'That username is already taken.', email_taken: 'That email is already in use by another account.' };
-  const body = `
-    <h1 class="screen-title">Edit User</h1>
-    ${error && errMessages[error] ? `<p style="color:#a13a3a;">${esc(errMessages[error])}</p>` : ''}
-    <form method="POST" action="/admin/users/${u.id}/edit">
-      <label class="field-label" style="margin-top:0;">Username</label>
-      <input type="text" name="username" value="${esc(u.username)}" required>
-      <label class="field-label">Email</label>
-      <input type="email" name="email" value="${esc(u.email || '')}">
-      <label class="field-label">First name</label>
-      <input type="text" name="first_name" value="${esc(u.first_name || '')}">
-      <label class="field-label">Last name</label>
-      <input type="text" name="last_name" value="${esc(u.last_name || '')}">
-      <label class="field-label">Date of birth</label>
-      <input type="date" name="birth_date" value="${esc((u.birth_date || '').slice(0, 10))}" required>
-      <button class="btn block" type="submit" style="margin-top:14px;">Save Changes</button>
-    </form>
-    <p class="empty-note" style="margin-top:12px;">Password changes still have to go through the normal "Forgot Password" email flow — an admin can't set someone else's password directly.</p>
-  `;
-  sendHtml(res, layout({ title: 'Edit User', body, isAdmin: true }));
-}
-async function handleAdminUserEditSubmit(req, res, id) {
-  if (!requireAdmin(req, res)) return;
-  const f = await parseForm(req);
-  try {
-    await db.adminUpdateUser(Number(id), {
-      username: (f.username || '').trim(), email: (f.email || '').trim().toLowerCase() || null,
-      first_name: f.first_name || null, last_name: f.last_name || null, birth_date: f.birth_date,
-    });
-    redirect(res, '/admin/users');
-  } catch (err) {
-    const code = /username/i.test(err.message) ? 'username_taken' : /email/i.test(err.message) ? 'email_taken' : '';
-    redirect(res, `/admin/users/${id}/edit${code ? `?error=${code}` : ''}`);
-  }
 }
 async function handleAdminUserDelete(req, res, userId) {
   if (!requireAdmin(req, res)) return;
@@ -3195,15 +2763,6 @@ async function handleAdminFaqDelete(req, res, id) {
 function parseEffectsInput(str) {
   return String(str || '').split(',').map(s => s.trim()).filter(Boolean);
 }
-// The Effects/Ailments fields on the admin strain form are now tag-pickers
-// (repeated hidden inputs, same convention as check-in effects) rather
-// than comma-separated text, so they arrive as either an array or a lone
-// string depending on how many were picked -- this normalizes either
-// shape to an array. Parents stays on parseEffectsInput/comma-split since
-// it's still a plain freeform text field.
-function parseMultiInput(val) {
-  return (Array.isArray(val) ? val : (val ? [val] : [])).filter(Boolean);
-}
 function parseTerpsInput(str) {
   return String(str || '').split(',').map(s => s.trim()).filter(Boolean).map(pair => {
     const [n, p] = pair.split(':').map(x => (x || '').trim());
@@ -3234,37 +2793,10 @@ function strainFormFields(s) {
     <input type="text" name="flavor" value="${v(s && s.flavor)}">
     <label class="field-label">Icon (a single emoji)</label>
     <input type="text" name="icon" value="${v(s ? s.icon : '🌿')}" maxlength="4">
-    <label class="field-label">Effects (pick from the list, or type to search)</label>
-    <div class="tag-picker" data-vocab-key="EFFECT_VOCAB" data-initial-key="INITIAL_STRAIN_EFFECTS" data-field-name="effects" data-max="12">
-      <input type="text" class="tag-picker-search" data-placeholder="Search effects..." placeholder="Search effects..." autocomplete="off">
-      <div class="effect-results tag-picker-results"></div>
-      <div class="effect-chips tag-picker-chips"></div>
-      <div class="tag-picker-hidden"></div>
-    </div>
+    <label class="field-label">Effects (comma-separated, e.g. "Relaxed, Happy, Euphoric")</label>
+    <input type="text" name="effects" value="${v(effectsToInput(s && s.effects))}">
     <label class="field-label">Top terpenes (comma-separated "Name:Percent", e.g. "Myrcene:30, Limonene:25")</label>
     <input type="text" name="terps" value="${v(terpsToInput(s && s.terps))}">
-    <label class="field-label">Breeder</label>
-    <input type="text" name="breeder" value="${v(s && s.breeder)}">
-    <label class="field-label">Users report relief from (pick from the list, or type to search)</label>
-    <div class="tag-picker" data-vocab-key="AILMENT_VOCAB" data-initial-key="INITIAL_STRAIN_AILMENTS" data-field-name="ailments" data-max="9">
-      <input type="text" class="tag-picker-search" data-placeholder="Search ailments..." placeholder="Search ailments..." autocomplete="off">
-      <div class="effect-results tag-picker-results"></div>
-      <div class="effect-chips tag-picker-chips"></div>
-      <div class="tag-picker-hidden"></div>
-    </div>
-    <label class="field-label">Parents / cross (comma-separated, e.g. "OG Kush, Durban Poison") <span class="empty-note" style="padding:0;">— type to search existing strains, or type any name</span></label>
-    <div class="autocomplete-wrap" style="position:relative;">
-      <input type="text" name="parents" id="parents-input" class="comma-autocomplete" data-search-url="/api/admin/strain-search" data-exclude="${v(s && s.name)}" value="${v(effectsToInput(s && s.parents))}" autocomplete="off">
-      <div class="effect-results" id="parents-results"></div>
-    </div>
-    <script>
-      window.EFFECT_VOCAB = ${JSON.stringify(EFFECT_VOCAB)};
-      window.AILMENT_VOCAB = ${JSON.stringify(AILMENT_VOCAB)};
-      window.INITIAL_STRAIN_EFFECTS = ${JSON.stringify((s && s.effects) || [])};
-      window.INITIAL_STRAIN_AILMENTS = ${JSON.stringify((s && s.ailments) || [])};
-    </script>
-    <label class="field-label">Also known as (comma-separated nicknames)</label>
-    <input type="text" name="aka" value="${v(s && s.aka)}">
   `;
 }
 
@@ -3310,8 +2842,7 @@ async function handleAdminStrainNew(req, res) {
   const id = db.nextStrainId();
   await db.insertStrain({
     id, name: f.name, type: f.type, lean: f.lean, rarity: f.rarity, thc: f.thc, cbd: f.cbd,
-    flavor: f.flavor, icon: f.icon || '🌿', effects: parseMultiInput(f.effects), terps: parseTerpsInput(f.terps),
-    breeder: f.breeder || '', ailments: parseMultiInput(f.ailments), parents: parseEffectsInput(f.parents), aka: f.aka || '',
+    flavor: f.flavor, icon: f.icon || '🌿', effects: parseEffectsInput(f.effects), terps: parseTerpsInput(f.terps),
   });
   redirect(res, '/admin/strains');
 }
@@ -3333,8 +2864,7 @@ async function handleAdminStrainEditSubmit(req, res, id) {
   const f = await parseForm(req);
   await db.insertStrain({
     id, name: f.name, type: f.type, lean: f.lean, rarity: f.rarity, thc: f.thc, cbd: f.cbd,
-    flavor: f.flavor, icon: f.icon || '🌿', effects: parseMultiInput(f.effects), terps: parseTerpsInput(f.terps),
-    breeder: f.breeder || '', ailments: parseMultiInput(f.ailments), parents: parseEffectsInput(f.parents), aka: f.aka || '',
+    flavor: f.flavor, icon: f.icon || '🌿', effects: parseEffectsInput(f.effects), terps: parseTerpsInput(f.terps),
   });
   redirect(res, '/admin/strains');
 }
@@ -3344,21 +2874,6 @@ async function handleAdminStrainDelete(req, res, id) {
   redirect(res, '/admin/strains');
 }
 
-// Shared row renderer for a pending recipe, used both on the dedicated
-// Manage Recipes page and the unified admin Inbox, so a pending recipe
-// looks and behaves identically no matter which page it's reviewed from.
-function renderPendingRecipeRow(r) {
-  return `
-    <div class="admin-row" style="flex-direction:column;align-items:stretch;">
-      <b>${esc(r.title)}</b> <span class="empty-note">by ${esc(r.author || 'Anonymous')} · ${esc(r.category || '')}</span>
-      <p class="empty-note">${esc(r.desc)}</p>
-      <div class="actions">
-        <a href="/admin/recipes/${r.id}/edit" class="btn secondary" style="text-decoration:none;">Edit</a>
-        <form method="POST" action="/admin/recipes/${r.id}/approve" style="display:inline;"><button class="btn" type="submit">Approve</button></form>
-        <form method="POST" action="/admin/recipes/${r.id}/delete" style="display:inline;" onsubmit="return confirm('Reject and delete?')"><button class="btn danger" style="color:#fff;" type="submit">Reject</button></form>
-      </div>
-    </div>`;
-}
 function pageAdminRecipes(req, res) {
   if (!requireAdmin(req, res)) return;
   const pending = db.listRecipes({ status: 'pending' });
@@ -3372,7 +2887,7 @@ function pageAdminRecipes(req, res) {
         <label class="field-label">Description</label>
         <input type="text" name="desc" required>
         <label class="field-label">Category</label>
-        <select name="category">${RECIPE_CATEGORIES.map(c => `<option value="${c}">${c}</option>`).join('')}</select>
+        <select name="category">${['Infusion Base', 'Baked Goods', 'Gummies & Candy', 'Drinks', 'Topicals', 'Savory & Snacks'].map(c => `<option value="${c}">${c}</option>`).join('')}</select>
         <label class="field-label">Ingredients (one per line)</label>
         <textarea name="ingredients" required></textarea>
         <label class="field-label">Steps (one per line)</label>
@@ -3382,13 +2897,20 @@ function pageAdminRecipes(req, res) {
         <button class="btn block" type="submit">Add Recipe (published immediately)</button>
       </form>
     </div>
-    ${pending.length ? `<h2 class="screen-title">Pending review (${pending.length})</h2>` + pending.map(renderPendingRecipeRow).join('') : ''}
+    ${pending.length ? `<h2 class="screen-title">Pending review (${pending.length})</h2>` + pending.map(r => `
+      <div class="admin-row" style="flex-direction:column;align-items:stretch;">
+        <b>${esc(r.title)}</b> <span class="empty-note">by ${esc(r.author || 'Anonymous')}</span>
+        <p class="empty-note">${esc(r.desc)}</p>
+        <div class="actions">
+          <form method="POST" action="/admin/recipes/${r.id}/approve" style="display:inline;"><button class="btn" type="submit">Approve</button></form>
+          <form method="POST" action="/admin/recipes/${r.id}/delete" style="display:inline;" onsubmit="return confirm('Reject and delete?')"><button class="btn danger" style="color:#fff;" type="submit">Reject</button></form>
+        </div>
+      </div>`).join('') : ''}
     <h2 class="screen-title">All recipes</h2>
     ${all.map(r => `
       <div class="admin-row">
         <span>${esc(r.title)} <span class="recipe-source-tag ${r.source}">${r.status}</span> <span class="empty-note">${esc(r.category || '')}</span></span>
         <div class="actions">
-          <a href="/admin/recipes/${r.id}/edit" class="btn secondary" style="text-decoration:none;">Edit</a>
           <form method="POST" action="/admin/recipes/${r.id}/delete" style="display:inline;" onsubmit="return confirm('Delete this recipe?')">
             <button class="btn danger" style="color:#fff;" type="submit">Delete</button>
           </form>
@@ -3396,41 +2918,6 @@ function pageAdminRecipes(req, res) {
       </div>`).join('')}
   `;
   sendHtml(res, layout({ title: 'Manage Recipes', body, isAdmin: true }));
-}
-function pageAdminRecipeEdit(req, res, id) {
-  if (!requireAdmin(req, res)) return;
-  const r = db.getRecipe(Number(id));
-  if (!r) return notFound(res);
-  const body = `
-    <h1 class="screen-title">Edit Recipe</h1>
-    <form method="POST" action="/admin/recipes/${r.id}/edit">
-      <label class="field-label" style="margin-top:0;">Title</label>
-      <input type="text" name="title" value="${esc(r.title)}" required>
-      <label class="field-label">Description</label>
-      <input type="text" name="desc" value="${esc(r.desc)}" required>
-      <label class="field-label">Category</label>
-      <select name="category">${RECIPE_CATEGORIES.map(c => `<option value="${c}" ${r.category === c ? 'selected' : ''}>${c}</option>`).join('')}</select>
-      <label class="field-label">Ingredients (one per line)</label>
-      <textarea name="ingredients" required>${esc((r.ingredients || []).join('\n'))}</textarea>
-      <label class="field-label">Steps (one per line)</label>
-      <textarea name="steps" required>${esc((r.steps || []).join('\n'))}</textarea>
-      <label class="field-label">Dosing note</label>
-      <input type="text" name="dosing" value="${esc(r.dosing || '')}">
-      <button class="btn block" type="submit" style="margin-top:14px;">Save Changes</button>
-    </form>
-  `;
-  sendHtml(res, layout({ title: 'Edit Recipe', body, isAdmin: true }));
-}
-async function handleAdminRecipeEditSubmit(req, res, id) {
-  if (!requireAdmin(req, res)) return;
-  const f = await parseForm(req);
-  await db.updateRecipe(Number(id), {
-    title: f.title, desc: f.desc, category: RECIPE_CATEGORIES.includes(f.category) ? f.category : 'Baked Goods',
-    ingredients: String(f.ingredients || '').split('\n').map(s => s.trim()).filter(Boolean),
-    steps: String(f.steps || '').split('\n').map(s => s.trim()).filter(Boolean),
-    dosing: f.dosing || '',
-  });
-  redirect(res, '/admin/recipes');
 }
 async function handleAdminRecipeNew(req, res) {
   if (!requireAdmin(req, res)) return;
@@ -3453,53 +2940,6 @@ async function handleAdminRecipeDelete(req, res, id) {
   redirect(res, '/admin/recipes');
 }
 
-// Grow tip review queue -- same shape as recipe review: pending tips wait
-// here until approved, only then do they show up on the public Growing
-// page (see listGrowTips's default status='approved' filter).
-// Shared row renderer for a pending grow tip -- same reasoning as
-// renderPendingRecipeRow above.
-function renderPendingGrowTipRow(g) {
-  return `
-    <div class="admin-row" style="flex-direction:column;align-items:stretch;">
-      <b>${esc(g.title)}</b> <span class="empty-note">by ${esc(g.author || 'Anonymous')} · ${esc(g.category)}</span>
-      <p class="empty-note">${esc(g.body)}</p>
-      <div class="actions">
-        <form method="POST" action="/admin/grow-tips/${g.id}/approve" style="display:inline;"><button class="btn" type="submit">Approve</button></form>
-        <form method="POST" action="/admin/grow-tips/${g.id}/delete" style="display:inline;" onsubmit="return confirm('Reject and delete?')"><button class="btn danger" style="color:#fff;" type="submit">Reject</button></form>
-      </div>
-    </div>`;
-}
-function pageAdminGrowTips(req, res) {
-  if (!requireAdmin(req, res)) return;
-  const pending = db.listGrowTips({ status: 'pending' });
-  const all = db.listGrowTips({ status: null });
-  const body = `
-    <h1 class="screen-title">Manage Grow Tips</h1>
-    ${pending.length ? `<h2 class="screen-title">Pending review (${pending.length})</h2>` + pending.map(renderPendingGrowTipRow).join('') : `<div class="empty-note">No pending grow tips.</div>`}
-    <h2 class="screen-title" style="margin-top:20px;">All grow tips (${all.length})</h2>
-    ${all.map(g => `
-      <div class="admin-row">
-        <span>${esc(g.title)} <span class="recipe-source-tag ${g.status === 'approved' ? 'official' : 'community'}">${g.status}</span> <span class="empty-note">${esc(g.category)}</span></span>
-        <div class="actions">
-          <form method="POST" action="/admin/grow-tips/${g.id}/delete" style="display:inline;" onsubmit="return confirm('Delete this grow tip?')">
-            <button class="btn danger" style="color:#fff;" type="submit">Delete</button>
-          </form>
-        </div>
-      </div>`).join('')}
-  `;
-  sendHtml(res, layout({ title: 'Manage Grow Tips', body, isAdmin: true }));
-}
-async function handleAdminGrowTipApprove(req, res, id) {
-  if (!requireAdmin(req, res)) return;
-  await db.updateGrowTipStatus(Number(id), 'approved');
-  redirect(res, '/admin/grow-tips');
-}
-async function handleAdminGrowTipDelete(req, res, id) {
-  if (!requireAdmin(req, res)) return;
-  await db.deleteGrowTip(Number(id));
-  redirect(res, '/admin/grow-tips');
-}
-
 // ---------------------------------------------------------------- API
 
 function apiListStrains(req, res, query) {
@@ -3517,22 +2957,6 @@ function apiListStrains(req, res, query) {
     total: db.countStrains({ q, type, rarity, effect, thc, terpene, ailment, breeder, verified }),
     results: db.listStrains({ q, type, rarity, effect, thc, terpene, ailment, breeder, verified, limit }),
   });
-}
-// Backs the live-search Parents field on the admin strain form -- returns
-// just a handful of matching strain names instead of shipping the whole
-// library to the page up front. Reads from the already-in-memory strain
-// cache (via listStrains), so this is cheap even though it runs on every
-// keystroke.
-function apiAdminStrainNameSearch(req, res, query) {
-  if (!requireAdmin(req, res)) return;
-  const q = (query.get('q') || '').trim().toLowerCase();
-  const exclude = (query.get('exclude') || '').trim().toLowerCase();
-  if (q.length < 2) return sendJson(res, { results: [] });
-  const results = db.listStrains({ limit: 6000 })
-    .map(x => x.name)
-    .filter(n => n.toLowerCase().includes(q) && n.toLowerCase() !== exclude)
-    .slice(0, 8);
-  sendJson(res, { results });
 }
 async function apiKudos(req, res, id) {
   const r = await db.addKudos(id);
@@ -3600,19 +3024,6 @@ function pageMore(req, res) {
   // not deleted, just not surfaced here until they're real.
   const sections = [
     {
-      title: 'Your Journey',
-      tiles: [
-        { href: '/collection', icon: '📖', t: 'My Collection', s: 'Your binder & rarity progress' },
-        { href: '/wishlist', icon: '⭐', t: 'Wishlist', s: 'Strains you want to try next' },
-        { href: '/grow-journal', icon: '📔', t: 'Grow Journal', s: 'Your private plant photo log' },
-        { href: '/lists', icon: '📋', t: 'Your Lists', s: 'Custom groupings — Morning, Sleep, anything' },
-        { href: '/history', icon: '🕐', t: 'Check-In History', s: 'Your full timeline' },
-        { href: '/insights', icon: '📊', t: 'Your Patterns', s: 'What your check-ins say about you' },
-        { href: '/insights', icon: '🌿', t: 'Tolerance Break', s: 'Start, track, or end a break' },
-        { href: '/year-in-review', icon: '🎁', t: 'Your Year in StrainDex', s: 'A shareable recap of your year' },
-      ],
-    },
-    {
       title: 'Discover',
       tiles: [
         { href: '/quiz', icon: '🧭', t: 'Find Your First Strain', s: '3-question strain matcher' },
@@ -3620,13 +3031,25 @@ function pageMore(req, res) {
         { href: '/compare', icon: '🆚', t: 'Compare Strains', s: 'Side-by-side lookup' },
         { href: '/surprise-me', icon: '🎲', t: 'Surprise Me', s: 'One random strain you haven\u2019t tried' },
         { href: '/trending', icon: '🔥', t: 'Trending This Week', s: 'Most checked-into right now' },
-        { href: '/strains/suggest', icon: '💡', t: 'Suggest a Strain', s: 'Seen one we don\u2019t have yet?' },
+      ],
+    },
+    {
+      title: 'Your Journey',
+      tiles: [
+        { href: '/collection', icon: '/docs/leaf-kudos.png', t: 'My Collection', s: 'Your binder & rarity progress' },
+        { href: '/wishlist', icon: '⭐', t: 'Wishlist', s: 'Strains you want to try next' },
+        { href: '/grow-journal', icon: '📔', t: 'Grow Journal', s: 'Your private plant photo log' },
+        { href: '/lists', icon: '📋', t: 'Your Lists', s: 'Custom groupings — Morning, Sleep, anything' },
+        { href: '/history', icon: '🕐', t: 'Check-In History', s: 'Your full timeline' },
+        { href: '/insights', icon: '📊', t: 'Your Patterns', s: 'What your check-ins say about you' },
+        { href: '/insights', icon: '🌿', t: 'Tolerance Break', s: 'Start, track, or end a break' },
       ],
     },
     {
       title: 'Learn & Stay Safe',
       tiles: [
-        { href: '/methods', icon: '🔥', t: 'Ways to Enjoy It', s: 'Every method, explained' },
+        { href: '/methods', icon: '/docs/joint-icon.png', t: 'Ways to Enjoy It', s: 'Every method, explained' },
+        { href: '/gear-care', icon: '🧼', t: 'Gear Care', s: 'Keeping your glass, rigs & vapes clean' },
         { href: '/concentrates', icon: '💠', t: 'Concentrates & Extracts', s: 'Kief, rosin, live resin & more' },
         { href: '/legal-status', icon: '🏛️', t: 'Is It Legal Near Me?', s: 'State-by-state cannabis law' },
         { href: '/mixing-cautions', icon: '⚠️', t: 'Mixing With Other Substances', s: 'General cautions, not medical advice' },
@@ -3642,7 +3065,6 @@ function pageMore(req, res) {
       tiles: [
         { href: '/messages', icon: '💬', t: 'Messages', s: userId != null && db.countUnreadMessages(userId) > 0 ? `${db.countUnreadMessages(userId)} unread` : 'Chat with friends & shared strains' },
         { href: '/trade', icon: '🔁', t: 'Trade', s: 'Swap dupes with real friends' },
-        { href: '/trade-history', icon: '📜', t: 'Trade History', s: 'Every trade you\\u2019ve made' },
         { href: '/friends-picks', icon: '🤝', t: "Friends' Picks", s: 'What your circle loves that you haven\u2019t tried' },
         { href: '/dispensaries', icon: '📍', t: 'Dispensaries', s: 'Locator & live menus' },
       ],
@@ -3650,7 +3072,6 @@ function pageMore(req, res) {
     {
       title: 'Support',
       tiles: [
-        { href: '/add-to-home-screen', icon: '📲', t: 'Add to Home Screen', s: 'Get the full-screen app experience' },
         { href: '/feedback', icon: '📝', t: 'Send Feedback', s: 'Bugs, ideas — anything' },
         { href: '/support-the-app', icon: '💚', t: 'Support the App', s: 'Help cover hosting costs' },
       ],
@@ -3669,7 +3090,7 @@ function pageMore(req, res) {
     ${sections.map(sec => `
       <div class="section-label" style="margin-top:18px;">${esc(sec.title)}</div>
       <div class="more-grid">
-        ${sec.tiles.map(t => `<a class="more-tile" href="${t.href}"><span class="ic">${t.icon}</span><div class="t">${esc(t.t)}</div><div class="s">${esc(t.s)}</div></a>`).join('')}
+        ${sec.tiles.map(t => `<a class="more-tile" href="${t.href}"><span class="ic">${t.icon.startsWith('/') ? `<img src="${t.icon}" alt="" class="ic-img-lg">` : t.icon}</span><div class="t">${esc(t.t)}</div><div class="s">${esc(t.s)}</div></a>`).join('')}
       </div>
     `).join('')}
   `;
@@ -3690,8 +3111,8 @@ function pageTerms(req, res) {
       <p><b>2. Eligibility.</b> The Service is intended solely for adults 21 and older. By creating an account, you represent that you're at least 21 and that your use of the Service complies with the laws of your jurisdiction. We don't verify the legal status of cannabis where you live — that's on you.</p>
       <p><b>3. What StrainDex is.</b> StrainDex is a personal cannabis journal and informational reference app: check-ins, a strain library, community recipes and growing tips, and a dispensary locator. StrainDex does not sell, deliver, broker, or otherwise facilitate the purchase or transfer of cannabis or cannabis products, and nothing in the app is a marketplace or point of sale.</p>
       <p><b>4. Accounts.</b> You're responsible for keeping your credentials confidential and for all activity under your account. Provide accurate registration information. One account per person — accounts can't be sold, transferred, or shared. We can suspend or terminate accounts that violate these Terms, engage in fraud, or misrepresent age or eligibility.</p>
-      <p><b>5. Your content.</b> You keep ownership of what you submit — check-ins, notes, tasting notes, photos, ratings, pairings, recipes, grow tips, feedback, and strain suggestions. By submitting it, you give StrainDex permission to host, store, and display it within the app. You confirm you have the rights to anything you upload.</p>
-      <p><b>6. Community-submitted content.</b> Recipes, growing tips, and suggested strains are reviewed before publishing, but this is a basic appropriateness check, not a professional or medical certification. Dosing suggestions and techniques reflect individual contributors' opinions, not StrainDex's. You take on the risk of following any community-submitted instructions, especially around dosing.</p>
+      <p><b>5. Your content.</b> You keep ownership of what you submit — check-ins, notes, tasting notes, photos, ratings, pairings. By submitting it, you give StrainDex permission to host, store, and display it within the app. You confirm you have the rights to anything you upload.</p>
+      <p><b>6. Community-submitted content.</b> Recipes and growing tips are reviewed before publishing, but this is a basic appropriateness check, not a professional or medical certification. Dosing suggestions and techniques reflect individual contributors' opinions, not StrainDex's. You take on the risk of following any community-submitted instructions, especially around dosing.</p>
       <p><b>7. Prohibited conduct.</b> Don't: break applicable law; harass or threaten other users; upload content that infringes someone else's rights; misrepresent your age; scrape or reverse-engineer the Service; or use StrainDex to actually sell, buy, or distribute cannabis or any controlled substance.</p>
       <p><b>8. Not medical advice.</b> Strain effects, THC/CBD percentages, and terpene info come from user reports and published third-party sources, and may not reflect the actual composition of anything you encounter. Nothing here is medical advice or intended to diagnose, treat, cure, or prevent any condition. Talk to a healthcare provider about your own situation.</p>
       <p><b>9. Third-party services.</b> Dispensary information comes from third-party data providers and may be incomplete, outdated, or wrong. We don't verify dispensary licensing, inventory, pricing, or hours — always confirm with the dispensary directly.</p>
@@ -3716,10 +3137,10 @@ function pagePrivacy(req, res) {
     <p class="empty-note">Last updated: ${new Date().toISOString().slice(0, 10)}. This expanded draft is currently being reviewed by an attorney and may change before it's finalized, particularly around jurisdiction-specific requirements (CCPA, GDPR, etc.).</p>
     <div class="card">
       <p><b>1. Overview.</b> This explains what StrainDex collects, how it's used, and your choices. We collect only what's needed to run the app and don't sell personal information to advertisers or data brokers.</p>
-      <p><b>2. What we collect.</b> Account info (username, first and last name, email, a securely hashed password, birth date to confirm age). User content (check-ins, tasting notes, pairings you log with a check-in, photos, recipes, grow tips, feedback, and any strain you suggest we add). Location, only when you use "find dispensaries near me" — not stored after the search. Basic technical/error logs. A single first-party session cookie to keep you logged in — no third-party ad-tracking cookies.</p>
-      <p><b>3. How we use it.</b> To run check-ins, the strain library, recipes, growing tips, dispensary search, and friends features; to keep your account secure; to send account emails like password resets; to respond to feedback and strain suggestions you submit; to fix bugs through error monitoring; and to generate aggregate, non-identifying usage stats.</p>
+      <p><b>2. What we collect.</b> Account info (username, email, a securely hashed password, birth date to confirm age). User content (check-ins, tasting notes, food/drink/entertainment/activity pairings, photos, recipes, grow tips). Location, only when you use "find dispensaries near me" — not stored after the search. Basic technical/error logs. A single first-party session cookie to keep you logged in — no third-party ad-tracking cookies.</p>
+      <p><b>3. How we use it.</b> To run check-ins, the strain library, recipes, growing tips, dispensary search, and friends features; to keep your account secure; to send account emails like password resets; to respond to feedback you submit; to fix bugs through error monitoring; and to generate aggregate, non-identifying usage stats.</p>
       <p><b>4. Who we share it with.</b> We don't sell your data. We use service providers who each process data only to provide their service to us: our database host, our app host, our photo storage provider, our transactional email provider, our error-monitoring provider, and a dispensary-location lookup service. We may also disclose information if required by law.</p>
-      <p><b>5. How long we keep it.</b> As long as your account is active. If you delete your account, your personal data is removed, including any feedback and strain suggestions you submitted; any recipe or grow tip you shared publicly stays up but is reattributed to "Former user."</p>
+      <p><b>5. How long we keep it.</b> As long as your account is active. If you delete your account, your personal data is removed; any recipe or grow tip you shared publicly stays up but is reattributed to "Former user."</p>
       <p><b>6. Your rights.</b> Export your data or permanently delete your account anytime from Account Settings. Update your info directly in the app.</p>
       <p><b>7. Not for minors.</b> The Service is for adults 21+ only and isn't directed at children. We don't knowingly collect data from anyone under 21.</p>
       <p><b>8. Security.</b> We use industry-standard measures — hashed passwords, encrypted connections — but no method of transmission or storage is perfectly secure.</p>
@@ -3760,20 +3181,6 @@ function pageAccount(req, res, query) {
         <label class="field-label" style="margin-top:0;">Email</label>
         <input type="email" name="email" value="${esc(user.email || '')}" required autocomplete="email">
         <button class="btn block" type="submit" style="margin-top:10px;">Update Email</button>
-      </form>
-    </div>
-
-    <div class="card" style="margin-top:14px;">
-      <h2 style="margin:0 0 10px;font-size:15px;">Name</h2>
-      <p class="empty-note" style="padding:0 0 10px;">Not shown to other users, just yours to keep accurate.</p>
-      ${error === 'name_invalid' ? `<p class="dosing-note">First and last name are both required.</p>` : ''}
-      ${success === 'name' ? `<p class="empty-note" style="color:var(--brand-green-dark);">Name updated.</p>` : ''}
-      <form method="POST" action="/account/name">
-        <label class="field-label" style="margin-top:0;">First name</label>
-        <input type="text" name="first_name" value="${esc(user.first_name || '')}" required autocomplete="given-name">
-        <label class="field-label">Last name</label>
-        <input type="text" name="last_name" value="${esc(user.last_name || '')}" required autocomplete="family-name">
-        <button class="btn block" type="submit" style="margin-top:10px;">Update Name</button>
       </form>
     </div>
 
@@ -3828,7 +3235,7 @@ async function handleAccountDelete(req, res) {
   const userId = requireUser(req, res);
   if (userId == null) return;
   await db.deleteUserAccount(userId);
-  res.setHeader('Set-Cookie', `user_session=; Path=/; HttpOnly; Secure; Max-Age=0`);
+  res.setHeader('Set-Cookie', `user_session=; Path=/; HttpOnly; Max-Age=0`);
   redirect(res, '/signup?deleted=1');
 }
 async function handleAccountUsername(req, res) {
@@ -3856,16 +3263,6 @@ async function handleAccountEmail(req, res) {
   } catch (err) {
     redirect(res, '/account?error=email_taken');
   }
-}
-async function handleAccountName(req, res) {
-  const userId = requireUser(req, res);
-  if (userId == null) return;
-  const fields = await parseForm(req);
-  const firstName = (fields.first_name || '').trim();
-  const lastName = (fields.last_name || '').trim();
-  if (!firstName || !lastName) return redirect(res, '/account?error=name_invalid');
-  await db.updateName(userId, firstName, lastName);
-  redirect(res, '/account?ok=name');
 }
 async function handleAccountPassword(req, res) {
   const userId = requireUser(req, res);
@@ -3929,16 +3326,13 @@ function pageCollection(req, res) {
   sendHtml(res, layout({ title: 'My Collection', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
-function pageHistory(req, res, query) {
+function pageHistory(req, res) {
   const userId = requireUser(req, res);
   if (userId == null) return;
-  const strainId = query ? query.get('strain') : null;
-  const filterStrain = strainId ? db.getStrain(strainId) : null;
-  const history = db.listCheckins({ userId, strain_id: strainId || undefined, limit: 100000 });
+  const history = db.listCheckins({ userId, limit: 200 });
   const body = `
-    <h1 class="screen-title">${filterStrain ? `Check-Ins: ${esc(filterStrain.name)}` : 'Check-In History'}</h1>
-    <p class="screen-sub">${filterStrain ? `Every check-in you've logged for this strain, newest first.` : 'Your full timeline, newest first.'}</p>
-    ${filterStrain ? `<p class="empty-note"><a href="/history">← All strains</a></p>` : ''}
+    <h1 class="screen-title">Check-In History</h1>
+    <p class="screen-sub">Your full timeline, newest first.</p>
     ${history.length ? history.map(c => {
       const s = db.getStrain(c.strain_id);
       return `<div class="library-row">
@@ -3949,12 +3343,11 @@ function pageHistory(req, res, query) {
             <div class="sub">${esc(c.method)} · ${starString(c.rating)} · <span class="local-time" data-utc="${c.created_at}Z">${esc(c.created_at)} UTC</span></div>
           </div>
         </a>
-        <a href="/checkin/${c.id}/card" class="empty-note" style="padding:0 4px;">Share</a>
         <a href="/checkin/${c.id}/edit" class="empty-note" style="padding:0 4px;">Edit</a>
       </div>`;
     }).join('') : `<div class="empty-note">No check-ins logged yet — <a href="/checkin">log your first one</a>.</div>`}
   `;
-  sendHtml(res, layout({ title: filterStrain ? `Check-Ins: ${filterStrain.name}` : 'Check-In History', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: 'Check-In History', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
 // ---------------------------------------------------------------- friends
@@ -3966,6 +3359,15 @@ function pageFriends(req, res, query) {
   const friends = db.listFriends(userId);
   const incoming = db.listIncomingRequests(userId);
   const outgoing = db.listOutgoingRequests(userId);
+
+  // Shared layout for every row on this page (search results, incoming
+  // requests, outgoing requests, friends list) so alignment can't drift
+  // between sections: name on the left vertically centered against
+  // whatever's on the right, buttons and status text all sitting on the
+  // same baseline regardless of which of the four blocks they're in.
+  const rowStyle = 'align-items:center;';
+  const actionsStyle = 'display:flex;align-items:center;flex-wrap:wrap;gap:8px;';
+  const statusStyle = 'padding:0;white-space:nowrap;';
 
   const body = `
     <h1 class="screen-title">Friends</h1>
@@ -3979,13 +3381,13 @@ function pageFriends(req, res, query) {
       <div class="section-label">Search results</div>
       ${results.length ? results.map(u => {
         const status = db.getFriendshipStatus(userId, u.id);
-        return `<div class="admin-row">
+        return `<div class="admin-row" style="${rowStyle}">
           <span>👤 ${esc(u.username)}</span>
-          <div class="actions">
-            ${status === 'none' ? `<form method="POST" action="/friends/${u.id}/request"><button class="btn" type="submit">Add Friend</button></form>` : ''}
-            ${status === 'pending_sent' ? `<span class="empty-note">Request sent</span>` : ''}
-            ${status === 'pending_received' ? `<span class="empty-note">Check your requests below</span>` : ''}
-            ${status === 'friends' ? `<span class="empty-note">Already friends</span>` : ''}
+          <div class="actions" style="${actionsStyle}">
+            ${status === 'none' ? `<form method="POST" action="/friends/${u.id}/request" style="display:inline;"><button class="btn" type="submit">Add Friend</button></form>` : ''}
+            ${status === 'pending_sent' ? `<span class="empty-note" style="${statusStyle}">Request sent</span>` : ''}
+            ${status === 'pending_received' ? `<span class="empty-note" style="${statusStyle}">Check your requests below</span>` : ''}
+            ${status === 'friends' ? `<span class="empty-note" style="${statusStyle}">Already friends</span>` : ''}
           </div>
         </div>`;
       }).join('') : `<div class="empty-note">No users found matching "${esc(q)}".</div>`}
@@ -3994,9 +3396,9 @@ function pageFriends(req, res, query) {
     ${incoming.length ? `
       <div class="section-label" style="margin-top:20px;color:var(--brand-green-dark);">🔔 Friend requests (${incoming.length})</div>
       ${incoming.map(u => `
-        <div class="admin-row">
+        <div class="admin-row" style="${rowStyle}">
           <span>👤 ${esc(u.username)}</span>
-          <div class="actions">
+          <div class="actions" style="${actionsStyle}">
             <form method="POST" action="/friends/${u.id}/accept" style="display:inline;"><button class="btn" type="submit">Accept</button></form>
             <form method="POST" action="/friends/${u.id}/decline" style="display:inline;"><button class="btn danger" style="color:#fff;" type="submit">Decline</button></form>
           </div>
@@ -4006,10 +3408,10 @@ function pageFriends(req, res, query) {
     ${outgoing.length ? `
       <div class="section-label" style="margin-top:20px;">Pending sent (${outgoing.length})</div>
       ${outgoing.map(u => `
-        <div class="admin-row">
+        <div class="admin-row" style="${rowStyle}">
           <span>👤 ${esc(u.username)}</span>
-          <div class="actions">
-            <span class="empty-note" style="padding:0;">Waiting for response</span>
+          <div class="actions" style="${actionsStyle}">
+            <span class="empty-note" style="${statusStyle}">Waiting for response</span>
             <form method="POST" action="/friends/${u.id}/cancel" style="display:inline;" onsubmit="return confirm('Cancel your friend request to ${esc(u.username)}?')">
               <button class="btn secondary" type="submit">Cancel</button>
             </form>
@@ -4020,9 +3422,9 @@ function pageFriends(req, res, query) {
 
     <div class="section-label" style="margin-top:20px;">Your friends (${friends.length})</div>
     ${friends.length ? friends.map(u => `
-      <div class="admin-row">
+      <div class="admin-row" style="${rowStyle}">
         <a href="/friends/${u.id}" style="text-decoration:none;color:inherit;">👤 ${esc(u.username)}</a>
-        <div class="actions">
+        <div class="actions" style="${actionsStyle}">
           <a href="/messages/${u.id}" class="btn secondary" style="text-decoration:none;">Message</a>
           <a href="/trade?friend=${u.id}" class="btn secondary" style="text-decoration:none;">Trade</a>
           <form method="POST" action="/friends/${u.id}/remove" style="display:inline;" onsubmit="return confirm('Remove this friend?')">
@@ -4154,10 +3556,6 @@ function pageConversation(req, res, friendId) {
                 <div class="sub">${esc(strain.type)} · THC ${esc(strain.thc)}</div>
               </div>
             </a>
-            <form method="POST" action="/wishlist/${strain.id}/toggle" style="margin-top:4px;">
-              <input type="hidden" name="redirect_to" value="/messages/${friend.id}">
-              <button type="submit" class="btn secondary block" style="padding:6px;font-size:12px;">${db.isInWishlist(userId, strain.id) ? '★ In Your Wishlist' : '☆ Add to Wishlist'}</button>
-            </form>
           ` : ''}
           ${m.body ? `<div class="admin-row" style="background:${mine ? 'var(--brand-green-dark)' : 'var(--bg-card)'};color:${mine ? '#fff' : 'inherit'};margin-top:${strain ? '4px' : '0'};">${esc(m.body)}</div>` : ''}
         </div>`;
@@ -4285,40 +3683,6 @@ async function handleFriendCancel(req, res, addresseeId) {
 
 // ---------------------------------------------------------------- trading (real friends, or demo)
 
-// A simple newest-first log of every trade a person has completed --
-// createTrade already saves everything needed for this, it just never had
-// anywhere to be read back from before now.
-function pageTradeHistory(req, res) {
-  const userId = requireUser(req, res);
-  if (userId == null) return;
-  const trades = db.listTrades(userId);
-  const body = `
-    <h1 class="screen-title">Trade History</h1>
-    <p class="screen-sub">${db.countTrades(userId)} trade${db.countTrades(userId) === 1 ? '' : 's'} total.</p>
-    ${trades.length ? trades.map(t => {
-      const gave = db.getStrain(t.gave_strain_id);
-      const got = db.getStrain(t.got_strain_id);
-      return `
-      <div class="card" style="margin-bottom:10px;">
-        <div class="empty-note" style="padding:0 0 6px;">With ${esc(t.friend_name)} · <span class="local-time" data-utc="${t.created_at}Z">${esc(t.created_at)}</span> UTC</div>
-        <div style="display:flex;align-items:center;gap:10px;">
-          <div style="flex:1;min-width:0;text-align:center;">
-            <div class="empty-note" style="padding:0 0 4px;">You gave</div>
-            ${strainPhotoTag(gave, 'sm')}
-            <div style="font-weight:700;font-size:12.5px;margin-top:4px;">${esc(gave ? gave.name : t.gave_strain_id)}</div>
-          </div>
-          <div style="font-size:18px;">⇄</div>
-          <div style="flex:1;min-width:0;text-align:center;">
-            <div class="empty-note" style="padding:0 0 4px;">You got</div>
-            ${strainPhotoTag(got, 'sm')}
-            <div style="font-weight:700;font-size:12.5px;margin-top:4px;">${esc(got ? got.name : t.got_strain_id)}</div>
-          </div>
-        </div>
-      </div>`;
-    }).join('') : `<div class="empty-note">No trades yet — head to <a href="/trade">Trade</a> to swap dupes with a friend.</div>`}
-  `;
-  sendHtml(res, layout({ title: 'Trade History', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
-}
 function pageTrade(req, res, query) {
   const userId = requireUser(req, res);
   if (userId == null) return;
@@ -4347,7 +3711,7 @@ function pageTrade(req, res, query) {
   const mk = (params) => '/trade?' + new URLSearchParams({ friend: friendId, your: yourPick, their: theirPick, ...params }).toString();
 
   const body = `
-    <h1 class="screen-title">Trade <a href="/trade-history" class="empty-note" style="padding:0;font-size:13px;font-weight:normal;">History →</a></h1>
+    <h1 class="screen-title">Trade</h1>
     ${usingReal
       ? `<div class="trade-caveat">Trading against ${esc(friend.name)}'s real collection.</div>`
       : `<div class="trade-caveat">Demo feature: you don't have any real friends added yet, so this trades against sample collections. <a href="/friends">Add a real friend</a> to trade for real.</div>`}
@@ -4583,7 +3947,7 @@ function pageMethods(req, res) {
     <p class="screen-sub">Every ingestion method, with realistic onset and duration windows.</p>
     ${mock.methodGuide.map(m => `
       <div class="method-guide-card">
-        <div class="mgtitle">${m.icon} ${esc(m.name)}</div>
+        <div class="mgtitle">${m.icon.startsWith('/') ? `<img src="${m.icon}" alt="" class="mg-icon-photo">` : m.icon} ${esc(m.name)}</div>
         <div class="mgstats"><span>Onset: ${esc(m.onset)}</span><span>Lasts: ${esc(m.duration)}</span></div>
         <div class="mgdesc">${esc(m.desc)}</div>
       </div>`).join('')}
@@ -4690,39 +4054,41 @@ const server = http.createServer(async (req, res) => {
     // individually, everything requires a logged-in user except the
     // signup/login/logout routes themselves and the separate admin panel
     // (which has its own, unrelated password gate below).
-    const PUBLIC_PATHS = new Set(['/', '/signup', '/login', '/logout', '/terms', '/privacy', '/add-to-home-screen', '/forgot-password', '/reset-password', '/api/analytics-snapshot', '/api/strains', '/auth/google', '/auth/google/callback', '/auth/google/finish']);
-    // Strain pages are exempted the same way /admin is -- excluded from the
-    // blanket login wall here, with each individual route underneath still
-    // enforcing its own login requirement where one's actually needed (e.g.
-    // /strains/suggest still calls requireUser itself). This is what makes
-    // the strain library indexable by search engines at all; a page behind
-    // a hard login wall can never be crawled, which was directly
-    // undermining the SEO strategy the business plan calls for.
-    const isPublicStrainPath = pathname === '/strains' || pathname.startsWith('/strains/');
-    if (!PUBLIC_PATHS.has(pathname) && !isPublicStrainPath && !pathname.startsWith('/admin') && auth.currentUserId(req) == null) {
-      return redirect(res, '/login');
+    const PUBLIC_PATHS = new Set(['/', '/signup', '/login', '/logout', '/terms', '/privacy', '/forgot-password', '/reset-password', '/api/analytics-snapshot', '/auth/google', '/auth/google/callback', '/auth/google/finish']);
+    // A single strain's page is left viewable without an account -- it's
+    // the page the "Share" button on that page points at, and a shared
+    // link that just bounces an unauthenticated visitor to a login wall
+    // (with no way back to the strain they were shown) defeats the point
+    // of sharing in the first place. pageStrainDetail() itself still hides
+    // anything personal -- check-in history, wishlist state, friend-share --
+    // behind its own `userId != null` checks.
+    const isPublicStrainDetail = method === 'GET' && /^\/strains\/[^/]+$/.test(pathname);
+    if (!PUBLIC_PATHS.has(pathname) && !isPublicStrainDetail && !pathname.startsWith('/admin') && auth.currentUserId(req) == null) {
+      // Remember where the visitor was headed so login/signup can send them
+      // right back afterward -- e.g. tapping "Check in" on a shared strain
+      // page as a logged-out visitor should land back on that same page
+      // post-signup, not on generic onboarding with no memory of why they came.
+      const next = encodeURIComponent(pathname + (url.search || ''));
+      return redirect(res, `/login?next=${next}`);
     }
 
     let m;
     if (method === 'GET' && pathname === '/') return pageHome(req, res);
     if (method === 'GET' && pathname === '/strains') return pageStrains(req, res, url.searchParams);
-    if (method === 'GET' && pathname === '/strains/suggest') return pageStrainSuggest(req, res, url.searchParams);
-    if (method === 'POST' && pathname === '/strains/suggest') return await handleStrainSuggestSubmit(req, res);
     if (method === 'GET' && (m = pathname.match(/^\/strains\/([^/]+)$/))) return pageStrainDetail(req, res, m[1]);
     if (method === 'GET' && pathname === '/checkin') return pageCheckinForm(req, res, url.searchParams);
     if (method === 'POST' && pathname === '/checkin') return await handleCheckinSubmit(req, res);
     if (method === 'GET' && (m = pathname.match(/^\/checkin\/(\d+)\/edit$/))) return pageCheckinEditForm(req, res, Number(m[1]));
-    if (method === 'GET' && (m = pathname.match(/^\/checkin\/(\d+)\/card$/))) return pageCheckinCard(req, res, Number(m[1]));
     if (method === 'POST' && (m = pathname.match(/^\/checkin\/(\d+)\/edit$/))) return await handleCheckinEditSubmit(req, res, Number(m[1]));
     if (method === 'POST' && (m = pathname.match(/^\/checkin\/(\d+)\/comment$/))) return await handleCheckinComment(req, res, Number(m[1]));
     if (method === 'POST' && (m = pathname.match(/^\/checkin\/(\d+)\/delete$/))) return await handleCheckinDelete(req, res, Number(m[1]));
     if (method === 'GET' && pathname === '/faq') return pageFaq(req, res, url.searchParams);
     if (method === 'GET' && pathname === '/recipes') return pageRecipes(req, res, url.searchParams);
     if (method === 'GET' && (m = pathname.match(/^\/recipes\/(\d+)$/))) return pageRecipeDetail(req, res, Number(m[1]));
-    if (method === 'GET' && pathname === '/recipes/new') return pageRecipeNew(req, res, url.searchParams);
+    if (method === 'GET' && pathname === '/recipes/new') return pageRecipeNew(req, res);
     if (method === 'POST' && pathname === '/recipes/new') return await handleRecipeNewSubmit(req, res);
     if (method === 'GET' && pathname === '/growing') return pageGrowing(req, res, url.searchParams);
-    if (method === 'GET' && pathname === '/growing/new') return pageGrowingNew(req, res, url.searchParams);
+    if (method === 'GET' && pathname === '/growing/new') return pageGrowingNew(req, res);
     if (method === 'POST' && pathname === '/growing/new') return await handleGrowingNewSubmit(req, res);
     if (method === 'GET' && pathname === '/chat') return pageChat(req, res);
     if (method === 'POST' && pathname === '/api/chat') return await handleChatApi(req, res);
@@ -4746,7 +4112,6 @@ const server = http.createServer(async (req, res) => {
     if (method === 'GET' && pathname === '/forgot-password') return pageForgotPassword(req, res, url.searchParams);
     if (method === 'POST' && pathname === '/forgot-password') return await handleForgotPasswordSubmit(req, res);
     if (method === 'GET' && pathname === '/onboarding') return pageOnboarding(req, res);
-    if (method === 'GET' && pathname === '/add-to-home-screen') return pageAddToHomeScreen(req, res);
     if (method === 'GET' && pathname === '/feedback') return pageFeedback(req, res, url.searchParams);
     if (method === 'POST' && pathname === '/feedback') return await handleFeedbackSubmit(req, res);
     if (method === 'GET' && pathname === '/support-the-app') return pageSupportTheApp(req, res);
@@ -4754,13 +4119,10 @@ const server = http.createServer(async (req, res) => {
     if (method === 'POST' && pathname === '/reset-password') return await handleResetPasswordSubmit(req, res);
     if (method === 'POST' && pathname === '/account/username') return await handleAccountUsername(req, res);
     if (method === 'POST' && pathname === '/account/email') return await handleAccountEmail(req, res);
-    if (method === 'POST' && pathname === '/account/name') return await handleAccountName(req, res);
     if (method === 'POST' && pathname === '/account/password') return await handleAccountPassword(req, res);
     if (method === 'GET' && pathname === '/admin/logout') return handleAdminLogout(req, res);
     if (method === 'GET' && pathname === '/admin') return pageAdminHome(req, res);
     if (method === 'GET' && pathname === '/admin/users') return pageAdminUsers(req, res, url.searchParams);
-    if (method === 'GET' && (m = pathname.match(/^\/admin\/users\/(\d+)\/edit$/))) return pageAdminUserEdit(req, res, m[1], url.searchParams);
-    if (method === 'POST' && (m = pathname.match(/^\/admin\/users\/(\d+)\/edit$/))) return await handleAdminUserEditSubmit(req, res, m[1]);
     if (method === 'POST' && (m = pathname.match(/^\/admin\/users\/(\d+)\/delete$/))) return await handleAdminUserDelete(req, res, Number(m[1]));
     if (method === 'GET' && pathname === '/admin/feedback') return pageAdminFeedback(req, res);
     if (method === 'GET' && pathname === '/admin/faqs') return pageAdminFaqs(req, res);
@@ -4775,16 +4137,10 @@ const server = http.createServer(async (req, res) => {
     if (method === 'POST' && (m = pathname.match(/^\/admin\/strains\/([^/]+)\/delete$/))) return await handleAdminStrainDelete(req, res, m[1]);
     if (method === 'GET' && pathname === '/admin/recipes') return pageAdminRecipes(req, res);
     if (method === 'POST' && pathname === '/admin/recipes/new') return await handleAdminRecipeNew(req, res);
-    if (method === 'GET' && (m = pathname.match(/^\/admin\/recipes\/(\d+)\/edit$/))) return pageAdminRecipeEdit(req, res, m[1]);
-    if (method === 'POST' && (m = pathname.match(/^\/admin\/recipes\/(\d+)\/edit$/))) return await handleAdminRecipeEditSubmit(req, res, m[1]);
     if (method === 'POST' && (m = pathname.match(/^\/admin\/recipes\/(\d+)\/approve$/))) return await handleAdminRecipeApprove(req, res, Number(m[1]));
     if (method === 'POST' && (m = pathname.match(/^\/admin\/recipes\/(\d+)\/delete$/))) return await handleAdminRecipeDelete(req, res, Number(m[1]));
-    if (method === 'GET' && pathname === '/admin/grow-tips') return pageAdminGrowTips(req, res);
-    if (method === 'POST' && (m = pathname.match(/^\/admin\/grow-tips\/(\d+)\/approve$/))) return await handleAdminGrowTipApprove(req, res, m[1]);
-    if (method === 'POST' && (m = pathname.match(/^\/admin\/grow-tips\/(\d+)\/delete$/))) return await handleAdminGrowTipDelete(req, res, m[1]);
 
     if (method === 'GET' && pathname === '/api/strains') return apiListStrains(req, res, url.searchParams);
-    if (method === 'GET' && pathname === '/api/admin/strain-search') return apiAdminStrainNameSearch(req, res, url.searchParams);
     if (method === 'POST' && (m = pathname.match(/^\/api\/recipes\/(\d+)\/kudos$/))) return await apiKudos(req, res, Number(m[1]));
     if (method === 'POST' && (m = pathname.match(/^\/api\/growtips\/(\d+)\/like$/))) return await apiGrowLike(req, res, Number(m[1]));
     if (method === 'POST' && (m = pathname.match(/^\/api\/checkins\/(\d+)\/kudos$/))) return await apiCheckinKudos(req, res, Number(m[1]));
@@ -4793,9 +4149,8 @@ const server = http.createServer(async (req, res) => {
 
     if (method === 'GET' && pathname === '/more') return pageMore(req, res);
     if (method === 'GET' && pathname === '/collection') return pageCollection(req, res);
-    if (method === 'GET' && pathname === '/history') return pageHistory(req, res, url.searchParams);
+    if (method === 'GET' && pathname === '/history') return pageHistory(req, res);
     if (method === 'GET' && pathname === '/trade') return pageTrade(req, res, url.searchParams);
-    if (method === 'GET' && pathname === '/trade-history') return pageTradeHistory(req, res);
     if (method === 'GET' && pathname === '/friends') return pageFriends(req, res, url.searchParams);
     if (method === 'GET' && (m = pathname.match(/^\/friends\/(\d+)$/))) return pageFriendProfile(req, res, Number(m[1]));
     if (method === 'POST' && (m = pathname.match(/^\/friends\/(\d+)\/request$/))) return await handleFriendRequest(req, res, Number(m[1]));
@@ -4828,14 +4183,11 @@ const server = http.createServer(async (req, res) => {
     if (method === 'POST' && (m = pathname.match(/^\/wishlist\/([^/]+)\/toggle$/))) return await handleWishlistToggle(req, res, m[1]);
     if (method === 'GET' && pathname === '/trending') return pageTrending(req, res);
     if (method === 'GET' && pathname === '/mixing-cautions') return pageMixingCautions(req, res);
+    if (method === 'GET' && pathname === '/gear-care') return pageGearCare(req, res);
     if (method === 'GET' && pathname === '/grow-journal') return pageGrowJournal(req, res);
     if (method === 'POST' && pathname === '/grow-journal') return await handleGrowJournalSubmit(req, res);
     if (method === 'POST' && (m = pathname.match(/^\/grow-journal\/(\d+)\/delete$/))) return await handleGrowJournalDelete(req, res, m[1]);
     if (method === 'GET' && pathname === '/friends-picks') return pageFriendsPicks(req, res);
-    if (method === 'GET' && pathname === '/year-in-review') return pageYearInReview(req, res);
-    if (method === 'GET' && pathname === '/admin/strain-submissions') return pageAdminStrainSubmissions(req, res);
-    if (method === 'GET' && pathname === '/admin/inbox') return pageAdminInbox(req, res);
-    if (method === 'POST' && (m = pathname.match(/^\/admin\/strain-submissions\/(\d+)\/reviewed$/))) return await handleAdminStrainSubmissionReviewed(req, res, m[1]);
     if (method === 'GET' && pathname === '/lists') return pageLists(req, res);
     if (method === 'POST' && pathname === '/lists') return await handleListCreate(req, res);
     if (method === 'GET' && (m = pathname.match(/^\/lists\/(\d+)$/))) return pageListDetail(req, res, m[1]);
