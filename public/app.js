@@ -1,879 +1,106 @@
-// app.js — shared client-side behavior. No framework, no build step.
-
-// Prevents accidental double-submission of any form in the app -- a real
-// risk on a phone with a slow connection, where a tap that doesn't seem to
-// register right away easily gets tapped again before the first one has
-// actually gone through. This is one global listener rather than a
-// per-page fix, so it automatically covers every current form (check-in,
-// signup, feedback, recipe/tip submission, friend requests...) and any
-// future one, without needing to remember to wire it up each time.
-// Native `required`/validation still runs first -- this only fires once
-// the browser has already decided the form is valid and is really
-// submitting.
-document.addEventListener('submit', (event) => {
-  // Some forms use onsubmit="return confirm(...)" for destructive actions
-  // (delete account, remove friend, block user). If someone cancels that
-  // dialog, the default action is already prevented by the time this
-  // runs -- skip disabling the button, since nothing is actually being
-  // submitted and it would otherwise look permanently stuck on "Saving…".
-  if (event.defaultPrevented) return;
-  const form = event.target;
-  const btn = form.querySelector('button[type="submit"], input[type="submit"]');
-  if (!btn || btn.disabled) return;
-  btn.dataset.originalText = btn.dataset.originalText || btn.innerHTML;
-  btn.disabled = true;
-  btn.style.opacity = '0.7';
-  btn.innerHTML = 'Saving…';
-});
-// If the page is restored from the browser's back/forward cache (e.g.
-// someone submits, then taps back), buttons could otherwise stay stuck
-// showing "Saving…" from before -- put them back to normal in that case.
-window.addEventListener('pageshow', (event) => {
-  if (!event.persisted) return;
-  document.querySelectorAll('button[type="submit"][disabled]').forEach(btn => {
-    if (btn.dataset.originalText) btn.innerHTML = btn.dataset.originalText;
-    btn.disabled = false;
-    btn.style.opacity = '';
-  });
-});
-
-// Timestamps are stored and sent as UTC. Formatting them server-side would
-// bake in the *server's* timezone for every viewer, which isn't what anyone
-// wants — each person should see the time converted to their own device's
-// local timezone. So the server only sends the raw UTC value (in a data
-// attribute) and this runs in the viewer's own browser to fill in the
-// human-readable local version.
-(function renderLocalTimes() {
-  function apply() {
-    document.querySelectorAll('.local-time[data-utc]').forEach(el => {
-      const d = new Date(el.dataset.utc);
-      if (isNaN(d.getTime())) return;
-      el.textContent = d.toLocaleString();
-    });
-  }
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', apply);
-  } else {
-    apply();
-  }
-})();
-
-function toast(msg) {
-  const t = document.getElementById('toast');
-  if (!t) return;
-  t.textContent = msg;
-  t.classList.add('show');
-  clearTimeout(window._toastTimer);
-  window._toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
-}
-
-function toggleFaq(el) {
-  el.parentElement.classList.toggle('open');
-}
-
-async function giveKudos(id, btn) {
-  const res = await fetch(`/api/recipes/${id}/kudos`, { method: 'POST' });
-  if (res.ok) {
-    const data = await res.json();
-    const icon = btn.querySelector('img, svg');
-    btn.innerHTML = (icon ? icon.outerHTML : '') + `Kudos (${data.kudos})`;
-    btn.disabled = true;
-    btn.classList.add('kudos-pulse');
-    toast('Kudos given!');
-  }
-}
-
-async function giveCheckinKudos(id, btn) {
-  const res = await fetch(`/api/checkins/${id}/kudos`, { method: 'POST' });
-  if (res.ok) {
-    const data = await res.json();
-    const icon = btn.querySelector('img, svg');
-    btn.innerHTML = (icon ? icon.outerHTML : '') + (data.given ? 'Kudos given' : 'Kudos') + (data.kudos ? ` (${data.kudos})` : '');
-    btn.classList.toggle('kudos-given', data.given);
-    // Force the pulse animation to restart even if the class is already
-    // present from a previous toggle -- simply re-adding a class that's
-    // already there doesn't replay a CSS animation on its own.
-    btn.classList.remove('kudos-pulse');
-    void btn.offsetWidth; // reflow, so the browser treats the next add as new
-    if (data.given) {
-      btn.classList.add('kudos-pulse');
-      toast('Kudos given!');
-    } else {
-      toast('Kudos removed');
-    }
-    // Update (or remove) the "who gave kudos" label right under the button.
-    const wrap = btn.parentElement;
-    if (wrap) {
-      let label = wrap.querySelector('.kudos-givers-label');
-      if (Array.isArray(data.givers) && data.givers.length) {
-        const names = data.givers.slice(0, 3).join(', ');
-        const extra = data.givers.length - 3;
-        const text = `🌿 ${names}${extra > 0 ? ` and ${extra} more` : ''}`;
-        if (!label) {
-          label = document.createElement('div');
-          label.className = 'empty-note kudos-givers-label';
-          label.style.cssText = 'padding:2px 0 0;text-align:right;';
-          wrap.appendChild(label);
-        }
-        label.textContent = text;
-      } else if (label) {
-        label.remove();
-      }
-    }
-  }
-}
-async function likeComment(id, btn) {
-  const res = await fetch(`/api/comments/${id}/like`, { method: 'POST' });
-  if (res.ok) {
-    const data = await res.json();
-    btn.textContent = (data.liked ? '💚 Liked' : '🤍 Like') + (data.count ? ` (${data.count})` : '');
-    btn.style.textDecoration = data.liked ? 'none' : 'underline';
-  }
-}
-async function likeGrowTip(id, btn) {
-  const res = await fetch(`/api/growtips/${id}/like`, { method: 'POST' });
-  if (res.ok) {
-    const data = await res.json();
-    const icon = btn.querySelector('img, svg');
-    btn.innerHTML = (icon ? icon.outerHTML : '') + `Kudos (${data.likes})`;
-    btn.disabled = true;
-    toast('Kudos given!');
-  }
-}
-
-// ------------------------------------------------------------ strain search
-// Live search on /strains — fetches /api/strains as you type instead of
-// resubmitting the whole page on every keystroke (which used to reload the
-// page and kick focus out of the search box after each letter).
-(function initOnsetTimers() {
-  // Edible onset varies a lot person-to-person, but "give it up to 2 hours,
-  // don't redose early" is the safest general guidance. This just turns a
-  // stored timestamp into a live "started Xh Ym ago" reminder tied to that.
-  function label(minutes) {
-    const h = Math.floor(minutes / 60), m = Math.floor(minutes % 60);
-    const started = h > 0 ? `${h}h ${m}m ago` : `${m}m ago`;
-    if (minutes < 60) return `⏱ Started ${started} — onset can take up to 2 hours. Hold off on more.`;
-    if (minutes < 90) return `⏱ Started ${started} — getting close to the usual peak window.`;
-    return `⏱ Started ${started} — should be at or past full effect by now.`;
-  }
-  function apply() {
-    document.querySelectorAll('.onset-timer[data-utc]').forEach(el => {
-      const d = new Date(el.dataset.utc);
-      if (isNaN(d.getTime())) return;
-      const minutes = (Date.now() - d.getTime()) / 60000;
-      el.textContent = label(Math.max(0, minutes));
-    });
-  }
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', apply);
-  } else {
-    apply();
-  }
-  setInterval(apply, 60000);
-})();
-
-(function initStrainSearch() {
-  const input = document.getElementById('strain-search-input');
-  const resultsEl = document.getElementById('strain-search-results');
-  const countEl = document.getElementById('strain-search-count');
-  if (!input || !resultsEl || !countEl) return;
-
-  const typeSel = document.getElementById('strain-search-type');
-  const raritySel = document.getElementById('strain-search-rarity');
-  const effectSel = document.getElementById('strain-search-effect');
-  const thcSel = document.getElementById('strain-search-thc');
-  const terpeneSel = document.getElementById('strain-search-terpene');
-  const ailmentSel = document.getElementById('strain-search-ailment');
-  const verifiedSel = document.getElementById('strain-search-verified');
-  // No dropdown exists for breeder (it's only reachable by clicking through
-  // from the Breeder Guide), but the value still needs to survive later
-  // filter changes -- read it once from the current URL and carry it
-  // forward manually so it doesn't silently vanish the moment another
-  // filter is touched.
-  const breederValue = new URLSearchParams(location.search).get('breeder') || 'All';
-
-  function escHtml(str) {
-    return String(str ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-  }
-  const rarityLabels = { common: 'Common', uncommon: 'Uncommon', rare: 'Rare', legendary: 'Legendary' };
-  function rarityLabel(r) { return rarityLabels[r] || r; }
-  const verifiedBadges = {
-    verified: { icon: '✅', label: 'Verified' },
-    partial: { icon: '🔹', label: 'Partially verified' },
-    listed: { icon: '⚪', label: 'Listed only' },
-  };
-  // Mirrors EFFECT_ICON in server.js -- kept in sync manually since this
-  // page's live search re-renders results entirely client-side. Update
-  // both together if an icon ever changes.
-  const EFFECT_ICON = {
-    Relaxed: '😌', Happy: '😊', Euphoric: '🤩', Uplifted: '🎈', Creative: '🎨',
-    Energetic: '⚡', Focused: '🎯', Talkative: '💬', Sleepy: '😴', Hungry: '🍕',
-    Calm: '🕊️', 'Clear-headed': '🧠', Giggly: '😄', Social: '👥', Tingly: '✨',
-    Aroused: '💗', Anxious: '😟', Paranoid: '👀', 'Dry Mouth': '🥤', 'Dry Eyes': '👁️',
-    Dizzy: '💫', Mellow: '🍃', Chill: '🧊', 'Zoned-out': '🌀', Introspective: '🪞',
-    Blissful: '😇', Sedated: '💤', 'Couch-locked': '🛋️', Buzzy: '🔋', Floaty: '🎈',
-    Grounded: '🌳', Present: '🧘', Warm: '☀️', 'Light-headed': '💫', 'Heavy-limbed': '🏋️',
-    Alert: '👀', Sharp: '🔪', Inspired: '💡', Playful: '🎉', Silly: '🤪',
-    Confident: '💪', Chatty: '🗣️', Cuddly: '🤗', Dreamy: '💭', Nostalgic: '📼',
-    Peaceful: '🕊️', Serene: '🌊', Refreshed: '🌿', Rejuvenated: '🌱', Cozy: '🧸',
-    Sociable: '🎊', Easygoing: '🌤️', Adventurous: '🧭', Curious: '🔍', Observant: '👁️',
-    'In-the-zone': '🎯', Productive: '✅', Wired: '🔌', Jittery: '⚡', Foggy: '🌫️',
-    Groggy: '🥱', Spacey: '🌌', Munchies: '🍔', Thirsty: '🥤', 'Red-eyed': '👁️',
-    Lightweight: '🪶', 'Heavy-eyed': '😑', Yawny: '🥱', Motivated: '🚀', Amorous: '💕',
-    Loose: '🎐', 'Free-spirited': '🦋', Tranquil: '🌅', Elevated: '🎈', Airy: '☁️',
-    'Slowed-down': '🐌', Spirited: '🔥', 'Numb (localized)': '🧊',
-    'Stress relief': '🧘', 'Pain relief': '💊', 'Sleep support': '🌙', 'Nausea relief': '🍵',
-    'Appetite boost': '🍽️', 'Inflammation relief': '❄️', 'Muscle relief': '💆', 'Mood lift': '☀️',
-  };
-  function verifiedTier(s) {
-    const hasThc = !!s.thc;
-    const hasBreeder = !!s.breeder;
-    const hasDetail = !!s.flavor || (Array.isArray(s.terps) && s.terps.length > 0);
-    const score = [hasThc, hasBreeder, hasDetail].filter(Boolean).length;
-    if (score === 3) return 'verified';
-    if (score >= 1) return 'partial';
-    return 'listed';
-  }
-
-  function renderRow(s) {
-    const tier = verifiedTier(s);
-    const badge = verifiedBadges[tier];
-    const effectIcon = s.effects && s.effects[0] && EFFECT_ICON[s.effects[0]] ? EFFECT_ICON[s.effects[0]] + ' ' : '';
-    return `
-      <a class="library-row tier-${tier}" href="/strains/${s.id}" style="text-decoration:none;color:inherit;">
-        <span class="icon">${escHtml(s.icon)}</span>
-        <div class="info">
-          <div class="nm">${effectIcon}${escHtml(s.name)} <span title="${escHtml(badge.label)}">${badge.icon}</span></div>
-          <div class="sub">${escHtml(s.type)} · ${rarityLabel(s.rarity)} · THC ${escHtml(s.thc)}</div>
-        </div>
-        <span class="rarity-tag rarity-${s.rarity}">${rarityLabel(s.rarity)}</span>
-      </a>`;
-  }
-
-  let shownCount = resultsEl.querySelectorAll('.library-row').length;
-  const loadMoreEl = document.getElementById('strain-load-more-container');
-  // The initial page load renders its own "Load more" button server-side
-  // (so it works before any JS search has run) -- wire that one up too,
-  // not just the ones render()/loadMore() create dynamically afterward.
-  const initialLoadMoreBtn = document.getElementById('strain-load-more-btn');
-  if (initialLoadMoreBtn) initialLoadMoreBtn.addEventListener('click', loadMore);
-
-  function renderLoadMore(total) {
-    if (!loadMoreEl) return;
-    if (shownCount >= total) { loadMoreEl.innerHTML = ''; return; }
-    const nextBatch = Math.min(60, total - shownCount);
-    loadMoreEl.innerHTML = `<button type="button" class="btn secondary block" id="strain-load-more-btn" style="margin-top:10px;">Load ${nextBatch} more (${shownCount} of ${total.toLocaleString()} shown)</button>`;
-    document.getElementById('strain-load-more-btn').addEventListener('click', loadMore);
-  }
-
-  function render(data) {
-    // A fresh search (new query/filter) always replaces from scratch --
-    // shownCount resets here, separately from loadMore()'s append path.
-    shownCount = data.results.length;
-    countEl.textContent = `${data.total.toLocaleString()} strain${data.total === 1 ? '' : 's'}`;
-    resultsEl.innerHTML = data.results.map(renderRow).join('') || `<div class="empty-note">No strains match your filters.</div>`;
-    renderLoadMore(data.total);
-  }
-
-  async function loadMore() {
-    const btn = document.getElementById('strain-load-more-btn');
-    if (btn) { btn.disabled = true; btn.textContent = 'Loading…'; }
-    const params = new URLSearchParams({
-      q: input.value, type: typeSel.value, rarity: raritySel.value, effect: effectSel.value,
-      thc: thcSel.value, terpene: terpeneSel.value, ailment: ailmentSel.value,
-      verified: verifiedSel ? verifiedSel.value : 'All', breeder: breederValue,
-      limit: '60', offset: String(shownCount),
-    });
-    const res = await fetch(`/api/strains?${params}`);
-    if (!res.ok) return;
-    const data = await res.json();
-    shownCount += data.results.length;
-    resultsEl.insertAdjacentHTML('beforeend', data.results.map(renderRow).join(''));
-    countEl.textContent = `${data.total.toLocaleString()} strain${data.total === 1 ? '' : 's'}`;
-    renderLoadMore(data.total);
-  }
-
-  async function runSearch() {
-    const params = new URLSearchParams({
-      q: input.value, type: typeSel.value, rarity: raritySel.value, effect: effectSel.value,
-      thc: thcSel.value, terpene: terpeneSel.value, ailment: ailmentSel.value,
-      verified: verifiedSel ? verifiedSel.value : 'All', breeder: breederValue, limit: '60',
-    });
-    countEl.textContent = 'Searching…';
-    const res = await fetch(`/api/strains?${params}`);
-    if (!res.ok) return;
-    render(await res.json());
-    // Keep the URL in sync (so refresh/back/share still works) without navigating.
-    history.replaceState(null, '', `/strains?${params}`);
-  }
-  let debounceTimer;
-  input.addEventListener('input', () => {
-    clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(runSearch, 200);
-  });
-  [effectSel, terpeneSel, ailmentSel].forEach(sel => sel && sel.addEventListener('change', runSearch));
-  // Type/Rarity/THC/Data quality are plain <select> dropdowns (same as the
-  // three above) -- wiring them the same way. This used to be tappable
-  // pill-buttons with hidden inputs behind them, which needed a different
-  // click-based wiring; that UI was replaced with plain selects but this
-  // wiring was never updated to match, so these four filters silently did
-  // nothing when changed. Fixed by treating them identically to the
-  // dropdowns above.
-  [typeSel, raritySel, thcSel, verifiedSel].forEach(sel => sel && sel.addEventListener('change', runSearch));
-})();
-
-// ------------------------------------------------------------ dispensaries
-// "Use my location" button on /dispensaries — asks the browser for GPS
-// coordinates, then reloads the page with ?lat=&lon= so the server can look
-// up real nearby dispensaries (see lib/geodispensaries.js).
-(function initLocateDispensaries() {
-  const btn = document.getElementById('use-location-btn');
-  if (!btn) return;
-  btn.addEventListener('click', () => {
-    if (!navigator.geolocation) { toast('Location is not supported on this device'); return; }
-    btn.disabled = true;
-    btn.textContent = 'Finding you…';
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        const { latitude, longitude } = pos.coords;
-        window.location.href = `/dispensaries?lat=${latitude}&lon=${longitude}`;
-      },
-      (err) => {
-        toast(err && err.code === 1 ? 'Location permission denied' : 'Could not get your location');
-        btn.disabled = false;
-        btn.textContent = 'Use my location';
-      },
-      { enableHighAccuracy: false, timeout: 10000, maximumAge: 300000 }
-    );
-  });
-})();
-
-// Register the service worker for installability (PWA "Add to Home Screen").
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js').catch(() => {});
-  });
-}
-
-// ---------------------------------------------------------------- check-in: strain picker
-// Live strain search for /checkin — same idea as the effect picker above,
-// but fetches real matches from /api/strains instead of a fixed vocab list,
-// so it scales past whatever a <datalist> can reasonably hold.
-(function initStrainPicker() {
-  const picker = document.getElementById('strain-picker');
-  const searchInput = document.getElementById('strain-picker-search');
-  const resultsBox = document.getElementById('strain-picker-results');
-  const selectedBox = document.getElementById('strain-picker-selected');
-  const hiddenInput = document.getElementById('strain-picker-hidden');
-  const hintBox = document.getElementById('strain-picker-hint');
-  const changeBtn = document.getElementById('strain-picker-change');
-  if (!picker || !searchInput) return;
-
-  function escHtml(str) {
-    return String(str ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-  }
-
-  function selectStrain(s) {
-    hiddenInput.value = s.id;
-    selectedBox.innerHTML = `${escHtml(s.icon)} <b>${escHtml(s.name)}</b> <button type="button" id="strain-picker-change" class="btn secondary" style="float:right;padding:2px 10px;">Change</button>`;
-    selectedBox.style.display = '';
-    picker.style.display = 'none';
-    hintBox.style.display = 'none';
-    document.getElementById('strain-picker-change').onclick = clearSelection;
-  }
-  function clearSelection() {
-    hiddenInput.value = '';
-    selectedBox.style.display = 'none';
-    picker.style.display = '';
-    hintBox.style.display = '';
-    searchInput.value = '';
-    searchInput.focus();
-  }
-  if (changeBtn) changeBtn.onclick = clearSelection;
-
-  let debounceTimer;
-  searchInput.addEventListener('input', () => {
-    clearTimeout(debounceTimer);
-    const q = searchInput.value.trim();
-    if (!q) { resultsBox.classList.remove('open'); resultsBox.innerHTML = ''; return; }
-    resultsBox.innerHTML = `<div class="search-no-results">Searching…</div>`;
-    resultsBox.classList.add('open');
-    debounceTimer = setTimeout(async () => {
-      const res = await fetch(`/api/strains?${new URLSearchParams({ q, limit: '8' })}`);
-      if (!res.ok) return;
-      const data = await res.json();
-      resultsBox.innerHTML = data.results.length
-        ? data.results.map(s => `<div class="search-result-row" data-id="${s.id}">${escHtml(s.icon)} ${escHtml(s.name)} <span class="empty-note" style="padding:0;">— ${escHtml(s.type)}</span></div>`).join('')
-        : `<div class="search-no-results">No matches — try a different spelling, or <a href="/strains">browse the library</a>.</div>`;
-      resultsBox.classList.add('open');
-      resultsBox.querySelectorAll('[data-id]').forEach(row => {
-        row.onclick = () => {
-          const match = data.results.find(s => s.id === row.dataset.id);
-          if (match) selectStrain(match);
-          resultsBox.classList.remove('open');
-        };
-      });
-    }, 200);
-  });
-})();
-
-// ---------------------------------------------------------------- check-in
-// Mood/effects search picker (pick 1-5) and photo capture, used on /checkin.
-// window.EFFECT_VOCAB is inlined by the server on that page only.
-(function initCheckinForm() {
-  const picker = document.getElementById('effect-picker');
-  if (!picker || !window.EFFECT_VOCAB) return;
-
-  const searchInput = document.getElementById('effect-search');
-  const resultsBox = document.getElementById('effect-results');
-  const chipsBox = document.getElementById('effect-chips');
-  const noteBox = document.getElementById('effect-note');
-  const hiddenBox = document.getElementById('effect-hidden-inputs');
-  let selected = Array.isArray(window.INITIAL_EFFECTS) ? window.INITIAL_EFFECTS.slice(0, 5) : [];
-
-  function renderEffects() {
-    const atMax = selected.length >= 5;
-    searchInput.disabled = atMax;
-    searchInput.placeholder = atMax ? 'Max 5 selected — remove one to add another' : 'Search 85+ moods, feelings & relief tags...';
-    chipsBox.innerHTML = selected.map(e =>
-      `<span class="tag-chip">${window.EFFECT_ICON && window.EFFECT_ICON[e] ? window.EFFECT_ICON[e] + ' ' : ''}${e} <button type="button" data-remove="${e}">✕</button></span>`
-    ).join('');
-    hiddenBox.innerHTML = selected.map(e => `<input type="hidden" name="effects" value="${e}">`).join('');
-    noteBox.textContent = `${selected.length} of 5 selected`;
-    noteBox.classList.toggle('full', atMax);
-    chipsBox.querySelectorAll('button[data-remove]').forEach(btn => {
-      btn.onclick = () => { selected = selected.filter(x => x !== btn.dataset.remove); renderEffects(); };
-    });
-  }
-
-  function showResults(query) {
-    const q = query.trim().toLowerCase();
-    if (!q) { resultsBox.classList.remove('open'); resultsBox.innerHTML = ''; return; }
-    const matches = window.EFFECT_VOCAB.filter(e => !selected.includes(e) && e.toLowerCase().includes(q)).slice(0, 8);
-    resultsBox.innerHTML = matches.length
-      ? matches.map(e => `<div class="search-result-row" data-add="${e}">${window.EFFECT_ICON && window.EFFECT_ICON[e] ? window.EFFECT_ICON[e] + ' ' : ''}${e}</div>`).join('')
-      : `<div class="search-no-results">No matches</div>`;
-    resultsBox.classList.add('open');
-    resultsBox.querySelectorAll('[data-add]').forEach(row => {
-      row.onclick = () => {
-        if (selected.length >= 5) return;
-        selected.push(row.dataset.add);
-        searchInput.value = '';
-        resultsBox.classList.remove('open');
-        renderEffects();
-      };
-    });
-  }
-
-  searchInput.addEventListener('input', () => showResults(searchInput.value));
-  searchInput.addEventListener('focus', () => showResults(searchInput.value));
-  document.addEventListener('click', (e) => {
-    if (!picker.contains(e.target)) resultsBox.classList.remove('open');
-  });
-
-  renderEffects();
-
-  // Photo capture — read the file as a data URL and stash it in a hidden
-  // field so the plain <form> POST carries it; no multipart parsing needed.
-  const fileInput = document.getElementById('photo-file-input');
-  const photoData = document.getElementById('photo-data-input');
-  const uploadBox = document.getElementById('photo-upload-box');
-  if (photoData && window.INITIAL_PHOTO) {
-    photoData.value = window.INITIAL_PHOTO;
-    uploadBox.innerHTML = `<div class="photo-preview-wrap"><img src="${window.INITIAL_PHOTO}" alt="Your photo"><button type="button" id="clear-photo-btn">✕</button></div>`;
-    document.getElementById('clear-photo-btn').onclick = (e) => {
-      e.stopPropagation();
-      photoData.value = '';
-      uploadBox.innerHTML = `<div class="up-ic">📷</div><div class="up-txt">Tap to snap or upload a photo of your bud<br>(optional — we'll show a placeholder if you skip it)</div>`;
-    };
-  }
-  if (fileInput) {
-    fileInput.addEventListener('change', () => {
-      const file = fileInput.files && fileInput.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = () => {
-        photoData.value = reader.result;
-        uploadBox.innerHTML = `<div class="photo-preview-wrap"><img src="${reader.result}" alt="Your photo"><button type="button" id="clear-photo-btn">✕</button></div>`;
-        document.getElementById('clear-photo-btn').onclick = (e) => {
-          e.stopPropagation();
-          photoData.value = '';
-          fileInput.value = '';
-          uploadBox.innerHTML = `<div class="up-ic">📷</div><div class="up-txt">Tap to snap or upload a photo of your bud<br>(optional — we'll show a placeholder if you skip it)</div>`;
-        };
-      };
-      reader.readAsDataURL(file);
-    });
-  }
-})();
-
-// Check-in "Pairings" -- an open-ended list of (type, note) rows. The
-// first row is always rendered server-side (see renderPairingRow in
-// server.js); this just wires up "+ Add Another Pairing" to append more
-// of the same row markup, built from the same PAIRING_TYPES vocabulary
-// the server used, so a newly-added row's dropdown matches exactly.
-// Removing a row is handled by an inline onclick baked into the row markup
-// itself (works the same whether the row came from the server or from
-// here), so there's nothing to wire up for that direction.
-(function initCheckinPairings() {
-  const addBtn = document.getElementById('pairing-add-btn');
-  const list = document.getElementById('pairing-list');
-  if (!addBtn || !list || !Array.isArray(window.PAIRING_TYPES)) return;
-
-  function renderPairingRow() {
-    const options = window.PAIRING_TYPES.map(p =>
-      `<option value="${p.key}">${p.icon} ${p.label}</option>`
-    ).join('');
-    const row = document.createElement('div');
-    row.className = 'pairing-row';
-    row.innerHTML = `
-      <select name="pairing_type">
-        <option value="">Add a pairing...</option>
-        ${options}
-      </select>
-      <input type="text" name="pairing_note" placeholder="Optional note...">
-      <button type="button" class="pairing-remove-btn" aria-label="Remove pairing">✕</button>
-    `;
-    row.querySelector('.pairing-remove-btn').onclick = () => row.remove();
-    return row;
-  }
-
-  addBtn.addEventListener('click', () => {
-    list.appendChild(renderPairingRow());
-  });
-})();
-
-// Custom tap-to-rate star widget -- replaces what used to be a plain
-// <select> showing "★★★★★" as text. A hidden input still carries the
-// actual value on submit, so the server-side form handling needed zero
-// changes for this.
-// Generic multi-select "tag picker" -- search box, dropdown results, and
-// removable chips, same interaction as the check-in effect picker above
-// but written to work on any element with the .tag-picker class rather
-// than one specific hardcoded set of IDs, so it can be reused anywhere
-// (currently: the admin strain form's Effects and Ailments fields)
-// without copy-pasting the whole widget again. Configuration comes from
-// data attributes plus two window globals per instance:
-//   data-vocab-key    -> window[key] is the array of all possible tags
-//   data-initial-key  -> window[key] is the array of already-selected tags
-//   data-field-name   -> the form field name for the hidden inputs
-//   data-max          -> optional cap on how many can be selected
-(function initTagPickers() {
-  document.querySelectorAll('.tag-picker').forEach(picker => {
-    const vocab = window[picker.dataset.vocabKey];
-    if (!Array.isArray(vocab)) return;
-    const initial = Array.isArray(window[picker.dataset.initialKey]) ? window[picker.dataset.initialKey] : [];
-    const fieldName = picker.dataset.fieldName;
-    const max = picker.dataset.max ? Number(picker.dataset.max) : Infinity;
-    const searchInput = picker.querySelector('.tag-picker-search');
-    const resultsBox = picker.querySelector('.tag-picker-results');
-    const chipsBox = picker.querySelector('.tag-picker-chips');
-    const hiddenBox = picker.querySelector('.tag-picker-hidden');
-    let selected = initial.slice(0, max);
-
-    function render() {
-      const atMax = selected.length >= max;
-      searchInput.disabled = atMax;
-      searchInput.placeholder = atMax ? `Max ${max} selected — remove one to add another` : searchInput.dataset.placeholder || 'Search...';
-      chipsBox.innerHTML = selected.map(v => `<span class="tag-chip">${escHtml(v)} <button type="button" data-remove="${escHtml(v)}">✕</button></span>`).join('');
-      hiddenBox.innerHTML = selected.map(v => `<input type="hidden" name="${fieldName}" value="${escHtml(v)}">`).join('');
-      chipsBox.querySelectorAll('button[data-remove]').forEach(btn => {
-        btn.onclick = () => { selected = selected.filter(x => x !== btn.dataset.remove); render(); };
-      });
-    }
-    function showResults(query) {
-      const q = query.trim().toLowerCase();
-      if (!q) { resultsBox.classList.remove('open'); resultsBox.innerHTML = ''; return; }
-      const matches = vocab.filter(v => !selected.includes(v) && v.toLowerCase().includes(q)).slice(0, 8);
-      resultsBox.innerHTML = matches.length
-        ? matches.map(v => `<div class="search-result-row" data-add="${escHtml(v)}">${escHtml(v)}</div>`).join('')
-        : `<div class="search-no-results">No matches</div>`;
-      resultsBox.classList.add('open');
-      resultsBox.querySelectorAll('[data-add]').forEach(row => {
-        row.onclick = () => {
-          if (selected.length >= max) return;
-          selected.push(row.dataset.add);
-          searchInput.value = '';
-          resultsBox.classList.remove('open');
-          render();
-        };
-      });
-    }
-    searchInput.addEventListener('input', () => showResults(searchInput.value));
-    searchInput.addEventListener('focus', () => showResults(searchInput.value));
-    document.addEventListener('click', (e) => { if (!picker.contains(e.target)) resultsBox.classList.remove('open'); });
-    render();
-  });
-})();
-
-// Comma-separated free-text autocomplete -- for fields like the admin
-// strain form's Parents field, where the value is a comma-separated list
-// of names but any of them can be a name that doesn't exist in the
-// library yet (a landrace, an unreleased cross, etc.), so this can't be a
-// closed-vocabulary tag picker like effects/ailments. Instead it searches
-// the server (data-search-url) for matches to whatever's been typed after
-// the last comma, and clicking a result replaces just that trailing
-// fragment -- the rest of the comma-separated list stays untouched.
-function escHtml(str) {
-  return String(str ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-}
-(function initCommaAutocomplete() {
-  document.querySelectorAll('.comma-autocomplete').forEach(input => {
-    const wrap = input.closest('.autocomplete-wrap') || input.parentElement;
-    const resultsBox = wrap.querySelector('.effect-results') || input.nextElementSibling;
-    if (!resultsBox) return;
-    const searchUrl = input.dataset.searchUrl;
-    const exclude = input.dataset.exclude || '';
-    let debounceTimer = null;
-
-    function currentFragment() {
-      const parts = input.value.split(',');
-      return parts[parts.length - 1].trim();
-    }
-    function replaceFragmentWith(name) {
-      const parts = input.value.split(',');
-      input.value = parts.slice(0, -1).map(p => p.trim()).filter(Boolean).concat([name]).join(', ') + ', ';
-      resultsBox.classList.remove('open');
-      resultsBox.innerHTML = '';
-      input.focus();
-    }
-    function search(fragment) {
-      if (fragment.length < 2) { resultsBox.classList.remove('open'); resultsBox.innerHTML = ''; return; }
-      fetch(`${searchUrl}?q=${encodeURIComponent(fragment)}&exclude=${encodeURIComponent(exclude)}`)
-        .then(r => r.json())
-        .then(data => {
-          const matches = (data && data.results) || [];
-          // Names come from the server, but strain names increasingly flow
-          // in from less-trusted sources (e.g. "Suggest a Strain"), so
-          // they're escaped here the same as any other untrusted content
-          // rendered into innerHTML -- both the visible text and the
-          // data-add attribute, since an unescaped quote in the attribute
-          // would be just as capable of breaking out of it as an
-          // unescaped angle bracket would be in the text.
-          resultsBox.innerHTML = matches.length
-            ? matches.map(name => `<div class="search-result-row" data-add="${escHtml(name)}">${escHtml(name)}</div>`).join('')
-            : `<div class="search-no-results">No matches</div>`;
-          resultsBox.classList.add('open');
-          resultsBox.querySelectorAll('[data-add]').forEach(row => {
-            row.onclick = () => replaceFragmentWith(row.dataset.add);
-          });
-        })
-        .catch(() => {});
-    }
-    input.addEventListener('input', () => {
-      clearTimeout(debounceTimer);
-      debounceTimer = setTimeout(() => search(currentFragment()), 200);
-    });
-    input.addEventListener('focus', () => search(currentFragment()));
-    document.addEventListener('click', (e) => { if (!wrap.contains(e.target)) resultsBox.classList.remove('open'); });
-  });
-})();
-
-(function initStarPicker() {
-  const picker = document.getElementById('star-picker');
-  const hidden = document.getElementById('star-picker-value');
-  if (!picker || !hidden) return;
-  const stars = Array.from(picker.querySelectorAll('.star-btn'));
-
-  function paint(value) {
-    stars.forEach(btn => {
-      btn.classList.toggle('filled', Number(btn.dataset.star) <= value);
-    });
-  }
-
-  stars.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const value = Number(btn.dataset.star);
-      hidden.value = value;
-      picker.dataset.value = value;
-      paint(value);
-    });
-    // Live preview on hover for anyone on a real mouse -- has no effect
-    // on touch, where there's no hover state to fire.
-    btn.addEventListener('mouseenter', () => paint(Number(btn.dataset.star)));
-  });
-  picker.addEventListener('mouseleave', () => paint(Number(hidden.value)));
-
-  paint(Number(hidden.value));
-})();
-
-// ---------------------------------------------------------------- glossary terms
-// Tap a dotted-underline term (e.g. "decarb") in a recipe or grow tip to
-// see a plain-language definition in a small popover near the word.
-// Tap the term again, or tap anywhere else, to dismiss it.
-(function initGlossary() {
-  let openPopover = null;
-  let openTermEl = null;
-
-  function closePopover() {
-    if (openPopover) { openPopover.remove(); openPopover = null; openTermEl = null; }
-  }
-
-  document.addEventListener('click', (e) => {
-    const term = e.target.closest('.glossary-term');
-    if (term) {
-      if (openTermEl === term) { closePopover(); return; }
-      closePopover();
-      const def = term.dataset.def || '';
-      const bubble = document.createElement('div');
-      bubble.className = 'glossary-popover';
-      bubble.textContent = def;
-      document.body.appendChild(bubble);
-      const rect = term.getBoundingClientRect();
-      const bubbleWidth = Math.min(280, window.innerWidth - 24);
-      bubble.style.width = bubbleWidth + 'px';
-      let left = rect.left;
-      if (left + bubbleWidth > window.innerWidth - 12) left = window.innerWidth - bubbleWidth - 12;
-      if (left < 12) left = 12;
-      bubble.style.left = left + 'px';
-      bubble.style.top = (rect.bottom + 8) + 'px';
-      openPopover = bubble;
-      openTermEl = term;
-      e.stopPropagation();
-    } else if (openPopover && !e.target.closest('.glossary-popover')) {
-      closePopover();
-    }
-  });
-})();
-
-// ---------------------------------------------------------------- compare
-// Two independent strain search-pickers on one page (/compare), each
-// suffixed 'a'/'b' so they don't collide. Same search-as-you-type pattern
-// as the check-in strain picker, just parameterized to run twice.
-(function initComparePickers() {
-  ['a', 'b'].forEach(suffix => {
-    const searchInput = document.getElementById('compare-search-' + suffix);
-    const resultsBox = document.getElementById('compare-results-' + suffix);
-    if (!searchInput || !resultsBox) return;
-    function escHtml(str) {
-      return String(str ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-    }
-    let debounceTimer;
-    searchInput.addEventListener('input', () => {
-      clearTimeout(debounceTimer);
-      const q = searchInput.value.trim();
-      if (!q) { resultsBox.classList.remove('open'); resultsBox.innerHTML = ''; return; }
-      resultsBox.innerHTML = `<div class="search-no-results">Searching…</div>`;
-      resultsBox.classList.add('open');
-      debounceTimer = setTimeout(async () => {
-        const res = await fetch(`/api/strains?${new URLSearchParams({ q, limit: '8' })}`);
-        if (!res.ok) return;
-        const data = await res.json();
-        resultsBox.innerHTML = data.results.length
-          ? data.results.map(s => `<div class="search-result-row" data-id="${s.id}">${escHtml(s.icon)} ${escHtml(s.name)} <span class="empty-note" style="padding:0;">— ${escHtml(s.type)}</span></div>`).join('')
-          : `<div class="search-no-results">No matches — try a different spelling.</div>`;
-        resultsBox.classList.add('open');
-        resultsBox.querySelectorAll('[data-id]').forEach(row => {
-          row.onclick = () => {
-            const params = new URLSearchParams(window.location.search);
-            params.set(suffix, row.dataset.id);
-            window.location.href = '/compare?' + params.toString();
-          };
-        });
-      }, 200);
-    });
-  });
-})();
-
-// ---------------------------------------------------- form submit feedback
-// A generic "Saving..." state on any form's submit button the moment it's
-// clicked, so a slower connection reads as "working" rather than "did that
-// actually register?" -- without needing to touch every individual form.
-// Skips forms that opt out (data-no-loading-state) and doesn't fight
-// native validation: if required fields are empty, the browser blocks the
-// submit event before this ever runs.
-// -------------------------------------------------------------- recipe scaling
-// Recipes are stored as plain-text ingredient lines ("2-3 tbsp olive oil"),
-// not structured {amount, unit, name} data -- restructuring all of them
-// would be a real data migration. Instead this parses the leading quantity
-// out of each line at scale-time (handles plain numbers, decimals, simple
-// fractions, mixed numbers, and ranges like "2-3"), scales just that part,
-// and leaves the rest of the line untouched. Lines with no parseable
-// leading quantity (e.g. "Salt and pepper to taste") are left as-is.
-function formatScaledQty(n) {
-  const rounded = Math.round(n * 100) / 100;
-  const whole = Math.floor(rounded);
-  const frac = rounded - whole;
-  const fracMap = [[0.333, '⅓'], [0.25, '¼'], [0.667, '⅔'], [0.5, '½'], [0.75, '¾']];
-  for (const [val, sym] of fracMap) {
-    if (Math.abs(frac - val) < 0.05) return whole > 0 ? `${whole} ${sym}` : sym;
-  }
-  if (Math.abs(frac) < 0.05) return String(whole);
-  return String(Math.round(rounded * 10) / 10);
-}
-function scaleIngredientText(text, factor) {
-  let m = text.match(/^(\d+)\s+(\d+)\/(\d+)(\s.*)?$/); // mixed number: "1 1/2 cups"
-  if (m) return formatScaledQty((parseInt(m[1], 10) + parseInt(m[2], 10) / parseInt(m[3], 10)) * factor) + (m[4] || '');
-  m = text.match(/^(\d+(?:\.\d+)?)\s*-\s*(\d+(?:\.\d+)?)(\s.*)?$/); // range: "2-3 tbsp"
-  if (m) return `${formatScaledQty(parseFloat(m[1]) * factor)}-${formatScaledQty(parseFloat(m[2]) * factor)}${m[3] || ''}`;
-  m = text.match(/^(\d+)\/(\d+)(\s.*)?$/); // fraction: "1/2 cup"
-  if (m) return formatScaledQty((parseInt(m[1], 10) / parseInt(m[2], 10)) * factor) + (m[3] || '');
-  m = text.match(/^(\d+(?:\.\d+)?)(\s.*)?$/); // plain number: "2 flour tortillas"
-  if (m) return formatScaledQty(parseFloat(m[1]) * factor) + (m[2] || '');
-  return text; // no leading quantity found -- leave untouched
-}
-function scaleRecipe(factor, btn) {
-  document.querySelectorAll('#ingredients-list li[data-original]').forEach(li => {
-    li.textContent = scaleIngredientText(li.dataset.original, factor);
-  });
-  document.querySelectorAll('.scale-btn').forEach(b => b.classList.remove('active'));
-  if (btn) btn.classList.add('active');
-}
-
-// PWA install prompt -- captures the browser's own beforeinstallprompt
-// event (fired only on browsers that support one-tap install: Android
-// Chrome, desktop Chrome/Edge, and similar Chromium browsers) and wires it
-// up to any [data-install-trigger] button already on the page. iOS Safari
-// never fires this event at all -- Apple doesn't expose any install API to
-// websites, by design -- so on iOS these buttons simply stay hidden
-// forever and the manual Add to Home Screen instructions (see
-// /add-to-home-screen) are the only path. Nothing here can change that;
-// it's a platform restriction, not a bug.
-(function initInstallPrompt() {
-  let deferredPrompt = null;
-
-  function revealButtons() {
-    document.querySelectorAll('[data-install-trigger]').forEach(btn => {
-      btn.style.display = '';
-      btn.onclick = async () => {
-        if (!deferredPrompt) return;
-        btn.disabled = true;
-        deferredPrompt.prompt();
-        const { outcome } = await deferredPrompt.userChoice;
-        deferredPrompt = null;
-        if (outcome === 'accepted') {
-          document.querySelectorAll('[data-install-trigger]').forEach(b => { b.style.display = 'none'; });
-        } else {
-          btn.disabled = false;
-        }
-      };
-    });
-  }
-
-  window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-    revealButtons();
-  });
-
-  // Already installed (or just got installed this session) -- no reason to
-  // keep offering the button.
-  window.addEventListener('appinstalled', () => {
-    deferredPrompt = null;
-    document.querySelectorAll('[data-install-trigger]').forEach(b => { b.style.display = 'none'; });
-  });
-})();
-
-(function initFormSubmitFeedback() {
-  document.addEventListener('submit', (e) => {
-    const form = e.target;
-    if (!(form instanceof HTMLFormElement) || form.hasAttribute('data-no-loading-state')) return;
-    const btn = form.querySelector('button[type="submit"], input[type="submit"]');
-    if (!btn || btn.disabled) return;
-    btn.dataset.originalText = btn.tagName === 'INPUT' ? btn.value : btn.innerHTML;
-    const label = 'Saving…';
-    if (btn.tagName === 'INPUT') btn.value = label; else btn.innerHTML = label;
-    btn.disabled = true;
-    btn.style.opacity = '0.7';
-  });
-})();
+--- public/app.js	2026-09-17 01:34:15.000000000 +0000
++++ /home/claude/inspect/straindex_app/straindex-app/public/app.js	2026-09-17 23:34:03.558305880 +0000
+@@ -820,34 +820,59 @@
+   if (btn) btn.classList.add('active');
+ }
+ 
+-// PWA install prompt -- captures the browser's own beforeinstallprompt
+-// event (fired only on browsers that support one-tap install: Android
+-// Chrome, desktop Chrome/Edge, and similar Chromium browsers) and wires it
+-// up to any [data-install-trigger] button already on the page. iOS Safari
+-// never fires this event at all -- Apple doesn't expose any install API to
+-// websites, by design -- so on iOS these buttons simply stay hidden
+-// forever and the manual Add to Home Screen instructions (see
+-// /add-to-home-screen) are the only path. Nothing here can change that;
+-// it's a platform restriction, not a bug.
+-(function initInstallPrompt() {
++// PWA install -- captures the browser's own beforeinstallprompt event
++// (fired only on browsers that support one-tap install: Android Chrome,
++// desktop Chrome/Edge, and similar Chromium browsers), wires it up to any
++// [data-install-trigger] button already on the page, AND exposes a small
++// shared window.StrainDexInstall API so other scripts on the page (the
++// onboarding install-offer step, /add-to-home-screen) can trigger the same
++// native prompt or check platform/install state without each maintaining
++// their own beforeinstallprompt listener. iOS Safari never fires this
++// event at all -- Apple doesn't expose any install API to websites, by
++// design -- so isIOS() is how callers know to fall back to manual Share ->
++// Add to Home Screen instructions instead of waiting on a prompt that will
++// never come. Nothing here can change that; it's a platform restriction,
++// not a bug.
++window.StrainDexInstall = (function initInstallPrompt() {
+   let deferredPrompt = null;
++  let installed = false;
++  const availableCallbacks = [];
++
++  function isStandalone() {
++    return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
++  }
++  // iPadOS 13+ reports itself as "Macintosh" in the user agent, so a plain
++  // /iphone|ipad/i test misses iPads -- the ontouchend check catches those
++  // without also matching an actual Mac (which has no touch events).
++  function isIOS() {
++    return /iP(hone|od|ad)/.test(navigator.platform) ||
++      (navigator.userAgent.includes('Mac') && 'ontouchend' in document);
++  }
++
++  function hideButtons() {
++    document.querySelectorAll('[data-install-trigger]').forEach(b => { b.style.display = 'none'; });
++  }
++
++  async function triggerPrompt() {
++    if (!deferredPrompt) return 'unavailable';
++    deferredPrompt.prompt();
++    const { outcome } = await deferredPrompt.userChoice;
++    deferredPrompt = null;
++    if (outcome === 'accepted') hideButtons();
++    return outcome; // 'accepted' | 'dismissed'
++  }
+ 
+   function revealButtons() {
+     document.querySelectorAll('[data-install-trigger]').forEach(btn => {
+       btn.style.display = '';
+       btn.onclick = async () => {
+-        if (!deferredPrompt) return;
+         btn.disabled = true;
+-        deferredPrompt.prompt();
+-        const { outcome } = await deferredPrompt.userChoice;
+-        deferredPrompt = null;
+-        if (outcome === 'accepted') {
+-          document.querySelectorAll('[data-install-trigger]').forEach(b => { b.style.display = 'none'; });
+-        } else {
+-          btn.disabled = false;
+-        }
++        const outcome = await triggerPrompt();
++        if (outcome !== 'accepted') btn.disabled = false;
+       };
+     });
++    availableCallbacks.forEach(cb => cb());
++    availableCallbacks.length = 0;
+   }
+ 
+   window.addEventListener('beforeinstallprompt', (e) => {
+@@ -859,9 +884,23 @@
+   // Already installed (or just got installed this session) -- no reason to
+   // keep offering the button.
+   window.addEventListener('appinstalled', () => {
++    installed = true;
+     deferredPrompt = null;
+-    document.querySelectorAll('[data-install-trigger]').forEach(b => { b.style.display = 'none'; });
++    hideButtons();
+   });
++
++  return {
++    isIOS,
++    isStandalone,
++    isAvailable: () => !!deferredPrompt,
++    isInstalled: () => installed || isStandalone(),
++    // Fires the native one-tap prompt and resolves to 'accepted',
++    // 'dismissed', or 'unavailable' (no captured prompt to show).
++    prompt: triggerPrompt,
++    // Calls back immediately if the prompt is already available, otherwise
++    // once beforeinstallprompt eventually fires.
++    onAvailable: (cb) => { if (deferredPrompt) cb(); else availableCallbacks.push(cb); },
++  };
+ })();
+ 
+ (function initFormSubmitFeedback() {
