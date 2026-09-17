@@ -3917,6 +3917,19 @@ function pageMethods(req, res) {
 // a wrong auto-detected state here is a much worse failure mode than for,
 // say, nearby dispensaries. A manual picker is slower by one tap but never
 // silently wrong.
+// External per-state possession/purchase/home-grow limit lookup (Budpedia).
+// Budpedia's tool covers the 50 states (not D.C.), with each state getting
+// its own URL via a `state` query param -- confirmed format: lowercase,
+// hyphen-separated (e.g. "new-york"). NOTE: this slug format was inferred
+// from the single example given (?state=michigan, a one-word state) since
+// budpedia.com blocks automated fetches -- worth spot-checking a multi-word
+// state's link (e.g. New York, North Dakota) once this is live, in case the
+// real slugs turn out to be un-hyphenated or abbreviated instead.
+function budpediaStateUrl(stateName) {
+  if (stateName === 'Washington, D.C.') return null; // not one of the 50 states Budpedia's tool covers
+  const slug = stateName.toLowerCase().replace(/[^a-z]+/g, '-').replace(/^-+|-+$/g, '');
+  return `https://budpedia.com/how-much-weed-can-i-buy?state=${slug}`;
+}
 function pageLegalStatus(req, res, query) {
   const selected = query.get('state') || '';
   const sorted = [...LEGAL_STATUS].sort((a, b) => a.state.localeCompare(b.state));
@@ -3939,17 +3952,25 @@ function pageLegalStatus(req, res, query) {
         <h2 style="margin:0 0 4px;font-size:17px;">${esc(current.state)}</h2>
         <div style="font-weight:700;color:${LEGAL_STATUS_LABELS[current.status].color};margin-bottom:6px;">${esc(LEGAL_STATUS_LABELS[current.status].label)}</div>
         <p style="margin:0;">${esc(current.note)}</p>
+        ${budpediaStateUrl(current.state) ? `<p style="margin:8px 0 0;"><a href="${budpediaStateUrl(current.state)}" target="_blank" rel="noopener noreferrer">See exact possession, purchase-per-visit &amp; home-grow limits →</a></p>` : ''}
       </div>
     ` : ''}
     <h2 class="screen-title" style="margin-top:8px;">Full list</h2>
+    <p class="empty-note" style="margin:-4px 0 8px;">Tap a state for its possession, purchase-per-visit, and home-grow limits.</p>
     ${Object.entries(LEGAL_STATUS_LABELS).map(([key, meta]) => `
       <h3 style="font-size:13px;color:${meta.color};margin:16px 0 6px;">${esc(meta.label)}</h3>
-      ${(grouped[key] || []).map(s => `
-        <div class="card" style="padding:10px 14px;margin-bottom:6px;">
-          <b>${esc(s.state)}</b>
+      ${(grouped[key] || []).map(s => {
+        const url = budpediaStateUrl(s.state);
+        return `
+        <a href="${url || `/legal-status?state=${encodeURIComponent(s.state)}`}" ${url ? 'target="_blank" rel="noopener noreferrer"' : ''} class="card" style="display:block;padding:10px 14px;margin-bottom:6px;text-decoration:none;color:inherit;">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;">
+            <b>${esc(s.state)}</b>
+            ${url ? `<span class="empty-note" style="padding:0;">Limits →</span>` : ''}
+          </div>
           <p class="empty-note" style="padding:2px 0 0;">${esc(s.note)}</p>
-        </div>
-      `).join('')}
+        </a>
+      `;
+      }).join('')}
     `).join('')}
   `;
   sendHtml(res, layout({ title: 'Is It Legal Near Me?', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
