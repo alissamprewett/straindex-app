@@ -2985,16 +2985,6 @@ function pageMore(req, res) {
   // not deleted, just not surfaced here until they're real.
   const sections = [
     {
-      title: 'Discover',
-      tiles: [
-        { href: '/quiz', icon: '🧭', t: 'Find Your First Strain', s: '3-question strain matcher' },
-        { href: '/mood-finder', icon: '🎯', t: 'Mood Finder', s: 'Pick a goal, get matched strains' },
-        { href: '/compare', icon: '🆚', t: 'Compare Strains', s: 'Side-by-side lookup' },
-        { href: '/surprise-me', icon: '🎲', t: 'Surprise Me', s: 'One random strain you haven\u2019t tried' },
-        { href: '/trending', icon: '🔥', t: 'Trending This Week', s: 'Most checked-into right now' },
-      ],
-    },
-    {
       title: 'Your Journey',
       tiles: [
         { href: '/collection', icon: '🗂️', t: 'My Collection', s: 'Your binder & rarity progress' },
@@ -3004,6 +2994,16 @@ function pageMore(req, res) {
         { href: '/history', icon: '🕐', t: 'Check-In History', s: 'Your full timeline' },
         { href: '/insights', icon: '📊', t: 'Your Patterns', s: 'What your check-ins say about you' },
         { href: '/insights', icon: '🌿', t: 'Tolerance Break', s: 'Start, track, or end a break' },
+      ],
+    },
+    {
+      title: 'Discover',
+      tiles: [
+        { href: '/quiz', icon: '🧭', t: 'Find Your First Strain', s: '3-question strain matcher' },
+        { href: '/mood-finder', icon: '🎯', t: 'Mood Finder', s: 'Pick a goal, get matched strains' },
+        { href: '/compare', icon: '🆚', t: 'Compare Strains', s: 'Side-by-side lookup' },
+        { href: '/surprise-me', icon: '🎲', t: 'Surprise Me', s: 'One random strain you haven\u2019t tried' },
+        { href: '/trending', icon: '🔥', t: 'Trending This Week', s: 'Most checked-into right now' },
       ],
     },
     {
