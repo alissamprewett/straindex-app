@@ -820,6 +820,50 @@ function scaleRecipe(factor, btn) {
   if (btn) btn.classList.add('active');
 }
 
+// PWA install prompt -- captures the browser's own beforeinstallprompt
+// event (fired only on browsers that support one-tap install: Android
+// Chrome, desktop Chrome/Edge, and similar Chromium browsers) and wires it
+// up to any [data-install-trigger] button already on the page. iOS Safari
+// never fires this event at all -- Apple doesn't expose any install API to
+// websites, by design -- so on iOS these buttons simply stay hidden
+// forever and the manual Add to Home Screen instructions (see
+// /add-to-home-screen) are the only path. Nothing here can change that;
+// it's a platform restriction, not a bug.
+(function initInstallPrompt() {
+  let deferredPrompt = null;
+
+  function revealButtons() {
+    document.querySelectorAll('[data-install-trigger]').forEach(btn => {
+      btn.style.display = '';
+      btn.onclick = async () => {
+        if (!deferredPrompt) return;
+        btn.disabled = true;
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        deferredPrompt = null;
+        if (outcome === 'accepted') {
+          document.querySelectorAll('[data-install-trigger]').forEach(b => { b.style.display = 'none'; });
+        } else {
+          btn.disabled = false;
+        }
+      };
+    });
+  }
+
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    revealButtons();
+  });
+
+  // Already installed (or just got installed this session) -- no reason to
+  // keep offering the button.
+  window.addEventListener('appinstalled', () => {
+    deferredPrompt = null;
+    document.querySelectorAll('[data-install-trigger]').forEach(b => { b.style.display = 'none'; });
+  });
+})();
+
 (function initFormSubmitFeedback() {
   document.addEventListener('submit', (e) => {
     const form = e.target;

@@ -71,6 +71,29 @@ async function recordFailedLogin(req, username) {
 async function clearLoginAttempts(req, username) {
   await db.clearRateLimitAttempts('login', loginAttemptKey(req, username));
 }
+
+// ---------------------------------------------------------------- submission rate limiting
+// A generous per-account limit on the four authenticated submission
+// endpoints (feedback, recipes, grow tips, strain suggestions) -- every
+// one of them now sends an email to SUPPORT_EMAIL the moment it's used,
+// so without this, a bored or malicious logged-in user could spam
+// dozens of emails in seconds and burn through the transactional email
+// provider's sending quota. Reuses the same persistent rate_limit_attempts
+// table built for signup/login, just keyed by user id instead of IP,
+// since these actions always require being logged in already -- no need
+// to worry about one shared IP (a school, an office) penalizing everyone
+// on it the way login's IP-based limiting has to. The threshold is
+// deliberately generous: this exists to stop an obvious burst, not to
+// second-guess someone submitting a handful of genuine reports in one
+// sitting.
+const SUBMISSION_WINDOW_MS = 15 * 60 * 1000;
+const SUBMISSION_MAX_ATTEMPTS = 10;
+async function isSubmissionRateLimited(bucket, userId) {
+  const existing = await db.pruneAndCountAttempts(bucket, String(userId), SUBMISSION_WINDOW_MS);
+  await db.recordRateLimitAttempt(bucket, String(userId));
+  return (existing + 1) > SUBMISSION_MAX_ATTEMPTS;
+}
+
 const PUBLIC_DIR = path.join(__dirname, 'public');
 const DOCS_DIR = path.join(__dirname, 'docs');
 
@@ -405,12 +428,22 @@ function pageLandingPage(req, res) {
       </div>
     </div>
 
+    <div class="card" style="margin-top:20px;">
+      <div style="display:flex;align-items:flex-start;gap:10px;">
+        <span style="font-size:22px;">🔒</span>
+        <div>
+          <div style="font-weight:700;font-size:14px;margin-bottom:4px;">We don't sell your data. Ever.</div>
+          <p class="empty-note" style="padding:0;">Cannabis use is legally sensitive in most of the country, and you shouldn't have to worry about a permanent, sellable record of it. StrainDex is a paid-when-you-want-it app, not an ad business — we don't need to sell what you check in to make money. <a href="/privacy">Read the full privacy policy →</a></p>
+        </div>
+      </div>
+    </div>
+
     <div class="card" style="margin-top:20px;text-align:center;">
       <p class="empty-note" style="padding:0 0 10px;">Already checking in with friends? See what StrainDex looks like inside.</p>
       <a href="/signup" class="btn secondary block" style="text-decoration:none;">Get Started →</a>
     </div>
   `;
-  sendHtml(res, layout({ title: 'StrainDex', body, isAdmin: false, showBack: false }));
+  sendHtml(res, layout({ title: 'StrainDex', body, isAdmin: false, showBack: false, metaDescription: `Track what you actually experience with cannabis, discover your next favorite strain from ${totalStrains.toLocaleString()}+ real strains, and compare notes with real friends — all in one place.`, canonicalPath: '/' }));
 }
 
 function pageHome(req, res) {
@@ -455,7 +488,7 @@ function pageHome(req, res) {
       return `<div class="feed-post">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
           ${friends.length ? `<div class="empty-note" style="padding:0;font-weight:${isMine ? 'normal' : '700'};">${isMine ? 'You' : `<a href="/friends/${c.user_id}" style="color:inherit;">${esc(posterName)}</a>`}</div>` : '<div></div>'}
-          ${isMine ? `<a href="/checkin/${c.id}/edit" class="empty-note" style="padding:0;">Edit</a>` : ''}
+          ${isMine ? `<span><a href="/checkin/${c.id}/card" class="empty-note" style="padding:0;">Share</a> · <a href="/checkin/${c.id}/edit" class="empty-note" style="padding:0;">Edit</a></span>` : ''}
         </div>
         <a class="strain-chip" href="/strains/${c.strain_id}">
           ${strainPhotoTag(s, 'xs')}
@@ -550,7 +583,7 @@ function pageStrains(req, res, query) {
         <span class="rarity-tag rarity-${s.rarity}">${rarityLabel(s.rarity)}</span>
       </a>`).join('') || `<div class="empty-note">No strains match your filters. <a href="/strains/suggest${q ? `?name=${encodeURIComponent(q)}` : ''}">Can't find it? Suggest it →</a></div>`}</div>
   `;
-  sendHtml(res, layout({ title: 'Strains', active: 'strains', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: 'Strains', active: 'strains', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)), metaDescription: `Browse ${total.toLocaleString()} cannabis strains with real THC data, effects, terpenes, and relief tags — search by name, flavor, or how you want to feel.`, canonicalPath: '/strains' }));
 }
 
 // Verification tier is computed live from how complete a strain's actual
@@ -689,7 +722,7 @@ function pageStrainDetail(req, res, id) {
         <div style="flex:1;min-width:0;">
           <div style="display:flex;justify-content:space-between;align-items:baseline;">
             <b>${esc(c.method)}</b>
-            <a href="/checkin/${c.id}/edit" class="empty-note" style="padding:0;">Edit</a>
+            <span><a href="/checkin/${c.id}/card" class="empty-note" style="padding:0;">Share</a> · <a href="/checkin/${c.id}/edit" class="empty-note" style="padding:0;">Edit</a></span>
           </div>
           ${starString(c.rating)}
           <div class="empty-note" style="padding:2px 0 0;"><span class="local-time" data-utc="${c.created_at}Z">${esc(c.created_at)} UTC</span></div>
@@ -707,7 +740,8 @@ function pageStrainDetail(req, res, id) {
       ${fullHistory.length > history.length ? `<p class="empty-note" style="text-align:center;margin-top:8px;"><a href="/history?strain=${s.id}">See all ${fullHistory.length} check-ins with this strain →</a></p>` : ''}
     ` : `<div class="empty-note">You haven't checked this one in yet.</div>`}
   `;
-  sendHtml(res, layout({ title: s.name, active: 'strains', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
+  const seoDescription = `${s.name} — ${s.type}${s.lean ? ` (${s.lean})` : ''} strain${s.thc ? ` with ${s.thc} THC` : ''}${s.effects && s.effects.length ? `. Reported effects: ${s.effects.slice(0, 3).join(', ')}` : ''}${s.flavor ? `. ${s.flavor}` : ''}`.slice(0, 300);
+  sendHtml(res, layout({ title: s.name, active: 'strains', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)), metaDescription: seoDescription, canonicalPath: `/strains/${s.id}` }));
 }
 
 // Full 85-term mood/effects/relief vocabulary — matched against the
@@ -930,6 +964,45 @@ function pageCheckinEditForm(req, res, id) {
   const existing = db.getCheckin(id);
   if (!existing || existing.user_id !== userId) return notFound(res);
   pageCheckinForm(req, res, new URLSearchParams(), existing);
+}
+// A single check-in rendered as a self-contained, screenshot-worthy card --
+// big strain photo, rating, and a StrainDex watermark, sized to look right
+// as an Instagram Story or a text to a friend. Not a real image export (no
+// image-generation library available in this environment), but it's a
+// distraction-free view specifically designed to be screenshotted, which
+// gets the same organic-sharing result without needing server-side image
+// rendering. Same ownership check as editing -- this can include private
+// tasting notes, so it's not something anyone else's check-in should
+// expose.
+function pageCheckinCard(req, res, id) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const c = db.getCheckin(id);
+  if (!c || c.user_id !== userId) return notFound(res);
+  const s = db.getStrain(c.strain_id);
+  const pairings = Array.isArray(c.pairings) ? c.pairings : [];
+  const body = `
+    <div class="share-card">
+      <div class="share-card-photo">${strainPhotoTag(s, 'card')}</div>
+      <div class="share-card-body">
+        <div class="share-card-name">${esc(s ? s.name : c.strain_id)}</div>
+        ${s ? `<div class="share-card-sub">${esc(s.type)}${s.lean ? ' · ' + esc(s.lean) : ''} · <span class="rarity-tag rarity-${s.rarity}">${rarityLabel(s.rarity)}</span></div>` : ''}
+        <div class="share-card-stars">${starString(c.rating)}</div>
+        <div class="share-card-method">${esc(c.method)}</div>
+        ${(c.effects || []).length ? `<div class="effect-tags" style="justify-content:center;">${c.effects.map(e => `<span>${esc(e)}</span>`).join('')}</div>` : ''}
+        ${c.note ? `<div class="share-card-note">"${esc(c.note)}"</div>` : ''}
+        ${c.tasting_notes ? `<div class="share-card-note">🍃 ${esc(c.tasting_notes)}</div>` : ''}
+        ${pairings.length ? `<div class="share-card-pairings">${pairings.map(p => {
+          const meta = PAIRING_TYPE_MAP[p.type];
+          return `<span>${meta ? meta.icon : '🔗'} ${p.note ? esc(p.note) : esc(meta ? meta.label : p.type)}</span>`;
+        }).join('')}</div>` : ''}
+        <div class="share-card-brand">🌿 StrainDex</div>
+      </div>
+    </div>
+    <p class="empty-note" style="text-align:center;margin-top:14px;">Screenshot this to share — press and hold the card, or use your device's screenshot shortcut.</p>
+    <a href="/strains/${c.strain_id}" class="btn secondary block" style="text-decoration:none;margin-top:8px;">Back to strain</a>
+  `;
+  sendHtml(res, layout({ title: `${s ? s.name : 'Check-in'} — Shareable Card`, body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
 // The pairing type/note rows submit as same-name repeated fields (one
@@ -1248,9 +1321,11 @@ function pageRecipes(req, res, query) {
 }
 
 const RECIPE_CATEGORIES = ['Infusion Base', 'Baked Goods', 'Gummies & Candy', 'Drinks', 'Topicals', 'Savory & Snacks'];
-function pageRecipeNew(req, res) {
+function pageRecipeNew(req, res, query) {
+  const error = query ? query.get('error') : null;
   const body = `
     <h1 class="screen-title">Submit a Recipe</h1>
+    ${error === 'rate_limited' ? `<p class="dosing-note">You've submitted a lot of recipes in a short time — give it a few minutes and try again.</p>` : ''}
     <form method="POST" action="/recipes/new">
       <label class="field-label">Your name</label>
       <input type="text" name="author" placeholder="e.g. Jordan" required>
@@ -1276,6 +1351,7 @@ function pageRecipeNew(req, res) {
 async function handleRecipeNewSubmit(req, res) {
   const userId = requireUser(req, res);
   if (userId == null) return;
+  if (await isSubmissionRateLimited('recipe_submit', userId)) return redirect(res, '/recipes/new?error=rate_limited');
   const f = await parseForm(req);
   const category = RECIPE_CATEGORIES.includes(f.category) ? f.category : 'Baked Goods';
   await db.createRecipe({
@@ -1338,10 +1414,12 @@ function pageGrowing(req, res, query) {
   sendHtml(res, layout({ title: 'Growing', active: 'growing', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
-function pageGrowingNew(req, res) {
+function pageGrowingNew(req, res, query) {
+  const error = query ? query.get('error') : null;
   const CATEGORIES = ['Plant Life Cycle', 'Watering', 'Lighting', 'Nutrients & Feeding', 'Pests & Disease', 'Training', 'Harvest & Curing', 'Genetics & Seeds', 'Indoor Setup', 'Outdoor Growing', 'Cleaning & Gear Care'];
   const body = `
     <h1 class="screen-title">Share a Grow Tip</h1>
+    ${error === 'rate_limited' ? `<p class="dosing-note">You've shared a lot of tips in a short time — give it a few minutes and try again.</p>` : ''}
     <form method="POST" action="/growing/new">
       <label class="field-label">Your name</label>
       <input type="text" name="author" placeholder="e.g. Sam" required>
@@ -1360,6 +1438,7 @@ function pageGrowingNew(req, res) {
 async function handleGrowingNewSubmit(req, res) {
   const userId = requireUser(req, res);
   if (userId == null) return;
+  if (await isSubmissionRateLimited('grow_tip_submit', userId)) return redirect(res, '/growing/new?error=rate_limited');
   const f = await parseForm(req);
   await db.createGrowTip({ title: f.title, category: f.category, author: f.author, user_id: userId, body: f.body, status: 'pending' });
   sendEmail({
@@ -1496,7 +1575,7 @@ function pageSignup(req, res, query) {
 // fetch built in, same as the Resend email calls elsewhere in this file).
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
-const GOOGLE_REDIRECT_URI = 'https://strain-dex.com/auth/google/callback';
+const GOOGLE_REDIRECT_URI = 'https://www.strain-dex.com/auth/google/callback';
 
 function pageGoogleStart(req, res, query) {
   if (!GOOGLE_CLIENT_ID) {
@@ -1738,6 +1817,10 @@ function pageOnboarding(req, res) {
     { icon: '📊', title: 'See your own patterns', body: 'Your Patterns reflects your check-in history back at you — favorite effects, top strain type, even a tolerance break tracker.' },
     { icon: '🧑\u200d🤝\u200d🧑', title: 'Bring your friends', body: 'Add friends to see their check-ins, message them, share strains, and trade duplicate cards.' },
     { icon: '⭐', title: 'A lot more in "More"', body: 'Compare strains side by side, check what’s trending, look up your state’s cannabis laws, keep a wishlist, and more — it’s all grouped by category in the More tab.' },
+    { icon: '📲', title: 'Add StrainDex to your phone', body: 'Get the full-screen, no-browser-bar experience — opens right from your home screen, just like a real app.', extra: `
+      <button type="button" id="onboarding-install-btn" class="btn block" style="margin-top:16px;display:none;" data-install-trigger>📲 Install Now</button>
+      <p class="empty-note" style="margin-top:10px;">On an iPhone? <a href="/add-to-home-screen">See the 3-tap instructions →</a></p>
+    ` },
   ];
   const body = `
     <div class="card" style="text-align:center;padding:32px 20px;">
@@ -1747,6 +1830,7 @@ function pageOnboarding(req, res) {
             <div style="font-size:44px;margin-bottom:16px;">${s.icon}</div>
             <h2 style="margin:0 0 8px;font-size:18px;">${esc(s.title)}</h2>
             <p style="color:var(--ink-secondary);font-size:13.5px;line-height:1.6;margin:0;">${esc(s.body)}</p>
+            ${s.extra || ''}
           </div>`).join('')}
       </div>
       <div style="display:flex;justify-content:center;gap:6px;margin:22px 0 6px;">
@@ -1776,6 +1860,51 @@ function pageOnboarding(req, res) {
   sendHtml(res, layout({ title: 'Welcome', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)), showBack: false }));
 }
 
+// "Add to Home Screen" guide -- always-available manual instructions for
+// every platform, since iOS Safari has no programmatic install API at all
+// (Apple doesn't expose one to any website, by design) and always needs
+// the manual steps. Where the browser *does* support a real one-tap
+// install (Android Chrome, desktop Chrome/Edge), the button up top does
+// that instead -- see initInstallPrompt in app.js, which only reveals it
+// when the browser has actually offered installability.
+function pageAddToHomeScreen(req, res) {
+  const body = `
+    <h1 class="screen-title">📲 Add StrainDex to Your Home Screen</h1>
+    <p class="screen-sub">StrainDex isn't in the App Store or Play Store — it doesn't need to be. Adding it to your home screen gives you the same full-screen, no-browser-bar experience, straight from your phone.</p>
+    <button type="button" id="add-home-install-btn" class="btn block" style="display:none;margin-bottom:18px;" data-install-trigger>📲 Install Now</button>
+
+    <div class="card" style="margin-bottom:12px;">
+      <h2 style="margin:0 0 10px;font-size:15px;">🍎 iPhone &amp; iPad (Safari)</h2>
+      <p class="empty-note" style="padding:0 0 8px;">Apple doesn't allow any website to trigger this automatically — these three taps in Safari are the only way.</p>
+      <ol style="margin:0;padding-left:20px;font-size:13.5px;line-height:1.9;">
+        <li>Tap the <b>Share</b> icon (the square with an arrow pointing up) in Safari's toolbar.</li>
+        <li>Scroll down and tap <b>Add to Home Screen</b>.</li>
+        <li>Tap <b>Add</b> in the top right.</li>
+      </ol>
+      <p class="empty-note" style="padding:8px 0 0;">Must be opened in Safari, not Chrome or another browser — iOS only allows this from Safari itself.</p>
+    </div>
+
+    <div class="card" style="margin-bottom:12px;">
+      <h2 style="margin:0 0 10px;font-size:15px;">🤖 Android (Chrome)</h2>
+      <ol style="margin:0;padding-left:20px;font-size:13.5px;line-height:1.9;">
+        <li>Tap the <b>⋮</b> menu (three dots) in the top right of Chrome.</li>
+        <li>Tap <b>Install app</b> (or <b>Add to Home screen</b>).</li>
+        <li>Confirm by tapping <b>Install</b>.</li>
+      </ol>
+      <p class="empty-note" style="padding:8px 0 0;">If the "Install Now" button above is visible, that does the same thing in one tap.</p>
+    </div>
+
+    <div class="card">
+      <h2 style="margin:0 0 10px;font-size:15px;">💻 Desktop (Chrome or Edge)</h2>
+      <ol style="margin:0;padding-left:20px;font-size:13.5px;line-height:1.9;">
+        <li>Look for a small install icon (a monitor with a down arrow) at the right edge of the address bar.</li>
+        <li>Click it, then click <b>Install</b>.</li>
+      </ol>
+      <p class="empty-note" style="padding:8px 0 0;">StrainDex opens in its own window after that, separate from your regular browser tabs.</p>
+    </div>
+  `;
+  sendHtml(res, layout({ title: 'Add to Home Screen', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
+}
 // "Find your first strain" quiz -- a lightweight 3-question filter over the
 // same THC-bucket logic already used by the Strain Library's filters, plus
 // simple effect-tag scoring. Not a medical tool, just a starting point for
@@ -1961,10 +2090,12 @@ function pageStrainSuggest(req, res, query) {
   const userId = requireUser(req, res);
   if (userId == null) return;
   const sent = query.get('sent');
+  const error = query.get('error');
   const prefill = query.get('name') || '';
   const body = `
     <h1 class="screen-title">Suggest a Strain</h1>
     <p class="screen-sub">Seen something at a dispensary that's not in the library yet? Tell us about it and we'll research it and add it.</p>
+    ${error === 'rate_limited' ? `<p class="dosing-note">You've suggested a lot of strains in a short time — give it a few minutes and try again.</p>` : ''}
     ${sent ? `<p class="empty-note" style="color:var(--brand-green-dark);">Thanks — your suggestion was sent for review.</p>` : ''}
     <form method="POST" action="/strains/suggest">
       <label class="field-label" style="margin-top:0;">Strain name</label>
@@ -2005,6 +2136,7 @@ function pageStrainSuggest(req, res, query) {
 async function handleStrainSuggestSubmit(req, res) {
   const userId = requireUser(req, res);
   if (userId == null) return;
+  if (await isSubmissionRateLimited('strain_suggest', userId)) return redirect(res, '/strains/suggest?error=rate_limited');
   const f = await parseForm(req);
   const strainName = (f.strain_name || '').trim();
   if (!strainName) return redirect(res, '/strains/suggest');
@@ -2714,10 +2846,12 @@ function pageFeedback(req, res, query) {
   const userId = requireUser(req, res);
   if (userId == null) return;
   const sent = query.get('sent');
+  const error = query.get('error');
   const body = `
     <h1 class="screen-title">Send Feedback</h1>
     <p class="screen-sub">Bugs, ideas, confusing screens, anything at all. This goes straight to the person building the app.</p>
     <p class="empty-note">For anything urgent — a compromised account, a safety concern, or a bad actor on the app — email <a href="mailto:${SUPPORT_EMAIL}">${SUPPORT_EMAIL}</a> directly instead of using the form below, since it's monitored more closely.</p>
+    ${error === 'rate_limited' ? `<p class="dosing-note">You've sent a lot of feedback in a short time — give it a few minutes and try again.</p>` : ''}
     ${sent ? `<p class="empty-note" style="color:var(--brand-green-dark);">Thanks — your feedback was sent.</p>` : ''}
     <form method="POST" action="/feedback">
       <label class="field-label" style="margin-top:0;">Your feedback</label>
@@ -2730,6 +2864,7 @@ function pageFeedback(req, res, query) {
 async function handleFeedbackSubmit(req, res) {
   const userId = requireUser(req, res);
   if (userId == null) return;
+  if (await isSubmissionRateLimited('feedback', userId)) return redirect(res, '/feedback?error=rate_limited');
   const fields = await parseForm(req);
   const message = String(fields.message || '').trim();
   if (!message) return redirect(res, '/feedback');
@@ -3515,6 +3650,7 @@ function pageMore(req, res) {
     {
       title: 'Support',
       tiles: [
+        { href: '/add-to-home-screen', icon: '📲', t: 'Add to Home Screen', s: 'Get the full-screen app experience' },
         { href: '/feedback', icon: '📝', t: 'Send Feedback', s: 'Bugs, ideas — anything' },
         { href: '/support-the-app', icon: '💚', t: 'Support the App', s: 'Help cover hosting costs' },
       ],
@@ -3813,6 +3949,7 @@ function pageHistory(req, res, query) {
             <div class="sub">${esc(c.method)} · ${starString(c.rating)} · <span class="local-time" data-utc="${c.created_at}Z">${esc(c.created_at)} UTC</span></div>
           </div>
         </a>
+        <a href="/checkin/${c.id}/card" class="empty-note" style="padding:0 4px;">Share</a>
         <a href="/checkin/${c.id}/edit" class="empty-note" style="padding:0 4px;">Edit</a>
       </div>`;
     }).join('') : `<div class="empty-note">No check-ins logged yet — <a href="/checkin">log your first one</a>.</div>`}
@@ -4017,6 +4154,10 @@ function pageConversation(req, res, friendId) {
                 <div class="sub">${esc(strain.type)} · THC ${esc(strain.thc)}</div>
               </div>
             </a>
+            <form method="POST" action="/wishlist/${strain.id}/toggle" style="margin-top:4px;">
+              <input type="hidden" name="redirect_to" value="/messages/${friend.id}">
+              <button type="submit" class="btn secondary block" style="padding:6px;font-size:12px;">${db.isInWishlist(userId, strain.id) ? '★ In Your Wishlist' : '☆ Add to Wishlist'}</button>
+            </form>
           ` : ''}
           ${m.body ? `<div class="admin-row" style="background:${mine ? 'var(--brand-green-dark)' : 'var(--bg-card)'};color:${mine ? '#fff' : 'inherit'};margin-top:${strain ? '4px' : '0'};">${esc(m.body)}</div>` : ''}
         </div>`;
@@ -4549,8 +4690,16 @@ const server = http.createServer(async (req, res) => {
     // individually, everything requires a logged-in user except the
     // signup/login/logout routes themselves and the separate admin panel
     // (which has its own, unrelated password gate below).
-    const PUBLIC_PATHS = new Set(['/', '/signup', '/login', '/logout', '/terms', '/privacy', '/forgot-password', '/reset-password', '/api/analytics-snapshot', '/auth/google', '/auth/google/callback', '/auth/google/finish']);
-    if (!PUBLIC_PATHS.has(pathname) && !pathname.startsWith('/admin') && auth.currentUserId(req) == null) {
+    const PUBLIC_PATHS = new Set(['/', '/signup', '/login', '/logout', '/terms', '/privacy', '/add-to-home-screen', '/forgot-password', '/reset-password', '/api/analytics-snapshot', '/api/strains', '/auth/google', '/auth/google/callback', '/auth/google/finish']);
+    // Strain pages are exempted the same way /admin is -- excluded from the
+    // blanket login wall here, with each individual route underneath still
+    // enforcing its own login requirement where one's actually needed (e.g.
+    // /strains/suggest still calls requireUser itself). This is what makes
+    // the strain library indexable by search engines at all; a page behind
+    // a hard login wall can never be crawled, which was directly
+    // undermining the SEO strategy the business plan calls for.
+    const isPublicStrainPath = pathname === '/strains' || pathname.startsWith('/strains/');
+    if (!PUBLIC_PATHS.has(pathname) && !isPublicStrainPath && !pathname.startsWith('/admin') && auth.currentUserId(req) == null) {
       return redirect(res, '/login');
     }
 
@@ -4563,16 +4712,17 @@ const server = http.createServer(async (req, res) => {
     if (method === 'GET' && pathname === '/checkin') return pageCheckinForm(req, res, url.searchParams);
     if (method === 'POST' && pathname === '/checkin') return await handleCheckinSubmit(req, res);
     if (method === 'GET' && (m = pathname.match(/^\/checkin\/(\d+)\/edit$/))) return pageCheckinEditForm(req, res, Number(m[1]));
+    if (method === 'GET' && (m = pathname.match(/^\/checkin\/(\d+)\/card$/))) return pageCheckinCard(req, res, Number(m[1]));
     if (method === 'POST' && (m = pathname.match(/^\/checkin\/(\d+)\/edit$/))) return await handleCheckinEditSubmit(req, res, Number(m[1]));
     if (method === 'POST' && (m = pathname.match(/^\/checkin\/(\d+)\/comment$/))) return await handleCheckinComment(req, res, Number(m[1]));
     if (method === 'POST' && (m = pathname.match(/^\/checkin\/(\d+)\/delete$/))) return await handleCheckinDelete(req, res, Number(m[1]));
     if (method === 'GET' && pathname === '/faq') return pageFaq(req, res, url.searchParams);
     if (method === 'GET' && pathname === '/recipes') return pageRecipes(req, res, url.searchParams);
     if (method === 'GET' && (m = pathname.match(/^\/recipes\/(\d+)$/))) return pageRecipeDetail(req, res, Number(m[1]));
-    if (method === 'GET' && pathname === '/recipes/new') return pageRecipeNew(req, res);
+    if (method === 'GET' && pathname === '/recipes/new') return pageRecipeNew(req, res, url.searchParams);
     if (method === 'POST' && pathname === '/recipes/new') return await handleRecipeNewSubmit(req, res);
     if (method === 'GET' && pathname === '/growing') return pageGrowing(req, res, url.searchParams);
-    if (method === 'GET' && pathname === '/growing/new') return pageGrowingNew(req, res);
+    if (method === 'GET' && pathname === '/growing/new') return pageGrowingNew(req, res, url.searchParams);
     if (method === 'POST' && pathname === '/growing/new') return await handleGrowingNewSubmit(req, res);
     if (method === 'GET' && pathname === '/chat') return pageChat(req, res);
     if (method === 'POST' && pathname === '/api/chat') return await handleChatApi(req, res);
@@ -4596,6 +4746,7 @@ const server = http.createServer(async (req, res) => {
     if (method === 'GET' && pathname === '/forgot-password') return pageForgotPassword(req, res, url.searchParams);
     if (method === 'POST' && pathname === '/forgot-password') return await handleForgotPasswordSubmit(req, res);
     if (method === 'GET' && pathname === '/onboarding') return pageOnboarding(req, res);
+    if (method === 'GET' && pathname === '/add-to-home-screen') return pageAddToHomeScreen(req, res);
     if (method === 'GET' && pathname === '/feedback') return pageFeedback(req, res, url.searchParams);
     if (method === 'POST' && pathname === '/feedback') return await handleFeedbackSubmit(req, res);
     if (method === 'GET' && pathname === '/support-the-app') return pageSupportTheApp(req, res);
