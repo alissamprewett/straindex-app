@@ -2032,31 +2032,33 @@ async function handleStrainSuggestSubmit(req, res) {
 // Strain form) or discarded as not corroborated. Deliberately doesn't
 // auto-add anything -- every suggestion still goes through the same
 // research standard as everything else in the library.
+// Shared row renderer for a suggested strain -- same reasoning as the
+// recipe/grow-tip row renderers above.
+function renderStrainSubmissionRow(s) {
+  const user = s.user_id != null ? db.getUserById(s.user_id) : null;
+  return `
+    <div class="admin-row" style="flex-direction:column;align-items:stretch;${s.status === 'reviewed' ? 'opacity:0.5;' : ''}">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;">
+        <b>${esc(s.strain_name)}</b>
+        <span class="empty-note" style="padding:0;">${user ? esc(user.username) : 'Anonymous'} · <span class="local-time" data-utc="${esc(s.created_at)}Z">${esc(s.created_at)}</span></span>
+      </div>
+      ${s.description ? `<p style="margin:6px 0 0;">${esc(s.description)}</p>` : ''}
+      ${s.photo ? `<div class="checkin-photo-thumb" style="margin:8px 0;max-width:200px;"><img src="${esc(s.photo)}" alt="Submitted photo"></div>` : ''}
+      <div class="actions" style="margin-top:8px;">
+        <a href="/admin/strains?q=${encodeURIComponent(s.strain_name)}" class="btn secondary" style="text-decoration:none;">Research &amp; Add</a>
+        ${s.status !== 'reviewed' ? `<form method="POST" action="/admin/strain-submissions/${s.id}/reviewed" style="display:inline;"><button class="btn" type="submit">Mark Reviewed</button></form>` : ''}
+      </div>
+    </div>`;
+}
 function pageAdminStrainSubmissions(req, res) {
   if (!requireAdmin(req, res)) return;
   const submissions = db.listStrainSubmissions();
   const pending = submissions.filter(s => s.status !== 'reviewed');
   const reviewed = submissions.filter(s => s.status === 'reviewed');
-  const renderSubmission = (s) => {
-    const user = s.user_id != null ? db.getUserById(s.user_id) : null;
-    return `
-      <div class="admin-row" style="flex-direction:column;align-items:stretch;${s.status === 'reviewed' ? 'opacity:0.5;' : ''}">
-        <div style="display:flex;justify-content:space-between;align-items:baseline;">
-          <b>${esc(s.strain_name)}</b>
-          <span class="empty-note" style="padding:0;">${user ? esc(user.username) : 'Anonymous'} · <span class="local-time" data-utc="${esc(s.created_at)}Z">${esc(s.created_at)}</span></span>
-        </div>
-        ${s.description ? `<p style="margin:6px 0 0;">${esc(s.description)}</p>` : ''}
-        ${s.photo ? `<div class="checkin-photo-thumb" style="margin:8px 0;max-width:200px;"><img src="${esc(s.photo)}" alt="Submitted photo"></div>` : ''}
-        <div class="actions" style="margin-top:8px;">
-          <a href="/admin/strains?q=${encodeURIComponent(s.strain_name)}" class="btn secondary" style="text-decoration:none;">Research &amp; Add</a>
-          ${s.status !== 'reviewed' ? `<form method="POST" action="/admin/strain-submissions/${s.id}/reviewed" style="display:inline;"><button class="btn" type="submit">Mark Reviewed</button></form>` : ''}
-        </div>
-      </div>`;
-  };
   const body = `
     <h1 class="screen-title">Suggested Strains</h1>
-    ${pending.length ? `<h2 class="screen-title">Pending (${pending.length})</h2>${pending.map(renderSubmission).join('')}` : `<div class="empty-note">No pending suggestions.</div>`}
-    ${reviewed.length ? `<h2 class="screen-title" style="margin-top:20px;">Reviewed (${reviewed.length})</h2>${reviewed.map(renderSubmission).join('')}` : ''}
+    ${pending.length ? `<h2 class="screen-title">Pending (${pending.length})</h2>${pending.map(renderStrainSubmissionRow).join('')}` : `<div class="empty-note">No pending suggestions.</div>`}
+    ${reviewed.length ? `<h2 class="screen-title" style="margin-top:20px;">Reviewed (${reviewed.length})</h2>${reviewed.map(renderStrainSubmissionRow).join('')}` : ''}
   `;
   sendHtml(res, layout({ title: 'Suggested Strains', body, isAdmin: true }));
 }
@@ -2833,13 +2835,51 @@ function handleLogout(req, res) {
   redirect(res, '/login');
 }
 
+// A single screen combining everything waiting on admin action --
+// pending recipes, pending grow tips, pending strain suggestions, and the
+// most recent feedback -- so a routine check-in doesn't mean clicking
+// through four separate pages just to see if anything's new. Each item
+// reuses the exact same row renderer as its dedicated management page, so
+// approving/rejecting from here behaves identically either way. Feedback
+// has no pending/reviewed concept of its own (it's just a running log),
+// so it's shown here for visibility with a link to the full history
+// rather than folded into the "needs action" count.
+function pageAdminInbox(req, res) {
+  if (!requireAdmin(req, res)) return;
+  const pendingRecipes = db.listRecipes({ status: 'pending' });
+  const pendingGrowTips = db.listGrowTips({ status: 'pending' });
+  const pendingStrainSubmissions = db.listStrainSubmissions().filter(s => s.status !== 'reviewed');
+  const recentFeedback = db.listFeedback().slice(0, 5);
+  const totalPending = pendingRecipes.length + pendingGrowTips.length + pendingStrainSubmissions.length;
+  const body = `
+    <h1 class="screen-title">Inbox</h1>
+    <p class="screen-sub">${totalPending ? `${totalPending} item${totalPending === 1 ? '' : 's'} need${totalPending === 1 ? 's' : ''} your attention.` : 'Nothing pending — you\u2019re all caught up.'}</p>
+
+    ${pendingStrainSubmissions.length ? `<h2 class="screen-title">💡 Suggested Strains (${pendingStrainSubmissions.length})</h2>${pendingStrainSubmissions.map(renderStrainSubmissionRow).join('')}` : ''}
+    ${pendingRecipes.length ? `<h2 class="screen-title" style="margin-top:20px;">🍽️ Recipes (${pendingRecipes.length})</h2>${pendingRecipes.map(renderPendingRecipeRow).join('')}` : ''}
+    ${pendingGrowTips.length ? `<h2 class="screen-title" style="margin-top:20px;">🌱 Grow Tips (${pendingGrowTips.length})</h2>${pendingGrowTips.map(renderPendingGrowTipRow).join('')}` : ''}
+
+    <h2 class="screen-title" style="margin-top:20px;">💬 Recent Feedback</h2>
+    ${recentFeedback.length ? recentFeedback.map(f => {
+      const user = f.user_id != null ? db.getUserById(f.user_id) : null;
+      return `<div class="admin-row" style="flex-direction:column;align-items:stretch;">
+        <span class="empty-note" style="padding:0;">${user ? esc(user.username) : 'Anonymous'} · <span class="local-time" data-utc="${esc(f.created_at)}Z">${esc(f.created_at)}</span></span>
+        <p style="margin:6px 0 0;white-space:pre-wrap;">${esc(f.message)}</p>
+      </div>`;
+    }).join('') : `<div class="empty-note">No feedback yet.</div>`}
+    <p class="empty-note" style="padding:6px 0 0;"><a href="/admin/feedback">See all feedback →</a></p>
+  `;
+  sendHtml(res, layout({ title: 'Inbox', body, isAdmin: true }));
+}
 function pageAdminHome(req, res) {
   if (!requireAdmin(req, res)) return;
   const pendingCount = db.listRecipes({ status: 'pending' }).length;
   const pendingSubmissions = db.listStrainSubmissions().filter(s => s.status !== 'reviewed').length;
   const pendingGrowTips = db.listGrowTips({ status: 'pending' }).length;
+  const totalPending = pendingCount + pendingSubmissions + pendingGrowTips;
   const body = `
     <h1 class="screen-title">Admin</h1>
+    <div class="card" style="background:${totalPending ? 'var(--brand-green-dark)' : 'var(--bg-card)'};${totalPending ? 'color:#fff;' : ''}"><a href="/admin/inbox" style="color:inherit;">📥 Inbox${totalPending ? ` — ${totalPending} pending` : ' — all caught up'}</a></div>
     <div class="card"><a href="/admin/feedback">💬 Feedback (${db.listFeedback().length})</a></div>
     <div class="card"><a href="/admin/faqs">📋 Manage FAQ (${db.listFaqs().length})</a></div>
     <div class="card"><a href="/admin/recipes">🍽️ Manage Recipes (${db.listRecipes({ status: null }).length}${pendingCount ? `, ${pendingCount} pending` : ''})</a></div>
@@ -3169,6 +3209,21 @@ async function handleAdminStrainDelete(req, res, id) {
   redirect(res, '/admin/strains');
 }
 
+// Shared row renderer for a pending recipe, used both on the dedicated
+// Manage Recipes page and the unified admin Inbox, so a pending recipe
+// looks and behaves identically no matter which page it's reviewed from.
+function renderPendingRecipeRow(r) {
+  return `
+    <div class="admin-row" style="flex-direction:column;align-items:stretch;">
+      <b>${esc(r.title)}</b> <span class="empty-note">by ${esc(r.author || 'Anonymous')} · ${esc(r.category || '')}</span>
+      <p class="empty-note">${esc(r.desc)}</p>
+      <div class="actions">
+        <a href="/admin/recipes/${r.id}/edit" class="btn secondary" style="text-decoration:none;">Edit</a>
+        <form method="POST" action="/admin/recipes/${r.id}/approve" style="display:inline;"><button class="btn" type="submit">Approve</button></form>
+        <form method="POST" action="/admin/recipes/${r.id}/delete" style="display:inline;" onsubmit="return confirm('Reject and delete?')"><button class="btn danger" style="color:#fff;" type="submit">Reject</button></form>
+      </div>
+    </div>`;
+}
 function pageAdminRecipes(req, res) {
   if (!requireAdmin(req, res)) return;
   const pending = db.listRecipes({ status: 'pending' });
@@ -3192,16 +3247,7 @@ function pageAdminRecipes(req, res) {
         <button class="btn block" type="submit">Add Recipe (published immediately)</button>
       </form>
     </div>
-    ${pending.length ? `<h2 class="screen-title">Pending review (${pending.length})</h2>` + pending.map(r => `
-      <div class="admin-row" style="flex-direction:column;align-items:stretch;">
-        <b>${esc(r.title)}</b> <span class="empty-note">by ${esc(r.author || 'Anonymous')} · ${esc(r.category || '')}</span>
-        <p class="empty-note">${esc(r.desc)}</p>
-        <div class="actions">
-          <a href="/admin/recipes/${r.id}/edit" class="btn secondary" style="text-decoration:none;">Edit</a>
-          <form method="POST" action="/admin/recipes/${r.id}/approve" style="display:inline;"><button class="btn" type="submit">Approve</button></form>
-          <form method="POST" action="/admin/recipes/${r.id}/delete" style="display:inline;" onsubmit="return confirm('Reject and delete?')"><button class="btn danger" style="color:#fff;" type="submit">Reject</button></form>
-        </div>
-      </div>`).join('') : ''}
+    ${pending.length ? `<h2 class="screen-title">Pending review (${pending.length})</h2>` + pending.map(renderPendingRecipeRow).join('') : ''}
     <h2 class="screen-title">All recipes</h2>
     ${all.map(r => `
       <div class="admin-row">
@@ -3275,21 +3321,26 @@ async function handleAdminRecipeDelete(req, res, id) {
 // Grow tip review queue -- same shape as recipe review: pending tips wait
 // here until approved, only then do they show up on the public Growing
 // page (see listGrowTips's default status='approved' filter).
+// Shared row renderer for a pending grow tip -- same reasoning as
+// renderPendingRecipeRow above.
+function renderPendingGrowTipRow(g) {
+  return `
+    <div class="admin-row" style="flex-direction:column;align-items:stretch;">
+      <b>${esc(g.title)}</b> <span class="empty-note">by ${esc(g.author || 'Anonymous')} · ${esc(g.category)}</span>
+      <p class="empty-note">${esc(g.body)}</p>
+      <div class="actions">
+        <form method="POST" action="/admin/grow-tips/${g.id}/approve" style="display:inline;"><button class="btn" type="submit">Approve</button></form>
+        <form method="POST" action="/admin/grow-tips/${g.id}/delete" style="display:inline;" onsubmit="return confirm('Reject and delete?')"><button class="btn danger" style="color:#fff;" type="submit">Reject</button></form>
+      </div>
+    </div>`;
+}
 function pageAdminGrowTips(req, res) {
   if (!requireAdmin(req, res)) return;
   const pending = db.listGrowTips({ status: 'pending' });
   const all = db.listGrowTips({ status: null });
   const body = `
     <h1 class="screen-title">Manage Grow Tips</h1>
-    ${pending.length ? `<h2 class="screen-title">Pending review (${pending.length})</h2>` + pending.map(g => `
-      <div class="admin-row" style="flex-direction:column;align-items:stretch;">
-        <b>${esc(g.title)}</b> <span class="empty-note">by ${esc(g.author || 'Anonymous')} · ${esc(g.category)}</span>
-        <p class="empty-note">${esc(g.body)}</p>
-        <div class="actions">
-          <form method="POST" action="/admin/grow-tips/${g.id}/approve" style="display:inline;"><button class="btn" type="submit">Approve</button></form>
-          <form method="POST" action="/admin/grow-tips/${g.id}/delete" style="display:inline;" onsubmit="return confirm('Reject and delete?')"><button class="btn danger" style="color:#fff;" type="submit">Reject</button></form>
-        </div>
-      </div>`).join('') : `<div class="empty-note">No pending grow tips.</div>`}
+    ${pending.length ? `<h2 class="screen-title">Pending review (${pending.length})</h2>` + pending.map(renderPendingGrowTipRow).join('') : `<div class="empty-note">No pending grow tips.</div>`}
     <h2 class="screen-title" style="margin-top:20px;">All grow tips (${all.length})</h2>
     ${all.map(g => `
       <div class="admin-row">
@@ -3503,8 +3554,8 @@ function pageTerms(req, res) {
       <p><b>2. Eligibility.</b> The Service is intended solely for adults 21 and older. By creating an account, you represent that you're at least 21 and that your use of the Service complies with the laws of your jurisdiction. We don't verify the legal status of cannabis where you live — that's on you.</p>
       <p><b>3. What StrainDex is.</b> StrainDex is a personal cannabis journal and informational reference app: check-ins, a strain library, community recipes and growing tips, and a dispensary locator. StrainDex does not sell, deliver, broker, or otherwise facilitate the purchase or transfer of cannabis or cannabis products, and nothing in the app is a marketplace or point of sale.</p>
       <p><b>4. Accounts.</b> You're responsible for keeping your credentials confidential and for all activity under your account. Provide accurate registration information. One account per person — accounts can't be sold, transferred, or shared. We can suspend or terminate accounts that violate these Terms, engage in fraud, or misrepresent age or eligibility.</p>
-      <p><b>5. Your content.</b> You keep ownership of what you submit — check-ins, notes, tasting notes, photos, ratings, pairings. By submitting it, you give StrainDex permission to host, store, and display it within the app. You confirm you have the rights to anything you upload.</p>
-      <p><b>6. Community-submitted content.</b> Recipes and growing tips are reviewed before publishing, but this is a basic appropriateness check, not a professional or medical certification. Dosing suggestions and techniques reflect individual contributors' opinions, not StrainDex's. You take on the risk of following any community-submitted instructions, especially around dosing.</p>
+      <p><b>5. Your content.</b> You keep ownership of what you submit — check-ins, notes, tasting notes, photos, ratings, pairings, recipes, grow tips, feedback, and strain suggestions. By submitting it, you give StrainDex permission to host, store, and display it within the app. You confirm you have the rights to anything you upload.</p>
+      <p><b>6. Community-submitted content.</b> Recipes, growing tips, and suggested strains are reviewed before publishing, but this is a basic appropriateness check, not a professional or medical certification. Dosing suggestions and techniques reflect individual contributors' opinions, not StrainDex's. You take on the risk of following any community-submitted instructions, especially around dosing.</p>
       <p><b>7. Prohibited conduct.</b> Don't: break applicable law; harass or threaten other users; upload content that infringes someone else's rights; misrepresent your age; scrape or reverse-engineer the Service; or use StrainDex to actually sell, buy, or distribute cannabis or any controlled substance.</p>
       <p><b>8. Not medical advice.</b> Strain effects, THC/CBD percentages, and terpene info come from user reports and published third-party sources, and may not reflect the actual composition of anything you encounter. Nothing here is medical advice or intended to diagnose, treat, cure, or prevent any condition. Talk to a healthcare provider about your own situation.</p>
       <p><b>9. Third-party services.</b> Dispensary information comes from third-party data providers and may be incomplete, outdated, or wrong. We don't verify dispensary licensing, inventory, pricing, or hours — always confirm with the dispensary directly.</p>
@@ -3529,10 +3580,10 @@ function pagePrivacy(req, res) {
     <p class="empty-note">Last updated: ${new Date().toISOString().slice(0, 10)}. This expanded draft is currently being reviewed by an attorney and may change before it's finalized, particularly around jurisdiction-specific requirements (CCPA, GDPR, etc.).</p>
     <div class="card">
       <p><b>1. Overview.</b> This explains what StrainDex collects, how it's used, and your choices. We collect only what's needed to run the app and don't sell personal information to advertisers or data brokers.</p>
-      <p><b>2. What we collect.</b> Account info (username, email, a securely hashed password, birth date to confirm age). User content (check-ins, tasting notes, food/drink/entertainment/activity pairings, photos, recipes, grow tips). Location, only when you use "find dispensaries near me" — not stored after the search. Basic technical/error logs. A single first-party session cookie to keep you logged in — no third-party ad-tracking cookies.</p>
-      <p><b>3. How we use it.</b> To run check-ins, the strain library, recipes, growing tips, dispensary search, and friends features; to keep your account secure; to send account emails like password resets; to respond to feedback you submit; to fix bugs through error monitoring; and to generate aggregate, non-identifying usage stats.</p>
+      <p><b>2. What we collect.</b> Account info (username, first and last name, email, a securely hashed password, birth date to confirm age). User content (check-ins, tasting notes, pairings you log with a check-in, photos, recipes, grow tips, feedback, and any strain you suggest we add). Location, only when you use "find dispensaries near me" — not stored after the search. Basic technical/error logs. A single first-party session cookie to keep you logged in — no third-party ad-tracking cookies.</p>
+      <p><b>3. How we use it.</b> To run check-ins, the strain library, recipes, growing tips, dispensary search, and friends features; to keep your account secure; to send account emails like password resets; to respond to feedback and strain suggestions you submit; to fix bugs through error monitoring; and to generate aggregate, non-identifying usage stats.</p>
       <p><b>4. Who we share it with.</b> We don't sell your data. We use service providers who each process data only to provide their service to us: our database host, our app host, our photo storage provider, our transactional email provider, our error-monitoring provider, and a dispensary-location lookup service. We may also disclose information if required by law.</p>
-      <p><b>5. How long we keep it.</b> As long as your account is active. If you delete your account, your personal data is removed; any recipe or grow tip you shared publicly stays up but is reattributed to "Former user."</p>
+      <p><b>5. How long we keep it.</b> As long as your account is active. If you delete your account, your personal data is removed, including any feedback and strain suggestions you submitted; any recipe or grow tip you shared publicly stays up but is reattributed to "Former user."</p>
       <p><b>6. Your rights.</b> Export your data or permanently delete your account anytime from Account Settings. Update your info directly in the app.</p>
       <p><b>7. Not for minors.</b> The Service is for adults 21+ only and isn't directed at children. We don't knowingly collect data from anyone under 21.</p>
       <p><b>8. Security.</b> We use industry-standard measures — hashed passwords, encrypted connections — but no method of transmission or storage is perfectly secure.</p>
@@ -4632,6 +4683,7 @@ const server = http.createServer(async (req, res) => {
     if (method === 'GET' && pathname === '/friends-picks') return pageFriendsPicks(req, res);
     if (method === 'GET' && pathname === '/year-in-review') return pageYearInReview(req, res);
     if (method === 'GET' && pathname === '/admin/strain-submissions') return pageAdminStrainSubmissions(req, res);
+    if (method === 'GET' && pathname === '/admin/inbox') return pageAdminInbox(req, res);
     if (method === 'POST' && (m = pathname.match(/^\/admin\/strain-submissions\/(\d+)\/reviewed$/))) return await handleAdminStrainSubmissionReviewed(req, res, m[1]);
     if (method === 'GET' && pathname === '/lists') return pageLists(req, res);
     if (method === 'POST' && pathname === '/lists') return await handleListCreate(req, res);
