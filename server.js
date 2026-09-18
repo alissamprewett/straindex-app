@@ -420,9 +420,13 @@ function pageHome(req, res) {
   // actually logged a check-in of its own before deciding which greeting
   // to show.
   const isFirstVisit = db.listCheckins({ userId, limit: 1 }).length === 0;
+  const streak = isFirstVisit ? { current: 0, longest: 0 } : db.getCheckinStreak(userId);
 
   const body = `
-    <h1 class="screen-title">${isFirstVisit ? 'Welcome to StrainDex 🌿' : 'Welcome back 🌿'}</h1>
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+      <h1 class="screen-title" style="margin-bottom:0;">${isFirstVisit ? 'Welcome to StrainDex 🌿' : 'Welcome back 🌿'}</h1>
+      ${streak.current > 0 ? `<a href="/insights" class="filter-pill" style="text-decoration:none;white-space:nowrap;">🔥 ${streak.current}-day streak</a>` : ''}
+    </div>
     <p class="screen-sub">Your personal cannabis companion — check-ins, discovery, safety info, and your friends, all in one place.</p>
     <a class="btn block" href="/checkin" style="margin-bottom:18px;">🌿 Light It Up</a>
 
@@ -2693,9 +2697,23 @@ function pageInsights(req, res) {
   if (userId == null) return;
   const insights = db.getUserInsights(userId);
   const activeBreak = db.getActiveBreak(userId);
+  const streak = db.getCheckinStreak(userId);
   const daysSince = (dateStr) => Math.max(0, Math.floor((Date.now() - new Date(dateStr + 'Z').getTime()) / 86400000));
   const body = `
     <h1 class="screen-title">Your Patterns</h1>
+    ${streak.current > 0 ? `
+      <div class="card" style="margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;">
+        <div>
+          <div style="font-size:20px;font-weight:700;">🔥 ${streak.current}-day streak</div>
+          <div class="empty-note" style="padding:2px 0 0;">${streak.longest > streak.current ? `Best ever: ${streak.longest} days` : "That's your best streak yet!"}</div>
+        </div>
+        <div style="font-size:32px;">🔥</div>
+      </div>
+    ` : streak.longest > 0 && !activeBreak ? `
+      <div class="card" style="margin-bottom:14px;">
+        <div class="empty-note" style="padding:0;">Your streak reset — log a check-in today to start a new one. Best so far: <b>${streak.longest} day${streak.longest === 1 ? '' : 's'}</b>.</div>
+      </div>
+    ` : ''}
     <div class="card" style="margin-bottom:14px;">
       <h2 style="margin:0 0 8px;font-size:15px;">🌿 Tolerance break</h2>
       ${activeBreak ? `
