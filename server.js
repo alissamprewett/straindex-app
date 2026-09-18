@@ -143,6 +143,19 @@ function requireUser(req, res) {
   return id;
 }
 const MIN_AGE = 21;
+// The one, real, branded domain -- used for every outbound link this app
+// generates (shared check-ins, invite links, recap links, password reset
+// emails, admin notification emails), rather than building the origin
+// dynamically from req.headers.host. Deliberately hardcoded rather than
+// derived per-request: this app is deployed on Render, which also exposes
+// its own *.onrender.com hostname alongside the custom domain, and
+// req.headers.host reflects whichever hostname actually served that
+// particular request. A link generated from a request that happened to
+// arrive on the Render-assigned hostname would silently leak that
+// internal URL to whoever it's shared with, instead of the clean, correct
+// domain people actually expect to see and click. Update this in exactly
+// one place if the domain ever changes.
+const SITE_URL = 'https://www.strain-dex.com';
 // A real, monitored contact point beyond the feedback form -- for
 // anything urgent (account issues, a bad actor, a safety/legal concern)
 // that shouldn't sit in a general feedback queue. Using a Gmail "+" alias
@@ -812,8 +825,7 @@ function pageSharedCheckin(req, res, id) {
   const s = db.getStrain(c.strain_id);
   const poster = db.getUserById(c.user_id);
   const posterName = poster ? poster.username : 'Someone';
-  const proto = req.headers['x-forwarded-proto'] || 'https';
-  const origin = `${proto}://${req.headers.host}`;
+  const origin = SITE_URL;
   const pageUrl = `${origin}/c/${c.id}`;
   const imageUrl = c.photo || (s ? `${origin}${strainPhotoUrl(s)}` : `${origin}/icons/icon-512.png`);
 
@@ -2951,8 +2963,7 @@ function pageRecap(req, res, query) {
   const currentYear = new Date().getUTCFullYear();
   const requestedYear = Number(query.get('year')) || currentYear;
   const recap = db.getYearInReview(userId, requestedYear);
-  const proto = req.headers['x-forwarded-proto'] || 'https';
-  const shareUrl = recap ? `${proto}://${req.headers.host}/recap/s/${makeRecapCode(userId, requestedYear)}` : null;
+  const shareUrl = recap ? `${SITE_URL}/recap/s/${makeRecapCode(userId, requestedYear)}` : null;
 
   const body = `
     <h1 class="screen-title">Your Year in StrainDex</h1>
@@ -2979,8 +2990,7 @@ function pageSharedRecap(req, res, code) {
   const user = db.getUserById(resolved.userId);
   const recap = user ? db.getYearInReview(resolved.userId, resolved.year) : null;
   if (!user || !recap) return notFound(res);
-  const proto = req.headers['x-forwarded-proto'] || 'https';
-  const pageUrl = `${proto}://${req.headers.host}/recap/s/${code}`;
+  const pageUrl = `${SITE_URL}/recap/s/${code}`;
 
   const body = `
     <h1 class="screen-title">${esc(user.username)}'s ${resolved.year} in StrainDex</h1>
@@ -3065,7 +3075,7 @@ async function handleFeedbackSubmit(req, res) {
       subject: `StrainDex feedback from ${user ? user.username : 'a user'}`,
       html: `<p><b>${esc(user ? user.username : 'Unknown user')}</b> (${user && user.email ? esc(user.email) : 'no email on file'}) sent this feedback:</p>
         <p style="white-space:pre-wrap;">${esc(message)}</p>
-        <p><a href="https://${req.headers.host}/admin/feedback">View all feedback in the admin panel</a></p>`,
+        <p><a href="${SITE_URL}/admin/feedback">View all feedback in the admin panel</a></p>`,
     });
   }
 
@@ -3097,7 +3107,7 @@ async function handleForgotPasswordSubmit(req, res) {
   // is its own small privacy leak, so this path stays silent either way.
   if (user) {
     const token = await db.createPasswordResetToken(user.id);
-    const resetUrl = `${req.headers['x-forwarded-proto'] || 'https'}://${req.headers.host}/reset-password?token=${token}`;
+    const resetUrl = `${SITE_URL}/reset-password?token=${token}`;
     await sendEmail({
       to: email,
       subject: 'Reset your StrainDex password',
@@ -3925,8 +3935,7 @@ function pageFriends(req, res, query) {
   const friends = db.listFriends(userId);
   const incoming = db.listIncomingRequests(userId);
   const outgoing = db.listOutgoingRequests(userId);
-  const proto = req.headers['x-forwarded-proto'] || 'https';
-  const inviteUrl = `${proto}://${req.headers.host}/invite/${makeInviteCode(userId)}`;
+  const inviteUrl = `${SITE_URL}/invite/${makeInviteCode(userId)}`;
 
   const body = `
     <h1 class="screen-title">Friends</h1>
