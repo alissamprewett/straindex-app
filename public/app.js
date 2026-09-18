@@ -112,6 +112,58 @@ async function shareCheckin(id, strainName) {
   window.prompt('Copy this link:', url);
 }
 
+// Shares a person's personal invite link (see makeInviteCode/pageInviteLink
+// in server.js). Same share-then-copy-then-prompt fallback chain as
+// shareCheckin, just with the URL supplied directly by the page rather
+// than built from an id, since the link itself never changes for a given
+// account.
+async function shareInviteLink(url) {
+  if (navigator.share) {
+    try {
+      await navigator.share({ title: 'Join me on StrainDex', url });
+    } catch (e) {
+      // User cancelled the native share sheet -- not an error, no toast.
+    }
+    return;
+  }
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    try {
+      await navigator.clipboard.writeText(url);
+      toast('Invite link copied!');
+      return;
+    } catch (e) {
+      // Clipboard permission denied or unavailable -- fall through to prompt.
+    }
+  }
+  window.prompt('Copy this link:', url);
+}
+
+// Generic "share this link" action -- same share-then-copy-then-prompt
+// fallback chain as shareCheckin/shareInviteLink, just not tied to a
+// specific kind of URL (used by the recap page's share button). Those two
+// stay as their own functions since their callers build the URL from just
+// an id rather than being handed a full one already.
+async function shareLink(url, title) {
+  if (navigator.share) {
+    try {
+      await navigator.share({ title: title || 'StrainDex', url });
+    } catch (e) {
+      // User cancelled the native share sheet -- not an error, no toast.
+    }
+    return;
+  }
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    try {
+      await navigator.clipboard.writeText(url);
+      toast('Link copied!');
+      return;
+    } catch (e) {
+      // Clipboard permission denied or unavailable -- fall through to prompt.
+    }
+  }
+  window.prompt('Copy this link:', url);
+}
+
 async function giveCheckinKudos(id, btn) {
   const res = await fetch(`/api/checkins/${id}/kudos`, { method: 'POST' });
   if (res.ok) {

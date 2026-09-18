@@ -232,7 +232,7 @@ function renderKudosButton(c, userId) {
 function renderShareButton(c) {
   if (c.is_private) return '';
   const strain = db.getStrain(c.strain_id);
-  return `<button type="button" class="btn secondary" style="padding:4px 10px;font-size:12px;" onclick="shareCheckin(${c.id}, ${JSON.stringify(strain ? strain.name : 'this strain')})">🔗 Share</button>`;
+  return `<button type="button" class="btn secondary" style="padding:4px 10px;font-size:12px;" onclick="shareCheckin(${c.id}, ${esc(JSON.stringify(strain ? strain.name : 'this strain'))})">🔗 Share</button>`;
 }
 function renderCheckinComments(c, userId, redirectPath) {
   const comments = db.listCheckinComments(c.id, userId);
@@ -654,7 +654,7 @@ function pageStrainDetail(req, res, id) {
         <button type="button" onclick="closeShareModal()" aria-label="Close" style="position:absolute;top:10px;right:12px;background:none;border:none;font-size:18px;cursor:pointer;color:var(--ink-secondary);">✕</button>
         <h3 style="margin:0 0 12px;font-size:16px;">Share ${esc(s.name)}</h3>
         <button type="button" class="btn secondary block" onclick="copyShareLink()" style="margin-bottom:8px;">🔗 Copy link</button>
-        <button type="button" class="btn secondary block" id="native-share-btn" onclick="nativeShare(${JSON.stringify(s.name)})" style="display:none;margin-bottom:8px;">📤 Share via...</button>
+        <button type="button" class="btn secondary block" id="native-share-btn" onclick="nativeShare(${esc(JSON.stringify(s.name))})" style="display:none;margin-bottom:8px;">📤 Share via...</button>
         ${userId != null && db.listFriends(userId).length ? `
           <label class="field-label" style="margin-top:14px;">Send to a friend</label>
           <form method="POST" action="/strains/${s.id}/share" id="share-friend-form" style="display:flex;gap:8px;" onsubmit="return validateShareForm(event)">
@@ -1575,6 +1575,7 @@ function handleAdminLogout(req, res) {
 function pageSignup(req, res, query) {
   const err = query.get('err');
   const deleted = query.get('deleted');
+  const invitedBy = query.get('invited_by');
   const errMessages = {
     taken: 'That username is already taken.',
     age: `You must be ${MIN_AGE} or older to create an account.`,
@@ -1587,6 +1588,7 @@ function pageSignup(req, res, query) {
   const body = `
     <h1 class="screen-title">Create an Account</h1>
     <p class="screen-sub">You must be ${MIN_AGE}+ to use StrainDex.</p>
+    ${invitedBy ? `<p class="empty-note" style="color:var(--brand-green-dark);font-weight:700;">🌿 ${esc(invitedBy)} invited you to StrainDex — sign up and you'll be connected as friends automatically.</p>` : ''}
     ${deleted ? `<p class="empty-note" style="color:var(--brand-green-dark);">Your account and data have been deleted.</p>` : ''}
     ${err && errMessages[err] ? `<p style="color:#a13a3a;">${esc(errMessages[err])}</p>` : ''}
     <a href="/auth/google" class="btn secondary block" style="text-decoration:none;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:14px;">
@@ -1764,6 +1766,55 @@ function pageGoogleFinish(req, res, query) {
   sendHtml(res, layout({ title: 'Finish Signing Up', body }));
 }
 
+// Invite links -- a personal, stateless referral link per user
+// ("/invite/<signed-code>"). Deliberately not a new database table: the
+// code is just the inviter's id run through the same HMAC sign/verify
+// helper already used for the Google OAuth state cookie and the admin
+// session, so there's no schema change and no expiry to track -- a
+// person's invite link keeps working for as long as their account does.
+// Landing on the link doesn't create a friendship by itself (the visitor
+// might already have an account, or might just bounce) -- see
+// pageInviteLink and completePendingInvite for the two different paths
+// that can actually result in one.
+function makeInviteCode(userId) {
+  return auth.sign(`invite:${userId}`);
+}
+function resolveInviteCode(code) {
+  const value = auth.verify(code);
+  if (!value || !value.startsWith('invite:')) return null;
+  const id = Number(value.slice('invite:'.length));
+  return Number.isFinite(id) ? id : null;
+}
+// Reads the pending_invite cookie set by pageInviteLink and, if it's
+// present and still resolves to a real user, creates an already-accepted
+// friendship between the inviter and the account that just finished
+// signing up. Composed from the existing request/accept primitives rather
+// than a new "force-friend" db function, so the accepted-friendship logic
+// itself isn't duplicated anywhere. Called once, right after a signup
+// actually completes (password-based or Google) -- clicking an invite
+// link alone is never enough on its own, only finishing signup through it
+// is. Failures here (blocked, self-invite, a garbled cookie) are swallowed
+// on purpose -- a broken invite must never be the reason a real signup
+// fails.
+async function completePendingInvite(req, newUserId) {
+  const cookies = auth.parseCookies(req);
+  const raw = cookies.pending_invite;
+  if (!raw) return;
+  const inviterId = Number(decodeURIComponent(raw));
+  if (!Number.isFinite(inviterId) || inviterId === newUserId) return;
+  if (!db.getUserById(inviterId)) return;
+  try {
+    await db.sendFriendRequest(inviterId, newUserId);
+    await db.respondToFriendRequest(newUserId, inviterId, true);
+  } catch (e) {
+    // Blocked, or some other edge case -- never let this fail the signup itself.
+  }
+}
+// The clear-cookie fragment for pending_invite, meant to be appended to
+// whatever Set-Cookie array a signup handler is already sending alongside
+// the new user_session cookie -- see the two call sites.
+const CLEAR_PENDING_INVITE_COOKIE = 'pending_invite=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0';
+
 async function handleGoogleFinishSubmit(req, res) {
   const cookies = auth.parseCookies(req);
   const raw = auth.verify(cookies.google_pending);
@@ -1775,10 +1826,12 @@ async function handleGoogleFinishSubmit(req, res) {
   if (!isOldEnough(f.birth_date)) return redirect(res, '/auth/google/finish?err=age');
   if (db.getUserByUsername(username)) return redirect(res, '/auth/google/finish?err=taken');
   const user = await db.createUserFromGoogle({ username, birth_date: f.birth_date, email: profile.email, google_id: profile.sub });
+  await completePendingInvite(req, user.id);
   const token = auth.signUserSessionValue(user.id);
   res.setHeader('Set-Cookie', [
     `user_session=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000`,
     `google_pending=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0`,
+    CLEAR_PENDING_INVITE_COOKIE,
   ]);
   redirect(res, '/onboarding');
 }
@@ -1795,10 +1848,48 @@ async function handleSignupSubmit(req, res) {
   if (db.getUserByUsername(username)) return redirect(res, '/signup?err=taken');
   if (db.getUserByEmail(email)) return redirect(res, '/signup?err=email_taken');
   const user = await db.createUser({ username, password: f.password, birth_date: f.birth_date, email });
+  await completePendingInvite(req, user.id);
   const token = auth.signUserSessionValue(user.id);
-  res.setHeader('Set-Cookie', `user_session=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000`);
+  res.setHeader('Set-Cookie', [
+    `user_session=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000`,
+    CLEAR_PENDING_INVITE_COOKIE,
+  ]);
   redirect(res, '/onboarding');
 }
+
+// The public landing spot for a personal invite link (see makeInviteCode).
+// Three outcomes depending on who's clicking it:
+//   1. Garbled/invalid code -- fails open to a normal signup rather than
+//      an error page; whoever clicked it still ends up somewhere useful.
+//   2. Already logged in -- skip the signup detour entirely and just send
+//      a friend request directly (same effect as typing their username
+//      into Friends search). Not auto-accepted in this branch, unlike
+//      outcome 3 below -- silently friending two already-existing accounts
+//      without either side confirming isn't the same narrow exception a
+//      brand-new signup through the link is.
+//   3. Not logged in -- stash the inviter in a short-lived cookie and send
+//      them to signup; completePendingInvite() picks it up if signup
+//      actually goes through.
+async function pageInviteLink(req, res, code) {
+  const inviterId = resolveInviteCode(code);
+  const inviter = inviterId != null ? db.getUserById(inviterId) : null;
+  if (!inviter) return redirect(res, '/signup');
+
+  const viewerId = auth.currentUserId(req);
+  if (viewerId != null) {
+    if (viewerId !== inviterId) {
+      try { await db.sendFriendRequest(viewerId, inviterId); } catch (e) { /* self/blocked -- nothing to show for it */ }
+    }
+    return redirect(res, '/friends');
+  }
+
+  // An hour is long enough to actually fill out the signup form, short
+  // enough that a stale cookie from a much earlier visit doesn't quietly
+  // attach itself to some unrelated later signup on the same device.
+  res.setHeader('Set-Cookie', `pending_invite=${encodeURIComponent(String(inviterId))}; Path=/; HttpOnly; SameSite=Lax; Max-Age=3600`);
+  redirect(res, `/signup?invited_by=${encodeURIComponent(inviter.username)}`);
+}
+
 function pageLogin(req, res, query) {
   const err = query.get('err');
   const errMessages = {
@@ -2762,6 +2853,125 @@ function pageInsights(req, res) {
   sendHtml(res, layout({ title: 'Your Patterns', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
+// Shared rendering for both the private recap page and its public share
+// link -- the data (from db.getYearInReview) is identical either way, only
+// the surrounding chrome (signup CTA vs. a "share yours" button, private
+// vs. public layout()) differs between the two callers.
+function renderRecapBody(recap, { longestStreak } = {}) {
+  return `
+    <div class="card" style="text-align:center;background:linear-gradient(135deg,#123a24,#1b5e3a);color:#fff;border:none;">
+      <div style="font-size:12px;opacity:.85;letter-spacing:.5px;text-transform:uppercase;">${recap.year} Year in Review</div>
+      <div style="font-size:44px;font-weight:800;margin:6px 0 2px;">${recap.totalCheckins}</div>
+      <div style="font-size:13px;opacity:.9;">check-in${recap.totalCheckins === 1 ? '' : 's'} logged</div>
+    </div>
+    <div class="collection-stats" style="margin-top:14px;">
+      <div class="stat-tile"><div class="num">${recap.uniqueStrains}</div><div class="lbl">Unique strains</div></div>
+      <div class="stat-tile"><div class="num">${recap.totalKudos}</div><div class="lbl">Kudos received</div></div>
+      ${longestStreak != null ? `<div class="stat-tile"><div class="num">${longestStreak}</div><div class="lbl">Longest streak</div></div>` : ''}
+    </div>
+    ${recap.topEffects.length ? `
+      <div class="card" style="margin-top:14px;">
+        <h2 style="margin:0 0 8px;font-size:15px;">Most common effects</h2>
+        <p>${recap.topEffects.map(e => `<span class="filter-pill">${esc(e.name)} (${e.count})</span>`).join('')}</p>
+      </div>
+    ` : ''}
+    <div class="card" style="margin-top:12px;">
+      <h2 style="margin:0 0 8px;font-size:15px;">Leanings</h2>
+      ${recap.topType ? `<p class="empty-note" style="padding:2px 0;">Gravitated toward <b>${esc(recap.topType.name)}</b> strains (${recap.topType.count} check-in${recap.topType.count === 1 ? '' : 's'}).</p>` : ''}
+      ${recap.topMethod ? `<p class="empty-note" style="padding:2px 0;">Most-used method: <b>${esc(recap.topMethod.name)}</b>.</p>` : ''}
+      ${recap.topTerpene ? `<p class="empty-note" style="padding:2px 0;">Leaned heaviest on <b>${esc(recap.topTerpene)}</b> as a terpene.</p>` : ''}
+    </div>
+    ${recap.mostLoggedStrain ? `
+      <a class="library-row" href="/strains/${recap.mostLoggedStrain.strain.id}" style="text-decoration:none;color:inherit;margin-top:12px;">
+        ${strainPhotoTag(recap.mostLoggedStrain.strain, 'sm')}
+        <div class="info">
+          <div class="nm">Most logged: ${esc(recap.mostLoggedStrain.strain.name)}</div>
+          <div class="sub">${recap.mostLoggedStrain.count} check-in${recap.mostLoggedStrain.count === 1 ? '' : 's'}</div>
+        </div>
+      </a>` : ''}
+    ${recap.topRatedStrain ? `
+      <a class="library-row" href="/strains/${recap.topRatedStrain.strain.id}" style="text-decoration:none;color:inherit;margin-top:8px;">
+        ${strainPhotoTag(recap.topRatedStrain.strain, 'sm')}
+        <div class="info">
+          <div class="nm">Highest rated: ${esc(recap.topRatedStrain.strain.name)}</div>
+          <div class="sub">${starString(Math.round(recap.topRatedStrain.avg))} (${recap.topRatedStrain.avg}★ average)</div>
+        </div>
+      </a>` : ''}
+  `;
+}
+
+// Stateless share codes for a recap, same pattern as makeInviteCode --
+// signs (userId, year) together rather than just userId, since a recap
+// link is specific to one particular year, not "whatever year it is now."
+function makeRecapCode(userId, year) {
+  return auth.sign(`recap:${userId}:${year}`);
+}
+function resolveRecapCode(code) {
+  const value = auth.verify(code);
+  if (!value || !value.startsWith('recap:')) return null;
+  const [userIdStr, yearStr] = value.slice('recap:'.length).split(':');
+  const userId = Number(userIdStr);
+  const year = Number(yearStr);
+  if (!Number.isFinite(userId) || !Number.isFinite(year)) return null;
+  return { userId, year };
+}
+
+function pageRecap(req, res, query) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const currentYear = new Date().getUTCFullYear();
+  const requestedYear = Number(query.get('year')) || currentYear;
+  const recap = db.getYearInReview(userId, requestedYear);
+  const proto = req.headers['x-forwarded-proto'] || 'https';
+  const shareUrl = recap ? `${proto}://${req.headers.host}/recap/s/${makeRecapCode(userId, requestedYear)}` : null;
+
+  const body = `
+    <h1 class="screen-title">Your Year in StrainDex</h1>
+    ${!recap ? `
+      <div class="empty-note">No check-ins logged in ${requestedYear} yet.${requestedYear === currentYear ? ' Come back once you have a few check-ins to see your recap.' : ''}</div>
+      ${requestedYear > 2024 ? `<a href="/recap?year=${requestedYear - 1}" class="empty-note" style="display:block;margin-top:8px;">See ${requestedYear - 1} instead →</a>` : ''}
+    ` : `
+      ${renderRecapBody(recap, { longestStreak: db.getCheckinStreak(userId).longest })}
+      <button type="button" class="btn block" style="margin-top:14px;" onclick="shareLink(${esc(JSON.stringify(shareUrl))}, ${esc(JSON.stringify(`My ${requestedYear} in StrainDex`))})">🔗 Share your recap</button>
+      ${requestedYear > 2024 ? `<a href="/recap?year=${requestedYear - 1}" class="empty-note" style="display:block;margin-top:10px;text-align:center;">See ${requestedYear - 1} instead →</a>` : ''}
+    `}
+  `;
+  sendHtml(res, layout({ title: 'Your Year in StrainDex', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
+}
+
+// Public, read-only, unauthenticated view of someone else's recap -- same
+// data shape as pageRecap, just resolved from a signed (userId, year) code
+// instead of the current session, and framed with a signup pitch instead
+// of the "share yours" button. Carries OG tags so it unfurls with real
+// numbers rather than a bare link when posted externally.
+function pageSharedRecap(req, res, code) {
+  const resolved = resolveRecapCode(code);
+  if (!resolved) return notFound(res);
+  const user = db.getUserById(resolved.userId);
+  const recap = user ? db.getYearInReview(resolved.userId, resolved.year) : null;
+  if (!user || !recap) return notFound(res);
+  const proto = req.headers['x-forwarded-proto'] || 'https';
+  const pageUrl = `${proto}://${req.headers.host}/recap/s/${code}`;
+
+  const body = `
+    <h1 class="screen-title">${esc(user.username)}'s ${resolved.year} in StrainDex</h1>
+    ${renderRecapBody(recap, { longestStreak: db.getCheckinStreak(resolved.userId).longest })}
+    <div class="card" style="margin-top:14px;text-align:center;">
+      <p style="margin:0 0 10px;font-weight:700;">Track your own strains, effects, and check-ins.</p>
+      <a href="/signup" class="btn block" style="text-decoration:none;">Create Free Account</a>
+      <p class="empty-note" style="margin-top:8px;">Already have an account? <a href="/login">Log in</a></p>
+    </div>
+  `;
+  sendHtml(res, layout({
+    title: `${user.username}'s ${resolved.year} in StrainDex`,
+    body,
+    showBack: false,
+    ogTitle: `${user.username}'s ${resolved.year} in StrainDex 🌿`,
+    ogDescription: `${recap.totalCheckins} check-in${recap.totalCheckins === 1 ? '' : 's'}, ${recap.uniqueStrains} unique strain${recap.uniqueStrains === 1 ? '' : 's'}${recap.topType ? `, mostly ${recap.topType.name}` : ''}.`,
+    ogUrl: pageUrl,
+  }));
+}
+
 async function handleToleranceBreakStart(req, res) {
   const userId = requireUser(req, res);
   if (userId == null) return;
@@ -3336,6 +3546,7 @@ function pageMore(req, res) {
         { href: '/grow-journal', icon: '📔', t: 'Grow Journal', s: 'Your private plant photo log' },
         { href: '/history', icon: '🕐', t: 'Check-In History', s: 'Your full timeline' },
         { href: '/insights', icon: '📊', t: 'Your Patterns', s: 'What your check-ins say about you' },
+        { href: '/recap', icon: '🎉', t: 'Your Year in Review', s: 'A shareable recap of your year' },
         { href: '/insights', icon: '🌿', t: 'Tolerance Break', s: 'Start, track, or end a break' },
       ],
     },
@@ -3670,10 +3881,20 @@ function pageFriends(req, res, query) {
   const friends = db.listFriends(userId);
   const incoming = db.listIncomingRequests(userId);
   const outgoing = db.listOutgoingRequests(userId);
+  const proto = req.headers['x-forwarded-proto'] || 'https';
+  const inviteUrl = `${proto}://${req.headers.host}/invite/${makeInviteCode(userId)}`;
 
   const body = `
     <h1 class="screen-title">Friends</h1>
     <p class="screen-sub">Find people by username, then trade dupes once you're connected.</p>
+    <div class="card" style="margin-bottom:14px;">
+      <b style="font-size:13px;">🔗 Invite a friend</b>
+      <p class="empty-note" style="padding:4px 0 8px;">Anyone who signs up through your link is added as a friend automatically — no request to accept.</p>
+      <div style="display:flex;gap:8px;">
+        <input type="text" readonly value="${esc(inviteUrl)}" id="invite-link-input" style="flex:1;margin:0;font-size:12px;" onclick="this.select()">
+        <button type="button" class="btn secondary" style="white-space:nowrap;" onclick="shareInviteLink(${esc(JSON.stringify(inviteUrl))})">Share</button>
+      </div>
+    </div>
     <a href="/messages" class="btn secondary block" style="text-decoration:none;margin-bottom:14px;">💬 Messages${db.countUnreadMessages(userId) > 0 ? ` (${db.countUnreadMessages(userId)})` : ''}</a>
     <form method="GET" action="/friends" style="margin-bottom:14px;display:flex;gap:8px;">
       <input type="text" name="q" value="${esc(q)}" placeholder="Search by username..." autocomplete="off" style="flex:1;">
@@ -4386,9 +4607,21 @@ const server = http.createServer(async (req, res) => {
     // is_private itself; see pageSharedCheckin. Its own "view this strain"
     // link now simply bounces a logged-out visitor to /login, same as any
     // other in-app link would.
+    //
+    // GET /invite/:code is the other one -- a personal referral link has
+    // no reason to work only for people who already have an account (see
+    // pageInviteLink). It never renders anything itself; it just sets a
+    // cookie and redirects, so there's nothing here for a logged-out
+    // visitor to see beyond that redirect either way.
+    //
+    // GET /recap/s/:code -- the public share link for a year-in-review
+    // recap (see pageSharedRecap). Same idea as /c/:id: meant to be posted
+    // somewhere a recipient may have no account at all.
     const PUBLIC_PATHS = new Set(['/', '/signup', '/login', '/logout', '/terms', '/privacy', '/forgot-password', '/reset-password', '/api/analytics-snapshot', '/auth/google', '/auth/google/callback', '/auth/google/finish']);
     const isPublicSharedCheckin = method === 'GET' && /^\/c\/[^/]+$/.test(pathname);
-    if (!PUBLIC_PATHS.has(pathname) && !isPublicSharedCheckin && !pathname.startsWith('/admin') && auth.currentUserId(req) == null) {
+    const isPublicInviteLink = method === 'GET' && /^\/invite\/[^/]+$/.test(pathname);
+    const isPublicSharedRecap = method === 'GET' && /^\/recap\/s\/[^/]+$/.test(pathname);
+    if (!PUBLIC_PATHS.has(pathname) && !isPublicSharedCheckin && !isPublicInviteLink && !isPublicSharedRecap && !pathname.startsWith('/admin') && auth.currentUserId(req) == null) {
       return redirect(res, '/login');
     }
 
@@ -4421,6 +4654,7 @@ const server = http.createServer(async (req, res) => {
     if (method === 'POST' && pathname === '/admin/login') return await handleAdminLoginSubmit(req, res);
     if (method === 'GET' && pathname === '/signup') return pageSignup(req, res, url.searchParams);
     if (method === 'POST' && pathname === '/signup') return await handleSignupSubmit(req, res);
+    if (method === 'GET' && (m = pathname.match(/^\/invite\/([^/]+)$/))) return await pageInviteLink(req, res, m[1]);
     if (method === 'GET' && pathname === '/auth/google') return pageGoogleStart(req, res, url.searchParams);
     if (method === 'GET' && pathname === '/auth/google/callback') return await handleGoogleCallback(req, res, url.searchParams);
     if (method === 'GET' && pathname === '/auth/google/finish') return pageGoogleFinish(req, res, url.searchParams);
@@ -4498,6 +4732,8 @@ const server = http.createServer(async (req, res) => {
     if (method === 'GET' && pathname === '/quiz') return pageQuiz(req, res, url.searchParams);
     if (method === 'GET' && pathname === '/compare') return pageCompare(req, res, url.searchParams);
     if (method === 'GET' && pathname === '/insights') return pageInsights(req, res);
+    if (method === 'GET' && pathname === '/recap') return pageRecap(req, res, url.searchParams);
+    if (method === 'GET' && (m = pathname.match(/^\/recap\/s\/([^/]+)$/))) return pageSharedRecap(req, res, m[1]);
     if (method === 'POST' && pathname === '/tolerance-break/start') return await handleToleranceBreakStart(req, res);
     if (method === 'POST' && pathname === '/tolerance-break/end') return await handleToleranceBreakEnd(req, res);
     if (method === 'GET' && pathname === '/concentrates') return pageConcentrates(req, res);
