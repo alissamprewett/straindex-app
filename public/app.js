@@ -61,6 +61,31 @@ window.addEventListener('pageshow', (event) => {
 // Shared by the form-auto-injection below and by the fetch()-based JSON
 // API calls further down (kudos/like buttons), which have no form body to
 // carry a hidden field in and so send this as a header instead.
+// Applies (and remembers) a manual Light/Dark/System choice from Account
+// Settings > Appearance. 'system' clears the override entirely, handing
+// control back to the prefers-color-scheme media query in app.css -- it
+// deliberately does NOT store the literal string 'system' in localStorage,
+// since the inline theme script in lib/render.js only ever looks for
+// 'light' or 'dark' and treats anything else (including no key at all) as
+// "follow the system," so removing the key is the correct way to express
+// that rather than adding a third value everything else would need to
+// handle too.
+function setTheme(value) {
+  try {
+    if (value === 'light' || value === 'dark') {
+      localStorage.setItem('theme', value);
+      document.documentElement.setAttribute('data-theme', value);
+    } else {
+      localStorage.removeItem('theme');
+      document.documentElement.removeAttribute('data-theme');
+    }
+  } catch (e) {
+    // Storage unavailable (private browsing, disabled storage) -- the
+    // radio still visually reflects the click, it just won't persist
+    // across a reload. Not worth surfacing an error for.
+  }
+}
+
 function getCsrfCookie() {
   const match = document.cookie.match(/(?:^|; )csrf_token=([^;]*)/);
   return match ? decodeURIComponent(match[1]) : null;
@@ -139,6 +164,16 @@ async function giveKudos(id, btn) {
   }
 }
 
+// The one, real, branded domain -- see the matching SITE_URL constant and
+// its comment in server.js for why this is hardcoded rather than derived
+// from window.location.origin: this app is deployed on Render, which also
+// exposes its own *.onrender.com hostname, and a share link built from
+// wherever the browser currently happens to be would silently show that
+// internal URL to whoever it's shared with (a stale bookmark, a lingering
+// search-index entry, a DNS propagation window) instead of the domain
+// people actually expect to see and click.
+const SITE_URL = 'https://www.strain-dex.com';
+
 // Shares a single check-in via its public, read-only link (/c/:id -- see
 // pageSharedCheckin in server.js). Deliberately not tied to friendship or
 // login at all on the receiving end, unlike the existing in-app "share to
@@ -147,7 +182,7 @@ async function giveKudos(id, btn) {
 // account. Prefers the native OS share sheet where available; falls back
 // to clipboard, then a manual prompt as a last resort.
 async function shareCheckin(id, strainName) {
-  const url = window.location.origin + '/c/' + id;
+  const url = SITE_URL + '/c/' + id;
   if (navigator.share) {
     try {
       await navigator.share({ title: 'My ' + strainName + ' check-in on StrainDex', url });

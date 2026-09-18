@@ -1,4 +1,4 @@
-:root{
+:root, html[data-theme="light"]{
   --brand-green-dark:#123a24; --brand-green:#1f5f3f; --brand-green-light:#2e8b57;
   --brand-lilac:#6b4ba8; --brand-gold:#c9972e;
   --bg-page:#f6f5f1; --bg-card:#ffffff;
@@ -25,6 +25,20 @@
   --surface-secondary:#eee; --track-bg:#e9e7dd; --accent-text:var(--brand-green-dark);
   --popover-bg:#232220;
 }
+/* Two ways into dark mode: following the OS/browser setting automatically
+   (the media query, no action needed from anyone), or an explicit choice
+   made in Account Settings > Appearance, applied via a data-theme
+   attribute on <html> (see the inline script in lib/render.js that reads
+   it from localStorage before first paint, and the settings control in
+   pageAccount). html[data-theme="dark"] has higher CSS specificity than a
+   plain :root, including the one inside this media query, so an explicit
+   choice always wins over the system setting either direction -- picking
+   "Dark" stays dark even on a light-mode phone, and "Light" stays light
+   even on a dark-mode phone (see html[data-theme="light"] combined into
+   the base :root selector above, for exactly that override). The
+   attribute selector below necessarily repeats the same values as the
+   media query rather than sharing them -- CSS has no mixin/include
+   mechanism -- so if one changes, change the other to match. */
 @media (prefers-color-scheme: dark) {
   :root{
     --brand-green-dark:#123a24; --brand-green:#3a9268; --brand-green-light:#4db383;
@@ -43,6 +57,20 @@
     --accent-text:#5fcf9a;
     --popover-bg:#2f322c;
   }
+}
+html[data-theme="dark"]{
+  /* Duplicate of the dark values inside the media query above (see the
+     comment on that block for why) -- applies dark mode even when the
+     device's own OS/browser setting is light, for an explicit "Dark"
+     choice made in Account Settings > Appearance. */
+  --brand-green-dark:#123a24; --brand-green:#3a9268; --brand-green-light:#4db383;
+  --brand-lilac:#9b7fd4; --brand-gold:#e0ac3f;
+  --bg-page:#111310; --bg-card:#1c1f1b;
+  --ink:#f0efe9; --ink-secondary:#c7c4b8; --ink-muted:#8f8c80; --border:#33362f;
+  --shadow:0 2px 10px rgba(0,0,0,0.35); --shadow-lg:0 12px 32px rgba(0,0,0,0.55);
+  --surface-secondary:#2a2d27; --track-bg:#33362f;
+  --accent-text:#5fcf9a;
+  --popover-bg:#2f322c;
 }
 *{box-sizing:border-box;accent-color:var(--brand-green);}
 body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg-page);color:var(--ink);-webkit-font-smoothing:antialiased;touch-action:manipulation;}

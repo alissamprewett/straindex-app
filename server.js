@@ -719,7 +719,15 @@ function pageStrainDetail(req, res, id) {
         if (el) el.style.display = 'none';
       }
       function copyShareLink() {
-        const url = window.location.href;
+        // Fixed domain + the current path, rather than window.location.href
+        // wholesale -- this app is deployed on Render, which also exposes
+        // its own *.onrender.com hostname, and a link built from wherever
+        // the browser currently happens to be would silently show that
+        // internal URL instead of the real domain if someone ever lands on
+        // this page via that hostname (a stale bookmark, a lingering
+        // search-index entry, a DNS propagation window). See SITE_URL in
+        // server.js/app.js for the same fix applied everywhere else.
+        const url = 'https://www.strain-dex.com' + window.location.pathname + window.location.search;
         if (navigator.clipboard && navigator.clipboard.writeText) {
           navigator.clipboard.writeText(url).then(function() { alert('Link copied to clipboard!'); }).catch(function() { window.prompt('Copy this link:', url); });
         } else {
@@ -727,7 +735,7 @@ function pageStrainDetail(req, res, id) {
         }
       }
       function nativeShare(name) {
-        const url = window.location.href;
+        const url = 'https://www.strain-dex.com' + window.location.pathname + window.location.search;
         if (navigator.share) navigator.share({ title: name, url: url }).catch(function() {});
       }
       (function() {
@@ -3782,6 +3790,37 @@ function pageAccount(req, res, query) {
     <h1 class="screen-title" style="margin-top:8px;">Account Settings</h1>
 
     <div class="card">
+      <h2 style="margin:0 0 10px;font-size:0.9375rem;">Appearance</h2>
+      <p class="empty-note" style="padding:0 0 10px;">Follows your phone's own Light/Dark setting unless you pick one here.</p>
+      <div id="theme-picker" style="display:flex;gap:8px;">
+        <label class="filter-pill" style="flex:1;text-align:center;margin:0;cursor:pointer;">
+          <input type="radio" name="theme-choice" value="system" style="width:auto;margin:0 4px 0 0;">System
+        </label>
+        <label class="filter-pill" style="flex:1;text-align:center;margin:0;cursor:pointer;">
+          <input type="radio" name="theme-choice" value="light" style="width:auto;margin:0 4px 0 0;">Light
+        </label>
+        <label class="filter-pill" style="flex:1;text-align:center;margin:0;cursor:pointer;">
+          <input type="radio" name="theme-choice" value="dark" style="width:auto;margin:0 4px 0 0;">Dark
+        </label>
+      </div>
+      <script>
+        (function () {
+          var saved = 'system';
+          try { saved = localStorage.getItem('theme') || 'system'; } catch (e) {}
+          var radios = document.querySelectorAll('#theme-picker input[name="theme-choice"]');
+          radios.forEach(function (r) {
+            r.checked = (r.value === saved);
+            r.addEventListener('change', function () {
+              setTheme(r.value);
+              radios.forEach(function (other) { other.closest('.filter-pill').classList.toggle('active', other.checked); });
+            });
+            r.closest('.filter-pill').classList.toggle('active', r.checked);
+          });
+        })();
+      </script>
+    </div>
+
+    <div class="card" style="margin-top:14px;">
       <h2 style="margin:0 0 10px;font-size:0.9375rem;">Username</h2>
       ${error === 'username_taken' ? `<p class="dosing-note">That username is already taken — try another.</p>` : ''}
       ${success === 'username' ? `<p class="empty-note" style="color:var(--accent-text);">Username updated.</p>` : ''}
