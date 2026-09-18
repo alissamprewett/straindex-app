@@ -245,7 +245,7 @@ function renderKudosButton(c, userId) {
 function renderShareButton(c) {
   if (c.is_private) return '';
   const strain = db.getStrain(c.strain_id);
-  return `<button type="button" class="btn secondary" style="padding:4px 10px;font-size:12px;" onclick="shareCheckin(${c.id}, ${esc(JSON.stringify(strain ? strain.name : 'this strain'))})">🔗 Share</button>`;
+  return `<button type="button" class="btn secondary" style="padding:4px 10px;font-size:0.75rem;" onclick="shareCheckin(${c.id}, ${esc(JSON.stringify(strain ? strain.name : 'this strain'))})">🔗 Share</button>`;
 }
 function renderCheckinComments(c, userId, redirectPath) {
   const comments = db.listCheckinComments(c.id, userId);
@@ -331,7 +331,7 @@ function strainPhotoStyle(strain) {
 // sizeClass controls the CSS box size; see .strain-thumb-* rules in app.css.
 function strainPhotoTag(strain, sizeClass = 'md') {
   if (!strain) return `<div class="strain-thumb strain-thumb-${sizeClass}" style="display:flex;align-items:center;justify-content:center;font-size:20px;">🌿</div>`;
-  return `<img class="strain-thumb strain-thumb-${sizeClass}" src="${strainPhotoUrl(strain)}" style="${strainPhotoStyle(strain)}" alt="${esc(strain.name)} bud" loading="lazy" onerror="this.onerror=null;this.replaceWith(Object.assign(document.createElement('div'),{className:this.className,textContent:'🌿',style:'display:flex;align-items:center;justify-content:center;font-size:20px;background:#e5e0d5;'}))">`;
+  return `<img class="strain-thumb strain-thumb-${sizeClass}" src="${strainPhotoUrl(strain)}" style="${strainPhotoStyle(strain)}" alt="${esc(strain.name)} bud" loading="lazy" onerror="this.onerror=null;this.replaceWith(Object.assign(document.createElement('div'),{className:this.className,textContent:'🌿',style:'display:flex;align-items:center;justify-content:center;font-size:1.25rem;background:#e5e0d5;'}))">`;
 }
 
 // Terpene-overlap recommendations, ported from the prototype: score every
@@ -379,7 +379,7 @@ function pageLandingPage(req, res) {
   const body = `
     <div style="text-align:center;padding:20px 4px 8px;">
       <div style="font-size:44px;margin-bottom:8px;">🌿</div>
-      <h1 style="margin:0 0 8px;font-size:22px;">StrainDex</h1>
+      <h1 style="margin:0 0 8px;font-size:1.375rem;">StrainDex</h1>
       <p class="screen-sub" style="margin:0 0 20px;">Your personal cannabis companion — track what you actually experience, stay informed on dosing and safety, discover your next favorite strain, and compare notes with real friends. All in one place.</p>
       <a href="/signup" class="btn block" style="text-decoration:none;max-width:280px;margin:0 auto;">Create Free Account</a>
       <p class="empty-note" style="margin-top:10px;">Already have an account? <a href="/login">Log in</a></p>
@@ -624,7 +624,7 @@ function renderFamilyTree(s) {
   const renderStrainLink = (o) => `<a href="/strains/${o.id}">${esc(o.name)}</a>`;
   return `
     <div class="card" style="margin-top:10px;">
-      <h2 style="margin:0 0 6px;font-size:15px;">🌳 Family Tree</h2>
+      <h2 style="margin:0 0 6px;font-size:0.9375rem;">🌳 Family Tree</h2>
       ${parents.length ? `<p style="margin:2px 0;"><b>Parents:</b> ${parents.map(renderName).join(' × ')}</p>` : ''}
       ${siblings.length ? `<p style="margin:2px 0;"><b>Shares a parent with:</b> ${siblings.slice(0, 8).map(renderStrainLink).join(', ')}</p>` : ''}
       ${descendants.length ? `<p style="margin:2px 0;"><b>Parent of:</b> ${descendants.map(renderStrainLink).join(', ')}</p>` : ''}
@@ -642,6 +642,23 @@ function pageStrainDetail(req, res, id) {
   // was previously unreachable by guests (whole page sat behind the login
   // wall), so the gap never mattered until /strains/:id became public.
   const history = userId != null ? db.listCheckins({ userId, strain_id: id, limit: 10 }) : [];
+  // Everyone else's public check-ins for this strain -- not just friends.
+  // The friend-only feed (Home) is great for "what's my circle up to," but
+  // it means a brand-new account with zero friends sees essentially none
+  // of the check-in data this app's whole value depends on, and a strain
+  // page has no way to show what the wider community actually thinks
+  // beyond the bare numeric rating average. listCheckins({ strain_id })
+  // with no userId/userIds returns every user's check-ins for this
+  // strain; filterVisibleCheckins strips private ones (except the
+  // viewer's own, irrelevant here since those are excluded next anyway),
+  // and the isBlocked filter matches the same one-directional convention
+  // already used for comments in lib/db.js (hide people the viewer has
+  // blocked; don't also require the reverse for a read-only list).
+  const communityCheckins = userId != null
+    ? db.filterVisibleCheckins(db.listCheckins({ strain_id: id, limit: 200 }), userId)
+        .filter(c => c.user_id !== userId && !db.isBlocked(userId, c.user_id))
+        .slice(0, 10)
+    : [];
   const ratingStats = db.getStrainRatingStats(id);
   const similar = db.getSimilarStrains(s, 4);
   const body = `
@@ -650,7 +667,7 @@ function pageStrainDetail(req, res, id) {
         <div style="display:flex;align-items:center;gap:12px;min-width:0;">
           ${strainPhotoTag(s, 'lg')}
           <div>
-            <h1 style="margin:0;font-size:19px;">${esc(s.name)}</h1>
+            <h1 style="margin:0;font-size:1.1875rem;">${esc(s.name)}</h1>
             <div class="empty-note" style="padding:0;">${esc(s.type)}${s.lean ? ' · ' + esc(s.lean) : ''} · <span class="rarity-tag rarity-${s.rarity}">${rarityLabel(s.rarity)}</span></div>
             <div style="margin-top:2px;" title="${esc(VERIFICATION_BADGE[strainVerificationTier(s)].note)}"><span class="empty-note" style="padding:0;">${VERIFICATION_BADGE[strainVerificationTier(s)].icon} ${VERIFICATION_BADGE[strainVerificationTier(s)].label}</span></div>
             ${ratingStats.count ? `<div style="margin-top:2px;">${starString(Math.round(ratingStats.avg))} <span class="empty-note" style="padding:0;">${ratingStats.avg}★ from ${ratingStats.count} check-in${ratingStats.count === 1 ? '' : 's'}</span></div>` : `<div class="empty-note" style="padding:2px 0 0;">No community ratings yet — be the first to check in.</div>`}
@@ -674,7 +691,7 @@ function pageStrainDetail(req, res, id) {
     <div id="share-modal-backdrop" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:1000;" onclick="closeShareModal(event)">
       <div style="background:var(--bg-card,#fff);max-width:360px;width:calc(100% - 40px);margin:15vh auto 0;border-radius:14px;padding:20px;position:relative;" onclick="event.stopPropagation()">
         <button type="button" onclick="closeShareModal()" aria-label="Close" style="position:absolute;top:10px;right:12px;background:none;border:none;font-size:18px;cursor:pointer;color:var(--ink-secondary);">✕</button>
-        <h3 style="margin:0 0 12px;font-size:16px;">Share ${esc(s.name)}</h3>
+        <h3 style="margin:0 0 12px;font-size:1rem;">Share ${esc(s.name)}</h3>
         <button type="button" class="btn secondary block" onclick="copyShareLink()" style="margin-bottom:8px;">🔗 Copy link</button>
         <button type="button" class="btn secondary block" id="native-share-btn" onclick="nativeShare(${esc(JSON.stringify(s.name))})" style="display:none;margin-bottom:8px;">📤 Share via...</button>
         ${userId != null && db.listFriends(userId).length ? `
@@ -747,11 +764,11 @@ function pageStrainDetail(req, res, id) {
         return myLists.length ? `
           <div class="card" style="margin-top:8px;">
             <div style="display:flex;justify-content:space-between;align-items:center;">
-              <b style="font-size:13px;">Add to a list</b>
+              <b style="font-size:0.8125rem;">Add to a list</b>
               <a href="/lists" class="empty-note" style="padding:0;">Manage your lists →</a>
             </div>
             <details style="margin-top:6px;" ${inAnyList ? 'open' : ''}>
-              <summary style="cursor:pointer;font-size:12.5px;font-weight:700;color:var(--accent-text);">${inAnyList ? 'Your lists' : 'Show your lists'}</summary>
+              <summary style="cursor:pointer;font-size:0.7812rem;font-weight:700;color:var(--accent-text);">${inAnyList ? 'Your lists' : 'Show your lists'}</summary>
               <p style="margin:6px 0 0;display:flex;flex-wrap:wrap;gap:6px;">
                 ${myLists.map(l => `
                   <form method="POST" action="/lists/${l.id}/items/${s.id}/toggle" style="display:inline;">
@@ -805,6 +822,36 @@ function pageStrainDetail(req, res, id) {
     ` : userId != null
       ? `<div class="empty-note">You haven't checked this one in yet.</div>`
       : `<div class="empty-note">Log in to track your own history with this strain — <a href="/signup">create a free account</a> or <a href="/login">log in</a>.</div>`}
+    ${communityCheckins.length ? `
+      <h2 class="screen-title" style="margin-top:20px;">What people are saying</h2>
+      <p class="screen-sub">Public check-ins from the wider StrainDex community, not just your friends.</p>
+      ${communityCheckins.map(c => {
+        const poster = db.getUserById(c.user_id);
+        const posterName = poster ? poster.username : 'Someone';
+        return `<div class="card checkin-history-row">
+        ${c.photo ? `<div class="checkin-photo-thumb"><img src="${esc(c.photo)}" alt="${esc(posterName)}'s photo"></div>` : ''}
+        <div style="flex:1;min-width:0;">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;">
+            <a href="/friends/${c.user_id}" style="color:inherit;font-weight:700;text-decoration:none;">${esc(posterName)}</a>
+            <span class="empty-note" style="padding:0;">${esc(c.method)}</span>
+          </div>
+          ${starString(c.rating)}
+          <div class="empty-note" style="padding:2px 0 0;"><span class="local-time" data-utc="${c.created_at}Z">${esc(c.created_at)} UTC</span></div>
+          ${(c.effects || []).length ? `<p style="margin:6px 0 0;">${c.effects.map(e => `<span class="filter-pill">${esc(e)}</span>`).join('')}</p>` : ''}
+          ${c.note ? `<span class="empty-note" style="display:block;padding:4px 0 0;">${esc(c.note)}</span>` : ''}
+        ${renderCheckinPairings(c)}
+        ${renderCheckinComments(c, userId, '/strains/' + s.id)}
+          <div style="display:flex;flex-direction:column;align-items:flex-end;margin-top:6px;">
+            <div style="display:flex;gap:6px;">
+              ${renderShareButton(c)}
+              ${renderKudosButton(c, userId)}
+            </div>
+            ${kudosGiversLabel(c.id)}
+          </div>
+        </div>
+      </div>`;
+      }).join('')}
+    ` : ''}
   `;
   sendHtml(res, layout({ title: s.name, active: 'strains', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
@@ -835,7 +882,7 @@ function pageSharedCheckin(req, res, id) {
         ${strainPhotoTag(s, 'lg')}
         <div>
           <div class="empty-note" style="padding:0;">${esc(posterName)} checked in on StrainDex</div>
-          <h1 style="margin:2px 0 0;font-size:19px;">${s ? esc(s.name) : esc(c.strain_id)}</h1>
+          <h1 style="margin:2px 0 0;font-size:1.1875rem;">${s ? esc(s.name) : esc(c.strain_id)}</h1>
           ${s ? `<div class="empty-note" style="padding:0;">${esc(s.type)}${s.lean ? ' · ' + esc(s.lean) : ''} · <span class="rarity-tag rarity-${s.rarity}">${rarityLabel(s.rarity)}</span></div>` : ''}
         </div>
       </div>
@@ -1001,7 +1048,7 @@ function pageCheckinForm(req, res, query, existing) {
 
       <label class="field-label">Photo</label>
       <div class="photo-picker" id="photo-picker">
-        <div class="photo-upload-box" id="photo-upload-box" onclick="document.getElementById('photo-file-input').click()">
+        <div class="photo-upload-box" id="photo-upload-box" onclick="document.getElementById('photo-file-input').click()" role="button" tabindex="0">
           <div class="up-ic">📷</div>
           <div class="up-txt">Tap to snap or upload a photo of your bud<br>(optional — we'll show a placeholder if you skip it)</div>
         </div>
@@ -1034,7 +1081,7 @@ function pageCheckinForm(req, res, query, existing) {
     ${isEdit ? `
       <form method="POST" action="/checkin/${existing.id}/delete" style="margin-top:10px;text-align:center;" onsubmit="return confirm('Delete this check-in? This cannot be undone.')">
         <input type="hidden" name="redirect_to" value="/strains/${existing.strain_id}">
-        <button type="submit" style="background:none;border:none;color:#a13a3a;cursor:pointer;font-size:12px;padding:4px;">Delete this check-in</button>
+        <button type="submit" style="background:none;border:none;color:#a13a3a;cursor:pointer;font-size:0.75rem;padding:4px;">Delete this check-in</button>
       </form>
     ` : ''}
     <script>
@@ -1115,7 +1162,7 @@ function pageFaq(req, res, query) {
 
   const renderFaq = (f) => `
     <div class="faq-item">
-      <div class="faq-q" onclick="toggleFaq(this)"><span>${esc(f.question)}</span><span>⌄</span></div>
+      <div class="faq-q" onclick="toggleFaq(this)" role="button" tabindex="0" aria-expanded="false"><span>${esc(f.question)}</span><span>⌄</span></div>
       <div class="faq-a">${esc(f.answer)}${f.source_url ? `<div class="empty-note" style="padding:6px 0 0;">Source: <a href="${esc(f.source_url)}" target="_blank" rel="noopener noreferrer">${esc(f.source_name || f.source_url)}</a></div>` : ''}</div>
     </div>`;
 
@@ -1266,7 +1313,7 @@ function pageRecipeDetail(req, res, id) {
   if (!r || r.status !== 'approved') return notFound(res);
   const body = `
     <div class="card" style="margin-top:10px;">
-      <b style="font-size:16px;">${r.icon || '🍽️'} ${esc(r.title)}</b>
+      <b style="font-size:1rem;">${r.icon || '🍽️'} ${esc(r.title)}</b>
       <span class="recipe-source-tag ${r.source}">${r.source === 'official' ? 'Official' : 'Community'}</span>
       <div class="empty-note">${esc(r.category || '')}${r.time ? ' · ' + esc(r.time) : ''}${r.author ? ' · by ' + esc(r.author) : ''}</div>
       <p>${linkGlossaryTerms(esc(r.desc))}</p>
@@ -1284,7 +1331,7 @@ function pageRecipeDetail(req, res, id) {
       <ol>${r.steps.map(i => `<li>${linkGlossaryTerms(esc(i))}</li>`).join('')}</ol>
       ${r.dosing ? `<div class="dosing-note">⚠️ ${esc(r.dosing)}</div>` : ''}
       <div class="card" style="margin-top:10px;background:var(--bg-subtle,#f7f7f2);">
-        <b style="font-size:14px;">🧮 Dosing calculator</b>
+        <b style="font-size:0.875rem;">🧮 Dosing calculator</b>
         <p class="empty-note" style="padding:2px 0 8px;">Figure out mg per serving so you're not doing the math in your head.</p>
         <label class="field-label" style="margin-top:0;">Total THC in the batch (mg)</label>
         <input type="number" id="dose-total-mg" placeholder="e.g. 200" min="0" step="any">
@@ -1343,7 +1390,7 @@ function pageRecipes(req, res, query) {
           return targetId ? `<a href="/recipes/${targetId}">${esc(b)}</a>` : esc(b);
         }).join(', ')} <span style="opacity:.7;">(tap to see how to make it)</span></p>` : ''}
         <details>
-          <summary style="cursor:pointer;font-size:12.5px;font-weight:700;color:var(--accent-text);">Ingredients &amp; steps</summary>
+          <summary style="cursor:pointer;font-size:0.7812rem;font-weight:700;color:var(--accent-text);">Ingredients &amp; steps</summary>
           <p><b>Ingredients:</b></p>
           <ul>${r.ingredients.map(i => `<li>${linkGlossaryTerms(esc(i))}</li>`).join('')}</ul>
           <p><b>Steps:</b></p>
@@ -1997,15 +2044,15 @@ function pageOnboarding(req, res) {
           <div class="onboarding-step" data-step="${i}" style="${i === 0 ? '' : 'display:none;'}">
             ${s.install ? `
               <div style="font-size:44px;margin-bottom:16px;">${s.icon}</div>
-              <h2 style="margin:0 0 8px;font-size:18px;">${esc(s.title)}</h2>
-              <p style="color:var(--ink-secondary);font-size:13.5px;line-height:1.6;margin:0 0 18px;">One tap gets you a real icon and a full-screen app — no app store needed.</p>
+              <h2 style="margin:0 0 8px;font-size:1.125rem;">${esc(s.title)}</h2>
+              <p style="color:var(--ink-secondary);font-size:0.8438rem;line-height:1.6;margin:0 0 18px;">One tap gets you a real icon and a full-screen app — no app store needed.</p>
               <div id="onboarding-install-offer" style="display:flex;gap:8px;">
                 <button type="button" id="onboarding-install-no" class="btn secondary" style="flex:1;">Not now</button>
                 <button type="button" id="onboarding-install-yes" class="btn" style="flex:1;">📲 Yes, add it</button>
               </div>
               <div id="onboarding-install-ios" style="display:none;text-align:left;">
                 <p class="empty-note" style="padding:0 0 6px;">On iPhone/iPad, Safari makes you do this one manually:</p>
-                <ol style="margin:0 0 14px;padding-left:20px;font-size:13px;">
+                <ol style="margin:0 0 14px;padding-left:20px;font-size:0.8125rem;">
                   <li style="margin-bottom:6px;">Tap the <b>Share</b> icon in Safari's toolbar.</li>
                   <li style="margin-bottom:6px;">Scroll down and tap <b>Add to Home Screen</b>.</li>
                   <li>Tap <b>Add</b> in the top right.</li>
@@ -2014,8 +2061,8 @@ function pageOnboarding(req, res) {
               </div>
             ` : `
               <div style="font-size:44px;margin-bottom:16px;">${s.icon}</div>
-              <h2 style="margin:0 0 8px;font-size:18px;">${esc(s.title)}</h2>
-              <p style="color:var(--ink-secondary);font-size:13.5px;line-height:1.6;margin:0;">${esc(s.body)}</p>
+              <h2 style="margin:0 0 8px;font-size:1.125rem;">${esc(s.title)}</h2>
+              <p style="color:var(--ink-secondary);font-size:0.8438rem;line-height:1.6;margin:0;">${esc(s.body)}</p>
             `}
           </div>`).join('')}
       </div>
@@ -2120,7 +2167,7 @@ function pageAddToHomeScreen(req, res) {
     </div>
 
     <div class="card a2hs-panel" data-a2hs-panel="ios">
-      <h2 style="margin:0 0 8px;font-size:15px;">iPhone &amp; iPad (Safari)</h2>
+      <h2 style="margin:0 0 8px;font-size:0.9375rem;">iPhone &amp; iPad (Safari)</h2>
       <ol style="margin:0;padding-left:20px;">
         <li style="margin-bottom:8px;">Open StrainDex in <b>Safari</b> — this only works in Safari itself, not Chrome, Instagram, or another in-app browser.</li>
         <li style="margin-bottom:8px;">Tap the <b>Share</b> icon (the square with an arrow pointing up) in the toolbar.</li>
@@ -2131,7 +2178,7 @@ function pageAddToHomeScreen(req, res) {
     </div>
 
     <div class="card a2hs-panel" data-a2hs-panel="android" style="display:none;">
-      <h2 style="margin:0 0 8px;font-size:15px;">Android (Chrome)</h2>
+      <h2 style="margin:0 0 8px;font-size:0.9375rem;">Android (Chrome)</h2>
       <ol style="margin:0;padding-left:20px;">
         <li style="margin-bottom:8px;">Tap the <b>Install StrainDex</b> button above if you see it — Chrome will prompt you and add the icon for you.</li>
         <li style="margin-bottom:8px;">Don't see the button? Tap the <b>⋮</b> menu in the top right of Chrome.</li>
@@ -2140,7 +2187,7 @@ function pageAddToHomeScreen(req, res) {
     </div>
 
     <div class="card a2hs-panel" data-a2hs-panel="desktop" style="display:none;">
-      <h2 style="margin:0 0 8px;font-size:15px;">Desktop (Chrome / Edge)</h2>
+      <h2 style="margin:0 0 8px;font-size:0.9375rem;">Desktop (Chrome / Edge)</h2>
       <ol style="margin:0;padding-left:20px;">
         <li style="margin-bottom:8px;">Tap the <b>Install StrainDex</b> button above if you see it.</li>
         <li style="margin-bottom:8px;">Or click the install icon at the right edge of the address bar.</li>
@@ -2234,7 +2281,7 @@ function pageCompare(req, res, query) {
       ${pickerBox('b', b)}
     </div>
     ${a && b ? `
-      <table style="width:100%;border-collapse:collapse;font-size:13px;">
+      <table style="width:100%;border-collapse:collapse;font-size:0.8125rem;">
         ${rows.map(([label, av, bv]) => `
           <tr style="border-bottom:1px solid var(--border);">
             <td style="padding:8px 6px;font-weight:700;color:var(--ink-secondary);width:28%;vertical-align:top;">${esc(label)}</td>
@@ -2295,7 +2342,7 @@ function pageGrowJournal(req, res) {
       <textarea name="note" placeholder="What's going on with it today?"></textarea>
       <label class="field-label">Photo</label>
       <div class="photo-picker">
-        <div class="photo-upload-box" id="gj-photo-upload-box" onclick="document.getElementById('gj-photo-file-input').click()">
+        <div class="photo-upload-box" id="gj-photo-upload-box" onclick="document.getElementById('gj-photo-file-input').click()" role="button" tabindex="0">
           <div class="up-ic">📷</div>
           <div class="up-txt">Tap to snap or upload a photo (optional)</div>
         </div>
@@ -2495,7 +2542,7 @@ function pageTerpeneGuide(req, res) {
     ${entries.map(([name, info]) => `
       <div class="card" style="margin-bottom:10px;">
         <div style="display:flex;justify-content:space-between;align-items:baseline;">
-          <h2 style="margin:0;font-size:16px;">${esc(name)}</h2>
+          <h2 style="margin:0;font-size:1rem;">${esc(name)}</h2>
           <a href="/strains?terpene=${encodeURIComponent(name)}" class="empty-note" style="padding:0;">${counts[name] || 0} strains →</a>
         </div>
         <p style="margin:6px 0 2px;"><b>Aroma:</b> ${esc(info.aroma)}</p>
@@ -2542,7 +2589,7 @@ function pageEffectsGuide(req, res) {
     ${entries.map(([name, description]) => `
       <div class="card" style="margin-bottom:10px;">
         <div style="display:flex;justify-content:space-between;align-items:baseline;">
-          <h2 style="margin:0;font-size:16px;">${esc(name)}</h2>
+          <h2 style="margin:0;font-size:1rem;">${esc(name)}</h2>
           <a href="/strains?effect=${encodeURIComponent(name)}" class="empty-note" style="padding:0;">${counts[name] || 0} strains →</a>
         </div>
         <p style="margin:6px 0 0;">${esc(description)}</p>
@@ -2661,7 +2708,7 @@ function pageBreederGuide(req, res) {
     ${sorted.map(([name, count]) => `
       <div class="card" style="margin-bottom:10px;">
         <div style="display:flex;justify-content:space-between;align-items:baseline;">
-          <h2 style="margin:0;font-size:16px;">${esc(name)}</h2>
+          <h2 style="margin:0;font-size:1rem;">${esc(name)}</h2>
           <a href="/strains?breeder=${encodeURIComponent(name)}" class="empty-note" style="padding:0;">${count} strain${count === 1 ? '' : 's'} →</a>
         </div>
         ${BREEDER_GUIDE[name] ? `<p style="margin:6px 0 0;">${esc(BREEDER_GUIDE[name])}</p>` : ''}
@@ -2747,7 +2794,7 @@ function pageMixingCautions(req, res) {
     <p class="screen-sub">General, pattern-level cautions — not medical advice, not a complete interaction database, and not a substitute for talking to a doctor or pharmacist about your specific medications.</p>
     ${cautions.map(c => `
       <div class="card" style="margin-bottom:10px;">
-        <h2 style="margin:0 0 6px;font-size:15px;">${esc(c.title)}</h2>
+        <h2 style="margin:0 0 6px;font-size:0.9375rem;">${esc(c.title)}</h2>
         <p style="margin:0;">${esc(c.body)}</p>
       </div>
     `).join('')}
@@ -2836,7 +2883,7 @@ function pageInsights(req, res) {
     ${streak.current > 0 ? `
       <div class="card" style="margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;">
         <div>
-          <div style="font-size:20px;font-weight:700;">🔥 ${streak.current}-day streak</div>
+          <div style="font-size:1.25rem;font-weight:700;">🔥 ${streak.current}-day streak</div>
           <div class="empty-note" style="padding:2px 0 0;">${streak.longest > streak.current ? `Best ever: ${streak.longest} days` : "That's your best streak yet!"}</div>
         </div>
         <div style="font-size:32px;">🔥</div>
@@ -2847,7 +2894,7 @@ function pageInsights(req, res) {
       </div>
     ` : ''}
     <div class="card" style="margin-bottom:14px;">
-      <h2 style="margin:0 0 8px;font-size:15px;">🌿 Tolerance break</h2>
+      <h2 style="margin:0 0 8px;font-size:0.9375rem;">🌿 Tolerance break</h2>
       ${activeBreak ? `
         <p class="empty-note" style="padding:0 0 8px;">You're on a break — started ${daysSince(activeBreak.started_at)} day${daysSince(activeBreak.started_at) === 1 ? '' : 's'} ago${activeBreak.note ? `: "${esc(activeBreak.note)}"` : '.'}</p>
         <form method="POST" action="/tolerance-break/end"><button class="btn secondary block" type="submit">End Break</button></form>
@@ -2863,12 +2910,12 @@ function pageInsights(req, res) {
       <p class="screen-sub">Based on your ${insights.totalCheckins} check-in${insights.totalCheckins === 1 ? '' : 's'} so far.</p>
       ${insights.topEffects.length ? `
         <div class="card">
-          <h2 style="margin:0 0 8px;font-size:15px;">Your most common effects</h2>
+          <h2 style="margin:0 0 8px;font-size:0.9375rem;">Your most common effects</h2>
           <p>${insights.topEffects.map(e => `<span class="filter-pill">${esc(e.name)} (${e.count})</span>`).join('')}</p>
         </div>
       ` : ''}
       <div class="card" style="margin-top:12px;">
-        <h2 style="margin:0 0 8px;font-size:15px;">Your leanings</h2>
+        <h2 style="margin:0 0 8px;font-size:0.9375rem;">Your leanings</h2>
         ${insights.topType ? `<p class="empty-note" style="padding:2px 0;">You gravitate toward <b>${esc(insights.topType.name)}</b> strains (${insights.topType.count} check-in${insights.topType.count === 1 ? '' : 's'}).</p>` : ''}
         ${insights.topMethod ? `<p class="empty-note" style="padding:2px 0;">Your most-used method is <b>${esc(insights.topMethod.name)}</b>.</p>` : ''}
         ${insights.topTerpene ? `<p class="empty-note" style="padding:2px 0;">Your check-ins lean heaviest on <b>${esc(insights.topTerpene)}</b> as a terpene.</p>` : ''}
@@ -2901,9 +2948,9 @@ function pageInsights(req, res) {
 function renderRecapBody(recap, { longestStreak } = {}) {
   return `
     <div class="card" style="text-align:center;background:linear-gradient(135deg,#123a24,#1b5e3a);color:#fff;border:none;">
-      <div style="font-size:12px;opacity:.85;letter-spacing:.5px;text-transform:uppercase;">${recap.year} Year in Review</div>
-      <div style="font-size:44px;font-weight:800;margin:6px 0 2px;">${recap.totalCheckins}</div>
-      <div style="font-size:13px;opacity:.9;">check-in${recap.totalCheckins === 1 ? '' : 's'} logged</div>
+      <div style="font-size:0.75rem;opacity:.85;letter-spacing:.5px;text-transform:uppercase;">${recap.year} Year in Review</div>
+      <div style="font-size:2.75rem;font-weight:800;margin:6px 0 2px;">${recap.totalCheckins}</div>
+      <div style="font-size:0.8125rem;opacity:.9;">check-in${recap.totalCheckins === 1 ? '' : 's'} logged</div>
     </div>
     <div class="collection-stats" style="margin-top:14px;">
       <div class="stat-tile"><div class="num">${recap.uniqueStrains}</div><div class="lbl">Unique strains</div></div>
@@ -2912,12 +2959,12 @@ function renderRecapBody(recap, { longestStreak } = {}) {
     </div>
     ${recap.topEffects.length ? `
       <div class="card" style="margin-top:14px;">
-        <h2 style="margin:0 0 8px;font-size:15px;">Most common effects</h2>
+        <h2 style="margin:0 0 8px;font-size:0.9375rem;">Most common effects</h2>
         <p>${recap.topEffects.map(e => `<span class="filter-pill">${esc(e.name)} (${e.count})</span>`).join('')}</p>
       </div>
     ` : ''}
     <div class="card" style="margin-top:12px;">
-      <h2 style="margin:0 0 8px;font-size:15px;">Leanings</h2>
+      <h2 style="margin:0 0 8px;font-size:0.9375rem;">Leanings</h2>
       ${recap.topType ? `<p class="empty-note" style="padding:2px 0;">Gravitated toward <b>${esc(recap.topType.name)}</b> strains (${recap.topType.count} check-in${recap.topType.count === 1 ? '' : 's'}).</p>` : ''}
       ${recap.topMethod ? `<p class="empty-note" style="padding:2px 0;">Most-used method: <b>${esc(recap.topMethod.name)}</b>.</p>` : ''}
       ${recap.topTerpene ? `<p class="empty-note" style="padding:2px 0;">Leaned heaviest on <b>${esc(recap.topTerpene)}</b> as a terpene.</p>` : ''}
@@ -3030,12 +3077,12 @@ function pageSupportTheApp(req, res) {
     <h1 class="screen-title">💚 Support the App</h1>
     <p class="screen-sub">StrainDex is free to use right now. If it's been useful to you and you'd like to help cover hosting costs, that's genuinely appreciated — but there's zero obligation and nothing extra unlocks either way.</p>
     <div class="card" style="margin-bottom:10px;">
-      <h2 style="margin:0 0 4px;font-size:16px;">Cash App</h2>
+      <h2 style="margin:0 0 4px;font-size:1rem;">Cash App</h2>
       <p class="empty-note" style="padding:0 0 8px;">Any amount, no account needed on your end beyond Cash App itself.</p>
       <a class="btn block" href="https://cash.app/$straindex" style="text-decoration:none;">Send via Cash App — $straindex</a>
     </div>
     <div class="card">
-      <h2 style="margin:0 0 4px;font-size:16px;">Venmo</h2>
+      <h2 style="margin:0 0 4px;font-size:1rem;">Venmo</h2>
       <p class="empty-note" style="padding:0 0 8px;">Same idea, if that's the app you already have.</p>
       <a class="btn block" href="https://venmo.com/straindex" style="text-decoration:none;">Send via Venmo — @straindex</a>
     </div>
@@ -3358,7 +3405,7 @@ function pageAdminStrains(req, res, query) {
     <h1 class="screen-title">Manage Strains</h1>
     <p class="screen-sub">${total.toLocaleString()} strains in the library.</p>
     <div class="card">
-      <h2 style="margin-top:0;font-size:16px;">Add a strain</h2>
+      <h2 style="margin-top:0;font-size:1rem;">Add a strain</h2>
       <form method="POST" action="/admin/strains/new">
         ${strainFormFields(null)}
         <button class="btn block" type="submit">Add Strain</button>
@@ -3735,7 +3782,7 @@ function pageAccount(req, res, query) {
     <h1 class="screen-title" style="margin-top:8px;">Account Settings</h1>
 
     <div class="card">
-      <h2 style="margin:0 0 10px;font-size:15px;">Username</h2>
+      <h2 style="margin:0 0 10px;font-size:0.9375rem;">Username</h2>
       ${error === 'username_taken' ? `<p class="dosing-note">That username is already taken — try another.</p>` : ''}
       ${success === 'username' ? `<p class="empty-note" style="color:var(--accent-text);">Username updated.</p>` : ''}
       <form method="POST" action="/account/username">
@@ -3746,7 +3793,7 @@ function pageAccount(req, res, query) {
     </div>
 
     <div class="card" style="margin-top:14px;">
-      <h2 style="margin:0 0 10px;font-size:15px;">Email</h2>
+      <h2 style="margin:0 0 10px;font-size:0.9375rem;">Email</h2>
       <p class="empty-note" style="padding:0 0 10px;">Used for password resets.${!user.email ? ' Your account currently has no email on file.' : ''}</p>
       ${error === 'email_taken' ? `<p class="dosing-note">That email is already in use on another account.</p>` : ''}
       ${success === 'email' ? `<p class="empty-note" style="color:var(--accent-text);">Email updated.</p>` : ''}
@@ -3758,7 +3805,7 @@ function pageAccount(req, res, query) {
     </div>
 
     <div class="card" style="margin-top:14px;">
-      <h2 style="margin:0 0 10px;font-size:15px;">Password</h2>
+      <h2 style="margin:0 0 10px;font-size:0.9375rem;">Password</h2>
       ${error === 'wrong_password' ? `<p class="dosing-note">Current password is incorrect.</p>` : ''}
       ${error === 'password_mismatch' ? `<p class="dosing-note">New password and confirmation don't match.</p>` : ''}
       ${error === 'password_short' ? `<p class="dosing-note">New password needs to be at least 8 characters.</p>` : ''}
@@ -3775,12 +3822,12 @@ function pageAccount(req, res, query) {
     </div>
 
     <div class="card" style="margin-top:14px;">
-      <h2 style="margin:0 0 10px;font-size:15px;">Privacy & Safety</h2>
+      <h2 style="margin:0 0 10px;font-size:0.9375rem;">Privacy & Safety</h2>
       <a class="btn secondary block" href="/blocked-users" style="text-decoration:none;">🚫 Blocked Users</a>
     </div>
 
     <div class="card" style="margin-top:14px;">
-      <h2 style="margin:0 0 10px;font-size:15px;">Your Data</h2>
+      <h2 style="margin:0 0 10px;font-size:0.9375rem;">Your Data</h2>
       <p class="empty-note" style="padding:0 0 10px;">See our <a href="/privacy">Privacy Policy</a> and <a href="/terms">Terms of Service</a> for what this covers.</p>
       <a class="btn secondary block" href="/account/export" style="text-decoration:none;margin-bottom:10px;">⬇️ Export my data</a>
       <form method="POST" action="/account/delete" onsubmit="return confirm('This permanently deletes your account, check-ins, friends, and photos. This cannot be undone. Continue?')">
@@ -3941,10 +3988,10 @@ function pageFriends(req, res, query) {
     <h1 class="screen-title">Friends</h1>
     <p class="screen-sub">Find people by username, then trade dupes once you're connected.</p>
     <div class="card" style="margin-bottom:14px;">
-      <b style="font-size:13px;">🔗 Invite a friend</b>
+      <b style="font-size:0.8125rem;">🔗 Invite a friend</b>
       <p class="empty-note" style="padding:4px 0 8px;">Anyone who signs up through your link is added as a friend automatically — no request to accept.</p>
       <div style="display:flex;gap:8px;">
-        <input type="text" readonly value="${esc(inviteUrl)}" id="invite-link-input" style="flex:1;margin:0;font-size:12px;" onclick="this.select()">
+        <input type="text" readonly value="${esc(inviteUrl)}" id="invite-link-input" style="flex:1;margin:0;font-size:0.75rem;" onclick="this.select()">
         <button type="button" class="btn secondary" style="white-space:nowrap;" onclick="shareInviteLink(${esc(JSON.stringify(inviteUrl))})">Share</button>
       </div>
     </div>
@@ -4197,9 +4244,9 @@ function pageFriendProfile(req, res, friendId) {
       </form>
     ` : ''}
     <div class="card" style="display:flex;justify-content:space-around;text-align:center;margin-bottom:16px;">
-      <div><div style="font-size:20px;font-weight:700;">${collection.length}</div><div class="empty-note">Cards caught</div></div>
-      <div><div style="font-size:20px;font-weight:700;">${db.getTotalDupes(friendId)}</div><div class="empty-note">Tradeable dupes</div></div>
-      <div><div style="font-size:20px;font-weight:700;">${recentCheckins.length}</div><div class="empty-note">Recent check-ins</div></div>
+      <div><div style="font-size:1.25rem;font-weight:700;">${collection.length}</div><div class="empty-note">Cards caught</div></div>
+      <div><div style="font-size:1.25rem;font-weight:700;">${db.getTotalDupes(friendId)}</div><div class="empty-note">Tradeable dupes</div></div>
+      <div><div style="font-size:1.25rem;font-weight:700;">${recentCheckins.length}</div><div class="empty-note">Recent check-ins</div></div>
     </div>
     ${friendId !== userId ? `<a class="btn block secondary" href="/trade?friend=${friendId}" style="margin-bottom:16px;">🔁 Trade with ${esc(friend.username)}</a>` : ''}
     <div class="section-label">Recent check-ins</div>
@@ -4405,7 +4452,7 @@ async function pageDispensaries(req, res, searchParams) {
     body = `
       <h1 class="screen-title">Dispensaries</h1>
       <div class="locate-banner">
-        <div style="font-weight:700;font-size:13px;">📍 Find dispensaries near you</div>
+        <div style="font-weight:700;font-size:0.8125rem;">📍 Find dispensaries near you</div>
         <div class="dsub" style="margin:3px 0 10px;">${realError ? esc(realError) : "Search by ZIP code, or share your location — nothing is sent anywhere else."}</div>
         <div class="locate-row">
           <form method="GET" action="/dispensaries" class="zip-form">
@@ -4569,7 +4616,7 @@ function pageLegalStatus(req, res, query) {
     </form>
     ${current ? `
       <div class="card" style="border-left:4px solid ${LEGAL_STATUS_LABELS[current.status].color};margin-bottom:20px;">
-        <h2 style="margin:0 0 4px;font-size:17px;">${esc(current.state)}</h2>
+        <h2 style="margin:0 0 4px;font-size:1.0625rem;">${esc(current.state)}</h2>
         <div style="font-weight:700;color:${LEGAL_STATUS_LABELS[current.status].color};margin-bottom:6px;">${esc(LEGAL_STATUS_LABELS[current.status].label)}</div>
         <p style="margin:0;">${esc(current.note)}</p>
         ${renderStateDetails(current)}
@@ -4578,7 +4625,7 @@ function pageLegalStatus(req, res, query) {
     <h2 class="screen-title" style="margin-top:8px;">Full list</h2>
     <p class="empty-note" style="margin:-4px 0 8px;">Tap a state to see its possession, purchase, and home-grow limits.</p>
     ${Object.entries(LEGAL_STATUS_LABELS).map(([key, meta]) => `
-      <h3 style="font-size:13px;color:${meta.color};margin:16px 0 6px;">${esc(meta.label)}</h3>
+      <h3 style="font-size:0.8125rem;color:${meta.color};margin:16px 0 6px;">${esc(meta.label)}</h3>
       ${(grouped[key] || []).map(s => `
         <a href="/legal-status?state=${encodeURIComponent(s.state)}" class="card" style="display:block;padding:10px 14px;margin-bottom:6px;text-decoration:none;color:inherit;">
           <div style="display:flex;justify-content:space-between;align-items:baseline;">

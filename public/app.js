@@ -105,8 +105,26 @@ function toast(msg) {
   window._toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
 }
 
+// Generic keyboard support for interactive elements that aren't a native
+// <button> or <a> (a <div onclick="...">, used in a few places where a
+// real <button> would need heavier CSS resets to match the existing
+// look). Marking one role="button" tabindex="0" makes it reachable by Tab
+// and announced correctly by screen readers, but does nothing on its own
+// for actually *activating* it from the keyboard -- browsers only wire up
+// Enter/Space to real buttons and links automatically. This listener
+// covers every element marked that way, current and future, in one place
+// rather than adding a one-off keydown handler each time.
+document.addEventListener('keydown', (e) => {
+  if (e.key !== 'Enter' && e.key !== ' ') return;
+  const el = e.target.closest('[role="button"]');
+  if (!el) return;
+  e.preventDefault();
+  el.click();
+});
+
 function toggleFaq(el) {
-  el.parentElement.classList.toggle('open');
+  const isOpen = el.parentElement.classList.toggle('open');
+  el.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
 }
 
 async function giveKudos(id, btn) {
@@ -555,7 +573,7 @@ if ('serviceWorker' in navigator) {
     searchInput.disabled = atMax;
     searchInput.placeholder = atMax ? 'Max 5 selected — remove one to add another' : 'Search 85+ moods, feelings & relief tags...';
     chipsBox.innerHTML = selected.map(e =>
-      `<span class="tag-chip">${window.EFFECT_ICON && window.EFFECT_ICON[e] ? window.EFFECT_ICON[e] + ' ' : ''}${e} <button type="button" data-remove="${e}">✕</button></span>`
+      `<span class="tag-chip">${window.EFFECT_ICON && window.EFFECT_ICON[e] ? window.EFFECT_ICON[e] + ' ' : ''}${e} <button type="button" data-remove="${e}" aria-label="Remove ${e}">✕</button></span>`
     ).join('');
     hiddenBox.innerHTML = selected.map(e => `<input type="hidden" name="effects" value="${e}">`).join('');
     noteBox.textContent = `${selected.length} of 5 selected`;
@@ -599,7 +617,7 @@ if ('serviceWorker' in navigator) {
   const uploadBox = document.getElementById('photo-upload-box');
   if (photoData && window.INITIAL_PHOTO) {
     photoData.value = window.INITIAL_PHOTO;
-    uploadBox.innerHTML = `<div class="photo-preview-wrap"><img src="${window.INITIAL_PHOTO}" alt="Your photo"><button type="button" id="clear-photo-btn">✕</button></div>`;
+    uploadBox.innerHTML = `<div class="photo-preview-wrap"><img src="${window.INITIAL_PHOTO}" alt="Your photo"><button type="button" id="clear-photo-btn" aria-label="Remove photo">✕</button></div>`;
     document.getElementById('clear-photo-btn').onclick = (e) => {
       e.stopPropagation();
       photoData.value = '';
@@ -613,7 +631,7 @@ if ('serviceWorker' in navigator) {
       const reader = new FileReader();
       reader.onload = () => {
         photoData.value = reader.result;
-        uploadBox.innerHTML = `<div class="photo-preview-wrap"><img src="${reader.result}" alt="Your photo"><button type="button" id="clear-photo-btn">✕</button></div>`;
+        uploadBox.innerHTML = `<div class="photo-preview-wrap"><img src="${reader.result}" alt="Your photo"><button type="button" id="clear-photo-btn" aria-label="Remove photo">✕</button></div>`;
         document.getElementById('clear-photo-btn').onclick = (e) => {
           e.stopPropagation();
           photoData.value = '';
@@ -694,7 +712,7 @@ if ('serviceWorker' in navigator) {
       const atMax = selected.length >= max;
       searchInput.disabled = atMax;
       searchInput.placeholder = atMax ? `Max ${max} selected — remove one to add another` : searchInput.dataset.placeholder || 'Search...';
-      chipsBox.innerHTML = selected.map(v => `<span class="tag-chip">${escHtml(v)} <button type="button" data-remove="${escHtml(v)}">✕</button></span>`).join('');
+      chipsBox.innerHTML = selected.map(v => `<span class="tag-chip">${escHtml(v)} <button type="button" data-remove="${escHtml(v)}" aria-label="Remove ${escHtml(v)}">✕</button></span>`).join('');
       hiddenBox.innerHTML = selected.map(v => `<input type="hidden" name="${fieldName}" value="${escHtml(v)}">`).join('');
       chipsBox.querySelectorAll('button[data-remove]').forEach(btn => {
         btn.onclick = () => { selected = selected.filter(x => x !== btn.dataset.remove); render(); };
