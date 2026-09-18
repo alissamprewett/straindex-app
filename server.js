@@ -668,7 +668,7 @@ function pageStrainDetail(req, res, id) {
           ${strainPhotoTag(s, 'lg')}
           <div>
             <h1 style="margin:0;font-size:1.1875rem;">${esc(s.name)}</h1>
-            <div class="empty-note" style="padding:0;">${esc(s.type)}${s.lean ? ' · ' + esc(s.lean) : ''} · <span class="rarity-tag rarity-${s.rarity}">${rarityLabel(s.rarity)}</span></div>
+            <div class="empty-note" style="padding:0;">${linkGlossaryTerms(esc(s.type))}${s.lean ? ' · ' + linkGlossaryTerms(esc(s.lean)) : ''} · <span class="rarity-tag rarity-${s.rarity}">${rarityLabel(s.rarity)}</span></div>
             <div style="margin-top:2px;" title="${esc(VERIFICATION_BADGE[strainVerificationTier(s)].note)}"><span class="empty-note" style="padding:0;">${VERIFICATION_BADGE[strainVerificationTier(s)].icon} ${VERIFICATION_BADGE[strainVerificationTier(s)].label}</span></div>
             ${ratingStats.count ? `<div style="margin-top:2px;">${starString(Math.round(ratingStats.avg))} <span class="empty-note" style="padding:0;">${ratingStats.avg}★ from ${ratingStats.count} check-in${ratingStats.count === 1 ? '' : 's'}</span></div>` : `<div class="empty-note" style="padding:2px 0 0;">No community ratings yet — be the first to check in.</div>`}
           </div>
@@ -680,7 +680,7 @@ function pageStrainDetail(req, res, id) {
       </div>
       ${(s.thc || s.cbd) ? `<p style="margin:12px 0 4px;">${s.thc ? `<b>THC:</b> ${esc(s.thc)}` : ''}${s.thc && s.cbd ? ' &nbsp; ' : ''}${s.cbd ? `<b>CBD:</b> ${esc(s.cbd)}` : ''}</p>` : `<p class="empty-note" style="padding:0 0 4px;">No verified THC/CBD data for this strain yet.</p>`}
       ${s.breeder ? `<p class="empty-note" style="padding:0;"><b>Bred by:</b> ${esc(s.breeder)}</p>` : ''}
-      ${s.flavor ? `<p style="font-style:italic;color:var(--ink-secondary);">"${esc(s.flavor)}"</p>` : ''}
+      ${s.flavor ? `<p style="font-style:italic;color:var(--ink-secondary);">"${linkGlossaryTerms(esc(s.flavor))}"</p>` : ''}
       <p>${s.effects.map(e => `<span class="filter-pill">${esc(e)}</span>`).join('')}</p>
       ${s.terps.length ? `<p><b>Top terpenes:</b> ${s.terps.map(t => `${esc(t.n)} (${Math.round(t.p * 100)}%)`).join(', ')}</p>` : ''}
       ${Array.isArray(s.ailments) && s.ailments.length ? `
@@ -891,7 +891,7 @@ function pageSharedCheckin(req, res, id) {
         <div>
           <div class="empty-note" style="padding:0;">${esc(posterName)} checked in on StrainDex</div>
           <h1 style="margin:2px 0 0;font-size:1.1875rem;">${s ? esc(s.name) : esc(c.strain_id)}</h1>
-          ${s ? `<div class="empty-note" style="padding:0;">${esc(s.type)}${s.lean ? ' · ' + esc(s.lean) : ''} · <span class="rarity-tag rarity-${s.rarity}">${rarityLabel(s.rarity)}</span></div>` : ''}
+          ${s ? `<div class="empty-note" style="padding:0;">${linkGlossaryTerms(esc(s.type))}${s.lean ? ' · ' + linkGlossaryTerms(esc(s.lean)) : ''} · <span class="rarity-tag rarity-${s.rarity}">${rarityLabel(s.rarity)}</span></div>` : ''}
         </div>
       </div>
       <div class="sub" style="margin-top:12px;">${esc(c.method)} · ${starString(c.rating)}</div>
@@ -1171,7 +1171,7 @@ function pageFaq(req, res, query) {
   const renderFaq = (f) => `
     <div class="faq-item">
       <div class="faq-q" onclick="toggleFaq(this)" role="button" tabindex="0" aria-expanded="false"><span>${esc(f.question)}</span><span>⌄</span></div>
-      <div class="faq-a">${esc(f.answer)}${f.source_url ? `<div class="empty-note" style="padding:6px 0 0;">Source: <a href="${esc(f.source_url)}" target="_blank" rel="noopener noreferrer">${esc(f.source_name || f.source_url)}</a></div>` : ''}</div>
+      <div class="faq-a">${linkGlossaryTerms(esc(f.answer))}${f.source_url ? `<div class="empty-note" style="padding:6px 0 0;">Source: <a href="${esc(f.source_url)}" target="_blank" rel="noopener noreferrer">${esc(f.source_name || f.source_url)}</a></div>` : ''}</div>
     </div>`;
 
   const body = `
@@ -2554,7 +2554,7 @@ function pageTerpeneGuide(req, res) {
           <a href="/strains?terpene=${encodeURIComponent(name)}" class="empty-note" style="padding:0;">${counts[name] || 0} strains →</a>
         </div>
         <p style="margin:6px 0 2px;"><b>Aroma:</b> ${esc(info.aroma)}</p>
-        <p style="margin:2px 0 0;"><b>Commonly associated with:</b> ${esc(info.effects)}</p>
+        <p style="margin:2px 0 0;"><b>Commonly associated with:</b> ${linkGlossaryTerms(esc(info.effects))}</p>
       </div>
     `).join('')}
   `;
@@ -2600,7 +2600,7 @@ function pageEffectsGuide(req, res) {
           <h2 style="margin:0;font-size:1rem;">${esc(name)}</h2>
           <a href="/strains?effect=${encodeURIComponent(name)}" class="empty-note" style="padding:0;">${counts[name] || 0} strains →</a>
         </div>
-        <p style="margin:6px 0 0;">${esc(description)}</p>
+        <p style="margin:6px 0 0;">${linkGlossaryTerms(esc(description))}</p>
       </div>
     `).join('')}
   `;
@@ -2719,7 +2719,7 @@ function pageBreederGuide(req, res) {
           <h2 style="margin:0;font-size:1rem;">${esc(name)}</h2>
           <a href="/strains?breeder=${encodeURIComponent(name)}" class="empty-note" style="padding:0;">${count} strain${count === 1 ? '' : 's'} →</a>
         </div>
-        ${BREEDER_GUIDE[name] ? `<p style="margin:6px 0 0;">${esc(BREEDER_GUIDE[name])}</p>` : ''}
+        ${BREEDER_GUIDE[name] ? `<p style="margin:6px 0 0;">${linkGlossaryTerms(esc(BREEDER_GUIDE[name]))}</p>` : ''}
       </div>
     `).join('')}
   `;
@@ -4614,7 +4614,7 @@ function pageMethods(req, res) {
       <div class="method-guide-card">
         <div class="mgtitle">${m.icon.startsWith('/') ? `<img src="${m.icon}" alt="" class="mg-icon-photo">` : m.icon} ${esc(m.name)}</div>
         <div class="mgstats"><span>Onset: ${esc(m.onset)}</span><span>Lasts: ${esc(m.duration)}</span></div>
-        <div class="mgdesc">${esc(m.desc)}</div>
+        <div class="mgdesc">${linkGlossaryTerms(esc(m.desc))}</div>
       </div>`).join('')}
   `;
   sendHtml(res, layout({ title: 'Ways to Enjoy It', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
@@ -4687,7 +4687,7 @@ function pageConcentrates(req, res) {
       <div class="method-guide-card">
         <div class="mgtitle">${c.icon} ${esc(c.name)}</div>
         <div class="mgstats"><span>THC: ${esc(c.thc)}</span></div>
-        <div class="mgdesc">${esc(c.desc)}</div>
+        <div class="mgdesc">${linkGlossaryTerms(esc(c.desc))}</div>
       </div>`).join('')}
     <p class="empty-note" style="margin-top:6px;">Not medical advice — potency varies by batch and producer even within these ranges.</p>
   `;
