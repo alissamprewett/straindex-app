@@ -4352,25 +4352,25 @@ const server = http.createServer(async (req, res) => {
     // signup/login/logout routes themselves and the separate admin panel
     // (which has its own, unrelated password gate below).
     //
-    // Two deliberate carve-outs beyond the flat PUBLIC_PATHS list:
-    //   - GET /strains and GET /strains/:id -- the strain library is the
-    //     app's biggest source of real, useful content (5,000+ researched
-    //     pages), and none of it was reachable by search engines or a
-    //     shared link while it sat behind the wall. Both page functions
-    //     already handle a null/guest userId gracefully (see
-    //     auth.currentUserId usage in pageStrains/pageStrainDetail) --
-    //     they were just never reachable anonymously. Actions on a strain
-    //     page (check in, wishlist, share, add to a list) still require an
-    //     account; only viewing is now public. POST routes under /strains/
-    //     are untouched by this and still fall through to the wall.
-    //   - GET /c/:id -- a public, read-only view of a single non-private
-    //     check-in, meant to be pasted into a text or posted externally
-    //     (see renderShareButton). Respects is_private itself; see
-    //     pageSharedCheckin.
+    // /strains and /strains/:id were briefly carved out as public (for SEO
+    // -- search engines can't index anything behind a login redirect) but
+    // that's a deliberate product call to make either way, and the call
+    // here is to keep the strain library itself behind the signup wall, so
+    // it's back to requiring an account like everything else. The guest-
+    // safe null-userId handling added to pageStrains/pageStrainDetail while
+    // this was public is harmless to leave in place (defense in depth --
+    // those pages simply won't be reached by a logged-out request now) and
+    // isn't reverted here.
+    //
+    // GET /c/:id remains the one deliberate carve-out: a public, read-only
+    // view of a single non-private check-in, meant to be pasted into a
+    // text or posted externally (see renderShareButton). It respects
+    // is_private itself; see pageSharedCheckin. Its own "view this strain"
+    // link now simply bounces a logged-out visitor to /login, same as any
+    // other in-app link would.
     const PUBLIC_PATHS = new Set(['/', '/signup', '/login', '/logout', '/terms', '/privacy', '/forgot-password', '/reset-password', '/api/analytics-snapshot', '/auth/google', '/auth/google/callback', '/auth/google/finish']);
-    const isPublicStrainView = method === 'GET' && /^\/strains(\/[^/]+)?$/.test(pathname);
     const isPublicSharedCheckin = method === 'GET' && /^\/c\/[^/]+$/.test(pathname);
-    if (!PUBLIC_PATHS.has(pathname) && !isPublicStrainView && !isPublicSharedCheckin && !pathname.startsWith('/admin') && auth.currentUserId(req) == null) {
+    if (!PUBLIC_PATHS.has(pathname) && !isPublicSharedCheckin && !pathname.startsWith('/admin') && auth.currentUserId(req) == null) {
       return redirect(res, '/login');
     }
 
