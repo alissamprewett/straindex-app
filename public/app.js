@@ -58,6 +58,44 @@ window.addEventListener('pageshow', (event) => {
   }
 })();
 
+// Shared by the form-auto-injection below and by the fetch()-based JSON
+// API calls further down (kudos/like buttons), which have no form body to
+// carry a hidden field in and so send this as a header instead.
+function getCsrfCookie() {
+  const match = document.cookie.match(/(?:^|; )csrf_token=([^;]*)/);
+  return match ? decodeURIComponent(match[1]) : null;
+}
+
+// CSRF protection: every native <form method="POST"> on the page gets an
+// invisible _csrf field auto-injected here, rather than needing one
+// hand-added to every one of this app's form templates server-side. The
+// value comes from a small, JS-readable csrf_token cookie set alongside
+// the real, HttpOnly session cookie at login -- see auth.csrfTokenFor in
+// lib/auth.js and the matching server-side check in server.js. Forms
+// rendered before any session exists (signup, login) simply get no token,
+// which is fine since those specific routes are exempted from the
+// server-side check for exactly that reason. Runs immediately rather than
+// waiting on DOMContentLoaded -- this script tag sits at the end of the
+// page, so every form already in the markup has already been parsed into
+// the DOM by the time this executes.
+(function injectCsrfTokens() {
+  function getCookie(name) {
+    const match = document.cookie.match(new RegExp('(?:^|; )' + name + '=([^;]*)'));
+    return match ? decodeURIComponent(match[1]) : null;
+  }
+  const token = getCsrfCookie() || getCookie('admin_csrf_token');
+  if (!token) return;
+  document.querySelectorAll('form').forEach(form => {
+    if ((form.getAttribute('method') || '').toLowerCase() !== 'post') return;
+    if (form.querySelector('input[name="_csrf"]')) return;
+    const input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = '_csrf';
+    input.value = token;
+    form.appendChild(input);
+  });
+})();
+
 function toast(msg) {
   const t = document.getElementById('toast');
   if (!t) return;
@@ -72,7 +110,7 @@ function toggleFaq(el) {
 }
 
 async function giveKudos(id, btn) {
-  const res = await fetch(`/api/recipes/${id}/kudos`, { method: 'POST' });
+  const res = await fetch(`/api/recipes/${id}/kudos`, { method: 'POST', headers: { 'X-CSRF-Token': getCsrfCookie() || '' } });
   if (res.ok) {
     const data = await res.json();
     const icon = btn.querySelector('img, svg');
@@ -165,7 +203,7 @@ async function shareLink(url, title) {
 }
 
 async function giveCheckinKudos(id, btn) {
-  const res = await fetch(`/api/checkins/${id}/kudos`, { method: 'POST' });
+  const res = await fetch(`/api/checkins/${id}/kudos`, { method: 'POST', headers: { 'X-CSRF-Token': getCsrfCookie() || '' } });
   if (res.ok) {
     const data = await res.json();
     const icon = btn.querySelector('img, svg');
@@ -204,7 +242,7 @@ async function giveCheckinKudos(id, btn) {
   }
 }
 async function likeComment(id, btn) {
-  const res = await fetch(`/api/comments/${id}/like`, { method: 'POST' });
+  const res = await fetch(`/api/comments/${id}/like`, { method: 'POST', headers: { 'X-CSRF-Token': getCsrfCookie() || '' } });
   if (res.ok) {
     const data = await res.json();
     btn.textContent = (data.liked ? '💚 Liked' : '🤍 Like') + (data.count ? ` (${data.count})` : '');
@@ -212,7 +250,7 @@ async function likeComment(id, btn) {
   }
 }
 async function likeGrowTip(id, btn) {
-  const res = await fetch(`/api/growtips/${id}/like`, { method: 'POST' });
+  const res = await fetch(`/api/growtips/${id}/like`, { method: 'POST', headers: { 'X-CSRF-Token': getCsrfCookie() || '' } });
   if (res.ok) {
     const data = await res.json();
     const icon = btn.querySelector('img, svg');

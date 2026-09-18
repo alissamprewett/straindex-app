@@ -1569,14 +1569,20 @@ async function handleAdminLoginSubmit(req, res) {
   const f = await parseForm(req);
   if (auth.checkPassword(f.password)) {
     const token = auth.sign('admin');
-    res.setHeader('Set-Cookie', `admin_session=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=2592000`);
+    res.setHeader('Set-Cookie', [
+      `admin_session=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=2592000`,
+      `admin_csrf_token=${encodeURIComponent(auth.csrfTokenFor(token))}; Path=/; SameSite=Lax; Max-Age=2592000`,
+    ]);
     redirect(res, '/admin');
   } else {
     redirect(res, '/admin/login?err=1');
   }
 }
 function handleAdminLogout(req, res) {
-  res.setHeader('Set-Cookie', `admin_session=; Path=/; HttpOnly; Max-Age=0`);
+  res.setHeader('Set-Cookie', [
+    `admin_session=; Path=/; HttpOnly; Max-Age=0`,
+    `admin_csrf_token=; Path=/; Max-Age=0`,
+  ]);
   redirect(res, '/');
 }
 
@@ -1726,7 +1732,10 @@ async function handleGoogleCallback(req, res, query) {
     }
     if (user) {
       const token = auth.signUserSessionValue(user.id);
-      res.setHeader('Set-Cookie', `user_session=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000`);
+      res.setHeader('Set-Cookie', [
+        `user_session=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000`,
+        `csrf_token=${encodeURIComponent(auth.csrfTokenFor(token))}; Path=/; SameSite=Lax; Max-Age=31536000`,
+      ]);
       return redirect(res, '/');
     }
     // 3) Genuinely new person -- Google doesn't give us a birth date, and
@@ -1839,6 +1848,7 @@ async function handleGoogleFinishSubmit(req, res) {
   const token = auth.signUserSessionValue(user.id);
   res.setHeader('Set-Cookie', [
     `user_session=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000`,
+    `csrf_token=${encodeURIComponent(auth.csrfTokenFor(token))}; Path=/; SameSite=Lax; Max-Age=31536000`,
     `google_pending=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0`,
     CLEAR_PENDING_INVITE_COOKIE,
   ]);
@@ -1861,6 +1871,7 @@ async function handleSignupSubmit(req, res) {
   const token = auth.signUserSessionValue(user.id);
   res.setHeader('Set-Cookie', [
     `user_session=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000`,
+    `csrf_token=${encodeURIComponent(auth.csrfTokenFor(token))}; Path=/; SameSite=Lax; Max-Age=31536000`,
     CLEAR_PENDING_INVITE_COOKIE,
   ]);
   redirect(res, '/onboarding');
@@ -3133,11 +3144,17 @@ async function handleLoginSubmit(req, res) {
   }
   clearLoginAttempts(req, username);
   const token = auth.signUserSessionValue(user.id);
-  res.setHeader('Set-Cookie', `user_session=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000`);
+  res.setHeader('Set-Cookie', [
+    `user_session=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000`,
+    `csrf_token=${encodeURIComponent(auth.csrfTokenFor(token))}; Path=/; SameSite=Lax; Max-Age=31536000`,
+  ]);
   redirect(res, '/');
 }
 function handleLogout(req, res) {
-  res.setHeader('Set-Cookie', `user_session=; Path=/; HttpOnly; Max-Age=0`);
+  res.setHeader('Set-Cookie', [
+    `user_session=; Path=/; HttpOnly; Max-Age=0`,
+    `csrf_token=; Path=/; Max-Age=0`,
+  ]);
   redirect(res, '/login');
 }
 
@@ -3472,17 +3489,34 @@ function apiListStrains(req, res, query) {
     results: db.listStrains({ q, type, rarity, effect, thc, terpene, ailment, breeder, verified, limit }),
   });
 }
+// Shared CSRF guard for the /api/* JSON endpoints below -- these are hit
+// via fetch() rather than a native form submission, so there's no hidden
+// _csrf field to check; the same token travels as a header instead (see
+// getCsrfCookie/X-CSRF-Token in app.js). Every other POST route gets this
+// enforced centrally, once, in the router; these few are the exception
+// specifically because they're JSON, not form-encoded (see the /api/
+// carve-out on that central check).
+function requireCsrfHeader(req, res) {
+  if (!auth.verifyCsrfToken(req, req.headers['x-csrf-token'])) {
+    sendJson(res, { error: 'CSRF check failed -- please refresh the page and try again' }, 403);
+    return false;
+  }
+  return true;
+}
 async function apiKudos(req, res, id) {
+  if (!requireCsrfHeader(req, res)) return;
   const r = await db.addKudos(id);
   if (!r) return sendJson(res, { error: 'not found' }, 404);
   sendJson(res, { kudos: r.kudos });
 }
 async function apiGrowLike(req, res, id) {
+  if (!requireCsrfHeader(req, res)) return;
   await db.likeGrowTip(id);
   const tip = db.listGrowTips().find(t => t.id === id);
   sendJson(res, { likes: tip ? tip.likes : 0 });
 }
 async function apiCheckinKudos(req, res, id) {
+  if (!requireCsrfHeader(req, res)) return;
   const userId = requireUser(req, res);
   if (userId == null) return;
   const { checkin, given } = await db.toggleCheckinKudos(id, userId);
@@ -3493,6 +3527,7 @@ async function apiCheckinKudos(req, res, id) {
   sendJson(res, { kudos: checkin.kudos, given, givers });
 }
 async function apiCommentLike(req, res, id) {
+  if (!requireCsrfHeader(req, res)) return;
   const userId = requireUser(req, res);
   if (userId == null) return;
   const result = await db.toggleCommentLike(id, userId);
@@ -3767,7 +3802,10 @@ async function handleAccountDelete(req, res) {
   const userId = requireUser(req, res);
   if (userId == null) return;
   await db.deleteUserAccount(userId);
-  res.setHeader('Set-Cookie', `user_session=; Path=/; HttpOnly; Max-Age=0`);
+  res.setHeader('Set-Cookie', [
+    `user_session=; Path=/; HttpOnly; Max-Age=0`,
+    `csrf_token=; Path=/; Max-Age=0`,
+  ]);
   redirect(res, '/signup?deleted=1');
 }
 async function handleAccountUsername(req, res) {
@@ -4633,6 +4671,36 @@ const server = http.createServer(async (req, res) => {
     const isPublicSharedRecap = method === 'GET' && /^\/recap\/s\/[^/]+$/.test(pathname);
     if (!PUBLIC_PATHS.has(pathname) && !isPublicSharedCheckin && !isPublicInviteLink && !isPublicSharedRecap && !pathname.startsWith('/admin') && auth.currentUserId(req) == null) {
       return redirect(res, '/login');
+    }
+
+    // CSRF protection for every authenticated, form-encoded POST past this
+    // point. Exempted: the handful of POST routes that fire before any
+    // session cookie exists yet (signup, login, password reset, admin
+    // login, finishing a Google signup) -- there's no token to derive or
+    // check until one of THESE requests actually creates the session, so
+    // requiring one here would be checking a lock that hasn't been
+    // installed yet. Also exempted: /api/* JSON endpoints, which use their
+    // own header-based token instead (see apiRequireCsrf below) since they
+    // have no form body to carry a hidden field in.
+    //
+    // This is a second, independent layer on top of SameSite=Lax, already
+    // set on every auth cookie in this app -- that alone blocks the
+    // classic cross-site form-POST attack on any modern browser. This
+    // layer doesn't depend on SameSite enforcement being correct, or even
+    // present (older browsers, non-browser HTTP clients, future browser
+    // bugs). See lib/auth.js for how the token itself is derived.
+    const CSRF_EXEMPT_POST_PATHS = new Set(['/signup', '/login', '/forgot-password', '/reset-password', '/admin/login', '/auth/google/finish']);
+    if (method === 'POST' && !CSRF_EXEMPT_POST_PATHS.has(pathname) && !pathname.startsWith('/api/')) {
+      const contentType = req.headers['content-type'] || '';
+      if (contentType.includes('application/x-www-form-urlencoded')) {
+        const fields = await parseForm(req);
+        if (!auth.verifyCsrfToken(req, fields._csrf)) {
+          return sendHtml(res, layout({
+            title: 'Please try again',
+            body: `<h1 class="screen-title">Please try again</h1><p>That form couldn't be verified — it may have been open a long time, or submitted from somewhere unexpected. <a href="javascript:history.back()">Go back</a>, refresh the page, and resubmit.</p>`,
+          }), 403);
+        }
+      }
     }
 
     let m;
