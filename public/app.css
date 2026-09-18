@@ -23,6 +23,16 @@
      does not, so it can't share one variable across both jobs once dark
      mode is in the mix. */
   --surface-secondary:#eee; --track-bg:#e9e7dd; --accent-text:var(--brand-green-dark);
+  /* Used for the "selected" highlight on quiz-style radio rows. This was
+     previously only ever supplied as an inline fallback (var(--brand-
+     green-pale, #eef6ee)) with no real variable behind it -- meaning it
+     silently used that same near-white green in EVERY theme, including
+     dark mode, where the row's text color correctly switches to the
+     light --ink value for a dark background but this fixed light
+     background did not, leaving light text on a near-white highlight:
+     unreadable. Defining it for real here, per theme, is what actually
+     fixes that rather than just patching the one call site. */
+  --brand-green-pale:#eef6ee;
   --popover-bg:#232220;
 }
 /* Two ways into dark mode: following the OS/browser setting automatically
@@ -46,7 +56,7 @@
     --bg-page:#111310; --bg-card:#1c1f1b;
     --ink:#f0efe9; --ink-secondary:#c7c4b8; --ink-muted:#8f8c80; --border:#33362f;
     --shadow:0 2px 10px rgba(0,0,0,0.35); --shadow-lg:0 12px 32px rgba(0,0,0,0.55);
-    --surface-secondary:#2a2d27; --track-bg:#33362f;
+    --surface-secondary:#2a2d27; --track-bg:#33362f; --brand-green-pale:#1a2e20;
     /* The one variable that deliberately moves opposite the rest: bare
        brand-green-dark text (no background of its own) needs to get
        LIGHTER against a dark page, even though the same hex value stays
@@ -68,7 +78,7 @@ html[data-theme="dark"]{
   --bg-page:#111310; --bg-card:#1c1f1b;
   --ink:#f0efe9; --ink-secondary:#c7c4b8; --ink-muted:#8f8c80; --border:#33362f;
   --shadow:0 2px 10px rgba(0,0,0,0.35); --shadow-lg:0 12px 32px rgba(0,0,0,0.55);
-  --surface-secondary:#2a2d27; --track-bg:#33362f;
+  --surface-secondary:#2a2d27; --track-bg:#33362f; --brand-green-pale:#1a2e20;
   --accent-text:#5fcf9a;
   --popover-bg:#2f322c;
 }
