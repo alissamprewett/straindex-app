@@ -275,7 +275,7 @@ function renderCheckinComments(c, userId, redirectPath) {
       </div>`;
     }).join('')}</div>` : ''}
     ${userId != null ? `
-      <form method="POST" action="/checkin/${c.id}/comment" style="display:flex;gap:6px;margin-top:6px;">
+      <form method="POST" action="/checkin/${c.id}/comment" style="display:flex;gap:6px;align-items:center;margin-top:6px;">
         <input type="hidden" name="redirect_to" value="${esc(redirectPath)}">
         <input type="text" name="body" placeholder="Add a comment..." required style="flex:1;margin:0;">
         <button class="btn secondary" type="submit" style="padding:6px 12px;">Post</button>
@@ -487,7 +487,7 @@ function pageHome(req, res) {
         ${renderOnsetTimer(c)}
         ${renderCheckinComments(c, userId, '/')}
         <div style="display:flex;flex-direction:column;align-items:flex-end;margin-top:8px;">
-          <div style="display:flex;gap:6px;">
+          <div style="display:flex;gap:6px;align-items:center;">
             ${renderShareButton(c)}
             ${renderKudosButton(c, userId)}
           </div>
@@ -673,7 +673,7 @@ function pageStrainDetail(req, res, id) {
             ${ratingStats.count ? `<div style="margin-top:2px;">${starString(Math.round(ratingStats.avg))} <span class="empty-note" style="padding:0;">${ratingStats.avg}★ from ${ratingStats.count} check-in${ratingStats.count === 1 ? '' : 's'}</span></div>` : `<div class="empty-note" style="padding:2px 0 0;">No community ratings yet — be the first to check in.</div>`}
           </div>
         </div>
-        <div style="display:flex;gap:6px;flex-shrink:0;">
+        <div style="display:flex;gap:6px;align-items:center;flex-shrink:0;">
           <button type="button" onclick="openShareModal()" title="Share" aria-label="Share" style="background:var(--bg-card,#fff);border:1px solid var(--border);border-radius:50%;width:34px;height:34px;font-size:15px;cursor:pointer;padding:0;">📤</button>
           <a href="/compare?a=${s.id}" title="Compare this strain" aria-label="Compare this strain" style="background:var(--bg-card,#fff);border:1px solid var(--border);border-radius:50%;width:34px;height:34px;font-size:15px;cursor:pointer;padding:0;display:flex;align-items:center;justify-content:center;text-decoration:none;">🆚</a>
         </div>
@@ -696,7 +696,7 @@ function pageStrainDetail(req, res, id) {
         <button type="button" class="btn secondary block" id="native-share-btn" onclick="nativeShare(${esc(JSON.stringify(s.name))})" style="display:none;margin-bottom:8px;">📤 Share via...</button>
         ${userId != null && db.listFriends(userId).length ? `
           <label class="field-label" style="margin-top:14px;">Send to a friend</label>
-          <form method="POST" action="/strains/${s.id}/share" id="share-friend-form" style="display:flex;gap:8px;" onsubmit="return validateShareForm(event)">
+          <form method="POST" action="/strains/${s.id}/share" id="share-friend-form" style="display:flex;gap:8px;align-items:center;" onsubmit="return validateShareForm(event)">
             <input type="text" id="share-friend-input" list="share-friend-list" placeholder="Type a friend's username..." autocomplete="off" style="flex:1;margin:0;">
             <datalist id="share-friend-list">
               ${db.listFriends(userId).map(f => `<option value="${esc(f.username)}" data-id="${f.id}">`).join('')}
@@ -736,7 +736,17 @@ function pageStrainDetail(req, res, id) {
       }
       function nativeShare(name) {
         const url = 'https://www.strain-dex.com' + window.location.pathname + window.location.search;
-        if (navigator.share) navigator.share({ title: name, url: url }).catch(function() {});
+        if (navigator.share) {
+          navigator.share({ title: name, url: url }).catch(function(e) {
+            // AbortError is a genuine, deliberate cancellation (closed the
+            // share sheet without picking anything) -- nothing more to do.
+            // Any other error means the share attempt never actually
+            // reached the person, so fall back to the same clipboard copy
+            // the modal's own "Copy Link" button uses, rather than the
+            // button just silently doing nothing.
+            if (e && e.name !== 'AbortError') copyShareLink();
+          });
+        }
       }
       (function() {
         const input = document.getElementById('share-friend-input');
@@ -821,7 +831,7 @@ function pageStrainDetail(req, res, id) {
         ${renderCheckinPairings(c)}
         ${renderCheckinComments(c, userId, '/strains/' + s.id)}
           <div style="display:flex;flex-direction:column;align-items:flex-end;margin-top:6px;">
-            <div style="display:flex;gap:6px;">
+            <div style="display:flex;gap:6px;align-items:center;">
               ${renderShareButton(c)}
               ${renderKudosButton(c, userId)}
             </div>
@@ -849,7 +859,7 @@ function pageStrainDetail(req, res, id) {
         ${renderOnsetTimer(c)}
         ${renderCheckinComments(c, userId, '/strains/' + s.id)}
           <div style="display:flex;flex-direction:column;align-items:flex-end;margin-top:6px;">
-            <div style="display:flex;gap:6px;">
+            <div style="display:flex;gap:6px;align-items:center;">
               ${renderShareButton(c)}
               ${renderKudosButton(c, userId)}
             </div>
@@ -1180,7 +1190,7 @@ function pageFaq(req, res, query) {
     ${topFaqs.map(renderFaq).join('') || `<div class="empty-note">No FAQ entries yet — try the <a href="/chat">Ask</a> tab, it can answer from the same content base.</div>`}
 
     <div class="section-label" style="margin-top:20px;">Search everything else (${allFaqs.length - topFaqs.length} more)</div>
-    <form method="GET" action="/faq" style="margin-bottom:12px;display:flex;gap:8px;">
+    <form method="GET" action="/faq" style="margin-bottom:12px;display:flex;gap:8px;align-items:center;">
       <input type="search" name="q" value="${esc(q)}" placeholder="Search all FAQ topics..." autocomplete="off" style="flex:1;">
       <button class="btn" type="submit">Search</button>
     </form>
@@ -1330,7 +1340,7 @@ function pageRecipeDetail(req, res, id) {
         return targetId ? `<a href="/recipes/${targetId}">${esc(b)}</a>` : esc(b);
       }).join(', ')} <span style="opacity:.7;">(tap to see how to make it)</span></p>` : ''}
       <p><b>Ingredients:</b></p>
-      <div style="display:flex;gap:6px;margin-bottom:8px;">
+      <div style="display:flex;gap:6px;align-items:center;margin-bottom:8px;">
         <span class="empty-note" style="padding:6px 0;">Scale:</span>
         ${[0.5, 1, 2, 3].map(f => `<button type="button" class="filter-pill scale-btn" data-factor="${f}" onclick="scaleRecipe(${f}, this)">${f}×</button>`).join('')}
       </div>
@@ -1380,7 +1390,7 @@ function pageRecipes(req, res, query) {
   const body = `
     <h1 class="screen-title">Infused Recipes</h1>
     <a class="btn block lilac" href="/recipes/new" style="margin-bottom:14px;">✏️ Submit a Recipe</a>
-    <form method="GET" action="/recipes" style="margin-bottom:12px;display:flex;gap:8px;">
+    <form method="GET" action="/recipes" style="margin-bottom:12px;display:flex;gap:8px;align-items:center;">
       <input type="hidden" name="category" value="${esc(category)}">
       <input type="search" name="q" value="${esc(q)}" placeholder="Search by name, ingredient, or description..." autocomplete="off" style="flex:1;">
       <button class="btn" type="submit">Search</button>
@@ -2054,7 +2064,7 @@ function pageOnboarding(req, res) {
               <div style="font-size:44px;margin-bottom:16px;">${s.icon}</div>
               <h2 style="margin:0 0 8px;font-size:1.125rem;">${esc(s.title)}</h2>
               <p style="color:var(--ink-secondary);font-size:0.8438rem;line-height:1.6;margin:0 0 18px;">One tap gets you a real icon and a full-screen app — no app store needed.</p>
-              <div id="onboarding-install-offer" style="display:flex;gap:8px;">
+              <div id="onboarding-install-offer" style="display:flex;gap:8px;align-items:center;">
                 <button type="button" id="onboarding-install-no" class="btn secondary" style="flex:1;">Not now</button>
                 <button type="button" id="onboarding-install-yes" class="btn" style="flex:1;">📲 Yes, add it</button>
               </div>
@@ -2078,7 +2088,7 @@ function pageOnboarding(req, res) {
         ${steps.map((_, i) => `<span class="onboarding-dot" data-dot="${i}" style="width:6px;height:6px;border-radius:50%;background:${i === 0 ? 'var(--brand-green)' : 'var(--border)'};"></span>`).join('')}
       </div>
     </div>
-    <div style="display:flex;gap:8px;margin-top:14px;" id="onboarding-standard-actions">
+    <div style="display:flex;gap:8px;align-items:center;margin-top:14px;" id="onboarding-standard-actions">
       <a href="/" class="btn secondary block" style="flex:1;">Skip</a>
       <button type="button" id="onboarding-next" class="btn block" style="flex:1;">Next</button>
     </div>
@@ -2284,7 +2294,7 @@ function pageCompare(req, res, query) {
   const body = `
     <h1 class="screen-title">Compare Strains</h1>
     <p class="screen-sub">Pick two strains to see them side by side.</p>
-    <div style="display:flex;gap:10px;margin-bottom:16px;">
+    <div style="display:flex;gap:10px;align-items:center;margin-bottom:16px;">
       ${pickerBox('a', a)}
       ${pickerBox('b', b)}
     </div>
@@ -2448,7 +2458,7 @@ function pageLists(req, res) {
       </div>
     </a>
     <div class="section-label" style="margin-top:16px;">Your custom lists</div>
-    <form method="POST" action="/lists" style="display:flex;gap:8px;margin-bottom:16px;">
+    <form method="POST" action="/lists" style="display:flex;gap:8px;align-items:center;margin-bottom:16px;">
       <input type="text" name="name" placeholder="New list name..." required style="flex:1;margin:0;">
       <button class="btn" type="submit" style="white-space:nowrap;">Create</button>
     </form>
@@ -3746,7 +3756,7 @@ function pageMore(req, res) {
     ${user ? `
       <div class="card" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
         <span>👤 Logged in as <b>${esc(user.username)}</b></span>
-        <div style="display:flex;gap:8px;">
+        <div style="display:flex;gap:8px;align-items:center;">
           <a href="/account" class="btn secondary" style="text-decoration:none;">Settings</a>
           <form method="POST" action="/logout"><button class="btn secondary" type="submit">Log out</button></form>
         </div>
@@ -3828,7 +3838,7 @@ function pageAccount(req, res, query) {
     <div class="card">
       <h2 style="margin:0 0 10px;font-size:0.9375rem;">Appearance</h2>
       <p class="empty-note" style="padding:0 0 10px;">Follows your phone's own Light/Dark setting unless you pick one here.</p>
-      <div id="theme-picker" style="display:flex;gap:8px;">
+      <div id="theme-picker" style="display:flex;gap:8px;align-items:center;">
         <label class="filter-pill" style="flex:1;text-align:center;margin:0;cursor:pointer;">
           <input type="radio" name="theme-choice" value="system" style="width:auto;margin:0 4px 0 0;">System
         </label>
@@ -3994,7 +4004,7 @@ function pageCollection(req, res) {
 
   const body = `
     <h1 class="screen-title">My Collection</h1>
-    <div style="display:flex;gap:8px;margin-bottom:14px;">
+    <div style="display:flex;gap:8px;align-items:center;margin-bottom:14px;">
       <a class="follow-btn" style="flex:1;text-align:center;" href="/strains">🔍 Browse Strain Library</a>
       <a class="follow-btn" style="flex:1;text-align:center;" href="/history">🕐 Check-In History</a>
     </div>
@@ -4065,13 +4075,13 @@ function pageFriends(req, res, query) {
     <div class="card" style="margin-bottom:14px;">
       <b style="font-size:0.8125rem;">🔗 Invite a friend</b>
       <p class="empty-note" style="padding:4px 0 8px;">Anyone who signs up through your link is added as a friend automatically — no request to accept.</p>
-      <div style="display:flex;gap:8px;">
+      <div style="display:flex;gap:8px;align-items:center;">
         <input type="text" readonly value="${esc(inviteUrl)}" id="invite-link-input" style="flex:1;margin:0;font-size:0.75rem;" onclick="this.select()">
         <button type="button" class="btn secondary" style="white-space:nowrap;" onclick="shareInviteLink(${esc(JSON.stringify(inviteUrl))})">Share</button>
       </div>
     </div>
     <a href="/messages" class="btn secondary block" style="text-decoration:none;margin-bottom:14px;">💬 Messages${db.countUnreadMessages(userId) > 0 ? ` (${db.countUnreadMessages(userId)})` : ''}</a>
-    <form method="GET" action="/friends" style="margin-bottom:14px;display:flex;gap:8px;">
+    <form method="GET" action="/friends" style="margin-bottom:14px;display:flex;gap:8px;align-items:center;">
       <input type="text" name="q" value="${esc(q)}" placeholder="Search by username..." autocomplete="off" style="flex:1;">
       <button class="btn" type="submit">Search</button>
     </form>
@@ -4259,7 +4269,7 @@ function pageConversation(req, res, friendId) {
         </div>`;
       }).join('') : `<div class="empty-note">Say hi to ${esc(friend.username)} 👋</div>`}
     </div>
-    <form method="POST" action="/messages/${friend.id}/send" style="display:flex;gap:8px;">
+    <form method="POST" action="/messages/${friend.id}/send" style="display:flex;gap:8px;align-items:center;">
       <input type="text" name="body" placeholder="Message ${esc(friend.username)}..." autocomplete="off" style="flex:1;">
       <button class="btn" type="submit">Send</button>
     </form>
@@ -4340,7 +4350,7 @@ function pageFriendProfile(req, res, friendId) {
         ${renderOnsetTimer(c)}
         ${renderCheckinComments(c, userId, '/friends/' + friendId)}
         <div style="display:flex;flex-direction:column;align-items:flex-end;margin-top:8px;">
-          <div style="display:flex;gap:6px;">
+          <div style="display:flex;gap:6px;align-items:center;">
             ${renderShareButton(c)}
             ${renderKudosButton(c, userId)}
           </div>
@@ -4515,7 +4525,7 @@ async function pageDispensaries(req, res, searchParams) {
               <button class="follow-btn ${following ? 'following' : ''}" type="submit">${following ? 'Following' : 'Follow'}</button>
             </form>
           </div>
-          <div style="margin-top:10px;display:flex;gap:14px;">
+          <div style="margin-top:10px;display:flex;gap:14px;align-items:center;">
             <a href="${mapsUrl}" target="_blank" rel="noopener">Get directions →</a>
             ${d.website ? `<a href="${esc(d.website)}" target="_blank" rel="noopener">Website →</a>` : ''}
           </div>

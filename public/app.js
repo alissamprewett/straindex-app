@@ -186,10 +186,20 @@ async function shareCheckin(id, strainName) {
   if (navigator.share) {
     try {
       await navigator.share({ title: 'My ' + strainName + ' check-in on StrainDex', url });
+      return;
     } catch (e) {
-      // User cancelled the native share sheet -- not an error, no toast.
+      // AbortError is what the Web Share API specifically throws when the
+      // person closes the share sheet without picking anything -- a real,
+      // deliberate cancellation, so there's genuinely nothing more to do.
+      // Any OTHER error (a permissions-policy block, no share targets
+      // registered on that OS/browser, assorted platform quirks) means
+      // the share attempt never actually reached the person at all, so it
+      // falls through to the clipboard/prompt fallback below instead of
+      // silently doing nothing -- which is exactly what made this button
+      // look simply broken on setups where navigator.share exists but
+      // doesn't actually work end to end.
+      if (e.name === 'AbortError') return;
     }
-    return;
   }
   if (navigator.clipboard && navigator.clipboard.writeText) {
     try {
@@ -212,10 +222,12 @@ async function shareInviteLink(url) {
   if (navigator.share) {
     try {
       await navigator.share({ title: 'Join me on StrainDex', url });
+      return;
     } catch (e) {
-      // User cancelled the native share sheet -- not an error, no toast.
+      // See the matching comment in shareCheckin -- only a genuine
+      // cancellation stops here; any other failure falls through.
+      if (e.name === 'AbortError') return;
     }
-    return;
   }
   if (navigator.clipboard && navigator.clipboard.writeText) {
     try {
@@ -238,10 +250,12 @@ async function shareLink(url, title) {
   if (navigator.share) {
     try {
       await navigator.share({ title: title || 'StrainDex', url });
+      return;
     } catch (e) {
-      // User cancelled the native share sheet -- not an error, no toast.
+      // See the matching comment in shareCheckin -- only a genuine
+      // cancellation stops here; any other failure falls through.
+      if (e.name === 'AbortError') return;
     }
-    return;
   }
   if (navigator.clipboard && navigator.clipboard.writeText) {
     try {
