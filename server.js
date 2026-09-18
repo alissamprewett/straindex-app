@@ -2784,6 +2784,41 @@ function pageTrending(req, res) {
   sendHtml(res, layout({ title: 'Trending This Week', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
+// Community leaderboard -- see getKudosLeaderboard in lib/db.js for the
+// ranking logic itself and why it's kudos RECEIVED (not raw check-in
+// count) on a rolling 30-day window rather than all-time. Requires login,
+// unlike Trending, since ranking a real person needs a real viewerId --
+// to filter out anyone the viewer has blocked, and to compute "your own
+// rank" below the list so showing up here still feels personal even for
+// someone who isn't near the top.
+function pageLeaderboard(req, res) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const { top, viewerEntry, windowDays } = db.getKudosLeaderboard(userId, { limit: 20, windowDays: 30 });
+  const medal = (rank) => ({ 1: '🥇', 2: '🥈', 3: '🥉' }[rank] || rank);
+  const renderRow = (r, isViewer) => `
+    <div class="library-row" style="${isViewer ? 'border:1.5px solid var(--brand-green);' : ''}">
+      <span style="font-weight:700;color:var(--ink-secondary);width:28px;text-align:center;flex-shrink:0;">${medal(r.rank)}</span>
+      <div class="info">
+        <div class="nm">${isViewer ? 'You' : esc(r.user.username)}</div>
+        <div class="sub">${r.allTimeKudos.toLocaleString()} kudos all-time</div>
+      </div>
+      <span style="font-weight:800;color:var(--accent-text);flex-shrink:0;">🌿 ${r.monthKudos}</span>
+    </div>
+  `;
+  const viewerInTop = top.some(r => r.user.id === userId);
+  const body = `
+    <h1 class="screen-title">Top Contributors</h1>
+    <p class="screen-sub">Ranked by kudos received in the last ${windowDays} days — the community's own way of saying "this check-in helped." Resets over time, so everyone gets a fair shot at climbing, not just whoever joined first.</p>
+    ${top.length ? top.map(r => renderRow(r, r.user.id === userId)).join('') : `<div class="empty-note">No kudos given out yet this month — be the first check-in someone appreciates.</div>`}
+    ${!viewerInTop ? (viewerEntry
+      ? `<div class="section-label" style="margin-top:16px;">Your rank</div>${renderRow(viewerEntry, true)}`
+      : `<p class="empty-note" style="margin-top:16px;">You haven't received a kudos yet this month — <a href="/checkin">log a check-in</a> and share it to start climbing.</p>`
+    ) : ''}
+  `;
+  sendHtml(res, layout({ title: 'Top Contributors', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
+}
+
 // Mixing cautions -- deliberately conservative, pattern-level guidance
 // only (matching the app's existing "not medical advice" framing), never
 // dosing specifics. General public-health caution categories, not a
@@ -3693,6 +3728,7 @@ function pageMore(req, res) {
         { href: '/messages', icon: '💬', t: 'Messages', s: userId != null && db.countUnreadMessages(userId) > 0 ? `${db.countUnreadMessages(userId)} unread` : 'Chat with friends & shared strains' },
         { href: '/trade', icon: '🔁', t: 'Trade', s: 'Swap dupes with real friends' },
         { href: '/friends-picks', icon: '🤝', t: "Friends' Picks", s: 'What your circle loves that you haven\u2019t tried' },
+        { href: '/leaderboard', icon: '🏆', t: 'Top Contributors', s: 'Most-appreciated check-ins this month' },
         { href: '/dispensaries', icon: '📍', t: 'Dispensaries', s: 'Locator & live menus' },
       ],
     },
@@ -4911,6 +4947,7 @@ const server = http.createServer(async (req, res) => {
     if (method === 'GET' && pathname === '/wishlist') return pageWishlist(req, res);
     if (method === 'POST' && (m = pathname.match(/^\/wishlist\/([^/]+)\/toggle$/))) return await handleWishlistToggle(req, res, m[1]);
     if (method === 'GET' && pathname === '/trending') return pageTrending(req, res);
+    if (method === 'GET' && pathname === '/leaderboard') return pageLeaderboard(req, res);
     if (method === 'GET' && pathname === '/mixing-cautions') return pageMixingCautions(req, res);
     if (method === 'GET' && pathname === '/grow-journal') return pageGrowJournal(req, res);
     if (method === 'POST' && pathname === '/grow-journal') return await handleGrowJournalSubmit(req, res);
