@@ -801,35 +801,6 @@ function pageStrainDetail(req, res, id) {
           </a>`).join('')}
       </div>
     ` : ''}
-    <h2 class="screen-title" style="margin-top:20px;">Your history with this strain</h2>
-    ${history.length ? `
-      <p class="empty-note">Last had: <span class="local-time" data-utc="${history[0].created_at}Z">${esc(history[0].created_at)} UTC</span></p>
-      ${history.map(c => `<div class="card checkin-history-row">
-        ${c.photo ? `<div class="checkin-photo-thumb"><img src="${esc(c.photo)}" alt="Your photo"></div>` : ''}
-        <div style="flex:1;min-width:0;">
-          <div style="display:flex;justify-content:space-between;align-items:baseline;">
-            <b>${esc(c.method)}</b>
-            <a href="/checkin/${c.id}/edit" class="empty-note" style="padding:0;">Edit</a>
-          </div>
-          ${starString(c.rating)}
-          <div class="empty-note" style="padding:2px 0 0;"><span class="local-time" data-utc="${c.created_at}Z">${esc(c.created_at)} UTC</span></div>
-          ${(c.effects || []).length ? `<p style="margin:6px 0 0;">${c.effects.map(e => `<span class="filter-pill">${esc(e)}</span>`).join('')}</p>` : ''}
-          ${c.note ? `<span class="empty-note" style="display:block;padding:4px 0 0;">${esc(c.note)}</span>` : ''}
-        ${renderCheckinPairings(c)}
-        ${renderOnsetTimer(c)}
-        ${renderCheckinComments(c, userId, '/strains/' + s.id)}
-          <div style="display:flex;flex-direction:column;align-items:flex-end;margin-top:6px;">
-            <div style="display:flex;gap:6px;">
-              ${renderShareButton(c)}
-              ${renderKudosButton(c, userId)}
-            </div>
-            ${kudosGiversLabel(c.id)}
-          </div>
-        </div>
-      </div>`).join('')}
-    ` : userId != null
-      ? `<div class="empty-note">You haven't checked this one in yet.</div>`
-      : `<div class="empty-note">Log in to track your own history with this strain — <a href="/signup">create a free account</a> or <a href="/login">log in</a>.</div>`}
     ${communityCheckins.length ? `
       <h2 class="screen-title" style="margin-top:20px;">What people are saying</h2>
       <p class="screen-sub">Public check-ins from the wider StrainDex community, not just your friends.</p>
@@ -860,6 +831,35 @@ function pageStrainDetail(req, res, id) {
       </div>`;
       }).join('')}
     ` : ''}
+    <h2 class="screen-title" style="margin-top:20px;">Your history with this strain</h2>
+    ${history.length ? `
+      <p class="empty-note">Last had: <span class="local-time" data-utc="${history[0].created_at}Z">${esc(history[0].created_at)} UTC</span></p>
+      ${history.map(c => `<div class="card checkin-history-row">
+        ${c.photo ? `<div class="checkin-photo-thumb"><img src="${esc(c.photo)}" alt="Your photo"></div>` : ''}
+        <div style="flex:1;min-width:0;">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;">
+            <b>${esc(c.method)}</b>
+            <a href="/checkin/${c.id}/edit" class="empty-note" style="padding:0;">Edit</a>
+          </div>
+          ${starString(c.rating)}
+          <div class="empty-note" style="padding:2px 0 0;"><span class="local-time" data-utc="${c.created_at}Z">${esc(c.created_at)} UTC</span></div>
+          ${(c.effects || []).length ? `<p style="margin:6px 0 0;">${c.effects.map(e => `<span class="filter-pill">${esc(e)}</span>`).join('')}</p>` : ''}
+          ${c.note ? `<span class="empty-note" style="display:block;padding:4px 0 0;">${esc(c.note)}</span>` : ''}
+        ${renderCheckinPairings(c)}
+        ${renderOnsetTimer(c)}
+        ${renderCheckinComments(c, userId, '/strains/' + s.id)}
+          <div style="display:flex;flex-direction:column;align-items:flex-end;margin-top:6px;">
+            <div style="display:flex;gap:6px;">
+              ${renderShareButton(c)}
+              ${renderKudosButton(c, userId)}
+            </div>
+            ${kudosGiversLabel(c.id)}
+          </div>
+        </div>
+      </div>`).join('')}
+    ` : userId != null
+      ? `<div class="empty-note">You haven't checked this one in yet.</div>`
+      : `<div class="empty-note">Log in to track your own history with this strain — <a href="/signup">create a free account</a> or <a href="/login">log in</a>.</div>`}
   `;
   sendHtml(res, layout({ title: s.name, active: 'strains', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
