@@ -1594,7 +1594,7 @@ function pageChat(req, res) {
     <h1 class="screen-title">Ask StrainDex</h1>
     <p class="screen-sub">Ask a question about strains, effects, or anything in the FAQ. Answers are generated from StrainDex's own content.</p>
     <div class="chat-box" id="chat-log"><div class="chat-msg bot">Hi! Ask me something like "what's a good strain for sleep?" or "how long do edibles take to kick in?"</div></div>
-    <form id="chat-form" onsubmit="return sendChat(event)">
+    <form id="chat-form" onsubmit="return sendChat(event)" data-no-loading-state>
       <input type="text" id="chat-input" placeholder="Type your question..." autocomplete="off">
       <button class="btn block" type="submit" style="margin-top:10px;">Ask</button>
     </form>
