@@ -330,7 +330,15 @@ function getRecommendations(userId, limit = 4) {
   const ownedIds = new Set(owned.map(o => o.strain.id));
   const terpWeight = {};
   owned.forEach(o => o.strain.terps.forEach(t => { terpWeight[t.n] = (terpWeight[t.n] || 0) + t.p; }));
-  const candidates = db.listStrains({ limit: 2000 }).filter(s => !ownedIds.has(s.id));
+  // Was db.listStrains({ limit: 2000 }) -- since listStrains sorts
+  // alphabetically before slicing to the limit, that call was silently
+  // capping the candidate pool to only the alphabetically-first ~2,000
+  // strains (out of ~5,500+) on every single call, meaning nothing from
+  // roughly the second half of the library, sorted by name, could ever be
+  // recommended or show up in the cold-start rare/legendary fallback
+  // below. listAllStrains() has no such cap and skips the unnecessary sort
+  // besides, since this function immediately re-sorts by score anyway.
+  const candidates = db.listAllStrains().filter(s => !ownedIds.has(s.id));
   const scored = candidates.map(s => {
     let score = 0, topShared = null, topShareVal = 0;
     s.terps.forEach(t => {
@@ -577,7 +585,7 @@ const VERIFICATION_BADGE = {
 };
 function findStrainByName(name) {
   const target = name.toLowerCase();
-  return db.listStrains({ limit: 5000 }).find(s => s.name.toLowerCase() === target) || null;
+  return db.listAllStrains().find(s => s.name.toLowerCase() === target) || null;
 }
 // Renders parents (linked where the strain exists in the library, plain
 // text otherwise), siblings (other strains sharing at least one parent),
@@ -587,12 +595,13 @@ function findStrainByName(name) {
 // section simply doesn't render for those, rather than guessing at a
 // family tree that was never actually verified.
 function renderFamilyTree(s) {
-  const allStrains = db.listStrains({ limit: 5000 });
+  const allStrains = db.listAllStrains();
   const parents = Array.isArray(s.parents) ? s.parents : [];
-  const descendants = allStrains.filter(o => Array.isArray(o.parents) && o.parents.some(p => p.toLowerCase() === s.name.toLowerCase()));
+  const byName = (a, b) => a.name.localeCompare(b.name);
+  const descendants = allStrains.filter(o => Array.isArray(o.parents) && o.parents.some(p => p.toLowerCase() === s.name.toLowerCase())).sort(byName);
   const siblings = parents.length
     ? allStrains.filter(o => o.id !== s.id && Array.isArray(o.parents) &&
-        o.parents.some(p => parents.some(myP => myP.toLowerCase() === p.toLowerCase())))
+        o.parents.some(p => parents.some(myP => myP.toLowerCase() === p.toLowerCase()))).sort(byName)
     : [];
   if (!parents.length && !descendants.length && !siblings.length) return '';
   const renderName = (name) => {
@@ -2221,7 +2230,7 @@ function pageCompare(req, res, query) {
 // wants to be shown something they'd never have found by browsing.
 function handleSurpriseMe(req, res) {
   const userId = auth.currentUserId(req);
-  const all = db.listStrains({ limit: 5000 });
+  const all = db.listAllStrains();
   const tried = new Set(userId != null ? db.listCheckins({ userId, limit: 5000 }).map(c => c.strain_id) : []);
   const untried = all.filter(s => !tried.has(s.id));
   const pool = untried.length ? untried : all; // everyone's tried everything -- fall back to the full library
@@ -2445,7 +2454,7 @@ const TERPENE_GUIDE = {
   Ocimene: { aroma: 'Sweet, herbal, slightly woody', effects: 'Often found alongside Limonene and Pinene; associated with uplifted, energizing effects.' },
 };
 function pageTerpeneGuide(req, res) {
-  const allStrains = db.listStrains({ limit: 5000 });
+  const allStrains = db.listAllStrains();
   const counts = {};
   allStrains.forEach(s => (s.terps || []).forEach(t => { counts[t.n] = (counts[t.n] || 0) + 1; }));
   const entries = Object.entries(TERPENE_GUIDE).sort((a, b) => (counts[b[0]] || 0) - (counts[a[0]] || 0));
@@ -2492,7 +2501,7 @@ const EFFECTS_GUIDE = {
   'Clear-headed': 'A functional high without much mental fog, often reported with balanced hybrids.',
 };
 function pageEffectsGuide(req, res) {
-  const allStrains = db.listStrains({ limit: 5000 });
+  const allStrains = db.listAllStrains();
   const counts = {};
   allStrains.forEach(s => (s.effects || []).forEach(e => { counts[e] = (counts[e] || 0) + 1; }));
   const entries = Object.entries(EFFECTS_GUIDE).sort((a, b) => (counts[b[0]] || 0) - (counts[a[0]] || 0));
@@ -2547,7 +2556,7 @@ function pageMoodFinder(req, res, query) {
     `;
     return sendHtml(res, layout({ title: 'Mood Finder', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
   }
-  const allStrains = db.listStrains({ limit: 5000 });
+  const allStrains = db.listAllStrains();
   const scored = allStrains
     .map(s => {
       const overlap = (s.effects || []).filter(e => goal.effects.includes(e)).length;
@@ -2611,7 +2620,7 @@ const BREEDER_GUIDE = {
   'K.C. Brains': 'One of the older Dutch seed banks, known for its own numbered K.C. strain series.',
 };
 function pageBreederGuide(req, res) {
-  const allStrains = db.listStrains({ limit: 5000 });
+  const allStrains = db.listAllStrains();
   const counts = {};
   allStrains.forEach(s => { if (s.breeder) counts[s.breeder] = (counts[s.breeder] || 0) + 1; });
   const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]).slice(0, 40);
@@ -2730,12 +2739,13 @@ function pageQuiz(req, res, query) {
     // effect tags to match against) fell back to that same alphabetical
     // order via Array.sort's stability. Net effect: results always looked
     // like "the first five A-named strains in this bucket," every time.
-    // Fix: pull every strain in the bucket (no meaningful cap at this
-    // scale), then shuffle before scoring so ties resolve randomly instead
-    // of alphabetically -- so retaking the quiz with the same answers
-    // actually surfaces different strains from the library, not the same
-    // five every time.
-    const candidates = db.listStrains({ thc: thcFilter, limit: 5000 });
+    // Fix: pull every strain in the bucket via the unsorted listAllStrains()
+    // + a direct matchesFilters() check (no cap, and no wasted sort -- this
+    // shuffles the result immediately below anyway), then shuffle before
+    // scoring so ties resolve randomly instead of alphabetically -- so
+    // retaking the quiz with the same answers actually surfaces different
+    // strains from the library, not the same five every time.
+    const candidates = db.listAllStrains().filter(s => db.matchesFilters(s, { thc: thcFilter }));
     for (let i = candidates.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [candidates[i], candidates[j]] = [candidates[j], candidates[i]];
