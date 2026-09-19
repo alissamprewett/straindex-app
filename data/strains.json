@@ -171643,5 +171643,300 @@
       "Supa Star"
     ],
     "id": "s6528"
+  },
+  {
+    "name": "Space Force",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Pungent, dirty socks to rotten fruit.",
+    "icon": "🚀",
+    "breeder": "Irie Genetics",
+    "parents": [
+      "Space Bitch",
+      "Arise"
+    ],
+    "id": "s6529"
+  },
+  {
+    "name": "Strawberry Push Pop",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [
+      "Myrcene",
+      "Limonene",
+      "Caryophyllene",
+      "Linalool"
+    ],
+    "effects": [
+      "Uplifted",
+      "Relaxed",
+      "Creative"
+    ],
+    "flavor": "Strawberry, guava, citrus, mint.",
+    "icon": "🍓",
+    "breeder": "Bloom Seed Co.",
+    "parents": [
+      "Strawberry Guava",
+      "Orange Mints"
+    ],
+    "id": "s6530"
+  },
+  {
+    "name": "Sundae Freezer",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "20-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Creative"
+    ],
+    "flavor": "Vanilla, citrus, berry, pine, creamy candy gas.",
+    "icon": "🍨",
+    "breeder": "Cannarado Genetics",
+    "parents": [
+      "Sundae Driver",
+      "Fried Ice Cream x Grandpa's Gun Chest"
+    ],
+    "id": "s6531"
+  },
+  {
+    "name": "Tar",
+    "type": "Indica",
+    "lean": "Kush-dominant",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Kush, earthy, subtle fruit and floral.",
+    "icon": "🌿",
+    "breeder": "Archive Seed Bank",
+    "parents": [
+      "Moonbow #112",
+      "Face Off OG BX1"
+    ],
+    "id": "s6532"
+  },
+  {
+    "name": "Vixen",
+    "type": "Hybrid",
+    "lean": "Balanced",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [
+      "Caryophyllene"
+    ],
+    "effects": [
+      "Focused",
+      "Relaxed",
+      "Creative"
+    ],
+    "flavor": "Sweet berries, citrus, earthy pine.",
+    "icon": "🍇",
+    "breeder": "JinxProof Genetics",
+    "parents": [
+      "Go Time",
+      "Dark Side of the Moon"
+    ],
+    "id": "s6533"
+  },
+  {
+    "name": "Watermelon Fuel",
+    "type": "Hybrid",
+    "lean": "Sativa-dominant",
+    "rarity": "uncommon",
+    "thc": "19-28%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Uplifted",
+      "Creative"
+    ],
+    "flavor": "Sweet watermelon, tropical fruit, diesel.",
+    "icon": "🍉",
+    "breeder": "Prima",
+    "parents": [
+      "Watermelon Zkittlez",
+      "I-95"
+    ],
+    "id": "s6534"
+  },
+  {
+    "name": "Wedding Cake F4",
+    "type": "Indica",
+    "lean": "Indica-dominant",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Vanilla, pine, lemon, earthy, diesel.",
+    "icon": "🎂",
+    "breeder": "Seed Junky Genetics",
+    "parents": [
+      "Triangle Kush",
+      "Animal Mints"
+    ],
+    "id": "s6535"
+  },
+  {
+    "name": "33 Mints",
+    "type": "Hybrid",
+    "lean": "Balanced",
+    "rarity": "uncommon",
+    "thc": "24-26%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Happy",
+      "Creative"
+    ],
+    "flavor": "Fresh mint, sweet cookie, creamy vanilla, gas, pine.",
+    "icon": "🍬",
+    "breeder": "",
+    "parents": [
+      "Gelato 33",
+      "Secret Mints"
+    ],
+    "id": "s6536"
+  },
+  {
+    "name": "4DD",
+    "type": "Indica",
+    "lean": "Indica-dominant",
+    "rarity": "rare",
+    "thc": "16-20%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Sleepy"
+    ],
+    "flavor": "Sour citrus lemon-pepper, dank diesel, chemical.",
+    "icon": "🌿",
+    "breeder": "People Under The Stairs Genetics",
+    "parents": [
+      "Chem D",
+      "Chem #4 x Chem IBL"
+    ],
+    "id": "s6537"
+  },
+  {
+    "name": "4G",
+    "type": "Hybrid",
+    "lean": "Balanced",
+    "rarity": "uncommon",
+    "thc": "20-25%",
+    "cbd": "",
+    "terps": [
+      "Myrcene",
+      "Caryophyllene",
+      "Limonene"
+    ],
+    "effects": [
+      "Relaxed",
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "Earthy, diesel, sweet cream.",
+    "icon": "🌿",
+    "breeder": "Purple Caper Seeds",
+    "parents": [
+      "Gorilla Glue #4",
+      "Gelato 45"
+    ],
+    "id": "s6538"
+  },
+  {
+    "name": "7 Steps To Heaven",
+    "type": "Indica",
+    "lean": "Indica-dominant",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [
+      "Pinene"
+    ],
+    "effects": [
+      "Euphoric",
+      "Happy",
+      "Giggly"
+    ],
+    "flavor": "Grapes, sweet, pinene, kush, diesel.",
+    "icon": "🌿",
+    "breeder": "Salty Cultivation",
+    "parents": [
+      "Grapestomper OG",
+      "Grapestomper OG",
+      "Joseph OG",
+      "Miles Ahead x Triangle Kush",
+      "Breathwork x MendoBreath",
+      "Grateful Breath"
+    ],
+    "id": "s6539"
+  },
+  {
+    "name": "814 Fireworks",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "23-32%",
+    "cbd": "",
+    "terps": [
+      "Limonene",
+      "Myrcene",
+      "Linalool"
+    ],
+    "effects": [
+      "Creative",
+      "Focused",
+      "Relaxed"
+    ],
+    "flavor": "Sweet, citrus, diesel, cream.",
+    "icon": "🎆",
+    "breeder": "Cresco",
+    "parents": [
+      "MAC",
+      "Gelato #7"
+    ],
+    "id": "s6540"
+  },
+  {
+    "name": "Acapulco Punch",
+    "type": "Hybrid",
+    "lean": "Balanced",
+    "rarity": "uncommon",
+    "thc": "20-23%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Focused",
+      "Sociable"
+    ],
+    "flavor": "Sweet creamy grape, tropical fruit, strawberry, herbal cheese.",
+    "icon": "🍇",
+    "breeder": "",
+    "parents": [
+      "Tropical Punch",
+      "Acapulco Gold"
+    ],
+    "id": "s6541"
   }
 ]
