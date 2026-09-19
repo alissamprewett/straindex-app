@@ -178,17 +178,40 @@ function isOldEnough(birthDateStr) {
   return age >= MIN_AGE;
 }
 function starString(n) { n = Number(n) || 0; return '★'.repeat(n) + '☆'.repeat(5 - n); }
+// The pairing categories someone can tag onto a check-in -- open-ended in
+// count (log as many as you want) but each one picks from this fixed,
+// small vocabulary rather than free-typing a category, so the feed stays
+// scannable and icons stay consistent. Shared between the server-rendered
+// first row and the client-side "add another" rows in app.js, so this is
+// the single source of truth for the list.
+const PAIRING_TYPES = [
+  { key: 'food', icon: '🍽️', label: 'Food' },
+  { key: 'drink', icon: '🍹', label: 'Drink' },
+  { key: 'music', icon: '🎵', label: 'Music' },
+  { key: 'movie', icon: '🎬', label: 'Movie / TV' },
+  { key: 'game', icon: '🎮', label: 'Game' },
+  { key: 'activity', icon: '🎨', label: 'Activity' },
+  { key: 'location', icon: '📍', label: 'Location' },
+  { key: 'occasion', icon: '🎉', label: 'Occasion' },
+  { key: 'company', icon: '👥', label: 'Company' },
+];
+const PAIRING_TYPE_MAP = Object.fromEntries(PAIRING_TYPES.map(p => [p.key, p]));
 // Shared renderer for the optional "pairings" a user can log with a
-// check-in -- tasting notes plus food/drink, music/entertainment, and
-// activity pairings. Each is independently optional, so only show what's
-// actually filled in.
+// check-in -- as many as they want, each one a (type, note) pair. Only
+// ever renders what's actually there; an empty pairings list renders
+// nothing beyond the private/brand/tasting-notes lines above it.
 function renderCheckinPairings(c) {
+  const pairings = Array.isArray(c.pairings) ? c.pairings : [];
   return `
     ${c.is_private ? `<div class="empty-note" style="padding:4px 0 0;font-weight:700;">🔒 Private — only visible to you</div>` : ''}
+    ${c.brand ? `<div class="empty-note" style="padding:4px 0 0;">🏷️ Brand: ${esc(c.brand)}</div>` : ''}
     ${c.tasting_notes ? `<div class="empty-note" style="padding:4px 0 0;">🍃 Tasting notes: ${esc(c.tasting_notes)}</div>` : ''}
-    ${c.pairing_food ? `<div class="empty-note" style="padding:2px 0 0;">🍽️ Paired with: ${esc(c.pairing_food)}</div>` : ''}
-    ${c.pairing_entertainment ? `<div class="empty-note" style="padding:2px 0 0;">🎵 Listening/watching: ${esc(c.pairing_entertainment)}</div>` : ''}
-    ${c.pairing_activity ? `<div class="empty-note" style="padding:2px 0 0;">🎯 Doing: ${esc(c.pairing_activity)}</div>` : ''}
+    ${pairings.map(p => {
+      const meta = PAIRING_TYPE_MAP[p.type];
+      const icon = meta ? meta.icon : '🔗';
+      const label = meta ? meta.label : p.type;
+      return `<div class="empty-note" style="padding:2px 0 0;">${icon} ${esc(label)}${p.note ? `: ${esc(p.note)}` : ''}</div>`;
+    }).join('')}
   `;
 }
 // Shows a live "started Xh Ym ago" onset reminder under any check-in logged
@@ -1029,10 +1052,31 @@ const METHOD_GROUPS = [
   { group: 'Topicals & Other', items: ['Topical Cream / Balm', 'Transdermal Patch', 'Suppository', 'RSO (Rick Simpson Oil)', 'Cannabis Bath Soak'] },
 ];
 
+// Renders one pairing row: a type dropdown plus an optional free-text note.
+// Used both for the row(s) rendered on first page load and, via the
+// PAIRING_TYPES data stashed on window, replicated client-side in app.js
+// when someone taps "+ Add Another Pairing".
+function renderPairingRow(selectedType, note) {
+  const options = PAIRING_TYPES.map(p => `<option value="${esc(p.key)}" ${selectedType === p.key ? 'selected' : ''}>${p.icon} ${esc(p.label)}</option>`).join('');
+  return `
+    <div class="pairing-row">
+      <select name="pairing_type">
+        <option value="">Add a pairing...</option>
+        ${options}
+      </select>
+      <input type="text" name="pairing_note" placeholder="Optional note..." value="${esc(note || '')}">
+      <button type="button" class="pairing-remove-btn" onclick="this.closest('.pairing-row').remove()" aria-label="Remove pairing">✕</button>
+    </div>`;
+}
 function pageCheckinForm(req, res, query, existing) {
   const strainId = existing ? existing.strain_id : (query.get('strain') || '');
   const s = strainId ? db.getStrain(strainId) : null;
   const isEdit = !!existing;
+  // A brand-new check-in starts with exactly one empty pairing row -- most
+  // people logging quickly won't touch it at all, so keeping it to one
+  // avoids the form looking more involved than it needs to be. Editing an
+  // existing check-in that already has several pairings shows all of them.
+  const initialPairings = (existing && Array.isArray(existing.pairings) && existing.pairings.length) ? existing.pairings : [{ type: '', note: '' }];
   const body = `
     <h1 class="screen-title">${isEdit ? 'Edit Check-In' : 'Check In'}</h1>
     ${isEdit ? `<p class="empty-note">Thoughts changed after the fact? That's normal, especially with edibles — update it below.</p>` : ''}
@@ -1080,14 +1124,14 @@ function pageCheckinForm(req, res, query, existing) {
       <label class="field-label">Tasting Notes</label>
       <textarea name="tasting_notes" placeholder="Flavor, smell, smoothness — what stood out?">${existing ? esc(existing.tasting_notes || '') : ''}</textarea>
 
-      <label class="field-label">Food / Drink Pairing</label>
-      <input type="text" name="pairing_food" placeholder="What went really well with it?" value="${existing ? esc(existing.pairing_food || '') : ''}">
+      <label class="field-label">Brand <span class="empty-note" style="padding:0;">(optional — whose version was it?)</span></label>
+      <input type="text" name="brand" placeholder="e.g. Cookies, Jungle Boys, a local grower..." value="${existing ? esc(existing.brand || '') : ''}">
 
-      <label class="field-label">Music / Entertainment Pairing</label>
-      <input type="text" name="pairing_entertainment" placeholder="What you listened to or watched" value="${existing ? esc(existing.pairing_entertainment || '') : ''}">
-
-      <label class="field-label">Activity Pairing</label>
-      <input type="text" name="pairing_activity" placeholder="What you did while enjoying it" value="${existing ? esc(existing.pairing_activity || '') : ''}">
+      <label class="field-label">Pairings <span class="empty-note" style="padding:0;">(optional — log as many as you want)</span></label>
+      <div class="pairing-list" id="pairing-list">
+        ${initialPairings.map(p => renderPairingRow(p.type, p.note)).join('')}
+      </div>
+      <button type="button" class="btn secondary" id="pairing-add-btn" style="margin-top:6px;padding:6px 14px;font-size:13px;">+ Add Another Pairing</button>
 
       <label style="display:flex;align-items:center;gap:8px;margin-top:16px;cursor:pointer;">
         <input type="checkbox" name="is_private" value="1" ${existing && existing.is_private ? 'checked' : ''} style="width:auto;margin:0;">
@@ -1105,6 +1149,7 @@ function pageCheckinForm(req, res, query, existing) {
     <script>
       window.EFFECT_VOCAB = ${JSON.stringify(EFFECT_VOCAB)};
       window.INITIAL_EFFECTS = ${JSON.stringify(existing ? existing.effects || [] : [])};
+      window.PAIRING_TYPES = ${JSON.stringify(PAIRING_TYPES)};
       window.INITIAL_PHOTO = ${JSON.stringify(existing ? existing.photo || '' : '')};
       window.EDIBLE_METHODS = ${JSON.stringify(METHOD_GROUPS.find(g => g.group === 'Edibles').items)};
       function toggleEdibleWarning(method) {
@@ -1125,6 +1170,24 @@ function pageCheckinEditForm(req, res, id) {
   pageCheckinForm(req, res, new URLSearchParams(), existing);
 }
 
+// The pairing type/note rows submit as same-name repeated fields (one
+// <select name="pairing_type"> + <input name="pairing_note"> per row, in
+// matching order), the same convention already used for effects. A single
+// row comes through as a lone string rather than a 1-item array, so both
+// shapes have to be normalized the same way. Rows where no type was chosen
+// are dropped entirely -- a note with nothing to attach it to isn't
+// something later display code (renderCheckinPairings) has a place to put.
+function parsePairingsFromForm(fields) {
+  const types = Array.isArray(fields.pairing_type) ? fields.pairing_type : (fields.pairing_type != null ? [fields.pairing_type] : []);
+  const notes = Array.isArray(fields.pairing_note) ? fields.pairing_note : (fields.pairing_note != null ? [fields.pairing_note] : []);
+  const pairings = [];
+  for (let i = 0; i < types.length; i++) {
+    const type = (types[i] || '').trim();
+    if (!type) continue;
+    pairings.push({ type, note: (notes[i] || '').trim() });
+  }
+  return pairings;
+}
 async function handleCheckinSubmit(req, res) {
   const userId = requireUser(req, res);
   if (userId == null) return;
@@ -1137,8 +1200,7 @@ async function handleCheckinSubmit(req, res) {
   await db.createCheckin({
     user_id: userId, strain_id: strainId, method: fields.method, rating: Number(fields.rating) || 0,
     note: fields.note || '', effects, photo: photoUrl,
-    tasting_notes: fields.tasting_notes || '', pairing_food: fields.pairing_food || '',
-    pairing_entertainment: fields.pairing_entertainment || '', pairing_activity: fields.pairing_activity || '',
+    tasting_notes: fields.tasting_notes || '', brand: fields.brand || '', pairings: parsePairingsFromForm(fields),
     is_private: !!fields.is_private,
   });
   redirect(res, `/strains/${strainId}`);
@@ -1155,8 +1217,7 @@ async function handleCheckinEditSubmit(req, res, id) {
   await db.updateCheckin(id, {
     method: fields.method, rating: Number(fields.rating) || 0,
     note: fields.note || '', effects, photo: photoUrl,
-    tasting_notes: fields.tasting_notes || '', pairing_food: fields.pairing_food || '',
-    pairing_entertainment: fields.pairing_entertainment || '', pairing_activity: fields.pairing_activity || '',
+    tasting_notes: fields.tasting_notes || '', brand: fields.brand || '', pairings: parsePairingsFromForm(fields),
     is_private: !!fields.is_private,
   });
   redirect(res, `/strains/${existing.strain_id}`);
