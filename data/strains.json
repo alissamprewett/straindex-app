@@ -167648,5 +167648,1301 @@
       "Purple Hindu Kush"
     ],
     "id": "s6346"
+  },
+  {
+    "name": "Wet Cherries",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "25-28%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Euphoric",
+      "Relaxed"
+    ],
+    "flavor": "Sweet fruity cherry, cream, spicy citrus.",
+    "icon": "🍒",
+    "breeder": "Offensive Selections",
+    "parents": [
+      "Trop Cherry #8",
+      "Pink Lady #27"
+    ],
+    "id": "s6347"
+  },
+  {
+    "name": "Wet P",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "23-28%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Hungry"
+    ],
+    "flavor": "Pine, skunk, earth, chem, bubblegum.",
+    "icon": "💧",
+    "breeder": "Heavy Weight Heads",
+    "parents": [
+      "Chocolate Diesel",
+      "Original Glue"
+    ],
+    "id": "s6348"
+  },
+  {
+    "name": "Wet Paint",
+    "type": "Indica",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Euphoric",
+      "Relaxed"
+    ],
+    "flavor": "Chemical diesel, earthy, wet paint.",
+    "icon": "🎨",
+    "breeder": "Prolific Coast Seeds",
+    "parents": [
+      "Tropicanna Cookies",
+      "PCS1"
+    ],
+    "id": "s6349"
+  },
+  {
+    "name": "Whipped Cherries",
+    "type": "Indica",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "20-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Happy",
+      "Relaxed"
+    ],
+    "flavor": "Sweet fruity cherry berry, creamy vanilla, nutty.",
+    "icon": "🍒",
+    "breeder": "Exotic Genetix",
+    "parents": [
+      "Cherry Cream Pie",
+      "Cookies and Cream F2"
+    ],
+    "id": "s6350"
+  },
+  {
+    "name": "Whipped Cream",
+    "type": "Indica",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "18-20%",
+    "cbd": "1-2%",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Calm",
+      "Sedated"
+    ],
+    "flavor": "Sweet creamy, spicy, pungent cheese.",
+    "icon": "🍦",
+    "breeder": "The Fire Department",
+    "parents": [
+      "Mammoth",
+      "Blue Cheese"
+    ],
+    "id": "s6351"
+  },
+  {
+    "name": "White 91",
+    "type": "Indica",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "20-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Creative",
+      "Relaxed"
+    ],
+    "flavor": "Sweet spicy peppery earthy, woody pine.",
+    "icon": "⚪",
+    "breeder": "Krome",
+    "parents": [
+      "The White",
+      "Chemdawg 91"
+    ],
+    "id": "s6352"
+  },
+  {
+    "name": "White Banner",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "19.8-26%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Relaxed",
+      "Creative"
+    ],
+    "flavor": "Citrus, berry, spicy diesel.",
+    "icon": "🏳️",
+    "breeder": null,
+    "parents": [
+      "White Widow",
+      "Bruce Banner"
+    ],
+    "id": "s6353"
+  },
+  {
+    "name": "White Blizzard",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Uplifted",
+      "Relaxed"
+    ],
+    "flavor": "Sweet creamy cereal, frosty, cookie gas.",
+    "icon": "❄️",
+    "breeder": "Elev8 Seeds",
+    "parents": [
+      "Cookie Blizzard",
+      "Cereal Milk"
+    ],
+    "id": "s6354"
+  },
+  {
+    "name": "White Bubblegum Gelato",
+    "type": "Indica",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "32-34%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Uplifted"
+    ],
+    "flavor": "Tart cherry, sugary bubblegum, rose, creamy.",
+    "icon": "🍬",
+    "breeder": "Backpack Boyz",
+    "parents": [
+      "Gelato #45",
+      "Indiana Bubblegum"
+    ],
+    "id": "s6355"
+  },
+  {
+    "name": "White Cake",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "23-26%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energized",
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "Sweet spicy creamy vanilla cake, fresh citrus, spicy herbs.",
+    "icon": "🎂",
+    "breeder": null,
+    "parents": [
+      "Wedding Cake",
+      "Triangle Mints #23"
+    ],
+    "id": "s6356"
+  },
+  {
+    "name": "White Candy",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "15-24%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Calm",
+      "Relaxed"
+    ],
+    "flavor": "Sweet sour fruity candy, tropical citrus.",
+    "icon": "🍬",
+    "breeder": "710 Genetics",
+    "parents": [
+      "Afghani",
+      "Nepalese",
+      "Hawaiian"
+    ],
+    "id": "s6357"
+  },
+  {
+    "name": "White Choco",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "19-20%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Creative",
+      "Relaxed"
+    ],
+    "flavor": "Sweet creamy white chocolate, spicy black pepper.",
+    "icon": "🍫",
+    "breeder": "Amsterdam Genetics",
+    "parents": [
+      "White Russian",
+      "Chocolope"
+    ],
+    "id": "s6358"
+  },
+  {
+    "name": "White Chocolate Chip",
+    "type": "Indica",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "20-31%",
+    "cbd": "1%",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Sedated"
+    ],
+    "flavor": "Sweet sugary creamy vanilla ice cream, syrupy chocolate.",
+    "icon": "🍪",
+    "breeder": null,
+    "parents": [
+      "Triple Chocolate Chip",
+      "White Truffle"
+    ],
+    "id": "s6359"
+  },
+  {
+    "name": "White Christmas",
+    "type": "Indica",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "18-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Creative",
+      "Relaxed",
+      "Sedated"
+    ],
+    "flavor": "Sweet dessert-like mint chocolate chip, earthy.",
+    "icon": "🎄",
+    "breeder": "Exotic Genetix",
+    "parents": [
+      "The White",
+      "Mint Chocolate Chip"
+    ],
+    "id": "s6360"
+  },
+  {
+    "name": "White Coconut Pie",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Focused",
+      "Creative",
+      "Relaxed"
+    ],
+    "flavor": "Sweet berries, spicy herbal, creamy earthiness.",
+    "icon": "🥥",
+    "breeder": "Cookie Fam Genetics/Lemonnade",
+    "parents": [
+      "Berry Pie",
+      "Medellin"
+    ],
+    "id": "s6361"
+  },
+  {
+    "name": "White Dahlia",
+    "type": "Indica",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "31-32%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Sedated",
+      "Relaxed"
+    ],
+    "flavor": "Creamy lemon-pepper, woody pine, earthy herbs.",
+    "icon": "🌺",
+    "breeder": "Maven Genetics",
+    "parents": [
+      "Pure Michigan F2",
+      "Medusa"
+    ],
+    "id": "s6362"
+  },
+  {
+    "name": "White Death",
+    "type": "Indica",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "23-28%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Sedated"
+    ],
+    "flavor": "Skunky woody gassy, earthy pungent.",
+    "icon": "☠️",
+    "breeder": null,
+    "parents": [
+      "White Widow",
+      "Death Bubba"
+    ],
+    "id": "s6363"
+  },
+  {
+    "name": "White Domina",
+    "type": "Indica",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "11-21%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Sedated",
+      "Happy"
+    ],
+    "flavor": "Sweet spicy flowers, earthy, savory herbs.",
+    "icon": "❄️",
+    "breeder": "Kannabia Seed Company",
+    "parents": [
+      "Black Domina",
+      "Black Domina"
+    ],
+    "id": "s6364"
+  },
+  {
+    "name": "White Fire Alien OG",
+    "type": "Indica",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "19-27%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Sedated"
+    ],
+    "flavor": "Sweet lemony diesel, sour earthy pine.",
+    "icon": "🔥",
+    "breeder": "OG Raskal Genetics",
+    "parents": [
+      "The White",
+      "Fire Alien Kush"
+    ],
+    "id": "s6365"
+  },
+  {
+    "name": "White Frost",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "21-23%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Relaxed",
+      "Energized"
+    ],
+    "flavor": "Sweet spicy citrus, cool pine.",
+    "icon": "❄️",
+    "breeder": null,
+    "parents": [
+      "White Widow",
+      "Jack Frost"
+    ],
+    "id": "s6366"
+  },
+  {
+    "name": "White Gelato Plus",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Hungry"
+    ],
+    "flavor": "Sweet candy, creamy berry, delicate gas, tropical pineapple.",
+    "icon": "🍨",
+    "breeder": "Dubz Garden/La Coz",
+    "parents": [
+      "White Runtz",
+      "Gelato"
+    ],
+    "id": "s6367"
+  },
+  {
+    "name": "White Knight",
+    "type": "Indica",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "26%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Sedated"
+    ],
+    "flavor": "Fragrant floral pine, sweet pine, earthy lemon.",
+    "icon": "♞",
+    "breeder": "Encanto Green Cross",
+    "parents": [
+      "White Widow",
+      "Afghan Kush"
+    ],
+    "id": "s6368"
+  },
+  {
+    "name": "White Knuckles",
+    "type": "Indica",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "12.5-27%",
+    "cbd": "1%",
+    "terps": [],
+    "effects": [
+      "Calm",
+      "Relaxed",
+      "Sedated"
+    ],
+    "flavor": "Sweet fruity banana berry, spicy nutty gassy.",
+    "icon": "✊",
+    "breeder": "Exotic Genetix",
+    "parents": [
+      "Kimbo Kush",
+      "Mr. White"
+    ],
+    "id": "s6369"
+  },
+  {
+    "name": "White Linen",
+    "type": "Indica",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "21-28%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Uplifted",
+      "Relaxed"
+    ],
+    "flavor": "Sweet fruity melon, sour citrus, musky.",
+    "icon": "🕊️",
+    "breeder": "Lit Farms",
+    "parents": [
+      "Wedding Cake #13",
+      "Melonade"
+    ],
+    "id": "s6370"
+  },
+  {
+    "name": "White Mamba",
+    "type": "Indica",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Sedated"
+    ],
+    "flavor": "Gassy, pine, citrus, earthy floral.",
+    "icon": "🐍",
+    "breeder": "Karma Genetics",
+    "parents": [
+      "Mamba (Cali Kush Farms)",
+      "White Kush"
+    ],
+    "id": "s6371"
+  },
+  {
+    "name": "White Master",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "23-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Happy",
+      "Relaxed"
+    ],
+    "flavor": "Hash and incense, earthy.",
+    "icon": "⚪",
+    "breeder": "OG Raskal Genetics",
+    "parents": [
+      "SoCal Master Kush",
+      "The White"
+    ],
+    "id": "s6372"
+  },
+  {
+    "name": "White Mints",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "20-27%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Focused",
+      "Relaxed"
+    ],
+    "flavor": "Sweet creamy mint chocolate, nutty cookies, spicy black pepper.",
+    "icon": "🍬",
+    "breeder": "Seed Junky Genetics",
+    "parents": [
+      "Cookies and Cream",
+      "White Widow"
+    ],
+    "id": "s6373"
+  },
+  {
+    "name": "White Mo",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Happy"
+    ],
+    "flavor": "Frosty, pungent gassy.",
+    "icon": "⚪",
+    "breeder": "Skunk House Genetics",
+    "parents": [
+      "The White",
+      "GMO"
+    ],
+    "id": "s6374"
+  },
+  {
+    "name": "White Moonshine",
+    "type": "Indica",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "15-19%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Focused"
+    ],
+    "flavor": "Bold lemony hash, skunky earthy pine.",
+    "icon": "🌕",
+    "breeder": "Ogr",
+    "parents": [
+      "The White",
+      "Blue Moonshine"
+    ],
+    "id": "s6375"
+  },
+  {
+    "name": "White Nectarine",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Uplifted"
+    ],
+    "flavor": "Hibiscus, citrus, caramel, gassy sweet earthy.",
+    "icon": "🍑",
+    "breeder": "Fig Farms",
+    "parents": [
+      "Purple Fig",
+      "Snow Buffalo"
+    ],
+    "id": "s6376"
+  },
+  {
+    "name": "White Nerds",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "20%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Creative",
+      "Focused",
+      "Uplifted"
+    ],
+    "flavor": "Sweet berry, grape, vanilla; citrus, pine, spice.",
+    "icon": "🍬",
+    "breeder": null,
+    "parents": [
+      "The White",
+      "Nerds"
+    ],
+    "id": "s6377"
+  },
+  {
+    "name": "White Peach Tarts",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "18-28%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Relaxed",
+      "Happy"
+    ],
+    "flavor": "Earthy, ripe peaches, creamy vanilla.",
+    "icon": "🍑",
+    "breeder": "West Coast Cure",
+    "parents": [
+      "Apple Tarts",
+      "White Runtz"
+    ],
+    "id": "s6378"
+  },
+  {
+    "name": "White Pineapple",
+    "type": "Indica",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "10-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Happy",
+      "Relaxed"
+    ],
+    "flavor": "Sweet spicy pineapple, mango, cedar, diesel.",
+    "icon": "🍍",
+    "breeder": null,
+    "parents": [
+      "White Widow",
+      "Pineapple"
+    ],
+    "id": "s6379"
+  },
+  {
+    "name": "White Platinum",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "20-24%",
+    "cbd": "1%",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Focused",
+      "Social"
+    ],
+    "flavor": "Spicy black pepper, chocolatey coffee mocha.",
+    "icon": "⚪",
+    "breeder": "Relentless Genetics",
+    "parents": [
+      "The White",
+      "Platinum OG"
+    ],
+    "id": "s6380"
+  },
+  {
+    "name": "White Poison",
+    "type": "Hybrid",
+    "lean": "Sativa-dominant",
+    "rarity": "uncommon",
+    "thc": "22%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Focused",
+      "Euphoric"
+    ],
+    "flavor": "Pine, skunk.",
+    "icon": "☠️",
+    "breeder": "Five Trees",
+    "parents": [
+      "White Widow",
+      "Durban Poison"
+    ],
+    "id": "s6381"
+  },
+  {
+    "name": "White Raspberry Gelato",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "23-32%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Hungry"
+    ],
+    "flavor": "Sweet dessert, fresh raspberries, sweet cream.",
+    "icon": "🍓",
+    "breeder": "Cannatique",
+    "parents": [
+      "Lemon Cherry",
+      "White Runtz"
+    ],
+    "id": "s6382"
+  },
+  {
+    "name": "White Sangria",
+    "type": "Indica",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "14-26%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Uplifted",
+      "Relaxed"
+    ],
+    "flavor": "Sweet pine, citrus, fresh earth.",
+    "icon": "🍇",
+    "breeder": null,
+    "parents": [
+      "Tahoe Hydro OG",
+      "Gelato 45"
+    ],
+    "id": "s6383"
+  },
+  {
+    "name": "White Siberian",
+    "type": "Indica",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "15%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Talkative"
+    ],
+    "flavor": "Earthy woody, subtle flowery.",
+    "icon": "❄️",
+    "breeder": "Dinafem",
+    "parents": [
+      "White Widow",
+      "AK-47"
+    ],
+    "id": "s6384"
+  },
+  {
+    "name": "White Slipper",
+    "type": "Hybrid",
+    "lean": "Sativa-dominant",
+    "rarity": "uncommon",
+    "thc": "18-25%",
+    "cbd": "1%",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Euphoric",
+      "Relaxed"
+    ],
+    "flavor": "Sweet spicy floral herbs, tropical fruit, sweet citrus.",
+    "icon": "🩰",
+    "breeder": null,
+    "parents": [
+      "The White",
+      "Glass Slipper"
+    ],
+    "id": "s6385"
+  },
+  {
+    "name": "White Smurf",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "19-22%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Relaxed",
+      "Euphoric"
+    ],
+    "flavor": "Sweet musky citrus, peppermint, skunky.",
+    "icon": "🍄",
+    "breeder": "Ceres Seeds",
+    "parents": [
+      "Northern Lights x Skunk #1",
+      "Dutch Sativa Landrace"
+    ],
+    "id": "s6386"
+  },
+  {
+    "name": "White Sumo",
+    "type": "Hybrid",
+    "lean": "Sativa-dominant",
+    "rarity": "rare",
+    "thc": "20-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Creative",
+      "Focused"
+    ],
+    "flavor": "Sour lemon lime, earthy pine, orange zest.",
+    "icon": "🍊",
+    "breeder": "Karma Genetics",
+    "parents": [
+      "Sumo Tangie",
+      "White OG"
+    ],
+    "id": "s6387"
+  },
+  {
+    "name": "White Super Skunk",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "19-26%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Creative"
+    ],
+    "flavor": "Pungent skunk, sweet fruity.",
+    "icon": "🦨",
+    "breeder": "OG Raskal Genetics",
+    "parents": [
+      "Super Skunk",
+      "The White"
+    ],
+    "id": "s6388"
+  },
+  {
+    "name": "White Tara",
+    "type": "Indica",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "19-24%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Calm",
+      "Euphoric"
+    ],
+    "flavor": "Sour lemon, spicy florals, earthy pine.",
+    "icon": "☯️",
+    "breeder": "Harmony Farms",
+    "parents": [
+      "White Shark",
+      "Tara"
+    ],
+    "id": "s6389"
+  },
+  {
+    "name": "White Voodoo",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "15-18%",
+    "cbd": "1-2%",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Calm"
+    ],
+    "flavor": "Sweet sour fruity tropical citrus, earthy herbal.",
+    "icon": "🪄",
+    "breeder": "Crop King Seeds",
+    "parents": [
+      "White Widow",
+      "Maui Wowie"
+    ],
+    "id": "s6390"
+  },
+  {
+    "name": "White Whale",
+    "type": "Indica",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "15-24%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Sleepy",
+      "Euphoric"
+    ],
+    "flavor": "Earthy pine, sweet citrus, diesel.",
+    "icon": "🐋",
+    "breeder": "FloraCal Farms",
+    "parents": [
+      "The White",
+      "Captain Krypt OG"
+    ],
+    "id": "s6391"
+  },
+  {
+    "name": "White Widow Max",
+    "type": "Indica",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "18-24%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Sedated"
+    ],
+    "flavor": "Pungent floral, peppery earth.",
+    "icon": "⚪",
+    "breeder": null,
+    "parents": [
+      "White Widow",
+      "Big Bud"
+    ],
+    "id": "s6392"
+  },
+  {
+    "name": "White Yoda",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "20%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Uplifted"
+    ],
+    "flavor": "Sweet fruity blueberries, sour citrus, spicy woodiness.",
+    "icon": "🧙",
+    "breeder": "Philosopher Seeds",
+    "parents": [
+      "Lowryder",
+      "White Russian"
+    ],
+    "id": "s6393"
+  },
+  {
+    "name": "White Zlushie",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "22-25%",
+    "cbd": "1%",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Creative",
+      "Sedated"
+    ],
+    "flavor": "Sweet creamy fruity berry candy, zesty citrus.",
+    "icon": "🍧",
+    "breeder": "Raw Genetics",
+    "parents": [
+      "White Runtz",
+      "Zlushie"
+    ],
+    "id": "s6394"
+  },
+  {
+    "name": "Whitewalker",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "20%",
+    "cbd": "0.2%",
+    "terps": [],
+    "effects": [
+      "Creative",
+      "Focused",
+      "Uplifted"
+    ],
+    "flavor": "Chestnut, earthy, spicy herbal.",
+    "icon": "❄️",
+    "breeder": "DNA Genetics",
+    "parents": [
+      "White Widow (Ingemar cut)",
+      "Skywalker"
+    ],
+    "id": "s6395"
+  },
+  {
+    "name": "Whoa-Si-Whoa",
+    "type": "Indica",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "21-30%",
+    "cbd": "1%",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Sedated",
+      "Giggly"
+    ],
+    "flavor": "Sweet nutty cookies, pungent earth, light spices.",
+    "icon": "🍪",
+    "breeder": "Cannarado Genetics",
+    "parents": [
+      "Do-Si-Dos",
+      "The White"
+    ],
+    "id": "s6396"
+  },
+  {
+    "name": "Whoody",
+    "type": "Indica",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "17-22%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Sedated",
+      "Happy",
+      "Relaxed"
+    ],
+    "flavor": "Strong red fruit, OG gas.",
+    "icon": "🍓",
+    "breeder": "Nerds Genetics",
+    "parents": [
+      "Gucci OG",
+      "Sour Strawberry"
+    ],
+    "id": "s6397"
+  },
+  {
+    "name": "Wicked Lime",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "21-22%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Relaxed",
+      "Euphoric"
+    ],
+    "flavor": "Zesty lime, spicy black pepper, gassy diesel.",
+    "icon": "🍈",
+    "breeder": "BestThingsGrowing",
+    "parents": [
+      "Mandarin Lime",
+      "Garlic Breath"
+    ],
+    "id": "s6398"
+  },
+  {
+    "name": "Widowmaker",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "25-26%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Creative",
+      "Relaxed"
+    ],
+    "flavor": "Spicy fruity, herbal woody pine.",
+    "icon": "🕷️",
+    "breeder": null,
+    "parents": [
+      "AK-47",
+      "White Widow"
+    ],
+    "id": "s6399"
+  },
+  {
+    "name": "WiFi Cake",
+    "type": "Hybrid",
+    "lean": "Sativa-dominant",
+    "rarity": "uncommon",
+    "thc": "21-30%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Happy"
+    ],
+    "flavor": "Sweet nutty vanilla, skunky diesel.",
+    "icon": "🎂",
+    "breeder": null,
+    "parents": [
+      "Wedding Cake",
+      "White Fire OG"
+    ],
+    "id": "s6400"
+  },
+  {
+    "name": "WiFi Sunset",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "20-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Creative"
+    ],
+    "flavor": "Skunky citrus, sweet berry, candy; citrus pine diesel earthy.",
+    "icon": "🌇",
+    "breeder": "Cannarado Genetics",
+    "parents": [
+      "White Fire OG #3",
+      "Sunset Sherbet"
+    ],
+    "id": "s6401"
+  },
+  {
+    "name": "Wild Berry Kush",
+    "type": "Indica",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "23-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Relaxed",
+      "Sedated"
+    ],
+    "flavor": "Sweet blueberry, fresh fruit, floral earthy.",
+    "icon": "🫐",
+    "breeder": "Scorpion Crew (BC Bud Depot)",
+    "parents": [
+      "DJ Short Blueberry",
+      "Blackberry Kush"
+    ],
+    "id": "s6402"
+  },
+  {
+    "name": "Wild Cherry Punch",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "13-20%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Relaxed",
+      "Sedated"
+    ],
+    "flavor": "Sweet sugary cherry berry, grapes, red fruits.",
+    "icon": "🍒",
+    "breeder": null,
+    "parents": [
+      "Cherry Cookies",
+      "Purple Punch"
+    ],
+    "id": "s6403"
+  },
+  {
+    "name": "Wilson",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "10-27%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Hungry",
+      "Energetic",
+      "Focused"
+    ],
+    "flavor": "Sweet fruity tropical mango, sour citrus, diesel.",
+    "icon": "🏝️",
+    "breeder": "Masonic Seeds",
+    "parents": [
+      "Banana OG",
+      "Papaya",
+      "Tropicana Cookies"
+    ],
+    "id": "s6404"
+  },
+  {
+    "name": "Wine Breath",
+    "type": "Indica",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "24-28%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Sedated",
+      "Focused"
+    ],
+    "flavor": "Red wine, berry, grape, earthy.",
+    "icon": "🍷",
+    "breeder": "Lit Farms",
+    "parents": [
+      "Mendo Breath F2",
+      "Plum White"
+    ],
+    "id": "s6405"
   }
 ]
