@@ -32,6 +32,22 @@ const storage = require('./lib/storage');
 
 const PORT = process.env.PORT || 3000;
 
+// Safety net for anything that slips past the per-request try/catch below.
+// Every route handler's own errors are already caught there -- this only
+// fires for a promise that was never awaited/caught at all (a real bug,
+// like the un-awaited db.markConversationRead() call that used to sit in
+// pageConversation). By default Node kills the whole process on an
+// unhandled rejection, which turns one flaky async call into a total
+// outage for every user, not just whoever triggered it. Logging + Sentry
+// + staying up is the safer failure mode for a small app where uptime
+// matters more than treating every rejection as fatal -- it doesn't hide
+// the bug (still shows up in logs and Sentry), it just stops one bad
+// promise from taking the whole server down with it.
+process.on('unhandledRejection', (reason) => {
+  console.error('[unhandledRejection]', reason);
+  Sentry.captureException(reason instanceof Error ? reason : new Error(String(reason)));
+});
+
 // ---------------------------------------------------------------- basic signup rate limiting
 // A simple in-memory per-IP throttle -- not bulletproof (resets on
 // restart, doesn't help behind a shared IP like a school or office), but
@@ -4314,7 +4330,17 @@ function pageConversation(req, res, friendId) {
   if (db.getFriendshipStatus(userId, friendId) !== 'friends') {
     return sendHtml(res, layout({ title: 'Messages', active: 'friends', body: `<div class="empty-note">You can only message friends.</div>`, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
   }
-  db.markConversationRead(userId, friendId);
+  // Fire-and-forget: pageConversation itself is synchronous, and marking
+  // messages read shouldn't hold up rendering the thread. But an
+  // un-awaited promise with no .catch() is a live crash risk -- if this
+  // write to Turso ever rejects (a network blip, a timeout), it becomes
+  // an unhandled promise rejection, and Node kills the whole process by
+  // default. Swallow it here the same way every other route's errors are
+  // caught, instead of letting one flaky DB write take the entire app down.
+  db.markConversationRead(userId, friendId).catch(err => {
+    console.error('Failed to mark conversation read:', err);
+    Sentry.captureException(err);
+  });
   const thread = db.listConversation(userId, friendId);
   const body = `
     <h1 class="screen-title">${esc(friend.username)}</h1>
