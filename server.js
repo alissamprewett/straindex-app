@@ -5087,6 +5087,14 @@ db.init()
     server.listen(PORT, () => {
       console.log(`StrainDex running at http://localhost:${PORT}`);
     });
+    // Explicitly raised from Node's defaults (keepAliveTimeout: 5000ms,
+    // headersTimeout: 60000ms) at Render support's suggestion while
+    // investigating connection resets on the custom domain (strain-dex.com)
+    // that don't reproduce on the *.onrender.com URL. Cheap, safe test --
+    // set after listen() per Node's docs, since these are properties of
+    // the running server instance rather than listen() options.
+    server.keepAliveTimeout = 120000;
+    server.headersTimeout = 120000;
   })
   .catch(err => {
     console.error('Failed to connect to the database — check TURSO_DATABASE_URL and TURSO_AUTH_TOKEN.');
