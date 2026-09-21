@@ -171938,5 +171938,377 @@
       "Acapulco Gold"
     ],
     "id": "s6541"
+  },
+  {
+    "name": "Animal Glue",
+    "type": "Indica",
+    "lean": "Indica-dominant",
+    "rarity": "uncommon",
+    "thc": "28-30%",
+    "cbd": "",
+    "terps": [
+      "Caryophyllene"
+    ],
+    "effects": [
+      "Happy",
+      "Relaxed",
+      "Sleepy"
+    ],
+    "flavor": "Sweet fruity blueberry cookie, spicy coffee.",
+    "icon": "🌿",
+    "breeder": "",
+    "parents": [
+      "Gorilla Glue #4",
+      "Animal Cookies"
+    ],
+    "id": "s6542"
+  },
+  {
+    "name": "Anunnaki",
+    "type": "Sativa",
+    "lean": "Sativa-dominant",
+    "rarity": "uncommon",
+    "thc": "17-22%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Relaxed",
+      "Hungry"
+    ],
+    "flavor": "Sweet, sour, fruity, hashy, spicy.",
+    "icon": "🌿",
+    "breeder": "DNA Genetics",
+    "parents": [
+      "Hash Plant",
+      "Cannalope Haze"
+    ],
+    "id": "s6543"
+  },
+  {
+    "name": "Appalachian Diesel",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Diesel, gassy.",
+    "icon": "🌿",
+    "breeder": "High Lonesome Grass Seed",
+    "parents": [
+      "East Coast Sour Diesel",
+      "Appalachia"
+    ],
+    "id": "s6544"
+  },
+  {
+    "name": "Apple Fritter #2",
+    "type": "Hybrid",
+    "lean": "Balanced",
+    "rarity": "uncommon",
+    "thc": "22-32%",
+    "cbd": "",
+    "terps": [
+      "Caryophyllene",
+      "Limonene",
+      "Pinene"
+    ],
+    "effects": [
+      "Relaxed",
+      "Giggly",
+      "Tingly"
+    ],
+    "flavor": "Sweet apple pie, vanilla, caramel.",
+    "icon": "🍎",
+    "breeder": "Lumpy's Flowers",
+    "parents": [
+      "Sour Apple",
+      "Animal Cookies"
+    ],
+    "id": "s6545"
+  },
+  {
+    "name": "Apple Gas",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [
+      "Myrcene",
+      "Caryophyllene",
+      "Linalool"
+    ],
+    "effects": [
+      "Energetic",
+      "Focused",
+      "Relaxed"
+    ],
+    "flavor": "Sweet apples, sour citrus, gassy diesel.",
+    "icon": "🍏",
+    "breeder": "Cresco",
+    "parents": [
+      "Apples & Bananas",
+      "Grape Gasoline"
+    ],
+    "id": "s6546"
+  },
+  {
+    "name": "Apricot Auto",
+    "type": "Indica",
+    "lean": "Indica-dominant",
+    "rarity": "uncommon",
+    "thc": "26%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Sleepy"
+    ],
+    "flavor": "Apricot marmalade, sweet, sour, citrus, woody.",
+    "icon": "🍑",
+    "breeder": "Fast Buds",
+    "parents": [
+      "Purple Apricot",
+      "Gorilla Auto (GG4 Auto)"
+    ],
+    "id": "s6547"
+  },
+  {
+    "name": "Artificial Candy",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "25.82%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Calm",
+      "Energetic",
+      "Happy",
+      "Relaxed"
+    ],
+    "flavor": "Sour, spice, fuel.",
+    "icon": "🍬",
+    "breeder": "Stardust Cultivation",
+    "parents": [
+      "Artificial Sour",
+      "Bird Brains"
+    ],
+    "id": "s6548"
+  },
+  {
+    "name": "Astral Destiny",
+    "type": "Indica",
+    "lean": "Indica-dominant",
+    "rarity": "uncommon",
+    "thc": "24-29%",
+    "cbd": "",
+    "terps": [
+      "Myrcene",
+      "Limonene",
+      "Pinene"
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Sedated"
+    ],
+    "flavor": "Cheesy, savory, funky, earthy.",
+    "icon": "✨",
+    "breeder": "Galenas",
+    "parents": [
+      "Unicorn Poop",
+      "Blunicorn"
+    ],
+    "id": "s6549"
+  },
+  {
+    "name": "Atlantic Sunrise",
+    "type": "Sativa",
+    "lean": "Sativa-dominant",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energized",
+      "Euphoric",
+      "Focused"
+    ],
+    "flavor": "Earthy, diesel.",
+    "icon": "🌅",
+    "breeder": "",
+    "parents": [
+      "Aspen OG",
+      "East Coast Sour Diesel"
+    ],
+    "id": "s6550"
+  },
+  {
+    "name": "Banana Headband",
+    "type": "Hybrid",
+    "lean": "Balanced/Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "28-30%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Focused",
+      "Social"
+    ],
+    "flavor": "Sweet creamy banana citrus, spicy earthiness, woody pine.",
+    "icon": "🍌",
+    "breeder": "",
+    "parents": [
+      "Headband",
+      "Platinum Banana OG"
+    ],
+    "id": "s6551"
+  },
+  {
+    "name": "Banana Oz",
+    "type": "Indica",
+    "lean": "Indica-dominant",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🍌",
+    "breeder": "Sunken Treasure Seeds",
+    "parents": [
+      "Banana OG",
+      "OZ Kush"
+    ],
+    "id": "s6552"
+  },
+  {
+    "name": "Banana Puffy",
+    "type": "Indica",
+    "lean": "Indica-dominant",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Pungent banana, cookie.",
+    "icon": "🍌",
+    "breeder": "Cannarado Genetics",
+    "parents": [
+      "Banana OG",
+      "Thin Mint"
+    ],
+    "id": "s6553"
+  },
+  {
+    "name": "Banana Twerpz",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Banana ice cream, candy, cream pie, fuel.",
+    "icon": "🍌",
+    "breeder": "Cosmic Wisdom Seeds",
+    "parents": [
+      "Banana Pepper",
+      "Twerpz"
+    ],
+    "id": "s6554"
+  },
+  {
+    "name": "Bazooka Joe G",
+    "type": "Hybrid",
+    "lean": "Balanced",
+    "rarity": "uncommon",
+    "thc": "14-23%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Aroused",
+      "Happy",
+      "Focused"
+    ],
+    "flavor": "Berry, skunk, bubblegum, cotton candy.",
+    "icon": "🍬",
+    "breeder": "Archive Seed Bank",
+    "parents": [
+      "Indiana Bubblegum",
+      "Face Off OG"
+    ],
+    "id": "s6555"
+  },
+  {
+    "name": "Ben & Gary's",
+    "type": "Indica",
+    "lean": "Indica-dominant",
+    "rarity": "uncommon",
+    "thc": "20-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Focused",
+      "Relaxed"
+    ],
+    "flavor": "Fizzy berry ice cream, creamy vanilla, citrus.",
+    "icon": "🍇",
+    "breeder": "Exotic Genetix",
+    "parents": [
+      "Ben & Berries",
+      "Gary Poppins"
+    ],
+    "id": "s6556"
+  },
+  {
+    "name": "Berry Fire",
+    "type": "Indica",
+    "lean": "Indica-dominant",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Calming",
+      "Relaxing"
+    ],
+    "flavor": "Blueberry, earthy, herbal.",
+    "icon": "🫐",
+    "breeder": "Glass House Farms",
+    "parents": [
+      "Hellfire",
+      "Ponche Nuevo"
+    ],
+    "id": "s6557"
+  },
+  {
+    "name": "Big Chainz",
+    "type": "Sativa",
+    "lean": "Sativa-dominant",
+    "rarity": "uncommon",
+    "thc": "20-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Focused",
+      "Uplifted"
+    ],
+    "flavor": "Spicy, savory, pungent gassy.",
+    "icon": "⛓️",
+    "breeder": "",
+    "parents": [
+      "Stardawg",
+      "Georgia Pine"
+    ],
+    "id": "s6558"
   }
 ]

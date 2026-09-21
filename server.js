@@ -18,6 +18,12 @@ const crypto = require('node:crypto');
 const db = require('./lib/db');
 const auth = require('./lib/auth');
 const { layout, esc } = require('./lib/render');
+// Renders the hidden CSRF field every authenticated POST form must include
+// (see the CSRF verification middleware in the router below, and
+// lib/auth.js for how the token itself is derived from the session cookie).
+function csrfField(req) {
+  return `<input type="hidden" name="_csrf" value="${esc(auth.csrfToken(req))}">`;
+}
 const { parseForm, parseJson } = require('./lib/body');
 const { answerFromKnowledgeBase } = require('./lib/chat');
 const mock = require('./lib/mockdata');
@@ -270,7 +276,7 @@ function renderShareButton(c) {
   const strain = db.getStrain(c.strain_id);
   return `<button type="button" class="btn secondary" style="padding:4px 10px;font-size:0.75rem;" onclick="shareCheckin(${c.id}, ${esc(JSON.stringify(strain ? strain.name : 'this strain'))})">🔗 Share</button>`;
 }
-function renderCheckinComments(c, userId, redirectPath) {
+function renderCheckinComments(req, c, userId, redirectPath) {
   const comments = db.listCheckinComments(c.id, userId);
   return `
     ${comments.length ? `<div style="margin-top:8px;">${comments.map(cm => {
@@ -284,13 +290,13 @@ function renderCheckinComments(c, userId, redirectPath) {
           </button>
         ` : (cm.likeCount ? `<span style="margin-left:6px;">💚 ${cm.likeCount}</span>` : '')}
         ${canModerate ? `
-          <form method="POST" action="/report" style="display:inline;" onsubmit="return confirm('Report this comment for review?')">
+          <form method="POST" action="/report" style="display:inline;" onsubmit="return confirm('Report this comment for review?')">${csrfField(req)}
             <input type="hidden" name="content_type" value="checkin_comment">
             <input type="hidden" name="content_id" value="${cm.id}">
             <input type="hidden" name="redirect_to" value="${esc(redirectPath)}">
             <button type="submit" style="background:none;border:none;padding:0;margin-left:6px;color:inherit;text-decoration:underline;cursor:pointer;font-size:inherit;">Report</button>
           </form>
-          <form method="POST" action="/block/${cm.user_id}" style="display:inline;" onsubmit="return confirm('Block ' + ${JSON.stringify(author ? author.username : 'this person')} + '? You will no longer see their comments, check-ins, or grow tips, and any friendship will end.')">
+          <form method="POST" action="/block/${cm.user_id}" style="display:inline;" onsubmit="return confirm('Block ' + ${JSON.stringify(author ? author.username : 'this person')} + '? You will no longer see their comments, check-ins, or grow tips, and any friendship will end.')">${csrfField(req)}
             <input type="hidden" name="redirect_to" value="${esc(redirectPath)}">
             <button type="submit" style="background:none;border:none;padding:0;margin-left:6px;color:inherit;text-decoration:underline;cursor:pointer;font-size:inherit;">Block</button>
           </form>
@@ -298,7 +304,7 @@ function renderCheckinComments(c, userId, redirectPath) {
       </div>`;
     }).join('')}</div>` : ''}
     ${userId != null ? `
-      <form method="POST" action="/checkin/${c.id}/comment" style="display:flex;gap:6px;align-items:center;margin-top:6px;">
+      <form method="POST" action="/checkin/${c.id}/comment" style="display:flex;gap:6px;align-items:center;margin-top:6px;">${csrfField(req)}
         <input type="hidden" name="redirect_to" value="${esc(redirectPath)}">
         <input type="text" name="body" placeholder="Add a comment..." required style="flex:1;margin:0;">
         <button class="btn secondary" type="submit" style="padding:6px 12px;">Post</button>
@@ -508,7 +514,7 @@ function pageHome(req, res) {
         ${c.note ? `<div class="note">"${esc(c.note)}"</div>` : ''}
         ${renderCheckinPairings(c)}
         ${renderOnsetTimer(c)}
-        ${renderCheckinComments(c, userId, '/')}
+        ${renderCheckinComments(req, c, userId, '/')}
         <div style="display:flex;flex-direction:column;align-items:flex-end;margin-top:8px;">
           <div style="display:flex;gap:6px;align-items:center;">
             ${renderShareButton(c)}
@@ -719,7 +725,7 @@ function pageStrainDetail(req, res, id) {
         <button type="button" class="btn secondary block" id="native-share-btn" onclick="nativeShare(${esc(JSON.stringify(s.name))})" style="display:none;margin-bottom:8px;">📤 Share via...</button>
         ${userId != null && db.listFriends(userId).length ? `
           <label class="field-label" style="margin-top:14px;">Send to a friend</label>
-          <form method="POST" action="/strains/${s.id}/share" id="share-friend-form" style="display:flex;gap:8px;align-items:center;" onsubmit="return validateShareForm(event)">
+          <form method="POST" action="/strains/${s.id}/share" id="share-friend-form" style="display:flex;gap:8px;align-items:center;" onsubmit="return validateShareForm(event)">${csrfField(req)}
             <input type="text" id="share-friend-input" list="share-friend-list" placeholder="Type a friend's username..." autocomplete="off" style="flex:1;margin:0;">
             <datalist id="share-friend-list">
               ${db.listFriends(userId).map(f => `<option value="${esc(f.username)}" data-id="${f.id}">`).join('')}
@@ -795,7 +801,7 @@ function pageStrainDetail(req, res, id) {
     ${renderFamilyTree(s)}
     <a class="btn block" href="/checkin?strain=${s.id}">＋ Check in this strain</a>
     ${userId != null ? `
-      <form method="POST" action="/wishlist/${s.id}/toggle" style="margin-top:8px;">
+      <form method="POST" action="/wishlist/${s.id}/toggle" style="margin-top:8px;">${csrfField(req)}
         <input type="hidden" name="redirect_to" value="/strains/${s.id}">
         <button type="submit" class="btn secondary block">${db.isInWishlist(userId, s.id) ? '★ Remove from Wishlist' : '☆ Add to Wishlist'}</button>
       </form>
@@ -812,7 +818,7 @@ function pageStrainDetail(req, res, id) {
               <summary style="cursor:pointer;font-size:0.7812rem;font-weight:700;color:var(--accent-text);">${inAnyList ? 'Your lists' : 'Show your lists'}</summary>
               <p style="margin:6px 0 0;display:flex;flex-wrap:wrap;gap:6px;">
                 ${myLists.map(l => `
-                  <form method="POST" action="/lists/${l.id}/items/${s.id}/toggle" style="display:inline;">
+                  <form method="POST" action="/lists/${l.id}/items/${s.id}/toggle" style="display:inline;">${csrfField(req)}
                     <input type="hidden" name="redirect_to" value="/strains/${s.id}">
                     <button type="submit" class="filter-pill ${db.isStrainInList(l.id, s.id) ? 'active' : ''}" style="border:none;cursor:pointer;">${db.isStrainInList(l.id, s.id) ? '✓ ' : '+ '}${esc(l.name)}</button>
                   </form>
@@ -852,7 +858,7 @@ function pageStrainDetail(req, res, id) {
           ${(c.effects || []).length ? `<p style="margin:6px 0 0;">${c.effects.map(e => `<span class="filter-pill">${esc(e)}</span>`).join('')}</p>` : ''}
           ${c.note ? `<span class="empty-note" style="display:block;padding:4px 0 0;">${esc(c.note)}</span>` : ''}
         ${renderCheckinPairings(c)}
-        ${renderCheckinComments(c, userId, '/strains/' + s.id)}
+        ${renderCheckinComments(req, c, userId, '/strains/' + s.id)}
           <div style="display:flex;flex-direction:column;align-items:flex-end;margin-top:6px;">
             <div style="display:flex;gap:6px;align-items:center;">
               ${renderShareButton(c)}
@@ -880,7 +886,7 @@ function pageStrainDetail(req, res, id) {
           ${c.note ? `<span class="empty-note" style="display:block;padding:4px 0 0;">${esc(c.note)}</span>` : ''}
         ${renderCheckinPairings(c)}
         ${renderOnsetTimer(c)}
-        ${renderCheckinComments(c, userId, '/strains/' + s.id)}
+        ${renderCheckinComments(req, c, userId, '/strains/' + s.id)}
           <div style="display:flex;flex-direction:column;align-items:flex-end;margin-top:6px;">
             <div style="display:flex;gap:6px;align-items:center;">
               ${renderShareButton(c)}
@@ -1080,7 +1086,7 @@ function pageCheckinForm(req, res, query, existing) {
   const body = `
     <h1 class="screen-title">${isEdit ? 'Edit Check-In' : 'Check In'}</h1>
     ${isEdit ? `<p class="empty-note">Thoughts changed after the fact? That's normal, especially with edibles — update it below.</p>` : ''}
-    <form method="POST" action="${isEdit ? `/checkin/${existing.id}/edit` : '/checkin'}" id="checkin-form">
+    <form method="POST" action="${isEdit ? `/checkin/${existing.id}/edit` : '/checkin'}" id="checkin-form">${csrfField(req)}
       <label class="field-label">Strain</label>
       <div id="strain-picker" ${s ? 'style="display:none;"' : ''}>
         <input type="text" id="strain-picker-search" placeholder="Type a strain name..." autocomplete="off" ${isEdit ? 'disabled' : ''}>
@@ -1141,7 +1147,7 @@ function pageCheckinForm(req, res, query, existing) {
       <button class="btn block" type="submit" id="checkin-submit">${isEdit ? 'Save Changes' : '🔥 Light It Up'}</button>
     </form>
     ${isEdit ? `
-      <form method="POST" action="/checkin/${existing.id}/delete" style="margin-top:10px;text-align:center;" onsubmit="return confirm('Delete this check-in? This cannot be undone.')">
+      <form method="POST" action="/checkin/${existing.id}/delete" style="margin-top:10px;text-align:center;" onsubmit="return confirm('Delete this check-in? This cannot be undone.')">${csrfField(req)}
         <input type="hidden" name="redirect_to" value="/strains/${existing.strain_id}">
         <button type="submit" style="background:none;border:none;color:#a13a3a;cursor:pointer;font-size:0.75rem;padding:4px;">Delete this check-in</button>
       </form>
@@ -1488,7 +1494,7 @@ function pageRecipes(req, res, query) {
 function pageRecipeNew(req, res) {
   const body = `
     <h1 class="screen-title">Submit a Recipe</h1>
-    <form method="POST" action="/recipes/new">
+    <form method="POST" action="/recipes/new">${csrfField(req)}
       <label class="field-label">Your name</label>
       <input type="text" name="author" placeholder="e.g. Jordan" required>
       <label class="field-label">Recipe title</label>
@@ -1543,13 +1549,13 @@ function pageGrowing(req, res, query) {
         <div style="display:flex;justify-content:space-between;align-items:center;">
           <span class="empty-note" style="padding:0;">by ${esc(g.author || 'Anonymous')}
             ${viewerId != null && g.user_id != null && g.user_id !== viewerId ? `
-              <form method="POST" action="/report" style="display:inline;" onsubmit="return confirm('Report this grow tip for review?')">
+              <form method="POST" action="/report" style="display:inline;" onsubmit="return confirm('Report this grow tip for review?')">${csrfField(req)}
                 <input type="hidden" name="content_type" value="grow_tip">
                 <input type="hidden" name="content_id" value="${g.id}">
                 <input type="hidden" name="redirect_to" value="/growing">
                 <button type="submit" style="background:none;border:none;padding:0;margin-left:6px;color:inherit;text-decoration:underline;cursor:pointer;font-size:inherit;">Report</button>
               </form>
-              <form method="POST" action="/block/${g.user_id}" style="display:inline;" onsubmit="return confirm('Block ${esc(g.author || 'this person')}? You will no longer see their comments, check-ins, or grow tips, and any friendship will end.')">
+              <form method="POST" action="/block/${g.user_id}" style="display:inline;" onsubmit="return confirm('Block ${esc(g.author || 'this person')}? You will no longer see their comments, check-ins, or grow tips, and any friendship will end.')">${csrfField(req)}
                 <input type="hidden" name="redirect_to" value="/growing">
                 <button type="submit" style="background:none;border:none;padding:0;margin-left:6px;color:inherit;text-decoration:underline;cursor:pointer;font-size:inherit;">Block</button>
               </form>
@@ -1566,7 +1572,7 @@ function pageGrowingNew(req, res) {
   const CATEGORIES = ['Plant Life Cycle', 'Watering', 'Lighting', 'Nutrients & Feeding', 'Pests & Disease', 'Training', 'Harvest & Curing', 'Genetics & Seeds', 'Indoor Setup', 'Outdoor Growing'];
   const body = `
     <h1 class="screen-title">Share a Grow Tip</h1>
-    <form method="POST" action="/growing/new">
+    <form method="POST" action="/growing/new">${csrfField(req)}
       <label class="field-label">Your name</label>
       <input type="text" name="author" placeholder="e.g. Sam" required>
       <label class="field-label">Title</label>
@@ -1609,13 +1615,13 @@ function pageGearCare(req, res) {
         <div style="display:flex;justify-content:space-between;align-items:center;">
           <span class="empty-note" style="padding:0;">by ${esc(g.author || 'Anonymous')}
             ${viewerId != null && g.user_id != null && g.user_id !== viewerId ? `
-              <form method="POST" action="/report" style="display:inline;" onsubmit="return confirm('Report this tip for review?')">
+              <form method="POST" action="/report" style="display:inline;" onsubmit="return confirm('Report this tip for review?')">${csrfField(req)}
                 <input type="hidden" name="content_type" value="grow_tip">
                 <input type="hidden" name="content_id" value="${g.id}">
                 <input type="hidden" name="redirect_to" value="/gear-care">
                 <button type="submit" style="background:none;border:none;padding:0;margin-left:6px;color:inherit;text-decoration:underline;cursor:pointer;font-size:inherit;">Report</button>
               </form>
-              <form method="POST" action="/block/${g.user_id}" style="display:inline;" onsubmit="return confirm('Block ${esc(g.author || 'this person')}? You will no longer see their comments, check-ins, or grow tips, and any friendship will end.')">
+              <form method="POST" action="/block/${g.user_id}" style="display:inline;" onsubmit="return confirm('Block ${esc(g.author || 'this person')}? You will no longer see their comments, check-ins, or grow tips, and any friendship will end.')">${csrfField(req)}
                 <input type="hidden" name="redirect_to" value="/gear-care">
                 <button type="submit" style="background:none;border:none;padding:0;margin-left:6px;color:inherit;text-decoration:underline;cursor:pointer;font-size:inherit;">Block</button>
               </form>
@@ -1630,7 +1636,7 @@ function pageGearCare(req, res) {
 function pageGearCareNew(req, res) {
   const body = `
     <h1 class="screen-title">Share a Cleaning Tip</h1>
-    <form method="POST" action="/gear-care/new">
+    <form method="POST" action="/gear-care/new">${csrfField(req)}
       <label class="field-label">Your name</label>
       <input type="text" name="author" placeholder="e.g. Sam" required>
       <label class="field-label">Title</label>
@@ -1695,7 +1701,7 @@ function pageAdminLogin(req, res, query) {
   const body = `
     <h1 class="screen-title">Admin Login</h1>
     ${err ? `<p style="color:#a13a3a;">Wrong password.</p>` : ''}
-    <form method="POST" action="/admin/login">
+    <form method="POST" action="/admin/login">${csrfField(req)}
       <label class="field-label">Password</label>
       <input type="password" name="password" required>
       <button class="btn block" type="submit">Log In</button>
@@ -1749,7 +1755,7 @@ function pageSignup(req, res, query) {
       Continue with Google
     </a>
     <p class="empty-note" style="text-align:center;margin:0 0 14px;">or</p>
-    <form method="POST" action="/signup">
+    <form method="POST" action="/signup">${csrfField(req)}
       <label class="field-label" style="margin-top:0;">Username</label>
       <input type="text" name="username" id="signup-username" required minlength="3" maxlength="24" autocomplete="username">
       <label class="field-label">Email</label>
@@ -1910,7 +1916,7 @@ function pageGoogleFinish(req, res, query) {
     <h1 class="screen-title">Almost there</h1>
     <p class="screen-sub">Signed in as ${esc(profile.email)} with Google. Just need a couple more things.</p>
     ${err && errMessages[err] ? `<p style="color:#a13a3a;">${esc(errMessages[err])}</p>` : ''}
-    <form method="POST" action="/auth/google/finish">
+    <form method="POST" action="/auth/google/finish">${csrfField(req)}
       <label class="field-label" style="margin-top:0;">Username</label>
       <input type="text" name="username" required minlength="3" maxlength="24" value="${esc(suggestedUsername)}">
       <label class="field-label">Date of birth</label>
@@ -2066,7 +2072,7 @@ function pageLogin(req, res, query) {
       Continue with Google
     </a>
     <p class="empty-note" style="text-align:center;margin:0 0 14px;">or</p>
-    <form method="POST" action="/login">
+    <form method="POST" action="/login">${csrfField(req)}
       <label class="field-label" style="margin-top:0;">Username or email</label>
       <input type="text" name="username" id="login-username" required autocomplete="username">
       <label class="field-label">Password</label>
@@ -2414,7 +2420,7 @@ function pageGrowJournal(req, res) {
   const body = `
     <h1 class="screen-title">Grow Journal</h1>
     <p class="screen-sub">A private photo timeline for tracking a plant from seedling to harvest. Use the title field as a plant nickname to keep entries for the same plant easy to spot.</p>
-    <form method="POST" action="/grow-journal" style="margin-bottom:20px;">
+    <form method="POST" action="/grow-journal" style="margin-bottom:20px;">${csrfField(req)}
       <label class="field-label" style="margin-top:0;">Title (optional)</label>
       <input type="text" name="title" placeholder="e.g. Wedding Cake #1 — Day 12">
       <label class="field-label">Notes</label>
@@ -2455,7 +2461,7 @@ function pageGrowJournal(req, res) {
         </div>
         ${e.photo ? `<div class="checkin-photo-thumb" style="margin:8px 0;"><img src="${esc(e.photo)}" alt="Grow journal photo"></div>` : ''}
         ${e.note ? `<p style="margin:6px 0 8px;">${esc(e.note)}</p>` : ''}
-        <form method="POST" action="/grow-journal/${e.id}/delete" onsubmit="return confirm('Delete this entry? This cannot be undone.')">
+        <form method="POST" action="/grow-journal/${e.id}/delete" onsubmit="return confirm('Delete this entry? This cannot be undone.')">${csrfField(req)}
           <button type="submit" class="empty-note" style="padding:0;background:none;border:none;color:#a13a3a;cursor:pointer;font-size:inherit;">Delete</button>
         </form>
       </div>
@@ -2519,7 +2525,7 @@ function pageLists(req, res) {
       </div>
     </a>
     <div class="section-label" style="margin-top:16px;">Your custom lists</div>
-    <form method="POST" action="/lists" style="display:flex;gap:8px;align-items:center;margin-bottom:16px;">
+    <form method="POST" action="/lists" style="display:flex;gap:8px;align-items:center;margin-bottom:16px;">${csrfField(req)}
       <input type="text" name="name" placeholder="New list name..." required style="flex:1;margin:0;">
       <button class="btn" type="submit" style="white-space:nowrap;">Create</button>
     </form>
@@ -2533,7 +2539,7 @@ function pageLists(req, res) {
             <div class="sub">${count} strain${count === 1 ? '' : 's'}</div>
           </div>
         </a>
-        <form method="POST" action="/lists/${l.id}/delete" onsubmit="return confirm('Delete this list? The strains themselves aren\\'t affected, just this list.')">
+        <form method="POST" action="/lists/${l.id}/delete" onsubmit="return confirm('Delete this list? The strains themselves aren\\'t affected, just this list.')">${csrfField(req)}
           <button type="submit" class="empty-note" style="padding:0 6px;background:none;border:none;color:#a13a3a;cursor:pointer;font-size:inherit;">Delete</button>
         </form>
       </div>`;
@@ -2558,7 +2564,7 @@ function pageListDetail(req, res, id) {
             <div class="sub">${esc(s.type)} · THC ${esc(s.thc)}</div>
           </div>
         </a>
-        <form method="POST" action="/lists/${list.id}/items/${s.id}/toggle">
+        <form method="POST" action="/lists/${list.id}/items/${s.id}/toggle">${csrfField(req)}
           <input type="hidden" name="redirect_to" value="/lists/${list.id}">
           <button type="submit" class="empty-note" style="padding:0 6px;background:none;border:none;color:#a13a3a;cursor:pointer;font-size:inherit;">Remove</button>
         </form>
@@ -2813,7 +2819,7 @@ function pageWishlist(req, res) {
             <div class="sub">${esc(s.type)} · THC ${esc(s.thc)}</div>
           </div>
         </a>
-        <form method="POST" action="/wishlist/${s.id}/toggle">
+        <form method="POST" action="/wishlist/${s.id}/toggle">${csrfField(req)}
           <input type="hidden" name="redirect_to" value="/wishlist">
           <button type="submit" class="empty-note" style="padding:0 6px;background:none;border:none;color:#a13a3a;cursor:pointer;font-size:inherit;">Remove</button>
         </form>
@@ -3011,10 +3017,10 @@ function pageInsights(req, res) {
       <h2 style="margin:0 0 8px;font-size:0.9375rem;">🌿 Tolerance break</h2>
       ${activeBreak ? `
         <p class="empty-note" style="padding:0 0 8px;">You're on a break — started ${daysSince(activeBreak.started_at)} day${daysSince(activeBreak.started_at) === 1 ? '' : 's'} ago${activeBreak.note ? `: "${esc(activeBreak.note)}"` : '.'}</p>
-        <form method="POST" action="/tolerance-break/end"><button class="btn secondary block" type="submit">End Break</button></form>
+        <form method="POST" action="/tolerance-break/end">${csrfField(req)}<button class="btn secondary block" type="submit">End Break</button></form>
       ` : `
         <p class="empty-note" style="padding:0 0 8px;">Not currently on a break.</p>
-        <form method="POST" action="/tolerance-break/start">
+        <form method="POST" action="/tolerance-break/start">${csrfField(req)}
           <input type="text" name="note" placeholder="Optional note — why are you taking this one?" style="margin-bottom:8px;">
           <button class="btn block" type="submit">Start a Tolerance Break</button>
         </form>
@@ -3213,7 +3219,7 @@ function pageFeedback(req, res, query) {
     <p class="screen-sub">StrainDex is in beta — bugs, ideas, confusing screens, anything at all. This goes straight to the person building the app.</p>
     <p class="empty-note">For anything urgent — a compromised account, a safety concern, or a bad actor on the app — email <a href="mailto:${SUPPORT_EMAIL}">${SUPPORT_EMAIL}</a> directly instead of using the form below, since it's monitored more closely.</p>
     ${sent ? `<p class="empty-note" style="color:var(--accent-text);">Thanks — your feedback was sent.</p>` : ''}
-    <form method="POST" action="/feedback">
+    <form method="POST" action="/feedback">${csrfField(req)}
       <label class="field-label" style="margin-top:0;">Your feedback</label>
       <textarea name="message" required minlength="3" maxlength="4000" placeholder="What's on your mind?" style="min-height:140px;"></textarea>
       <button class="btn block" type="submit" style="margin-top:14px;">Send</button>
@@ -3250,7 +3256,7 @@ function pageForgotPassword(req, res, query) {
     ${sent
       ? `<p class="empty-note">If that email is on an account, a reset link is on its way — check your inbox (and spam folder).</p>`
       : `<p class="screen-sub">Enter the email on your account and we'll send a link to reset your password.</p>
-      <form method="POST" action="/forgot-password">
+      <form method="POST" action="/forgot-password">${csrfField(req)}
         <label class="field-label" style="margin-top:0;">Email</label>
         <input type="email" name="email" required autocomplete="email">
         <button class="btn block" type="submit" style="margin-top:14px;">Send Reset Link</button>
@@ -3291,7 +3297,7 @@ function pageResetPassword(req, res, query) {
     <h1 class="screen-title">Reset Password</h1>
     ${err && errMessages[err] ? `<p style="color:#a13a3a;">${esc(errMessages[err])}</p>` : ''}
     ${err === 'invalid_token' ? `<p class="empty-note"><a href="/forgot-password">Request a new reset link</a></p>` : `
-    <form method="POST" action="/reset-password">
+    <form method="POST" action="/reset-password">${csrfField(req)}
       <input type="hidden" name="token" value="${esc(token)}">
       <label class="field-label" style="margin-top:0;">New password</label>
       <input type="password" name="password" required minlength="8" autocomplete="new-password">
@@ -3362,7 +3368,7 @@ function pageAdminUsers(req, res, query) {
     ${users.map(u => `
       <div class="admin-row">
         <span>👤 <b>${esc(u.username)}</b>${u.email ? ` · ${esc(u.email)}` : ''}<br><span class="empty-note" style="padding:0;">Joined ${esc((u.created_at || '').slice(0, 10))}</span></span>
-        <form method="POST" action="/admin/users/${u.id}/delete" onsubmit="return confirm('Permanently delete ${esc(u.username)}\\'s account, check-ins, messages, and friendships? This cannot be undone.')">
+        <form method="POST" action="/admin/users/${u.id}/delete" onsubmit="return confirm('Permanently delete ${esc(u.username)}\\'s account, check-ins, messages, and friendships? This cannot be undone.')">${csrfField(req)}
           <button class="btn danger" style="color:#fff;" type="submit">Delete</button>
         </form>
       </div>
@@ -3401,7 +3407,7 @@ function pageAdminFaqs(req, res) {
   const body = `
     <h1 class="screen-title">Manage FAQ</h1>
     <div class="card">
-      <form method="POST" action="/admin/faqs/new">
+      <form method="POST" action="/admin/faqs/new">${csrfField(req)}
         <label class="field-label" style="margin-top:0;">Question</label>
         <input type="text" name="question" required>
         <label class="field-label">Answer</label>
@@ -3420,7 +3426,7 @@ function pageAdminFaqs(req, res) {
         ${f.source_url ? `<p class="empty-note">Source: ${esc(f.source_name || f.source_url)}</p>` : ''}
         <div class="actions">
           <a href="/admin/faqs/${f.id}/edit" class="btn secondary" style="text-decoration:none;">Edit</a>
-          <form method="POST" action="/admin/faqs/${f.id}/delete" style="display:inline;" onsubmit="return confirm('Delete this FAQ entry?')">
+          <form method="POST" action="/admin/faqs/${f.id}/delete" style="display:inline;" onsubmit="return confirm('Delete this FAQ entry?')">${csrfField(req)}
             <button class="btn danger" type="submit" style="color:#fff;">Delete</button>
           </form>
         </div>
@@ -3440,7 +3446,7 @@ function pageAdminFaqEdit(req, res, id) {
   if (!f) return notFound(res);
   const body = `
     <h1 class="screen-title">Edit FAQ</h1>
-    <form method="POST" action="/admin/faqs/${f.id}/edit">
+    <form method="POST" action="/admin/faqs/${f.id}/edit">${csrfField(req)}
       <label class="field-label" style="margin-top:0;">Question</label>
       <input type="text" name="question" value="${esc(f.question)}" required>
       <label class="field-label">Answer</label>
@@ -3520,7 +3526,7 @@ function pageAdminStrains(req, res, query) {
     <p class="screen-sub">${total.toLocaleString()} strains in the library.</p>
     <div class="card">
       <h2 style="margin-top:0;font-size:1rem;">Add a strain</h2>
-      <form method="POST" action="/admin/strains/new">
+      <form method="POST" action="/admin/strains/new">${csrfField(req)}
         ${strainFormFields(null)}
         <button class="btn block" type="submit">Add Strain</button>
       </form>
@@ -3538,7 +3544,7 @@ function pageAdminStrains(req, res, query) {
         </div>
         <div class="actions">
           <a href="/admin/strains/${s.id}/edit" class="btn secondary" style="text-decoration:none;">Edit</a>
-          <form method="POST" action="/admin/strains/${s.id}/delete" style="display:inline;" onsubmit="return confirm('Delete this strain? This cannot be undone.')">
+          <form method="POST" action="/admin/strains/${s.id}/delete" style="display:inline;" onsubmit="return confirm('Delete this strain? This cannot be undone.')">${csrfField(req)}
             <button class="btn danger" type="submit" style="color:#fff;">Delete</button>
           </form>
         </div>
@@ -3562,7 +3568,7 @@ function pageAdminStrainEdit(req, res, id) {
   if (!s) return notFound(res);
   const body = `
     <h1 class="screen-title">Edit Strain</h1>
-    <form method="POST" action="/admin/strains/${s.id}/edit">
+    <form method="POST" action="/admin/strains/${s.id}/edit">${csrfField(req)}
       ${strainFormFields(s)}
       <button class="btn block" type="submit">Save</button>
     </form>
@@ -3591,7 +3597,7 @@ function pageAdminRecipes(req, res) {
   const body = `
     <h1 class="screen-title">Manage Recipes</h1>
     <div class="card">
-      <form method="POST" action="/admin/recipes/new">
+      <form method="POST" action="/admin/recipes/new">${csrfField(req)}
         <label class="field-label" style="margin-top:0;">Title</label>
         <input type="text" name="title" required>
         <label class="field-label">Description</label>
@@ -3612,8 +3618,8 @@ function pageAdminRecipes(req, res) {
         <b>${esc(r.title)}</b> <span class="empty-note">by ${esc(r.author || 'Anonymous')}</span>
         <p class="empty-note">${esc(r.desc)}</p>
         <div class="actions">
-          <form method="POST" action="/admin/recipes/${r.id}/approve" style="display:inline;"><button class="btn" type="submit">Approve</button></form>
-          <form method="POST" action="/admin/recipes/${r.id}/delete" style="display:inline;" onsubmit="return confirm('Reject and delete?')"><button class="btn danger" style="color:#fff;" type="submit">Reject</button></form>
+          <form method="POST" action="/admin/recipes/${r.id}/approve" style="display:inline;">${csrfField(req)}<button class="btn" type="submit">Approve</button></form>
+          <form method="POST" action="/admin/recipes/${r.id}/delete" style="display:inline;" onsubmit="return confirm('Reject and delete?')">${csrfField(req)}<button class="btn danger" style="color:#fff;" type="submit">Reject</button></form>
         </div>
       </div>`).join('') : ''}
     <h2 class="screen-title">All recipes</h2>
@@ -3621,7 +3627,7 @@ function pageAdminRecipes(req, res) {
       <div class="admin-row">
         <span>${esc(r.title)} <span class="recipe-source-tag ${r.source}">${r.status}</span> <span class="empty-note">${esc(r.category || '')}</span></span>
         <div class="actions">
-          <form method="POST" action="/admin/recipes/${r.id}/delete" style="display:inline;" onsubmit="return confirm('Delete this recipe?')">
+          <form method="POST" action="/admin/recipes/${r.id}/delete" style="display:inline;" onsubmit="return confirm('Delete this recipe?')">${csrfField(req)}
             <button class="btn danger" style="color:#fff;" type="submit">Delete</button>
           </form>
         </div>
@@ -3819,7 +3825,7 @@ function pageMore(req, res) {
         <span>👤 Logged in as <b>${esc(user.username)}</b></span>
         <div style="display:flex;gap:8px;align-items:center;">
           <a href="/account" class="btn secondary" style="text-decoration:none;">Settings</a>
-          <form method="POST" action="/logout"><button class="btn secondary" type="submit">Log out</button></form>
+          <form method="POST" action="/logout">${csrfField(req)}<button class="btn secondary" type="submit">Log out</button></form>
         </div>
       </div>` : ''}
     ${sections.map(sec => `
@@ -3931,7 +3937,7 @@ function pageAccount(req, res, query) {
       <h2 style="margin:0 0 10px;font-size:0.9375rem;">Username</h2>
       ${error === 'username_taken' ? `<p class="dosing-note">That username is already taken — try another.</p>` : ''}
       ${success === 'username' ? `<p class="empty-note" style="color:var(--accent-text);">Username updated.</p>` : ''}
-      <form method="POST" action="/account/username">
+      <form method="POST" action="/account/username">${csrfField(req)}
         <label class="field-label" style="margin-top:0;">Username</label>
         <input type="text" name="username" value="${esc(user.username)}" required minlength="2" maxlength="30">
         <button class="btn block" type="submit" style="margin-top:10px;">Update Username</button>
@@ -3943,7 +3949,7 @@ function pageAccount(req, res, query) {
       <p class="empty-note" style="padding:0 0 10px;">Used for password resets.${!user.email ? ' Your account currently has no email on file.' : ''}</p>
       ${error === 'email_taken' ? `<p class="dosing-note">That email is already in use on another account.</p>` : ''}
       ${success === 'email' ? `<p class="empty-note" style="color:var(--accent-text);">Email updated.</p>` : ''}
-      <form method="POST" action="/account/email">
+      <form method="POST" action="/account/email">${csrfField(req)}
         <label class="field-label" style="margin-top:0;">Email</label>
         <input type="email" name="email" value="${esc(user.email || '')}" required autocomplete="email">
         <button class="btn block" type="submit" style="margin-top:10px;">Update Email</button>
@@ -3956,7 +3962,7 @@ function pageAccount(req, res, query) {
       ${error === 'password_mismatch' ? `<p class="dosing-note">New password and confirmation don't match.</p>` : ''}
       ${error === 'password_short' ? `<p class="dosing-note">New password needs to be at least 8 characters.</p>` : ''}
       ${success === 'password' ? `<p class="empty-note" style="color:var(--accent-text);">Password updated.</p>` : ''}
-      <form method="POST" action="/account/password">
+      <form method="POST" action="/account/password">${csrfField(req)}
         <label class="field-label" style="margin-top:0;">Current password</label>
         <input type="password" name="current_password" required>
         <label class="field-label">New password</label>
@@ -3976,7 +3982,7 @@ function pageAccount(req, res, query) {
       <h2 style="margin:0 0 10px;font-size:0.9375rem;">Your Data</h2>
       <p class="empty-note" style="padding:0 0 10px;">See our <a href="/privacy">Privacy Policy</a> and <a href="/terms">Terms of Service</a> for what this covers.</p>
       <a class="btn secondary block" href="/account/export" style="text-decoration:none;margin-bottom:10px;">⬇️ Export my data</a>
-      <form method="POST" action="/account/delete" onsubmit="return confirm('This permanently deletes your account, check-ins, friends, and photos. This cannot be undone. Continue?')">
+      <form method="POST" action="/account/delete" onsubmit="return confirm('This permanently deletes your account, check-ins, friends, and photos. This cannot be undone. Continue?')">${csrfField(req)}
         <button class="btn danger block" type="submit" style="color:#fff;">Delete my account</button>
       </form>
     </div>
@@ -4153,7 +4159,7 @@ function pageFriends(req, res, query) {
         return `<div class="admin-row">
           <span>👤 ${esc(u.username)}</span>
           <div class="actions">
-            ${status === 'none' ? `<form method="POST" action="/friends/${u.id}/request"><button class="btn" type="submit">Add Friend</button></form>` : ''}
+            ${status === 'none' ? `<form method="POST" action="/friends/${u.id}/request">${csrfField(req)}<button class="btn" type="submit">Add Friend</button></form>` : ''}
             ${status === 'pending_sent' ? `<span class="empty-note">Request sent</span>` : ''}
             ${status === 'pending_received' ? `<span class="empty-note">Check your requests below</span>` : ''}
             ${status === 'friends' ? `<span class="empty-note">Already friends</span>` : ''}
@@ -4168,8 +4174,8 @@ function pageFriends(req, res, query) {
         <div class="admin-row">
           <span>👤 ${esc(u.username)}</span>
           <div class="actions">
-            <form method="POST" action="/friends/${u.id}/accept" style="display:inline;"><button class="btn" type="submit">Accept</button></form>
-            <form method="POST" action="/friends/${u.id}/decline" style="display:inline;"><button class="btn danger" style="color:#fff;" type="submit">Decline</button></form>
+            <form method="POST" action="/friends/${u.id}/accept" style="display:inline;">${csrfField(req)}<button class="btn" type="submit">Accept</button></form>
+            <form method="POST" action="/friends/${u.id}/decline" style="display:inline;">${csrfField(req)}<button class="btn danger" style="color:#fff;" type="submit">Decline</button></form>
           </div>
         </div>`).join('')}
     ` : ''}
@@ -4181,7 +4187,7 @@ function pageFriends(req, res, query) {
           <span>👤 ${esc(u.username)}</span>
           <div class="actions">
             <span class="empty-note" style="padding:0;">Waiting for response</span>
-            <form method="POST" action="/friends/${u.id}/cancel" style="display:inline;" onsubmit="return confirm('Cancel your friend request to ${esc(u.username)}?')">
+            <form method="POST" action="/friends/${u.id}/cancel" style="display:inline;" onsubmit="return confirm('Cancel your friend request to ${esc(u.username)}?')">${csrfField(req)}
               <button class="btn secondary" type="submit">Cancel</button>
             </form>
           </div>
@@ -4196,7 +4202,7 @@ function pageFriends(req, res, query) {
         <div class="actions">
           <a href="/messages/${u.id}" class="btn secondary" style="text-decoration:none;">Message</a>
           <a href="/trade?friend=${u.id}" class="btn secondary" style="text-decoration:none;">Trade</a>
-          <form method="POST" action="/friends/${u.id}/remove" style="display:inline;" onsubmit="return confirm('Remove this friend?')">
+          <form method="POST" action="/friends/${u.id}/remove" style="display:inline;" onsubmit="return confirm('Remove this friend?')">${csrfField(req)}
             <button class="btn danger" style="color:#fff;" type="submit">Remove</button>
           </form>
         </div>
@@ -4239,7 +4245,7 @@ function pageBlockedUsers(req, res) {
     ${blocked.length ? blocked.map(u => `
       <div class="library-row">
         <div class="info"><div class="nm">${esc(u.username)}</div></div>
-        <form method="POST" action="/unblock/${u.id}">
+        <form method="POST" action="/unblock/${u.id}">${csrfField(req)}
           <button type="submit" class="empty-note" style="padding:0 6px;background:none;border:none;color:var(--accent-text);cursor:pointer;font-size:inherit;text-decoration:underline;">Unblock</button>
         </form>
       </div>
@@ -4264,7 +4270,7 @@ function pageAdminReports(req, res) {
         <b>${esc(r.content_type)}</b> #${esc(r.content_id)} — reported by ${esc(reporter ? reporter.username : 'unknown')}
         <p class="empty-note" style="padding:2px 0;">${esc(r.reason || 'No reason given')} · ${esc(r.created_at)} UTC · ${esc(r.status)}</p>
         ${r.status !== 'reviewed' ? `
-          <form method="POST" action="/admin/reports/${r.id}/reviewed">
+          <form method="POST" action="/admin/reports/${r.id}/reviewed">${csrfField(req)}
             <button type="submit" class="btn secondary" style="padding:6px 12px;">Mark Reviewed</button>
           </form>
         ` : ''}
@@ -4330,7 +4336,7 @@ function pageConversation(req, res, friendId) {
         </div>`;
       }).join('') : `<div class="empty-note">Say hi to ${esc(friend.username)} 👋</div>`}
     </div>
-    <form method="POST" action="/messages/${friend.id}/send" style="display:flex;gap:8px;align-items:center;">
+    <form method="POST" action="/messages/${friend.id}/send" style="display:flex;gap:8px;align-items:center;">${csrfField(req)}
       <input type="text" name="body" placeholder="Message ${esc(friend.username)}..." autocomplete="off" style="flex:1;">
       <button class="btn" type="submit">Send</button>
     </form>
@@ -4384,7 +4390,7 @@ function pageFriendProfile(req, res, friendId) {
     <h1 class="screen-title" style="margin-top:8px;">👤 ${esc(friend.username)}</h1>
     ${friendId !== userId && status === 'friends' ? `<a href="/messages/${friendId}" class="btn" style="text-decoration:none;display:inline-block;margin-bottom:10px;">💬 Message</a>` : ''}
     ${friendId !== userId ? `
-      <form method="POST" action="/block/${friendId}" style="margin-bottom:10px;" onsubmit="return confirm('Block ${esc(friend.username)}? You will no longer see their comments, check-ins, or grow tips, and any friendship will end.')">
+      <form method="POST" action="/block/${friendId}" style="margin-bottom:10px;" onsubmit="return confirm('Block ${esc(friend.username)}? You will no longer see their comments, check-ins, or grow tips, and any friendship will end.')">${csrfField(req)}
         <input type="hidden" name="redirect_to" value="/friends">
         <button type="submit" class="empty-note" style="padding:0;background:none;border:none;color:#a13a3a;cursor:pointer;font-size:inherit;text-decoration:underline;">Block this person</button>
       </form>
@@ -4409,7 +4415,7 @@ function pageFriendProfile(req, res, friendId) {
         ${c.note ? `<div class="note">"${esc(c.note)}"</div>` : ''}
         ${renderCheckinPairings(c)}
         ${renderOnsetTimer(c)}
-        ${renderCheckinComments(c, userId, '/friends/' + friendId)}
+        ${renderCheckinComments(req, c, userId, '/friends/' + friendId)}
         <div style="display:flex;flex-direction:column;align-items:flex-end;margin-top:8px;">
           <div style="display:flex;gap:6px;align-items:center;">
             ${renderShareButton(c)}
@@ -4511,7 +4517,7 @@ function pageTrade(req, res, query) {
         }).join('') : `<div class="empty-note">${esc(friend.name)} has nothing spare you're missing.</div>`}
       </div>
     </div>
-    <form method="POST" action="/trade/propose">
+    <form method="POST" action="/trade/propose">${csrfField(req)}
       <input type="hidden" name="friend" value="${esc(friendId)}">
       <input type="hidden" name="your" value="${esc(yourPick)}">
       <input type="hidden" name="their" value="${esc(theirPick)}">
@@ -4582,7 +4588,7 @@ async function pageDispensaries(req, res, searchParams) {
               ${d.hours ? `<div class="dsub">${sourceLabel === 'Google Places' ? esc(d.hours) : 'Hours: ' + esc(d.hours)}</div>` : ''}
               ${d.phone ? `<div class="dsub">${esc(d.phone)}</div>` : ''}
             </div>
-            <form method="POST" action="/dispensaries/${encodeURIComponent(d.id)}/follow?lat=${lat}&lon=${lon}">
+            <form method="POST" action="/dispensaries/${encodeURIComponent(d.id)}/follow?lat=${lat}&lon=${lon}">${csrfField(req)}
               <button class="follow-btn ${following ? 'following' : ''}" type="submit">${following ? 'Following' : 'Follow'}</button>
             </form>
           </div>
@@ -4640,7 +4646,7 @@ function pageEvents(req, res) {
           <div class="event-title">${esc(e.title)}</div>
           <div class="event-venue">${venue ? esc(venue.name) : ''}</div>
           <div class="event-desc">${esc(e.desc)}</div>
-          <form method="POST" action="/events/${e.id}/rsvp">
+          <form method="POST" action="/events/${e.id}/rsvp">${csrfField(req)}
             <button class="rsvp-btn ${going ? 'going' : ''}" type="submit">${going ? "✓ You're going" : 'RSVP'}</button>
           </form>
         </div>
@@ -4694,7 +4700,7 @@ function pageShop(req, res) {
           <div class="ic">${i.icon}</div>
           <div class="sn">${esc(i.name)}</div>
           <div class="sp">${esc(i.price)}</div>
-          <form method="POST" action="/shop/${i.id}/add"><button type="submit">Add to Cart</button></form>
+          <form method="POST" action="/shop/${i.id}/add">${csrfField(req)}<button type="submit">Add to Cart</button></form>
         </div>`).join('')}
     </div>
     <div class="cart-note">Cart: ${cartCount} item${cartCount === 1 ? '' : 's'}</div>
