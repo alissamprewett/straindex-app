@@ -171472,9 +171472,18 @@
     "thc": "",
     "cbd": "",
     "terps": [
-      "Limonene",
-      "Caryophyllene",
-      "Myrcene"
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.15
+      }
     ],
     "effects": [
       "Cerebral",
@@ -171539,8 +171548,14 @@
     "thc": "30%+",
     "cbd": "",
     "terps": [
-      "Caryophyllene",
-      "Myrcene"
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      }
     ],
     "effects": [
       "Relaxed",
@@ -171584,9 +171599,18 @@
     "thc": "",
     "cbd": "",
     "terps": [
-      "Caryophyllene",
-      "Limonene",
-      "Linalool"
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      },
+      {
+        "n": "Linalool",
+        "p": 0.15
+      }
     ],
     "effects": [
       "Euphoric",
@@ -171670,10 +171694,22 @@
     "thc": "",
     "cbd": "",
     "terps": [
-      "Myrcene",
-      "Limonene",
-      "Caryophyllene",
-      "Linalool"
+      {
+        "n": "Myrcene",
+        "p": 0.28
+      },
+      {
+        "n": "Limonene",
+        "p": 0.18
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.14
+      },
+      {
+        "n": "Linalool",
+        "p": 0.1
+      }
     ],
     "effects": [
       "Uplifted",
@@ -171736,7 +171772,10 @@
     "thc": "",
     "cbd": "",
     "terps": [
-      "Caryophyllene"
+      {
+        "n": "Caryophyllene",
+        "p": 0.35
+      }
     ],
     "effects": [
       "Focused",
@@ -171845,9 +171884,18 @@
     "thc": "20-25%",
     "cbd": "",
     "terps": [
-      "Myrcene",
-      "Caryophyllene",
-      "Limonene"
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      },
+      {
+        "n": "Limonene",
+        "p": 0.15
+      }
     ],
     "effects": [
       "Relaxed",
@@ -171871,7 +171919,10 @@
     "thc": "",
     "cbd": "",
     "terps": [
-      "Pinene"
+      {
+        "n": "Pinene",
+        "p": 0.35
+      }
     ],
     "effects": [
       "Euphoric",
@@ -171899,9 +171950,18 @@
     "thc": "23-32%",
     "cbd": "",
     "terps": [
-      "Limonene",
-      "Myrcene",
-      "Linalool"
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      },
+      {
+        "n": "Linalool",
+        "p": 0.15
+      }
     ],
     "effects": [
       "Creative",
@@ -171947,7 +172007,10 @@
     "thc": "28-30%",
     "cbd": "",
     "terps": [
-      "Caryophyllene"
+      {
+        "n": "Caryophyllene",
+        "p": 0.35
+      }
     ],
     "effects": [
       "Happy",
@@ -172011,9 +172074,18 @@
     "thc": "22-32%",
     "cbd": "",
     "terps": [
-      "Caryophyllene",
-      "Limonene",
-      "Pinene"
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      },
+      {
+        "n": "Pinene",
+        "p": 0.15
+      }
     ],
     "effects": [
       "Relaxed",
@@ -172037,9 +172109,18 @@
     "thc": "",
     "cbd": "",
     "terps": [
-      "Myrcene",
-      "Caryophyllene",
-      "Linalool"
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      },
+      {
+        "n": "Linalool",
+        "p": 0.15
+      }
     ],
     "effects": [
       "Energetic",
@@ -172108,9 +172189,18 @@
     "thc": "24-29%",
     "cbd": "",
     "terps": [
-      "Myrcene",
-      "Limonene",
-      "Pinene"
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      },
+      {
+        "n": "Pinene",
+        "p": 0.15
+      }
     ],
     "effects": [
       "Relaxed",
@@ -172310,5 +172400,956 @@
       "Georgia Pine"
     ],
     "id": "s6558"
+  },
+  {
+    "name": "Big Pine Key",
+    "type": "Indica",
+    "lean": "Indica-dominant",
+    "rarity": "uncommon",
+    "thc": "19-20%",
+    "cbd": "",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      },
+      {
+        "n": "Linalool",
+        "p": 0.15
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.1
+      }
+    ],
+    "effects": [
+      "Happy",
+      "Creative",
+      "Sedated"
+    ],
+    "flavor": "Sweet and sour citrusy lemon-lime, woody pine, spicy flowers.",
+    "icon": "🍋",
+    "breeder": "GrowHealthy",
+    "parents": [
+      "Bubba Kush",
+      "Key Lime Mints"
+    ],
+    "id": "s6559"
+  },
+  {
+    "name": "Bikini Diesel",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Creative",
+      "Energetic"
+    ],
+    "flavor": "Sour, diesel, gas.",
+    "icon": "⛽",
+    "breeder": "Ithaca Organics",
+    "parents": [
+      "Sour Diesel",
+      "Lazer Wolf"
+    ],
+    "id": "s6560"
+  },
+  {
+    "name": "Biscotti Super Fire",
+    "type": "Indica",
+    "lean": "Indica-dominant",
+    "rarity": "uncommon",
+    "thc": "0-1%",
+    "cbd": "14-18%",
+    "terps": [],
+    "effects": [
+      "Calm",
+      "Happy",
+      "Relaxed"
+    ],
+    "flavor": "Sweet and spicy, sour lemony citrus cookies, peppery diesel.",
+    "icon": "🍪",
+    "breeder": "Crane City",
+    "parents": [
+      "Biscotti",
+      "Gorilla Cookies",
+      "Sunset Sherbet",
+      "OG Kush"
+    ],
+    "id": "s6561"
+  },
+  {
+    "name": "Black Mandarin",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      },
+      {
+        "n": "Linalool",
+        "p": 0.15
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.1
+      }
+    ],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Creative"
+    ],
+    "flavor": "Orange, grapefruit, gas, grape, peppery finish.",
+    "icon": "🍊",
+    "breeder": "",
+    "parents": [
+      "California Black Roze",
+      "Mandarin Sunset"
+    ],
+    "id": "s6562"
+  },
+  {
+    "name": "Black Papaya",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "18-24%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Creative",
+      "Relaxed",
+      "Euphoric"
+    ],
+    "flavor": "Tropical papaya, grape candy, vanilla spice, earthy gas, peppery finish.",
+    "icon": "🥭",
+    "breeder": "Cannarado Genetics",
+    "parents": [
+      "Carbon Fiber",
+      "Papaya"
+    ],
+    "id": "s6563"
+  },
+  {
+    "name": "Black Spritzer",
+    "type": "Hybrid",
+    "lean": "Balanced",
+    "rarity": "uncommon",
+    "thc": "up to 29%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed"
+    ],
+    "flavor": "Grape gas, raunchy candy.",
+    "icon": "🍇",
+    "breeder": "Cannarado Genetics",
+    "parents": [
+      "Spritzer",
+      "Grumpz"
+    ],
+    "id": "s6564"
+  },
+  {
+    "name": "Blu Apricot",
+    "type": "Indica",
+    "lean": "Indica-dominant",
+    "rarity": "uncommon",
+    "thc": "17-22%",
+    "cbd": "",
+    "terps": [
+      {
+        "n": "Terpinolene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      },
+      {
+        "n": "Limonene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Uplifted",
+      "Relaxed",
+      "Sleepy"
+    ],
+    "flavor": "Apricot jam, sweet blueberry, zesty citrus.",
+    "icon": "🍑",
+    "breeder": "Compound Genetics",
+    "parents": [
+      "Blue Sherbet",
+      "Legend Orange Apricot"
+    ],
+    "id": "s6565"
+  },
+  {
+    "name": "Blue Burnout",
+    "type": "Indica",
+    "lean": "Indica-dominant",
+    "rarity": "uncommon",
+    "thc": "20-21%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Sleepy"
+    ],
+    "flavor": "Sweet fruity blueberry, bubblegum, grape candy, spicy black pepper.",
+    "icon": "🫐",
+    "breeder": "Bio Bomb Selections",
+    "parents": [
+      "Bubba Blumese",
+      "Purple 710 Gum"
+    ],
+    "id": "s6566"
+  },
+  {
+    "name": "Blue Lamb's Breath",
+    "type": "Hybrid",
+    "lean": "Balanced",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      },
+      {
+        "n": "Pinene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Uplifted",
+      "Creative",
+      "Relaxed"
+    ],
+    "flavor": "Sweet and spicy blueberry, earthy vanilla.",
+    "icon": "🫐",
+    "breeder": "",
+    "parents": [
+      "Jamaican Lamb's Bread",
+      "Blueberry"
+    ],
+    "id": "s6567"
+  },
+  {
+    "name": "Blue Ogre",
+    "type": "Indica",
+    "lean": "Indica-dominant",
+    "rarity": "uncommon",
+    "thc": "23-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Sedated",
+      "Relaxed",
+      "Happy"
+    ],
+    "flavor": "Sweet fruity blueberry, spicy peppery exhale, earthy kush.",
+    "icon": "🫐",
+    "breeder": "Elkhorn Ranch",
+    "parents": [
+      "Ogre",
+      "Blueberry"
+    ],
+    "id": "s6568"
+  },
+  {
+    "name": "Blue Suede",
+    "type": "Hybrid",
+    "lean": "Balanced",
+    "rarity": "uncommon",
+    "thc": "24-27%",
+    "cbd": "",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      },
+      {
+        "n": "Linalool",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Calm",
+      "Happy"
+    ],
+    "flavor": "Spiced nutmeg, vanilla cream cookie, blue cotton candy.",
+    "icon": "🍪",
+    "breeder": "Grandiflora",
+    "parents": [
+      "Blue Cookies",
+      "Project 4516"
+    ],
+    "id": "s6569"
+  },
+  {
+    "name": "Blue Zu",
+    "type": "Indica",
+    "lean": "Indica-dominant",
+    "rarity": "uncommon",
+    "thc": "16-21%",
+    "cbd": "",
+    "terps": [
+      {
+        "n": "Humulene",
+        "p": 0.3
+      },
+      {
+        "n": "Terpinolene",
+        "p": 0.2
+      },
+      {
+        "n": "Valencene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Euphoric",
+      "Creative",
+      "Relaxed"
+    ],
+    "flavor": "Sweet berry, bright citrus, fresh pine.",
+    "icon": "🍋",
+    "breeder": "Sin City Seeds",
+    "parents": [
+      "Purple Yuzu",
+      "Blue Power"
+    ],
+    "id": "s6570"
+  },
+  {
+    "name": "Blueberry Cereal",
+    "type": "Hybrid",
+    "lean": "Balanced",
+    "rarity": "uncommon",
+    "thc": "17-27%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Euphoric",
+      "Sleepy"
+    ],
+    "flavor": "Sweet sugary blueberry, nutty herbs, skunk.",
+    "icon": "🫐",
+    "breeder": "",
+    "parents": [
+      "Special Skunk",
+      "'90s Skunk"
+    ],
+    "id": "s6571"
+  },
+  {
+    "name": "Blueberry Wizard",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      },
+      {
+        "n": "Limonene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Creative"
+    ],
+    "flavor": "Blueberry, earthy, hint of spice.",
+    "icon": "🫐",
+    "breeder": "Curio Wellness",
+    "parents": [
+      "Blissful Wizard",
+      "Blueberry Cookies"
+    ],
+    "id": "s6572"
+  },
+  {
+    "name": "Bluemeanies",
+    "type": "Indica",
+    "lean": "Indica-dominant",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Sedated"
+    ],
+    "flavor": "Savory truffle, onion, garlic.",
+    "icon": "🧄",
+    "breeder": "Dungeon of Dank Genetics",
+    "parents": [
+      "Chem Cookies",
+      "Platinum Blue Breath"
+    ],
+    "id": "s6573"
+  },
+  {
+    "name": "Boozy Melon",
+    "type": "Indica",
+    "lean": "Indica-dominant",
+    "rarity": "uncommon",
+    "thc": "18%",
+    "cbd": "",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Calm",
+      "Sedated"
+    ],
+    "flavor": "Sweet watermelon, tropical fruit.",
+    "icon": "🍉",
+    "breeder": "Dying Breed Seeds",
+    "parents": [
+      "Watermelon",
+      "4 Locoz"
+    ],
+    "id": "s6574"
+  },
+  {
+    "name": "Buffalato",
+    "type": "Hybrid",
+    "lean": "Balanced",
+    "rarity": "uncommon",
+    "thc": "19-20%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Relaxed",
+      "Sleepy"
+    ],
+    "flavor": "Spicy, skunky, sour citrus, deep dank.",
+    "icon": "🍨",
+    "breeder": "",
+    "parents": [
+      "White Buffalo",
+      "Gelato #33"
+    ],
+    "id": "s6575"
+  },
+  {
+    "name": "Gary Payton",
+    "type": "Hybrid",
+    "lean": "Balanced",
+    "rarity": "rare",
+    "thc": "19-30%",
+    "cbd": "",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Linalool",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Uplifted",
+      "Euphoric",
+      "Focused"
+    ],
+    "flavor": "Diesel, herbs, sweet doughy undertone.",
+    "icon": "🏀",
+    "breeder": "Cookies x Powerzzzup Genetics",
+    "parents": [
+      "The Y",
+      "Snowman"
+    ],
+    "id": "s6576"
+  },
+  {
+    "name": "Orange Glue",
+    "type": "Hybrid",
+    "lean": "Balanced",
+    "rarity": "uncommon",
+    "thc": "15-23%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Uplifted"
+    ],
+    "flavor": "Sour citrus, spicy hash, earthy.",
+    "icon": "🍊",
+    "breeder": "Relentless Genetics",
+    "parents": [
+      "Gorilla Glue #4",
+      "Agent Orange"
+    ],
+    "id": "s6577"
+  },
+  {
+    "name": "Orange Apricot",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20-26%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Creative"
+    ],
+    "flavor": "Sweet candied orange, tangy apricot, earthy.",
+    "icon": "🍑",
+    "breeder": "",
+    "parents": [
+      "Orange Juice",
+      "Apricot Helix"
+    ],
+    "id": "s6578"
+  },
+  {
+    "name": "Larry OG F7",
+    "type": "Indica",
+    "lean": "Indica-dominant",
+    "rarity": "uncommon",
+    "thc": "22-29%",
+    "cbd": "",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Focused"
+    ],
+    "flavor": "Lemon, pine, earth, fuel.",
+    "icon": "🍋",
+    "breeder": "",
+    "parents": [
+      "OG Kush",
+      "SFV OG"
+    ],
+    "id": "s6579"
+  },
+  {
+    "name": "Pure Michigan",
+    "type": "Indica",
+    "lean": "Indica-dominant",
+    "rarity": "uncommon",
+    "thc": "20-29%",
+    "cbd": "",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Creative",
+      "Sleepy"
+    ],
+    "flavor": "Tree fruit, lime, ammonia.",
+    "icon": "🍪",
+    "breeder": "ThugPug Genetics x 3rd Coast Genetics",
+    "parents": [
+      "Oreoz",
+      "Mendo Breath F2"
+    ],
+    "id": "s6580"
+  },
+  {
+    "name": "Banana Butter Cups",
+    "type": "Hybrid",
+    "lean": "Balanced",
+    "rarity": "uncommon",
+    "thc": "15-25%",
+    "cbd": "",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Creative",
+      "Uplifted",
+      "Focused"
+    ],
+    "flavor": "Butter, vanilla, banana peel, creamy cheese.",
+    "icon": "🍌",
+    "breeder": "Square One Genetics / Robin Hood Seeds",
+    "parents": [
+      "Banana Punch",
+      "PB & Jealous"
+    ],
+    "id": "s6581"
+  },
+  {
+    "name": "Monkey Butter",
+    "type": "Indica",
+    "lean": "Indica-dominant",
+    "rarity": "uncommon",
+    "thc": "18-26%",
+    "cbd": "",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Cedrene",
+        "p": 0.2
+      },
+      {
+        "n": "Humulene",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Creative"
+    ],
+    "flavor": "Nutty, earthy, woodsy.",
+    "icon": "🥜",
+    "breeder": "Fresh Coast Seed Co",
+    "parents": [
+      "Peanut Butter Breath",
+      "GG4"
+    ],
+    "id": "s6582"
+  },
+  {
+    "name": "Snakes Cake",
+    "type": "Sativa",
+    "lean": "Slightly sativa-leaning",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Humulene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Creative",
+      "Focused",
+      "Happy"
+    ],
+    "flavor": "Creamy pineapple cookie dough, tart cherry, cinnamon spice.",
+    "icon": "🍰",
+    "breeder": "HONEYSTICKS Genetics",
+    "parents": [
+      "Cherry Pie",
+      "Animal Cookies",
+      "Pineapple Express"
+    ],
+    "id": "s6583"
+  },
+  {
+    "name": "Garlic Breath",
+    "type": "Indica",
+    "lean": "Indica-dominant",
+    "rarity": "uncommon",
+    "thc": "18-28%",
+    "cbd": "",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Sleepy",
+      "Happy"
+    ],
+    "flavor": "Garlic, citrus, nutty vanilla.",
+    "icon": "🧄",
+    "breeder": "ThugPug Genetics",
+    "parents": [
+      "GMO",
+      "Mendo Breath"
+    ],
+    "id": "s6584"
+  },
+  {
+    "name": "Snake Bite",
+    "type": "Hybrid",
+    "lean": "Sativa-dominant",
+    "rarity": "uncommon",
+    "thc": "20-25%",
+    "cbd": "",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      }
+    ],
+    "effects": [
+      "Euphoric",
+      "Creative",
+      "Uplifted"
+    ],
+    "flavor": "Pine, pineapple, cinnamon.",
+    "icon": "🐍",
+    "breeder": "",
+    "parents": [
+      "Lollypop",
+      "C99"
+    ],
+    "id": "s6585"
+  },
+  {
+    "name": "True Gangster Kush",
+    "type": "Indica",
+    "lean": "Indica-dominant",
+    "rarity": "uncommon",
+    "thc": "15-20%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Sleepy"
+    ],
+    "flavor": "Sour lemon, woody pine, creamy vanilla caramel.",
+    "icon": "🌲",
+    "breeder": "SnowHigh Seeds",
+    "parents": [
+      "True OG",
+      "Pinetar Kush",
+      "Purple Chitrali"
+    ],
+    "id": "s6586"
+  },
+  {
+    "name": "Rollins",
+    "type": "Sativa",
+    "lean": "Sativa-dominant",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Energetic",
+      "Relaxed"
+    ],
+    "flavor": "Sour citrus, earthy pine, lemon.",
+    "icon": "🍋",
+    "breeder": "Swamp Boy Seeds",
+    "parents": [
+      "Lemon Tree S1",
+      "Nigerian"
+    ],
+    "id": "s6587"
+  },
+  {
+    "name": "Candy Rain",
+    "type": "Indica",
+    "lean": "Indica-dominant",
+    "rarity": "uncommon",
+    "thc": "20-26%",
+    "cbd": "",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      }
+    ],
+    "effects": [
+      "Happy",
+      "Relaxed",
+      "Euphoric"
+    ],
+    "flavor": "Pungent citrus, fruity berries.",
+    "icon": "🍬",
+    "breeder": "Cookies Fam Genetics",
+    "parents": [
+      "London Pound Cake",
+      "Gelato"
+    ],
+    "id": "s6588"
+  },
+  {
+    "name": "Animal Land",
+    "type": "Indica",
+    "lean": "Indica-dominant",
+    "rarity": "uncommon",
+    "thc": "23-26%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Sleepy"
+    ],
+    "flavor": "Sweet fruity candy, heavy gassy.",
+    "icon": "🍬",
+    "breeder": "Seed Junky Genetics",
+    "parents": [
+      "Candyland",
+      "Animal Cookies"
+    ],
+    "id": "s6589"
+  },
+  {
+    "name": "POGO",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "",
+    "parents": [
+      "Purple Alien OG",
+      "Goji OG"
+    ],
+    "id": "s6590"
+  },
+  {
+    "name": "Purple Alien OG",
+    "type": "Indica",
+    "lean": "Indica-dominant",
+    "rarity": "rare",
+    "thc": "12-26%",
+    "cbd": "",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Sleepy"
+    ],
+    "flavor": "Sweet herbs, pine, citrus, grape.",
+    "icon": "👽",
+    "breeder": "",
+    "parents": [
+      "Alien Kush",
+      "Tahoe OG"
+    ],
+    "id": "s6591"
+  },
+  {
+    "name": "Goji OG",
+    "type": "Sativa",
+    "lean": "Sativa-dominant",
+    "rarity": "uncommon",
+    "thc": "18-26%",
+    "cbd": "",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.2
+      },
+      {
+        "n": "Linalool",
+        "p": 0.15
+      }
+    ],
+    "effects": [
+      "Happy",
+      "Uplifted",
+      "Relaxed",
+      "Creative"
+    ],
+    "flavor": "Red berry, tart cherry, licorice, earthy pine.",
+    "icon": "🍒",
+    "breeder": "Bodhi Seeds",
+    "parents": [
+      "Nepali OG",
+      "Snow Lotus"
+    ],
+    "id": "s6592"
   }
 ]
