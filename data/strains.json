@@ -126880,7 +126880,8 @@
       "Biscotti",
       "Guava'z #74"
     ],
-    "id": "s4597"
+    "id": "s4597",
+    "aka": "Guava Bars #5"
   },
   {
     "name": "Guava Berry",
@@ -174751,6 +174752,299 @@
     "parents": [
       "Purple Punch",
       "Mandarin Sunset"
+    ]
+  },
+  {
+    "id": "s6632",
+    "name": "Black Cream",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "18–24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.32
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.24
+      },
+      {
+        "n": "Linalool",
+        "p": 0.16
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Sleepy",
+      "Calm",
+      "Happy"
+    ],
+    "flavor": "Sweet caramel cream with an earthy, spicy kush finish.",
+    "icon": "⚫",
+    "aka": "Black Cream Auto",
+    "breeder": "Sweet Seeds",
+    "parents": [
+      "Cream Caramel",
+      "Pakistani Kush Auto"
+    ]
+  },
+  {
+    "id": "s6633",
+    "name": "Cherry Zoap",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "20–26%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.24
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.18
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Sleepy"
+    ],
+    "flavor": "Sweet cherry candy with a soapy floral gas edge.",
+    "icon": "🍒",
+    "breeder": "Growers Choice",
+    "parents": [
+      "Cherry Garcia",
+      "Zoap"
+    ]
+  },
+  {
+    "id": "s6634",
+    "name": "Cocoa Dulce",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "18–24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.28
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.26
+      },
+      {
+        "n": "Limonene",
+        "p": 0.16
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Sleepy",
+      "Euphoric"
+    ],
+    "flavor": "Sweet cocoa and earthy pine with a gassy kush finish.",
+    "icon": "🍫",
+    "aka": "Cocoa Duluce",
+    "breeder": "3C Farms",
+    "parents": [
+      "Northern Lights",
+      "Illuminati OG Kush"
+    ]
+  },
+  {
+    "id": "s6635",
+    "name": "Cognac",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "20–26%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.24
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.18
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Sleepy"
+    ],
+    "flavor": "Sweet cherry citrus with a warm, gassy kush finish.",
+    "icon": "🥃",
+    "breeder": "Boston Farmer",
+    "parents": [
+      "Cherry Cookies",
+      "Mimosa"
+    ]
+  },
+  {
+    "id": "s6636",
+    "name": "Lemon OZ Kush",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "rare",
+    "thc": "20–26%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.36
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.22
+      },
+      {
+        "n": "Terpinolene",
+        "p": 0.16
+      }
+    ],
+    "effects": [
+      "Uplifted",
+      "Energetic",
+      "Happy",
+      "Creative"
+    ],
+    "flavor": "Sharp lemon citrus over a gassy kush base.",
+    "icon": "🍋",
+    "aka": "Lemon Oz",
+    "parents": [
+      "Exotikz OZ Kush",
+      "Original Lemonnade"
+    ]
+  },
+  {
+    "id": "s6637",
+    "name": "Lime Dog",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "18–24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.32
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.24
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.18
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Uplifted",
+      "Euphoric"
+    ],
+    "flavor": "Tart lime citrus over an earthy diesel base.",
+    "icon": "🍈",
+    "aka": "Lime Dawg, Lime Dog OG, Limedog OG",
+    "breeder": "Umami",
+    "parents": [
+      "Underdog OG (Headband)",
+      "Key Lime"
+    ]
+  },
+  {
+    "id": "s6638",
+    "name": "Stardust OG",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "20–26%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.28
+      },
+      {
+        "n": "Limonene",
+        "p": 0.24
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Sleepy"
+    ],
+    "flavor": "Sweet lime and chem gas over an earthy kush base.",
+    "icon": "✨",
+    "aka": "Stardust, Star Dust OG",
+    "breeder": "Eighth Brother Farms",
+    "parents": [
+      "Chem Dog",
+      "Key Lime Pie",
+      "Northern Lights"
+    ]
+  },
+  {
+    "id": "s6639",
+    "name": "Oregon Noble",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "18–24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.24
+      },
+      {
+        "n": "Limonene",
+        "p": 0.18
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Sleepy",
+      "Euphoric"
+    ],
+    "flavor": "Earthy pine with a sweet, gassy candy finish.",
+    "icon": "🌲",
+    "breeder": "AlphaKronik Genes",
+    "parents": [
+      "Pine Tar Kush",
+      "Gobbstopper"
     ]
   }
 ]
