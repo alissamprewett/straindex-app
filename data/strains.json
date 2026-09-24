@@ -173351,5 +173351,1406 @@
       "Snow Lotus"
     ],
     "id": "s6592"
+  },
+  {
+    "id": "s6593",
+    "name": "Don Lemon",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "20–25%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.35
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.28
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "Bright citrus and lemon zest over a gassy, earthy backbone.",
+    "icon": "🍋",
+    "breeder": "Solfire Genetics",
+    "parents": [
+      "Lemon Tree",
+      "The Don Mega"
+    ]
+  },
+  {
+    "id": "s6594",
+    "name": "Dosi Trop",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "22–27%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.27
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.22
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Sleepy",
+      "Euphoric"
+    ],
+    "flavor": "Sweet tropical citrus over a doughy, earthy cookie finish.",
+    "icon": "🍊",
+    "breeder": "Galaxy Labs",
+    "parents": [
+      "Do-Si-Dos",
+      "Tropicana Cookies"
+    ]
+  },
+  {
+    "id": "s6595",
+    "name": "Dragonsmilk",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "20–26%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.32
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.25
+      },
+      {
+        "n": "Linalool",
+        "p": 0.18
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Sleepy",
+      "Happy",
+      "Calm"
+    ],
+    "flavor": "Creamy strawberry milk with an earthy, herbal exhale.",
+    "icon": "🐉",
+    "breeder": "Bodhi Seeds",
+    "parents": [
+      "Dragonsoul",
+      "Strawberry Milk"
+    ]
+  },
+  {
+    "id": "s6596",
+    "name": "Dream Boat",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "rare",
+    "thc": "20–25%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.26
+      },
+      {
+        "n": "Pinene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Uplifted",
+      "Happy",
+      "Creative",
+      "Energetic"
+    ],
+    "flavor": "Gassy orange citrus with a subtle cookie sweetness.",
+    "icon": "🛥️",
+    "breeder": "FreeWorld Genetics",
+    "parents": [
+      "Orange Cookie Chem",
+      "Big O"
+    ]
+  },
+  {
+    "id": "s6597",
+    "name": "Durban 95",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "rare",
+    "thc": "18–24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Terpinolene",
+        "p": 0.34
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.22
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.18
+      }
+    ],
+    "effects": [
+      "Energetic",
+      "Uplifted",
+      "Creative",
+      "Focused"
+    ],
+    "flavor": "Sweet anise and licorice over a spicy, earthy sativa base.",
+    "icon": "🌍",
+    "parents": [
+      "Durban Poison",
+      "9A95 Kunduz"
+    ]
+  },
+  {
+    "id": "s6598",
+    "name": "Durban Julep",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "rare",
+    "thc": "22–28%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.25
+      },
+      {
+        "n": "Terpinolene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Energetic",
+      "Happy",
+      "Uplifted",
+      "Creative"
+    ],
+    "flavor": "Gassy citrus fuel with a spicy anise undertone.",
+    "icon": "🌿",
+    "breeder": "Compound Genetics",
+    "parents": [
+      "Triangle Durban",
+      "Jet Fuel Gelato"
+    ]
+  },
+  {
+    "id": "s6599",
+    "name": "Eastons Cut",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "22–28%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.25
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Sleepy",
+      "Euphoric"
+    ],
+    "flavor": "Sweet vanilla cake with a creamy, gassy dessert finish.",
+    "icon": "🍰",
+    "breeder": "Kings Garden",
+    "aka": "Ice Cream Cake",
+    "parents": [
+      "Wedding Cake",
+      "Gelato #33"
+    ]
+  },
+  {
+    "id": "s6600",
+    "name": "Emerald RNTZ",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "24–30%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.32
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.24
+      },
+      {
+        "n": "Linalool",
+        "p": 0.18
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Sleepy"
+    ],
+    "flavor": "Sweet candy and tropical citrus with a creamy, gassy exhale.",
+    "icon": "💚",
+    "aka": "Emerald Runtz",
+    "parents": [
+      "Emerald OG",
+      "Runtz"
+    ]
+  },
+  {
+    "id": "s6601",
+    "name": "Emerald Runts",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "24–30%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.32
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.24
+      },
+      {
+        "n": "Linalool",
+        "p": 0.18
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Sleepy"
+    ],
+    "flavor": "Sweet candy and tropical citrus with a creamy, gassy exhale.",
+    "icon": "💚",
+    "aka": "Emerald Runtz",
+    "parents": [
+      "Emerald OG",
+      "Runtz"
+    ]
+  },
+  {
+    "id": "s6602",
+    "name": "Eucalyptus",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "18–24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.22
+      },
+      {
+        "n": "Pinene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Sleepy",
+      "Calm",
+      "Happy"
+    ],
+    "flavor": "Cool minty herbal notes over a sweet, fruity base.",
+    "icon": "🌿",
+    "parents": [
+      "Do-si-dos",
+      "Purple Punch"
+    ]
+  },
+  {
+    "id": "s6603",
+    "name": "Fart Blossum",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "rare",
+    "thc": "17–22%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.25
+      },
+      {
+        "n": "Limonene",
+        "p": 0.18
+      }
+    ],
+    "effects": [
+      "Energetic",
+      "Uplifted",
+      "Focused",
+      "Happy"
+    ],
+    "flavor": "Pungent old-school skunk with hot rubber and body odor notes.",
+    "icon": "💨",
+    "breeder": "ITC Genetics",
+    "parents": [
+      "Road Kill Skunk",
+      "Deer Creek #1"
+    ]
+  },
+  {
+    "id": "s6604",
+    "name": "5G",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "rare",
+    "thc": "20–26%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.24
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Energetic",
+      "Uplifted",
+      "Happy",
+      "Focused"
+    ],
+    "flavor": "Gassy diesel with sharp citrus and earthy fuel notes.",
+    "icon": "📶",
+    "breeder": "Ganja Rebel Seeds",
+    "parents": [
+      "(Sour Diesel x F13)",
+      "((OG x Chemdawg) x C99)"
+    ]
+  },
+  {
+    "id": "s6605",
+    "name": "Astronaut",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "20–25%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.24
+      },
+      {
+        "n": "Linalool",
+        "p": 0.18
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Sleepy",
+      "Happy",
+      "Euphoric"
+    ],
+    "flavor": "Earthy kush with a subtle sweet, herbal exhale.",
+    "icon": "🧑‍🚀",
+    "aka": "The Astronaut",
+    "breeder": "Mycotek",
+    "parents": [
+      "Skywalker OG",
+      "The Missing Link"
+    ]
+  },
+  {
+    "id": "s6606",
+    "name": "Butterfinger",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "20–26%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.28
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.24
+      },
+      {
+        "n": "Limonene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Sleepy"
+    ],
+    "flavor": "Nutty peanut butter sweetness with a gassy, candy-like finish.",
+    "icon": "🍫",
+    "breeder": "3rd Coast Genetics",
+    "parents": [
+      "Special Candy",
+      "Peanut Butter Breath"
+    ]
+  },
+  {
+    "id": "s6607",
+    "name": "Cascade Orange",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "rare",
+    "thc": "20–26%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.34
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.22
+      },
+      {
+        "n": "Terpinolene",
+        "p": 0.18
+      }
+    ],
+    "effects": [
+      "Uplifted",
+      "Happy",
+      "Energetic",
+      "Creative"
+    ],
+    "flavor": "Bright orange citrus over a spicy, herbal base.",
+    "icon": "🍊",
+    "breeder": "Compound Genetics",
+    "parents": [
+      "Mt. Hood Magic",
+      "Legend Orange Apricot"
+    ]
+  },
+  {
+    "id": "s6608",
+    "name": "Cate Harrington",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "rare",
+    "thc": "16–22%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.28
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.22
+      },
+      {
+        "n": "Pinene",
+        "p": 0.18
+      }
+    ],
+    "effects": [
+      "Uplifted",
+      "Happy",
+      "Relaxed",
+      "Creative"
+    ],
+    "flavor": "Earthy landrace spice with a subtle sweet edge.",
+    "icon": "🌍",
+    "breeder": "Pornoseed",
+    "parents": [
+      "Lowryder",
+      "Helmand"
+    ]
+  },
+  {
+    "id": "s6609",
+    "name": "Cheddarwurst 2",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "20–26%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.32
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.24
+      },
+      {
+        "n": "Limonene",
+        "p": 0.16
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Sleepy",
+      "Euphoric"
+    ],
+    "flavor": "Pungent cheese and skunk over a gassy diesel backbone.",
+    "icon": "🧀",
+    "breeder": "Alphakronik Genes",
+    "parents": [
+      "Exodus Cheese",
+      "Snowdawg BX"
+    ]
+  },
+  {
+    "id": "s6610",
+    "name": "Cheek Meat",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "22–28%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.26
+      },
+      {
+        "n": "Limonene",
+        "p": 0.18
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Sleepy",
+      "Happy",
+      "Euphoric"
+    ],
+    "flavor": "Funky gas and earthy sweetness with a creamy finish.",
+    "icon": "🥩",
+    "breeder": "Cannarado",
+    "parents": [
+      "Fatso",
+      "Zawtlatti"
+    ]
+  },
+  {
+    "id": "s6611",
+    "name": "Chem Crush",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "rare",
+    "thc": "18–24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.32
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.24
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.18
+      }
+    ],
+    "effects": [
+      "Energetic",
+      "Uplifted",
+      "Happy",
+      "Creative"
+    ],
+    "flavor": "Gassy chem funk with bright orange citrus.",
+    "icon": "🍊",
+    "parents": [
+      "Chem Tang",
+      "Orange Crush"
+    ]
+  },
+  {
+    "id": "s6612",
+    "name": "Chilled Cherries",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "20–25%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.28
+      },
+      {
+        "n": "Limonene",
+        "p": 0.24
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Calm"
+    ],
+    "flavor": "Sweet cherry and cookie dough with a creamy exhale.",
+    "icon": "🍒",
+    "parents": [
+      "Sunset Sherbet",
+      "Cherry Cookies BX1"
+    ]
+  },
+  {
+    "id": "s6613",
+    "name": "Chocolate Banana",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "20–26%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.26
+      },
+      {
+        "n": "Limonene",
+        "p": 0.16
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Sleepy",
+      "Euphoric"
+    ],
+    "flavor": "Creamy chocolate and ripe banana sweetness.",
+    "icon": "🍌",
+    "parents": [
+      "Chocolate OG",
+      "Strawberry Banana Sherbet"
+    ]
+  },
+  {
+    "id": "s6614",
+    "name": "Chocolate Cookie",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "18–24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.25
+      },
+      {
+        "n": "Limonene",
+        "p": 0.17
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Sleepy"
+    ],
+    "flavor": "Sweet chocolate cookie dough over an earthy kush base.",
+    "icon": "🍪",
+    "breeder": "Breaking Buds Seeds",
+    "parents": [
+      "Chocolope",
+      "OG Kush"
+    ]
+  },
+  {
+    "id": "s6615",
+    "name": "Chocolate Eruption",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "20–27%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.32
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.24
+      },
+      {
+        "n": "Limonene",
+        "p": 0.16
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Sleepy",
+      "Happy",
+      "Euphoric"
+    ],
+    "flavor": "Rich chocolate and chem gas with a spicy finish.",
+    "icon": "🌋",
+    "breeder": "Lost River Seeds",
+    "parents": [
+      "Chocolate Chunk",
+      "Chem Breath"
+    ]
+  },
+  {
+    "id": "s6616",
+    "name": "Chocolate Truffle",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "20–25%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.25
+      },
+      {
+        "n": "Linalool",
+        "p": 0.16
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Sleepy",
+      "Calm"
+    ],
+    "flavor": "Creamy chocolate dessert with a mellow gelato sweetness.",
+    "icon": "🍫",
+    "parents": [
+      "Chocolate Kush",
+      "Gelato"
+    ]
+  },
+  {
+    "id": "s6617",
+    "name": "Compton Creek",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
+    "rarity": "rare",
+    "thc": "16–22%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.22
+      },
+      {
+        "n": "Pinene",
+        "p": 0.18
+      }
+    ],
+    "effects": [
+      "Energetic",
+      "Uplifted",
+      "Happy",
+      "Creative"
+    ],
+    "flavor": "Earthy tropical spice with a subtle sweetness.",
+    "icon": "🌴",
+    "parents": [
+      "Panama Red",
+      "Wilson"
+    ]
+  },
+  {
+    "id": "s6618",
+    "name": "Connect 407",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "20–26%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.24
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "Citrusy gas with an earthy pine backbone.",
+    "icon": "🔗",
+    "aka": "Larry OG",
+    "breeder": "Canndescent",
+    "parents": [
+      "OG Kush",
+      "SFV OG"
+    ]
+  },
+  {
+    "id": "s6619",
+    "name": "Cookie Lady",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "20–25%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.24
+      },
+      {
+        "n": "Limonene",
+        "p": 0.18
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Sleepy"
+    ],
+    "flavor": "Sweet cookie dough with a spicy floral finish.",
+    "icon": "🍪",
+    "breeder": "Purple Caper Seeds",
+    "parents": [
+      "Cookie F2",
+      "Fire Lady"
+    ]
+  },
+  {
+    "id": "s6620",
+    "name": "Crazyade",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "rare",
+    "thc": "20–26%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.34
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.22
+      },
+      {
+        "n": "Terpinolene",
+        "p": 0.16
+      }
+    ],
+    "effects": [
+      "Uplifted",
+      "Energetic",
+      "Happy",
+      "Creative"
+    ],
+    "flavor": "Tart lemonade citrus with a gassy candy finish.",
+    "icon": "🍋",
+    "breeder": "Dying Breed Seeds",
+    "parents": [
+      "Lemonade",
+      "4 LocoZ"
+    ]
+  },
+  {
+    "id": "s6621",
+    "name": "D33",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "22–28%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.25
+      },
+      {
+        "n": "Linalool",
+        "p": 0.16
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Sleepy",
+      "Euphoric"
+    ],
+    "flavor": "Sweet doughy cookie over a creamy gelato base.",
+    "icon": "🍥",
+    "breeder": "Source Cannabis",
+    "parents": [
+      "Do-Si-Dos",
+      "Gelato #33"
+    ]
+  },
+  {
+    "id": "s6622",
+    "name": "Da Yayo",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "rare",
+    "thc": "20–26%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.24
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Energetic",
+      "Uplifted",
+      "Happy",
+      "Creative"
+    ],
+    "flavor": "Tropical citrus gas with an earthy sweet finish.",
+    "icon": "❄️",
+    "breeder": "Heady Tree",
+    "parents": [
+      "Medellin",
+      "Collins Ave"
+    ]
+  },
+  {
+    "id": "s6623",
+    "name": "Daily Blues",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "20–25%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.28
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.25
+      },
+      {
+        "n": "Limonene",
+        "p": 0.18
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Calm",
+      "Euphoric"
+    ],
+    "flavor": "Sweet blueberry cookie dough with a creamy exhale.",
+    "icon": "🫐",
+    "breeder": "Cannarado Genetics",
+    "parents": [
+      "Blue Cookies",
+      "Daily Driver"
+    ]
+  },
+  {
+    "id": "s6624",
+    "name": "Denver Delight",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "20–26%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.24
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Sleepy"
+    ],
+    "flavor": "Sweet grape jelly over a gassy OG base.",
+    "icon": "🍇",
+    "breeder": "Good Day Farm",
+    "parents": [
+      "501 OG",
+      "Purple Jellato"
+    ]
+  },
+  {
+    "id": "s6625",
+    "name": "Desi",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "18–24%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.24
+      },
+      {
+        "n": "Limonene",
+        "p": 0.16
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Calm",
+      "Sleepy"
+    ],
+    "flavor": "Sweet strawberry over an earthy landrace base.",
+    "icon": "🍓",
+    "breeder": "Five Rivers Cannabis",
+    "parents": [
+      "Strawberry Kush",
+      "Panjab landrace"
+    ]
+  },
+  {
+    "id": "s6626",
+    "name": "Devil's Candy",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "22–28%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.25
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.18
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Sleepy"
+    ],
+    "flavor": "Sweet candy citrus with a pungent gassy finish.",
+    "icon": "😈",
+    "breeder": "Clearwater Genetics",
+    "parents": [
+      "Devil Driver",
+      "Runtz"
+    ]
+  },
+  {
+    "id": "s6627",
+    "name": "Devine Gelato",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "22–28%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.24
+      },
+      {
+        "n": "Linalool",
+        "p": 0.17
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Sleepy"
+    ],
+    "flavor": "Creamy gelato sweetness with a doughy cookie finish.",
+    "icon": "🍨",
+    "aka": "Divine Gelato",
+    "breeder": "In House Genetics",
+    "parents": [
+      "(Sunset Sherbert x (Dosidos x Gelato #41))",
+      "(Dosidos x Gelato #33)"
+    ]
+  },
+  {
+    "id": "s6628",
+    "name": "Diamonds and Pearls",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "22–28%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.24
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.18
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Sleepy"
+    ],
+    "flavor": "Sweet cake batter with a floral, gassy finish.",
+    "icon": "💎",
+    "breeder": "Lovin' in Her Eyes",
+    "parents": [
+      "Cake Crasher",
+      "Spanish Moon"
+    ]
+  },
+  {
+    "id": "s6629",
+    "name": "Drippin Aint Eazy",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "22–28%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.3
+      },
+      {
+        "n": "Limonene",
+        "p": 0.24
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Sleepy"
+    ],
+    "flavor": "Sticky sweet candy gas with an earthy finish.",
+    "icon": "💧",
+    "breeder": "Exotic Genetix",
+    "parents": [
+      "Drip Station",
+      "Gary Poppins"
+    ]
+  },
+  {
+    "id": "s6630",
+    "name": "Lemon Grapefruit Banana Tangerine Duffy",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "rare",
+    "thc": "20–26%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.36
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.22
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.16
+      }
+    ],
+    "effects": [
+      "Uplifted",
+      "Energetic",
+      "Happy",
+      "Creative"
+    ],
+    "flavor": "Layered citrus — lemon, grapefruit, banana, and tangerine.",
+    "icon": "🍋",
+    "breeder": "Duffy's (Fig Farms)",
+    "parents": [
+      "Strawberry Banana",
+      "Backpack Boyz cultivar"
+    ]
+  },
+  {
+    "id": "s6631",
+    "name": "Purple Mandarin Punch 1",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "20–26%",
+    "cbd": "<1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.3
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.24
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.2
+      }
+    ],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "Sweet mandarin citrus over a grape punch base.",
+    "icon": "🍊",
+    "breeder": "matter.",
+    "parents": [
+      "Purple Punch",
+      "Mandarin Sunset"
+    ]
   }
 ]
