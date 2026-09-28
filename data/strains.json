@@ -195,7 +195,11 @@
     "flavor": "Woodsy and earthy with a peppery bite.",
     "icon": "❄️",
     "breeder": "Green House Seed Co.",
-    "aka": "Arnhem's Wonder, White Widow OG"
+    "aka": "Arnhem's Wonder, White Widow OG",
+    "parents": [
+      "Brazilian Sativa",
+      "South Indian Indica"
+    ]
   },
   {
     "id": "s7",
@@ -226,7 +230,11 @@
     ],
     "flavor": "Tropical pineapple with a cedar finish.",
     "icon": "🍍",
-    "breeder": "G13 Labs"
+    "breeder": "G13 Labs",
+    "parents": [
+      "Trainwreck",
+      "Hawaiian"
+    ]
   },
   {
     "id": "s8",
@@ -578,7 +586,13 @@
       "Insomnia",
       "Lack of Appetite",
       "Muscle Spasms"
-    ]
+    ],
+    "parents": [
+      "Afghani",
+      "Maui Haze"
+    ],
+    "breeder": "Green House Seeds",
+    "aka": "Afgooey, Afghan Goo"
   },
   {
     "id": "s18",
@@ -2197,7 +2211,11 @@
       "Insomnia",
       "Lack of Appetite"
     ],
-    "aka": "KC Mango"
+    "aka": "KC Mango",
+    "parents": [
+      "KC 33",
+      "Afghani"
+    ]
   },
   {
     "id": "s60",
@@ -5883,7 +5901,12 @@
       "Lack of Appetite",
       "Pain"
     ],
-    "aka": "ATF, Alaskan Thunder, Alaskan Thunder F"
+    "aka": "ATF, Alaskan Thunder, Alaskan Thunder F, Matanuska Thunder Fuck, Alaskan Thunderfuck",
+    "parents": [
+      "Northern California Sativa",
+      "Russian Ruderalis",
+      "Afghani"
+    ]
   },
   {
     "id": "s158",
@@ -18826,6 +18849,10 @@
       "Pain",
       "Insomnia",
       "Lack of Appetite"
+    ],
+    "parents": [
+      "Bubba Kush",
+      "Alien Kush"
     ]
   },
   {
@@ -22965,7 +22992,13 @@
       "Pain",
       "Insomnia",
       "Nausea"
-    ]
+    ],
+    "parents": [
+      "Chem D",
+      "Alien Technology"
+    ],
+    "breeder": "Alien Genetics",
+    "aka": "Alien Dog"
   },
   {
     "id": "s614",
@@ -25369,7 +25402,12 @@
       "Stress",
       "Insomnia",
       "Depression"
-    ]
+    ],
+    "parents": [
+      "Blueberry",
+      "Afghani"
+    ],
+    "aka": "Afghan Blueberry, Afghan Blue"
   },
   {
     "id": "s679",
@@ -28285,7 +28323,12 @@
       "Lack of Appetite",
       "Inflammation",
       "Muscle Spasms"
-    ]
+    ],
+    "parents": [
+      "Alien Kush",
+      "Stardawg"
+    ],
+    "aka": "Alien Star Dawg"
   },
   {
     "id": "s757",
@@ -35739,7 +35782,13 @@
     "ailments": [
       "Inflammation",
       "Stress"
-    ]
+    ],
+    "parents": [
+      "Sour Alien",
+      "White Moonshine"
+    ],
+    "breeder": "Sin City Seeds",
+    "aka": "Alien Moonshine"
   },
   {
     "id": "s963",
@@ -37376,7 +37425,11 @@
     ],
     "flavor": "Earthy on the palate with a myrcene-leaning finish.",
     "icon": "🌰",
-    "breeder": "The Cali Connection"
+    "breeder": "The Cali Connection",
+    "parents": [
+      "LVPK",
+      "Alien Dawg"
+    ]
   },
   {
     "id": "s1014",
@@ -37650,7 +37703,11 @@
     ],
     "flavor": "Linalool-forward with a ocimene undertone.",
     "icon": "🌿",
-    "breeder": "TGA Seeds"
+    "breeder": "TGA Seeds",
+    "parents": [
+      "Orange Velvet",
+      "Jack the Ripper"
+    ]
   },
   {
     "id": "s1023",
@@ -37682,7 +37739,13 @@
     "flavor": "Limonene-forward with a myrcene undertone.",
     "icon": "🌿",
     "breeder": "Serious Seeds",
-    "aka": "AK 47, AK"
+    "aka": "AK 47, AK",
+    "parents": [
+      "Colombian",
+      "Mexican",
+      "Thai",
+      "Afghani"
+    ]
   },
   {
     "id": "s1024",
@@ -39558,7 +39621,12 @@
     ],
     "flavor": "Ocimene-forward with a caryophyllene undertone.",
     "icon": "🌿",
-    "breeder": "Sensi Seeds"
+    "breeder": "Sensi Seeds",
+    "parents": [
+      "Big Bud",
+      "Skunk #1"
+    ],
+    "aka": "Super Bud, SuperBud"
   },
   {
     "id": "s1088",
@@ -39744,7 +39812,12 @@
     ],
     "flavor": "Humulene-forward with a caryophyllene undertone.",
     "icon": "🌿",
-    "breeder": "DJ Short"
+    "breeder": "DJ Short",
+    "parents": [
+      "Purple Thai",
+      "Afghani"
+    ],
+    "aka": "DJ Short Flo"
   },
   {
     "id": "s1094",
@@ -45418,7 +45491,12 @@
     ],
     "flavor": "Linalool-forward with a humulene undertone.",
     "icon": "🌿",
-    "breeder": "Greenhouse"
+    "breeder": "Greenhouse",
+    "parents": [
+      "Swiss Sativa",
+      "Swiss Indica"
+    ],
+    "aka": "Anti Mold Strain"
   },
   {
     "id": "s1289",
@@ -52452,7 +52530,12 @@
     "flavor": "Pungent diesel and earth with a sour, chocolatey undertone.",
     "icon": "🦍",
     "breeder": "Joesy Whales",
-    "aka": "GG4, Original Glue"
+    "aka": "GG4, Original Glue",
+    "parents": [
+      "Chem's Sister",
+      "Sour Dubb",
+      "Chocolate Diesel"
+    ]
   },
   {
     "id": "s1519",
@@ -52546,7 +52629,12 @@
       "Sleepy"
     ],
     "flavor": "Sweet and nutty with an earthy, cookie-dough finish.",
-    "icon": "🍪"
+    "icon": "🍪",
+    "parents": [
+      "South Florida OG",
+      "Gelato #25"
+    ],
+    "breeder": "Connected Cannabis Co."
   },
   {
     "id": "s1522",
@@ -52579,7 +52667,11 @@
     "flavor": "Sweet berry and citrus with a creamy finish.",
     "icon": "🍨",
     "breeder": "AFFCO",
-    "aka": "Sherbet, Cookie Fam Sherbet"
+    "aka": "Sherbet, Cookie Fam Sherbet",
+    "parents": [
+      "Girl Scout Cookies",
+      "Pink Panties"
+    ]
   },
   {
     "id": "s1523",
@@ -53293,7 +53385,11 @@
     "flavor": "Sweet strawberry and ripe banana with a tropical finish.",
     "icon": "🍓",
     "breeder": "Reserva Privada",
-    "aka": "Strawberry Banana OG, Strawnana"
+    "aka": "Strawberry Banana OG, Strawnana",
+    "parents": [
+      "Crockett's Banana Kush",
+      "Bubble Gum"
+    ]
   },
   {
     "id": "s1545",
@@ -53958,7 +54054,12 @@
     ],
     "flavor": "Sweet berry and cream with a tart, fruity edge.",
     "icon": "🫐",
-    "aka": "Acai Berry"
+    "aka": "Acai Berry",
+    "parents": [
+      "Sunset Sherbet",
+      "Thin Mint Cookies"
+    ],
+    "breeder": "Sherbinski"
   },
   {
     "id": "s1567",
@@ -55286,7 +55387,12 @@
       "Clear-headed"
     ],
     "flavor": "Earthy citrus with a mild, clear-headed effect thanks to its balanced CBD:THC ratio.",
-    "icon": "⚖️"
+    "icon": "⚖️",
+    "parents": [
+      "Queen Mother",
+      "NYC Diesel"
+    ],
+    "breeder": "Resin Seeds"
   },
   {
     "id": "s1613",
@@ -55828,7 +55934,11 @@
     ],
     "flavor": "Sweet cookie dough with a sharp, spicy gas finish.",
     "icon": "👽",
-    "breeder": "Jaws Gear"
+    "breeder": "Jaws Gear",
+    "parents": [
+      "Alien Dawg",
+      "Girl Scout Cookies"
+    ]
   },
   {
     "id": "s1632",
@@ -55860,7 +55970,12 @@
     ],
     "flavor": "Sweet candy with a sharp, gassy, spicy undertone.",
     "icon": "🍬",
-    "breeder": "Alien Genetics"
+    "breeder": "Alien Genetics",
+    "parents": [
+      "Sour Dubble",
+      "Tahoe Alien"
+    ],
+    "aka": "Alien Candy, ARC"
   },
   {
     "id": "s1633",
@@ -56367,7 +56482,11 @@
     "flavor": "Sweet dessert-like grape and vanilla cream.",
     "icon": "🍨",
     "breeder": "Cannarado Genetics",
-    "aka": "Sunday Driver"
+    "aka": "Sunday Driver",
+    "parents": [
+      "Fruity Pebbles OG",
+      "Grape Pie"
+    ]
   },
   {
     "id": "s1652",
@@ -178964,5 +179083,620 @@
       "Hash Plant"
     ],
     "aka": "88 G13, 88 G13/Hash Plant, 88G13HP, 88HP"
+  },
+  {
+    "id": "s6779",
+    "name": "501st OG",
+    "type": "Indica",
+    "lean": "Indica-dominant",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Sleepy"
+    ],
+    "flavor": "Piney kush with sweet grape.",
+    "icon": "leaf",
+    "breeder": "Rare Dankness",
+    "parents": [
+      "Skywalker OG",
+      "Rare Dankness #1"
+    ],
+    "aka": "501 OG"
+  },
+  {
+    "id": "s6780",
+    "name": "99/OG",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Energetic",
+      "Focused"
+    ],
+    "flavor": "",
+    "icon": "leaf",
+    "breeder": "",
+    "parents": [
+      "OG Kush",
+      "Cinderella 99"
+    ],
+    "aka": "OG-99, OG/99"
+  },
+  {
+    "id": "s6781",
+    "name": "Acai Mints",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "20-27%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Sedated"
+    ],
+    "flavor": "Frosty mint, sweet fruity acai berries, sour citrus lemon, and spicy kush.",
+    "icon": "leaf",
+    "breeder": "Coastal Sun",
+    "parents": [
+      "Acai Berry Gelato",
+      "Kush Mints"
+    ],
+    "aka": "Acai Mintz"
+  },
+  {
+    "id": "s6782",
+    "name": "Adios Motherf*cker",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "20-34%",
+    "cbd": "0-1%",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Happy"
+    ],
+    "flavor": "Sweet and sour citrusy pine with a subtle skunky exhale.",
+    "icon": "leaf",
+    "breeder": "Seed Junky Genetics",
+    "parents": [
+      "Biscotti",
+      "Sherb",
+      "Jealousy"
+    ],
+    "aka": "AMF, Adios MF"
+  },
+  {
+    "id": "s6783",
+    "name": "Afghan Haze",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "18-24%",
+    "cbd": "",
+    "terps": [
+      {
+        "n": "Pinene",
+        "p": 0
+      },
+      {
+        "n": "Limonene",
+        "p": 0
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0
+      }
+    ],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Happy"
+    ],
+    "flavor": "Nutty, earthy tea with skunk.",
+    "icon": "leaf",
+    "breeder": "Mr. Nice Seeds (Nevil Schoenmakers and Shantibaba)",
+    "parents": [
+      "Afghani",
+      "Haze"
+    ]
+  },
+  {
+    "id": "s6784",
+    "name": "Mazar",
+    "type": "Indica",
+    "lean": "Indica-dominant",
+    "rarity": "uncommon",
+    "thc": "15-20%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Sedated"
+    ],
+    "flavor": "Earthy kush, sweet hash, spicy pine, skunk.",
+    "icon": "leaf",
+    "breeder": "Dutch Passion",
+    "parents": [
+      "Afghani",
+      "Skunk #1"
+    ],
+    "aka": "Mazar I Sharif, formerly Afghan/Skunk"
+  },
+  {
+    "id": "s6785",
+    "name": "Afghani Pink OG",
+    "type": "Indica",
+    "lean": "Indica-dominant",
+    "rarity": "uncommon",
+    "thc": "19-23%",
+    "cbd": "0-1%",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed",
+      "Social"
+    ],
+    "flavor": "Skunky haze, peppery menthol, woody pine.",
+    "icon": "leaf",
+    "breeder": "",
+    "parents": [
+      "Afghani",
+      "Pink Kush"
+    ],
+    "aka": "Afghani Pink, Afghan Pink OG"
+  },
+  {
+    "id": "s6786",
+    "name": "Afpak",
+    "type": "Indica",
+    "lean": "Indica-dominant",
+    "rarity": "uncommon",
+    "thc": "20-22%",
+    "cbd": "0.25-1%",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Focused"
+    ],
+    "flavor": "Sweet earthy pine with berry and lemon.",
+    "icon": "leaf",
+    "breeder": "Heritage Seeds",
+    "parents": [
+      "Afghani",
+      "Pakistani Kush"
+    ],
+    "aka": "Af-Pak, Af-Pak Hashplant"
+  },
+  {
+    "id": "s6787",
+    "name": "African Orange",
+    "type": "Sativa",
+    "lean": "Sativa-dominant",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Focused",
+      "Energetic",
+      "Talkative"
+    ],
+    "flavor": "Sun-rind citrus and musky orange peel with a faint gassy note.",
+    "icon": "leaf",
+    "breeder": "Equilibrium Genetics",
+    "parents": [
+      "Agent Orange",
+      "Heirloom Malawi"
+    ]
+  },
+  {
+    "id": "s6788",
+    "name": "African Queen",
+    "type": "Sativa",
+    "lean": "Sativa-dominant",
+    "rarity": "uncommon",
+    "thc": "20-23%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Focused",
+      "Relaxed"
+    ],
+    "flavor": "Anise, licorice, and leather with sweet citrus.",
+    "icon": "leaf",
+    "breeder": "Fleur du Mal",
+    "parents": [
+      "Durban",
+      "Cinderella 99"
+    ],
+    "aka": "La Reina de Africa"
+  },
+  {
+    "id": "s6789",
+    "name": "AJ's Sour Diesel",
+    "type": "Sativa",
+    "lean": "Sativa-dominant",
+    "rarity": "rare",
+    "thc": "18-26%",
+    "cbd": "<0.5%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0
+      }
+    ],
+    "effects": [
+      "Energetic",
+      "Focused",
+      "Euphoric"
+    ],
+    "flavor": "Acrid chemical kerosene, sour lime, skunky musk.",
+    "icon": "leaf",
+    "breeder": "",
+    "parents": [
+      "Chemdog 91",
+      "Super Skunk"
+    ],
+    "aka": "AJ Sour D, AJ Sour Diesel"
+  },
+  {
+    "id": "s6790",
+    "name": "AK-420",
+    "type": "Sativa",
+    "lean": "Sativa-dominant",
+    "rarity": "rare",
+    "thc": "26%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Social",
+      "Sedated"
+    ],
+    "flavor": "Earthy with pungent skunk fragrance.",
+    "icon": "leaf",
+    "breeder": "White Label Seeds (Sensi Seeds)/Zamnesia",
+    "parents": [
+      "Colombian",
+      "Mexican",
+      "Thai",
+      "Afghani"
+    ],
+    "aka": "AK 420"
+  },
+  {
+    "id": "s6791",
+    "name": "Al Capone F2",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Kush/OG with a Chem-like power and Alien exhale.",
+    "icon": "leaf",
+    "breeder": "Lupos CannaSeed/Sunleaf Seed Co",
+    "parents": [
+      "Mob Boss",
+      "Bacon"
+    ]
+  },
+  {
+    "id": "s6792",
+    "name": "Albert Walker OG",
+    "type": "Indica",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Pine, lemon, skunk, earth, old-school funk.",
+    "icon": "leaf",
+    "breeder": "",
+    "parents": [
+      "OG Kush",
+      "Albert Walker"
+    ],
+    "aka": "AWOG"
+  },
+  {
+    "id": "s6793",
+    "name": "Alcatraz OG",
+    "type": "Sativa",
+    "lean": "Sativa-dominant",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Sedated"
+    ],
+    "flavor": "Sugary citrus with skunky flowers and earthiness.",
+    "icon": "leaf",
+    "breeder": "NorStar Genetics",
+    "parents": [
+      "Hells Angel OG",
+      "Frisco OG"
+    ]
+  },
+  {
+    "id": "s6794",
+    "name": "Fresh Squeezed OG",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "20-31%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Creative",
+      "Euphoric"
+    ],
+    "flavor": "Vibrant sour orange with lightly sour spicy exhale.",
+    "icon": "leaf",
+    "breeder": "",
+    "parents": [
+      "Face Off OG",
+      "Ohio Lemon G"
+    ],
+    "aka": "Fresh Squeeze, Freshly Squeezed"
+  },
+  {
+    "id": "s6795",
+    "name": "Alien Bubba Berry",
+    "type": "Hybrid",
+    "lean": "Indica-dominant",
+    "rarity": "uncommon",
+    "thc": "20-28%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Relaxed",
+      "Sleepy"
+    ],
+    "flavor": "Sweet blueberry with spicy black cherries and flowery kush.",
+    "icon": "leaf",
+    "breeder": "La Plata Labs",
+    "parents": [
+      "Blueberry",
+      "Alien Bubba"
+    ],
+    "aka": "Alien Bubble Berry"
+  },
+  {
+    "id": "s6796",
+    "name": "Alien Mints",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "24-28%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Euphoric",
+      "Talkative"
+    ],
+    "flavor": "Creamy cherry vanilla, cool mint, sweet cookie dough, gassy kush.",
+    "icon": "leaf",
+    "breeder": "Strane (Capulator/Seed Junky Genetics)",
+    "parents": [
+      "Alien Cookies",
+      "Kush Mints"
+    ],
+    "aka": "Alien Mintz, CapJunky"
+  },
+  {
+    "id": "s6797",
+    "name": "Alien Orange Cookies",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "17%",
+    "cbd": "",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0
+      }
+    ],
+    "effects": [
+      "Euphoric",
+      "Relaxed"
+    ],
+    "flavor": "Bright citrus with sweet cookie-like undertones.",
+    "icon": "leaf",
+    "breeder": "Obsoul33t Genetics",
+    "parents": [
+      "Orange Cookies",
+      "Alien Technology"
+    ]
+  },
+  {
+    "id": "s6798",
+    "name": "Alien Pebbles",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Happy",
+      "Relaxed"
+    ],
+    "flavor": "Sweet citrus with pungent skunky background.",
+    "icon": "leaf",
+    "breeder": "",
+    "parents": [
+      "Alien OG",
+      "Fruity Pebbles OG"
+    ]
+  },
+  {
+    "id": "s6799",
+    "name": "Alien Sour Apple",
+    "type": "Sativa",
+    "lean": "Sativa-dominant",
+    "rarity": "uncommon",
+    "thc": "20-28%",
+    "cbd": "1%",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Energetic",
+      "Creative"
+    ],
+    "flavor": "Sweet yet sour Granny Smith apple with earthy berry.",
+    "icon": "leaf",
+    "breeder": "Franchise Genetics (Obsoul33t Genetics)",
+    "parents": [
+      "Alien Dawg",
+      "Sour Apple"
+    ]
+  },
+  {
+    "id": "s6800",
+    "name": "Alligator Wine",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "20-25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Creative"
+    ],
+    "flavor": "Chem, gas, wine, cheese.",
+    "icon": "leaf",
+    "breeder": "Lovin' in Her Eyes",
+    "parents": [
+      "Cajun Moon",
+      "Mars Hotel"
+    ]
+  },
+  {
+    "id": "s6801",
+    "name": "Amnesia Mac Ganja",
+    "type": "Sativa",
+    "lean": "Sativa-dominant",
+    "rarity": "rare",
+    "thc": "22%",
+    "cbd": "Low",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Focused",
+      "Creative"
+    ],
+    "flavor": "Citrus and earthy notes with herbal tea and spiciness.",
+    "icon": "leaf",
+    "breeder": "Kera Seeds ('The Ganja Man')",
+    "parents": [
+      "Amnesia",
+      "Mexican Haze"
+    ],
+    "aka": "AMG, Medical AMG, AMG Haze"
+  },
+  {
+    "id": "s6802",
+    "name": "Amherst Sour Diesel",
+    "type": "Sativa",
+    "lean": "Sativa-dominant",
+    "rarity": "uncommon",
+    "thc": "20-26%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Energetic",
+      "Happy"
+    ],
+    "flavor": "Tropical and fruity with hints of oil and exotic wood.",
+    "icon": "leaf",
+    "breeder": "Humboldt Seed Organisation",
+    "parents": [
+      "Chemdawg",
+      "Amherst Super Skunk"
+    ]
+  },
+  {
+    "id": "s6803",
+    "name": "Amnesia Lemon",
+    "type": "Sativa",
+    "lean": "Sativa-dominant",
+    "rarity": "uncommon",
+    "thc": "20.5%",
+    "cbd": "0.7%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0
+      },
+      {
+        "n": "Pinene",
+        "p": 0
+      },
+      {
+        "n": "Myrcene",
+        "p": 0
+      }
+    ],
+    "effects": [
+      "Euphoric",
+      "Energetic",
+      "Happy"
+    ],
+    "flavor": "Lemon citrus with spicy tea aroma.",
+    "icon": "leaf",
+    "breeder": "Barney's Farm (with Soma Seeds)",
+    "parents": [
+      "Amnesia Haze",
+      "Lemon Skunk"
+    ],
+    "aka": "Amnesia Lemon Haze"
+  },
+  {
+    "id": "s6804",
+    "name": "Amnesia Sour Diesel",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Euphoric",
+      "Happy"
+    ],
+    "flavor": "Pungent diesel-like with hints of citrus and earthiness.",
+    "icon": "leaf",
+    "breeder": "",
+    "parents": [
+      "Amnesia",
+      "Sour Diesel"
+    ]
   }
 ]
