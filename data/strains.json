@@ -398,6 +398,10 @@
       "Insomnia",
       "Depression",
       "Lack of Appetite"
+    ],
+    "parents": [
+      "Afghani",
+      "Thai"
     ]
   },
   {
@@ -2501,6 +2505,10 @@
       "Insomnia",
       "Depression",
       "Muscle Spasms"
+    ],
+    "parents": [
+      "Hindu Kush",
+      "Purple Afghani"
     ]
   },
   {
@@ -13612,6 +13620,10 @@
       "Pain",
       "Inflammation",
       "Muscle Spasms"
+    ],
+    "parents": [
+      "Larry OG",
+      "Granddaddy Purple"
     ]
   },
   {
@@ -41458,7 +41470,11 @@
     "flavor": "Myrcene-forward with a humulene undertone.",
     "icon": "\ud83c\udf3f",
     "breeder": "Bud Rx Delivery",
-    "aka": "Lemon OG Kush"
+    "aka": "Lemon OG Kush",
+    "parents": [
+      "Lemon Skunk",
+      "OG #18"
+    ]
   },
   {
     "id": "s1145",
@@ -52783,7 +52799,11 @@
       "Focused"
     ],
     "flavor": "Bright citrus and tropical orange, sweet on the exhale.",
-    "icon": "\ud83e\udd42"
+    "icon": "\ud83e\udd42",
+    "parents": [
+      "Clementine",
+      "Purple Punch"
+    ]
   },
   {
     "id": "s1521",
@@ -53470,7 +53490,11 @@
     ],
     "flavor": "Genuinely nutty and earthy, closer to real peanut butter than most food-named strains.",
     "icon": "\ud83e\udd5c",
-    "aka": "PB Breath"
+    "aka": "PB Breath",
+    "parents": [
+      "Do-Si-Dos",
+      "Mendo Breath"
+    ]
   },
   {
     "id": "s1541",
@@ -53764,7 +53788,11 @@
     "flavor": "Lemon and pine over an earthy OG base.",
     "icon": "\ud83c\udf4b",
     "breeder": "Carl D.",
-    "aka": "Lemon Lary"
+    "aka": "Lemon Lary",
+    "parents": [
+      "OG Kush",
+      "SFV OG Kush"
+    ]
   },
   {
     "id": "s1550",
@@ -56988,7 +57016,11 @@
     "flavor": "Heavy diesel and fuel with earthy, lemony notes.",
     "icon": "\ud83d\ude97",
     "breeder": "Pisces Genetics",
-    "aka": "Motor Breath OG, Motor Breath, Motorbreath 15, Motorbreath #15"
+    "aka": "Motor Breath OG, Motor Breath, Motorbreath 15, Motorbreath #15",
+    "parents": [
+      "Chem D",
+      "SFV OG Kush"
+    ]
   },
   {
     "id": "s1662",
