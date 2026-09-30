@@ -2954,6 +2954,51 @@ const BREEDER_GUIDE = {
   'Sagarmatha Seeds': 'Amsterdam breeder known for high-THC genetics like Yumbolt and Blue Ice.',
   'K.C. Brains': 'One of the older Dutch seed banks, known for its own numbered K.C. strain series.',
 };
+// Well-documented landrace populations by region of origin -- deliberately
+// a small, confidently-sourced list rather than an attempt to tag every
+// strain in the library as landrace/not, since there's no reliable field
+// for that in the strain schema and guessing would be worse than a short,
+// solid list. Each name only shows as a clickable link if it actually
+// exists in the library under this exact name (via findStrainByName);
+// otherwise it renders as plain text rather than a dead link.
+const LANDRACE_REGIONS = [
+  { region: 'Afghanistan & Pakistan', names: ['Afghan Kush', 'Hindu Kush', 'Mazar-i-Sharif'] },
+  { region: 'Thailand', names: ['Thai', 'Chocolate Thai'] },
+  { region: 'South Africa & Swaziland', names: ['Durban Poison', 'Swazi'] },
+  { region: 'Jamaica', names: ["Lambsbread", 'Jamaican Lambsbread'] },
+  { region: 'Mexico', names: ['Acapulco Gold', 'Mexican Sativa'] },
+  { region: 'Colombia', names: ['Colombian Gold', 'Punto Rojo'] },
+  { region: 'Panama', names: ['Panama Red'] },
+  { region: 'Malawi', names: ['Malawi Gold'] },
+  { region: 'Nepal', names: ['Nepalese'] },
+  { region: 'Lebanon', names: ['Lebanese'] },
+];
+function pageLandraceGuide(req, res) {
+  const body = `
+    <h1 class="screen-title">Landrace Guide</h1>
+    <p class="screen-sub">The genetic root almost everything else in the library was eventually built from.</p>
+    <div class="card" style="margin-bottom:16px;">
+      <p style="margin:0 0 10px;">A <b>landrace</b> is a cannabis variety that developed naturally in one specific region over many generations — shaped by local climate and traditional farming, not deliberate modern crossbreeding.</p>
+      <p style="margin:0 0 10px;"><b>Geographic origin is core to its identity.</b> Landraces are typically named for where they come from — the place isn't a marketing detail, it's what actually produced the genetics.</p>
+      <p style="margin:0 0 10px;"><b>They're the product of natural selection plus generations of local cultivation</b> — not a breeder selecting for traits over a few generations, but a population adapting to its own environment over a long stretch of time.</p>
+      <p style="margin:0 0 10px;"><b>They're relatively genetically stable.</b> Because a landrace was never crossed with anything else, plants grown from it tend to look and behave a lot like each other, unlike a strain with a complicated hybrid pedigree.</p>
+      <p style="margin:0 0 10px;"><b>They're the foundation modern hybrids are built from.</b> Nearly every popular strain today traces back, through a chain of crosses, to landrace ancestors.</p>
+      <p style="margin:0;"><b>They're also genuinely at risk.</b> Commercial breeding overwhelmingly favors hybrids, so a lot of original landrace populations have become rare in cultivation — once a specific line is lost, it can't be recreated.</p>
+    </div>
+    <p class="empty-note" style="margin-bottom:14px;">This is also why landraces and clone-only strains are deliberately left unparented elsewhere in this library — a landrace doesn't have two parent strains the way a hybrid does. It <i>is</i> the root of the tree, not a branch.</p>
+    <div class="section-label">Known Landraces by Region</div>
+    ${LANDRACE_REGIONS.map(r => `
+      <div class="card" style="margin-bottom:10px;">
+        <h2 style="margin:0 0 6px;font-size:16px;">${esc(r.region)}</h2>
+        <p style="margin:0;">${r.names.map(n => {
+          const match = findStrainByName(n);
+          return match ? `<a href="/strains/${match.id}">${esc(n)}</a>` : esc(n);
+        }).join(', ')}</p>
+      </div>
+    `).join('')}
+  `;
+  sendHtml(res, layout({ title: 'Landrace Guide', active: 'education', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
+}
 function pageBreederGuide(req, res) {
   const allStrains = db.listStrains({ limit: 5000 });
   const counts = {};
@@ -3915,6 +3960,7 @@ function pageEducation(req, res) {
         { href: '/terpene-guide', icon: '🌸', t: 'Terpene Guide', s: 'Aroma & effects by terpene' },
         { href: '/effects-guide', icon: '✨', t: 'Effects Guide', s: 'What each effect actually feels like' },
         { href: '/breeder-guide', icon: '🧬', t: 'Breeder Guide', s: 'Who\u2019s actually behind each strain' },
+        { href: '/landrace-guide', icon: '🌍', t: 'Landrace Guide', s: 'The genetic root everything else grew from' },
         { href: '/chat', icon: '💬', t: 'Ask', s: 'Chat with the assistant' },
       ],
     },
@@ -5279,6 +5325,7 @@ const server = http.createServer(async (req, res) => {
     if (method === 'GET' && pathname === '/effects-guide') return pageEffectsGuide(req, res);
     if (method === 'GET' && pathname === '/mood-finder') return pageMoodFinder(req, res, url.searchParams);
     if (method === 'GET' && pathname === '/breeder-guide') return pageBreederGuide(req, res);
+    if (method === 'GET' && pathname === '/landrace-guide') return pageLandraceGuide(req, res);
     if (method === 'POST' && pathname === '/report') return await handleReport(req, res);
     if (method === 'POST' && (m = pathname.match(/^\/block\/(\d+)$/))) return await handleBlock(req, res, m[1]);
     if (method === 'POST' && (m = pathname.match(/^\/unblock\/(\d+)$/))) return await handleUnblock(req, res, m[1]);
