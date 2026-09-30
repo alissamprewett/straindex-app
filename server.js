@@ -196,6 +196,33 @@ function renderOnsetTimer(c) {
 // incoming friend requests, both genuinely "things needing your attention
 // in this section." Shown as one number rather than two separate badges
 // on the same icon, which would just look cluttered.
+// Safety & Education carousel -- rides right above the feed on Home so
+// this content gets seen on every single open, not just by people who go
+// dig for it under the Education tab. Deliberately safety-first ordering
+// (dosing/mixing/legal before general strain trivia), matching the
+// priority the app is meant to lead with: community first, safety a very
+// visible second.
+const HOME_SAFETY_CAROUSEL = [
+  { href: '/dosing-calculator', icon: '🧮', title: 'Dosing Calculator', s: 'Know your dose first' },
+  { href: '/mixing-cautions', icon: '⚠️', title: 'Mixing Cautions', s: 'What not to combine' },
+  { href: '/legal-status', icon: '🏛️', title: 'Is It Legal?', s: 'Check your state' },
+  { href: '/methods', icon: '💨', title: 'Ways to Enjoy It', s: 'Every method explained' },
+  { href: '/faq', icon: '❓', title: 'FAQ', s: 'Strain school' },
+];
+function renderSafetyCarousel() {
+  return `
+    <div class="section-label">Safety & Education</div>
+    <div class="hcarousel" style="margin-bottom:4px;">
+      ${HOME_SAFETY_CAROUSEL.map(item => `
+        <a href="${item.href}" style="flex-shrink:0;min-width:140px;max-width:140px;background:var(--bg-subtle,#f7f7f2);border-radius:12px;padding:12px;text-decoration:none;color:inherit;">
+          <div style="font-size:22px;">${item.icon}</div>
+          <div style="font-weight:700;font-size:13px;margin-top:8px;">${esc(item.title)}</div>
+          <div class="empty-note" style="padding:2px 0 0;">${esc(item.s)}</div>
+        </a>
+      `).join('')}
+    </div>
+  `;
+}
 function friendsBadgeCount(userId) {
   if (userId == null) return 0;
   return db.countUnreadMessages(userId) + db.listIncomingRequests(userId).length + db.countUnreadMentions(userId);
@@ -225,29 +252,66 @@ function linkMentions(escapedText) {
     return `<a href="/friends/${user.id}" class="mention-tag" style="font-weight:700;color:var(--brand-green-dark);text-decoration:none;">@${esc(user.username)}</a>`;
   });
 }
-function kudosGiversLabel(checkinId) {
-  // Filters out any giver with a blank/missing username -- this shouldn't
-  // be possible for a real account, but a real bug surfaced during
-  // testing where phantom kudos_givers rows appeared referencing a
-  // brand-new, never-before-used checkin ID, with usernames resolving to
-  // empty strings. Root cause wasn't fully diagnosed (needs direct
-  // database inspection), but this at minimum stops the broken ", , and
-  // N more" display from ever showing to a real user while that's
-  // investigated further.
-  const givers = db.listCheckinKudosGivers(checkinId).filter(u => u && u.username);
+// Replaces the old single Kudos button on check-ins with a small,
+// Facebook-style set of named reactions -- picking one replaces whatever
+// you already had rather than stacking (see db.setCheckinReaction). Only
+// used on check-ins; recipe Kudos and Grow Tip likes are separate
+// features and are untouched.
+const REACTIONS = [
+  { key: 'nice', icon: '🌿', label: 'Nice' },
+  { key: 'fire', icon: '🔥', label: 'Fire' },
+  { key: 'whoa', icon: '😮', label: 'Whoa' },
+  { key: 'relatable', icon: '🙌', label: 'Relatable' },
+];
+const REACTION_BY_KEY = Object.fromEntries(REACTIONS.map(r => [r.key, r]));
+// Renders the whole reaction bar (all 4 buttons + counts) as one unit, so
+// the /api/checkins/:id/react endpoint can just re-render this same
+// function and hand the fresh HTML back to the browser to swap in --
+// no separate client-side counting logic to keep in sync with the server.
+function renderReactionBar(c, userId) {
+  const summary = db.getCheckinReactionSummary(c.id, userId);
+  const buttons = REACTIONS.map(r => {
+    const count = summary.counts[r.key] || 0;
+    const active = summary.myReaction === r.key;
+    const action = userId != null ? `reactToCheckin(${c.id}, '${r.key}', this)` : `window.location.href='/login'`;
+    return `<button type="button" onclick="${action}" title="${esc(r.label)}" style="display:flex;align-items:center;gap:4px;padding:4px 10px;border-radius:999px;border:1px solid ${active ? 'var(--brand-green-dark)' : 'var(--border)'};background:${active ? 'var(--brand-green-pale,#eef6ee)' : 'none'};cursor:pointer;font-size:13px;line-height:1.4;">
+      <span>${r.icon}</span>${count > 0 ? `<span>${count}</span>` : ''}
+    </button>`;
+  }).join('');
+  return `<div id="reaction-bar-${c.id}" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;">${buttons}</div>`;
+}
+// Attribution line under a reaction bar -- "who reacted", same spirit as
+// the old kudosGiversLabel but grouped by reaction rather than one flat
+// list, since which reaction someone gave is itself useful information.
+function reactionGiversLabel(checkinId) {
+  const givers = db.listCheckinReactionGivers(checkinId).filter(g => g.user && g.user.username);
   if (!givers.length) return '';
-  const names = givers.slice(0, 3).map(u => esc(u.username));
+  const names = givers.slice(0, 3).map(g => `${REACTION_BY_KEY[g.reaction] ? REACTION_BY_KEY[g.reaction].icon : ''} ${esc(g.user.username)}`);
   const extra = givers.length - names.length;
-  return `<div class="empty-note kudos-givers-label" style="padding:2px 0 0;text-align:right;">🌿 ${names.join(', ')}${extra > 0 ? ` and ${extra} more` : ''}</div>`;
+  return `<div class="empty-note" style="padding:2px 0 0;text-align:right;">${names.join(', ')}${extra > 0 ? ` and ${extra} more` : ''}</div>`;
 }
-// The kudos button itself -- reflects whether the current viewer has
-// already given kudos on page load (not just after clicking), and is
-// styled/labeled differently in each state so a toggle-off feels
-// intentional rather than like the button just broke.
-function renderKudosButton(c, userId) {
-  const given = db.hasUserGivenKudos(c.id, userId);
-  return `<button class="kudos-btn${given ? ' kudos-given' : ''}" id="kudos-btn-${c.id}" data-given="${given}" onclick="giveCheckinKudos(${c.id}, this)">${KUDOS_BUD_ICON}${given ? 'Kudos given' : 'Kudos'}${c.kudos ? ` (${c.kudos})` : ''}</button>`;
-}
+// Loaded once per page (guarded so re-rendering several reaction bars on
+// one page doesn't redeclare it) -- swaps in the fresh server-rendered
+// bar after each click rather than hand-rolling client-side counting.
+const REACT_TO_CHECKIN_SCRIPT = `
+  <script>
+    if (!window.reactToCheckin) {
+      window.reactToCheckin = function(checkinId, reaction) {
+        fetch('/api/checkins/' + checkinId + '/react', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ reaction: reaction })
+        }).then(function(r) { return r.json(); }).then(function(data) {
+          var bar = document.getElementById('reaction-bar-' + checkinId);
+          if (bar && data && data.html) {
+            var wrapper = document.createElement('div');
+            wrapper.innerHTML = data.html;
+            bar.replaceWith(wrapper.firstElementChild);
+          }
+        });
+      };
+    }
+  </script>
+`;
 function renderCheckinComments(c, userId, redirectPath) {
   const comments = db.listCheckinComments(c.id, userId);
   const tagCandidates = userId != null ? db.listFriends(userId).map(f => f.username) : [];
@@ -490,10 +554,24 @@ function pageHome(req, res) {
   // actually logged a check-in of its own before deciding which greeting
   // to show.
   const isFirstVisit = db.listCheckins({ userId, limit: 1 }).length === 0;
+  const streak = db.getCheckinStreak(userId);
+  const onThisDay = db.getOnThisDay(userId);
 
   const body = `
-    <h1 class="screen-title">${isFirstVisit ? 'Welcome to StrainDex 🌿' : 'Welcome back 🌿'}</h1>
-    <div id="install-app-banner" class="card" style="display:none;margin-bottom:14px;padding:10px 12px;display:flex;align-items:center;gap:10px;justify-content:space-between;">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
+      <h1 class="screen-title" style="margin:0;">${isFirstVisit ? 'Welcome to StrainDex 🌿' : 'Welcome back 🌿'}</h1>
+      ${streak.current > 0 ? `<div title="${streak.current} day check-in streak${streak.longest > streak.current ? ` — best: ${streak.longest}` : ''}" style="display:flex;align-items:center;gap:4px;background:#fff1de;color:#8a4a1f;padding:4px 10px;border-radius:999px;font-size:13px;font-weight:700;flex-shrink:0;">🔥 ${streak.current}</div>` : ''}
+    </div>
+    ${onThisDay.length ? `
+      <a href="/strains/${onThisDay[0].checkin.strain_id}" class="card" style="display:flex;align-items:center;gap:10px;margin:10px 0 0;text-decoration:none;color:inherit;background:var(--bg-subtle,#f7f7f2);">
+        ${strainPhotoTag(onThisDay[0].strain, 'sm')}
+        <div style="min-width:0;">
+          <div style="font-weight:700;font-size:13px;">📅 On this day, ${onThisDay[0].yearsAgo} year${onThisDay[0].yearsAgo === 1 ? '' : 's'} ago</div>
+          <div class="empty-note" style="padding:2px 0 0;">${esc(onThisDay[0].strain ? onThisDay[0].strain.name : onThisDay[0].checkin.strain_id)}${onThisDay[0].checkin.note ? ` — "${esc(onThisDay[0].checkin.note)}"` : ''}</div>
+        </div>
+      </a>
+    ` : ''}
+    <div id="install-app-banner" class="card" style="display:none;margin:14px 0;padding:10px 12px;align-items:center;gap:10px;justify-content:space-between;">
       <div style="display:flex;align-items:center;gap:10px;min-width:0;">
         <span style="font-size:20px;">📲</span>
         <div style="min-width:0;">
@@ -571,6 +649,8 @@ function pageHome(req, res) {
     <p class="screen-sub">Your personal cannabis companion — check-ins, discovery, safety info, and your community, all in one place.</p>
     <a class="btn block" href="/checkin" style="margin-bottom:18px;">🌿 Light It Up</a>
 
+    ${renderSafetyCarousel()}
+
     <div class="section-label">Recommended for you</div>
     <div class="hcarousel">
       ${recs.map(r => `
@@ -608,11 +688,12 @@ function pageHome(req, res) {
         ${renderOnsetTimer(c)}
         ${renderCheckinComments(c, userId, '/')}
         <div style="display:flex;flex-direction:column;align-items:flex-end;margin-top:8px;">
-          ${renderKudosButton(c, userId)}
-          ${kudosGiversLabel(c.id)}
+          ${renderReactionBar(c, userId)}
+          ${reactionGiversLabel(c.id)}
         </div>
       </div>`;
     }).join('') : `<div class="empty-note">No public check-ins yet — <a href="/checkin">log your first one</a> to get the community feed started.</div>`}
+    ${REACT_TO_CHECKIN_SCRIPT}
   `;
   sendHtml(res, layout({ title: 'Home', active: 'home', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)), showBack: false }));
 }
@@ -836,11 +917,12 @@ function pageStrainDetail(req, res, id) {
         ${renderOnsetTimer(c)}
         ${renderCheckinComments(c, userId, '/strains/' + s.id)}
           <div style="display:flex;flex-direction:column;align-items:flex-end;margin-top:6px;">
-            ${renderKudosButton(c, userId)}
-            ${kudosGiversLabel(c.id)}
+            ${renderReactionBar(c, userId)}
+            ${reactionGiversLabel(c.id)}
           </div>
         </div>
       </div>`).join('')}
+      ${REACT_TO_CHECKIN_SCRIPT}
     ` : `<div class="empty-note">You haven't checked this one in yet.</div>`}
   `;
   sendHtml(res, layout({ title: s.name, active: 'strains', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
@@ -3359,15 +3441,20 @@ async function apiGrowLike(req, res, id) {
   const tip = db.listGrowTips().find(t => t.id === id);
   sendJson(res, { likes: tip ? tip.likes : 0 });
 }
-async function apiCheckinKudos(req, res, id) {
+// Replaces the old /api/checkins/:id/kudos endpoint. Returns the freshly
+// re-rendered reaction bar HTML rather than raw counts -- see
+// REACT_TO_CHECKIN_SCRIPT, which just swaps this straight into the DOM,
+// so there's no separate client-side rendering logic to keep in sync.
+async function apiCheckinReaction(req, res, id) {
   const userId = requireUser(req, res);
   if (userId == null) return;
-  const { checkin, given } = await db.toggleCheckinKudos(id, userId);
+  const checkin = db.getCheckin(id);
   if (!checkin) return sendJson(res, { error: 'not found' }, 404);
-  // Same defensive filter as kudosGiversLabel -- see the comment there for
-  // context on the real bug this guards against.
-  const givers = db.listCheckinKudosGivers(id).filter(u => u && u.username).map(u => u.username);
-  sendJson(res, { kudos: checkin.kudos, given, givers });
+  const body = await parseJson(req);
+  const reaction = REACTION_BY_KEY[body.reaction] ? body.reaction : null;
+  if (!reaction) return sendJson(res, { error: 'invalid reaction' }, 400);
+  await db.setCheckinReaction(id, userId, reaction);
+  sendJson(res, { html: renderReactionBar(checkin, userId) });
 }
 async function apiCommentLike(req, res, id) {
   const userId = requireUser(req, res);
@@ -3611,6 +3698,17 @@ function pageAccount(req, res, query) {
     <h1 class="screen-title" style="margin-top:8px;">Account Settings</h1>
 
     <div class="card">
+      <h2 style="margin:0 0 10px;font-size:15px;">Profile</h2>
+      ${success === 'bio' ? `<p class="empty-note" style="color:var(--brand-green-dark);">Bio updated.</p>` : ''}
+      <form method="POST" action="/account/bio">
+        <label class="field-label" style="margin-top:0;">Bio</label>
+        <textarea name="bio" maxlength="160" placeholder="What should people see on your profile?">${esc(user.bio || '')}</textarea>
+        <button class="btn block" type="submit" style="margin-top:10px;">Update Bio</button>
+      </form>
+      <a href="/friends/${userId}" class="empty-note" style="display:block;padding:10px 0 0;">View your profile as others see it →</a>
+    </div>
+
+    <div class="card" style="margin-top:14px;">
       <h2 style="margin:0 0 10px;font-size:15px;">Username</h2>
       ${error === 'username_taken' ? `<p class="dosing-note">That username is already taken — try another.</p>` : ''}
       ${success === 'username' ? `<p class="empty-note" style="color:var(--brand-green-dark);">Username updated.</p>` : ''}
@@ -3686,6 +3784,13 @@ async function handleAccountDelete(req, res) {
   await db.deleteUserAccount(userId);
   res.setHeader('Set-Cookie', `user_session=; Path=/; HttpOnly; Max-Age=0`);
   redirect(res, '/signup?deleted=1');
+}
+async function handleAccountBio(req, res) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const fields = await parseForm(req);
+  await db.updateBio(userId, fields.bio || '');
+  redirect(res, '/account?ok=bio');
 }
 async function handleAccountUsername(req, res) {
   const userId = requireUser(req, res);
@@ -4104,8 +4209,10 @@ function pageFriendProfile(req, res, friendId) {
   }
   const collection = db.getCollection(friendId);
   const recentCheckins = db.filterVisibleCheckins(db.listCheckins({ userId: friendId, limit: 30 }), userId).slice(0, 10);
+  const photoPosts = recentCheckins.filter(c => c.photo);
   const body = `
     <h1 class="screen-title" style="margin-top:8px;">👤 ${esc(friend.username)}</h1>
+    ${friend.bio ? `<p class="empty-note" style="padding:0 0 10px;">${esc(friend.bio)}</p>` : ''}
     ${friendId !== userId && status === 'friends' ? `<a href="/messages/${friendId}" class="btn" style="text-decoration:none;display:inline-block;margin-bottom:10px;">💬 Message</a>` : ''}
     ${friendId !== userId && status === 'friends' ? `
       <div style="display:flex;gap:14px;margin-bottom:10px;">
@@ -4124,6 +4231,16 @@ function pageFriendProfile(req, res, friendId) {
       <div><div style="font-size:20px;font-weight:700;">${recentCheckins.length}</div><div class="empty-note">Recent check-ins</div></div>
     </div>
     ${friendId !== userId ? `<a class="btn block secondary" href="/trade?friend=${friendId}" style="margin-bottom:16px;">🔁 Trade with ${esc(friend.username)}</a>` : ''}
+    ${photoPosts.length ? `
+      <div class="section-label">Photos</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-bottom:16px;">
+        ${photoPosts.map(c => `
+          <a href="/strains/${c.strain_id}" style="display:block;aspect-ratio:1;overflow:hidden;border-radius:6px;">
+            <img src="${esc(c.photo)}" alt="Check-in photo" style="width:100%;height:100%;object-fit:cover;display:block;">
+          </a>
+        `).join('')}
+      </div>
+    ` : ''}
     <div class="section-label">Recent check-ins</div>
     ${recentCheckins.length ? recentCheckins.map(c => {
       const s = db.getStrain(c.strain_id);
@@ -4140,11 +4257,12 @@ function pageFriendProfile(req, res, friendId) {
         ${renderOnsetTimer(c)}
         ${renderCheckinComments(c, userId, '/friends/' + friendId)}
         <div style="display:flex;flex-direction:column;align-items:flex-end;margin-top:8px;">
-          ${renderKudosButton(c, userId)}
-          ${kudosGiversLabel(c.id)}
+          ${renderReactionBar(c, userId)}
+          ${reactionGiversLabel(c.id)}
         </div>
       </div>`;
     }).join('') : `<div class="empty-note">No check-ins yet.</div>`}
+    ${REACT_TO_CHECKIN_SCRIPT}
   `;
   sendHtml(res, layout({ title: friend.username, active: 'friends', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
@@ -4606,6 +4724,7 @@ const server = http.createServer(async (req, res) => {
     if (method === 'GET' && pathname === '/support-the-app') return pageSupportTheApp(req, res);
     if (method === 'GET' && pathname === '/reset-password') return pageResetPassword(req, res, url.searchParams);
     if (method === 'POST' && pathname === '/reset-password') return await handleResetPasswordSubmit(req, res);
+    if (method === 'POST' && pathname === '/account/bio') return await handleAccountBio(req, res);
     if (method === 'POST' && pathname === '/account/username') return await handleAccountUsername(req, res);
     if (method === 'POST' && pathname === '/account/email') return await handleAccountEmail(req, res);
     if (method === 'POST' && pathname === '/account/password') return await handleAccountPassword(req, res);
@@ -4632,7 +4751,7 @@ const server = http.createServer(async (req, res) => {
     if (method === 'GET' && pathname === '/api/strains') return apiListStrains(req, res, url.searchParams);
     if (method === 'POST' && (m = pathname.match(/^\/api\/recipes\/(\d+)\/kudos$/))) return await apiKudos(req, res, Number(m[1]));
     if (method === 'POST' && (m = pathname.match(/^\/api\/growtips\/(\d+)\/like$/))) return await apiGrowLike(req, res, Number(m[1]));
-    if (method === 'POST' && (m = pathname.match(/^\/api\/checkins\/(\d+)\/kudos$/))) return await apiCheckinKudos(req, res, Number(m[1]));
+    if (method === 'POST' && (m = pathname.match(/^\/api\/checkins\/(\d+)\/react$/))) return await apiCheckinReaction(req, res, Number(m[1]));
     if (method === 'POST' && (m = pathname.match(/^\/api\/comments\/(\d+)\/like$/))) return await apiCommentLike(req, res, Number(m[1]));
     if (method === 'GET' && pathname === '/api/analytics-snapshot') return apiAnalyticsSnapshot(req, res, url.searchParams);
 
