@@ -198,7 +198,32 @@ function renderOnsetTimer(c) {
 // on the same icon, which would just look cluttered.
 function friendsBadgeCount(userId) {
   if (userId == null) return 0;
-  return db.countUnreadMessages(userId) + db.listIncomingRequests(userId).length;
+  return db.countUnreadMessages(userId) + db.listIncomingRequests(userId).length + db.countUnreadMentions(userId);
+}
+// @mentions in check-in comments. Matches a conservative username charset
+// (letters/digits/underscore) -- a username with other characters can
+// still be typed and read fine, it just won't auto-link or notify, which
+// is an acceptable edge case rather than a real limitation for most
+// usernames people actually pick.
+const MENTION_REGEX = /@([A-Za-z0-9_]{2,24})/g;
+function extractMentionedUsernames(text) {
+  const found = new Set();
+  const re = new RegExp(MENTION_REGEX);
+  let m;
+  while ((m = re.exec(text || '')) !== null) found.add(m[1]);
+  return [...found];
+}
+// Runs on an already-esc()'d comment body (same pattern as
+// linkGlossaryTerms below) -- only usernames that actually exist get
+// linked, so mistyping or mentioning someone who isn't a real user just
+// stays as plain "@text" rather than linking to a 404.
+function linkMentions(escapedText) {
+  if (!escapedText) return escapedText;
+  return escapedText.replace(MENTION_REGEX, (match, username) => {
+    const user = db.getUserByUsername(username);
+    if (!user) return match;
+    return `<a href="/friends/${user.id}" class="mention-tag" style="font-weight:700;color:var(--brand-green-dark);text-decoration:none;">@${esc(user.username)}</a>`;
+  });
 }
 function kudosGiversLabel(checkinId) {
   // Filters out any giver with a blank/missing username -- this shouldn't
@@ -225,12 +250,13 @@ function renderKudosButton(c, userId) {
 }
 function renderCheckinComments(c, userId, redirectPath) {
   const comments = db.listCheckinComments(c.id, userId);
+  const tagCandidates = userId != null ? db.listFriends(userId).map(f => f.username) : [];
   return `
     ${comments.length ? `<div style="margin-top:8px;">${comments.map(cm => {
       const author = db.getUserById(cm.user_id);
       const canModerate = userId != null && cm.user_id !== userId;
       return `<div class="empty-note" style="padding:3px 0;">
-        <b>${esc(author ? author.username : 'Someone')}:</b> ${esc(cm.body)}
+        <b>${esc(author ? author.username : 'Someone')}:</b> ${linkMentions(esc(cm.body))}
         ${userId != null ? `
           <button type="button" id="comment-like-${cm.id}" onclick="likeComment(${cm.id}, this)" style="background:none;border:none;padding:0;margin-left:6px;color:inherit;text-decoration:${cm.likedByMe ? 'none' : 'underline'};cursor:pointer;font-size:inherit;">
             ${cm.likedByMe ? '💚 Liked' : '🤍 Like'}${cm.likeCount ? ` (${cm.likeCount})` : ''}
@@ -253,9 +279,59 @@ function renderCheckinComments(c, userId, redirectPath) {
     ${userId != null ? `
       <form method="POST" action="/checkin/${c.id}/comment" style="display:flex;gap:6px;margin-top:6px;">
         <input type="hidden" name="redirect_to" value="${esc(redirectPath)}">
-        <input type="text" name="body" placeholder="Add a comment..." required style="flex:1;margin:0;">
+        <div style="position:relative;flex:1;">
+          <input type="text" name="body" id="comment-body-${c.id}" placeholder="Add a comment... @ to tag someone" required style="width:100%;margin:0;" autocomplete="off">
+          <div id="mention-suggest-${c.id}" style="display:none;position:absolute;bottom:100%;left:0;right:0;margin-bottom:4px;background:var(--bg-card,#fff);border:1px solid var(--border);border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,0.15);z-index:20;max-height:160px;overflow-y:auto;"></div>
+        </div>
         <button class="btn secondary" type="submit" style="padding:6px 12px;">Post</button>
       </form>
+      ${tagCandidates.length ? `
+      <script>
+        (function() {
+          var input = document.getElementById('comment-body-${c.id}');
+          var box = document.getElementById('mention-suggest-${c.id}');
+          var names = ${JSON.stringify(tagCandidates)};
+          if (!input || !box) return;
+          function activeQuery() {
+            var pos = input.selectionStart;
+            var head = input.value.slice(0, pos);
+            var at = head.lastIndexOf('@');
+            if (at === -1) return null;
+            var fragment = head.slice(at + 1);
+            if (/\\s/.test(fragment)) return null;
+            return { at: at, fragment: fragment };
+          }
+          function render() {
+            var q = activeQuery();
+            if (!q) { box.style.display = 'none'; box.innerHTML = ''; return; }
+            var matches = names.filter(function(n) { return n.toLowerCase().indexOf(q.fragment.toLowerCase()) === 0; }).slice(0, 5);
+            if (!matches.length) { box.style.display = 'none'; box.innerHTML = ''; return; }
+            box.innerHTML = matches.map(function(n) {
+              return '<div class="mention-suggest-item" style="padding:8px 10px;cursor:pointer;" data-name="' + n.replace(/"/g, '&quot;') + '" onmouseover="this.style.background=\\'var(--bg-subtle,#f5f5f0)\\'" onmouseout="this.style.background=\\'\\'">@' + n + '</div>';
+            }).join('');
+            box.style.display = 'block';
+            Array.prototype.forEach.call(box.querySelectorAll('.mention-suggest-item'), function(item) {
+              item.addEventListener('mousedown', function(e) {
+                e.preventDefault();
+                var name = item.getAttribute('data-name');
+                var q2 = activeQuery();
+                if (!q2) return;
+                var pos = input.selectionStart;
+                var value = input.value;
+                input.value = value.slice(0, q2.at) + '@' + name + ' ' + value.slice(pos);
+                var newPos = q2.at + name.length + 2;
+                input.setSelectionRange(newPos, newPos);
+                box.style.display = 'none';
+                input.focus();
+              });
+            });
+          }
+          input.addEventListener('input', render);
+          input.addEventListener('click', render);
+          input.addEventListener('blur', function() { setTimeout(function() { box.style.display = 'none'; }, 150); });
+        })();
+      </script>
+      ` : ''}
     ` : ''}
   `;
 }
@@ -3308,7 +3384,17 @@ async function handleCheckinComment(req, res, checkinId) {
   if (userId == null) return;
   const f = await parseForm(req);
   const body = (f.body || '').trim();
-  if (body) await db.createCheckinComment({ checkin_id: checkinId, user_id: userId, body });
+  if (body) {
+    const comment = await db.createCheckinComment({ checkin_id: checkinId, user_id: userId, body });
+    // Tag anyone @mentioned who's a real user (and not the commenter
+    // themselves) so it shows up on their Mentions page and nav badge.
+    for (const username of extractMentionedUsernames(body)) {
+      const mentioned = db.getUserByUsername(username);
+      if (mentioned && mentioned.id !== userId) {
+        await db.createCommentMention({ comment_id: comment.id, checkin_id: checkinId, mentioning_user_id: userId, mentioned_user_id: mentioned.id });
+      }
+    }
+  }
   redirect(res, f.redirect_to || '/');
 }
 // Protected analytics endpoint for the Google Sheets automation -- returns
@@ -3796,6 +3882,7 @@ function pageFriends(req, res, query) {
     <div class="section-label" style="margin-top:24px;">Community Features</div>
     <div class="more-grid">
       <a class="more-tile" href="/messages"><span class="ic">💬</span><div class="t">Messages</div><div class="s">${db.countUnreadMessages(userId) > 0 ? `${db.countUnreadMessages(userId)} unread` : 'Chat with your community'}</div></a>
+      <a class="more-tile" href="/mentions"><span class="ic">🏷️</span><div class="t">Mentions</div><div class="s">${db.countUnreadMentions(userId) > 0 ? `${db.countUnreadMentions(userId)} new` : 'Posts you\u2019ve been tagged in'}</div></a>
       <a class="more-tile" href="/puff-puff-ask"><span class="ic">💨</span><div class="t">Puff Puff Ask</div><div class="s">Ask the community, browse by section</div></a>
       <a class="more-tile" href="/trade"><span class="ic">🔁</span><div class="t">Trade</div><div class="s">Swap dupes with your community</div></a>
       <a class="more-tile" href="/friends-picks"><span class="ic">🤝</span><div class="t">Community Picks</div><div class="s">What your circle loves that you haven't tried</div></a>
@@ -3803,6 +3890,44 @@ function pageFriends(req, res, query) {
   `;
   sendHtml(res, layout({ title: 'Community', active: 'friends', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
+// Everywhere someone's tagged you with @username in a comment, most recent
+// first. Viewing this page marks them all read, same "opening it implies
+// you've seen it" pattern as a DM thread. The link target depends on
+// whether you can actually see that person's profile: your own posts go
+// to the strain page (where your own history renders), a friend's post
+// goes to their profile, and anyone else's (their check-in was public,
+// but you're not connected) falls back to the open community feed on
+// Home, since there's no other page that would show a stranger's post.
+async function pageMentions(req, res) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const rows = db.listMentionsForUser(userId).map(m => {
+    const checkin = db.getCheckin(m.checkin_id);
+    if (!checkin) return null;
+    const mentioner = db.getUserById(m.mentioning_user_id);
+    const strain = db.getStrain(checkin.strain_id);
+    const link = checkin.user_id === userId
+      ? `/strains/${checkin.strain_id}`
+      : (db.getFriendshipStatus(userId, checkin.user_id) === 'friends' ? `/friends/${checkin.user_id}` : '/');
+    return { m, checkin, mentioner, strain, link };
+  }).filter(Boolean);
+  await db.markMentionsRead(userId);
+  const body = `
+    <h1 class="screen-title">Mentions</h1>
+    <p class="screen-sub">Posts where someone tagged you with @username in a comment.</p>
+    ${rows.length ? rows.map(({ m, checkin, mentioner, strain, link }) => `
+      <a class="library-row" href="${link}" style="text-decoration:none;color:inherit;">
+        ${strainPhotoTag(strain, 'sm')}
+        <div class="info">
+          <div class="nm">${esc(mentioner ? mentioner.username : 'Someone')} tagged you</div>
+          <div class="sub">on ${esc(strain ? strain.name : checkin.strain_id)} · <span class="local-time" data-utc="${m.created_at}Z">${esc(m.created_at)} UTC</span></div>
+        </div>
+      </a>
+    `).join('') : `<div class="empty-note">No one's tagged you yet — use @username in a comment to tag someone yourself.</div>`}
+  `;
+  sendHtml(res, layout({ title: 'Mentions', active: 'friends', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
+}
+
 // Abuse protection: report + block. Reports go to a simple admin review
 // queue; blocking is one-directional and hides the blocked person's
 // comments, check-ins, and grow tips from the blocker's own view, ends any
@@ -4552,6 +4677,7 @@ const server = http.createServer(async (req, res) => {
     if (method === 'POST' && pathname === '/grow-journal') return await handleGrowJournalSubmit(req, res);
     if (method === 'POST' && (m = pathname.match(/^\/grow-journal\/(\d+)\/delete$/))) return await handleGrowJournalDelete(req, res, m[1]);
     if (method === 'GET' && pathname === '/friends-picks') return pageFriendsPicks(req, res);
+    if (method === 'GET' && pathname === '/mentions') return await pageMentions(req, res);
     if (method === 'GET' && pathname === '/puff-puff-ask') return pagePuffPuffAsk(req, res, url.searchParams);
     if (method === 'GET' && (m = pathname.match(/^\/puff-puff-ask\/(\d+)$/))) return pagePuffPuffAskThread(req, res, Number(m[1]));
     if (method === 'POST' && pathname === '/puff-puff-ask/new') return await handlePuffPuffAskNew(req, res);
