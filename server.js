@@ -579,7 +579,7 @@ function pageStrains(req, res, query) {
       <a class="library-row" href="/strains/${s.id}" style="text-decoration:none;color:inherit;">
         ${strainPhotoTag(s, 'sm')}
         <div class="info">
-          <div class="nm">${esc(s.name)} <span title="${esc(VERIFICATION_BADGE[strainVerificationTier(s)].label)}">${VERIFICATION_BADGE[strainVerificationTier(s)].icon}</span></div>
+          <div class="nm">${esc(s.name)} <span title="${esc(VERIFICATION_BADGE[strainVerificationTier(s)].label)}">${VERIFICATION_BADGE[strainVerificationTier(s)].icon}</span> ${renderAwardBadges(s, { compact: true })}</div>
           <div class="sub">${esc(s.type)} · ${rarityLabel(s.rarity)} · THC ${esc(s.thc)}</div>
         </div>
         <span class="rarity-tag rarity-${s.rarity}">${rarityLabel(s.rarity)}</span>
@@ -658,6 +658,7 @@ function pageStrainDetail(req, res, id) {
           ${ratingStats.count ? `<div style="margin-top:2px;">${starString(Math.round(ratingStats.avg))} <span class="empty-note" style="padding:0;">${ratingStats.avg}★ from ${ratingStats.count} check-in${ratingStats.count === 1 ? '' : 's'}</span></div>` : `<div class="empty-note" style="padding:2px 0 0;">No community ratings yet — be the first to check in.</div>`}
         </div>
       </div>
+      ${renderAwardBadges(s)}
       ${(s.thc || s.cbd) ? `<p style="margin:12px 0 4px;">${s.thc ? `<b>THC:</b> ${esc(s.thc)}` : ''}${s.thc && s.cbd ? ' &nbsp; ' : ''}${s.cbd ? `<b>CBD:</b> ${esc(s.cbd)}` : ''}</p>` : `<p class="empty-note" style="padding:0 0 4px;">No verified THC/CBD data for this strain yet.</p>`}
       ${s.breeder ? `<p class="empty-note" style="padding:0;"><b>Bred by:</b> ${esc(s.breeder)}</p>` : ''}
       ${s.flavor ? `<p style="font-style:italic;color:var(--ink-secondary);">"${esc(s.flavor)}"</p>` : ''}
@@ -2436,7 +2437,7 @@ function pageMoodFinder(req, res, query) {
       <a class="library-row" href="/strains/${s.id}" style="text-decoration:none;color:inherit;">
         ${strainPhotoTag(s, 'sm')}
         <div class="info">
-          <div class="nm">${esc(s.name)} <span title="${esc(VERIFICATION_BADGE[strainVerificationTier(s)].label)}">${VERIFICATION_BADGE[strainVerificationTier(s)].icon}</span></div>
+          <div class="nm">${esc(s.name)} <span title="${esc(VERIFICATION_BADGE[strainVerificationTier(s)].label)}">${VERIFICATION_BADGE[strainVerificationTier(s)].icon}</span> ${renderAwardBadges(s, { compact: true })}</div>
           <div class="sub">${esc(s.type)} · ${s.effects.map(esc).join(', ')}</div>
         </div>
       </a>
@@ -3015,6 +3016,29 @@ function parseTerpsInput(str) {
 }
 function effectsToInput(effects) { return (effects || []).join(', '); }
 function terpsToInput(terps) { return (terps || []).map(t => `${t.n}:${Math.round((t.p || 0) * 100)}`).join(', '); }
+// Awards use the same "Name:Year" shorthand as terpenes' "Name:Percent" --
+// e.g. "Leafly Strain of the Year:2025, High Times Cannabis Cup:2019".
+// Only ever meant to hold a real, verifiable, named award -- never
+// popularity or ratings dressed up as one.
+function parseAwardsInput(str) {
+  return String(str || '').split(',').map(s => s.trim()).filter(Boolean).map(pair => {
+    const idx = pair.lastIndexOf(':');
+    if (idx === -1) return { name: pair, year: null };
+    const name = pair.slice(0, idx).trim();
+    const year = Number(pair.slice(idx + 1).trim());
+    return { name, year: Number.isFinite(year) ? year : null };
+  }).filter(a => a.name);
+}
+function awardsToInput(awards) { return (awards || []).map(a => a.year ? `${a.name}:${a.year}` : a.name).join(', '); }
+const AWARD_ICON = '🏆';
+function renderAwardBadges(s, { compact = false } = {}) {
+  const awards = s && s.awards;
+  if (!Array.isArray(awards) || !awards.length) return '';
+  if (compact) {
+    return `<span title="${esc(awards.map(a => `${a.name}${a.year ? ' ' + a.year : ''}`).join(', '))}">${AWARD_ICON}</span>`;
+  }
+  return `<div class="award-badges" style="margin:6px 0;">${awards.map(a => `<span class="filter-pill" style="background:var(--brand-gold,#a9822a);color:#fff;border:none;">${AWARD_ICON} ${esc(a.name)}${a.year ? ` ${a.year}` : ''}</span>`).join(' ')}</div>`;
+}
 
 function strainFormFields(s) {
   const v = (val) => esc(val ?? '');
@@ -3041,6 +3065,16 @@ function strainFormFields(s) {
     <input type="text" name="effects" value="${v(effectsToInput(s && s.effects))}">
     <label class="field-label">Top terpenes (comma-separated "Name:Percent", e.g. "Myrcene:30, Limonene:25")</label>
     <input type="text" name="terps" value="${v(terpsToInput(s && s.terps))}">
+    <label class="field-label">Breeder (optional)</label>
+    <input type="text" name="breeder" value="${v(s && s.breeder)}">
+    <label class="field-label">Also known as (comma-separated, optional)</label>
+    <input type="text" name="aka" value="${v(s && s.aka)}">
+    <label class="field-label">Relief from (comma-separated ailments, e.g. "Stress, Pain, Insomnia")</label>
+    <input type="text" name="ailments" value="${v(effectsToInput(s && s.ailments))}">
+    <label class="field-label">Parents (comma-separated strain names, only if confirmed by 2+ independent sources)</label>
+    <input type="text" name="parents" value="${v(effectsToInput(s && s.parents))}">
+    <label class="field-label">Awards (comma-separated "Name:Year", e.g. "Leafly Strain of the Year:2025")</label>
+    <input type="text" name="awards" value="${v(awardsToInput(s && s.awards))}">
   `;
 }
 
@@ -3087,6 +3121,8 @@ async function handleAdminStrainNew(req, res) {
   await db.insertStrain({
     id, name: f.name, type: f.type, lean: f.lean, rarity: f.rarity, thc: f.thc, cbd: f.cbd,
     flavor: f.flavor, icon: f.icon || '🌿', effects: parseEffectsInput(f.effects), terps: parseTerpsInput(f.terps),
+    breeder: f.breeder || null, aka: f.aka || '', ailments: parseEffectsInput(f.ailments),
+    parents: parseEffectsInput(f.parents), awards: parseAwardsInput(f.awards),
   });
   redirect(res, '/admin/strains');
 }
@@ -3106,9 +3142,16 @@ function pageAdminStrainEdit(req, res, id) {
 async function handleAdminStrainEditSubmit(req, res, id) {
   if (!requireAdmin(req, res)) return;
   const f = await parseForm(req);
+  // NOTE: this used to only pass the fields below, which meant saving ANY
+  // edit here silently wiped breeder/aka/ailments/parents on every strain --
+  // including all the researched-and-confirmed `parents` lineage data.
+  // Now the form actually surfaces those fields (see strainFormFields), so
+  // this passes through what's submitted instead of defaulting them away.
   await db.insertStrain({
     id, name: f.name, type: f.type, lean: f.lean, rarity: f.rarity, thc: f.thc, cbd: f.cbd,
     flavor: f.flavor, icon: f.icon || '🌿', effects: parseEffectsInput(f.effects), terps: parseTerpsInput(f.terps),
+    breeder: f.breeder || null, aka: f.aka || '', ailments: parseEffectsInput(f.ailments),
+    parents: parseEffectsInput(f.parents), awards: parseAwardsInput(f.awards),
   });
   redirect(res, '/admin/strains');
 }

@@ -282,6 +282,12 @@
     "parents": [
       "Sunset Sherbet",
       "Thin Mint GSC"
+    ],
+    "awards": [
+      {
+        "name": "Leafly Strain of the Year",
+        "year": 2018
+      }
     ]
   },
   {
@@ -318,6 +324,12 @@
     "parents": [
       "Triangle Kush",
       "Animal Mints"
+    ],
+    "awards": [
+      {
+        "name": "Leafly Strain of the Year",
+        "year": 2019
+      }
     ]
   },
   {
@@ -41932,7 +41944,11 @@
     "flavor": "Myrcene-forward with a caryophyllene undertone.",
     "icon": "\ud83c\udf3f",
     "breeder": "Soma Seeds",
-    "aka": "NY Sour, NY Sr Diesel, New York Sour Diesel, NYC Sour Diesel, New York Diesel, Soma Sour Diesel"
+    "aka": "NY Sour, NY Sr Diesel, New York Sour Diesel, NYC Sour Diesel, New York Diesel, Soma Sour Diesel",
+    "parents": [
+      "Mexican landrace",
+      "Afghani landrace"
+    ]
   },
   {
     "id": "s1161",
@@ -52694,6 +52710,12 @@
     "parents": [
       "Zkittlez",
       "Gelato"
+    ],
+    "awards": [
+      {
+        "name": "Leafly Strain of the Year",
+        "year": 2020
+      }
     ]
   },
   {
@@ -52803,6 +52825,12 @@
     "parents": [
       "Clementine",
       "Purple Punch"
+    ],
+    "awards": [
+      {
+        "name": "High Times Cannabis Cup \u2014 2nd Place, Sativa",
+        "year": 2018
+      }
     ]
   },
   {
@@ -53223,6 +53251,12 @@
     "parents": [
       "Gelato 41",
       "Sherbert Bx1"
+    ],
+    "awards": [
+      {
+        "name": "Leafly Strain of the Year",
+        "year": 2022
+      }
     ]
   },
   {
@@ -53359,7 +53393,11 @@
       "Euphoric"
     ],
     "flavor": "Sweet grape and vanilla with a gassy undertone.",
-    "icon": "\ud83c\udf00"
+    "icon": "\ud83c\udf00",
+    "parents": [
+      "Do-Si-Dos",
+      "Purple Punch"
+    ]
   },
   {
     "id": "s1537",
@@ -53458,7 +53496,18 @@
     ],
     "flavor": "Candy-sweet gas with an inky, funky edge.",
     "icon": "\ud83d\udd8a\ufe0f",
-    "aka": "Adios MF, Gunnpowwder"
+    "aka": "Adios MF, Gunnpowwder",
+    "parents": [
+      "Biscotti",
+      "Sherb Bx1",
+      "Jealousy"
+    ],
+    "awards": [
+      {
+        "name": "Leafly Strain of the Year",
+        "year": 2023
+      }
+    ]
   },
   {
     "id": "s1540",
@@ -56695,7 +56744,17 @@
       "Uplifted"
     ],
     "flavor": "Pungent ammonia and funky cheese with a peppery, garlicky finish \u2014 one of the boldest, savoriest profiles around.",
-    "icon": "\ud83c\udf54"
+    "icon": "\ud83c\udf54",
+    "parents": [
+      "Han Solo Hash Plant",
+      "Double Burger"
+    ],
+    "awards": [
+      {
+        "name": "Leafly Strain of the Year",
+        "year": 2025
+      }
+    ]
   },
   {
     "id": "s1650",
