@@ -242,7 +242,6 @@ function renderOnsetTimer(c) {
 // an uploaded image icon like /docs/joint-icon.png without asking first.
 // That exact swap happened once already and had to be reverted.
 const HOME_SAFETY_CAROUSEL = [
-  { href: '/dosing-calculator', icon: '🧮', title: 'Dosing Calculator', s: 'Know your dose first' },
   { href: '/mixing-cautions', icon: '⚠️', title: 'Mixing Cautions', s: 'What not to combine' },
   { href: '/legal-status', icon: '🏛️', title: 'Is It Legal?', s: 'Check your state' },
   { href: '/methods', icon: '💨', title: 'Ways to Enjoy It', s: 'Every method explained' },
