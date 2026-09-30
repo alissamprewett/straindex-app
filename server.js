@@ -18,12 +18,6 @@ const crypto = require('node:crypto');
 const db = require('./lib/db');
 const auth = require('./lib/auth');
 const { layout, esc } = require('./lib/render');
-// Renders the hidden CSRF field every authenticated POST form must include
-// (see the CSRF verification middleware in the router below, and
-// lib/auth.js for how the token itself is derived from the session cookie).
-function csrfField(req) {
-  return `<input type="hidden" name="_csrf" value="${esc(auth.csrfToken(req))}">`;
-}
 const { parseForm, parseJson } = require('./lib/body');
 const { answerFromKnowledgeBase } = require('./lib/chat');
 const mock = require('./lib/mockdata');
@@ -31,22 +25,6 @@ const geo = require('./lib/geodispensaries');
 const storage = require('./lib/storage');
 
 const PORT = process.env.PORT || 3000;
-
-// Safety net for anything that slips past the per-request try/catch below.
-// Every route handler's own errors are already caught there -- this only
-// fires for a promise that was never awaited/caught at all (a real bug,
-// like the un-awaited db.markConversationRead() call that used to sit in
-// pageConversation). By default Node kills the whole process on an
-// unhandled rejection, which turns one flaky async call into a total
-// outage for every user, not just whoever triggered it. Logging + Sentry
-// + staying up is the safer failure mode for a small app where uptime
-// matters more than treating every rejection as fatal -- it doesn't hide
-// the bug (still shows up in logs and Sentry), it just stops one bad
-// promise from taking the whole server down with it.
-process.on('unhandledRejection', (reason) => {
-  console.error('[unhandledRejection]', reason);
-  Sentry.captureException(reason instanceof Error ? reason : new Error(String(reason)));
-});
 
 // ---------------------------------------------------------------- basic signup rate limiting
 // A simple in-memory per-IP throttle -- not bulletproof (resets on
@@ -165,19 +143,6 @@ function requireUser(req, res) {
   return id;
 }
 const MIN_AGE = 21;
-// The one, real, branded domain -- used for every outbound link this app
-// generates (shared check-ins, invite links, recap links, password reset
-// emails, admin notification emails), rather than building the origin
-// dynamically from req.headers.host. Deliberately hardcoded rather than
-// derived per-request: this app is deployed on Render, which also exposes
-// its own *.onrender.com hostname alongside the custom domain, and
-// req.headers.host reflects whichever hostname actually served that
-// particular request. A link generated from a request that happened to
-// arrive on the Render-assigned hostname would silently leak that
-// internal URL to whoever it's shared with, instead of the clean, correct
-// domain people actually expect to see and click. Update this in exactly
-// one place if the domain ever changes.
-const SITE_URL = 'https://www.strain-dex.com';
 // A real, monitored contact point beyond the feedback form -- for
 // anything urgent (account issues, a bad actor, a safety/legal concern)
 // that shouldn't sit in a general feedback queue. Using a Gmail "+" alias
@@ -200,40 +165,17 @@ function isOldEnough(birthDateStr) {
   return age >= MIN_AGE;
 }
 function starString(n) { n = Number(n) || 0; return '★'.repeat(n) + '☆'.repeat(5 - n); }
-// The pairing categories someone can tag onto a check-in -- open-ended in
-// count (log as many as you want) but each one picks from this fixed,
-// small vocabulary rather than free-typing a category, so the feed stays
-// scannable and icons stay consistent. Shared between the server-rendered
-// first row and the client-side "add another" rows in app.js, so this is
-// the single source of truth for the list.
-const PAIRING_TYPES = [
-  { key: 'food', icon: '🍽️', label: 'Food' },
-  { key: 'drink', icon: '🍹', label: 'Drink' },
-  { key: 'music', icon: '🎵', label: 'Music' },
-  { key: 'movie', icon: '🎬', label: 'Movie / TV' },
-  { key: 'game', icon: '🎮', label: 'Game' },
-  { key: 'activity', icon: '🎨', label: 'Activity' },
-  { key: 'location', icon: '📍', label: 'Location' },
-  { key: 'occasion', icon: '🎉', label: 'Occasion' },
-  { key: 'company', icon: '👥', label: 'Company' },
-];
-const PAIRING_TYPE_MAP = Object.fromEntries(PAIRING_TYPES.map(p => [p.key, p]));
 // Shared renderer for the optional "pairings" a user can log with a
-// check-in -- as many as they want, each one a (type, note) pair. Only
-// ever renders what's actually there; an empty pairings list renders
-// nothing beyond the private/brand/tasting-notes lines above it.
+// check-in -- tasting notes plus food/drink, music/entertainment, and
+// activity pairings. Each is independently optional, so only show what's
+// actually filled in.
 function renderCheckinPairings(c) {
-  const pairings = Array.isArray(c.pairings) ? c.pairings : [];
   return `
     ${c.is_private ? `<div class="empty-note" style="padding:4px 0 0;font-weight:700;">🔒 Private — only visible to you</div>` : ''}
-    ${c.brand ? `<div class="empty-note" style="padding:4px 0 0;">🏷️ Brand: ${esc(c.brand)}</div>` : ''}
     ${c.tasting_notes ? `<div class="empty-note" style="padding:4px 0 0;">🍃 Tasting notes: ${esc(c.tasting_notes)}</div>` : ''}
-    ${pairings.map(p => {
-      const meta = PAIRING_TYPE_MAP[p.type];
-      const icon = meta ? meta.icon : '🔗';
-      const label = meta ? meta.label : p.type;
-      return `<div class="empty-note" style="padding:2px 0 0;">${icon} ${esc(label)}${p.note ? `: ${esc(p.note)}` : ''}</div>`;
-    }).join('')}
+    ${c.pairing_food ? `<div class="empty-note" style="padding:2px 0 0;">🍽️ Paired with: ${esc(c.pairing_food)}</div>` : ''}
+    ${c.pairing_entertainment ? `<div class="empty-note" style="padding:2px 0 0;">🎵 Listening/watching: ${esc(c.pairing_entertainment)}</div>` : ''}
+    ${c.pairing_activity ? `<div class="empty-note" style="padding:2px 0 0;">🎯 Doing: ${esc(c.pairing_activity)}</div>` : ''}
   `;
 }
 // Shows a live "started Xh Ym ago" onset reminder under any check-in logged
@@ -281,18 +223,7 @@ function renderKudosButton(c, userId) {
   const given = db.hasUserGivenKudos(c.id, userId);
   return `<button class="kudos-btn${given ? ' kudos-given' : ''}" id="kudos-btn-${c.id}" data-given="${given}" onclick="giveCheckinKudos(${c.id}, this)">${KUDOS_BUD_ICON}${given ? 'Kudos given' : 'Kudos'}${c.kudos ? ` (${c.kudos})` : ''}</button>`;
 }
-// A small "share externally" affordance next to kudos on any check-in card
-// -- links to the public, read-only /c/:id view (see pageSharedCheckin)
-// rather than anything inside the app, so the link still works for
-// whoever it's sent to even if they've never made a StrainDex account.
-// Never offered for a private check-in -- there's nothing to link to
-// (pageSharedCheckin refuses to serve one too, as a backstop).
-function renderShareButton(c) {
-  if (c.is_private) return '';
-  const strain = db.getStrain(c.strain_id);
-  return `<button type="button" class="btn secondary" style="padding:4px 10px;font-size:0.75rem;" onclick="shareCheckin(${c.id}, ${esc(JSON.stringify(strain ? strain.name : 'this strain'))})">🔗 Share</button>`;
-}
-function renderCheckinComments(req, c, userId, redirectPath) {
+function renderCheckinComments(c, userId, redirectPath) {
   const comments = db.listCheckinComments(c.id, userId);
   return `
     ${comments.length ? `<div style="margin-top:8px;">${comments.map(cm => {
@@ -306,13 +237,13 @@ function renderCheckinComments(req, c, userId, redirectPath) {
           </button>
         ` : (cm.likeCount ? `<span style="margin-left:6px;">💚 ${cm.likeCount}</span>` : '')}
         ${canModerate ? `
-          <form method="POST" action="/report" style="display:inline;" onsubmit="return confirm('Report this comment for review?')">${csrfField(req)}
+          <form method="POST" action="/report" style="display:inline;" onsubmit="return confirm('Report this comment for review?')">
             <input type="hidden" name="content_type" value="checkin_comment">
             <input type="hidden" name="content_id" value="${cm.id}">
             <input type="hidden" name="redirect_to" value="${esc(redirectPath)}">
             <button type="submit" style="background:none;border:none;padding:0;margin-left:6px;color:inherit;text-decoration:underline;cursor:pointer;font-size:inherit;">Report</button>
           </form>
-          <form method="POST" action="/block/${cm.user_id}" style="display:inline;" onsubmit="return confirm('Block ' + ${JSON.stringify(author ? author.username : 'this person')} + '? You will no longer see their comments, check-ins, or grow tips, and any friendship will end.')">${csrfField(req)}
+          <form method="POST" action="/block/${cm.user_id}" style="display:inline;" onsubmit="return confirm('Block ' + ${JSON.stringify(author ? author.username : 'this person')} + '? You will no longer see their comments, check-ins, or grow tips, and any community connection will end.')">
             <input type="hidden" name="redirect_to" value="${esc(redirectPath)}">
             <button type="submit" style="background:none;border:none;padding:0;margin-left:6px;color:inherit;text-decoration:underline;cursor:pointer;font-size:inherit;">Block</button>
           </form>
@@ -320,7 +251,7 @@ function renderCheckinComments(req, c, userId, redirectPath) {
       </div>`;
     }).join('')}</div>` : ''}
     ${userId != null ? `
-      <form method="POST" action="/checkin/${c.id}/comment" style="display:flex;gap:6px;align-items:center;margin-top:6px;">${csrfField(req)}
+      <form method="POST" action="/checkin/${c.id}/comment" style="display:flex;gap:6px;margin-top:6px;">
         <input type="hidden" name="redirect_to" value="${esc(redirectPath)}">
         <input type="text" name="body" placeholder="Add a comment..." required style="flex:1;margin:0;">
         <button class="btn secondary" type="submit" style="padding:6px 12px;">Post</button>
@@ -376,7 +307,7 @@ function strainPhotoStyle(strain) {
 // sizeClass controls the CSS box size; see .strain-thumb-* rules in app.css.
 function strainPhotoTag(strain, sizeClass = 'md') {
   if (!strain) return `<div class="strain-thumb strain-thumb-${sizeClass}" style="display:flex;align-items:center;justify-content:center;font-size:20px;">🌿</div>`;
-  return `<img class="strain-thumb strain-thumb-${sizeClass}" src="${strainPhotoUrl(strain)}" style="${strainPhotoStyle(strain)}" alt="${esc(strain.name)} bud" loading="lazy" onerror="this.onerror=null;this.replaceWith(Object.assign(document.createElement('div'),{className:this.className,textContent:'🌿',style:'display:flex;align-items:center;justify-content:center;font-size:1.25rem;background:#e5e0d5;'}))">`;
+  return `<img class="strain-thumb strain-thumb-${sizeClass}" src="${strainPhotoUrl(strain)}" style="${strainPhotoStyle(strain)}" alt="${esc(strain.name)} bud" loading="lazy" onerror="this.onerror=null;this.replaceWith(Object.assign(document.createElement('div'),{className:this.className,textContent:'🌿',style:'display:flex;align-items:center;justify-content:center;font-size:20px;background:#e5e0d5;'}))">`;
 }
 
 // Terpene-overlap recommendations, ported from the prototype: score every
@@ -388,15 +319,7 @@ function getRecommendations(userId, limit = 4) {
   const ownedIds = new Set(owned.map(o => o.strain.id));
   const terpWeight = {};
   owned.forEach(o => o.strain.terps.forEach(t => { terpWeight[t.n] = (terpWeight[t.n] || 0) + t.p; }));
-  // Was db.listStrains({ limit: 2000 }) -- since listStrains sorts
-  // alphabetically before slicing to the limit, that call was silently
-  // capping the candidate pool to only the alphabetically-first ~2,000
-  // strains (out of ~5,500+) on every single call, meaning nothing from
-  // roughly the second half of the library, sorted by name, could ever be
-  // recommended or show up in the cold-start rare/legendary fallback
-  // below. listAllStrains() has no such cap and skips the unnecessary sort
-  // besides, since this function immediately re-sorts by score anyway.
-  const candidates = db.listAllStrains().filter(s => !ownedIds.has(s.id));
+  const candidates = db.listStrains({ limit: 2000 }).filter(s => !ownedIds.has(s.id));
   const scored = candidates.map(s => {
     let score = 0, topShared = null, topShareVal = 0;
     s.terps.forEach(t => {
@@ -424,8 +347,9 @@ function pageLandingPage(req, res) {
   const body = `
     <div style="text-align:center;padding:20px 4px 8px;">
       <div style="font-size:44px;margin-bottom:8px;">🌿</div>
-      <h1 style="margin:0 0 8px;font-size:1.375rem;">StrainDex</h1>
-      <p class="screen-sub" style="margin:0 0 20px;">Your personal cannabis companion — track what you actually experience, stay informed on dosing and safety, discover your next favorite strain, and compare notes with real friends. All in one place.</p>
+      <h1 style="margin:0 0 8px;font-size:22px;">StrainDex</h1>
+      <p class="screen-sub" style="margin:0 0 20px;">Your personal cannabis companion — track what you actually experience, stay informed on dosing and safety, discover your next favorite strain, and compare notes with your community. All in one place.</p>
+      <p class="empty-note" style="margin:0 0 20px;font-style:italic;">Build A Higher Community</p>
       <a href="/signup" class="btn block" style="text-decoration:none;max-width:280px;margin:0 auto;">Create Free Account</a>
       <p class="empty-note" style="margin-top:10px;">Already have an account? <a href="/login">Log in</a></p>
       <p class="empty-note" style="margin-top:4px;">Beta · For adults 21+ where legal · Not medical advice</p>
@@ -460,12 +384,12 @@ function pageLandingPage(req, res) {
       <div class="more-tile">
         <span class="ic">📍</span>
         <div class="t">Dispensaries</div>
-        <div class="s">Find dispensaries near you</div>
+        <div class="s">Find real dispensaries near you</div>
       </div>
     </div>
 
     <div class="card" style="margin-top:20px;text-align:center;">
-      <p class="empty-note" style="padding:0 0 10px;">Already checking in with friends? See what StrainDex looks like inside.</p>
+      <p class="empty-note" style="padding:0 0 10px;">Already checking in with your community? See what StrainDex looks like inside.</p>
       <a href="/signup" class="btn secondary block" style="text-decoration:none;">Get Started →</a>
     </div>
   `;
@@ -486,14 +410,57 @@ function pageHome(req, res) {
   // actually logged a check-in of its own before deciding which greeting
   // to show.
   const isFirstVisit = db.listCheckins({ userId, limit: 1 }).length === 0;
-  const streak = isFirstVisit ? { current: 0, longest: 0 } : db.getCheckinStreak(userId);
 
   const body = `
-    <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
-      <h1 class="screen-title" style="margin-bottom:0;">${isFirstVisit ? 'Welcome to StrainDex 🌿' : 'Welcome back 🌿'}</h1>
-      ${streak.current > 0 ? `<a href="/insights" class="filter-pill" style="text-decoration:none;white-space:nowrap;">🔥 ${streak.current}-day streak</a>` : ''}
+    <h1 class="screen-title">${isFirstVisit ? 'Welcome to StrainDex 🌿' : 'Welcome back 🌿'}</h1>
+    <div id="install-app-banner" class="card" style="display:none;margin-bottom:14px;padding:10px 12px;display:flex;align-items:center;gap:10px;justify-content:space-between;">
+      <div style="display:flex;align-items:center;gap:10px;min-width:0;">
+        <span style="font-size:20px;">📲</span>
+        <div style="min-width:0;">
+          <div style="font-weight:700;font-size:13px;">Get the StrainDex app</div>
+          <div class="empty-note" style="padding:0;font-size:11.5px;" id="install-app-sub">Add it to your home screen for one-tap access.</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:6px;flex-shrink:0;">
+        <button type="button" id="install-app-btn" class="btn" style="padding:6px 12px;display:none;">Install</button>
+        <button type="button" id="install-app-dismiss" aria-label="Dismiss" style="background:none;border:none;color:var(--ink-secondary);cursor:pointer;font-size:16px;padding:2px 4px;">✕</button>
+      </div>
     </div>
-    <p class="screen-sub">Your personal cannabis companion — check-ins, discovery, safety info, and your friends, all in one place.</p>
+    <script>
+      (function() {
+        var KEY = 'sd_install_banner_dismissed';
+        var banner = document.getElementById('install-app-banner');
+        var installBtn = document.getElementById('install-app-btn');
+        var sub = document.getElementById('install-app-sub');
+        var dismissBtn = document.getElementById('install-app-dismiss');
+        var isStandalone = window.matchMedia && window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+        var dismissed = false;
+        try { dismissed = localStorage.getItem(KEY) === '1'; } catch (e) {}
+        if (isStandalone || dismissed) return;
+        var deferredPrompt = null;
+        window.addEventListener('beforeinstallprompt', function(e) {
+          e.preventDefault();
+          deferredPrompt = e;
+          installBtn.style.display = 'inline-block';
+        });
+        var isIOS = /iphone|ipad|ipod/i.test(window.navigator.userAgent);
+        if (isIOS) { sub.textContent = 'Tap the Share icon, then "Add to Home Screen".'; }
+        banner.style.display = 'flex';
+        installBtn.addEventListener('click', function() {
+          if (!deferredPrompt) return;
+          deferredPrompt.prompt();
+          deferredPrompt.userChoice.finally(function() {
+            deferredPrompt = null;
+            banner.style.display = 'none';
+          });
+        });
+        dismissBtn.addEventListener('click', function() {
+          banner.style.display = 'none';
+          try { localStorage.setItem(KEY, '1'); } catch (e) {}
+        });
+      })();
+    </script>
+    <p class="screen-sub">Your personal cannabis companion — check-ins, discovery, safety info, and your community, all in one place.</p>
     <a class="btn block" href="/checkin" style="margin-bottom:18px;">🌿 Light It Up</a>
 
     <div class="section-label">Recommended for you</div>
@@ -507,10 +474,10 @@ function pageHome(req, res) {
     </div>
 
     <div class="section-label">Dispensaries</div>
-    <a class="btn secondary block" href="/dispensaries" style="text-decoration:none;margin-bottom:4px;">${hasFollowedDispensaries ? '📍 View your followed dispensaries →' : '📍 Find dispensaries near you →'}</a>
+    <a class="btn secondary block" href="/dispensaries" style="text-decoration:none;margin-bottom:4px;">${hasFollowedDispensaries ? '📍 View your followed dispensaries →' : '📍 Find real dispensaries near you →'}</a>
 
     <h2 class="screen-title" style="margin-top:20px;">${friends.length ? 'Recent activity' : 'Recent check-ins'}</h2>
-    ${friends.length && recentCheckins.every(c => c.user_id === userId) ? `<p class="empty-note">None of your friends have checked in yet — once they do, it'll show up here too.</p>` : ''}
+    ${friends.length && recentCheckins.every(c => c.user_id === userId) ? `<p class="empty-note">None of your community has checked in yet — once they do, it'll show up here too.</p>` : ''}
     ${recentCheckins.length ? recentCheckins.map(c => {
       const s = db.getStrain(c.strain_id);
       const posterName = userNames.get(c.user_id) || 'Someone';
@@ -530,12 +497,9 @@ function pageHome(req, res) {
         ${c.note ? `<div class="note">"${esc(c.note)}"</div>` : ''}
         ${renderCheckinPairings(c)}
         ${renderOnsetTimer(c)}
-        ${renderCheckinComments(req, c, userId, '/')}
+        ${renderCheckinComments(c, userId, '/')}
         <div style="display:flex;flex-direction:column;align-items:flex-end;margin-top:8px;">
-          <div style="display:flex;gap:6px;align-items:center;">
-            ${renderShareButton(c)}
-            ${renderKudosButton(c, userId)}
-          </div>
+          ${renderKudosButton(c, userId)}
           ${kudosGiversLabel(c.id)}
         </div>
       </div>`;
@@ -603,11 +567,7 @@ function pageStrains(req, res, query) {
         <select id="strain-search-verified" name="verified" form="strain-search-form">${verifiedOpts.map(v => `<option value="${esc(v)}" ${verified === v ? 'selected' : ''}>${verifiedLabel[v]}</option>`).join('')}</select>
       </div>
     </div>
-    <div class="empty-note" style="margin-bottom:6px;line-height:1.6;">
-      <div>✅ Verified — THC, breeder, and flavor/terpene data all independently confirmed.</div>
-      <div>🔹 Partial — some details confirmed.</div>
-      <div>⚪ Listed only — seen on a dispensary menu, nothing independently confirmed yet.</div>
-    </div>
+    <p class="empty-note" style="margin-bottom:2px;">✅ Verified — THC, breeder, and flavor/terpene data all independently confirmed. &nbsp; 🔹 Partial — some details confirmed. &nbsp; ⚪ Listed only — seen on a dispensary menu, nothing independently confirmed yet.</p>
     <p class="empty-note" style="margin-bottom:10px;">User-reported associations, not medical advice — see a doctor for real guidance.</p>
     <p class="empty-note" id="strain-search-count">${total > 60 ? `Showing 60 of ${total.toLocaleString()} — refine your search to narrow it down.` : `${total} strain${total === 1 ? '' : 's'}`}</p>
     <div id="strain-search-results">${results.map(s => `
@@ -643,7 +603,7 @@ const VERIFICATION_BADGE = {
 };
 function findStrainByName(name) {
   const target = name.toLowerCase();
-  return db.listAllStrains().find(s => s.name.toLowerCase() === target) || null;
+  return db.listStrains({ limit: 5000 }).find(s => s.name.toLowerCase() === target) || null;
 }
 // Renders parents (linked where the strain exists in the library, plain
 // text otherwise), siblings (other strains sharing at least one parent),
@@ -653,13 +613,12 @@ function findStrainByName(name) {
 // section simply doesn't render for those, rather than guessing at a
 // family tree that was never actually verified.
 function renderFamilyTree(s) {
-  const allStrains = db.listAllStrains();
+  const allStrains = db.listStrains({ limit: 5000 });
   const parents = Array.isArray(s.parents) ? s.parents : [];
-  const byName = (a, b) => a.name.localeCompare(b.name);
-  const descendants = allStrains.filter(o => Array.isArray(o.parents) && o.parents.some(p => p.toLowerCase() === s.name.toLowerCase())).sort(byName);
+  const descendants = allStrains.filter(o => Array.isArray(o.parents) && o.parents.some(p => p.toLowerCase() === s.name.toLowerCase()));
   const siblings = parents.length
     ? allStrains.filter(o => o.id !== s.id && Array.isArray(o.parents) &&
-        o.parents.some(p => parents.some(myP => myP.toLowerCase() === p.toLowerCase()))).sort(byName)
+        o.parents.some(p => parents.some(myP => myP.toLowerCase() === p.toLowerCase())))
     : [];
   if (!parents.length && !descendants.length && !siblings.length) return '';
   const renderName = (name) => {
@@ -669,7 +628,7 @@ function renderFamilyTree(s) {
   const renderStrainLink = (o) => `<a href="/strains/${o.id}">${esc(o.name)}</a>`;
   return `
     <div class="card" style="margin-top:10px;">
-      <h2 style="margin:0 0 6px;font-size:0.9375rem;">🌳 Family Tree</h2>
+      <h2 style="margin:0 0 6px;font-size:15px;">🌳 Family Tree</h2>
       ${parents.length ? `<p style="margin:2px 0;"><b>Parents:</b> ${parents.map(renderName).join(' × ')}</p>` : ''}
       ${siblings.length ? `<p style="margin:2px 0;"><b>Shares a parent with:</b> ${siblings.slice(0, 8).map(renderStrainLink).join(', ')}</p>` : ''}
       ${descendants.length ? `<p style="margin:2px 0;"><b>Parent of:</b> ${descendants.map(renderStrainLink).join(', ')}</p>` : ''}
@@ -680,52 +639,23 @@ function pageStrainDetail(req, res, id) {
   const s = db.getStrain(id);
   if (!s) return notFound(res);
   const userId = auth.currentUserId(req);
-  // Guest-safe: db.listCheckins() only filters by user when userId is
-  // non-null (see lib/db.js), so calling it with a null userId here would
-  // return every user's check-ins for this strain -- including private
-  // ones -- straight into a section labeled "Your history." This section
-  // was previously unreachable by guests (whole page sat behind the login
-  // wall), so the gap never mattered until /strains/:id became public.
-  const history = userId != null ? db.listCheckins({ userId, strain_id: id, limit: 10 }) : [];
-  // Everyone else's public check-ins for this strain -- not just friends.
-  // The friend-only feed (Home) is great for "what's my circle up to," but
-  // it means a brand-new account with zero friends sees essentially none
-  // of the check-in data this app's whole value depends on, and a strain
-  // page has no way to show what the wider community actually thinks
-  // beyond the bare numeric rating average. listCheckins({ strain_id })
-  // with no userId/userIds returns every user's check-ins for this
-  // strain; filterVisibleCheckins strips private ones (except the
-  // viewer's own, irrelevant here since those are excluded next anyway),
-  // and the isBlocked filter matches the same one-directional convention
-  // already used for comments in lib/db.js (hide people the viewer has
-  // blocked; don't also require the reverse for a read-only list).
-  const communityCheckins = userId != null
-    ? db.filterVisibleCheckins(db.listCheckins({ strain_id: id, limit: 200 }), userId)
-        .filter(c => c.user_id !== userId && !db.isBlocked(userId, c.user_id))
-        .slice(0, 10)
-    : [];
+  const history = db.listCheckins({ userId, strain_id: id, limit: 10 });
   const ratingStats = db.getStrainRatingStats(id);
   const similar = db.getSimilarStrains(s, 4);
   const body = `
     <div class="card" style="margin-top:10px;">
-      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;">
-        <div style="display:flex;align-items:center;gap:12px;min-width:0;">
-          ${strainPhotoTag(s, 'lg')}
-          <div>
-            <h1 style="margin:0;font-size:1.1875rem;">${esc(s.name)}</h1>
-            <div class="empty-note" style="padding:0;">${linkGlossaryTerms(esc(s.type))}${s.lean ? ' · ' + linkGlossaryTerms(esc(s.lean)) : ''} · <span class="rarity-tag rarity-${s.rarity}">${rarityLabel(s.rarity)}</span></div>
-            <div style="margin-top:2px;" title="${esc(VERIFICATION_BADGE[strainVerificationTier(s)].note)}"><span class="empty-note" style="padding:0;">${VERIFICATION_BADGE[strainVerificationTier(s)].icon} ${VERIFICATION_BADGE[strainVerificationTier(s)].label}</span></div>
-            ${ratingStats.count ? `<div style="margin-top:2px;">${starString(Math.round(ratingStats.avg))} <span class="empty-note" style="padding:0;">${ratingStats.avg}★ from ${ratingStats.count} check-in${ratingStats.count === 1 ? '' : 's'}</span></div>` : `<div class="empty-note" style="padding:2px 0 0;">No community ratings yet — be the first to check in.</div>`}
-          </div>
-        </div>
-        <div style="display:flex;gap:6px;align-items:center;flex-shrink:0;">
-          <button type="button" onclick="openShareModal()" title="Share" aria-label="Share" style="background:var(--bg-card,#fff);border:1px solid var(--border);border-radius:50%;width:34px;height:34px;font-size:15px;cursor:pointer;padding:0;">📤</button>
-          <a href="/compare?a=${s.id}" title="Compare this strain" aria-label="Compare this strain" style="background:var(--bg-card,#fff);border:1px solid var(--border);border-radius:50%;width:34px;height:34px;font-size:15px;cursor:pointer;padding:0;display:flex;align-items:center;justify-content:center;text-decoration:none;">🆚</a>
+      <div style="display:flex;align-items:center;gap:12px;">
+        ${strainPhotoTag(s, 'lg')}
+        <div>
+          <h1 style="margin:0;font-size:19px;">${esc(s.name)}</h1>
+          <div class="empty-note" style="padding:0;">${esc(s.type)}${s.lean ? ' · ' + esc(s.lean) : ''} · <span class="rarity-tag rarity-${s.rarity}">${rarityLabel(s.rarity)}</span></div>
+          <div style="margin-top:2px;" title="${esc(VERIFICATION_BADGE[strainVerificationTier(s)].note)}"><span class="empty-note" style="padding:0;">${VERIFICATION_BADGE[strainVerificationTier(s)].icon} ${VERIFICATION_BADGE[strainVerificationTier(s)].label}</span></div>
+          ${ratingStats.count ? `<div style="margin-top:2px;">${starString(Math.round(ratingStats.avg))} <span class="empty-note" style="padding:0;">${ratingStats.avg}★ from ${ratingStats.count} check-in${ratingStats.count === 1 ? '' : 's'}</span></div>` : `<div class="empty-note" style="padding:2px 0 0;">No community ratings yet — be the first to check in.</div>`}
         </div>
       </div>
       ${(s.thc || s.cbd) ? `<p style="margin:12px 0 4px;">${s.thc ? `<b>THC:</b> ${esc(s.thc)}` : ''}${s.thc && s.cbd ? ' &nbsp; ' : ''}${s.cbd ? `<b>CBD:</b> ${esc(s.cbd)}` : ''}</p>` : `<p class="empty-note" style="padding:0 0 4px;">No verified THC/CBD data for this strain yet.</p>`}
       ${s.breeder ? `<p class="empty-note" style="padding:0;"><b>Bred by:</b> ${esc(s.breeder)}</p>` : ''}
-      ${s.flavor ? `<p style="font-style:italic;color:var(--ink-secondary);">"${linkGlossaryTerms(esc(s.flavor))}"</p>` : ''}
+      ${s.flavor ? `<p style="font-style:italic;color:var(--ink-secondary);">"${esc(s.flavor)}"</p>` : ''}
       <p>${s.effects.map(e => `<span class="filter-pill">${esc(e)}</span>`).join('')}</p>
       ${s.terps.length ? `<p><b>Top terpenes:</b> ${s.terps.map(t => `${esc(t.n)} (${Math.round(t.p * 100)}%)`).join(', ')}</p>` : ''}
       ${Array.isArray(s.ailments) && s.ailments.length ? `
@@ -733,114 +663,36 @@ function pageStrainDetail(req, res, id) {
         <p class="empty-note" style="padding:0;">User-reported, not medical advice — see a doctor for real guidance.</p>
       ` : ''}
     </div>
-    <div id="share-modal-backdrop" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:1000;" onclick="closeShareModal(event)">
-      <div style="background:var(--bg-card,#fff);max-width:360px;width:calc(100% - 40px);margin:15vh auto 0;border-radius:14px;padding:20px;position:relative;" onclick="event.stopPropagation()">
-        <button type="button" onclick="closeShareModal()" aria-label="Close" style="position:absolute;top:10px;right:12px;background:none;border:none;font-size:18px;cursor:pointer;color:var(--ink-secondary);">✕</button>
-        <h3 style="margin:0 0 12px;font-size:1rem;">Share ${esc(s.name)}</h3>
-        <button type="button" class="btn secondary block" onclick="copyShareLink()" style="margin-bottom:8px;">🔗 Copy link</button>
-        <button type="button" class="btn secondary block" id="native-share-btn" onclick="nativeShare(${esc(JSON.stringify(s.name))})" style="display:none;margin-bottom:8px;">📤 Share via...</button>
-        ${userId != null && db.listFriends(userId).length ? `
-          <label class="field-label" style="margin-top:14px;">Send to a friend</label>
-          <form method="POST" action="/strains/${s.id}/share" id="share-friend-form" style="display:flex;gap:8px;align-items:center;" onsubmit="return validateShareForm(event)">${csrfField(req)}
-            <input type="text" id="share-friend-input" list="share-friend-list" placeholder="Type a friend's username..." autocomplete="off" style="flex:1;margin:0;">
-            <datalist id="share-friend-list">
-              ${db.listFriends(userId).map(f => `<option value="${esc(f.username)}" data-id="${f.id}">`).join('')}
-            </datalist>
-            <input type="hidden" name="friend_id" id="share-friend-id">
-            <button class="btn" type="submit" style="white-space:nowrap;">Send</button>
-          </form>
-        ` : userId != null ? `<p class="empty-note" style="margin-top:14px;padding:0;"><a href="/friends">Add friends</a> to share strains with them.</p>` : ''}
-      </div>
-    </div>
-    <script>
-      function openShareModal() {
-        const el = document.getElementById('share-modal-backdrop');
-        if (el) el.style.display = 'block';
-        const nativeBtn = document.getElementById('native-share-btn');
-        if (nativeBtn && navigator.share) nativeBtn.style.display = 'block';
-      }
-      function closeShareModal() {
-        const el = document.getElementById('share-modal-backdrop');
-        if (el) el.style.display = 'none';
-      }
-      function copyShareLink() {
-        // Fixed domain + the current path, rather than window.location.href
-        // wholesale -- this app is deployed on Render, which also exposes
-        // its own *.onrender.com hostname, and a link built from wherever
-        // the browser currently happens to be would silently show that
-        // internal URL instead of the real domain if someone ever lands on
-        // this page via that hostname (a stale bookmark, a lingering
-        // search-index entry, a DNS propagation window). See SITE_URL in
-        // server.js/app.js for the same fix applied everywhere else.
-        const url = 'https://www.strain-dex.com' + window.location.pathname + window.location.search;
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText(url).then(function() { alert('Link copied to clipboard!'); }).catch(function() { window.prompt('Copy this link:', url); });
-        } else {
-          window.prompt('Copy this link:', url);
-        }
-      }
-      function nativeShare(name) {
-        const url = 'https://www.strain-dex.com' + window.location.pathname + window.location.search;
-        if (navigator.share) {
-          navigator.share({ title: name, url: url }).catch(function(e) {
-            // AbortError is a genuine, deliberate cancellation (closed the
-            // share sheet without picking anything) -- nothing more to do.
-            // Any other error means the share attempt never actually
-            // reached the person, so fall back to the same clipboard copy
-            // the modal's own "Copy Link" button uses, rather than the
-            // button just silently doing nothing.
-            if (e && e.name !== 'AbortError') copyShareLink();
-          });
-        }
-      }
-      (function() {
-        const input = document.getElementById('share-friend-input');
-        if (!input) return;
-        const hidden = document.getElementById('share-friend-id');
-        const list = document.getElementById('share-friend-list');
-        function syncId() {
-          const match = Array.from(list.options).find(o => o.value.toLowerCase() === input.value.trim().toLowerCase());
-          hidden.value = match ? match.dataset.id : '';
-        }
-        input.addEventListener('input', syncId);
-      })();
-      function validateShareForm(evt) {
-        const hidden = document.getElementById('share-friend-id');
-        if (!hidden.value) {
-          evt.preventDefault();
-          alert("Pick a friend from the list first — type their username and choose the match that appears.");
-          return false;
-        }
-        return true;
-      }
-    </script>
     ${renderFamilyTree(s)}
     <a class="btn block" href="/checkin?strain=${s.id}">＋ Check in this strain</a>
+    <a class="btn secondary block" href="/compare?a=${s.id}" style="margin-top:8px;">🆚 Compare this strain</a>
+    ${userId != null && db.listFriends(userId).length ? `
+      <form method="POST" action="/strains/${s.id}/share" style="display:flex;gap:8px;margin-top:8px;">
+        <select name="friend_id" style="flex:1;">
+          ${db.listFriends(userId).map(f => `<option value="${f.id}">${esc(f.username)}</option>`).join('')}
+        </select>
+        <button class="btn secondary" type="submit">🌿 Share</button>
+      </form>
+    ` : ''}
     ${userId != null ? `
-      <form method="POST" action="/wishlist/${s.id}/toggle" style="margin-top:8px;">${csrfField(req)}
+      <form method="POST" action="/wishlist/${s.id}/toggle" style="margin-top:8px;">
         <input type="hidden" name="redirect_to" value="/strains/${s.id}">
         <button type="submit" class="btn secondary block">${db.isInWishlist(userId, s.id) ? '★ Remove from Wishlist' : '☆ Add to Wishlist'}</button>
       </form>
       ${(() => {
         const myLists = db.listCustomLists(userId);
-        const inAnyList = myLists.some(l => db.isStrainInList(l.id, s.id));
         return myLists.length ? `
           <div class="card" style="margin-top:8px;">
-            <div style="display:flex;justify-content:space-between;align-items:center;">
-              <b style="font-size:0.8125rem;">Add to a list</b>
-              <a href="/lists" class="empty-note" style="padding:0;">Manage your lists →</a>
-            </div>
-            <details style="margin-top:6px;" ${inAnyList ? 'open' : ''}>
-              <summary style="cursor:pointer;font-size:0.7812rem;font-weight:700;color:var(--accent-text);">${inAnyList ? 'Your lists' : 'Show your lists'}</summary>
-              <p style="margin:6px 0 0;display:flex;flex-wrap:wrap;gap:6px;">
-                ${myLists.map(l => `
-                  <form method="POST" action="/lists/${l.id}/items/${s.id}/toggle" style="display:inline;">${csrfField(req)}
-                    <input type="hidden" name="redirect_to" value="/strains/${s.id}">
-                    <button type="submit" class="filter-pill ${db.isStrainInList(l.id, s.id) ? 'active' : ''}" style="border:none;cursor:pointer;">${db.isStrainInList(l.id, s.id) ? '✓ ' : '+ '}${esc(l.name)}</button>
-                  </form>
-                `).join('')}
-              </p>
-            </details>
+            <b style="font-size:13px;">Add to a list</b>
+            <p style="margin:6px 0 0;display:flex;flex-wrap:wrap;gap:6px;">
+              ${myLists.map(l => `
+                <form method="POST" action="/lists/${l.id}/items/${s.id}/toggle" style="display:inline;">
+                  <input type="hidden" name="redirect_to" value="/strains/${s.id}">
+                  <button type="submit" class="filter-pill ${db.isStrainInList(l.id, s.id) ? 'active' : ''}" style="border:none;cursor:pointer;">${db.isStrainInList(l.id, s.id) ? '✓ ' : '+ '}${esc(l.name)}</button>
+                </form>
+              `).join('')}
+            </p>
+            <p class="empty-note" style="padding:6px 0 0;"><a href="/lists">Manage your lists →</a></p>
           </div>
         ` : `<p class="empty-note" style="margin-top:8px;"><a href="/lists">Create a list</a> to organize strains your own way.</p>`;
       })()}
@@ -855,36 +707,6 @@ function pageStrainDetail(req, res, id) {
             <span class="why">${r.why ? 'Shares ' + esc(r.why) : 'Similar profile'}</span>
           </a>`).join('')}
       </div>
-    ` : ''}
-    ${communityCheckins.length ? `
-      <h2 class="screen-title" style="margin-top:20px;">What people are saying</h2>
-      <p class="screen-sub">Public check-ins from the wider StrainDex community, not just your friends.</p>
-      ${communityCheckins.map(c => {
-        const poster = db.getUserById(c.user_id);
-        const posterName = poster ? poster.username : 'Someone';
-        return `<div class="card checkin-history-row">
-        ${c.photo ? `<div class="checkin-photo-thumb"><img src="${esc(c.photo)}" alt="${esc(posterName)}'s photo"></div>` : ''}
-        <div style="flex:1;min-width:0;">
-          <div style="display:flex;justify-content:space-between;align-items:baseline;">
-            <a href="/friends/${c.user_id}" style="color:inherit;font-weight:700;text-decoration:none;">${esc(posterName)}</a>
-            <span class="empty-note" style="padding:0;">${esc(c.method)}</span>
-          </div>
-          ${starString(c.rating)}
-          <div class="empty-note" style="padding:2px 0 0;"><span class="local-time" data-utc="${c.created_at}Z">${esc(c.created_at)} UTC</span></div>
-          ${(c.effects || []).length ? `<p style="margin:6px 0 0;">${c.effects.map(e => `<span class="filter-pill">${esc(e)}</span>`).join('')}</p>` : ''}
-          ${c.note ? `<span class="empty-note" style="display:block;padding:4px 0 0;">${esc(c.note)}</span>` : ''}
-        ${renderCheckinPairings(c)}
-        ${renderCheckinComments(req, c, userId, '/strains/' + s.id)}
-          <div style="display:flex;flex-direction:column;align-items:flex-end;margin-top:6px;">
-            <div style="display:flex;gap:6px;align-items:center;">
-              ${renderShareButton(c)}
-              ${renderKudosButton(c, userId)}
-            </div>
-            ${kudosGiversLabel(c.id)}
-          </div>
-        </div>
-      </div>`;
-      }).join('')}
     ` : ''}
     <h2 class="screen-title" style="margin-top:20px;">Your history with this strain</h2>
     ${history.length ? `
@@ -902,76 +724,16 @@ function pageStrainDetail(req, res, id) {
           ${c.note ? `<span class="empty-note" style="display:block;padding:4px 0 0;">${esc(c.note)}</span>` : ''}
         ${renderCheckinPairings(c)}
         ${renderOnsetTimer(c)}
-        ${renderCheckinComments(req, c, userId, '/strains/' + s.id)}
+        ${renderCheckinComments(c, userId, '/strains/' + s.id)}
           <div style="display:flex;flex-direction:column;align-items:flex-end;margin-top:6px;">
-            <div style="display:flex;gap:6px;align-items:center;">
-              ${renderShareButton(c)}
-              ${renderKudosButton(c, userId)}
-            </div>
+            ${renderKudosButton(c, userId)}
             ${kudosGiversLabel(c.id)}
           </div>
         </div>
       </div>`).join('')}
-    ` : userId != null
-      ? `<div class="empty-note">You haven't checked this one in yet.</div>`
-      : `<div class="empty-note">Log in to track your own history with this strain — <a href="/signup">create a free account</a> or <a href="/login">log in</a>.</div>`}
+    ` : `<div class="empty-note">You haven't checked this one in yet.</div>`}
   `;
   sendHtml(res, layout({ title: s.name, active: 'strains', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
-}
-
-// Public, read-only, unauthenticated view of a single non-private
-// check-in -- the landing page behind the "Share" button on any check-in
-// card (see renderShareButton). Deliberately outside the login wall (see
-// isPublicSharedCheckin in the router) so a link pasted into a text or
-// social post actually works for whoever opens it, logged in or not.
-// Carries real Open Graph tags built from the check-in's own strain photo
-// and rating so it unfurls as an actual preview card in iMessage/Discord/
-// Twitter instead of a bare link. Ends with a signup pitch -- the entire
-// point of a public share surface is to convert whoever receives it, not
-// just to display data at them.
-function pageSharedCheckin(req, res, id) {
-  const c = db.getCheckin(Number(id));
-  if (!c || c.is_private) return notFound(res);
-  const s = db.getStrain(c.strain_id);
-  const poster = db.getUserById(c.user_id);
-  const posterName = poster ? poster.username : 'Someone';
-  const origin = SITE_URL;
-  const pageUrl = `${origin}/c/${c.id}`;
-  const imageUrl = c.photo || (s ? `${origin}${strainPhotoUrl(s)}` : `${origin}/icons/icon-512.png`);
-
-  const body = `
-    <div class="card" style="margin-top:10px;">
-      <div style="display:flex;align-items:center;gap:12px;">
-        ${strainPhotoTag(s, 'lg')}
-        <div>
-          <div class="empty-note" style="padding:0;">${esc(posterName)} checked in on StrainDex</div>
-          <h1 style="margin:2px 0 0;font-size:1.1875rem;">${s ? esc(s.name) : esc(c.strain_id)}</h1>
-          ${s ? `<div class="empty-note" style="padding:0;">${linkGlossaryTerms(esc(s.type))}${s.lean ? ' · ' + linkGlossaryTerms(esc(s.lean)) : ''} · <span class="rarity-tag rarity-${s.rarity}">${rarityLabel(s.rarity)}</span></div>` : ''}
-        </div>
-      </div>
-      <div class="sub" style="margin-top:12px;">${esc(c.method)} · ${starString(c.rating)}</div>
-      ${c.photo ? `<img class="photo-thumb" src="${esc(c.photo)}" alt="photo" style="margin-top:8px;">` : ''}
-      ${(c.effects || []).length ? `<div class="effect-tags" style="margin-top:8px;">${c.effects.map(e => `<span>${esc(e)}</span>`).join('')}</div>` : ''}
-      ${c.note ? `<div class="note" style="margin-top:8px;">"${esc(c.note)}"</div>` : ''}
-      ${renderCheckinPairings(c)}
-      ${c.kudos ? `<div class="empty-note" style="padding:8px 0 0;">🌿 ${c.kudos} kudos on StrainDex</div>` : ''}
-    </div>
-    ${s ? `<a class="btn secondary block" href="/strains/${s.id}" style="margin-top:14px;text-decoration:none;">View ${esc(s.name)} in the Strain Library →</a>` : ''}
-    <div class="card" style="margin-top:14px;text-align:center;">
-      <p style="margin:0 0 10px;font-weight:700;">See what StrainDex looks like inside.</p>
-      <a href="/signup" class="btn block" style="text-decoration:none;">Create Free Account</a>
-      <p class="empty-note" style="margin-top:8px;">Already have an account? <a href="/login">Log in</a></p>
-    </div>
-  `;
-  sendHtml(res, layout({
-    title: s ? `${posterName}'s ${s.name} check-in` : 'A StrainDex check-in',
-    body,
-    showBack: false,
-    ogTitle: `${posterName} checked into ${s ? s.name : 'a strain'} on StrainDex`,
-    ogDescription: c.note || (s ? `${c.method} · ${starString(c.rating)}` : 'A cannabis check-in on StrainDex.'),
-    ogImage: imageUrl,
-    ogUrl: pageUrl,
-  }));
 }
 
 // Full 85-term mood/effects/relief vocabulary — matched against the
@@ -1003,60 +765,59 @@ const EFFECT_VOCAB = [
 // itself carries a strong "verify locally" disclaimer rather than presenting this
 // as a legal guarantee. Marijuana remains illegal under federal law everywhere in
 // the US regardless of state status.
-const LEGAL_STATUS_LAST_VERIFIED = '2026-09-17';
+const LEGAL_STATUS_LAST_VERIFIED = '2026-06-01';
 const LEGAL_STATUS = [
-
-  { state: 'Alabama', status: 'medical', note: 'Medical program for qualifying conditions; no recreational sales.', possession: 'No public possession limit set — cannabis is dispensed under a 70-day physician-directed supply (medical only); recreational use remains illegal.', purchaseLimit: 'Up to a 70-day supply per physician recommendation. Smokable flower, vapes, and food-form edibles (cookies, candy) are prohibited — only tablets, capsules, gummies, tinctures, patches, suppositories, and nebulizer-ready forms are sold.', homeGrow: 'Not permitted, including for registered medical patients.' },
-  { state: 'Alaska', status: 'recreational', note: 'Adult-use legal since 2015; licensed retail available.', possession: '1 oz of flower or 7 g of concentrate; total THC across all products capped at 5,600 mg/day.', purchaseLimit: 'Same as possession — up to 1 oz flower or 7 g concentrate, with a combined 5,600 mg THC cap per day.', homeGrow: '6 plants per adult (no more than 3 mature/flowering); household cap of 12 plants (6 mature).' },
-  { state: 'Arizona', status: 'recreational', note: 'Adult-use legal since 2020.', possession: '1 oz of cannabis, with no more than 5 g as concentrate (recreational); medical patients up to 2.5 oz per 14 days.', purchaseLimit: '1 oz per transaction, concentrates capped at 5 g.', homeGrow: '6 plants per adult; 12-plant maximum in a residence with two or more adults.' },
-  { state: 'Arkansas', status: 'medical', note: 'Medical program for qualifying conditions; no recreational sales.', possession: '2.5 oz within a 14-day period (medical only — no recreational program).', purchaseLimit: '2.5 oz per 14-day period.', homeGrow: 'Not permitted, including for registered medical patients.' },
-  { state: 'California', status: 'recreational', note: 'Adult-use legal since 2016.', possession: '28.5 g (1 oz) of flower plus a separate 8 g concentrate allowance per day (recreational); medical patients up to 8 oz/day.', purchaseLimit: '28.5 g flower + 8 g concentrate per day; medical patients/caregivers may also purchase up to 12 immature plants per day.', homeGrow: '6 plants per private residence — the limit applies per household, not per adult.' },
-  { state: 'Colorado', status: 'recreational', note: 'One of the first two adult-use states, legal since 2012.', possession: '1 oz flower, 8 g concentrate, or 800 mg edible THC per day (recreational); ages 18–20 limited to 2 g concentrate.', purchaseLimit: 'Same day limits apply per transaction, plus 6+ seeds; medical patients 21+ capped at 8 g concentrate (2 g for ages 18–20).', homeGrow: '6 plants per adult (no more than 3 flowering at once); generally 12 per residence.' },
-  { state: 'Connecticut', status: 'recreational', note: 'Adult-use legal since 2021.', possession: '0.5 oz per transaction (recreational); medical patients up to 5 oz (a one-month supply) per 30 days.', purchaseLimit: '0.5 oz (½ ounce) per dispensary visit.', homeGrow: '3 mature + 3 immature plants per adult, 12-plant household cap; must be grown indoors at the primary residence.' },
-  { state: 'Delaware', status: 'recreational', note: 'Adult-use legal since 2023.', possession: '1 oz (28 g), with no more than 5 g as concentrate.', purchaseLimit: '1 oz per visit.', homeGrow: 'Not permitted — one of the few adult-use states with no personal cultivation allowance at all.' },
-  { state: 'Florida', status: 'medical', note: 'Medical program only; a 2024 recreational ballot measure fell short of the required supermajority.', possession: '70-day supply as recommended by a physician (a 35-day/2.5 oz sub-cap applies specifically to smokable flower).', purchaseLimit: 'Physicians may authorize up to three 70-day supplies, or six 35-day smoking supplies, with exceptions possible.', homeGrow: 'Not permitted, including for registered medical patients.' },
-  { state: 'Georgia', status: 'cbd_only', note: 'Low-THC medical program only, not full-plant medical or recreational.', possession: '20 fl oz of low-THC (≤0.3%), high-CBD oil; CBD content must equal or exceed THC content.', purchaseLimit: 'Same 20 fl oz cap applies to purchases.', homeGrow: 'Not permitted.' },
-  { state: 'Hawaii', status: 'medical', note: 'Medical program for qualifying conditions; no recreational sales.', possession: '4 oz (or the manufactured-product equivalent) per 15-day period.', purchaseLimit: '4 oz per 15 days.', homeGrow: 'Registered medical patients/caregivers only — up to 10 plants at a state-registered grow site.' },
-  { state: 'Idaho', status: 'illegal', note: 'No legal program of any kind, medical or recreational.', possession: 'Not legal.', purchaseLimit: 'Not legal — no medical or recreational program of any kind exists.', homeGrow: 'Not permitted.' },
-  { state: 'Illinois', status: 'recreational', note: 'Adult-use legal since 2020.', possession: 'Residents: 30 g flower, 500 mg THC in infused products, or 5 g concentrate; non-residents get half those amounts.', purchaseLimit: 'Same as possession per transaction; medical patients get 2.5 oz per 14 days (up to 5 oz with a medical-necessity exemption).', homeGrow: 'Recreational home grow isn\'t allowed — registered medical patients only, up to 5 plants.' },
-  { state: 'Indiana', status: 'cbd_only', note: 'Low-THC CBD products only; no medical or recreational program.', possession: 'Low-THC (≤0.03%) CBD oil only; state law doesn\'t set a specific quantity limit.', purchaseLimit: 'No specified purchase limit under the state\'s CBD law (Act 52).', homeGrow: 'Not permitted.' },
-  { state: 'Iowa', status: 'cbd_only', note: 'Very restrictive low-THC medical program only.', possession: '4.5 g of THC within a rolling 90-day period (medical only); smokable flower is prohibited.', purchaseLimit: '4.5 g THC per rolling 90 days.', homeGrow: 'Not permitted, including for registered medical patients.' },
-  { state: 'Kansas', status: 'illegal', note: 'No legal program of any kind, medical or recreational.', possession: 'Not legal — only a narrow low-THC CBD allowance exists, with no comprehensive medical or recreational program.', purchaseLimit: 'Not applicable — no dispensary system exists.', homeGrow: 'Not permitted.' },
-  { state: 'Kentucky', status: 'medical', note: 'Medical program for qualifying conditions; no recreational sales.', possession: 'Set by physician recommendation — approved forms include flower (for vaporizing), edibles, oils, and topicals.', purchaseLimit: 'Determined case-by-case by the prescribing physician; no fixed statewide cap is published.', homeGrow: 'Not permitted, including for registered medical patients.' },
-  { state: 'Louisiana', status: 'medical', note: 'Medical program for qualifying conditions; no recreational sales.', possession: '2.5 oz (71 g) of raw flower per 14-day period; other product forms follow physician recommendation.', purchaseLimit: '2.5 oz raw flower per 14 days.', homeGrow: 'Not permitted, including for registered medical patients.' },
-  { state: 'Maine', status: 'recreational', note: 'Adult-use legal since 2016.', possession: '2.5 oz of flower (or a flower/concentrate combination) per day.', purchaseLimit: '2.5 oz per day; up to 12 immature plants per transaction (residents only for the plant allowance).', homeGrow: '6 mature plants, 12 immature plants, and unlimited seedlings per adult.' },
-  { state: 'Maryland', status: 'recreational', note: 'Adult-use legal since 2022.', possession: '1.5 oz flower, 12 g concentrate, or products totaling up to 750 mg THC (recreational, per visit).', purchaseLimit: 'Same as possession per visit; medical patients get a combined 30-day cap of 120 g flower or 36 g THC in processed products.', homeGrow: '2 plants per household (recreational); up to 4 for a qualifying medical patient 21+.' },
-  { state: 'Massachusetts', status: 'recreational', note: 'Adult-use legal since 2016.', possession: '1 oz in public; up to 10 oz may be kept at home.', purchaseLimit: '1 oz per day (or the equivalent: 5 g concentrate / 500 mg edible THC); medical patients up to 10 oz per 60-day rolling period.', homeGrow: '6 plants per adult; 12-plant household cap, kept out of public view.' },
-  { state: 'Michigan', status: 'recreational', note: 'Adult-use legal since 2018.', possession: '2.5 oz in public; up to 10 oz may be kept at home.', purchaseLimit: '2.5 oz per day, including up to 15 g of concentrate; medical patients get 10 oz per month.', homeGrow: '12 plants per residence (the limit applies per household, not per adult).' },
-  { state: 'Minnesota', status: 'recreational', note: 'Adult-use legal since 2023.', possession: '2 oz flower, 8 g concentrate, or 800 mg edible THC (recreational).', purchaseLimit: 'Same limits apply per transaction; medical patients get a pharmacist-set 30-day supply within a 23-day window.', homeGrow: '8 plants per residence, no more than 4 flowering/mature at once.' },
-  { state: 'Mississippi', status: 'medical', note: 'Medical program for qualifying conditions; no recreational sales.', possession: 'Up to 24 MMCEUs (Medical Cannabis Equivalency Units) per rolling 30 days — 1 MMCEU equals 3.5 g flower, 1 g concentrate, or 100 mg THC in an infused product.', purchaseLimit: 'Residents: 6 MMCEU per rolling 7 days, 24 per rolling 30 days; non-residents: 12 MMCEU per rolling 15 days.', homeGrow: 'Not permitted, including for registered medical patients.' },
-  { state: 'Missouri', status: 'recreational', note: 'Adult-use legal since 2022.', possession: '3 oz at any time (recreational).', purchaseLimit: '3 oz per transaction; medical patients get 6 oz per 30 days.', homeGrow: 'Requires a state cultivation registration: up to 6 flowering, 6 nonflowering (14"+ tall), and 6 nonflowering (under 14") plants.' },
-  { state: 'Montana', status: 'recreational', note: 'Adult-use legal since 2020.', possession: 'Regulated by THC concentration rather than a flat weight for recreational purchases (e.g., edibles capped at 100 mg THC per package, flower capped at 35% THC).', purchaseLimit: 'Medical patients: 1 oz/day, 5 oz/month; recreational purchases are capped by potency rather than weight.', homeGrow: '2 mature plants + 2 seedlings per adult; generally 4 mature + 4 seedlings per residence.' },
-  { state: 'Nebraska', status: 'medical', note: 'Medical program approved by voters; implementation has faced legal challenges, so confirm current availability locally.', possession: 'Not yet finalized — the voter-approved medical program is still being built out through state rulemaking.', purchaseLimit: 'To be established through rulemaking; dispensary openings are expected in 2026.', homeGrow: 'Not permitted under the current framework.' },
-  { state: 'Nevada', status: 'recreational', note: 'Adult-use legal since 2016.', possession: '1 oz (28.35 g) of usable cannabis, or 1/8 oz of concentrate / products up to 3,543 mg THC.', purchaseLimit: 'Same as possession per visit; medical patients get 1 oz per transaction.', homeGrow: 'Allowed only if you live more than 25 miles from a licensed retailer (or qualify for another exception): 6 plants per adult, 12-plant household cap.' },
-  { state: 'New Hampshire', status: 'medical', note: 'Medical program only; recreational proposals have repeatedly failed to pass.', possession: '2 oz of usable cannabis per 10-day period (medical only).', purchaseLimit: '2 oz per 10 days.', homeGrow: 'Not permitted, including for registered medical patients.' },
-  { state: 'New Jersey', status: 'recreational', note: 'Adult-use legal since 2020.', possession: '1 oz flower, 4 g of concentrate/vape, or 1,000 mg in ingestible products (recreational); combinations are allowed proportionally.', purchaseLimit: 'Same as possession per visit; medical patients get 3 oz per 30 days (no cap for terminally ill patients).', homeGrow: 'Not permitted — no recreational or medical home-grow right exists.' },
-  { state: 'New Mexico', status: 'recreational', note: 'Adult-use legal since 2021.', possession: '2 oz cannabis, 16 g concentrate, or 800 mg edibles per transaction (recreational) — there\'s no separate daily/weekly/monthly cap beyond that.', purchaseLimit: 'Same as possession; medical patients get up to 15 oz (425 units) per 90 days, with no per-serving cap beyond 50 mg THC.', homeGrow: '6 mature + 6 immature plants per adult; household cap of 12 mature plants.' },
-  { state: 'New York', status: 'recreational', note: 'Adult-use legal since 2021.', possession: '3 oz (85 g) of flower and 24 g of concentrate in public; up to 5 lbs may be kept at home.', purchaseLimit: '3 oz flower + 24 g concentrate per day (recreational); medical patients get a 30-day supply, with no more than a 7-day supply on hand at once.', homeGrow: '3 mature + 3 immature plants per adult; household cap of 6 mature + 6 immature.' },
-  { state: 'North Carolina', status: 'illegal', note: 'No medical or recreational program, though small possession has been decriminalized to a civil fine since 1977.', possession: 'No general legal possession — a narrow low-THC (≤0.9%) CBD oil allowance exists via neurologist prescription only.', purchaseLimit: 'Not applicable outside that narrow CBD-oil program.', homeGrow: 'Not permitted.' },
-  { state: 'North Dakota', status: 'medical', note: 'Medical program for qualifying conditions; no recreational sales.', possession: '2.5 oz of dried flower per 30 days (cancer patients can be authorized for up to 6 oz); 6,000 mg total THC cap for other product types.', purchaseLimit: 'Same 30-day limits.', homeGrow: 'Not permitted, including for registered medical patients.' },
-  { state: 'Ohio', status: 'recreational', note: 'Adult-use legal since 2023; retail sales began in 2024.', possession: '2.5 oz of flower and 15 g of extract (recreational, effective under Senate Bill 56, March 2026).', purchaseLimit: 'Same day limits apply per purchase; potency capped at 35% THC for flower and 70% for concentrates (medical patients can access up to 90% THC concentrates).', homeGrow: '6 plants per adult; 12-plant household cap.' },
-  { state: 'Oklahoma', status: 'medical', note: 'Broad medical program with relatively accessible qualifying conditions; no recreational sales.', possession: '3 oz of marijuana, 1 oz of concentrate, or 72 oz of edibles (medical).', purchaseLimit: 'Same as possession.', homeGrow: 'Registered medical patients only — up to 6 mature plants plus 6 seedlings.' },
-  { state: 'Oregon', status: 'recreational', note: 'Adult-use legal since 2014.', possession: '2 oz of usable marijuana per day (recreational); medical patients up to 24 oz per day.', purchaseLimit: '2 oz flower, 10 g extract/concentrate, or 16 oz of solid infused product per day (recreational).', homeGrow: '4 plants per residence — the limit applies per household, not per adult.' },
-  { state: 'Pennsylvania', status: 'medical', note: 'Medical program only; often cited as the most likely next state to pursue recreational legalization.', possession: '30-day supply as determined by a physician; no more than a 7-day supply already dispensed may be on hand at once.', purchaseLimit: 'Same 30-day cap.', homeGrow: 'Not permitted — one of the largest medical-only states with no home-grow right at all.' },
-  { state: 'Rhode Island', status: 'recreational', note: 'Adult-use legal since 2022.', possession: '1 oz cannabis, 7.7 g concentrate, or 83 servings (10 mg each) of edibles (recreational).', purchaseLimit: 'Same as possession; medical patients get 2.5 oz per 15 days.', homeGrow: '3 mature + 3 immature plants per dwelling, grown indoors in a secure location.' },
-  { state: 'South Carolina', status: 'illegal', note: 'No legal program of any kind, medical or recreational.', possession: 'Not legal — only a narrow low-THC, high-CBD oil allowance exists via physician.', purchaseLimit: 'Not applicable — no dispensary system exists.', homeGrow: 'Not permitted.' },
-  { state: 'South Dakota', status: 'medical', note: 'Medical program for qualifying conditions; a recreational ballot measure did not pass.', possession: '3 oz on a rolling 14-day basis (medical only); purchased amounts roll back onto your available balance as they age past 14 days.', purchaseLimit: 'Same rolling 3 oz / 14-day limit.', homeGrow: 'Registered medical patients only, if their card authorizes cultivation — up to 2 flowering + 2 nonflowering plants.' },
-  { state: 'Tennessee', status: 'cbd_only', note: 'Low-THC CBD products only; no medical or recreational program.', possession: 'Only hemp-derived products below 0.3% THC are legal; cannabis above that threshold remains fully illegal.', purchaseLimit: 'Same 0.3% THC threshold applies to any purchase.', homeGrow: 'Not permitted.' },
-  { state: 'Texas', status: 'cbd_only', note: "Compassionate Use Program (TCUP) covers a growing list of qualifying conditions; a 2025 law replaced the old percentage-based THC cap with a dose-based one. Not full medical or recreational.", possession: 'Low-THC oil under the Compassionate Use Program only, capped at 10 mg THC per dose and 1 g (1,000 mg) THC per package — replacing the old percentage-based cap in a 2025 law change.', purchaseLimit: 'Same 10 mg/dose, 1 g/package caps; smokable flower remains prohibited under the program.', homeGrow: 'Not permitted.' },
-  { state: 'Utah', status: 'medical', note: 'Medical program for qualifying conditions; no recreational sales.', possession: '113 g of unprocessed flower and/or 20 g of composite THC in other forms, per 30-day period.', purchaseLimit: 'Same 30-day cap.', homeGrow: 'Not permitted, including for registered medical patients.' },
-  { state: 'Vermont', status: 'recreational', note: 'Adult-use legal since 2018; first state to legalize via legislature rather than ballot measure.', possession: '1 oz per transaction (recreational); medical patients can hold up to 2 oz plus what their own plants produce.', purchaseLimit: '1 oz of cannabis or equivalent per dispensary visit.', homeGrow: '2 mature + 4 immature plants per dwelling.' },
-  { state: 'Virginia', status: 'recreational', note: 'Adult-use possession legal since 2021, though retail sales have lagged behind legalization.', possession: '2.5 oz (updated 2026) — this currently governs possession only, since retail sales aren\'t live yet.', purchaseLimit: 'No legal purchase point yet — regulated retail sales are set to begin January 1, 2027 with a 2.5 oz per-transaction cap once live. Medical patients: 4 oz of botanical cannabis, or a 90-day cannabis-product supply at up to 10 mg THC per dose.', homeGrow: '4 plants per household.' },
-  { state: 'Washington', status: 'recreational', note: 'One of the first two adult-use states, legal since 2012.', possession: '1 oz flower, 16 oz solid edibles, 72 oz liquid edibles, or 7 g concentrate per day (recreational).', purchaseLimit: 'Same daily limits; medical patients get 3 oz usable, 48 oz solid infused product, 216 oz liquid infused product, or 21 g concentrate.', homeGrow: 'Not permitted for recreational users as of late 2026 — repeated legislative attempts (most recently SB 6204) have stalled. Registered medical patients only, 4–15 plants depending on registration tier.' },
-  { state: 'West Virginia', status: 'medical', note: 'Medical program for qualifying conditions; no recreational sales.', possession: '30-day supply; no more than a 7-day supply already dispensed may be on hand at once.', purchaseLimit: 'Same 30-day cap.', homeGrow: 'Not permitted, including for registered medical patients.' },
-  { state: 'Wisconsin', status: 'cbd_only', note: 'Low-THC CBD products only; no medical or recreational program.', possession: 'Physician-recommended CBD oil only — there\'s no broader medical or recreational program.', purchaseLimit: 'No standard purchase limit is published; access runs entirely through physician recommendation.', homeGrow: 'Not permitted.' },
-  { state: 'Wyoming', status: 'illegal', note: 'No legal program of any kind, medical or recreational.', possession: 'Only a neurologist-prescribed, high-CBD (≥5%), low-THC (≤0.3%) oil is legal.', purchaseLimit: 'Same narrow CBD-oil allowance governs purchases.', homeGrow: 'Not permitted.' },
-  { state: 'Washington, D.C.', status: 'recreational', note: 'Adult possession and home cultivation are legal, but D.C. is barred by Congress from regulating commercial sales.', possession: 'Up to 1 oz may be transferred between adults without payment; there\'s no legal retail purchase point since Congress blocks D.C. from regulating commercial cannabis sales.', purchaseLimit: 'No legal recreational purchase point exists — an unofficial "gifting" economy fills the gap. Medical patients get 4 oz per 30 days through the regulated medical program.', homeGrow: '6 plants per adult (no more than 3 mature); household cap of 12 plants (6 mature).' },
+  { state: 'Alabama', status: 'medical', note: 'Medical program for qualifying conditions; no recreational sales.' },
+  { state: 'Alaska', status: 'recreational', note: 'Adult-use legal since 2015; licensed retail available.' },
+  { state: 'Arizona', status: 'recreational', note: 'Adult-use legal since 2020.' },
+  { state: 'Arkansas', status: 'medical', note: 'Medical program for qualifying conditions; no recreational sales.' },
+  { state: 'California', status: 'recreational', note: 'Adult-use legal since 2016.' },
+  { state: 'Colorado', status: 'recreational', note: 'One of the first two adult-use states, legal since 2012.' },
+  { state: 'Connecticut', status: 'recreational', note: 'Adult-use legal since 2021.' },
+  { state: 'Delaware', status: 'recreational', note: 'Adult-use legal since 2023.' },
+  { state: 'Florida', status: 'medical', note: 'Medical program only; a 2024 recreational ballot measure fell short of the required supermajority.' },
+  { state: 'Georgia', status: 'cbd_only', note: 'Low-THC medical program only, not full-plant medical or recreational.' },
+  { state: 'Hawaii', status: 'medical', note: 'Medical program for qualifying conditions; no recreational sales.' },
+  { state: 'Idaho', status: 'illegal', note: 'No legal program of any kind, medical or recreational.' },
+  { state: 'Illinois', status: 'recreational', note: 'Adult-use legal since 2020.' },
+  { state: 'Indiana', status: 'cbd_only', note: 'Low-THC CBD products only; no medical or recreational program.' },
+  { state: 'Iowa', status: 'cbd_only', note: 'Very restrictive low-THC medical program only.' },
+  { state: 'Kansas', status: 'illegal', note: 'No legal program of any kind, medical or recreational.' },
+  { state: 'Kentucky', status: 'medical', note: 'Medical program for qualifying conditions; no recreational sales.' },
+  { state: 'Louisiana', status: 'medical', note: 'Medical program for qualifying conditions; no recreational sales.' },
+  { state: 'Maine', status: 'recreational', note: 'Adult-use legal since 2016.' },
+  { state: 'Maryland', status: 'recreational', note: 'Adult-use legal since 2022.' },
+  { state: 'Massachusetts', status: 'recreational', note: 'Adult-use legal since 2016.' },
+  { state: 'Michigan', status: 'recreational', note: 'Adult-use legal since 2018.' },
+  { state: 'Minnesota', status: 'recreational', note: 'Adult-use legal since 2023.' },
+  { state: 'Mississippi', status: 'medical', note: 'Medical program for qualifying conditions; no recreational sales.' },
+  { state: 'Missouri', status: 'recreational', note: 'Adult-use legal since 2022.' },
+  { state: 'Montana', status: 'recreational', note: 'Adult-use legal since 2020.' },
+  { state: 'Nebraska', status: 'medical', note: 'Medical program approved by voters; implementation has faced legal challenges, so confirm current availability locally.' },
+  { state: 'Nevada', status: 'recreational', note: 'Adult-use legal since 2016.' },
+  { state: 'New Hampshire', status: 'medical', note: 'Medical program only; recreational proposals have repeatedly failed to pass.' },
+  { state: 'New Jersey', status: 'recreational', note: 'Adult-use legal since 2020; among the higher possession limits nationally.' },
+  { state: 'New Mexico', status: 'recreational', note: 'Adult-use legal since 2021.' },
+  { state: 'New York', status: 'recreational', note: 'Adult-use legal since 2021.' },
+  { state: 'North Carolina', status: 'illegal', note: 'No medical or recreational program, though small possession has been decriminalized to a civil fine since 1977.' },
+  { state: 'North Dakota', status: 'medical', note: 'Medical program for qualifying conditions; no recreational sales.' },
+  { state: 'Ohio', status: 'recreational', note: 'Adult-use legal since 2023; retail sales began in 2024.' },
+  { state: 'Oklahoma', status: 'medical', note: 'Broad medical program with relatively accessible qualifying conditions; no recreational sales.' },
+  { state: 'Oregon', status: 'recreational', note: 'Adult-use legal since 2014.' },
+  { state: 'Pennsylvania', status: 'medical', note: 'Medical program only; often cited as the most likely next state to pursue recreational legalization.' },
+  { state: 'Rhode Island', status: 'recreational', note: 'Adult-use legal since 2022.' },
+  { state: 'South Carolina', status: 'illegal', note: 'No legal program of any kind, medical or recreational.' },
+  { state: 'South Dakota', status: 'medical', note: 'Medical program for qualifying conditions; a recreational ballot measure did not pass.' },
+  { state: 'Tennessee', status: 'cbd_only', note: 'Low-THC CBD products only; no medical or recreational program.' },
+  { state: 'Texas', status: 'cbd_only', note: "Compassionate Use Program covers specific conditions with a strict 0.5% THC cap; not full medical or recreational." },
+  { state: 'Utah', status: 'medical', note: 'Medical program for qualifying conditions; no recreational sales.' },
+  { state: 'Vermont', status: 'recreational', note: 'Adult-use legal since 2018; first state to legalize via legislature rather than ballot measure.' },
+  { state: 'Virginia', status: 'recreational', note: 'Adult-use possession legal since 2021, though retail sales have lagged behind legalization.' },
+  { state: 'Washington', status: 'recreational', note: 'One of the first two adult-use states, legal since 2012.' },
+  { state: 'West Virginia', status: 'medical', note: 'Medical program for qualifying conditions; no recreational sales.' },
+  { state: 'Wisconsin', status: 'cbd_only', note: 'Low-THC CBD products only; no medical or recreational program.' },
+  { state: 'Wyoming', status: 'illegal', note: 'No legal program of any kind, medical or recreational.' },
+  { state: 'Washington, D.C.', status: 'recreational', note: 'Adult possession and home cultivation are legal, but D.C. is barred by Congress from regulating commercial sales.' },
 ];
 const LEGAL_STATUS_LABELS = {
   recreational: { label: 'Recreational (21+)', color: '#1b5e3a' },
@@ -1074,35 +835,14 @@ const METHOD_GROUPS = [
   { group: 'Topicals & Other', items: ['Topical Cream / Balm', 'Transdermal Patch', 'Suppository', 'RSO (Rick Simpson Oil)', 'Cannabis Bath Soak'] },
 ];
 
-// Renders one pairing row: a type dropdown plus an optional free-text note.
-// Used both for the row(s) rendered on first page load and, via the
-// PAIRING_TYPES data stashed on window, replicated client-side in app.js
-// when someone taps "+ Add Another Pairing".
-function renderPairingRow(selectedType, note) {
-  const options = PAIRING_TYPES.map(p => `<option value="${esc(p.key)}" ${selectedType === p.key ? 'selected' : ''}>${p.icon} ${esc(p.label)}</option>`).join('');
-  return `
-    <div class="pairing-row">
-      <select name="pairing_type">
-        <option value="">Add a pairing...</option>
-        ${options}
-      </select>
-      <input type="text" name="pairing_note" placeholder="Optional note..." value="${esc(note || '')}">
-      <button type="button" class="pairing-remove-btn" onclick="this.closest('.pairing-row').remove()" aria-label="Remove pairing">✕</button>
-    </div>`;
-}
 function pageCheckinForm(req, res, query, existing) {
   const strainId = existing ? existing.strain_id : (query.get('strain') || '');
   const s = strainId ? db.getStrain(strainId) : null;
   const isEdit = !!existing;
-  // A brand-new check-in starts with exactly one empty pairing row -- most
-  // people logging quickly won't touch it at all, so keeping it to one
-  // avoids the form looking more involved than it needs to be. Editing an
-  // existing check-in that already has several pairings shows all of them.
-  const initialPairings = (existing && Array.isArray(existing.pairings) && existing.pairings.length) ? existing.pairings : [{ type: '', note: '' }];
   const body = `
     <h1 class="screen-title">${isEdit ? 'Edit Check-In' : 'Check In'}</h1>
     ${isEdit ? `<p class="empty-note">Thoughts changed after the fact? That's normal, especially with edibles — update it below.</p>` : ''}
-    <form method="POST" action="${isEdit ? `/checkin/${existing.id}/edit` : '/checkin'}" id="checkin-form">${csrfField(req)}
+    <form method="POST" action="${isEdit ? `/checkin/${existing.id}/edit` : '/checkin'}" id="checkin-form">
       <label class="field-label">Strain</label>
       <div id="strain-picker" ${s ? 'style="display:none;"' : ''}>
         <input type="text" id="strain-picker-search" placeholder="Type a strain name..." autocomplete="off" ${isEdit ? 'disabled' : ''}>
@@ -1132,7 +872,7 @@ function pageCheckinForm(req, res, query, existing) {
 
       <label class="field-label">Photo</label>
       <div class="photo-picker" id="photo-picker">
-        <div class="photo-upload-box" id="photo-upload-box" onclick="document.getElementById('photo-file-input').click()" role="button" tabindex="0">
+        <div class="photo-upload-box" id="photo-upload-box" onclick="document.getElementById('photo-file-input').click()">
           <div class="up-ic">📷</div>
           <div class="up-txt">Tap to snap or upload a photo of your bud<br>(optional — we'll show a placeholder if you skip it)</div>
         </div>
@@ -1146,14 +886,14 @@ function pageCheckinForm(req, res, query, existing) {
       <label class="field-label">Tasting Notes</label>
       <textarea name="tasting_notes" placeholder="Flavor, smell, smoothness — what stood out?">${existing ? esc(existing.tasting_notes || '') : ''}</textarea>
 
-      <label class="field-label">Brand <span class="empty-note" style="padding:0;">(optional — whose version was it?)</span></label>
-      <input type="text" name="brand" placeholder="e.g. Cookies, Jungle Boys, a local grower..." value="${existing ? esc(existing.brand || '') : ''}">
+      <label class="field-label">Food / Drink Pairing</label>
+      <input type="text" name="pairing_food" placeholder="What went really well with it?" value="${existing ? esc(existing.pairing_food || '') : ''}">
 
-      <label class="field-label">Pairings <span class="empty-note" style="padding:0;">(optional — log as many as you want)</span></label>
-      <div class="pairing-list" id="pairing-list">
-        ${initialPairings.map(p => renderPairingRow(p.type, p.note)).join('')}
-      </div>
-      <button type="button" class="btn secondary" id="pairing-add-btn" style="margin-top:6px;padding:6px 14px;font-size:13px;">+ Add Another Pairing</button>
+      <label class="field-label">Music / Entertainment Pairing</label>
+      <input type="text" name="pairing_entertainment" placeholder="What you listened to or watched" value="${existing ? esc(existing.pairing_entertainment || '') : ''}">
+
+      <label class="field-label">Activity Pairing</label>
+      <input type="text" name="pairing_activity" placeholder="What you did while enjoying it" value="${existing ? esc(existing.pairing_activity || '') : ''}">
 
       <label style="display:flex;align-items:center;gap:8px;margin-top:16px;cursor:pointer;">
         <input type="checkbox" name="is_private" value="1" ${existing && existing.is_private ? 'checked' : ''} style="width:auto;margin:0;">
@@ -1163,15 +903,14 @@ function pageCheckinForm(req, res, query, existing) {
       <button class="btn block" type="submit" id="checkin-submit">${isEdit ? 'Save Changes' : '🔥 Light It Up'}</button>
     </form>
     ${isEdit ? `
-      <form method="POST" action="/checkin/${existing.id}/delete" style="margin-top:10px;text-align:center;" onsubmit="return confirm('Delete this check-in? This cannot be undone.')">${csrfField(req)}
+      <form method="POST" action="/checkin/${existing.id}/delete" style="margin-top:10px;text-align:center;" onsubmit="return confirm('Delete this check-in? This cannot be undone.')">
         <input type="hidden" name="redirect_to" value="/strains/${existing.strain_id}">
-        <button type="submit" style="background:none;border:none;color:#a13a3a;cursor:pointer;font-size:0.75rem;padding:4px;">Delete this check-in</button>
+        <button type="submit" style="background:none;border:none;color:#a13a3a;cursor:pointer;font-size:12px;padding:4px;">Delete this check-in</button>
       </form>
     ` : ''}
     <script>
       window.EFFECT_VOCAB = ${JSON.stringify(EFFECT_VOCAB)};
       window.INITIAL_EFFECTS = ${JSON.stringify(existing ? existing.effects || [] : [])};
-      window.PAIRING_TYPES = ${JSON.stringify(PAIRING_TYPES)};
       window.INITIAL_PHOTO = ${JSON.stringify(existing ? existing.photo || '' : '')};
       window.EDIBLE_METHODS = ${JSON.stringify(METHOD_GROUPS.find(g => g.group === 'Edibles').items)};
       function toggleEdibleWarning(method) {
@@ -1192,24 +931,6 @@ function pageCheckinEditForm(req, res, id) {
   pageCheckinForm(req, res, new URLSearchParams(), existing);
 }
 
-// The pairing type/note rows submit as same-name repeated fields (one
-// <select name="pairing_type"> + <input name="pairing_note"> per row, in
-// matching order), the same convention already used for effects. A single
-// row comes through as a lone string rather than a 1-item array, so both
-// shapes have to be normalized the same way. Rows where no type was chosen
-// are dropped entirely -- a note with nothing to attach it to isn't
-// something later display code (renderCheckinPairings) has a place to put.
-function parsePairingsFromForm(fields) {
-  const types = Array.isArray(fields.pairing_type) ? fields.pairing_type : (fields.pairing_type != null ? [fields.pairing_type] : []);
-  const notes = Array.isArray(fields.pairing_note) ? fields.pairing_note : (fields.pairing_note != null ? [fields.pairing_note] : []);
-  const pairings = [];
-  for (let i = 0; i < types.length; i++) {
-    const type = (types[i] || '').trim();
-    if (!type) continue;
-    pairings.push({ type, note: (notes[i] || '').trim() });
-  }
-  return pairings;
-}
 async function handleCheckinSubmit(req, res) {
   const userId = requireUser(req, res);
   if (userId == null) return;
@@ -1222,7 +943,8 @@ async function handleCheckinSubmit(req, res) {
   await db.createCheckin({
     user_id: userId, strain_id: strainId, method: fields.method, rating: Number(fields.rating) || 0,
     note: fields.note || '', effects, photo: photoUrl,
-    tasting_notes: fields.tasting_notes || '', brand: fields.brand || '', pairings: parsePairingsFromForm(fields),
+    tasting_notes: fields.tasting_notes || '', pairing_food: fields.pairing_food || '',
+    pairing_entertainment: fields.pairing_entertainment || '', pairing_activity: fields.pairing_activity || '',
     is_private: !!fields.is_private,
   });
   redirect(res, `/strains/${strainId}`);
@@ -1239,7 +961,8 @@ async function handleCheckinEditSubmit(req, res, id) {
   await db.updateCheckin(id, {
     method: fields.method, rating: Number(fields.rating) || 0,
     note: fields.note || '', effects, photo: photoUrl,
-    tasting_notes: fields.tasting_notes || '', brand: fields.brand || '', pairings: parsePairingsFromForm(fields),
+    tasting_notes: fields.tasting_notes || '', pairing_food: fields.pairing_food || '',
+    pairing_entertainment: fields.pairing_entertainment || '', pairing_activity: fields.pairing_activity || '',
     is_private: !!fields.is_private,
   });
   redirect(res, `/strains/${existing.strain_id}`);
@@ -1263,8 +986,8 @@ function pageFaq(req, res, query) {
 
   const renderFaq = (f) => `
     <div class="faq-item">
-      <div class="faq-q" onclick="toggleFaq(this)" role="button" tabindex="0" aria-expanded="false"><span>${esc(f.question)}</span><span>⌄</span></div>
-      <div class="faq-a">${linkGlossaryTerms(esc(f.answer))}${f.source_url ? `<div class="empty-note" style="padding:6px 0 0;">Source: <a href="${esc(f.source_url)}" target="_blank" rel="noopener noreferrer">${esc(f.source_name || f.source_url)}</a></div>` : ''}</div>
+      <div class="faq-q" onclick="toggleFaq(this)"><span>${esc(f.question)}</span><span>⌄</span></div>
+      <div class="faq-a">${esc(f.answer)}${f.source_url ? `<div class="empty-note" style="padding:6px 0 0;">Source: <a href="${esc(f.source_url)}" target="_blank" rel="noopener noreferrer">${esc(f.source_name || f.source_url)}</a></div>` : ''}</div>
     </div>`;
 
   const body = `
@@ -1273,7 +996,7 @@ function pageFaq(req, res, query) {
     ${topFaqs.map(renderFaq).join('') || `<div class="empty-note">No FAQ entries yet — try the <a href="/chat">Ask</a> tab, it can answer from the same content base.</div>`}
 
     <div class="section-label" style="margin-top:20px;">Search everything else (${allFaqs.length - topFaqs.length} more)</div>
-    <form method="GET" action="/faq" style="margin-bottom:12px;display:flex;gap:8px;align-items:center;">
+    <form method="GET" action="/faq" style="margin-bottom:12px;display:flex;gap:8px;">
       <input type="search" name="q" value="${esc(q)}" placeholder="Search all FAQ topics..." autocomplete="off" style="flex:1;">
       <button class="btn" type="submit">Search</button>
     </form>
@@ -1414,7 +1137,7 @@ function pageRecipeDetail(req, res, id) {
   if (!r || r.status !== 'approved') return notFound(res);
   const body = `
     <div class="card" style="margin-top:10px;">
-      <b style="font-size:1rem;">${r.icon || '🍽️'} ${esc(r.title)}</b>
+      <b style="font-size:16px;">${r.icon || '🍽️'} ${esc(r.title)}</b>
       <span class="recipe-source-tag ${r.source}">${r.source === 'official' ? 'Official' : 'Community'}</span>
       <div class="empty-note">${esc(r.category || '')}${r.time ? ' · ' + esc(r.time) : ''}${r.author ? ' · by ' + esc(r.author) : ''}</div>
       <p>${linkGlossaryTerms(esc(r.desc))}</p>
@@ -1423,7 +1146,7 @@ function pageRecipeDetail(req, res, id) {
         return targetId ? `<a href="/recipes/${targetId}">${esc(b)}</a>` : esc(b);
       }).join(', ')} <span style="opacity:.7;">(tap to see how to make it)</span></p>` : ''}
       <p><b>Ingredients:</b></p>
-      <div style="display:flex;gap:6px;align-items:center;margin-bottom:8px;">
+      <div style="display:flex;gap:6px;margin-bottom:8px;">
         <span class="empty-note" style="padding:6px 0;">Scale:</span>
         ${[0.5, 1, 2, 3].map(f => `<button type="button" class="filter-pill scale-btn" data-factor="${f}" onclick="scaleRecipe(${f}, this)">${f}×</button>`).join('')}
       </div>
@@ -1432,7 +1155,7 @@ function pageRecipeDetail(req, res, id) {
       <ol>${r.steps.map(i => `<li>${linkGlossaryTerms(esc(i))}</li>`).join('')}</ol>
       ${r.dosing ? `<div class="dosing-note">⚠️ ${esc(r.dosing)}</div>` : ''}
       <div class="card" style="margin-top:10px;background:var(--bg-subtle,#f7f7f2);">
-        <b style="font-size:0.875rem;">🧮 Dosing calculator</b>
+        <b style="font-size:14px;">🧮 Dosing calculator</b>
         <p class="empty-note" style="padding:2px 0 8px;">Figure out mg per serving so you're not doing the math in your head.</p>
         <label class="field-label" style="margin-top:0;">Total THC in the batch (mg)</label>
         <input type="number" id="dose-total-mg" placeholder="e.g. 200" min="0" step="any">
@@ -1473,7 +1196,7 @@ function pageRecipes(req, res, query) {
   const body = `
     <h1 class="screen-title">Infused Recipes</h1>
     <a class="btn block lilac" href="/recipes/new" style="margin-bottom:14px;">✏️ Submit a Recipe</a>
-    <form method="GET" action="/recipes" style="margin-bottom:12px;display:flex;gap:8px;align-items:center;">
+    <form method="GET" action="/recipes" style="margin-bottom:12px;display:flex;gap:8px;">
       <input type="hidden" name="category" value="${esc(category)}">
       <input type="search" name="q" value="${esc(q)}" placeholder="Search by name, ingredient, or description..." autocomplete="off" style="flex:1;">
       <button class="btn" type="submit">Search</button>
@@ -1491,7 +1214,7 @@ function pageRecipes(req, res, query) {
           return targetId ? `<a href="/recipes/${targetId}">${esc(b)}</a>` : esc(b);
         }).join(', ')} <span style="opacity:.7;">(tap to see how to make it)</span></p>` : ''}
         <details>
-          <summary style="cursor:pointer;font-size:0.7812rem;font-weight:700;color:var(--accent-text);">Ingredients &amp; steps</summary>
+          <summary style="cursor:pointer;font-size:12.5px;font-weight:700;color:var(--brand-green-dark);">Ingredients &amp; steps</summary>
           <p><b>Ingredients:</b></p>
           <ul>${r.ingredients.map(i => `<li>${linkGlossaryTerms(esc(i))}</li>`).join('')}</ul>
           <p><b>Steps:</b></p>
@@ -1510,7 +1233,7 @@ function pageRecipes(req, res, query) {
 function pageRecipeNew(req, res) {
   const body = `
     <h1 class="screen-title">Submit a Recipe</h1>
-    <form method="POST" action="/recipes/new">${csrfField(req)}
+    <form method="POST" action="/recipes/new">
       <label class="field-label">Your name</label>
       <input type="text" name="author" placeholder="e.g. Jordan" required>
       <label class="field-label">Recipe title</label>
@@ -1545,9 +1268,9 @@ async function handleRecipeNewSubmit(req, res) {
 
 function pageGrowing(req, res, query) {
   const viewerId = auth.currentUserId(req);
-  const CATEGORIES = ['Plant Life Cycle', 'Watering', 'Lighting', 'Nutrients & Feeding', 'Pests & Disease', 'Training', 'Harvest & Curing', 'Genetics & Seeds', 'Indoor Setup', 'Outdoor Growing'];
+  const CATEGORIES = ['Plant Life Cycle', 'Watering', 'Lighting', 'Nutrients & Feeding', 'Pests & Disease', 'Training', 'Harvest & Curing', 'Genetics & Seeds', 'Indoor Setup', 'Outdoor Growing', 'Cleaning & Gear Care'];
   const cat = query.get('cat') || 'All';
-  const tips = db.listGrowTips({ category: cat, viewerId }).filter(g => g.category !== 'Cleaning & Gear Care');
+  const tips = db.listGrowTips({ category: cat, viewerId });
   const body = `
     <h1 class="screen-title">Growing</h1>
     <p class="screen-sub">Tips &amp; tricks from home growers. Home cultivation laws vary by location — check yours first.</p>
@@ -1565,13 +1288,13 @@ function pageGrowing(req, res, query) {
         <div style="display:flex;justify-content:space-between;align-items:center;">
           <span class="empty-note" style="padding:0;">by ${esc(g.author || 'Anonymous')}
             ${viewerId != null && g.user_id != null && g.user_id !== viewerId ? `
-              <form method="POST" action="/report" style="display:inline;" onsubmit="return confirm('Report this grow tip for review?')">${csrfField(req)}
+              <form method="POST" action="/report" style="display:inline;" onsubmit="return confirm('Report this grow tip for review?')">
                 <input type="hidden" name="content_type" value="grow_tip">
                 <input type="hidden" name="content_id" value="${g.id}">
                 <input type="hidden" name="redirect_to" value="/growing">
                 <button type="submit" style="background:none;border:none;padding:0;margin-left:6px;color:inherit;text-decoration:underline;cursor:pointer;font-size:inherit;">Report</button>
               </form>
-              <form method="POST" action="/block/${g.user_id}" style="display:inline;" onsubmit="return confirm('Block ${esc(g.author || 'this person')}? You will no longer see their comments, check-ins, or grow tips, and any friendship will end.')">${csrfField(req)}
+              <form method="POST" action="/block/${g.user_id}" style="display:inline;" onsubmit="return confirm('Block ${esc(g.author || 'this person')}? You will no longer see their comments, check-ins, or grow tips, and any community connection will end.')">
                 <input type="hidden" name="redirect_to" value="/growing">
                 <button type="submit" style="background:none;border:none;padding:0;margin-left:6px;color:inherit;text-decoration:underline;cursor:pointer;font-size:inherit;">Block</button>
               </form>
@@ -1585,10 +1308,10 @@ function pageGrowing(req, res, query) {
 }
 
 function pageGrowingNew(req, res) {
-  const CATEGORIES = ['Plant Life Cycle', 'Watering', 'Lighting', 'Nutrients & Feeding', 'Pests & Disease', 'Training', 'Harvest & Curing', 'Genetics & Seeds', 'Indoor Setup', 'Outdoor Growing'];
+  const CATEGORIES = ['Plant Life Cycle', 'Watering', 'Lighting', 'Nutrients & Feeding', 'Pests & Disease', 'Training', 'Harvest & Curing', 'Genetics & Seeds', 'Indoor Setup', 'Outdoor Growing', 'Cleaning & Gear Care'];
   const body = `
     <h1 class="screen-title">Share a Grow Tip</h1>
-    <form method="POST" action="/growing/new">${csrfField(req)}
+    <form method="POST" action="/growing/new">
       <label class="field-label">Your name</label>
       <input type="text" name="author" placeholder="e.g. Sam" required>
       <label class="field-label">Title</label>
@@ -1611,73 +1334,12 @@ async function handleGrowingNewSubmit(req, res) {
   redirect(res, '/growing');
 }
 
-// Cleaning & Gear Care -- split out of the general Growing tips page into
-// its own spot (More tab) since it's really a separate topic (maintaining
-// gear you already own) from cultivation (growing a plant), and was easy
-// to miss buried as just one filter pill among eleven growing categories.
-const GEAR_CARE_CATEGORY = 'Cleaning & Gear Care';
-function pageGearCare(req, res) {
-  const viewerId = auth.currentUserId(req);
-  const tips = db.listGrowTips({ category: GEAR_CARE_CATEGORY, viewerId });
-  const body = `
-    <h1 class="screen-title">Cleaning &amp; Gear Care</h1>
-    <p class="screen-sub">Keeping pipes, rigs, grinders, and vapes resin-free and running well -- tips from real users.</p>
-    <a class="btn block lilac" href="/gear-care/new" style="margin-bottom:14px;">🧼 Share a Cleaning Tip</a>
-    ${tips.map(g => `
-      <div class="card grow-tip-card">
-        <b>${esc(g.title)}</b>
-        <p>${linkGlossaryTerms(esc(g.body))}</p>
-        ${g.source_url ? `<p class="empty-note" style="padding:2px 0 0;">Source: <a href="${esc(g.source_url)}" target="_blank" rel="noopener noreferrer">${esc(g.source_name || g.source_url)}</a></p>` : ''}
-        <div style="display:flex;justify-content:space-between;align-items:center;">
-          <span class="empty-note" style="padding:0;">by ${esc(g.author || 'Anonymous')}
-            ${viewerId != null && g.user_id != null && g.user_id !== viewerId ? `
-              <form method="POST" action="/report" style="display:inline;" onsubmit="return confirm('Report this tip for review?')">${csrfField(req)}
-                <input type="hidden" name="content_type" value="grow_tip">
-                <input type="hidden" name="content_id" value="${g.id}">
-                <input type="hidden" name="redirect_to" value="/gear-care">
-                <button type="submit" style="background:none;border:none;padding:0;margin-left:6px;color:inherit;text-decoration:underline;cursor:pointer;font-size:inherit;">Report</button>
-              </form>
-              <form method="POST" action="/block/${g.user_id}" style="display:inline;" onsubmit="return confirm('Block ${esc(g.author || 'this person')}? You will no longer see their comments, check-ins, or grow tips, and any friendship will end.')">${csrfField(req)}
-                <input type="hidden" name="redirect_to" value="/gear-care">
-                <button type="submit" style="background:none;border:none;padding:0;margin-left:6px;color:inherit;text-decoration:underline;cursor:pointer;font-size:inherit;">Block</button>
-              </form>
-            ` : ''}
-          </span>
-          <button class="kudos-btn" onclick="likeGrowTip(${g.id}, this)">${KUDOS_BUD_ICON}Kudos (${g.likes})</button>
-        </div>
-      </div>`).join('') || `<div class="empty-note">No cleaning tips yet — be the first to <a href="/gear-care/new">share one</a>.</div>`}
-  `;
-  sendHtml(res, layout({ title: 'Cleaning & Gear Care', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
-}
-function pageGearCareNew(req, res) {
-  const body = `
-    <h1 class="screen-title">Share a Cleaning Tip</h1>
-    <form method="POST" action="/gear-care/new">${csrfField(req)}
-      <label class="field-label">Your name</label>
-      <input type="text" name="author" placeholder="e.g. Sam" required>
-      <label class="field-label">Title</label>
-      <input type="text" name="title" required>
-      <label class="field-label">Your tip</label>
-      <textarea name="body" required></textarea>
-      <button class="btn block" type="submit">Post Tip</button>
-    </form>
-  `;
-  sendHtml(res, layout({ title: 'Share a Cleaning Tip', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
-}
-async function handleGearCareNewSubmit(req, res) {
-  const userId = requireUser(req, res);
-  if (userId == null) return;
-  const f = await parseForm(req);
-  await db.createGrowTip({ title: f.title, category: GEAR_CARE_CATEGORY, author: f.author, user_id: userId, body: f.body });
-  redirect(res, '/gear-care');
-}
-
 function pageChat(req, res) {
   const body = `
     <h1 class="screen-title">Ask StrainDex</h1>
     <p class="screen-sub">Ask a question about strains, effects, or anything in the FAQ. Answers are generated from StrainDex's own content.</p>
     <div class="chat-box" id="chat-log"><div class="chat-msg bot">Hi! Ask me something like "what's a good strain for sleep?" or "how long do edibles take to kick in?"</div></div>
-    <form id="chat-form" onsubmit="return sendChat(event)" data-no-loading-state>
+    <form id="chat-form" onsubmit="return sendChat(event)">
       <input type="text" id="chat-input" placeholder="Type your question..." autocomplete="off">
       <button class="btn block" type="submit" style="margin-top:10px;">Ask</button>
     </form>
@@ -1717,7 +1379,7 @@ function pageAdminLogin(req, res, query) {
   const body = `
     <h1 class="screen-title">Admin Login</h1>
     ${err ? `<p style="color:#a13a3a;">Wrong password.</p>` : ''}
-    <form method="POST" action="/admin/login">${csrfField(req)}
+    <form method="POST" action="/admin/login">
       <label class="field-label">Password</label>
       <input type="password" name="password" required>
       <button class="btn block" type="submit">Log In</button>
@@ -1729,20 +1391,14 @@ async function handleAdminLoginSubmit(req, res) {
   const f = await parseForm(req);
   if (auth.checkPassword(f.password)) {
     const token = auth.sign('admin');
-    res.setHeader('Set-Cookie', [
-      `admin_session=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=2592000`,
-      `admin_csrf_token=${encodeURIComponent(auth.csrfTokenFor(token))}; Path=/; SameSite=Lax; Max-Age=2592000`,
-    ]);
+    res.setHeader('Set-Cookie', `admin_session=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=2592000`);
     redirect(res, '/admin');
   } else {
     redirect(res, '/admin/login?err=1');
   }
 }
 function handleAdminLogout(req, res) {
-  res.setHeader('Set-Cookie', [
-    `admin_session=; Path=/; HttpOnly; Max-Age=0`,
-    `admin_csrf_token=; Path=/; Max-Age=0`,
-  ]);
+  res.setHeader('Set-Cookie', `admin_session=; Path=/; HttpOnly; Max-Age=0`);
   redirect(res, '/');
 }
 
@@ -1750,7 +1406,6 @@ function handleAdminLogout(req, res) {
 function pageSignup(req, res, query) {
   const err = query.get('err');
   const deleted = query.get('deleted');
-  const invitedBy = query.get('invited_by');
   const errMessages = {
     taken: 'That username is already taken.',
     age: `You must be ${MIN_AGE} or older to create an account.`,
@@ -1763,15 +1418,14 @@ function pageSignup(req, res, query) {
   const body = `
     <h1 class="screen-title">Create an Account</h1>
     <p class="screen-sub">You must be ${MIN_AGE}+ to use StrainDex.</p>
-    ${invitedBy ? `<p class="empty-note" style="color:var(--accent-text);font-weight:700;">🌿 ${esc(invitedBy)} invited you to StrainDex — sign up and you'll be connected as friends automatically.</p>` : ''}
-    ${deleted ? `<p class="empty-note" style="color:var(--accent-text);">Your account and data have been deleted.</p>` : ''}
+    ${deleted ? `<p class="empty-note" style="color:var(--brand-green-dark);">Your account and data have been deleted.</p>` : ''}
     ${err && errMessages[err] ? `<p style="color:#a13a3a;">${esc(errMessages[err])}</p>` : ''}
     <a href="/auth/google" class="btn secondary block" style="text-decoration:none;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:14px;">
       <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.72v2.26h2.9c1.7-1.57 2.7-3.88 2.7-6.62z"/><path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.9-2.26c-.8.54-1.84.86-3.06.86-2.35 0-4.34-1.59-5.05-3.72H.98v2.33A9 9 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.95 10.7A5.4 5.4 0 0 1 3.67 9c0-.59.1-1.17.28-1.7V4.97H.98A9 9 0 0 0 0 9c0 1.45.35 2.83.98 4.03l2.97-2.33z"/><path fill="#EA4335" d="M9 3.58c1.32 0 2.5.46 3.44 1.35l2.58-2.58C13.46.89 11.43 0 9 0A9 9 0 0 0 .98 4.97l2.97 2.33C4.66 5.17 6.65 3.58 9 3.58z"/></svg>
       Continue with Google
     </a>
     <p class="empty-note" style="text-align:center;margin:0 0 14px;">or</p>
-    <form method="POST" action="/signup">${csrfField(req)}
+    <form method="POST" action="/signup">
       <label class="field-label" style="margin-top:0;">Username</label>
       <input type="text" name="username" id="signup-username" required minlength="3" maxlength="24" autocomplete="username">
       <label class="field-label">Email</label>
@@ -1892,10 +1546,7 @@ async function handleGoogleCallback(req, res, query) {
     }
     if (user) {
       const token = auth.signUserSessionValue(user.id);
-      res.setHeader('Set-Cookie', [
-        `user_session=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000`,
-        `csrf_token=${encodeURIComponent(auth.csrfTokenFor(token))}; Path=/; SameSite=Lax; Max-Age=31536000`,
-      ]);
+      res.setHeader('Set-Cookie', `user_session=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000`);
       return redirect(res, '/');
     }
     // 3) Genuinely new person -- Google doesn't give us a birth date, and
@@ -1932,7 +1583,7 @@ function pageGoogleFinish(req, res, query) {
     <h1 class="screen-title">Almost there</h1>
     <p class="screen-sub">Signed in as ${esc(profile.email)} with Google. Just need a couple more things.</p>
     ${err && errMessages[err] ? `<p style="color:#a13a3a;">${esc(errMessages[err])}</p>` : ''}
-    <form method="POST" action="/auth/google/finish">${csrfField(req)}
+    <form method="POST" action="/auth/google/finish">
       <label class="field-label" style="margin-top:0;">Username</label>
       <input type="text" name="username" required minlength="3" maxlength="24" value="${esc(suggestedUsername)}">
       <label class="field-label">Date of birth</label>
@@ -1943,55 +1594,6 @@ function pageGoogleFinish(req, res, query) {
   `;
   sendHtml(res, layout({ title: 'Finish Signing Up', body }));
 }
-
-// Invite links -- a personal, stateless referral link per user
-// ("/invite/<signed-code>"). Deliberately not a new database table: the
-// code is just the inviter's id run through the same HMAC sign/verify
-// helper already used for the Google OAuth state cookie and the admin
-// session, so there's no schema change and no expiry to track -- a
-// person's invite link keeps working for as long as their account does.
-// Landing on the link doesn't create a friendship by itself (the visitor
-// might already have an account, or might just bounce) -- see
-// pageInviteLink and completePendingInvite for the two different paths
-// that can actually result in one.
-function makeInviteCode(userId) {
-  return auth.sign(`invite:${userId}`);
-}
-function resolveInviteCode(code) {
-  const value = auth.verify(code);
-  if (!value || !value.startsWith('invite:')) return null;
-  const id = Number(value.slice('invite:'.length));
-  return Number.isFinite(id) ? id : null;
-}
-// Reads the pending_invite cookie set by pageInviteLink and, if it's
-// present and still resolves to a real user, creates an already-accepted
-// friendship between the inviter and the account that just finished
-// signing up. Composed from the existing request/accept primitives rather
-// than a new "force-friend" db function, so the accepted-friendship logic
-// itself isn't duplicated anywhere. Called once, right after a signup
-// actually completes (password-based or Google) -- clicking an invite
-// link alone is never enough on its own, only finishing signup through it
-// is. Failures here (blocked, self-invite, a garbled cookie) are swallowed
-// on purpose -- a broken invite must never be the reason a real signup
-// fails.
-async function completePendingInvite(req, newUserId) {
-  const cookies = auth.parseCookies(req);
-  const raw = cookies.pending_invite;
-  if (!raw) return;
-  const inviterId = Number(decodeURIComponent(raw));
-  if (!Number.isFinite(inviterId) || inviterId === newUserId) return;
-  if (!db.getUserById(inviterId)) return;
-  try {
-    await db.sendFriendRequest(inviterId, newUserId);
-    await db.respondToFriendRequest(newUserId, inviterId, true);
-  } catch (e) {
-    // Blocked, or some other edge case -- never let this fail the signup itself.
-  }
-}
-// The clear-cookie fragment for pending_invite, meant to be appended to
-// whatever Set-Cookie array a signup handler is already sending alongside
-// the new user_session cookie -- see the two call sites.
-const CLEAR_PENDING_INVITE_COOKIE = 'pending_invite=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0';
 
 async function handleGoogleFinishSubmit(req, res) {
   const cookies = auth.parseCookies(req);
@@ -2004,13 +1606,10 @@ async function handleGoogleFinishSubmit(req, res) {
   if (!isOldEnough(f.birth_date)) return redirect(res, '/auth/google/finish?err=age');
   if (db.getUserByUsername(username)) return redirect(res, '/auth/google/finish?err=taken');
   const user = await db.createUserFromGoogle({ username, birth_date: f.birth_date, email: profile.email, google_id: profile.sub });
-  await completePendingInvite(req, user.id);
   const token = auth.signUserSessionValue(user.id);
   res.setHeader('Set-Cookie', [
     `user_session=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000`,
-    `csrf_token=${encodeURIComponent(auth.csrfTokenFor(token))}; Path=/; SameSite=Lax; Max-Age=31536000`,
     `google_pending=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0`,
-    CLEAR_PENDING_INVITE_COOKIE,
   ]);
   redirect(res, '/onboarding');
 }
@@ -2027,49 +1626,10 @@ async function handleSignupSubmit(req, res) {
   if (db.getUserByUsername(username)) return redirect(res, '/signup?err=taken');
   if (db.getUserByEmail(email)) return redirect(res, '/signup?err=email_taken');
   const user = await db.createUser({ username, password: f.password, birth_date: f.birth_date, email });
-  await completePendingInvite(req, user.id);
   const token = auth.signUserSessionValue(user.id);
-  res.setHeader('Set-Cookie', [
-    `user_session=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000`,
-    `csrf_token=${encodeURIComponent(auth.csrfTokenFor(token))}; Path=/; SameSite=Lax; Max-Age=31536000`,
-    CLEAR_PENDING_INVITE_COOKIE,
-  ]);
+  res.setHeader('Set-Cookie', `user_session=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000`);
   redirect(res, '/onboarding');
 }
-
-// The public landing spot for a personal invite link (see makeInviteCode).
-// Three outcomes depending on who's clicking it:
-//   1. Garbled/invalid code -- fails open to a normal signup rather than
-//      an error page; whoever clicked it still ends up somewhere useful.
-//   2. Already logged in -- skip the signup detour entirely and just send
-//      a friend request directly (same effect as typing their username
-//      into Friends search). Not auto-accepted in this branch, unlike
-//      outcome 3 below -- silently friending two already-existing accounts
-//      without either side confirming isn't the same narrow exception a
-//      brand-new signup through the link is.
-//   3. Not logged in -- stash the inviter in a short-lived cookie and send
-//      them to signup; completePendingInvite() picks it up if signup
-//      actually goes through.
-async function pageInviteLink(req, res, code) {
-  const inviterId = resolveInviteCode(code);
-  const inviter = inviterId != null ? db.getUserById(inviterId) : null;
-  if (!inviter) return redirect(res, '/signup');
-
-  const viewerId = auth.currentUserId(req);
-  if (viewerId != null) {
-    if (viewerId !== inviterId) {
-      try { await db.sendFriendRequest(viewerId, inviterId); } catch (e) { /* self/blocked -- nothing to show for it */ }
-    }
-    return redirect(res, '/friends');
-  }
-
-  // An hour is long enough to actually fill out the signup form, short
-  // enough that a stale cookie from a much earlier visit doesn't quietly
-  // attach itself to some unrelated later signup on the same device.
-  res.setHeader('Set-Cookie', `pending_invite=${encodeURIComponent(String(inviterId))}; Path=/; HttpOnly; SameSite=Lax; Max-Age=3600`);
-  redirect(res, `/signup?invited_by=${encodeURIComponent(inviter.username)}`);
-}
-
 function pageLogin(req, res, query) {
   const err = query.get('err');
   const errMessages = {
@@ -2088,7 +1648,7 @@ function pageLogin(req, res, query) {
       Continue with Google
     </a>
     <p class="empty-note" style="text-align:center;margin:0 0 14px;">or</p>
-    <form method="POST" action="/login">${csrfField(req)}
+    <form method="POST" action="/login">
       <label class="field-label" style="margin-top:0;">Username or email</label>
       <input type="text" name="username" id="login-username" required autocomplete="username">
       <label class="field-label">Password</label>
@@ -2125,207 +1685,44 @@ function pageOnboarding(req, res) {
     { icon: '🔥', title: 'Log your first check-in', body: 'Tap "Light It Up" any time you try a strain — rate it, add tasting notes, and start your collection.' },
     { icon: '🧭', title: 'Not sure where to start?', body: `Take the 3-question quiz to get matched to a starter strain, or hit "Surprise Me" for a random pick from the ${db.countStrains().toLocaleString()}+ strain library.` },
     { icon: '📊', title: 'See your own patterns', body: 'Your Patterns reflects your check-in history back at you — favorite effects, top strain type, even a tolerance break tracker.' },
-    { icon: '🧑\u200d🤝\u200d🧑', title: 'Bring your friends', body: 'Add friends to see their check-ins, message them, share strains, and trade duplicate cards.' },
+    { icon: '🧑\u200d🤝\u200d🧑', title: 'Bring your community', body: 'Add people to your community to see their check-ins, message them, share strains, and trade duplicate cards.' },
     { icon: '⭐', title: 'A lot more in "More"', body: 'Compare strains side by side, check what’s trending, look up your state’s cannabis laws, keep a wishlist, and more — it’s all grouped by category in the More tab.' },
-    // Deliberately last: a straight yes/no offer to add StrainDex to the
-    // home screen, right while someone's already paying attention during
-    // signup. On Chromium (Android/desktop) "Yes" fires the browser's own
-    // one-tap install; on iOS, where Apple gives websites no install API
-    // at all, "Yes" instead reveals the manual Share -> Add to Home Screen
-    // steps in place. See StrainDexInstall in app.js and, for anyone who
-    // skips this or comes back later, the permanent guide at
-    // /add-to-home-screen.
-    { icon: '📲', title: 'Add StrainDex to your phone', install: true },
   ];
-  const installStepIndex = steps.length - 1;
   const body = `
     <div class="card" style="text-align:center;padding:32px 20px;">
       <div id="onboarding-steps">
         ${steps.map((s, i) => `
           <div class="onboarding-step" data-step="${i}" style="${i === 0 ? '' : 'display:none;'}">
-            ${s.install ? `
-              <div style="font-size:44px;margin-bottom:16px;">${s.icon}</div>
-              <h2 style="margin:0 0 8px;font-size:1.125rem;">${esc(s.title)}</h2>
-              <p style="color:var(--ink-secondary);font-size:0.8438rem;line-height:1.6;margin:0 0 18px;">One tap gets you a real icon and a full-screen app — no app store needed.</p>
-              <div id="onboarding-install-offer" style="display:flex;gap:8px;align-items:center;">
-                <button type="button" id="onboarding-install-no" class="btn secondary" style="flex:1;">Not now</button>
-                <button type="button" id="onboarding-install-yes" class="btn" style="flex:1;">📲 Yes, add it</button>
-              </div>
-              <div id="onboarding-install-ios" style="display:none;text-align:left;">
-                <p class="empty-note" style="padding:0 0 6px;">On iPhone/iPad, Safari makes you do this one manually:</p>
-                <ol style="margin:0 0 14px;padding-left:20px;font-size:0.8125rem;">
-                  <li style="margin-bottom:6px;">Tap the <b>Share</b> icon in Safari's toolbar.</li>
-                  <li style="margin-bottom:6px;">Scroll down and tap <b>Add to Home Screen</b>.</li>
-                  <li>Tap <b>Add</b> in the top right.</li>
-                </ol>
-                <button type="button" id="onboarding-install-done" class="btn block">Got it</button>
-              </div>
-            ` : `
-              <div style="font-size:44px;margin-bottom:16px;">${s.icon}</div>
-              <h2 style="margin:0 0 8px;font-size:1.125rem;">${esc(s.title)}</h2>
-              <p style="color:var(--ink-secondary);font-size:0.8438rem;line-height:1.6;margin:0;">${esc(s.body)}</p>
-            `}
+            <div style="font-size:44px;margin-bottom:16px;">${s.icon}</div>
+            <h2 style="margin:0 0 8px;font-size:18px;">${esc(s.title)}</h2>
+            <p style="color:var(--ink-secondary);font-size:13.5px;line-height:1.6;margin:0;">${esc(s.body)}</p>
           </div>`).join('')}
       </div>
       <div style="display:flex;justify-content:center;gap:6px;margin:22px 0 6px;">
         ${steps.map((_, i) => `<span class="onboarding-dot" data-dot="${i}" style="width:6px;height:6px;border-radius:50%;background:${i === 0 ? 'var(--brand-green)' : 'var(--border)'};"></span>`).join('')}
       </div>
     </div>
-    <div style="display:flex;gap:8px;align-items:center;margin-top:14px;" id="onboarding-standard-actions">
+    <div style="display:flex;gap:8px;margin-top:14px;">
       <a href="/" class="btn secondary block" style="flex:1;">Skip</a>
       <button type="button" id="onboarding-next" class="btn block" style="flex:1;">Next</button>
     </div>
     <script>
       (function() {
-        let total = ${steps.length};
-        let installStepIndex = ${installStepIndex};
+        const total = ${steps.length};
         let i = 0;
         const nextBtn = document.getElementById('onboarding-next');
-        const standardActions = document.getElementById('onboarding-standard-actions');
-
         function render() {
           document.querySelectorAll('.onboarding-step').forEach(el => { el.style.display = Number(el.dataset.step) === i ? '' : 'none'; });
           document.querySelectorAll('.onboarding-dot').forEach(el => { el.style.background = Number(el.dataset.dot) === i ? 'var(--brand-green)' : 'var(--border)'; });
-          standardActions.style.display = i === installStepIndex ? 'none' : 'flex';
           nextBtn.textContent = i === total - 1 ? 'Get started' : 'Next';
         }
         nextBtn.addEventListener('click', () => {
           if (i < total - 1) { i++; render(); } else { window.location.href = '/'; }
         });
-
-        // Already running installed (e.g. re-opened this link from inside
-        // the installed app, or installed earlier via a [data-install-trigger]
-        // button elsewhere) -- nothing to offer, so drop the step entirely
-        // rather than showing a dead-end screen.
-        const install = window.StrainDexInstall;
-        if (install && install.isInstalled && install.isInstalled()) {
-          const stepEl = document.querySelector('.onboarding-step[data-step="' + installStepIndex + '"]');
-          const dotEl = document.querySelector('.onboarding-dot[data-dot="' + installStepIndex + '"]');
-          if (stepEl) stepEl.remove();
-          if (dotEl) dotEl.remove();
-          total -= 1;
-          installStepIndex = -1;
-        }
-
-        const yesBtn = document.getElementById('onboarding-install-yes');
-        const noBtn = document.getElementById('onboarding-install-no');
-        const doneBtn = document.getElementById('onboarding-install-done');
-        const offerBox = document.getElementById('onboarding-install-offer');
-        const iosBox = document.getElementById('onboarding-install-ios');
-        if (yesBtn) {
-          yesBtn.addEventListener('click', async () => {
-            if (install && install.isAvailable && install.isAvailable()) {
-              yesBtn.disabled = true;
-              yesBtn.textContent = 'Adding…';
-              await install.prompt();
-              window.location.href = '/';
-            } else if (install && install.isIOS && install.isIOS()) {
-              offerBox.style.display = 'none';
-              iosBox.style.display = '';
-            } else {
-              // Not iOS, and the browser hasn't offered a native prompt
-              // (e.g. Firefox, or Chromium just hasn't decided to yet) --
-              // send them to the full guide instead of a dead end.
-              window.location.href = '/add-to-home-screen';
-            }
-          });
-        }
-        if (noBtn) noBtn.addEventListener('click', () => { window.location.href = '/'; });
-        if (doneBtn) doneBtn.addEventListener('click', () => { window.location.href = '/'; });
-
-        render();
       })();
     </script>
   `;
   sendHtml(res, layout({ title: 'Welcome', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)), showBack: false }));
-}
-
-// ---------------------------------------------------------------- add to home screen
-// StrainDex is a PWA, not something distributed through the App Store or
-// Play Store -- most people have never installed a website before, so this
-// exists as the permanent, findable version of "how do I actually do that"
-// (the onboarding install step covers the same ground once, right after
-// signup, but this is here for anyone who skipped it, switched devices, or
-// just wants the instructions again). Shows all three platforms rather
-// than trying to guess right from the server side (no reliable signal
-// pre-JS), then a small inline script auto-selects the tab that matches
-// the visitor's actual device and reveals the one-tap install button only
-// where the browser has actually offered one (see StrainDexInstall in
-// app.js) -- Chromium never fires that offer on the very first page view,
-// so the button starts hidden and appears if/when the browser decides to.
-function pageAddToHomeScreen(req, res) {
-  const body = `
-    <h1 class="screen-title">📲 Add StrainDex to Your Home Screen</h1>
-    <p class="screen-sub">StrainDex is a <b>web app</b>, not something you download from an app store — but you can still add it to your home screen so it opens full-screen with its own icon, just like any other app.</p>
-
-    <button type="button" class="btn block" data-install-trigger style="display:none;margin-bottom:8px;">📲 Install StrainDex</button>
-    <p class="empty-note" id="a2hs-auto-note" style="display:none;padding:0 0 14px;">Tap above and confirm — your browser will add the icon automatically.</p>
-
-    <div style="margin-bottom:14px;">
-      <button type="button" class="filter-pill active" data-a2hs-tab="ios">📱 iPhone / iPad</button>
-      <button type="button" class="filter-pill" data-a2hs-tab="android">🤖 Android</button>
-      <button type="button" class="filter-pill" data-a2hs-tab="desktop">💻 Desktop</button>
-    </div>
-
-    <div class="card a2hs-panel" data-a2hs-panel="ios">
-      <h2 style="margin:0 0 8px;font-size:0.9375rem;">iPhone &amp; iPad (Safari)</h2>
-      <ol style="margin:0;padding-left:20px;">
-        <li style="margin-bottom:8px;">Open StrainDex in <b>Safari</b> — this only works in Safari itself, not Chrome, Instagram, or another in-app browser.</li>
-        <li style="margin-bottom:8px;">Tap the <b>Share</b> icon (the square with an arrow pointing up) in the toolbar.</li>
-        <li style="margin-bottom:8px;">Scroll down and tap <b>Add to Home Screen</b>.</li>
-        <li>Tap <b>Add</b> in the top right — that's it.</li>
-      </ol>
-      <p class="empty-note" style="padding-top:8px;">Apple doesn't let any website trigger this automatically — the Share menu is the only way in on iOS.</p>
-    </div>
-
-    <div class="card a2hs-panel" data-a2hs-panel="android" style="display:none;">
-      <h2 style="margin:0 0 8px;font-size:0.9375rem;">Android (Chrome)</h2>
-      <ol style="margin:0;padding-left:20px;">
-        <li style="margin-bottom:8px;">Tap the <b>Install StrainDex</b> button above if you see it — Chrome will prompt you and add the icon for you.</li>
-        <li style="margin-bottom:8px;">Don't see the button? Tap the <b>⋮</b> menu in the top right of Chrome.</li>
-        <li>Tap <b>Install app</b> (or <b>Add to Home screen</b>), then confirm.</li>
-      </ol>
-    </div>
-
-    <div class="card a2hs-panel" data-a2hs-panel="desktop" style="display:none;">
-      <h2 style="margin:0 0 8px;font-size:0.9375rem;">Desktop (Chrome / Edge)</h2>
-      <ol style="margin:0;padding-left:20px;">
-        <li style="margin-bottom:8px;">Tap the <b>Install StrainDex</b> button above if you see it.</li>
-        <li style="margin-bottom:8px;">Or click the install icon at the right edge of the address bar.</li>
-        <li>Or open the <b>⋮</b> menu and choose <b>Install StrainDex…</b>.</li>
-      </ol>
-      <p class="empty-note" style="padding-top:8px;">Firefox and Safari on desktop don't currently support installing websites this way — StrainDex still works fine in a regular browser tab either way.</p>
-    </div>
-
-    <p class="empty-note" style="margin-top:14px;">Already installed? Look for the StrainDex leaf icon on your home screen or desktop next time instead of coming back to a browser tab.</p>
-
-    <script>
-      (function () {
-        const tabs = document.querySelectorAll('[data-a2hs-tab]');
-        const panels = document.querySelectorAll('[data-a2hs-panel]');
-        function selectTab(name) {
-          tabs.forEach(t => t.classList.toggle('active', t.dataset.a2hsTab === name));
-          panels.forEach(p => { p.style.display = p.dataset.a2hsPanel === name ? '' : 'none'; });
-        }
-        tabs.forEach(t => t.addEventListener('click', () => selectTab(t.dataset.a2hsTab)));
-
-        const install = window.StrainDexInstall;
-        const autoNote = document.getElementById('a2hs-auto-note');
-        if (install && install.isInstalled && install.isInstalled()) {
-          if (autoNote) { autoNote.textContent = 'StrainDex is already installed on this device.'; autoNote.style.display = ''; }
-        } else if (install && install.onAvailable) {
-          install.onAvailable(() => { if (autoNote) autoNote.style.display = ''; });
-        }
-
-        // Auto-select whichever tab matches this device -- doesn't affect
-        // the button above, just saves a tap for the common case.
-        if (install && install.isIOS && install.isIOS()) selectTab('ios');
-        else if (/android/i.test(navigator.userAgent)) selectTab('android');
-        else selectTab('desktop');
-      })();
-    </script>
-  `;
-  sendHtml(res, layout({ title: 'Add to Home Screen', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
 // "Find your first strain" quiz -- a lightweight 3-question filter over the
@@ -2377,12 +1774,12 @@ function pageCompare(req, res, query) {
   const body = `
     <h1 class="screen-title">Compare Strains</h1>
     <p class="screen-sub">Pick two strains to see them side by side.</p>
-    <div style="display:flex;gap:10px;align-items:center;margin-bottom:16px;">
+    <div style="display:flex;gap:10px;margin-bottom:16px;">
       ${pickerBox('a', a)}
       ${pickerBox('b', b)}
     </div>
     ${a && b ? `
-      <table style="width:100%;border-collapse:collapse;font-size:0.8125rem;">
+      <table style="width:100%;border-collapse:collapse;font-size:13px;">
         ${rows.map(([label, av, bv]) => `
           <tr style="border-bottom:1px solid var(--border);">
             <td style="padding:8px 6px;font-weight:700;color:var(--ink-secondary);width:28%;vertical-align:top;">${esc(label)}</td>
@@ -2401,7 +1798,7 @@ function pageCompare(req, res, query) {
 // wants to be shown something they'd never have found by browsing.
 function handleSurpriseMe(req, res) {
   const userId = auth.currentUserId(req);
-  const all = db.listAllStrains();
+  const all = db.listStrains({ limit: 5000 });
   const tried = new Set(userId != null ? db.listCheckins({ userId, limit: 5000 }).map(c => c.strain_id) : []);
   const untried = all.filter(s => !tried.has(s.id));
   const pool = untried.length ? untried : all; // everyone's tried everything -- fall back to the full library
@@ -2436,14 +1833,14 @@ function pageGrowJournal(req, res) {
   const body = `
     <h1 class="screen-title">Grow Journal</h1>
     <p class="screen-sub">A private photo timeline for tracking a plant from seedling to harvest. Use the title field as a plant nickname to keep entries for the same plant easy to spot.</p>
-    <form method="POST" action="/grow-journal" style="margin-bottom:20px;">${csrfField(req)}
+    <form method="POST" action="/grow-journal" style="margin-bottom:20px;">
       <label class="field-label" style="margin-top:0;">Title (optional)</label>
       <input type="text" name="title" placeholder="e.g. Wedding Cake #1 — Day 12">
       <label class="field-label">Notes</label>
       <textarea name="note" placeholder="What's going on with it today?"></textarea>
       <label class="field-label">Photo</label>
       <div class="photo-picker">
-        <div class="photo-upload-box" id="gj-photo-upload-box" onclick="document.getElementById('gj-photo-file-input').click()" role="button" tabindex="0">
+        <div class="photo-upload-box" id="gj-photo-upload-box" onclick="document.getElementById('gj-photo-file-input').click()">
           <div class="up-ic">📷</div>
           <div class="up-txt">Tap to snap or upload a photo (optional)</div>
         </div>
@@ -2477,7 +1874,7 @@ function pageGrowJournal(req, res) {
         </div>
         ${e.photo ? `<div class="checkin-photo-thumb" style="margin:8px 0;"><img src="${esc(e.photo)}" alt="Grow journal photo"></div>` : ''}
         ${e.note ? `<p style="margin:6px 0 8px;">${esc(e.note)}</p>` : ''}
-        <form method="POST" action="/grow-journal/${e.id}/delete" onsubmit="return confirm('Delete this entry? This cannot be undone.')">${csrfField(req)}
+        <form method="POST" action="/grow-journal/${e.id}/delete" onsubmit="return confirm('Delete this entry? This cannot be undone.')">
           <button type="submit" class="empty-note" style="padding:0;background:none;border:none;color:#a13a3a;cursor:pointer;font-size:inherit;">Delete</button>
         </form>
       </div>
@@ -2509,8 +1906,8 @@ function pageFriendsPicks(req, res) {
   if (userId == null) return;
   const picks = db.getFriendsPicks(userId, 20);
   const body = `
-    <h1 class="screen-title">Friends' Picks</h1>
-    <p class="screen-sub">Strains your friends rated 4★ or higher that you haven't checked into yet.</p>
+    <h1 class="screen-title">Community Picks</h1>
+    <p class="screen-sub">Strains your community rated 4★ or higher that you haven't checked into yet.</p>
     ${picks.length ? picks.map(p => `
       <a class="library-row" href="/strains/${p.strain.id}" style="text-decoration:none;color:inherit;">
         ${strainPhotoTag(p.strain, 'sm')}
@@ -2519,9 +1916,131 @@ function pageFriendsPicks(req, res) {
           <div class="sub">Loved by ${p.friendNames.map(esc).join(', ')} · ${p.avgRating}★ avg</div>
         </div>
       </a>
-    `).join('') : `<div class="empty-note">Nothing to show yet — either your friends haven't rated anything 4★+, or you've already tried everything they love. <a href="/friends">Add more friends</a> or check back later.</div>`}
+    `).join('') : `<div class="empty-note">Nothing to show yet — either your community hasn't rated anything 4★+, or you've already tried everything they love. <a href="/friends">Add more people</a> or check back later.</div>`}
   `;
-  sendHtml(res, layout({ title: "Friends' Picks", active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: "Community Picks", active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
+}
+
+// ---------------------------------------------------------------- Puff Puff Ask (community forum)
+// Sections mirror the same filter dimensions already used in the Strain
+// Library (Type, Effect, Terpene, Relief/ailment, Rarity), plus a General
+// catch-all -- so the forum's categories line up with vocabulary people
+// already know from browsing strains, rather than inventing a new taxonomy.
+// Threads and replies are persisted for real via db.listForumThreads /
+// db.getForumThread / db.createForumThread / db.createForumReply (backed by
+// the forum_threads / forum_replies tables in lib/db.js).
+const FORUM_SECTIONS = [
+  { key: 'general', label: 'General', icon: '💬', desc: 'Anything goes' },
+  { key: 'type', label: 'By Type', icon: '🌿', desc: 'Indica, Sativa & Hybrid talk' },
+  { key: 'effect', label: 'By Effect', icon: '🎯', desc: 'Chasing (or avoiding) a specific feeling' },
+  { key: 'terpene', label: 'By Terpene', icon: '🌸', desc: 'Aroma & flavor nerdery' },
+  { key: 'ailment', label: 'By Relief', icon: '🛡️', desc: 'What helped with what' },
+  { key: 'rarity', label: 'By Rarity', icon: '⭐', desc: 'Common finds to legendary grails' },
+];
+const FORUM_SECTION_KEYS = new Set(FORUM_SECTIONS.map(s => s.key));
+function forumSectionMeta(key) { return FORUM_SECTIONS.find(s => s.key === key) || FORUM_SECTIONS[0]; }
+function forumAuthorName(userId) {
+  const u = db.getUserById(userId);
+  return u ? u.username : 'Former user';
+}
+function renderForumThreadRow(t) {
+  const meta = forumSectionMeta(t.section);
+  return `
+    <a class="library-row" href="/puff-puff-ask/${t.id}" style="text-decoration:none;color:inherit;">
+      <div class="info">
+        <div class="nm">${esc(t.title)}</div>
+        <div class="sub">${meta.icon} ${esc(meta.label)} · by ${esc(forumAuthorName(t.user_id))} · ${t.replyCount} repl${t.replyCount === 1 ? 'y' : 'ies'}</div>
+      </div>
+    </a>`;
+}
+function pagePuffPuffAsk(req, res, query) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const sectionKey = query.get('section') || '';
+  const activeSection = FORUM_SECTION_KEYS.has(sectionKey) ? sectionKey : '';
+  const threads = db.listForumThreads({ section: activeSection || undefined });
+  const body = `
+    <h1 class="screen-title">💨 Puff Puff Ask</h1>
+    <p class="screen-sub">Ask the community anything — browse by section or start your own thread.</p>
+    <div class="more-grid" style="margin-bottom:16px;">
+      ${FORUM_SECTIONS.map(s => `
+        <a class="more-tile ${activeSection === s.key ? 'active' : ''}" href="/puff-puff-ask?section=${s.key}">
+          <span class="ic">${s.icon}</span>
+          <div class="t">${esc(s.label)}</div>
+          <div class="s">${esc(s.desc)}</div>
+        </a>`).join('')}
+    </div>
+    ${activeSection ? `<p class="empty-note" style="margin-bottom:8px;">Showing ${esc(forumSectionMeta(activeSection).label)} · <a href="/puff-puff-ask">View all sections</a></p>` : ''}
+
+    <div class="card" style="margin-bottom:16px;">
+      <b style="font-size:14px;">Start a thread</b>
+      <form method="POST" action="/puff-puff-ask/new" style="margin-top:8px;">
+        <label class="field-label" style="margin-top:0;">Section</label>
+        <select name="section">${FORUM_SECTIONS.map(s => `<option value="${s.key}" ${activeSection === s.key ? 'selected' : ''}>${s.icon} ${esc(s.label)}</option>`).join('')}</select>
+        <label class="field-label">Title</label>
+        <input type="text" name="title" placeholder="What's on your mind?" required maxlength="140">
+        <label class="field-label">Details</label>
+        <textarea name="body" placeholder="Add some context..." required></textarea>
+        <button class="btn block" type="submit" style="margin-top:10px;">Post Thread</button>
+      </form>
+    </div>
+
+    <div class="section-label">${activeSection ? esc(forumSectionMeta(activeSection).label) + ' threads' : 'Recent threads'} (${threads.length})</div>
+    ${threads.length ? threads.map(renderForumThreadRow).join('') : `<div class="empty-note">No threads here yet — be the first to ask.</div>`}
+  `;
+  sendHtml(res, layout({ title: 'Puff Puff Ask', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
+}
+function pagePuffPuffAskThread(req, res, id) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const t = db.getForumThread(id);
+  if (!t) return notFound(res);
+  const meta = forumSectionMeta(t.section);
+  const body = `
+    <p class="empty-note" style="padding:0 0 6px;">${meta.icon} <a href="/puff-puff-ask?section=${t.section}">${esc(meta.label)}</a></p>
+    <h1 class="screen-title">${esc(t.title)}</h1>
+    <div class="card" style="margin-bottom:14px;">
+      <div class="empty-note" style="padding:0 0 6px;">by ${esc(forumAuthorName(t.user_id))} · <span class="local-time" data-utc="${t.created_at}Z">${esc(t.created_at)} UTC</span></div>
+      <p style="margin:0;white-space:pre-wrap;">${esc(t.body)}</p>
+    </div>
+
+    <div class="section-label">${t.replies.length} repl${t.replies.length === 1 ? 'y' : 'ies'}</div>
+    ${t.replies.length ? t.replies.map(r => `
+      <div class="card" style="margin-bottom:8px;">
+        <div class="empty-note" style="padding:0 0 4px;">${esc(forumAuthorName(r.user_id))} · <span class="local-time" data-utc="${r.created_at}Z">${esc(r.created_at)} UTC</span></div>
+        <p style="margin:0;white-space:pre-wrap;">${esc(r.body)}</p>
+      </div>
+    `).join('') : `<div class="empty-note">No replies yet — say something.</div>`}
+
+    <form method="POST" action="/puff-puff-ask/${t.id}/reply" style="margin-top:10px;">
+      <textarea name="body" placeholder="Write a reply..." required></textarea>
+      <button class="btn block" type="submit" style="margin-top:8px;">Reply</button>
+    </form>
+  `;
+  sendHtml(res, layout({ title: t.title, active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
+}
+async function handlePuffPuffAskNew(req, res) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const f = await parseForm(req);
+  const title = String(f.title || '').trim();
+  const body = String(f.body || '').trim();
+  const section = FORUM_SECTION_KEYS.has(f.section) ? f.section : 'general';
+  if (!title || !body) return redirect(res, '/puff-puff-ask');
+  const thread = await db.createForumThread({ user_id: userId, section, title, body });
+  redirect(res, `/puff-puff-ask/${thread.id}`);
+}
+async function handlePuffPuffAskReply(req, res, id) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const t = db.getForumThread(id);
+  if (!t) return notFound(res);
+  const f = await parseForm(req);
+  const body = String(f.body || '').trim();
+  if (body) {
+    await db.createForumReply({ thread_id: t.id, user_id: userId, body });
+  }
+  redirect(res, `/puff-puff-ask/${t.id}`);
 }
 
 // Custom personal lists -- as many as someone wants ("Morning strains",
@@ -2530,18 +2049,10 @@ function pageLists(req, res) {
   const userId = requireUser(req, res);
   if (userId == null) return;
   const lists = db.listCustomLists(userId);
-  const wishlistCount = db.getWishlist(userId).length;
   const body = `
-    <h1 class="screen-title">Lists</h1>
+    <h1 class="screen-title">Your Lists</h1>
     <p class="screen-sub">Organize strains however makes sense to you — "Morning," "Date night," "Sleep," anything.</p>
-    <a href="/wishlist" class="library-row" style="text-decoration:none;color:inherit;">
-      <div class="info">
-        <div class="nm">⭐ Wishlist</div>
-        <div class="sub">${wishlistCount} strain${wishlistCount === 1 ? '' : 's'} · Built-in</div>
-      </div>
-    </a>
-    <div class="section-label" style="margin-top:16px;">Your custom lists</div>
-    <form method="POST" action="/lists" style="display:flex;gap:8px;align-items:center;margin-bottom:16px;">${csrfField(req)}
+    <form method="POST" action="/lists" style="display:flex;gap:8px;margin-bottom:16px;">
       <input type="text" name="name" placeholder="New list name..." required style="flex:1;margin:0;">
       <button class="btn" type="submit" style="white-space:nowrap;">Create</button>
     </form>
@@ -2555,13 +2066,13 @@ function pageLists(req, res) {
             <div class="sub">${count} strain${count === 1 ? '' : 's'}</div>
           </div>
         </a>
-        <form method="POST" action="/lists/${l.id}/delete" onsubmit="return confirm('Delete this list? The strains themselves aren\\'t affected, just this list.')">${csrfField(req)}
+        <form method="POST" action="/lists/${l.id}/delete" onsubmit="return confirm('Delete this list? The strains themselves aren\\'t affected, just this list.')">
           <button type="submit" class="empty-note" style="padding:0 6px;background:none;border:none;color:#a13a3a;cursor:pointer;font-size:inherit;">Delete</button>
         </form>
       </div>`;
-    }).join('') : `<div class="empty-note">No custom lists yet — create your first one above.</div>`}
+    }).join('') : `<div class="empty-note">No lists yet — create your first one above.</div>`}
   `;
-  sendHtml(res, layout({ title: 'Lists', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: 'Your Lists', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 function pageListDetail(req, res, id) {
   const userId = requireUser(req, res);
@@ -2580,7 +2091,7 @@ function pageListDetail(req, res, id) {
             <div class="sub">${esc(s.type)} · THC ${esc(s.thc)}</div>
           </div>
         </a>
-        <form method="POST" action="/lists/${list.id}/items/${s.id}/toggle">${csrfField(req)}
+        <form method="POST" action="/lists/${list.id}/items/${s.id}/toggle">
           <input type="hidden" name="redirect_to" value="/lists/${list.id}">
           <button type="submit" class="empty-note" style="padding:0 6px;background:none;border:none;color:#a13a3a;cursor:pointer;font-size:inherit;">Remove</button>
         </form>
@@ -2633,7 +2144,7 @@ const TERPENE_GUIDE = {
   Ocimene: { aroma: 'Sweet, herbal, slightly woody', effects: 'Often found alongside Limonene and Pinene; associated with uplifted, energizing effects.' },
 };
 function pageTerpeneGuide(req, res) {
-  const allStrains = db.listAllStrains();
+  const allStrains = db.listStrains({ limit: 5000 });
   const counts = {};
   allStrains.forEach(s => (s.terps || []).forEach(t => { counts[t.n] = (counts[t.n] || 0) + 1; }));
   const entries = Object.entries(TERPENE_GUIDE).sort((a, b) => (counts[b[0]] || 0) - (counts[a[0]] || 0));
@@ -2643,11 +2154,11 @@ function pageTerpeneGuide(req, res) {
     ${entries.map(([name, info]) => `
       <div class="card" style="margin-bottom:10px;">
         <div style="display:flex;justify-content:space-between;align-items:baseline;">
-          <h2 style="margin:0;font-size:1rem;">${esc(name)}</h2>
+          <h2 style="margin:0;font-size:16px;">${esc(name)}</h2>
           <a href="/strains?terpene=${encodeURIComponent(name)}" class="empty-note" style="padding:0;">${counts[name] || 0} strains →</a>
         </div>
         <p style="margin:6px 0 2px;"><b>Aroma:</b> ${esc(info.aroma)}</p>
-        <p style="margin:2px 0 0;"><b>Commonly associated with:</b> ${linkGlossaryTerms(esc(info.effects))}</p>
+        <p style="margin:2px 0 0;"><b>Commonly associated with:</b> ${esc(info.effects)}</p>
       </div>
     `).join('')}
   `;
@@ -2680,7 +2191,7 @@ const EFFECTS_GUIDE = {
   'Clear-headed': 'A functional high without much mental fog, often reported with balanced hybrids.',
 };
 function pageEffectsGuide(req, res) {
-  const allStrains = db.listAllStrains();
+  const allStrains = db.listStrains({ limit: 5000 });
   const counts = {};
   allStrains.forEach(s => (s.effects || []).forEach(e => { counts[e] = (counts[e] || 0) + 1; }));
   const entries = Object.entries(EFFECTS_GUIDE).sort((a, b) => (counts[b[0]] || 0) - (counts[a[0]] || 0));
@@ -2690,10 +2201,10 @@ function pageEffectsGuide(req, res) {
     ${entries.map(([name, description]) => `
       <div class="card" style="margin-bottom:10px;">
         <div style="display:flex;justify-content:space-between;align-items:baseline;">
-          <h2 style="margin:0;font-size:1rem;">${esc(name)}</h2>
+          <h2 style="margin:0;font-size:16px;">${esc(name)}</h2>
           <a href="/strains?effect=${encodeURIComponent(name)}" class="empty-note" style="padding:0;">${counts[name] || 0} strains →</a>
         </div>
-        <p style="margin:6px 0 0;">${linkGlossaryTerms(esc(description))}</p>
+        <p style="margin:6px 0 0;">${esc(description)}</p>
       </div>
     `).join('')}
   `;
@@ -2735,7 +2246,7 @@ function pageMoodFinder(req, res, query) {
     `;
     return sendHtml(res, layout({ title: 'Mood Finder', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
   }
-  const allStrains = db.listAllStrains();
+  const allStrains = db.listStrains({ limit: 5000 });
   const scored = allStrains
     .map(s => {
       const overlap = (s.effects || []).filter(e => goal.effects.includes(e)).length;
@@ -2799,7 +2310,7 @@ const BREEDER_GUIDE = {
   'K.C. Brains': 'One of the older Dutch seed banks, known for its own numbered K.C. strain series.',
 };
 function pageBreederGuide(req, res) {
-  const allStrains = db.listAllStrains();
+  const allStrains = db.listStrains({ limit: 5000 });
   const counts = {};
   allStrains.forEach(s => { if (s.breeder) counts[s.breeder] = (counts[s.breeder] || 0) + 1; });
   const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]).slice(0, 40);
@@ -2809,10 +2320,10 @@ function pageBreederGuide(req, res) {
     ${sorted.map(([name, count]) => `
       <div class="card" style="margin-bottom:10px;">
         <div style="display:flex;justify-content:space-between;align-items:baseline;">
-          <h2 style="margin:0;font-size:1rem;">${esc(name)}</h2>
+          <h2 style="margin:0;font-size:16px;">${esc(name)}</h2>
           <a href="/strains?breeder=${encodeURIComponent(name)}" class="empty-note" style="padding:0;">${count} strain${count === 1 ? '' : 's'} →</a>
         </div>
-        ${BREEDER_GUIDE[name] ? `<p style="margin:6px 0 0;">${linkGlossaryTerms(esc(BREEDER_GUIDE[name]))}</p>` : ''}
+        ${BREEDER_GUIDE[name] ? `<p style="margin:6px 0 0;">${esc(BREEDER_GUIDE[name])}</p>` : ''}
       </div>
     `).join('')}
   `;
@@ -2835,7 +2346,7 @@ function pageWishlist(req, res) {
             <div class="sub">${esc(s.type)} · THC ${esc(s.thc)}</div>
           </div>
         </a>
-        <form method="POST" action="/wishlist/${s.id}/toggle">${csrfField(req)}
+        <form method="POST" action="/wishlist/${s.id}/toggle">
           <input type="hidden" name="redirect_to" value="/wishlist">
           <button type="submit" class="empty-note" style="padding:0 6px;background:none;border:none;color:#a13a3a;cursor:pointer;font-size:inherit;">Remove</button>
         </form>
@@ -2877,41 +2388,6 @@ function pageTrending(req, res) {
   sendHtml(res, layout({ title: 'Trending This Week', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
-// Community leaderboard -- see getKudosLeaderboard in lib/db.js for the
-// ranking logic itself and why it's kudos RECEIVED (not raw check-in
-// count) on a rolling 30-day window rather than all-time. Requires login,
-// unlike Trending, since ranking a real person needs a real viewerId --
-// to filter out anyone the viewer has blocked, and to compute "your own
-// rank" below the list so showing up here still feels personal even for
-// someone who isn't near the top.
-function pageLeaderboard(req, res) {
-  const userId = requireUser(req, res);
-  if (userId == null) return;
-  const { top, viewerEntry, windowDays } = db.getKudosLeaderboard(userId, { limit: 20, windowDays: 30 });
-  const medal = (rank) => ({ 1: '🥇', 2: '🥈', 3: '🥉' }[rank] || rank);
-  const renderRow = (r, isViewer) => `
-    <div class="library-row" style="${isViewer ? 'border:1.5px solid var(--brand-green);' : ''}">
-      <span style="font-weight:700;color:var(--ink-secondary);width:28px;text-align:center;flex-shrink:0;">${medal(r.rank)}</span>
-      <div class="info">
-        <div class="nm">${isViewer ? 'You' : esc(r.user.username)}</div>
-        <div class="sub">${r.allTimeKudos.toLocaleString()} kudos all-time</div>
-      </div>
-      <span style="font-weight:800;color:var(--accent-text);flex-shrink:0;">🌿 ${r.monthKudos}</span>
-    </div>
-  `;
-  const viewerInTop = top.some(r => r.user.id === userId);
-  const body = `
-    <h1 class="screen-title">Top Contributors</h1>
-    <p class="screen-sub">Ranked by kudos received in the last ${windowDays} days — the community's own way of saying "this check-in helped." Resets over time, so everyone gets a fair shot at climbing, not just whoever joined first.</p>
-    ${top.length ? top.map(r => renderRow(r, r.user.id === userId)).join('') : `<div class="empty-note">No kudos given out yet this month — be the first check-in someone appreciates.</div>`}
-    ${!viewerInTop ? (viewerEntry
-      ? `<div class="section-label" style="margin-top:16px;">Your rank</div>${renderRow(viewerEntry, true)}`
-      : `<p class="empty-note" style="margin-top:16px;">You haven't received a kudos yet this month — <a href="/checkin">log a check-in</a> and share it to start climbing.</p>`
-    ) : ''}
-  `;
-  sendHtml(res, layout({ title: 'Top Contributors', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
-}
-
 // Mixing cautions -- deliberately conservative, pattern-level guidance
 // only (matching the app's existing "not medical advice" framing), never
 // dosing specifics. General public-health caution categories, not a
@@ -2930,7 +2406,7 @@ function pageMixingCautions(req, res) {
     <p class="screen-sub">General, pattern-level cautions — not medical advice, not a complete interaction database, and not a substitute for talking to a doctor or pharmacist about your specific medications.</p>
     ${cautions.map(c => `
       <div class="card" style="margin-bottom:10px;">
-        <h2 style="margin:0 0 6px;font-size:0.9375rem;">${esc(c.title)}</h2>
+        <h2 style="margin:0 0 6px;font-size:15px;">${esc(c.title)}</h2>
         <p style="margin:0;">${esc(c.body)}</p>
       </div>
     `).join('')}
@@ -2953,13 +2429,12 @@ function pageQuiz(req, res, query) {
     // effect tags to match against) fell back to that same alphabetical
     // order via Array.sort's stability. Net effect: results always looked
     // like "the first five A-named strains in this bucket," every time.
-    // Fix: pull every strain in the bucket via the unsorted listAllStrains()
-    // + a direct matchesFilters() check (no cap, and no wasted sort -- this
-    // shuffles the result immediately below anyway), then shuffle before
-    // scoring so ties resolve randomly instead of alphabetically -- so
-    // retaking the quiz with the same answers actually surfaces different
-    // strains from the library, not the same five every time.
-    const candidates = db.listAllStrains().filter(s => db.matchesFilters(s, { thc: thcFilter }));
+    // Fix: pull every strain in the bucket (no meaningful cap at this
+    // scale), then shuffle before scoring so ties resolve randomly instead
+    // of alphabetically -- so retaking the quiz with the same answers
+    // actually surfaces different strains from the library, not the same
+    // five every time.
+    const candidates = db.listStrains({ thc: thcFilter, limit: 5000 });
     for (let i = candidates.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [candidates[i], candidates[j]] = [candidates[j], candidates[i]];
@@ -3012,31 +2487,17 @@ function pageInsights(req, res) {
   if (userId == null) return;
   const insights = db.getUserInsights(userId);
   const activeBreak = db.getActiveBreak(userId);
-  const streak = db.getCheckinStreak(userId);
   const daysSince = (dateStr) => Math.max(0, Math.floor((Date.now() - new Date(dateStr + 'Z').getTime()) / 86400000));
   const body = `
     <h1 class="screen-title">Your Patterns</h1>
-    ${streak.current > 0 ? `
-      <div class="card" style="margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;">
-        <div>
-          <div style="font-size:1.25rem;font-weight:700;">🔥 ${streak.current}-day streak</div>
-          <div class="empty-note" style="padding:2px 0 0;">${streak.longest > streak.current ? `Best ever: ${streak.longest} days` : "That's your best streak yet!"}</div>
-        </div>
-        <div style="font-size:32px;">🔥</div>
-      </div>
-    ` : streak.longest > 0 && !activeBreak ? `
-      <div class="card" style="margin-bottom:14px;">
-        <div class="empty-note" style="padding:0;">Your streak reset — log a check-in today to start a new one. Best so far: <b>${streak.longest} day${streak.longest === 1 ? '' : 's'}</b>.</div>
-      </div>
-    ` : ''}
     <div class="card" style="margin-bottom:14px;">
-      <h2 style="margin:0 0 8px;font-size:0.9375rem;">🌿 Tolerance break</h2>
+      <h2 style="margin:0 0 8px;font-size:15px;">🌿 Tolerance break</h2>
       ${activeBreak ? `
         <p class="empty-note" style="padding:0 0 8px;">You're on a break — started ${daysSince(activeBreak.started_at)} day${daysSince(activeBreak.started_at) === 1 ? '' : 's'} ago${activeBreak.note ? `: "${esc(activeBreak.note)}"` : '.'}</p>
-        <form method="POST" action="/tolerance-break/end">${csrfField(req)}<button class="btn secondary block" type="submit">End Break</button></form>
+        <form method="POST" action="/tolerance-break/end"><button class="btn secondary block" type="submit">End Break</button></form>
       ` : `
         <p class="empty-note" style="padding:0 0 8px;">Not currently on a break.</p>
-        <form method="POST" action="/tolerance-break/start">${csrfField(req)}
+        <form method="POST" action="/tolerance-break/start">
           <input type="text" name="note" placeholder="Optional note — why are you taking this one?" style="margin-bottom:8px;">
           <button class="btn block" type="submit">Start a Tolerance Break</button>
         </form>
@@ -3046,12 +2507,12 @@ function pageInsights(req, res) {
       <p class="screen-sub">Based on your ${insights.totalCheckins} check-in${insights.totalCheckins === 1 ? '' : 's'} so far.</p>
       ${insights.topEffects.length ? `
         <div class="card">
-          <h2 style="margin:0 0 8px;font-size:0.9375rem;">Your most common effects</h2>
+          <h2 style="margin:0 0 8px;font-size:15px;">Your most common effects</h2>
           <p>${insights.topEffects.map(e => `<span class="filter-pill">${esc(e.name)} (${e.count})</span>`).join('')}</p>
         </div>
       ` : ''}
       <div class="card" style="margin-top:12px;">
-        <h2 style="margin:0 0 8px;font-size:0.9375rem;">Your leanings</h2>
+        <h2 style="margin:0 0 8px;font-size:15px;">Your leanings</h2>
         ${insights.topType ? `<p class="empty-note" style="padding:2px 0;">You gravitate toward <b>${esc(insights.topType.name)}</b> strains (${insights.topType.count} check-in${insights.topType.count === 1 ? '' : 's'}).</p>` : ''}
         ${insights.topMethod ? `<p class="empty-note" style="padding:2px 0;">Your most-used method is <b>${esc(insights.topMethod.name)}</b>.</p>` : ''}
         ${insights.topTerpene ? `<p class="empty-note" style="padding:2px 0;">Your check-ins lean heaviest on <b>${esc(insights.topTerpene)}</b> as a terpene.</p>` : ''}
@@ -3077,123 +2538,6 @@ function pageInsights(req, res) {
   sendHtml(res, layout({ title: 'Your Patterns', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
-// Shared rendering for both the private recap page and its public share
-// link -- the data (from db.getYearInReview) is identical either way, only
-// the surrounding chrome (signup CTA vs. a "share yours" button, private
-// vs. public layout()) differs between the two callers.
-function renderRecapBody(recap, { longestStreak } = {}) {
-  return `
-    <div class="card" style="text-align:center;background:linear-gradient(135deg,#123a24,#1b5e3a);color:#fff;border:none;">
-      <div style="font-size:0.75rem;opacity:.85;letter-spacing:.5px;text-transform:uppercase;">${recap.year} Year in Review</div>
-      <div style="font-size:2.75rem;font-weight:800;margin:6px 0 2px;">${recap.totalCheckins}</div>
-      <div style="font-size:0.8125rem;opacity:.9;">check-in${recap.totalCheckins === 1 ? '' : 's'} logged</div>
-    </div>
-    <div class="collection-stats" style="margin-top:14px;">
-      <div class="stat-tile"><div class="num">${recap.uniqueStrains}</div><div class="lbl">Unique strains</div></div>
-      <div class="stat-tile"><div class="num">${recap.totalKudos}</div><div class="lbl">Kudos received</div></div>
-      ${longestStreak != null ? `<div class="stat-tile"><div class="num">${longestStreak}</div><div class="lbl">Longest streak</div></div>` : ''}
-    </div>
-    ${recap.topEffects.length ? `
-      <div class="card" style="margin-top:14px;">
-        <h2 style="margin:0 0 8px;font-size:0.9375rem;">Most common effects</h2>
-        <p>${recap.topEffects.map(e => `<span class="filter-pill">${esc(e.name)} (${e.count})</span>`).join('')}</p>
-      </div>
-    ` : ''}
-    <div class="card" style="margin-top:12px;">
-      <h2 style="margin:0 0 8px;font-size:0.9375rem;">Leanings</h2>
-      ${recap.topType ? `<p class="empty-note" style="padding:2px 0;">Gravitated toward <b>${esc(recap.topType.name)}</b> strains (${recap.topType.count} check-in${recap.topType.count === 1 ? '' : 's'}).</p>` : ''}
-      ${recap.topMethod ? `<p class="empty-note" style="padding:2px 0;">Most-used method: <b>${esc(recap.topMethod.name)}</b>.</p>` : ''}
-      ${recap.topTerpene ? `<p class="empty-note" style="padding:2px 0;">Leaned heaviest on <b>${esc(recap.topTerpene)}</b> as a terpene.</p>` : ''}
-    </div>
-    ${recap.mostLoggedStrain ? `
-      <a class="library-row" href="/strains/${recap.mostLoggedStrain.strain.id}" style="text-decoration:none;color:inherit;margin-top:12px;">
-        ${strainPhotoTag(recap.mostLoggedStrain.strain, 'sm')}
-        <div class="info">
-          <div class="nm">Most logged: ${esc(recap.mostLoggedStrain.strain.name)}</div>
-          <div class="sub">${recap.mostLoggedStrain.count} check-in${recap.mostLoggedStrain.count === 1 ? '' : 's'}</div>
-        </div>
-      </a>` : ''}
-    ${recap.topRatedStrain ? `
-      <a class="library-row" href="/strains/${recap.topRatedStrain.strain.id}" style="text-decoration:none;color:inherit;margin-top:8px;">
-        ${strainPhotoTag(recap.topRatedStrain.strain, 'sm')}
-        <div class="info">
-          <div class="nm">Highest rated: ${esc(recap.topRatedStrain.strain.name)}</div>
-          <div class="sub">${starString(Math.round(recap.topRatedStrain.avg))} (${recap.topRatedStrain.avg}★ average)</div>
-        </div>
-      </a>` : ''}
-  `;
-}
-
-// Stateless share codes for a recap, same pattern as makeInviteCode --
-// signs (userId, year) together rather than just userId, since a recap
-// link is specific to one particular year, not "whatever year it is now."
-function makeRecapCode(userId, year) {
-  return auth.sign(`recap:${userId}:${year}`);
-}
-function resolveRecapCode(code) {
-  const value = auth.verify(code);
-  if (!value || !value.startsWith('recap:')) return null;
-  const [userIdStr, yearStr] = value.slice('recap:'.length).split(':');
-  const userId = Number(userIdStr);
-  const year = Number(yearStr);
-  if (!Number.isFinite(userId) || !Number.isFinite(year)) return null;
-  return { userId, year };
-}
-
-function pageRecap(req, res, query) {
-  const userId = requireUser(req, res);
-  if (userId == null) return;
-  const currentYear = new Date().getUTCFullYear();
-  const requestedYear = Number(query.get('year')) || currentYear;
-  const recap = db.getYearInReview(userId, requestedYear);
-  const shareUrl = recap ? `${SITE_URL}/recap/s/${makeRecapCode(userId, requestedYear)}` : null;
-
-  const body = `
-    <h1 class="screen-title">Your Year in StrainDex</h1>
-    ${!recap ? `
-      <div class="empty-note">No check-ins logged in ${requestedYear} yet.${requestedYear === currentYear ? ' Come back once you have a few check-ins to see your recap.' : ''}</div>
-      ${requestedYear > 2024 ? `<a href="/recap?year=${requestedYear - 1}" class="empty-note" style="display:block;margin-top:8px;">See ${requestedYear - 1} instead →</a>` : ''}
-    ` : `
-      ${renderRecapBody(recap, { longestStreak: db.getCheckinStreak(userId).longest })}
-      <button type="button" class="btn block" style="margin-top:14px;" onclick="shareLink(${esc(JSON.stringify(shareUrl))}, ${esc(JSON.stringify(`My ${requestedYear} in StrainDex`))})">🔗 Share your recap</button>
-      ${requestedYear > 2024 ? `<a href="/recap?year=${requestedYear - 1}" class="empty-note" style="display:block;margin-top:10px;text-align:center;">See ${requestedYear - 1} instead →</a>` : ''}
-    `}
-  `;
-  sendHtml(res, layout({ title: 'Your Year in StrainDex', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
-}
-
-// Public, read-only, unauthenticated view of someone else's recap -- same
-// data shape as pageRecap, just resolved from a signed (userId, year) code
-// instead of the current session, and framed with a signup pitch instead
-// of the "share yours" button. Carries OG tags so it unfurls with real
-// numbers rather than a bare link when posted externally.
-function pageSharedRecap(req, res, code) {
-  const resolved = resolveRecapCode(code);
-  if (!resolved) return notFound(res);
-  const user = db.getUserById(resolved.userId);
-  const recap = user ? db.getYearInReview(resolved.userId, resolved.year) : null;
-  if (!user || !recap) return notFound(res);
-  const pageUrl = `${SITE_URL}/recap/s/${code}`;
-
-  const body = `
-    <h1 class="screen-title">${esc(user.username)}'s ${resolved.year} in StrainDex</h1>
-    ${renderRecapBody(recap, { longestStreak: db.getCheckinStreak(resolved.userId).longest })}
-    <div class="card" style="margin-top:14px;text-align:center;">
-      <p style="margin:0 0 10px;font-weight:700;">Track your own strains, effects, and check-ins.</p>
-      <a href="/signup" class="btn block" style="text-decoration:none;">Create Free Account</a>
-      <p class="empty-note" style="margin-top:8px;">Already have an account? <a href="/login">Log in</a></p>
-    </div>
-  `;
-  sendHtml(res, layout({
-    title: `${user.username}'s ${resolved.year} in StrainDex`,
-    body,
-    showBack: false,
-    ogTitle: `${user.username}'s ${resolved.year} in StrainDex 🌿`,
-    ogDescription: `${recap.totalCheckins} check-in${recap.totalCheckins === 1 ? '' : 's'}, ${recap.uniqueStrains} unique strain${recap.uniqueStrains === 1 ? '' : 's'}${recap.topType ? `, mostly ${recap.topType.name}` : ''}.`,
-    ogUrl: pageUrl,
-  }));
-}
-
 async function handleToleranceBreakStart(req, res) {
   const userId = requireUser(req, res);
   if (userId == null) return;
@@ -3213,12 +2557,12 @@ function pageSupportTheApp(req, res) {
     <h1 class="screen-title">💚 Support the App</h1>
     <p class="screen-sub">StrainDex is free to use right now. If it's been useful to you and you'd like to help cover hosting costs, that's genuinely appreciated — but there's zero obligation and nothing extra unlocks either way.</p>
     <div class="card" style="margin-bottom:10px;">
-      <h2 style="margin:0 0 4px;font-size:1rem;">Cash App</h2>
+      <h2 style="margin:0 0 4px;font-size:16px;">Cash App</h2>
       <p class="empty-note" style="padding:0 0 8px;">Any amount, no account needed on your end beyond Cash App itself.</p>
       <a class="btn block" href="https://cash.app/$straindex" style="text-decoration:none;">Send via Cash App — $straindex</a>
     </div>
     <div class="card">
-      <h2 style="margin:0 0 4px;font-size:1rem;">Venmo</h2>
+      <h2 style="margin:0 0 4px;font-size:16px;">Venmo</h2>
       <p class="empty-note" style="padding:0 0 8px;">Same idea, if that's the app you already have.</p>
       <a class="btn block" href="https://venmo.com/straindex" style="text-decoration:none;">Send via Venmo — @straindex</a>
     </div>
@@ -3234,8 +2578,8 @@ function pageFeedback(req, res, query) {
     <h1 class="screen-title">Send Feedback</h1>
     <p class="screen-sub">StrainDex is in beta — bugs, ideas, confusing screens, anything at all. This goes straight to the person building the app.</p>
     <p class="empty-note">For anything urgent — a compromised account, a safety concern, or a bad actor on the app — email <a href="mailto:${SUPPORT_EMAIL}">${SUPPORT_EMAIL}</a> directly instead of using the form below, since it's monitored more closely.</p>
-    ${sent ? `<p class="empty-note" style="color:var(--accent-text);">Thanks — your feedback was sent.</p>` : ''}
-    <form method="POST" action="/feedback">${csrfField(req)}
+    ${sent ? `<p class="empty-note" style="color:var(--brand-green-dark);">Thanks — your feedback was sent.</p>` : ''}
+    <form method="POST" action="/feedback">
       <label class="field-label" style="margin-top:0;">Your feedback</label>
       <textarea name="message" required minlength="3" maxlength="4000" placeholder="What's on your mind?" style="min-height:140px;"></textarea>
       <button class="btn block" type="submit" style="margin-top:14px;">Send</button>
@@ -3258,7 +2602,7 @@ async function handleFeedbackSubmit(req, res) {
       subject: `StrainDex feedback from ${user ? user.username : 'a user'}`,
       html: `<p><b>${esc(user ? user.username : 'Unknown user')}</b> (${user && user.email ? esc(user.email) : 'no email on file'}) sent this feedback:</p>
         <p style="white-space:pre-wrap;">${esc(message)}</p>
-        <p><a href="${SITE_URL}/admin/feedback">View all feedback in the admin panel</a></p>`,
+        <p><a href="https://${req.headers.host}/admin/feedback">View all feedback in the admin panel</a></p>`,
     });
   }
 
@@ -3272,7 +2616,7 @@ function pageForgotPassword(req, res, query) {
     ${sent
       ? `<p class="empty-note">If that email is on an account, a reset link is on its way — check your inbox (and spam folder).</p>`
       : `<p class="screen-sub">Enter the email on your account and we'll send a link to reset your password.</p>
-      <form method="POST" action="/forgot-password">${csrfField(req)}
+      <form method="POST" action="/forgot-password">
         <label class="field-label" style="margin-top:0;">Email</label>
         <input type="email" name="email" required autocomplete="email">
         <button class="btn block" type="submit" style="margin-top:14px;">Send Reset Link</button>
@@ -3290,7 +2634,7 @@ async function handleForgotPasswordSubmit(req, res) {
   // is its own small privacy leak, so this path stays silent either way.
   if (user) {
     const token = await db.createPasswordResetToken(user.id);
-    const resetUrl = `${SITE_URL}/reset-password?token=${token}`;
+    const resetUrl = `${req.headers['x-forwarded-proto'] || 'https'}://${req.headers.host}/reset-password?token=${token}`;
     await sendEmail({
       to: email,
       subject: 'Reset your StrainDex password',
@@ -3313,7 +2657,7 @@ function pageResetPassword(req, res, query) {
     <h1 class="screen-title">Reset Password</h1>
     ${err && errMessages[err] ? `<p style="color:#a13a3a;">${esc(errMessages[err])}</p>` : ''}
     ${err === 'invalid_token' ? `<p class="empty-note"><a href="/forgot-password">Request a new reset link</a></p>` : `
-    <form method="POST" action="/reset-password">${csrfField(req)}
+    <form method="POST" action="/reset-password">
       <input type="hidden" name="token" value="${esc(token)}">
       <label class="field-label" style="margin-top:0;">New password</label>
       <input type="password" name="password" required minlength="8" autocomplete="new-password">
@@ -3345,17 +2689,11 @@ async function handleLoginSubmit(req, res) {
   }
   clearLoginAttempts(req, username);
   const token = auth.signUserSessionValue(user.id);
-  res.setHeader('Set-Cookie', [
-    `user_session=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000`,
-    `csrf_token=${encodeURIComponent(auth.csrfTokenFor(token))}; Path=/; SameSite=Lax; Max-Age=31536000`,
-  ]);
+  res.setHeader('Set-Cookie', `user_session=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000`);
   redirect(res, '/');
 }
 function handleLogout(req, res) {
-  res.setHeader('Set-Cookie', [
-    `user_session=; Path=/; HttpOnly; Max-Age=0`,
-    `csrf_token=; Path=/; Max-Age=0`,
-  ]);
+  res.setHeader('Set-Cookie', `user_session=; Path=/; HttpOnly; Max-Age=0`);
   redirect(res, '/login');
 }
 
@@ -3380,11 +2718,11 @@ function pageAdminUsers(req, res, query) {
   const users = db.listUsers();
   const body = `
     <h1 class="screen-title">Manage Users (${users.length})</h1>
-    ${deleted ? `<p class="empty-note" style="color:var(--accent-text);">User "${esc(deleted)}" was deleted.</p>` : ''}
+    ${deleted ? `<p class="empty-note" style="color:var(--brand-green-dark);">User "${esc(deleted)}" was deleted.</p>` : ''}
     ${users.map(u => `
       <div class="admin-row">
         <span>👤 <b>${esc(u.username)}</b>${u.email ? ` · ${esc(u.email)}` : ''}<br><span class="empty-note" style="padding:0;">Joined ${esc((u.created_at || '').slice(0, 10))}</span></span>
-        <form method="POST" action="/admin/users/${u.id}/delete" onsubmit="return confirm('Permanently delete ${esc(u.username)}\\'s account, check-ins, messages, and friendships? This cannot be undone.')">${csrfField(req)}
+        <form method="POST" action="/admin/users/${u.id}/delete" onsubmit="return confirm('Permanently delete ${esc(u.username)}\\'s account, check-ins, messages, and community connections? This cannot be undone.')">
           <button class="btn danger" style="color:#fff;" type="submit">Delete</button>
         </form>
       </div>
@@ -3423,7 +2761,7 @@ function pageAdminFaqs(req, res) {
   const body = `
     <h1 class="screen-title">Manage FAQ</h1>
     <div class="card">
-      <form method="POST" action="/admin/faqs/new">${csrfField(req)}
+      <form method="POST" action="/admin/faqs/new">
         <label class="field-label" style="margin-top:0;">Question</label>
         <input type="text" name="question" required>
         <label class="field-label">Answer</label>
@@ -3442,7 +2780,7 @@ function pageAdminFaqs(req, res) {
         ${f.source_url ? `<p class="empty-note">Source: ${esc(f.source_name || f.source_url)}</p>` : ''}
         <div class="actions">
           <a href="/admin/faqs/${f.id}/edit" class="btn secondary" style="text-decoration:none;">Edit</a>
-          <form method="POST" action="/admin/faqs/${f.id}/delete" style="display:inline;" onsubmit="return confirm('Delete this FAQ entry?')">${csrfField(req)}
+          <form method="POST" action="/admin/faqs/${f.id}/delete" style="display:inline;" onsubmit="return confirm('Delete this FAQ entry?')">
             <button class="btn danger" type="submit" style="color:#fff;">Delete</button>
           </form>
         </div>
@@ -3462,7 +2800,7 @@ function pageAdminFaqEdit(req, res, id) {
   if (!f) return notFound(res);
   const body = `
     <h1 class="screen-title">Edit FAQ</h1>
-    <form method="POST" action="/admin/faqs/${f.id}/edit">${csrfField(req)}
+    <form method="POST" action="/admin/faqs/${f.id}/edit">
       <label class="field-label" style="margin-top:0;">Question</label>
       <input type="text" name="question" value="${esc(f.question)}" required>
       <label class="field-label">Answer</label>
@@ -3541,8 +2879,8 @@ function pageAdminStrains(req, res, query) {
     <h1 class="screen-title">Manage Strains</h1>
     <p class="screen-sub">${total.toLocaleString()} strains in the library.</p>
     <div class="card">
-      <h2 style="margin-top:0;font-size:1rem;">Add a strain</h2>
-      <form method="POST" action="/admin/strains/new">${csrfField(req)}
+      <h2 style="margin-top:0;font-size:16px;">Add a strain</h2>
+      <form method="POST" action="/admin/strains/new">
         ${strainFormFields(null)}
         <button class="btn block" type="submit">Add Strain</button>
       </form>
@@ -3560,7 +2898,7 @@ function pageAdminStrains(req, res, query) {
         </div>
         <div class="actions">
           <a href="/admin/strains/${s.id}/edit" class="btn secondary" style="text-decoration:none;">Edit</a>
-          <form method="POST" action="/admin/strains/${s.id}/delete" style="display:inline;" onsubmit="return confirm('Delete this strain? This cannot be undone.')">${csrfField(req)}
+          <form method="POST" action="/admin/strains/${s.id}/delete" style="display:inline;" onsubmit="return confirm('Delete this strain? This cannot be undone.')">
             <button class="btn danger" type="submit" style="color:#fff;">Delete</button>
           </form>
         </div>
@@ -3584,7 +2922,7 @@ function pageAdminStrainEdit(req, res, id) {
   if (!s) return notFound(res);
   const body = `
     <h1 class="screen-title">Edit Strain</h1>
-    <form method="POST" action="/admin/strains/${s.id}/edit">${csrfField(req)}
+    <form method="POST" action="/admin/strains/${s.id}/edit">
       ${strainFormFields(s)}
       <button class="btn block" type="submit">Save</button>
     </form>
@@ -3613,7 +2951,7 @@ function pageAdminRecipes(req, res) {
   const body = `
     <h1 class="screen-title">Manage Recipes</h1>
     <div class="card">
-      <form method="POST" action="/admin/recipes/new">${csrfField(req)}
+      <form method="POST" action="/admin/recipes/new">
         <label class="field-label" style="margin-top:0;">Title</label>
         <input type="text" name="title" required>
         <label class="field-label">Description</label>
@@ -3634,8 +2972,8 @@ function pageAdminRecipes(req, res) {
         <b>${esc(r.title)}</b> <span class="empty-note">by ${esc(r.author || 'Anonymous')}</span>
         <p class="empty-note">${esc(r.desc)}</p>
         <div class="actions">
-          <form method="POST" action="/admin/recipes/${r.id}/approve" style="display:inline;">${csrfField(req)}<button class="btn" type="submit">Approve</button></form>
-          <form method="POST" action="/admin/recipes/${r.id}/delete" style="display:inline;" onsubmit="return confirm('Reject and delete?')">${csrfField(req)}<button class="btn danger" style="color:#fff;" type="submit">Reject</button></form>
+          <form method="POST" action="/admin/recipes/${r.id}/approve" style="display:inline;"><button class="btn" type="submit">Approve</button></form>
+          <form method="POST" action="/admin/recipes/${r.id}/delete" style="display:inline;" onsubmit="return confirm('Reject and delete?')"><button class="btn danger" style="color:#fff;" type="submit">Reject</button></form>
         </div>
       </div>`).join('') : ''}
     <h2 class="screen-title">All recipes</h2>
@@ -3643,7 +2981,7 @@ function pageAdminRecipes(req, res) {
       <div class="admin-row">
         <span>${esc(r.title)} <span class="recipe-source-tag ${r.source}">${r.status}</span> <span class="empty-note">${esc(r.category || '')}</span></span>
         <div class="actions">
-          <form method="POST" action="/admin/recipes/${r.id}/delete" style="display:inline;" onsubmit="return confirm('Delete this recipe?')">${csrfField(req)}
+          <form method="POST" action="/admin/recipes/${r.id}/delete" style="display:inline;" onsubmit="return confirm('Delete this recipe?')">
             <button class="btn danger" style="color:#fff;" type="submit">Delete</button>
           </form>
         </div>
@@ -3690,34 +3028,17 @@ function apiListStrains(req, res, query) {
     results: db.listStrains({ q, type, rarity, effect, thc, terpene, ailment, breeder, verified, limit }),
   });
 }
-// Shared CSRF guard for the /api/* JSON endpoints below -- these are hit
-// via fetch() rather than a native form submission, so there's no hidden
-// _csrf field to check; the same token travels as a header instead (see
-// getCsrfCookie/X-CSRF-Token in app.js). Every other POST route gets this
-// enforced centrally, once, in the router; these few are the exception
-// specifically because they're JSON, not form-encoded (see the /api/
-// carve-out on that central check).
-function requireCsrfHeader(req, res) {
-  if (!auth.verifyCsrfToken(req, req.headers['x-csrf-token'])) {
-    sendJson(res, { error: 'CSRF check failed -- please refresh the page and try again' }, 403);
-    return false;
-  }
-  return true;
-}
 async function apiKudos(req, res, id) {
-  if (!requireCsrfHeader(req, res)) return;
   const r = await db.addKudos(id);
   if (!r) return sendJson(res, { error: 'not found' }, 404);
   sendJson(res, { kudos: r.kudos });
 }
 async function apiGrowLike(req, res, id) {
-  if (!requireCsrfHeader(req, res)) return;
   await db.likeGrowTip(id);
   const tip = db.listGrowTips().find(t => t.id === id);
   sendJson(res, { likes: tip ? tip.likes : 0 });
 }
 async function apiCheckinKudos(req, res, id) {
-  if (!requireCsrfHeader(req, res)) return;
   const userId = requireUser(req, res);
   if (userId == null) return;
   const { checkin, given } = await db.toggleCheckinKudos(id, userId);
@@ -3728,7 +3049,6 @@ async function apiCheckinKudos(req, res, id) {
   sendJson(res, { kudos: checkin.kudos, given, givers });
 }
 async function apiCommentLike(req, res, id) {
-  if (!requireCsrfHeader(req, res)) return;
   const userId = requireUser(req, res);
   if (userId == null) return;
   const result = await db.toggleCommentLike(id, userId);
@@ -3774,18 +3094,6 @@ function pageMore(req, res) {
   // not deleted, just not surfaced here until they're real.
   const sections = [
     {
-      title: 'Your Journey',
-      tiles: [
-        { href: '/collection', icon: '🗂️', t: 'My Collection', s: 'Your binder & rarity progress' },
-        { href: '/lists', icon: '📋', t: 'Lists', s: 'Wishlist & your custom groupings' },
-        { href: '/grow-journal', icon: '📔', t: 'Grow Journal', s: 'Your private plant photo log' },
-        { href: '/history', icon: '🕐', t: 'Check-In History', s: 'Your full timeline' },
-        { href: '/insights', icon: '📊', t: 'Your Patterns', s: 'What your check-ins say about you' },
-        { href: '/recap', icon: '🎉', t: 'Your Year in Review', s: 'A shareable recap of your year' },
-        { href: '/insights', icon: '🌿', t: 'Tolerance Break', s: 'Start, track, or end a break' },
-      ],
-    },
-    {
       title: 'Discover',
       tiles: [
         { href: '/quiz', icon: '🧭', t: 'Find Your First Strain', s: '3-question strain matcher' },
@@ -3796,9 +3104,21 @@ function pageMore(req, res) {
       ],
     },
     {
+      title: 'Your Journey',
+      tiles: [
+        { href: '/collection', icon: '/docs/leaf-kudos.png', t: 'My Collection', s: 'Your binder & rarity progress' },
+        { href: '/wishlist', icon: '⭐', t: 'Wishlist', s: 'Strains you want to try next' },
+        { href: '/grow-journal', icon: '📔', t: 'Grow Journal', s: 'Your private plant photo log' },
+        { href: '/lists', icon: '📋', t: 'Your Lists', s: 'Custom groupings — Morning, Sleep, anything' },
+        { href: '/history', icon: '🕐', t: 'Check-In History', s: 'Your full timeline' },
+        { href: '/insights', icon: '📊', t: 'Your Patterns', s: 'What your check-ins say about you' },
+        { href: '/insights', icon: '🌿', t: 'Tolerance Break', s: 'Start, track, or end a break' },
+      ],
+    },
+    {
       title: 'Learn & Stay Safe',
       tiles: [
-        { href: '/methods', icon: '💨', t: 'Ways to Enjoy It', s: 'Every method, explained' },
+        { href: '/methods', icon: '/docs/joint-icon.png', t: 'Ways to Enjoy It', s: 'Every method, explained' },
         { href: '/concentrates', icon: '💠', t: 'Concentrates & Extracts', s: 'Kief, rosin, live resin & more' },
         { href: '/legal-status', icon: '🏛️', t: 'Is It Legal Near Me?', s: 'State-by-state cannabis law' },
         { href: '/mixing-cautions', icon: '⚠️', t: 'Mixing With Other Substances', s: 'General cautions, not medical advice' },
@@ -3810,25 +3130,18 @@ function pageMore(req, res) {
       ],
     },
     {
-      title: 'Cleaning & Gear Care',
-      tiles: [
-        { href: '/gear-care', icon: '🧼', t: 'Cleaning & Gear Care', s: 'Keep your pipes, rigs & vapes running well' },
-      ],
-    },
-    {
       title: 'Community & Local',
       tiles: [
-        { href: '/messages', icon: '💬', t: 'Messages', s: userId != null && db.countUnreadMessages(userId) > 0 ? `${db.countUnreadMessages(userId)} unread` : 'Chat with friends & shared strains' },
-        { href: '/trade', icon: '🔁', t: 'Trade', s: 'Swap dupes with real friends' },
-        { href: '/friends-picks', icon: '🤝', t: "Friends' Picks", s: 'What your circle loves that you haven\u2019t tried' },
-        { href: '/leaderboard', icon: '🏆', t: 'Top Contributors', s: 'Most-appreciated check-ins this month' },
+        { href: '/messages', icon: '💬', t: 'Messages', s: userId != null && db.countUnreadMessages(userId) > 0 ? `${db.countUnreadMessages(userId)} unread` : 'Chat with your community & shared strains' },
+        { href: '/puff-puff-ask', icon: '💨', t: 'Puff Puff Ask', s: 'Ask the community, browse by section' },
+        { href: '/trade', icon: '🔁', t: 'Trade', s: 'Swap dupes with your community' },
+        { href: '/friends-picks', icon: '🤝', t: "Community Picks", s: 'What your circle loves that you haven\u2019t tried' },
         { href: '/dispensaries', icon: '📍', t: 'Dispensaries', s: 'Locator & live menus' },
       ],
     },
     {
       title: 'Support',
       tiles: [
-        { href: '/add-to-home-screen', icon: '📲', t: 'Add to Home Screen', s: 'Install StrainDex like an app' },
         { href: '/feedback', icon: '📝', t: 'Send Feedback', s: 'Bugs, ideas — anything' },
         { href: '/support-the-app', icon: '💚', t: 'Support the App', s: 'Help cover hosting costs' },
       ],
@@ -3836,18 +3149,19 @@ function pageMore(req, res) {
   ];
   const body = `
     <h1 class="screen-title">More</h1>
+    <p class="empty-note" style="margin-top:-4px;font-style:italic;">Build A Higher Community</p>
     ${user ? `
       <div class="card" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
         <span>👤 Logged in as <b>${esc(user.username)}</b></span>
-        <div style="display:flex;gap:8px;align-items:center;">
+        <div style="display:flex;gap:8px;">
           <a href="/account" class="btn secondary" style="text-decoration:none;">Settings</a>
-          <form method="POST" action="/logout">${csrfField(req)}<button class="btn secondary" type="submit">Log out</button></form>
+          <form method="POST" action="/logout"><button class="btn secondary" type="submit">Log out</button></form>
         </div>
       </div>` : ''}
     ${sections.map(sec => `
       <div class="section-label" style="margin-top:18px;">${esc(sec.title)}</div>
       <div class="more-grid">
-        ${sec.tiles.map(t => `<a class="more-tile" href="${t.href}"><span class="ic">${t.icon}</span><div class="t">${esc(t.t)}</div><div class="s">${esc(t.s)}</div></a>`).join('')}
+        ${sec.tiles.map(t => `<a class="more-tile" href="${t.href}"><span class="ic">${t.icon.startsWith('/') ? `<img src="${t.icon}" alt="" class="ic-img-lg">` : t.icon}</span><div class="t">${esc(t.t)}</div><div class="s">${esc(t.s)}</div></a>`).join('')}
       </div>
     `).join('')}
   `;
@@ -3895,7 +3209,7 @@ function pagePrivacy(req, res) {
     <div class="card">
       <p><b>1. Overview.</b> This explains what StrainDex collects, how it's used, and your choices. We collect only what's needed to run the app and don't sell personal information to advertisers or data brokers.</p>
       <p><b>2. What we collect.</b> Account info (username, email, a securely hashed password, birth date to confirm age). User content (check-ins, tasting notes, food/drink/entertainment/activity pairings, photos, recipes, grow tips). Location, only when you use "find dispensaries near me" — not stored after the search. Basic technical/error logs. A single first-party session cookie to keep you logged in — no third-party ad-tracking cookies.</p>
-      <p><b>3. How we use it.</b> To run check-ins, the strain library, recipes, growing tips, dispensary search, and friends features; to keep your account secure; to send account emails like password resets; to respond to feedback you submit; to fix bugs through error monitoring; and to generate aggregate, non-identifying usage stats.</p>
+      <p><b>3. How we use it.</b> To run check-ins, the strain library, recipes, growing tips, dispensary search, and community features; to keep your account secure; to send account emails like password resets; to respond to feedback you submit; to fix bugs through error monitoring; and to generate aggregate, non-identifying usage stats.</p>
       <p><b>4. Who we share it with.</b> We don't sell your data. We use service providers who each process data only to provide their service to us: our database host, our app host, our photo storage provider, our transactional email provider, our error-monitoring provider, and a dispensary-location lookup service. We may also disclose information if required by law.</p>
       <p><b>5. How long we keep it.</b> As long as your account is active. If you delete your account, your personal data is removed; any recipe or grow tip you shared publicly stays up but is reattributed to "Former user."</p>
       <p><b>6. Your rights.</b> Export your data or permanently delete your account anytime from Account Settings. Update your info directly in the app.</p>
@@ -3919,41 +3233,10 @@ function pageAccount(req, res, query) {
     <h1 class="screen-title" style="margin-top:8px;">Account Settings</h1>
 
     <div class="card">
-      <h2 style="margin:0 0 10px;font-size:0.9375rem;">Appearance</h2>
-      <p class="empty-note" style="padding:0 0 10px;">Follows your phone's own Light/Dark setting unless you pick one here.</p>
-      <div id="theme-picker" style="display:flex;gap:8px;align-items:center;">
-        <label class="filter-pill" style="flex:1;text-align:center;margin:0;cursor:pointer;">
-          <input type="radio" name="theme-choice" value="system" style="width:auto;margin:0 4px 0 0;">System
-        </label>
-        <label class="filter-pill" style="flex:1;text-align:center;margin:0;cursor:pointer;">
-          <input type="radio" name="theme-choice" value="light" style="width:auto;margin:0 4px 0 0;">Light
-        </label>
-        <label class="filter-pill" style="flex:1;text-align:center;margin:0;cursor:pointer;">
-          <input type="radio" name="theme-choice" value="dark" style="width:auto;margin:0 4px 0 0;">Dark
-        </label>
-      </div>
-      <script>
-        (function () {
-          var saved = 'system';
-          try { saved = localStorage.getItem('theme') || 'system'; } catch (e) {}
-          var radios = document.querySelectorAll('#theme-picker input[name="theme-choice"]');
-          radios.forEach(function (r) {
-            r.checked = (r.value === saved);
-            r.addEventListener('change', function () {
-              setTheme(r.value);
-              radios.forEach(function (other) { other.closest('.filter-pill').classList.toggle('active', other.checked); });
-            });
-            r.closest('.filter-pill').classList.toggle('active', r.checked);
-          });
-        })();
-      </script>
-    </div>
-
-    <div class="card" style="margin-top:14px;">
-      <h2 style="margin:0 0 10px;font-size:0.9375rem;">Username</h2>
+      <h2 style="margin:0 0 10px;font-size:15px;">Username</h2>
       ${error === 'username_taken' ? `<p class="dosing-note">That username is already taken — try another.</p>` : ''}
-      ${success === 'username' ? `<p class="empty-note" style="color:var(--accent-text);">Username updated.</p>` : ''}
-      <form method="POST" action="/account/username">${csrfField(req)}
+      ${success === 'username' ? `<p class="empty-note" style="color:var(--brand-green-dark);">Username updated.</p>` : ''}
+      <form method="POST" action="/account/username">
         <label class="field-label" style="margin-top:0;">Username</label>
         <input type="text" name="username" value="${esc(user.username)}" required minlength="2" maxlength="30">
         <button class="btn block" type="submit" style="margin-top:10px;">Update Username</button>
@@ -3961,11 +3244,11 @@ function pageAccount(req, res, query) {
     </div>
 
     <div class="card" style="margin-top:14px;">
-      <h2 style="margin:0 0 10px;font-size:0.9375rem;">Email</h2>
+      <h2 style="margin:0 0 10px;font-size:15px;">Email</h2>
       <p class="empty-note" style="padding:0 0 10px;">Used for password resets.${!user.email ? ' Your account currently has no email on file.' : ''}</p>
       ${error === 'email_taken' ? `<p class="dosing-note">That email is already in use on another account.</p>` : ''}
-      ${success === 'email' ? `<p class="empty-note" style="color:var(--accent-text);">Email updated.</p>` : ''}
-      <form method="POST" action="/account/email">${csrfField(req)}
+      ${success === 'email' ? `<p class="empty-note" style="color:var(--brand-green-dark);">Email updated.</p>` : ''}
+      <form method="POST" action="/account/email">
         <label class="field-label" style="margin-top:0;">Email</label>
         <input type="email" name="email" value="${esc(user.email || '')}" required autocomplete="email">
         <button class="btn block" type="submit" style="margin-top:10px;">Update Email</button>
@@ -3973,12 +3256,12 @@ function pageAccount(req, res, query) {
     </div>
 
     <div class="card" style="margin-top:14px;">
-      <h2 style="margin:0 0 10px;font-size:0.9375rem;">Password</h2>
+      <h2 style="margin:0 0 10px;font-size:15px;">Password</h2>
       ${error === 'wrong_password' ? `<p class="dosing-note">Current password is incorrect.</p>` : ''}
       ${error === 'password_mismatch' ? `<p class="dosing-note">New password and confirmation don't match.</p>` : ''}
       ${error === 'password_short' ? `<p class="dosing-note">New password needs to be at least 8 characters.</p>` : ''}
-      ${success === 'password' ? `<p class="empty-note" style="color:var(--accent-text);">Password updated.</p>` : ''}
-      <form method="POST" action="/account/password">${csrfField(req)}
+      ${success === 'password' ? `<p class="empty-note" style="color:var(--brand-green-dark);">Password updated.</p>` : ''}
+      <form method="POST" action="/account/password">
         <label class="field-label" style="margin-top:0;">Current password</label>
         <input type="password" name="current_password" required>
         <label class="field-label">New password</label>
@@ -3990,15 +3273,15 @@ function pageAccount(req, res, query) {
     </div>
 
     <div class="card" style="margin-top:14px;">
-      <h2 style="margin:0 0 10px;font-size:0.9375rem;">Privacy & Safety</h2>
+      <h2 style="margin:0 0 10px;font-size:15px;">Privacy & Safety</h2>
       <a class="btn secondary block" href="/blocked-users" style="text-decoration:none;">🚫 Blocked Users</a>
     </div>
 
     <div class="card" style="margin-top:14px;">
-      <h2 style="margin:0 0 10px;font-size:0.9375rem;">Your Data</h2>
+      <h2 style="margin:0 0 10px;font-size:15px;">Your Data</h2>
       <p class="empty-note" style="padding:0 0 10px;">See our <a href="/privacy">Privacy Policy</a> and <a href="/terms">Terms of Service</a> for what this covers.</p>
       <a class="btn secondary block" href="/account/export" style="text-decoration:none;margin-bottom:10px;">⬇️ Export my data</a>
-      <form method="POST" action="/account/delete" onsubmit="return confirm('This permanently deletes your account, check-ins, friends, and photos. This cannot be undone. Continue?')">${csrfField(req)}
+      <form method="POST" action="/account/delete" onsubmit="return confirm('This permanently deletes your account, check-ins, community connections, and photos. This cannot be undone. Continue?')">
         <button class="btn danger block" type="submit" style="color:#fff;">Delete my account</button>
       </form>
     </div>
@@ -4023,10 +3306,7 @@ async function handleAccountDelete(req, res) {
   const userId = requireUser(req, res);
   if (userId == null) return;
   await db.deleteUserAccount(userId);
-  res.setHeader('Set-Cookie', [
-    `user_session=; Path=/; HttpOnly; Max-Age=0`,
-    `csrf_token=; Path=/; Max-Age=0`,
-  ]);
+  res.setHeader('Set-Cookie', `user_session=; Path=/; HttpOnly; Max-Age=0`);
   redirect(res, '/signup?deleted=1');
 }
 async function handleAccountUsername(req, res) {
@@ -4087,7 +3367,7 @@ function pageCollection(req, res) {
 
   const body = `
     <h1 class="screen-title">My Collection</h1>
-    <div style="display:flex;gap:8px;align-items:center;margin-bottom:14px;">
+    <div style="display:flex;gap:8px;margin-bottom:14px;">
       <a class="follow-btn" style="flex:1;text-align:center;" href="/strains">🔍 Browse Strain Library</a>
       <a class="follow-btn" style="flex:1;text-align:center;" href="/history">🕐 Check-In History</a>
     </div>
@@ -4150,21 +3430,12 @@ function pageFriends(req, res, query) {
   const friends = db.listFriends(userId);
   const incoming = db.listIncomingRequests(userId);
   const outgoing = db.listOutgoingRequests(userId);
-  const inviteUrl = `${SITE_URL}/invite/${makeInviteCode(userId)}`;
 
   const body = `
-    <h1 class="screen-title">Friends</h1>
+    <h1 class="screen-title">Community</h1>
     <p class="screen-sub">Find people by username, then trade dupes once you're connected.</p>
-    <div class="card" style="margin-bottom:14px;">
-      <b style="font-size:0.8125rem;">🔗 Invite a friend</b>
-      <p class="empty-note" style="padding:4px 0 8px;">Anyone who signs up through your link is added as a friend automatically — no request to accept.</p>
-      <div style="display:flex;gap:8px;align-items:center;">
-        <input type="text" readonly value="${esc(inviteUrl)}" id="invite-link-input" style="flex:1;margin:0;font-size:0.75rem;" onclick="this.select()">
-        <button type="button" class="btn secondary" style="white-space:nowrap;" onclick="shareInviteLink(${esc(JSON.stringify(inviteUrl))})">Share</button>
-      </div>
-    </div>
     <a href="/messages" class="btn secondary block" style="text-decoration:none;margin-bottom:14px;">💬 Messages${db.countUnreadMessages(userId) > 0 ? ` (${db.countUnreadMessages(userId)})` : ''}</a>
-    <form method="GET" action="/friends" style="margin-bottom:14px;display:flex;gap:8px;align-items:center;">
+    <form method="GET" action="/friends" style="margin-bottom:14px;display:flex;gap:8px;">
       <input type="text" name="q" value="${esc(q)}" placeholder="Search by username..." autocomplete="off" style="flex:1;">
       <button class="btn" type="submit">Search</button>
     </form>
@@ -4175,23 +3446,23 @@ function pageFriends(req, res, query) {
         return `<div class="admin-row">
           <span>👤 ${esc(u.username)}</span>
           <div class="actions">
-            ${status === 'none' ? `<form method="POST" action="/friends/${u.id}/request">${csrfField(req)}<button class="btn" type="submit">Add Friend</button></form>` : ''}
+            ${status === 'none' ? `<form method="POST" action="/friends/${u.id}/request"><button class="btn" type="submit">Add to Community</button></form>` : ''}
             ${status === 'pending_sent' ? `<span class="empty-note">Request sent</span>` : ''}
             ${status === 'pending_received' ? `<span class="empty-note">Check your requests below</span>` : ''}
-            ${status === 'friends' ? `<span class="empty-note">Already friends</span>` : ''}
+            ${status === 'friends' ? `<span class="empty-note">Already connected</span>` : ''}
           </div>
         </div>`;
       }).join('') : `<div class="empty-note">No users found matching "${esc(q)}".</div>`}
     ` : ''}
 
     ${incoming.length ? `
-      <div class="section-label" style="margin-top:20px;color:var(--accent-text);">🔔 Friend requests (${incoming.length})</div>
+      <div class="section-label" style="margin-top:20px;color:var(--brand-green-dark);">🔔 Community requests (${incoming.length})</div>
       ${incoming.map(u => `
         <div class="admin-row">
           <span>👤 ${esc(u.username)}</span>
           <div class="actions">
-            <form method="POST" action="/friends/${u.id}/accept" style="display:inline;">${csrfField(req)}<button class="btn" type="submit">Accept</button></form>
-            <form method="POST" action="/friends/${u.id}/decline" style="display:inline;">${csrfField(req)}<button class="btn danger" style="color:#fff;" type="submit">Decline</button></form>
+            <form method="POST" action="/friends/${u.id}/accept" style="display:inline;"><button class="btn" type="submit">Accept</button></form>
+            <form method="POST" action="/friends/${u.id}/decline" style="display:inline;"><button class="btn danger" style="color:#fff;" type="submit">Decline</button></form>
           </div>
         </div>`).join('')}
     ` : ''}
@@ -4203,7 +3474,7 @@ function pageFriends(req, res, query) {
           <span>👤 ${esc(u.username)}</span>
           <div class="actions">
             <span class="empty-note" style="padding:0;">Waiting for response</span>
-            <form method="POST" action="/friends/${u.id}/cancel" style="display:inline;" onsubmit="return confirm('Cancel your friend request to ${esc(u.username)}?')">${csrfField(req)}
+            <form method="POST" action="/friends/${u.id}/cancel" style="display:inline;" onsubmit="return confirm('Cancel your request to ${esc(u.username)}?')">
               <button class="btn secondary" type="submit">Cancel</button>
             </form>
           </div>
@@ -4211,20 +3482,20 @@ function pageFriends(req, res, query) {
       `).join('')}
     ` : ''}
 
-    <div class="section-label" style="margin-top:20px;">Your friends (${friends.length})</div>
+    <div class="section-label" style="margin-top:20px;">Your community (${friends.length})</div>
     ${friends.length ? friends.map(u => `
       <div class="admin-row">
         <a href="/friends/${u.id}" style="text-decoration:none;color:inherit;">👤 ${esc(u.username)}</a>
         <div class="actions">
           <a href="/messages/${u.id}" class="btn secondary" style="text-decoration:none;">Message</a>
           <a href="/trade?friend=${u.id}" class="btn secondary" style="text-decoration:none;">Trade</a>
-          <form method="POST" action="/friends/${u.id}/remove" style="display:inline;" onsubmit="return confirm('Remove this friend?')">${csrfField(req)}
+          <form method="POST" action="/friends/${u.id}/remove" style="display:inline;" onsubmit="return confirm('Remove this person from your community?')">
             <button class="btn danger" style="color:#fff;" type="submit">Remove</button>
           </form>
         </div>
-      </div>`).join('') : `<div class="empty-note">No friends yet — search for a username above to get started.</div>`}
+      </div>`).join('') : `<div class="empty-note">No one in your community yet — search for a username above to get started.</div>`}
   `;
-  sendHtml(res, layout({ title: 'Friends', active: 'friends', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: 'Community', active: 'friends', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 // Abuse protection: report + block. Reports go to a simple admin review
 // queue; blocking is one-directional and hides the blocked person's
@@ -4261,8 +3532,8 @@ function pageBlockedUsers(req, res) {
     ${blocked.length ? blocked.map(u => `
       <div class="library-row">
         <div class="info"><div class="nm">${esc(u.username)}</div></div>
-        <form method="POST" action="/unblock/${u.id}">${csrfField(req)}
-          <button type="submit" class="empty-note" style="padding:0 6px;background:none;border:none;color:var(--accent-text);cursor:pointer;font-size:inherit;text-decoration:underline;">Unblock</button>
+        <form method="POST" action="/unblock/${u.id}">
+          <button type="submit" class="empty-note" style="padding:0 6px;background:none;border:none;color:var(--brand-green-dark);cursor:pointer;font-size:inherit;text-decoration:underline;">Unblock</button>
         </form>
       </div>
     `).join('') : `<div class="empty-note">You haven't blocked anyone.</div>`}
@@ -4286,7 +3557,7 @@ function pageAdminReports(req, res) {
         <b>${esc(r.content_type)}</b> #${esc(r.content_id)} — reported by ${esc(reporter ? reporter.username : 'unknown')}
         <p class="empty-note" style="padding:2px 0;">${esc(r.reason || 'No reason given')} · ${esc(r.created_at)} UTC · ${esc(r.status)}</p>
         ${r.status !== 'reviewed' ? `
-          <form method="POST" action="/admin/reports/${r.id}/reviewed">${csrfField(req)}
+          <form method="POST" action="/admin/reports/${r.id}/reviewed">
             <button type="submit" class="btn secondary" style="padding:6px 12px;">Mark Reviewed</button>
           </form>
         ` : ''}
@@ -4308,7 +3579,7 @@ function pageMessagesInbox(req, res) {
   const threads = db.listConversations(userId);
   const body = `
     <h1 class="screen-title">Messages</h1>
-    <p class="screen-sub">Private conversations with friends.</p>
+    <p class="screen-sub">Private conversations with your community.</p>
     ${threads.length ? threads.map(t => `
       <a href="/messages/${t.partner.id}" class="admin-row" style="text-decoration:none;color:inherit;align-items:center;">
         <div>
@@ -4330,17 +3601,7 @@ function pageConversation(req, res, friendId) {
   if (db.getFriendshipStatus(userId, friendId) !== 'friends') {
     return sendHtml(res, layout({ title: 'Messages', active: 'friends', body: `<div class="empty-note">You can only message friends.</div>`, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
   }
-  // Fire-and-forget: pageConversation itself is synchronous, and marking
-  // messages read shouldn't hold up rendering the thread. But an
-  // un-awaited promise with no .catch() is a live crash risk -- if this
-  // write to Turso ever rejects (a network blip, a timeout), it becomes
-  // an unhandled promise rejection, and Node kills the whole process by
-  // default. Swallow it here the same way every other route's errors are
-  // caught, instead of letting one flaky DB write take the entire app down.
-  db.markConversationRead(userId, friendId).catch(err => {
-    console.error('Failed to mark conversation read:', err);
-    Sentry.captureException(err);
-  });
+  db.markConversationRead(userId, friendId);
   const thread = db.listConversation(userId, friendId);
   const body = `
     <h1 class="screen-title">${esc(friend.username)}</h1>
@@ -4362,7 +3623,7 @@ function pageConversation(req, res, friendId) {
         </div>`;
       }).join('') : `<div class="empty-note">Say hi to ${esc(friend.username)} 👋</div>`}
     </div>
-    <form method="POST" action="/messages/${friend.id}/send" style="display:flex;gap:8px;align-items:center;">${csrfField(req)}
+    <form method="POST" action="/messages/${friend.id}/send" style="display:flex;gap:8px;">
       <input type="text" name="body" placeholder="Message ${esc(friend.username)}..." autocomplete="off" style="flex:1;">
       <button class="btn" type="submit">Send</button>
     </form>
@@ -4407,7 +3668,7 @@ function pageFriendProfile(req, res, friendId) {
   if (!friend) return notFound(res);
   const status = db.getFriendshipStatus(userId, friendId);
   if (status !== 'friends' && friendId !== userId) {
-    const body = `<h1 class="screen-title">Not connected yet</h1><p class="empty-note">You can only see a profile once you're friends with them. <a href="/friends">Back to Friends</a></p>`;
+    const body = `<h1 class="screen-title">Not connected yet</h1><p class="empty-note">You can only see a profile once you're connected in your community. <a href="/friends">Back to Community</a></p>`;
     return sendHtml(res, layout({ title: 'Profile', active: 'friends', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
   }
   const collection = db.getCollection(friendId);
@@ -4416,15 +3677,15 @@ function pageFriendProfile(req, res, friendId) {
     <h1 class="screen-title" style="margin-top:8px;">👤 ${esc(friend.username)}</h1>
     ${friendId !== userId && status === 'friends' ? `<a href="/messages/${friendId}" class="btn" style="text-decoration:none;display:inline-block;margin-bottom:10px;">💬 Message</a>` : ''}
     ${friendId !== userId ? `
-      <form method="POST" action="/block/${friendId}" style="margin-bottom:10px;" onsubmit="return confirm('Block ${esc(friend.username)}? You will no longer see their comments, check-ins, or grow tips, and any friendship will end.')">${csrfField(req)}
+      <form method="POST" action="/block/${friendId}" style="margin-bottom:10px;" onsubmit="return confirm('Block ${esc(friend.username)}? You will no longer see their comments, check-ins, or grow tips, and any community connection will end.')">
         <input type="hidden" name="redirect_to" value="/friends">
         <button type="submit" class="empty-note" style="padding:0;background:none;border:none;color:#a13a3a;cursor:pointer;font-size:inherit;text-decoration:underline;">Block this person</button>
       </form>
     ` : ''}
     <div class="card" style="display:flex;justify-content:space-around;text-align:center;margin-bottom:16px;">
-      <div><div style="font-size:1.25rem;font-weight:700;">${collection.length}</div><div class="empty-note">Cards caught</div></div>
-      <div><div style="font-size:1.25rem;font-weight:700;">${db.getTotalDupes(friendId)}</div><div class="empty-note">Tradeable dupes</div></div>
-      <div><div style="font-size:1.25rem;font-weight:700;">${recentCheckins.length}</div><div class="empty-note">Recent check-ins</div></div>
+      <div><div style="font-size:20px;font-weight:700;">${collection.length}</div><div class="empty-note">Cards caught</div></div>
+      <div><div style="font-size:20px;font-weight:700;">${db.getTotalDupes(friendId)}</div><div class="empty-note">Tradeable dupes</div></div>
+      <div><div style="font-size:20px;font-weight:700;">${recentCheckins.length}</div><div class="empty-note">Recent check-ins</div></div>
     </div>
     ${friendId !== userId ? `<a class="btn block secondary" href="/trade?friend=${friendId}" style="margin-bottom:16px;">🔁 Trade with ${esc(friend.username)}</a>` : ''}
     <div class="section-label">Recent check-ins</div>
@@ -4441,12 +3702,9 @@ function pageFriendProfile(req, res, friendId) {
         ${c.note ? `<div class="note">"${esc(c.note)}"</div>` : ''}
         ${renderCheckinPairings(c)}
         ${renderOnsetTimer(c)}
-        ${renderCheckinComments(req, c, userId, '/friends/' + friendId)}
+        ${renderCheckinComments(c, userId, '/friends/' + friendId)}
         <div style="display:flex;flex-direction:column;align-items:flex-end;margin-top:8px;">
-          <div style="display:flex;gap:6px;align-items:center;">
-            ${renderShareButton(c)}
-            ${renderKudosButton(c, userId)}
-          </div>
+          ${renderKudosButton(c, userId)}
           ${kudosGiversLabel(c.id)}
         </div>
       </div>`;
@@ -4518,7 +3776,7 @@ function pageTrade(req, res, query) {
     <h1 class="screen-title">Trade</h1>
     ${usingReal
       ? `<div class="trade-caveat">Trading against ${esc(friend.name)}'s real collection.</div>`
-      : `<div class="trade-caveat">Demo feature: you don't have any real friends added yet, so this trades against sample collections. <a href="/friends">Add a real friend</a> to trade for real.</div>`}
+      : `<div class="trade-caveat">Demo feature: you don't have anyone in your community added yet, so this trades against sample collections. <a href="/friends">Add someone to your community</a> to trade for real.</div>`}
     <div class="friend-strip">
       ${friendOptions.map(f => `<a class="friend-chip ${f.id === friendId ? 'selected' : ''}" href="${'/trade?friend=' + f.id}"><div class="avatar">${f.name[0]}</div><div class="fname">${esc(f.name)}</div></a>`).join('')}
     </div>
@@ -4543,7 +3801,7 @@ function pageTrade(req, res, query) {
         }).join('') : `<div class="empty-note">${esc(friend.name)} has nothing spare you're missing.</div>`}
       </div>
     </div>
-    <form method="POST" action="/trade/propose">${csrfField(req)}
+    <form method="POST" action="/trade/propose">
       <input type="hidden" name="friend" value="${esc(friendId)}">
       <input type="hidden" name="your" value="${esc(yourPick)}">
       <input type="hidden" name="their" value="${esc(theirPick)}">
@@ -4614,11 +3872,11 @@ async function pageDispensaries(req, res, searchParams) {
               ${d.hours ? `<div class="dsub">${sourceLabel === 'Google Places' ? esc(d.hours) : 'Hours: ' + esc(d.hours)}</div>` : ''}
               ${d.phone ? `<div class="dsub">${esc(d.phone)}</div>` : ''}
             </div>
-            <form method="POST" action="/dispensaries/${encodeURIComponent(d.id)}/follow?lat=${lat}&lon=${lon}">${csrfField(req)}
+            <form method="POST" action="/dispensaries/${encodeURIComponent(d.id)}/follow?lat=${lat}&lon=${lon}">
               <button class="follow-btn ${following ? 'following' : ''}" type="submit">${following ? 'Following' : 'Follow'}</button>
             </form>
           </div>
-          <div style="margin-top:10px;display:flex;gap:14px;align-items:center;">
+          <div style="margin-top:10px;display:flex;gap:14px;">
             <a href="${mapsUrl}" target="_blank" rel="noopener">Get directions →</a>
             ${d.website ? `<a href="${esc(d.website)}" target="_blank" rel="noopener">Website →</a>` : ''}
           </div>
@@ -4630,7 +3888,7 @@ async function pageDispensaries(req, res, searchParams) {
     body = `
       <h1 class="screen-title">Dispensaries</h1>
       <div class="locate-banner">
-        <div style="font-weight:700;font-size:0.8125rem;">📍 Find dispensaries near you</div>
+        <div style="font-weight:700;font-size:13px;">📍 Find real dispensaries near you</div>
         <div class="dsub" style="margin:3px 0 10px;">${realError ? esc(realError) : "Search by ZIP code, or share your location — nothing is sent anywhere else."}</div>
         <div class="locate-row">
           <form method="GET" action="/dispensaries" class="zip-form">
@@ -4640,7 +3898,7 @@ async function pageDispensaries(req, res, searchParams) {
           <button type="button" id="use-location-btn" class="follow-btn">Use my location</button>
         </div>
       </div>
-      ${zipParam || realError ? `<div class="empty-note" style="margin-top:16px;">${realError ? 'Nothing to show right now — try again in a moment, or try a different ZIP code.' : 'No dispensaries found for that ZIP code.'}</div>` : `<div class="empty-note" style="margin-top:16px;">Enter a ZIP code or share your location above to find dispensaries near you.</div>`}
+      ${zipParam || realError ? `<div class="empty-note" style="margin-top:16px;">${realError ? 'Nothing to show right now — try again in a moment, or try a different ZIP code.' : 'No dispensaries found for that ZIP code.'}</div>` : `<div class="empty-note" style="margin-top:16px;">Enter a ZIP code or share your location above to find real dispensaries near you.</div>`}
     `;
   }
   sendHtml(res, layout({ title: 'Dispensaries', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
@@ -4672,7 +3930,7 @@ function pageEvents(req, res) {
           <div class="event-title">${esc(e.title)}</div>
           <div class="event-venue">${venue ? esc(venue.name) : ''}</div>
           <div class="event-desc">${esc(e.desc)}</div>
-          <form method="POST" action="/events/${e.id}/rsvp">${csrfField(req)}
+          <form method="POST" action="/events/${e.id}/rsvp">
             <button class="rsvp-btn ${going ? 'going' : ''}" type="submit">${going ? "✓ You're going" : 'RSVP'}</button>
           </form>
         </div>
@@ -4726,7 +3984,7 @@ function pageShop(req, res) {
           <div class="ic">${i.icon}</div>
           <div class="sn">${esc(i.name)}</div>
           <div class="sp">${esc(i.price)}</div>
-          <form method="POST" action="/shop/${i.id}/add">${csrfField(req)}<button type="submit">Add to Cart</button></form>
+          <form method="POST" action="/shop/${i.id}/add"><button type="submit">Add to Cart</button></form>
         </div>`).join('')}
     </div>
     <div class="cart-note">Cart: ${cartCount} item${cartCount === 1 ? '' : 's'}</div>
@@ -4753,7 +4011,7 @@ function pageMethods(req, res) {
       <div class="method-guide-card">
         <div class="mgtitle">${m.icon.startsWith('/') ? `<img src="${m.icon}" alt="" class="mg-icon-photo">` : m.icon} ${esc(m.name)}</div>
         <div class="mgstats"><span>Onset: ${esc(m.onset)}</span><span>Lasts: ${esc(m.duration)}</span></div>
-        <div class="mgdesc">${linkGlossaryTerms(esc(m.desc))}</div>
+        <div class="mgdesc">${esc(m.desc)}</div>
       </div>`).join('')}
   `;
   sendHtml(res, layout({ title: 'Ways to Enjoy It', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
@@ -4776,11 +4034,6 @@ function pageLegalStatus(req, res, query) {
   const current = sorted.find(s => s.state === selected);
   const grouped = {};
   sorted.forEach(s => { (grouped[s.status] = grouped[s.status] || []).push(s); });
-  const renderStateDetails = (s) => `
-    <p style="margin:10px 0 2px;"><b>Possession:</b> ${esc(s.possession)}</p>
-    <p style="margin:6px 0 2px;"><b>Purchase limit:</b> ${esc(s.purchaseLimit)}</p>
-    <p style="margin:6px 0 2px;"><b>Home grow:</b> ${esc(s.homeGrow)}</p>
-  `;
   const body = `
     <h1 class="screen-title">Is It Legal Near Me?</h1>
     <p class="screen-sub">Cannabis law is a fast-moving patchwork that changes with little notice. This is a starting point, not legal advice — always verify with your state's official government site before relying on it. Regardless of state law, cannabis remains illegal under federal law everywhere in the US.</p>
@@ -4794,24 +4047,19 @@ function pageLegalStatus(req, res, query) {
     </form>
     ${current ? `
       <div class="card" style="border-left:4px solid ${LEGAL_STATUS_LABELS[current.status].color};margin-bottom:20px;">
-        <h2 style="margin:0 0 4px;font-size:1.0625rem;">${esc(current.state)}</h2>
+        <h2 style="margin:0 0 4px;font-size:17px;">${esc(current.state)}</h2>
         <div style="font-weight:700;color:${LEGAL_STATUS_LABELS[current.status].color};margin-bottom:6px;">${esc(LEGAL_STATUS_LABELS[current.status].label)}</div>
         <p style="margin:0;">${esc(current.note)}</p>
-        ${renderStateDetails(current)}
       </div>
     ` : ''}
     <h2 class="screen-title" style="margin-top:8px;">Full list</h2>
-    <p class="empty-note" style="margin:-4px 0 8px;">Tap a state to see its possession, purchase, and home-grow limits.</p>
     ${Object.entries(LEGAL_STATUS_LABELS).map(([key, meta]) => `
-      <h3 style="font-size:0.8125rem;color:${meta.color};margin:16px 0 6px;">${esc(meta.label)}</h3>
+      <h3 style="font-size:13px;color:${meta.color};margin:16px 0 6px;">${esc(meta.label)}</h3>
       ${(grouped[key] || []).map(s => `
-        <a href="/legal-status?state=${encodeURIComponent(s.state)}" class="card" style="display:block;padding:10px 14px;margin-bottom:6px;text-decoration:none;color:inherit;">
-          <div style="display:flex;justify-content:space-between;align-items:baseline;">
-            <b>${esc(s.state)}</b>
-            <span class="empty-note" style="padding:0;">Details →</span>
-          </div>
+        <div class="card" style="padding:10px 14px;margin-bottom:6px;">
+          <b>${esc(s.state)}</b>
           <p class="empty-note" style="padding:2px 0 0;">${esc(s.note)}</p>
-        </a>
+        </div>
       `).join('')}
     `).join('')}
   `;
@@ -4826,7 +4074,7 @@ function pageConcentrates(req, res) {
       <div class="method-guide-card">
         <div class="mgtitle">${c.icon} ${esc(c.name)}</div>
         <div class="mgstats"><span>THC: ${esc(c.thc)}</span></div>
-        <div class="mgdesc">${linkGlossaryTerms(esc(c.desc))}</div>
+        <div class="mgdesc">${esc(c.desc)}</div>
       </div>`).join('')}
     <p class="empty-note" style="margin-top:6px;">Not medical advice — potency varies by batch and producer even within these ranges.</p>
   `;
@@ -4868,76 +4116,15 @@ const server = http.createServer(async (req, res) => {
     // individually, everything requires a logged-in user except the
     // signup/login/logout routes themselves and the separate admin panel
     // (which has its own, unrelated password gate below).
-    //
-    // /strains and /strains/:id were briefly carved out as public (for SEO
-    // -- search engines can't index anything behind a login redirect) but
-    // that's a deliberate product call to make either way, and the call
-    // here is to keep the strain library itself behind the signup wall, so
-    // it's back to requiring an account like everything else. The guest-
-    // safe null-userId handling added to pageStrains/pageStrainDetail while
-    // this was public is harmless to leave in place (defense in depth --
-    // those pages simply won't be reached by a logged-out request now) and
-    // isn't reverted here.
-    //
-    // GET /c/:id remains the one deliberate carve-out: a public, read-only
-    // view of a single non-private check-in, meant to be pasted into a
-    // text or posted externally (see renderShareButton). It respects
-    // is_private itself; see pageSharedCheckin. Its own "view this strain"
-    // link now simply bounces a logged-out visitor to /login, same as any
-    // other in-app link would.
-    //
-    // GET /invite/:code is the other one -- a personal referral link has
-    // no reason to work only for people who already have an account (see
-    // pageInviteLink). It never renders anything itself; it just sets a
-    // cookie and redirects, so there's nothing here for a logged-out
-    // visitor to see beyond that redirect either way.
-    //
-    // GET /recap/s/:code -- the public share link for a year-in-review
-    // recap (see pageSharedRecap). Same idea as /c/:id: meant to be posted
-    // somewhere a recipient may have no account at all.
     const PUBLIC_PATHS = new Set(['/', '/signup', '/login', '/logout', '/terms', '/privacy', '/forgot-password', '/reset-password', '/api/analytics-snapshot', '/auth/google', '/auth/google/callback', '/auth/google/finish']);
-    const isPublicSharedCheckin = method === 'GET' && /^\/c\/[^/]+$/.test(pathname);
-    const isPublicInviteLink = method === 'GET' && /^\/invite\/[^/]+$/.test(pathname);
-    const isPublicSharedRecap = method === 'GET' && /^\/recap\/s\/[^/]+$/.test(pathname);
-    if (!PUBLIC_PATHS.has(pathname) && !isPublicSharedCheckin && !isPublicInviteLink && !isPublicSharedRecap && !pathname.startsWith('/admin') && auth.currentUserId(req) == null) {
+    if (!PUBLIC_PATHS.has(pathname) && !pathname.startsWith('/admin') && auth.currentUserId(req) == null) {
       return redirect(res, '/login');
-    }
-
-    // CSRF protection for every authenticated, form-encoded POST past this
-    // point. Exempted: the handful of POST routes that fire before any
-    // session cookie exists yet (signup, login, password reset, admin
-    // login, finishing a Google signup) -- there's no token to derive or
-    // check until one of THESE requests actually creates the session, so
-    // requiring one here would be checking a lock that hasn't been
-    // installed yet. Also exempted: /api/* JSON endpoints, which use their
-    // own header-based token instead (see apiRequireCsrf below) since they
-    // have no form body to carry a hidden field in.
-    //
-    // This is a second, independent layer on top of SameSite=Lax, already
-    // set on every auth cookie in this app -- that alone blocks the
-    // classic cross-site form-POST attack on any modern browser. This
-    // layer doesn't depend on SameSite enforcement being correct, or even
-    // present (older browsers, non-browser HTTP clients, future browser
-    // bugs). See lib/auth.js for how the token itself is derived.
-    const CSRF_EXEMPT_POST_PATHS = new Set(['/signup', '/login', '/forgot-password', '/reset-password', '/admin/login', '/auth/google/finish']);
-    if (method === 'POST' && !CSRF_EXEMPT_POST_PATHS.has(pathname) && !pathname.startsWith('/api/')) {
-      const contentType = req.headers['content-type'] || '';
-      if (contentType.includes('application/x-www-form-urlencoded')) {
-        const fields = await parseForm(req);
-        if (!auth.verifyCsrfToken(req, fields._csrf)) {
-          return sendHtml(res, layout({
-            title: 'Please try again',
-            body: `<h1 class="screen-title">Please try again</h1><p>That form couldn't be verified — it may have been open a long time, or submitted from somewhere unexpected. <a href="javascript:history.back()">Go back</a>, refresh the page, and resubmit.</p>`,
-          }), 403);
-        }
-      }
     }
 
     let m;
     if (method === 'GET' && pathname === '/') return pageHome(req, res);
     if (method === 'GET' && pathname === '/strains') return pageStrains(req, res, url.searchParams);
     if (method === 'GET' && (m = pathname.match(/^\/strains\/([^/]+)$/))) return pageStrainDetail(req, res, m[1]);
-    if (method === 'GET' && (m = pathname.match(/^\/c\/([^/]+)$/))) return pageSharedCheckin(req, res, m[1]);
     if (method === 'GET' && pathname === '/checkin') return pageCheckinForm(req, res, url.searchParams);
     if (method === 'POST' && pathname === '/checkin') return await handleCheckinSubmit(req, res);
     if (method === 'GET' && (m = pathname.match(/^\/checkin\/(\d+)\/edit$/))) return pageCheckinEditForm(req, res, Number(m[1]));
@@ -4952,9 +4139,6 @@ const server = http.createServer(async (req, res) => {
     if (method === 'GET' && pathname === '/growing') return pageGrowing(req, res, url.searchParams);
     if (method === 'GET' && pathname === '/growing/new') return pageGrowingNew(req, res);
     if (method === 'POST' && pathname === '/growing/new') return await handleGrowingNewSubmit(req, res);
-    if (method === 'GET' && pathname === '/gear-care') return pageGearCare(req, res);
-    if (method === 'GET' && pathname === '/gear-care/new') return pageGearCareNew(req, res);
-    if (method === 'POST' && pathname === '/gear-care/new') return await handleGearCareNewSubmit(req, res);
     if (method === 'GET' && pathname === '/chat') return pageChat(req, res);
     if (method === 'POST' && pathname === '/api/chat') return await handleChatApi(req, res);
 
@@ -4962,7 +4146,6 @@ const server = http.createServer(async (req, res) => {
     if (method === 'POST' && pathname === '/admin/login') return await handleAdminLoginSubmit(req, res);
     if (method === 'GET' && pathname === '/signup') return pageSignup(req, res, url.searchParams);
     if (method === 'POST' && pathname === '/signup') return await handleSignupSubmit(req, res);
-    if (method === 'GET' && (m = pathname.match(/^\/invite\/([^/]+)$/))) return await pageInviteLink(req, res, m[1]);
     if (method === 'GET' && pathname === '/auth/google') return pageGoogleStart(req, res, url.searchParams);
     if (method === 'GET' && pathname === '/auth/google/callback') return await handleGoogleCallback(req, res, url.searchParams);
     if (method === 'GET' && pathname === '/auth/google/finish') return pageGoogleFinish(req, res, url.searchParams);
@@ -5040,8 +4223,6 @@ const server = http.createServer(async (req, res) => {
     if (method === 'GET' && pathname === '/quiz') return pageQuiz(req, res, url.searchParams);
     if (method === 'GET' && pathname === '/compare') return pageCompare(req, res, url.searchParams);
     if (method === 'GET' && pathname === '/insights') return pageInsights(req, res);
-    if (method === 'GET' && pathname === '/recap') return pageRecap(req, res, url.searchParams);
-    if (method === 'GET' && (m = pathname.match(/^\/recap\/s\/([^/]+)$/))) return pageSharedRecap(req, res, m[1]);
     if (method === 'POST' && pathname === '/tolerance-break/start') return await handleToleranceBreakStart(req, res);
     if (method === 'POST' && pathname === '/tolerance-break/end') return await handleToleranceBreakEnd(req, res);
     if (method === 'GET' && pathname === '/concentrates') return pageConcentrates(req, res);
@@ -5050,12 +4231,15 @@ const server = http.createServer(async (req, res) => {
     if (method === 'GET' && pathname === '/wishlist') return pageWishlist(req, res);
     if (method === 'POST' && (m = pathname.match(/^\/wishlist\/([^/]+)\/toggle$/))) return await handleWishlistToggle(req, res, m[1]);
     if (method === 'GET' && pathname === '/trending') return pageTrending(req, res);
-    if (method === 'GET' && pathname === '/leaderboard') return pageLeaderboard(req, res);
     if (method === 'GET' && pathname === '/mixing-cautions') return pageMixingCautions(req, res);
     if (method === 'GET' && pathname === '/grow-journal') return pageGrowJournal(req, res);
     if (method === 'POST' && pathname === '/grow-journal') return await handleGrowJournalSubmit(req, res);
     if (method === 'POST' && (m = pathname.match(/^\/grow-journal\/(\d+)\/delete$/))) return await handleGrowJournalDelete(req, res, m[1]);
     if (method === 'GET' && pathname === '/friends-picks') return pageFriendsPicks(req, res);
+    if (method === 'GET' && pathname === '/puff-puff-ask') return pagePuffPuffAsk(req, res, url.searchParams);
+    if (method === 'GET' && (m = pathname.match(/^\/puff-puff-ask\/(\d+)$/))) return pagePuffPuffAskThread(req, res, Number(m[1]));
+    if (method === 'POST' && pathname === '/puff-puff-ask/new') return await handlePuffPuffAskNew(req, res);
+    if (method === 'POST' && (m = pathname.match(/^\/puff-puff-ask\/(\d+)\/reply$/))) return await handlePuffPuffAskReply(req, res, Number(m[1]));
     if (method === 'GET' && pathname === '/lists') return pageLists(req, res);
     if (method === 'POST' && pathname === '/lists') return await handleListCreate(req, res);
     if (method === 'GET' && (m = pathname.match(/^\/lists\/(\d+)$/))) return pageListDetail(req, res, m[1]);
@@ -5065,7 +4249,6 @@ const server = http.createServer(async (req, res) => {
     if (method === 'GET' && pathname === '/effects-guide') return pageEffectsGuide(req, res);
     if (method === 'GET' && pathname === '/mood-finder') return pageMoodFinder(req, res, url.searchParams);
     if (method === 'GET' && pathname === '/breeder-guide') return pageBreederGuide(req, res);
-    if (method === 'GET' && pathname === '/add-to-home-screen') return pageAddToHomeScreen(req, res);
     if (method === 'POST' && pathname === '/report') return await handleReport(req, res);
     if (method === 'POST' && (m = pathname.match(/^\/block\/(\d+)$/))) return await handleBlock(req, res, m[1]);
     if (method === 'POST' && (m = pathname.match(/^\/unblock\/(\d+)$/))) return await handleUnblock(req, res, m[1]);
@@ -5087,14 +4270,6 @@ db.init()
     server.listen(PORT, () => {
       console.log(`StrainDex running at http://localhost:${PORT}`);
     });
-    // Explicitly raised from Node's defaults (keepAliveTimeout: 5000ms,
-    // headersTimeout: 60000ms) at Render support's suggestion while
-    // investigating connection resets on the custom domain (strain-dex.com)
-    // that don't reproduce on the *.onrender.com URL. Cheap, safe test --
-    // set after listen() per Node's docs, since these are properties of
-    // the running server instance rather than listen() options.
-    server.keepAliveTimeout = 120000;
-    server.headersTimeout = 120000;
   })
   .catch(err => {
     console.error('Failed to connect to the database — check TURSO_DATABASE_URL and TURSO_AUTH_TOKEN.');
