@@ -214,7 +214,7 @@ function renderSafetyCarousel() {
     <div class="section-label">Safety & Education</div>
     <div class="hcarousel" style="margin-bottom:4px;">
       ${HOME_SAFETY_CAROUSEL.map(item => `
-        <a href="${item.href}" style="flex-shrink:0;min-width:140px;max-width:140px;background:var(--bg-subtle,#f7f7f2);border-radius:12px;padding:12px;text-decoration:none;color:inherit;">
+        <a href="${item.href}" style="flex-shrink:0;min-width:140px;max-width:140px;background:var(--bg-subtle,#f7f7f2);border-radius:12px;padding:12px;text-decoration:none;color:#2a2a2a;">
           <div style="font-size:22px;">${item.icon}</div>
           <div style="font-weight:700;font-size:13px;margin-top:8px;">${esc(item.title)}</div>
           <div class="empty-note" style="padding:2px 0 0;">${esc(item.s)}</div>
@@ -225,7 +225,7 @@ function renderSafetyCarousel() {
 }
 function friendsBadgeCount(userId) {
   if (userId == null) return 0;
-  return db.countUnreadMessages(userId) + db.listIncomingRequests(userId).length + db.countUnreadMentions(userId);
+  return db.countUnreadMessages(userId) + db.listIncomingRequests(userId).length + db.countUnreadMentions(userId) + db.countUnreadCheckinNotifications(userId);
 }
 // A small "copy link" affordance for one specific post -- links to the
 // pageCheckinDetail permalink rather than making the whole card/photo
@@ -408,7 +408,7 @@ function renderCheckinComments(c, userId, redirectPath) {
             var matches = names.filter(function(n) { return n.toLowerCase().indexOf(q.fragment.toLowerCase()) === 0; }).slice(0, 5);
             if (!matches.length) { box.style.display = 'none'; box.innerHTML = ''; return; }
             box.innerHTML = matches.map(function(n) {
-              return '<div class="mention-suggest-item" style="padding:8px 10px;cursor:pointer;" data-name="' + n.replace(/"/g, '&quot;') + '" onmouseover="this.style.background=\\'var(--bg-subtle,#f5f5f0)\\'" onmouseout="this.style.background=\\'\\'">@' + n + '</div>';
+              return '<div class="mention-suggest-item" style="padding:8px 10px;cursor:pointer;" data-name="' + n.replace(/"/g, '&quot;') + '" onmouseover="this.style.background=\\'var(--bg-subtle,#f5f5f0)\\';this.style.color=\\'#2a2a2a\\'" onmouseout="this.style.background=\\'\\';this.style.color=\\'\\'">@' + n + '</div>';
             }).join('');
             box.style.display = 'block';
             Array.prototype.forEach.call(box.querySelectorAll('.mention-suggest-item'), function(item) {
@@ -561,7 +561,7 @@ function pageLandingPage(req, res) {
       <div class="more-tile">
         <span class="ic">📍</span>
         <div class="t">Dispensaries</div>
-        <div class="s">Find real dispensaries near you</div>
+        <div class="s">Find dispensaries near you</div>
       </div>
     </div>
 
@@ -586,6 +586,13 @@ function pageHome(req, res) {
     .slice(0, 15);
   const recs = getRecommendations(userId, 4);
   const hasFollowedDispensaries = db.anyDispensaryFollowed(userId);
+  // Keeps the feed from ever reading as dead early on, before there's
+  // enough check-in volume to fill it on its own -- blends in a little
+  // Puff Puff Ask and trending-strain activity underneath whatever real
+  // check-ins there are, rather than leaving a big empty/sparse feed.
+  const feedIsThin = recentCheckins.length < 5;
+  const supplementalThreads = feedIsThin ? db.listForumThreads().slice(0, 3) : [];
+  const supplementalTrending = feedIsThin ? db.getMostCheckedInStrains(3) : [];
   // "Welcome back" doesn't make sense the very first time someone lands
   // here right after signing up -- check whether this account has ever
   // actually logged a check-in of its own before deciding which greeting
@@ -593,14 +600,25 @@ function pageHome(req, res) {
   const isFirstVisit = db.listCheckins({ userId, limit: 1 }).length === 0;
   const streak = db.getCheckinStreak(userId);
   const onThisDay = db.getOnThisDay(userId);
+  const onboarding = getOnboardingChecklist(userId);
+  const onboardingDone = onboarding.filter(o => o.done).length;
 
   const body = `
     <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
       <h1 class="screen-title" style="margin:0;">${isFirstVisit ? 'Welcome to StrainDex 🌿' : 'Welcome back 🌿'}</h1>
       ${streak.current > 0 ? `<div title="${streak.current} day check-in streak${streak.longest > streak.current ? ` — best: ${streak.longest}` : ''}" style="display:flex;align-items:center;gap:4px;background:#fff1de;color:#8a4a1f;padding:4px 10px;border-radius:999px;font-size:13px;font-weight:700;flex-shrink:0;">🔥 ${streak.current}</div>` : ''}
     </div>
+    ${onboardingDone < onboarding.length ? `
+      <a href="/onboarding" class="card" style="display:block;margin:10px 0 0;text-decoration:none;color:#2a2a2a;background:var(--bg-subtle,#f7f7f2);">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div style="font-weight:700;font-size:13px;">🚀 Finish setting up your account</div>
+          <div class="empty-note" style="padding:0;">${onboardingDone}/${onboarding.length}</div>
+        </div>
+        <div class="progress-bar" style="margin-top:8px;"><div class="fill" style="width:${Math.round((100 * onboardingDone) / onboarding.length)}%;"></div></div>
+      </a>
+    ` : ''}
     ${onThisDay.length ? `
-      <a href="/strains/${onThisDay[0].checkin.strain_id}" class="card" style="display:flex;align-items:center;gap:10px;margin:10px 0 0;text-decoration:none;color:inherit;background:var(--bg-subtle,#f7f7f2);">
+      <a href="/strains/${onThisDay[0].checkin.strain_id}" class="card" style="display:flex;align-items:center;gap:10px;margin:10px 0 0;text-decoration:none;color:#2a2a2a;background:var(--bg-subtle,#f7f7f2);">
         ${strainPhotoTag(onThisDay[0].strain, 'sm')}
         <div style="min-width:0;">
           <div style="font-weight:700;font-size:13px;">📅 On this day, ${onThisDay[0].yearsAgo} year${onThisDay[0].yearsAgo === 1 ? '' : 's'} ago</div>
@@ -699,7 +717,7 @@ function pageHome(req, res) {
     </div>
 
     <div class="section-label">Dispensaries</div>
-    <a class="btn secondary block" href="/dispensaries" style="text-decoration:none;margin-bottom:4px;">${hasFollowedDispensaries ? '📍 View your followed dispensaries →' : '📍 Find real dispensaries near you →'}</a>
+    <a class="btn secondary block" href="/dispensaries" style="text-decoration:none;margin-bottom:4px;">${hasFollowedDispensaries ? '📍 View your followed dispensaries →' : '📍 Find dispensaries near you →'}</a>
 
     <h2 class="screen-title" style="margin-top:20px;">Higher Community</h2>
     <p class="empty-note" style="padding:2px 0 10px;">Public check-ins from everyone on StrainDex — not just people you're connected with.</p>
@@ -733,6 +751,22 @@ function pageHome(req, res) {
         </div>
       </div>`;
     }).join('') : `<div class="empty-note">No public check-ins yet — <a href="/checkin">log your first one</a> to get the community feed started.</div>`}
+    ${supplementalThreads.length ? `
+      <div class="section-label" style="margin-top:20px;">From Puff Puff Ask</div>
+      ${supplementalThreads.map(renderForumThreadRow).join('')}
+    ` : ''}
+    ${supplementalTrending.length ? `
+      <div class="section-label" style="margin-top:20px;">Trending strains</div>
+      ${supplementalTrending.map(r => `
+        <a class="library-row" href="/strains/${r.strain.id}" style="text-decoration:none;color:inherit;">
+          ${strainPhotoTag(r.strain, 'sm')}
+          <div class="info">
+            <div class="nm">${esc(r.strain.name)}</div>
+            <div class="sub">${r.count} check-in${r.count === 1 ? '' : 's'}</div>
+          </div>
+        </a>
+      `).join('')}
+    ` : ''}
     ${REACT_TO_CHECKIN_SCRIPT}
     ${SHARE_CHECKIN_SCRIPT}
   `;
@@ -1477,7 +1511,7 @@ function pageRecipeDetail(req, res, id) {
       <p><b>Steps:</b></p>
       <ol>${r.steps.map(i => `<li>${linkGlossaryTerms(esc(i))}</li>`).join('')}</ol>
       ${r.dosing ? `<div class="dosing-note">⚠️ ${esc(r.dosing)}</div>` : ''}
-      <div class="card" style="margin-top:10px;background:var(--bg-subtle,#f7f7f2);">
+      <div class="card" style="margin-top:10px;background:var(--bg-subtle,#f7f7f2);color:#2a2a2a;">
         <b style="font-size:14px;">🧮 Dosing calculator</b>
         <p class="empty-note" style="padding:2px 0 8px;">Figure out mg per serving so you're not doing the math in your head.</p>
         <label class="field-label" style="margin-top:0;">Total THC in the batch (mg)</label>
@@ -1873,9 +1907,15 @@ function pageSignup(req, res, query) {
     email_taken: 'That email is already in use.',
     rate_limited: 'Too many signup attempts from this connection. Try again in a few minutes.',
   };
+  // ?ref=username on the signup link (see pageInvite) -- shows who invited
+  // this person and carries through as a hidden field so it survives to
+  // handleSignupSubmit, which resolves it into invited_by on the new row.
+  const refParam = (query.get('ref') || '').trim();
+  const referrer = refParam ? db.getUserByUsername(refParam) : null;
   const body = `
     <h1 class="screen-title">Create an Account</h1>
     <p class="screen-sub">You must be ${MIN_AGE}+ to use StrainDex.</p>
+    ${referrer ? `<p class="empty-note" style="color:var(--brand-green-dark);padding:0 0 10px;">🌿 ${esc(referrer.username)} invited you to StrainDex.</p>` : ''}
     ${deleted ? `<p class="empty-note" style="color:var(--brand-green-dark);">Your account and data have been deleted.</p>` : ''}
     ${err && errMessages[err] ? `<p style="color:#a13a3a;">${esc(errMessages[err])}</p>` : ''}
     <a href="/auth/google" class="btn secondary block" style="text-decoration:none;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:14px;">
@@ -1884,6 +1924,7 @@ function pageSignup(req, res, query) {
     </a>
     <p class="empty-note" style="text-align:center;margin:0 0 14px;">or</p>
     <form method="POST" action="/signup">
+      ${referrer ? `<input type="hidden" name="ref" value="${esc(referrer.username)}">` : ''}
       <label class="field-label" style="margin-top:0;">Username</label>
       <input type="text" name="username" id="signup-username" required minlength="3" maxlength="24" autocomplete="username">
       <label class="field-label">Email</label>
@@ -2083,7 +2124,8 @@ async function handleSignupSubmit(req, res) {
   if (f.password.length < 8) return redirect(res, '/signup?err=short');
   if (db.getUserByUsername(username)) return redirect(res, '/signup?err=taken');
   if (db.getUserByEmail(email)) return redirect(res, '/signup?err=email_taken');
-  const user = await db.createUser({ username, password: f.password, birth_date: f.birth_date, email });
+  const referrer = f.ref ? db.getUserByUsername(String(f.ref).trim()) : null;
+  const user = await db.createUser({ username, password: f.password, birth_date: f.birth_date, email, invited_by: referrer ? referrer.id : null });
   const token = auth.signUserSessionValue(user.id);
   res.setHeader('Set-Cookie', `user_session=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000`);
   redirect(res, '/onboarding');
@@ -2135,50 +2177,46 @@ function pageLogin(req, res, query) {
 // user doesn't land on Home with zero context. No persistent "seen" flag
 // needed -- only the signup flow links here, so an existing user would
 // only see it again if they typed the URL directly, which is harmless.
+// Computed live from real account state every time rather than a
+// separate "onboarding progress" table to keep in sync -- same
+// philosophy as getUserInsights/getCheckinStreak recomputing from source
+// data instead of persisting derived state. Used both by the full
+// checklist page and the compact card on Home.
+function getOnboardingChecklist(userId) {
+  const user = db.getUserById(userId);
+  return [
+    { key: 'checkin', done: db.listCheckins({ userId, limit: 1 }).length > 0, icon: '🔥', title: 'Log your first check-in', href: '/checkin' },
+    { key: 'community', done: db.listFriends(userId).length > 0, icon: '🧑\u200d🤝\u200d🧑', title: 'Add someone to your community', href: '/friends' },
+    { key: 'bio', done: !!(user && user.bio), icon: '📝', title: 'Set your bio', href: '/account' },
+    { key: 'invite', done: db.listInvitedUsers(userId).length > 0, icon: '📣', title: 'Invite a friend', href: '/invite' },
+  ];
+}
+// A real, checkable checklist instead of a one-time slideshow -- each
+// item reflects actual account state (see getOnboardingChecklist), so
+// unlike the old swipe-through-once-and-forget version, this gives
+// someone a concrete reason to come back and do a second and third
+// thing rather than stopping after whatever got them to sign up. Also
+// reachable any time (not just right after signup) via the compact card
+// on Home that shows while anything's still unchecked.
 function pageOnboarding(req, res) {
   const userId = requireUser(req, res);
   if (userId == null) return;
-  const steps = [
-    { icon: '🌿', title: 'Welcome to StrainDex', body: 'Your personal cannabis journal — strains, recipes, growing knowledge, and a lot more, all in one place.' },
-    { icon: '🔥', title: 'Log your first check-in', body: 'Tap "Light It Up" any time you try a strain — rate it, add tasting notes, and start your collection.' },
-    { icon: '🧭', title: 'Not sure where to start?', body: `Take the 3-question quiz to get matched to a starter strain, or hit "Surprise Me" for a random pick from the ${db.countStrains().toLocaleString()}+ strain library.` },
-    { icon: '📊', title: 'See your own patterns', body: 'Your Patterns reflects your check-in history back at you — favorite effects, top strain type, even a tolerance break tracker.' },
-    { icon: '🧑\u200d🤝\u200d🧑', title: 'Bring your community', body: 'Add people to your community to see their check-ins, message them, share strains, and trade duplicate cards.' },
-    { icon: '⭐', title: 'A lot more in "More"', body: 'Compare strains side by side, check what’s trending, look up your state’s cannabis laws, keep a wishlist, and more — it’s all grouped by category in the More tab.' },
-  ];
+  const checklist = getOnboardingChecklist(userId);
+  const doneCount = checklist.filter(c => c.done).length;
+  const allDone = doneCount === checklist.length;
   const body = `
-    <div class="card" style="text-align:center;padding:32px 20px;">
-      <div id="onboarding-steps">
-        ${steps.map((s, i) => `
-          <div class="onboarding-step" data-step="${i}" style="${i === 0 ? '' : 'display:none;'}">
-            <div style="font-size:44px;margin-bottom:16px;">${s.icon}</div>
-            <h2 style="margin:0 0 8px;font-size:18px;">${esc(s.title)}</h2>
-            <p style="color:var(--ink-secondary);font-size:13.5px;line-height:1.6;margin:0;">${esc(s.body)}</p>
-          </div>`).join('')}
-      </div>
-      <div style="display:flex;justify-content:center;gap:6px;margin:22px 0 6px;">
-        ${steps.map((_, i) => `<span class="onboarding-dot" data-dot="${i}" style="width:6px;height:6px;border-radius:50%;background:${i === 0 ? 'var(--brand-green)' : 'var(--border)'};"></span>`).join('')}
-      </div>
-    </div>
-    <div style="display:flex;gap:8px;margin-top:14px;">
-      <a href="/" class="btn secondary block" style="flex:1;">Skip</a>
-      <button type="button" id="onboarding-next" class="btn block" style="flex:1;">Next</button>
-    </div>
-    <script>
-      (function() {
-        const total = ${steps.length};
-        let i = 0;
-        const nextBtn = document.getElementById('onboarding-next');
-        function render() {
-          document.querySelectorAll('.onboarding-step').forEach(el => { el.style.display = Number(el.dataset.step) === i ? '' : 'none'; });
-          document.querySelectorAll('.onboarding-dot').forEach(el => { el.style.background = Number(el.dataset.dot) === i ? 'var(--brand-green)' : 'var(--border)'; });
-          nextBtn.textContent = i === total - 1 ? 'Get started' : 'Next';
-        }
-        nextBtn.addEventListener('click', () => {
-          if (i < total - 1) { i++; render(); } else { window.location.href = '/'; }
-        });
-      })();
-    </script>
+    <h1 class="screen-title">Welcome to StrainDex 🌿</h1>
+    <p class="screen-sub">${allDone ? 'You\u2019re all set up.' : 'A few things to get you started — check them off as you go.'}</p>
+    <div class="progress-bar" style="margin-bottom:16px;"><div class="fill" style="width:${Math.round((100 * doneCount) / checklist.length)}%;"></div></div>
+    ${checklist.map(item => `
+      <a href="${item.href}" class="library-row" style="text-decoration:none;color:inherit;${item.done ? 'opacity:0.55;' : ''}">
+        <div class="strain-thumb strain-thumb-sm" style="display:flex;align-items:center;justify-content:center;font-size:20px;background:#e5e0d5;">${item.done ? '✅' : item.icon}</div>
+        <div class="info">
+          <div class="nm" style="${item.done ? 'text-decoration:line-through;' : ''}">${esc(item.title)}</div>
+        </div>
+      </a>
+    `).join('')}
+    <a href="/" class="btn block secondary" style="margin-top:16px;">${allDone ? 'Go to Home' : 'Skip for now'}</a>
   `;
   sendHtml(res, layout({ title: 'Welcome', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)), showBack: false }));
 }
@@ -3550,7 +3588,12 @@ async function apiCheckinReaction(req, res, id) {
   const body = await parseJson(req);
   const reaction = REACTION_BY_KEY[body.reaction] ? body.reaction : null;
   if (!reaction) return sendJson(res, { error: 'invalid reaction' }, 400);
-  await db.setCheckinReaction(id, userId, reaction);
+  const summary = await db.setCheckinReaction(id, userId, reaction);
+  if (summary.myReaction) {
+    await db.upsertReactionNotification({ user_id: checkin.user_id, actor_user_id: userId, checkin_id: id, reaction: summary.myReaction });
+  } else {
+    await db.deleteReactionNotification({ user_id: checkin.user_id, actor_user_id: userId, checkin_id: id });
+  }
   sendJson(res, { html: renderReactionBar(checkin, userId) });
 }
 async function apiCommentLike(req, res, id) {
@@ -3571,12 +3614,19 @@ async function handleCheckinComment(req, res, checkinId) {
   if (body) {
     const comment = await db.createCheckinComment({ checkin_id: checkinId, user_id: userId, body });
     // Tag anyone @mentioned who's a real user (and not the commenter
-    // themselves) so it shows up on their Mentions page and nav badge.
+    // themselves) so it shows up on their Notifications page and nav badge.
     for (const username of extractMentionedUsernames(body)) {
       const mentioned = db.getUserByUsername(username);
       if (mentioned && mentioned.id !== userId) {
         await db.createCommentMention({ comment_id: comment.id, checkin_id: checkinId, mentioning_user_id: userId, mentioned_user_id: mentioned.id });
       }
+    }
+    // Separately, let the post's owner know someone commented at all --
+    // createCommentNotification already no-ops if they commented on their
+    // own post, so no extra check needed here.
+    const checkin = db.getCheckin(checkinId);
+    if (checkin) {
+      await db.createCommentNotification({ user_id: checkin.user_id, actor_user_id: userId, checkin_id: checkinId, comment_id: comment.id });
     }
   }
   redirect(res, f.redirect_to || '/');
@@ -4084,47 +4134,62 @@ function pageFriends(req, res, query) {
     <div class="section-label" style="margin-top:24px;">Community Features</div>
     <div class="more-grid">
       <a class="more-tile" href="/messages"><span class="ic">💬</span><div class="t">Messages</div><div class="s">${db.countUnreadMessages(userId) > 0 ? `${db.countUnreadMessages(userId)} unread` : 'Chat with your community'}</div></a>
-      <a class="more-tile" href="/mentions"><span class="ic">🏷️</span><div class="t">Mentions</div><div class="s">${db.countUnreadMentions(userId) > 0 ? `${db.countUnreadMentions(userId)} new` : 'Posts you\u2019ve been tagged in'}</div></a>
+      <a class="more-tile" href="/notifications"><span class="ic">🔔</span><div class="t">Notifications</div><div class="s">${(db.countUnreadMentions(userId) + db.countUnreadCheckinNotifications(userId)) > 0 ? `${db.countUnreadMentions(userId) + db.countUnreadCheckinNotifications(userId)} new` : 'Mentions, comments & reactions'}</div></a>
       <a class="more-tile" href="/puff-puff-ask"><span class="ic">💨</span><div class="t">Puff Puff Ask</div><div class="s">Ask the community, browse by section</div></a>
       <a class="more-tile" href="/trade"><span class="ic">🔁</span><div class="t">Trade</div><div class="s">Swap dupes with your community</div></a>
       <a class="more-tile" href="/friends-picks"><span class="ic">🤝</span><div class="t">Community Picks</div><div class="s">What your circle loves that you haven't tried</div></a>
+      <a class="more-tile" href="/invite"><span class="ic">📣</span><div class="t">Invite</div><div class="s">Bring someone into your community</div></a>
     </div>
   `;
   sendHtml(res, layout({ title: 'Community', active: 'friends', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
-// Everywhere someone's tagged you with @username in a comment, most recent
-// first. Viewing this page marks them all read, same "opening it implies
-// you've seen it" pattern as a DM thread. Links straight to the exact
-// post via pageCheckinDetail -- this used to have to fall back to the
-// poster's profile or just Home for anyone outside your community, since
-// there was no page that could show a single stranger's post on its own;
-// that's exactly what pageCheckinDetail is for, so every mention can now
-// point at precisely the right place regardless of who posted it.
-async function pageMentions(req, res) {
+// Every way someone can engage with your posts -- @mentions, comments,
+// and reactions -- merged into one inbox, most recent first. Mentions
+// live in their own comment_mentions table (a mention is really "someone
+// tagged YOU," distinct from "someone engaged with a post of yours"),
+// comments and reactions live in checkin_notifications; this just merges
+// and sorts all three for display rather than making the person check
+// three different places. Viewing this page marks everything read, same
+// "opening it implies you've seen it" pattern as a DM thread. Every entry
+// links straight to the exact post via pageCheckinDetail.
+async function pageNotifications(req, res) {
   const userId = requireUser(req, res);
   if (userId == null) return;
-  const rows = db.listMentionsForUser(userId).map(m => {
-    const checkin = db.getCheckin(m.checkin_id);
-    if (!checkin) return null;
-    const mentioner = db.getUserById(m.mentioning_user_id);
-    const strain = db.getStrain(checkin.strain_id);
-    return { m, checkin, mentioner, strain, link: `/checkin/${checkin.id}` };
-  }).filter(Boolean);
+  const mentionRows = db.listMentionsForUser(userId).map(m => ({
+    type: 'mention', actor_user_id: m.mentioning_user_id, checkin_id: m.checkin_id, created_at: m.created_at,
+  }));
+  const engagementRows = db.listCheckinNotificationsForUser(userId).map(n => ({
+    type: n.type, actor_user_id: n.actor_user_id, checkin_id: n.checkin_id, reaction: n.reaction, created_at: n.created_at,
+  }));
+  const rows = [...mentionRows, ...engagementRows]
+    .sort((a, b) => (b.created_at || '').localeCompare(a.created_at || ''))
+    .map(row => {
+      const checkin = db.getCheckin(row.checkin_id);
+      if (!checkin) return null;
+      const actor = db.getUserById(row.actor_user_id);
+      const strain = db.getStrain(checkin.strain_id);
+      const reactionMeta = row.reaction ? REACTION_BY_KEY[row.reaction] : null;
+      const verb = row.type === 'mention' ? 'tagged you'
+        : row.type === 'comment' ? 'commented on your post'
+        : `reacted ${reactionMeta ? reactionMeta.icon : ''} to your post`;
+      return { ...row, checkin, actor, strain, verb };
+    }).filter(Boolean);
   await db.markMentionsRead(userId);
+  await db.markCheckinNotificationsRead(userId);
   const body = `
-    <h1 class="screen-title">Mentions</h1>
-    <p class="screen-sub">Posts where someone tagged you with @username in a comment.</p>
-    ${rows.length ? rows.map(({ m, checkin, mentioner, strain, link }) => `
-      <a class="library-row" href="${link}" style="text-decoration:none;color:inherit;">
+    <h1 class="screen-title">Notifications</h1>
+    <p class="screen-sub">Mentions, comments, and reactions on your posts.</p>
+    ${rows.length ? rows.map(({ checkin, actor, strain, verb, created_at }) => `
+      <a class="library-row" href="/checkin/${checkin.id}" style="text-decoration:none;color:inherit;">
         ${strainPhotoTag(strain, 'sm')}
         <div class="info">
-          <div class="nm">${esc(mentioner ? mentioner.username : 'Someone')} tagged you</div>
-          <div class="sub">on ${esc(strain ? strain.name : checkin.strain_id)} · <span class="local-time" data-utc="${m.created_at}Z">${esc(m.created_at)} UTC</span></div>
+          <div class="nm">${esc(actor ? actor.username : 'Someone')} ${esc(verb)}</div>
+          <div class="sub">on ${esc(strain ? strain.name : checkin.strain_id)} · <span class="local-time" data-utc="${created_at}Z">${esc(created_at)} UTC</span></div>
         </div>
       </a>
-    `).join('') : `<div class="empty-note">No one's tagged you yet — use @username in a comment to tag someone yourself.</div>`}
+    `).join('') : `<div class="empty-note">Nothing yet — comments, reactions, and @mentions on your posts will show up here.</div>`}
   `;
-  sendHtml(res, layout({ title: 'Mentions', active: 'friends', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: 'Notifications', active: 'friends', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
 // Abuse protection: report + block. Reports go to a simple admin review
@@ -4203,6 +4268,78 @@ async function handleAdminReportReviewed(req, res, id) {
 }
 
 // ---------- Direct messages ----------
+// Badges are computed live from existing stats every time a profile
+// loads -- no separate "earned badges" table, same recompute-don't-persist
+// philosophy as getOnboardingChecklist/getCheckinStreak. Locked badges
+// still render (greyed out, not hidden) since showing what's *not*
+// earned yet is part of what makes a badge shelf worth coming back to.
+function computeBadges(userId) {
+  const totalCheckins = db.listCheckins({ userId, limit: 100000 }).length;
+  const streak = db.getCheckinStreak(userId);
+  const uniqueStrains = db.getUniqueOwnedCount(userId);
+  const friendsCount = db.listFriends(userId).length;
+  const invitedCount = db.listInvitedUsers(userId).length;
+  const typesTried = new Set(db.getCollection(userId).map(o => o.strain.type).filter(Boolean));
+  return [
+    { icon: '🌱', title: 'First Check-In', desc: 'Log your first check-in', earned: totalCheckins >= 1 },
+    { icon: '🔥', title: 'On Fire', desc: '7-day check-in streak', earned: streak.longest >= 7 },
+    { icon: '💪', title: 'Dedicated', desc: '30-day check-in streak', earned: streak.longest >= 30 },
+    { icon: '📖', title: 'Strain Explorer', desc: 'Try 5 unique strains', earned: uniqueStrains >= 5 },
+    { icon: '🎓', title: 'Strain Connoisseur', desc: 'Try 20 unique strains', earned: uniqueStrains >= 20 },
+    { icon: '🌈', title: 'Type Explorer', desc: 'Try Indica, Sativa & Hybrid', earned: ['Indica', 'Sativa', 'Hybrid'].every(t => typesTried.has(t)) },
+    { icon: '🧑\u200d🤝\u200d🧑', title: 'Community Builder', desc: 'Connect with 5 people', earned: friendsCount >= 5 },
+    { icon: '📣', title: 'Recruiter', desc: 'Invite someone who joins', earned: invitedCount >= 1 },
+    { icon: '🃏', title: 'Collector', desc: 'Catch 25 unique cards', earned: uniqueStrains >= 25 },
+    { icon: '💯', title: 'Century Club', desc: '100 check-ins', earned: totalCheckins >= 100 },
+  ];
+}
+// A shareable invite link -- ?ref=username on /signup, resolved by
+// pageSignup into a "so-and-so invited you" banner and threaded through
+// to invited_by on the new account (see handleSignupSubmit). Reuses the
+// exact same share pattern as renderShareButton/SHARE_CHECKIN_SCRIPT
+// (native share sheet, or copy-to-clipboard with a quick confirmation)
+// rather than inventing a third separate sharing mechanism.
+function pageInvite(req, res) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const user = db.getUserById(userId);
+  const invited = db.listInvitedUsers(userId);
+  const inviteUrl = `${req.headers['x-forwarded-proto'] || 'https'}://${req.headers.host}/signup?ref=${encodeURIComponent(user.username)}`;
+  const body = `
+    <h1 class="screen-title">Invite to StrainDex</h1>
+    <p class="screen-sub">This app is only as good as the community in it — bring someone in.</p>
+    <div class="card" style="text-align:center;">
+      <p style="font-size:13px;word-break:break-all;margin:0 0 12px;" id="invite-link-text">${esc(inviteUrl)}</p>
+      <button type="button" class="btn block" onclick="shareInviteLink(this)">🔗 Share Invite Link</button>
+    </div>
+    <p class="empty-note" style="margin-top:14px;">${invited.length ? `You've invited ${invited.length} ${invited.length === 1 ? 'person' : 'people'} so far — welcome them in the <a href="/friends">Community</a> tab.` : `Nobody's joined from your link yet — once they do, they'll show up here.`}</p>
+    <script>
+      if (!window.shareInviteLink) {
+        window.shareInviteLink = function(btn) {
+          var url = document.getElementById('invite-link-text').textContent.trim();
+          var flash = function(text) {
+            var original = btn.textContent;
+            btn.textContent = text;
+            setTimeout(function() { btn.textContent = original; }, 1500);
+          };
+          if (navigator.share) {
+            navigator.share({ url: url, title: 'Join me on StrainDex' }).catch(function() {});
+            return;
+          }
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(url).then(function() { flash('✓ Copied'); }).catch(function() {
+              window.prompt('Copy this link:', url);
+            });
+          } else {
+            window.prompt('Copy this link:', url);
+          }
+        };
+      }
+    </script>
+  `;
+  sendHtml(res, layout({ title: 'Invite', active: 'friends', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
+}
+
 function pageMessagesInbox(req, res) {
   const userId = requireUser(req, res);
   if (userId == null) return;
@@ -4323,6 +4460,15 @@ function pageFriendProfile(req, res, friendId) {
       <div><div style="font-size:20px;font-weight:700;">${collection.length}</div><div class="empty-note">Cards caught</div></div>
       <div><div style="font-size:20px;font-weight:700;">${db.getTotalDupes(friendId)}</div><div class="empty-note">Tradeable dupes</div></div>
       <div><div style="font-size:20px;font-weight:700;">${recentCheckins.length}</div><div class="empty-note">Recent check-ins</div></div>
+    </div>
+    <div class="section-label">Badges</div>
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:16px;">
+      ${computeBadges(friendId).map(b => `
+        <div title="${esc(b.title)} — ${esc(b.desc)}" style="text-align:center;${b.earned ? '' : 'opacity:0.3;'}">
+          <div style="font-size:24px;">${b.icon}</div>
+          <div style="font-size:10px;color:var(--ink-secondary);margin-top:2px;line-height:1.2;">${esc(b.title)}</div>
+        </div>
+      `).join('')}
     </div>
     ${friendId !== userId ? `<a class="btn block secondary" href="/trade?friend=${friendId}" style="margin-bottom:16px;">🔁 Trade with ${esc(friend.username)}</a>` : ''}
     ${photoPosts.length ? `
@@ -4540,7 +4686,7 @@ async function pageDispensaries(req, res, searchParams) {
     body = `
       <h1 class="screen-title">Dispensaries</h1>
       <div class="locate-banner">
-        <div style="font-weight:700;font-size:13px;">📍 Find real dispensaries near you</div>
+        <div style="font-weight:700;font-size:13px;">📍 Find dispensaries near you</div>
         <div class="dsub" style="margin:3px 0 10px;">${realError ? esc(realError) : "Search by ZIP code, or share your location — nothing is sent anywhere else."}</div>
         <div class="locate-row">
           <form method="GET" action="/dispensaries" class="zip-form">
@@ -4550,7 +4696,7 @@ async function pageDispensaries(req, res, searchParams) {
           <button type="button" id="use-location-btn" class="follow-btn">Use my location</button>
         </div>
       </div>
-      ${zipParam || realError ? `<div class="empty-note" style="margin-top:16px;">${realError ? 'Nothing to show right now — try again in a moment, or try a different ZIP code.' : 'No dispensaries found for that ZIP code.'}</div>` : `<div class="empty-note" style="margin-top:16px;">Enter a ZIP code or share your location above to find real dispensaries near you.</div>`}
+      ${zipParam || realError ? `<div class="empty-note" style="margin-top:16px;">${realError ? 'Nothing to show right now — try again in a moment, or try a different ZIP code.' : 'No dispensaries found for that ZIP code.'}</div>` : `<div class="empty-note" style="margin-top:16px;">Enter a ZIP code or share your location above to find dispensaries near you.</div>`}
     `;
   }
   sendHtml(res, layout({ title: 'Dispensaries', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
@@ -4895,7 +5041,8 @@ const server = http.createServer(async (req, res) => {
     if (method === 'POST' && pathname === '/grow-journal') return await handleGrowJournalSubmit(req, res);
     if (method === 'POST' && (m = pathname.match(/^\/grow-journal\/(\d+)\/delete$/))) return await handleGrowJournalDelete(req, res, m[1]);
     if (method === 'GET' && pathname === '/friends-picks') return pageFriendsPicks(req, res);
-    if (method === 'GET' && pathname === '/mentions') return await pageMentions(req, res);
+    if (method === 'GET' && pathname === '/notifications') return await pageNotifications(req, res);
+    if (method === 'GET' && pathname === '/invite') return pageInvite(req, res);
     if (method === 'GET' && pathname === '/puff-puff-ask') return pagePuffPuffAsk(req, res, url.searchParams);
     if (method === 'GET' && (m = pathname.match(/^\/puff-puff-ask\/(\d+)$/))) return pagePuffPuffAskThread(req, res, Number(m[1]));
     if (method === 'POST' && pathname === '/puff-puff-ask/new') return await handlePuffPuffAskNew(req, res);
