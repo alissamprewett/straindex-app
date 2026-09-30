@@ -1017,7 +1017,7 @@ function pageStrainDetail(req, res, id) {
         <div>
           <h1 style="margin:0;font-size:19px;">${esc(s.name)}</h1>
           <div class="empty-note" style="padding:0;">${esc(s.type)}${s.lean ? ' · ' + esc(s.lean) : ''} · <span class="rarity-tag rarity-${s.rarity}">${rarityLabel(s.rarity)}</span></div>
-          <div style="margin-top:2px;" title="${esc(VERIFICATION_BADGE[strainVerificationTier(s)].note)}"><span class="empty-note" style="padding:0;">${VERIFICATION_BADGE[strainVerificationTier(s)].icon} ${VERIFICATION_BADGE[strainVerificationTier(s)].label}</span></div>
+          <div style="margin-top:2px;" title="${esc(VERIFICATION_BADGE[strainVerificationTier(s)].note)}"><a href="/lab-result-guide" class="empty-note" style="padding:0;text-decoration:none;color:inherit;">${VERIFICATION_BADGE[strainVerificationTier(s)].icon} ${VERIFICATION_BADGE[strainVerificationTier(s)].label}</a></div>
           ${ratingStats.count ? `<div style="margin-top:2px;">${starString(Math.round(ratingStats.avg))} <span class="empty-note" style="padding:0;">${ratingStats.avg}★ from ${ratingStats.count} check-in${ratingStats.count === 1 ? '' : 's'}</span></div>` : `<div class="empty-note" style="padding:2px 0 0;">No community ratings yet — be the first to check in.</div>`}
         </div>
       </div>
@@ -1625,6 +1625,33 @@ const GLOSSARY_REGEX = new RegExp(
 );
 const GLOSSARY_BY_VARIANT = new Map();
 GLOSSARY_TERMS.forEach(t => t.variants.forEach(v => GLOSSARY_BY_VARIANT.set(v.toLowerCase(), t)));
+// Every term defined across the site, in one browsable/searchable place --
+// previously these only surfaced as inline hover-links inside recipes and
+// grow tips (or the narrow genetics subset on the Genetics & Breeding
+// Guide), with no page of their own. Reuses GLOSSARY_TERMS directly, so
+// there's still only one place any definition is ever written.
+function pageGlossary(req, res, query) {
+  const q = ((query && query.get('q')) || '').trim().toLowerCase();
+  const sorted = [...GLOSSARY_TERMS].sort((a, b) => a.key.localeCompare(b.key));
+  const filtered = q
+    ? sorted.filter(t => t.key.includes(q) || t.variants.some(v => v.includes(q)) || t.definition.toLowerCase().includes(q))
+    : sorted;
+  const body = `
+    <h1 class="screen-title">Glossary</h1>
+    <p class="screen-sub">Every term used across StrainDex, in one place — the same definitions that auto-link inline in recipes, grow tips, and the Education guides.</p>
+    <form method="GET" action="/glossary" style="margin-bottom:14px;display:flex;gap:8px;">
+      <input type="search" name="q" value="${esc(q)}" placeholder="Search terms..." autocomplete="off" style="flex:1;">
+      <button class="btn" type="submit">Search</button>
+    </form>
+    ${filtered.length ? filtered.map(t => `
+      <div class="card" style="margin-bottom:8px;">
+        <h2 style="margin:0 0 4px;font-size:15px;text-transform:capitalize;">${esc(t.key.replace(/-/g, ' '))}</h2>
+        <p style="margin:0;">${esc(t.definition)}</p>
+      </div>
+    `).join('') : `<div class="empty-note">No terms match "${esc(q)}".</div>`}
+  `;
+  sendHtml(res, layout({ title: 'Glossary', active: 'education', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
+}
 function linkGlossaryTerms(escapedText) {
   if (!escapedText) return escapedText;
   return escapedText.replace(GLOSSARY_REGEX, (match) => {
@@ -2014,6 +2041,41 @@ const GROWER_GUIDE_STEPS = [
   { title: 'Harvest & cure', body: 'Trichomes turning from clear to milky/amber is the classic sign it\u2019s close. After harvest, a slow cure (in a jar, opened daily, out of light) is what actually develops the flavor and potency you\u2019re after.', link: '/growing?cat=Harvest+%26+Curing', linkLabel: 'Browse harvest & curing tips \u2192' },
   { title: 'Use everything you grew', body: 'Bud isn\u2019t the only usable part of the plant — sugar leaves, trim, and even fan leaves each have a real use.', link: '/using-whole-plant', linkLabel: 'See Using the Whole Plant \u2192' },
 ];
+// The consumption-side counterpart to the First-Time Grower's Guide --
+// same sequenced-walkthrough pattern, but for someone new to using
+// cannabis rather than growing it. Education was previously two flat
+// tile grids with no path through them for someone who doesn't yet know
+// what to look for; this links out to the real pages rather than
+// duplicating their content.
+const NEW_TO_CANNABIS_STEPS = [
+  { title: 'Know your dose before you start', body: 'This matters most with edibles, where it\u2019s easy to take more before the first dose has even kicked in. Figure out the math first, not after.', link: '/dosing-calculator', linkLabel: 'Dosing Calculator \u2192' },
+  { title: 'Pick a method', body: 'Smoking and vaping hit fast and fade fast. Edibles take much longer to start and last much longer once they do. Same cannabis, very different experience depending on how you take it.', link: '/methods', linkLabel: 'Ways to Enjoy It \u2192' },
+  { title: 'Know roughly what you might feel', body: 'Effects vary a lot by strain and person, but having a general vocabulary for what\u2019s commonly reported helps you describe (and predict) your own experience.', link: '/effects-guide', linkLabel: 'Effects Guide \u2192' },
+  { title: 'Know what not to combine it with', body: 'Alcohol, certain medications, and a few other substances interact with cannabis in ways worth knowing about before, not during.', link: '/mixing-cautions', linkLabel: 'Mixing With Other Substances \u2192' },
+  { title: 'Know what to do if something feels wrong', body: 'Being too high is uncomfortable, not usually dangerous — but it helps to already know the practical steps rather than figuring them out in the moment.', link: '/feels-wrong', linkLabel: 'If Something Feels Wrong \u2192' },
+  { title: 'Terpenes shape the experience too', body: 'THC percentage isn\u2019t the whole story — the aromatic compounds in a strain play a real role in how it actually feels.', link: '/terpene-guide', linkLabel: 'Terpene Guide \u2192' },
+  { title: 'Tolerance builds with regular use', body: 'If a strain that used to work well starts feeling weaker, that\u2019s tolerance, not a bad batch — and there\u2019s a real, well-understood fix for it.', link: '/tolerance-explained', linkLabel: 'Tolerance, Explained \u2192' },
+  { title: 'Store what you don\u2019t use right away', body: 'Flower, concentrates, and edibles all degrade differently if stored wrong — worth knowing before your first purchase outlasts its freshness.', link: '/storage-guide', linkLabel: 'Storage Guide \u2192' },
+];
+function pageNewToCannabis(req, res) {
+  const body = `
+    <h1 class="screen-title">New to Cannabis? Start Here</h1>
+    <p class="screen-sub">A roadmap through the basics before your first (or next) time. Not medical advice.</p>
+    ${NEW_TO_CANNABIS_STEPS.map((s, i) => `
+      <div class="card" style="margin-bottom:10px;">
+        <div style="display:flex;gap:10px;">
+          <div style="font-weight:700;color:var(--ink-secondary);flex-shrink:0;">${i + 1}.</div>
+          <div>
+            <h2 style="margin:0 0 4px;font-size:15px;">${esc(s.title)}</h2>
+            <p style="margin:0;">${linkGlossaryTerms(esc(s.body))}</p>
+            <a href="${s.link}" class="empty-note" style="display:inline-block;padding:6px 0 0;">${esc(s.linkLabel)}</a>
+          </div>
+        </div>
+      </div>
+    `).join('')}
+  `;
+  sendHtml(res, layout({ title: 'New to Cannabis? Start Here', active: 'education', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
+}
 function pageFirstTimeGrowerGuide(req, res) {
   const body = `
     <h1 class="screen-title">First-Time Grower's Guide</h1>
@@ -2980,6 +3042,13 @@ function pageTerpeneGuide(req, res) {
   const counts = {};
   allStrains.forEach(s => (s.terps || []).forEach(t => { counts[t.n] = (counts[t.n] || 0) + 1; }));
   const entries = Object.entries(TERPENE_GUIDE).sort((a, b) => (counts[b[0]] || 0) - (counts[a[0]] || 0));
+  // Personalization: not just "how common is this in the library" but
+  // "how much of this shows up in what you've actually logged," reusing
+  // the same weighted terpene breakdown Your Patterns already computes.
+  const userId = auth.currentUserId(req);
+  const insights = userId != null ? db.getUserInsights(userId) : null;
+  const myPct = {};
+  if (insights && insights.topTerpenes) insights.topTerpenes.forEach(t => { myPct[t.name] = t.pct; });
   const body = `
     <h1 class="screen-title">Terpene Guide</h1>
     <p class="screen-sub">Terpenes are the aromatic compounds behind a strain's smell and flavor. Effects here are commonly reported associations, not clinically proven outcomes — everyone responds differently.</p>
@@ -2991,6 +3060,7 @@ function pageTerpeneGuide(req, res) {
         </div>
         <p style="margin:6px 0 2px;"><b>Aroma:</b> ${esc(info.aroma)}</p>
         <p style="margin:2px 0 0;"><b>Commonly associated with:</b> ${esc(info.effects)}</p>
+        ${myPct[name] ? `<p style="margin:4px 0 0;color:var(--brand-green-dark);font-weight:700;font-size:13px;">🌿 ${myPct[name]}% of your own check-in history</p>` : ''}
       </div>
     `).join('')}
   `;
@@ -3037,6 +3107,13 @@ function pageEffectsGuide(req, res) {
   const counts = {};
   allStrains.forEach(s => (s.effects || []).forEach(e => { counts[e] = (counts[e] || 0) + 1; }));
   const entries = Object.entries(EFFECTS_GUIDE).sort((a, b) => (counts[b[0]] || 0) - (counts[a[0]] || 0));
+  // Same personalization idea as the Terpene Guide: how often this effect
+  // actually shows up in the viewer's own logged check-ins, not just how
+  // common it is across the whole library.
+  const userId = auth.currentUserId(req);
+  const insights = userId != null ? db.getUserInsights(userId) : null;
+  const myCount = {};
+  if (insights && insights.topEffects) insights.topEffects.forEach(e => { myCount[e.name] = e.count; });
   const body = `
     <h1 class="screen-title">Effects Guide</h1>
     <p class="screen-sub">What people commonly report feeling from each effect tag — reported associations, not guaranteed outcomes. Everyone responds differently.</p>
@@ -3049,6 +3126,7 @@ function pageEffectsGuide(req, res) {
           <a href="/strains?effect=${encodeURIComponent(name)}" class="empty-note" style="padding:0;">${counts[name] || 0} strains →</a>
         </div>
         <p style="margin:6px 0 0;">${esc(description)}</p>
+        ${myCount[name] ? `<p style="margin:4px 0 0;color:var(--brand-green-dark);font-weight:700;font-size:13px;">🌿 You've logged this ${myCount[name]} time${myCount[name] === 1 ? '' : 's'}</p>` : ''}
         ${goalKey ? `<a href="/mood-finder?goal=${goalKey}" class="empty-note" style="display:inline-block;padding:6px 0 0;">${esc(MOOD_GOALS[goalKey].icon)} Find strains for ${esc(MOOD_GOALS[goalKey].label)} →</a>` : ''}
       </div>
     `;
@@ -3359,7 +3437,7 @@ function pageMixingCautions(req, res) {
     ${cautions.map(c => `
       <div class="card" style="margin-bottom:10px;">
         <h2 style="margin:0 0 6px;font-size:15px;">${esc(c.title)}</h2>
-        <p style="margin:0;">${esc(c.body)}</p>
+        <p style="margin:0;">${linkGlossaryTerms(esc(c.body))}</p>
       </div>
     `).join('')}
   `;
@@ -3379,7 +3457,7 @@ function pageStorageGuide(req, res) {
     ${cards.map(c => `
       <div class="card" style="margin-bottom:10px;">
         <h2 style="margin:0 0 6px;font-size:15px;">${esc(c.title)}</h2>
-        <p style="margin:0;">${esc(c.body)}</p>
+        <p style="margin:0;">${linkGlossaryTerms(esc(c.body))}</p>
       </div>
     `).join('')}
   `;
@@ -3401,7 +3479,7 @@ function pageLabResultGuide(req, res) {
     ${cards.map(c => `
       <div class="card" style="margin-bottom:10px;">
         <h2 style="margin:0 0 6px;font-size:15px;">${esc(c.title)}</h2>
-        <p style="margin:0;">${esc(c.body)}</p>
+        <p style="margin:0;">${linkGlossaryTerms(esc(c.body))}</p>
       </div>
     `).join('')}
   `;
@@ -3414,11 +3492,11 @@ function pageToleranceExplained(req, res) {
     <p class="screen-sub">The thinking behind the Tolerance Break tracker on <a href="/insights">Your Patterns</a>. Not medical advice.</p>
     <div class="card" style="margin-bottom:10px;">
       <h2 style="margin:0 0 6px;font-size:15px;">Why tolerance builds</h2>
-      <p style="margin:0;">With regular use, the body adjusts to a steady presence of THC, and the same dose gradually produces less effect. It\u2019s the same basic pattern behind tolerance to a lot of substances, not something specific to cannabis.</p>
+      <p style="margin:0;">${linkGlossaryTerms(esc('With regular use, the body adjusts to a steady presence of THC, and the same dose gradually produces less effect. It\u2019s the same basic pattern behind tolerance to a lot of substances, not something specific to cannabis.'))}</p>
     </div>
     <div class="card" style="margin-bottom:10px;">
       <h2 style="margin:0 0 6px;font-size:15px;">Why a break actually works</h2>
-      <p style="margin:0;">Stepping away for a stretch lets that adjustment reverse, so a dose that stopped doing much starts working like it used to. This is the entire idea behind a "t-break" — time off, not a different strain or a bigger dose, is what resets it.</p>
+      <p style="margin:0;">${linkGlossaryTerms(esc('Stepping away for a stretch lets that adjustment reverse, so a dose that stopped doing much starts working like it used to. This is the entire idea behind a "t-break" — time off, not a different strain or a bigger dose, is what resets it.'))}</p>
     </div>
     <div class="card" style="margin-bottom:10px;">
       <h2 style="margin:0 0 6px;font-size:15px;">How long is enough?</h2>
@@ -3449,7 +3527,7 @@ function pageFeelsWrong(req, res) {
     </div>
     <div class="card" style="margin-bottom:10px;">
       <h2 style="margin:0 0 6px;font-size:15px;">Nausea or vomiting ("greening out")</h2>
-      <p style="margin:0;">Lie down on your side, sip water slowly, and give it time. A cool cloth on your forehead or neck can help. This is more common with edibles or combining with alcohol — see <a href="/mixing-cautions">Mixing With Other Substances</a>.</p>
+      <p style="margin:0;">${linkGlossaryTerms(esc('Lie down on your side, sip water slowly, and give it time. A cool cloth on your forehead or neck can help. This is more common with edibles or combining with alcohol'))} — see <a href="/mixing-cautions">Mixing With Other Substances</a>.</p>
     </div>
     <div class="card" style="margin-bottom:10px;">
       <h2 style="margin:0 0 6px;font-size:15px;">Racing heart or panic</h2>
@@ -3457,7 +3535,7 @@ function pageFeelsWrong(req, res) {
     </div>
     <div class="card" style="margin-bottom:10px;">
       <h2 style="margin:0 0 6px;font-size:15px;">A note on edibles specifically</h2>
-      <p style="margin:0;">Edibles take longer to hit and hit harder and longer than smoking. Most "too high" situations come from redosing too early because nothing seemed to be happening yet. See the <a href="/dosing-calculator">Dosing Calculator</a> before you start, not after.</p>
+      <p style="margin:0;">${linkGlossaryTerms(esc('Edibles take longer to hit and hit harder and longer than smoking. Most "too high" situations come from redosing too early because nothing seemed to be happening yet.'))} See the <a href="/dosing-calculator">Dosing Calculator</a> before you start, not after.</p>
     </div>
     <div class="card" style="background:#fdecec;">
       <h2 style="margin:0 0 6px;font-size:15px;">When to get real help</h2>
@@ -4333,6 +4411,7 @@ function pageEducation(req, res) {
     {
       title: 'Consumption & Safety',
       tiles: [
+        { href: '/new-to-cannabis', icon: '🧭', t: 'New to Cannabis? Start Here', s: 'A roadmap through the basics' },
         { href: '/feels-wrong', icon: '🆘', t: 'If Something Feels Wrong', s: 'Calm, practical steps for the moment' },
         { href: '/methods', icon: '💨', t: 'Ways to Enjoy It', s: 'Every method, explained' },
         { href: '/concentrates', icon: '💠', t: 'Concentrates & Extracts', s: 'Kief, rosin, live resin & more' },
@@ -4353,6 +4432,7 @@ function pageEducation(req, res) {
         { href: '/breeder-guide', icon: '🧬', t: 'Breeder Guide', s: 'Who\u2019s actually behind each strain' },
         { href: '/landrace-guide', icon: '🌍', t: 'Landrace Guide', s: 'The genetic root everything else grew from' },
         { href: '/genetics-guide', icon: '🔬', t: 'Genetics & Breeding Guide', s: 'Phenotype, backcross, cultivar & more' },
+        { href: '/glossary', icon: '📚', t: 'Glossary', s: 'Every term used across the app' },
         { href: '/chat', icon: '💬', t: 'Ask', s: 'Chat with the assistant' },
       ],
     },
@@ -4425,6 +4505,28 @@ function pagePrivacy(req, res) {
   sendHtml(res, layout({ title: 'Privacy Policy', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
+// A static index of every Education guide page, purely so unified search
+// can find them -- previously someone searching "landrace" or "tolerance"
+// got nothing back even though a full page exists on exactly that.
+const EDUCATION_GUIDE_INDEX = [
+  { title: 'New to Cannabis? Start Here', desc: 'A roadmap through the basics', href: '/new-to-cannabis' },
+  { title: 'If Something Feels Wrong', desc: 'Calm, practical steps for the moment', href: '/feels-wrong' },
+  { title: 'Ways to Enjoy It', desc: 'Every ingestion method explained', href: '/methods' },
+  { title: 'Concentrates & Extracts', desc: 'Kief, rosin, live resin & more', href: '/concentrates' },
+  { title: 'Using the Whole Plant', desc: 'Leaves, trim & stems, not just the bud', href: '/using-whole-plant' },
+  { title: 'Storage Guide', desc: 'Keep flower, concentrates & edibles fresh', href: '/storage-guide' },
+  { title: 'How to Read a Lab Result', desc: 'What a real COA actually shows', href: '/lab-result-guide' },
+  { title: 'Tolerance, Explained', desc: 'Why tolerance breaks actually work', href: '/tolerance-explained' },
+  { title: 'Mixing With Other Substances', desc: 'General cautions, not medical advice', href: '/mixing-cautions' },
+  { title: 'Is It Legal Near Me?', desc: 'State-by-state cannabis law', href: '/legal-status' },
+  { title: 'Terpene Guide', desc: 'Aroma & effects by terpene', href: '/terpene-guide' },
+  { title: 'Effects Guide', desc: 'What each effect actually feels like', href: '/effects-guide' },
+  { title: 'Breeder Guide', desc: "Who's actually behind each strain", href: '/breeder-guide' },
+  { title: 'Landrace Guide', desc: 'The genetic root everything else grew from', href: '/landrace-guide' },
+  { title: 'Genetics & Breeding Guide', desc: 'Phenotype, backcross, cultivar & more', href: '/genetics-guide' },
+  { title: 'Glossary', desc: 'Every term used across the app', href: '/glossary' },
+  { title: "First-Time Grower's Guide", desc: 'A roadmap through your first grow', href: '/first-time-grower-guide' },
+];
 // One search box across everything, instead of four separate ones on
 // four separate pages. Grow tips have no listRecipes-style q param to
 // reuse (no per-tip detail page either), so they're filtered here
@@ -4433,7 +4535,7 @@ function pagePrivacy(req, res) {
 function pageSearch(req, res, query) {
   const userId = auth.currentUserId(req);
   const q = (query.get('q') || '').trim();
-  const results = { strains: [], recipes: [], growTips: [], faqs: [] };
+  const results = { strains: [], recipes: [], growTips: [], faqs: [], guides: [] };
   if (q) {
     results.strains = db.listStrains({ q, limit: 5 });
     results.recipes = db.listRecipes({ status: 'approved', q }).slice(0, 5);
@@ -4442,8 +4544,9 @@ function pageSearch(req, res, query) {
       .filter(g => g.title.toLowerCase().includes(needle) || (g.body && g.body.toLowerCase().includes(needle)))
       .slice(0, 5);
     results.faqs = db.listFaqs(q).slice(0, 5);
+    results.guides = EDUCATION_GUIDE_INDEX.filter(g => g.title.toLowerCase().includes(needle) || g.desc.toLowerCase().includes(needle)).slice(0, 5);
   }
-  const totalResults = results.strains.length + results.recipes.length + results.growTips.length + results.faqs.length;
+  const totalResults = results.strains.length + results.recipes.length + results.growTips.length + results.faqs.length + results.guides.length;
   const body = `
     <h1 class="screen-title">Search</h1>
     <form method="GET" action="/search" style="margin-bottom:14px;display:flex;gap:8px;">
@@ -4475,6 +4578,15 @@ function pageSearch(req, res, query) {
         <a class="library-row" href="/growing?cat=${encodeURIComponent(g.category)}" style="text-decoration:none;color:inherit;">
           <div class="strain-thumb strain-thumb-sm" style="display:flex;align-items:center;justify-content:center;font-size:20px;background:#e5e0d5;">🌱</div>
           <div class="info"><div class="nm">${esc(g.title)}</div><div class="sub">${esc(g.category)}</div></div>
+        </a>
+      `).join('')}
+    ` : ''}
+    ${results.guides.length ? `
+      <div class="section-label">Education & Guides</div>
+      ${results.guides.map(g => `
+        <a class="library-row" href="${g.href}" style="text-decoration:none;color:inherit;">
+          <div class="strain-thumb strain-thumb-sm" style="display:flex;align-items:center;justify-content:center;font-size:20px;background:#e5e0d5;">📖</div>
+          <div class="info"><div class="nm">${esc(g.title)}</div><div class="sub">${esc(g.desc)}</div></div>
         </a>
       `).join('')}
     ` : ''}
@@ -5527,7 +5639,7 @@ function pageMethods(req, res) {
       <div class="method-guide-card">
         <div class="mgtitle">${m.icon.startsWith('/') ? `<img src="${m.icon}" alt="" class="mg-icon-photo">` : m.icon} ${esc(m.name)}</div>
         <div class="mgstats"><span>Onset: ${esc(m.onset)}</span><span>Lasts: ${esc(m.duration)}</span></div>
-        <div class="mgdesc">${esc(m.desc)}</div>
+        <div class="mgdesc">${linkGlossaryTerms(esc(m.desc))}</div>
       </div>`).join('')}
   `;
   sendHtml(res, layout({ title: 'Ways to Enjoy It', active: 'education', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
@@ -5603,7 +5715,7 @@ function pageUsingWholePlant(req, res) {
       <div class="method-guide-card">
         <div class="mgtitle">${p.icon} ${esc(p.name)}</div>
         <div class="mgstats"><span>Trichome density: ${esc(p.density)}</span></div>
-        <div class="mgdesc">${esc(p.desc)}</div>
+        <div class="mgdesc">${linkGlossaryTerms(esc(p.desc))}</div>
       </div>`).join('')}
     <p class="empty-note" style="margin-top:6px;">An overview of what each part is generally good for, not a how-to — see <a href="/concentrates">Concentrates & Extracts</a> for what those end products actually are, and <a href="/recipes">Recipes</a> for infusions like cannabutter. Solvent-based extraction in particular carries real fire and safety risks best left to licensed facilities.</p>
   `;
@@ -5617,7 +5729,7 @@ function pageConcentrates(req, res) {
       <div class="method-guide-card">
         <div class="mgtitle">${c.icon} ${esc(c.name)}</div>
         <div class="mgstats"><span>THC: ${esc(c.thc)}</span></div>
-        <div class="mgdesc">${esc(c.desc)}</div>
+        <div class="mgdesc">${linkGlossaryTerms(esc(c.desc))}</div>
       </div>`).join('')}
     <p class="empty-note" style="margin-top:6px;">Not medical advice — potency varies by batch and producer even within these ranges.</p>
   `;
@@ -5840,12 +5952,14 @@ const server = http.createServer(async (req, res) => {
     if (method === 'GET' && pathname === '/breeder-guide') return pageBreederGuide(req, res);
     if (method === 'GET' && pathname === '/landrace-guide') return pageLandraceGuide(req, res);
     if (method === 'GET' && pathname === '/genetics-guide') return pageGeneticsGuide(req, res);
+    if (method === 'GET' && pathname === '/glossary') return pageGlossary(req, res, url.searchParams);
     if (method === 'GET' && pathname === '/using-whole-plant') return pageUsingWholePlant(req, res);
     if (method === 'GET' && pathname === '/first-time-grower-guide') return pageFirstTimeGrowerGuide(req, res);
     if (method === 'GET' && pathname === '/storage-guide') return pageStorageGuide(req, res);
     if (method === 'GET' && pathname === '/lab-result-guide') return pageLabResultGuide(req, res);
     if (method === 'GET' && pathname === '/tolerance-explained') return pageToleranceExplained(req, res);
     if (method === 'GET' && pathname === '/feels-wrong') return pageFeelsWrong(req, res);
+    if (method === 'GET' && pathname === '/new-to-cannabis') return pageNewToCannabis(req, res);
     if (method === 'POST' && pathname === '/report') return await handleReport(req, res);
     if (method === 'POST' && (m = pathname.match(/^\/block\/(\d+)$/))) return await handleBlock(req, res, m[1]);
     if (method === 'POST' && (m = pathname.match(/^\/unblock\/(\d+)$/))) return await handleUnblock(req, res, m[1]);
