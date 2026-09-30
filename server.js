@@ -432,15 +432,34 @@ function pageHome(req, res) {
     </div>
     <script>
       (function() {
-        var KEY = 'sd_install_banner_dismissed';
+        var DISMISS_KEY = 'sd_install_banner_dismissed';
+        // Separate, permanent flag for "this browser has launched the app in
+        // standalone mode at least once" -- i.e. it's already on the home
+        // screen. display-mode:standalone / navigator.standalone only tell
+        // you about the CURRENT tab, not history -- someone who installed it
+        // and is now just browsing in regular Safari/Chrome would still read
+        // as "not standalone" and get re-prompted forever without this.
+        // Once we ever see a standalone launch, or a completed install via
+        // our own button, remember it for good.
+        var INSTALLED_KEY = 'sd_pwa_installed';
         var banner = document.getElementById('install-app-banner');
         var installBtn = document.getElementById('install-app-btn');
         var sub = document.getElementById('install-app-sub');
         var dismissBtn = document.getElementById('install-app-dismiss');
-        var isStandalone = window.matchMedia && window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
-        var dismissed = false;
-        try { dismissed = localStorage.getItem(KEY) === '1'; } catch (e) {}
-        if (isStandalone || dismissed) return;
+        var isStandalone = (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || window.navigator.standalone === true;
+        var dismissed = false, alreadyInstalled = false;
+        try {
+          dismissed = localStorage.getItem(DISMISS_KEY) === '1';
+          alreadyInstalled = localStorage.getItem(INSTALLED_KEY) === '1';
+        } catch (e) {}
+        if (isStandalone) {
+          try { localStorage.setItem(INSTALLED_KEY, '1'); } catch (e) {}
+        }
+        window.addEventListener('appinstalled', function() {
+          try { localStorage.setItem(INSTALLED_KEY, '1'); } catch (e) {}
+          banner.style.display = 'none';
+        });
+        if (isStandalone || dismissed || alreadyInstalled) return;
         var deferredPrompt = null;
         window.addEventListener('beforeinstallprompt', function(e) {
           e.preventDefault();
@@ -448,19 +467,28 @@ function pageHome(req, res) {
           installBtn.style.display = 'inline-block';
         });
         var isIOS = /iphone|ipad|ipod/i.test(window.navigator.userAgent);
-        if (isIOS) { sub.textContent = 'Tap the Share icon, then "Add to Home Screen".'; }
+        // iOS Safari has no install API at all -- there's no button we can
+        // wire up to actually trigger anything, only the manual Share-sheet
+        // path below. Keep the Install button hidden here (it stays hidden
+        // by default and beforeinstallprompt never fires on iOS anyway) so
+        // the banner reads as pure guidance, not a broken button.
+        if (isIOS) { sub.textContent = 'Tap the Share icon in the Safari toolbar, then "Add to Home Screen".'; }
         banner.style.display = 'flex';
         installBtn.addEventListener('click', function() {
           if (!deferredPrompt) return;
           deferredPrompt.prompt();
-          deferredPrompt.userChoice.finally(function() {
+          deferredPrompt.userChoice.then(function(choice) {
+            if (choice && choice.outcome === 'accepted') {
+              try { localStorage.setItem(INSTALLED_KEY, '1'); } catch (e) {}
+            }
+          }).finally(function() {
             deferredPrompt = null;
             banner.style.display = 'none';
           });
         });
         dismissBtn.addEventListener('click', function() {
           banner.style.display = 'none';
-          try { localStorage.setItem(KEY, '1'); } catch (e) {}
+          try { localStorage.setItem(DISMISS_KEY, '1'); } catch (e) {}
         });
       })();
     </script>
@@ -2093,7 +2121,7 @@ function pageFriendsPicks(req, res) {
       </a>
     `).join('') : `<div class="empty-note">Nothing to show yet — either your community hasn't rated anything 4★+, or you've already tried everything they love. <a href="/friends">Add more people</a> or check back later.</div>`}
   `;
-  sendHtml(res, layout({ title: "Community Picks", active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: "Community Picks", active: 'friends', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
 // ---------------------------------------------------------------- Puff Puff Ask (community forum)
@@ -2163,7 +2191,7 @@ function pagePuffPuffAsk(req, res, query) {
     <div class="section-label">${activeSection ? esc(forumSectionMeta(activeSection).label) + ' threads' : 'Recent threads'} (${threads.length})</div>
     ${threads.length ? threads.map(renderForumThreadRow).join('') : `<div class="empty-note">No threads here yet — be the first to ask.</div>`}
   `;
-  sendHtml(res, layout({ title: 'Puff Puff Ask', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: 'Puff Puff Ask', active: 'friends', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 function pagePuffPuffAskThread(req, res, id) {
   const userId = requireUser(req, res);
@@ -3312,7 +3340,25 @@ function pageMore(req, res) {
   // sections here instead. Events/Shop/Business stay hidden too -- still
   // running on demo data, not deleted, just not surfaced here until
   // they're real.
+  // ORDER IS INTENTIONAL AND USER-CONFIRMED: "Your Journey" comes first,
+  // "Discover" second. This was accidentally reversed once already --
+  // if a future change wants to reorder these sections (or the tiles
+  // within them), ASK THE USER FIRST rather than just reshuffling. Same
+  // goes for moving "Community & Local" back here -- it was deliberately
+  // moved out entirely (see pageFriends / the Community tab below), so
+  // don't re-add a Community section here without asking either.
   const sections = [
+    {
+      title: 'Your Journey',
+      tiles: [
+        { href: '/collection', icon: '🎴', t: 'My Collection', s: 'Your binder & rarity progress' },
+        { href: '/wishlist', icon: '⭐', t: 'Wishlist', s: 'Strains you want to try next' },
+        { href: '/lists', icon: '📋', t: 'Your Lists', s: 'Custom groupings — Morning, Sleep, anything' },
+        { href: '/history', icon: '🕐', t: 'Check-In History', s: 'Your full timeline' },
+        { href: '/insights', icon: '📊', t: 'Your Patterns', s: 'What your check-ins say about you' },
+        { href: '/insights', icon: '🌿', t: 'Tolerance Break', s: 'Start, track, or end a break' },
+      ],
+    },
     {
       title: 'Discover',
       tiles: [
@@ -3321,17 +3367,7 @@ function pageMore(req, res) {
         { href: '/compare', icon: '🆚', t: 'Compare Strains', s: 'Side-by-side lookup' },
         { href: '/surprise-me', icon: '🎲', t: 'Surprise Me', s: 'One random strain you haven\u2019t tried' },
         { href: '/trending', icon: '🔥', t: 'Trending This Week', s: 'Most checked-into right now' },
-      ],
-    },
-    {
-      title: 'Your Journey',
-      tiles: [
-        { href: '/collection', icon: '/docs/leaf-kudos.png', t: 'My Collection', s: 'Your binder & rarity progress' },
-        { href: '/wishlist', icon: '⭐', t: 'Wishlist', s: 'Strains you want to try next' },
-        { href: '/lists', icon: '📋', t: 'Your Lists', s: 'Custom groupings — Morning, Sleep, anything' },
-        { href: '/history', icon: '🕐', t: 'Check-In History', s: 'Your full timeline' },
-        { href: '/insights', icon: '📊', t: 'Your Patterns', s: 'What your check-ins say about you' },
-        { href: '/insights', icon: '🌿', t: 'Tolerance Break', s: 'Start, track, or end a break' },
+        { href: '/dispensaries', icon: '📍', t: 'Dispensaries', s: 'Locator & live menus' },
       ],
     },
     {
@@ -3349,16 +3385,6 @@ function pageMore(req, res) {
         { href: '/growing', icon: '🌱', t: 'Growing Tips', s: 'Tips & tricks from home growers' },
         { href: '/growing/new', icon: '✏️', t: 'Share a Grow Tip', s: 'Add your own' },
         { href: '/grow-journal', icon: '📔', t: 'Grow Journal', s: 'Your private plant photo log' },
-      ],
-    },
-    {
-      title: 'Community & Local',
-      tiles: [
-        { href: '/messages', icon: '💬', t: 'Messages', s: userId != null && db.countUnreadMessages(userId) > 0 ? `${db.countUnreadMessages(userId)} unread` : 'Chat with your community & shared strains' },
-        { href: '/puff-puff-ask', icon: '💨', t: 'Puff Puff Ask', s: 'Ask the community, browse by section' },
-        { href: '/trade', icon: '🔁', t: 'Trade', s: 'Swap dupes with your community' },
-        { href: '/friends-picks', icon: '🤝', t: "Community Picks", s: 'What your circle loves that you haven\u2019t tried' },
-        { href: '/dispensaries', icon: '📍', t: 'Dispensaries', s: 'Locator & live menus' },
       ],
     },
     {
@@ -3688,6 +3714,16 @@ function pageHistory(req, res) {
 }
 
 // ---------------------------------------------------------------- friends
+// The Community tab is the home for anything social -- not just your
+// people, but Messages/Puff Puff Ask/Trade/Community Picks too (moved
+// here from More's old "Community & Local" section, which no longer
+// exists -- see the guard comment on pageMore's sections array). Each
+// friend renders as its own clickable card (same library-row pattern as
+// a strain card) rather than a row with inline action buttons; Message,
+// Trade, Remove, and Block all live on the profile page you land on
+// after tapping the card (see pageFriendProfile) so there's one
+// consistent "click in for everything" place, matching how strain cards
+// work.
 function pageFriends(req, res, query) {
   const userId = requireUser(req, res);
   if (userId == null) return;
@@ -3699,8 +3735,7 @@ function pageFriends(req, res, query) {
 
   const body = `
     <h1 class="screen-title">Community</h1>
-    <p class="screen-sub">Find people by username, then trade dupes once you're connected.</p>
-    <a href="/messages" class="btn secondary block" style="text-decoration:none;margin-bottom:14px;">💬 Messages${db.countUnreadMessages(userId) > 0 ? ` (${db.countUnreadMessages(userId)})` : ''}</a>
+    <p class="screen-sub">Your people, messages, trading, and community-wide features — all in one place.</p>
     <form method="GET" action="/friends" style="margin-bottom:14px;display:flex;gap:8px;">
       <input type="text" name="q" value="${esc(q)}" placeholder="Search by username..." autocomplete="off" style="flex:1;">
       <button class="btn" type="submit">Search</button>
@@ -3750,16 +3785,21 @@ function pageFriends(req, res, query) {
 
     <div class="section-label" style="margin-top:20px;">Your community (${friends.length})</div>
     ${friends.length ? friends.map(u => `
-      <div class="admin-row">
-        <a href="/friends/${u.id}" style="text-decoration:none;color:inherit;">👤 ${esc(u.username)}</a>
-        <div class="actions">
-          <a href="/messages/${u.id}" class="btn secondary" style="text-decoration:none;">Message</a>
-          <a href="/trade?friend=${u.id}" class="btn secondary" style="text-decoration:none;">Trade</a>
-          <form method="POST" action="/friends/${u.id}/remove" style="display:inline;" onsubmit="return confirm('Remove this person from your community?')">
-            <button class="btn danger" style="color:#fff;" type="submit">Remove</button>
-          </form>
+      <a class="library-row" href="/friends/${u.id}" style="text-decoration:none;color:inherit;">
+        <div class="strain-thumb strain-thumb-sm" style="display:flex;align-items:center;justify-content:center;font-size:20px;background:#e5e0d5;">👤</div>
+        <div class="info">
+          <div class="nm">${esc(u.username)}</div>
+          <div class="sub">Tap for messages, trading & more</div>
         </div>
-      </div>`).join('') : `<div class="empty-note">No one in your community yet — search for a username above to get started.</div>`}
+      </a>`).join('') : `<div class="empty-note">No one in your community yet — search for a username above to get started.</div>`}
+
+    <div class="section-label" style="margin-top:24px;">Community Features</div>
+    <div class="more-grid">
+      <a class="more-tile" href="/messages"><span class="ic">💬</span><div class="t">Messages</div><div class="s">${db.countUnreadMessages(userId) > 0 ? `${db.countUnreadMessages(userId)} unread` : 'Chat with your community'}</div></a>
+      <a class="more-tile" href="/puff-puff-ask"><span class="ic">💨</span><div class="t">Puff Puff Ask</div><div class="s">Ask the community, browse by section</div></a>
+      <a class="more-tile" href="/trade"><span class="ic">🔁</span><div class="t">Trade</div><div class="s">Swap dupes with your community</div></a>
+      <a class="more-tile" href="/friends-picks"><span class="ic">🤝</span><div class="t">Community Picks</div><div class="s">What your circle loves that you haven't tried</div></a>
+    </div>
   `;
   sendHtml(res, layout({ title: 'Community', active: 'friends', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
@@ -3942,11 +3982,16 @@ function pageFriendProfile(req, res, friendId) {
   const body = `
     <h1 class="screen-title" style="margin-top:8px;">👤 ${esc(friend.username)}</h1>
     ${friendId !== userId && status === 'friends' ? `<a href="/messages/${friendId}" class="btn" style="text-decoration:none;display:inline-block;margin-bottom:10px;">💬 Message</a>` : ''}
-    ${friendId !== userId ? `
-      <form method="POST" action="/block/${friendId}" style="margin-bottom:10px;" onsubmit="return confirm('Block ${esc(friend.username)}? You will no longer see their comments, check-ins, or grow tips, and any community connection will end.')">
-        <input type="hidden" name="redirect_to" value="/friends">
-        <button type="submit" class="empty-note" style="padding:0;background:none;border:none;color:#a13a3a;cursor:pointer;font-size:inherit;text-decoration:underline;">Block this person</button>
-      </form>
+    ${friendId !== userId && status === 'friends' ? `
+      <div style="display:flex;gap:14px;margin-bottom:10px;">
+        <form method="POST" action="/friends/${friendId}/remove" onsubmit="return confirm('Remove ${esc(friend.username)} from your community?')">
+          <button type="submit" class="empty-note" style="padding:0;background:none;border:none;color:inherit;cursor:pointer;font-size:inherit;text-decoration:underline;">Remove from community</button>
+        </form>
+        <form method="POST" action="/block/${friendId}" onsubmit="return confirm('Block ${esc(friend.username)}? You will no longer see their comments, check-ins, or grow tips, and any community connection will end.')">
+          <input type="hidden" name="redirect_to" value="/friends">
+          <button type="submit" class="empty-note" style="padding:0;background:none;border:none;color:#a13a3a;cursor:pointer;font-size:inherit;text-decoration:underline;">Block this person</button>
+        </form>
+      </div>
     ` : ''}
     <div class="card" style="display:flex;justify-content:space-around;text-align:center;margin-bottom:16px;">
       <div><div style="font-size:20px;font-weight:700;">${collection.length}</div><div class="empty-note">Cards caught</div></div>
@@ -4074,7 +4119,7 @@ function pageTrade(req, res, query) {
       <button class="propose-btn" type="submit" ${(!yourPick || !theirPick) ? 'disabled' : ''}>Propose Trade</button>
     </form>
   `;
-  sendHtml(res, layout({ title: 'Trade', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: 'Trade', active: 'friends', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
 async function handleTradePropose(req, res) {
