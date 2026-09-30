@@ -4007,6 +4007,7 @@ function pageEducation(req, res) {
       tiles: [
         { href: '/methods', icon: '💨', t: 'Ways to Enjoy It', s: 'Every method, explained' },
         { href: '/concentrates', icon: '💠', t: 'Concentrates & Extracts', s: 'Kief, rosin, live resin & more' },
+        { href: '/using-whole-plant', icon: '♻️', t: 'Using the Whole Plant', s: 'Leaves, trim & stems — not just the bud' },
         { href: '/mixing-cautions', icon: '⚠️', t: 'Mixing With Other Substances', s: 'General cautions, not medical advice' },
         { href: '/legal-status', icon: '🏛️', t: 'Is It Legal Near Me?', s: 'State-by-state cannabis law' },
       ],
@@ -5160,6 +5161,33 @@ function pageLegalStatus(req, res, query) {
   sendHtml(res, layout({ title: 'Is It Legal Near Me?', active: 'education', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
+// Overview only -- what each part of the plant is good for, not a
+// step-by-step extraction tutorial. Solvent-based extraction specifically
+// carries real fire/safety risks, so this stays at the same descriptive
+// level as the Concentrates & Extracts page (what a thing is called and
+// roughly how it's made) rather than giving actual how-to instructions.
+const PLANT_PART_GUIDE = [
+  { icon: '🌸', name: 'Buds & Flower', density: 'Highest', desc: 'The main event — see Ways to Enjoy It and Concentrates & Extracts for what to actually do with it.' },
+  { icon: '🍃', name: 'Sugar Leaves', density: 'High', desc: 'The small leaves growing directly on and around the buds, often dusted in trichomes themselves. Good source material for kief, bubble hash, and cannabutter or cannaoil — can be smoked or vaped in a pinch, though harsher and less potent than bud itself.' },
+  { icon: '✂️', name: 'Trim', density: 'Medium-High', desc: 'Sugar leaves and small leaf material removed during post-harvest cleanup. The classic source material for bubble hash, dry sift kief, and infusions — and for live rosin or live resin specifically, only if frozen immediately after harvest, since fresh-frozen trim preserves terpenes far better than trim that was dried first.' },
+  { icon: '🌿', name: 'Fan Leaves', density: 'Very Low', desc: "The big, iconic pointed leaves. Too low in trichomes and cannabinoids to be worth smoking or concentrating for effect. Real uses: raw juicing (not decarbed, so no real high, but popular for chlorophyll and nutrients), composting back into your next grow, or a mild tea." },
+  { icon: '🪵', name: 'Stems & Stalks', density: 'Minimal', desc: 'A little resin can cling on near the buds, so some people toss stems into a butter or tincture batch for a small extra boost. Otherwise: a mild folk-remedy tea, or just composting and mulch.' },
+  { icon: '🌱', name: 'Roots', density: 'Negligible', desc: "The least-used part of the plant. Some folk and topical traditions exist, but they're not well documented in modern use — composting is the common, straightforward option." },
+];
+function pageUsingWholePlant(req, res) {
+  const body = `
+    <h1 class="screen-title">Using the Whole Plant</h1>
+    <p class="screen-sub">Harvest isn't just the bud — most of the plant has a real use if you don't throw it out.</p>
+    ${PLANT_PART_GUIDE.map(p => `
+      <div class="method-guide-card">
+        <div class="mgtitle">${p.icon} ${esc(p.name)}</div>
+        <div class="mgstats"><span>Trichome density: ${esc(p.density)}</span></div>
+        <div class="mgdesc">${esc(p.desc)}</div>
+      </div>`).join('')}
+    <p class="empty-note" style="margin-top:6px;">An overview of what each part is generally good for, not a how-to — see <a href="/concentrates">Concentrates & Extracts</a> for what those end products actually are, and <a href="/recipes">Recipes</a> for infusions like cannabutter. Solvent-based extraction in particular carries real fire and safety risks best left to licensed facilities.</p>
+  `;
+  sendHtml(res, layout({ title: 'Using the Whole Plant', active: 'education', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
+}
 function pageConcentrates(req, res) {
   const body = `
     <h1 class="screen-title">Concentrates &amp; Extracts</h1>
@@ -5386,6 +5414,7 @@ const server = http.createServer(async (req, res) => {
     if (method === 'GET' && pathname === '/breeder-guide') return pageBreederGuide(req, res);
     if (method === 'GET' && pathname === '/landrace-guide') return pageLandraceGuide(req, res);
     if (method === 'GET' && pathname === '/genetics-guide') return pageGeneticsGuide(req, res);
+    if (method === 'GET' && pathname === '/using-whole-plant') return pageUsingWholePlant(req, res);
     if (method === 'POST' && pathname === '/report') return await handleReport(req, res);
     if (method === 'POST' && (m = pathname.match(/^\/block\/(\d+)$/))) return await handleBlock(req, res, m[1]);
     if (method === 'POST' && (m = pathname.match(/^\/unblock\/(\d+)$/))) return await handleUnblock(req, res, m[1]);
