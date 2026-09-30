@@ -641,20 +641,34 @@ function pageHome(req, res) {
   const onThisDay = db.getOnThisDay(userId);
   const onboarding = getOnboardingChecklist(userId);
   const onboardingDone = onboarding.filter(o => o.done).length;
+  const homeUser = db.getUserById(userId);
+  // USER-CONFIRMED BEHAVIOR: this card is dismissible from Home specifically
+  // (see handleOnboardingDismiss) so it doesn't nag someone who'd rather
+  // finish later -- dismissing it here does NOT hide the checklist itself,
+  // which always stays visible on Account Settings (see pageAccount) as
+  // its permanent, always-reachable home. Don't make this card
+  // undismissible, and don't remove the checklist from Account Settings,
+  // without asking first.
+  const showOnboardingCard = onboardingDone < onboarding.length && !(homeUser && homeUser.onboarding_card_dismissed);
 
   const body = `
     <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
       <h1 class="screen-title" style="margin:0;">${isFirstVisit ? 'Welcome to StrainDex 🌿' : 'Welcome back 🌿'}</h1>
       ${streak.current > 0 ? `<div title="${streak.current} day check-in streak${streak.longest > streak.current ? ` — best: ${streak.longest}` : ''}" style="display:flex;align-items:center;gap:4px;background:#fff1de;color:#8a4a1f;padding:4px 10px;border-radius:999px;font-size:13px;font-weight:700;flex-shrink:0;">🔥 ${streak.current}</div>` : ''}
     </div>
-    ${onboardingDone < onboarding.length ? `
-      <a href="/onboarding" class="card" style="display:block;margin:10px 0 0;text-decoration:none;color:#2a2a2a;background:var(--bg-subtle,#f7f7f2);">
-        <div style="display:flex;justify-content:space-between;align-items:center;">
-          <div style="font-weight:700;font-size:13px;">🚀 Finish setting up your account</div>
-          <div class="empty-note" style="padding:0;">${onboardingDone}/${onboarding.length}</div>
-        </div>
-        <div class="progress-bar" style="margin-top:8px;"><div class="fill" style="width:${Math.round((100 * onboardingDone) / onboarding.length)}%;"></div></div>
-      </a>
+    ${showOnboardingCard ? `
+      <div class="card" style="margin:10px 0 0;background:var(--bg-subtle,#f7f7f2);color:#2a2a2a;position:relative;">
+        <form method="POST" action="/onboarding/dismiss" style="position:absolute;top:6px;right:6px;margin:0;">
+          <button type="submit" title="Dismiss" style="background:none;border:none;color:#2a2a2a;opacity:0.5;cursor:pointer;font-size:16px;padding:4px 8px;line-height:1;">×</button>
+        </form>
+        <a href="/onboarding" style="display:block;text-decoration:none;color:inherit;padding-right:20px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <div style="font-weight:700;font-size:13px;">🚀 Finish setting up your account</div>
+            <div class="empty-note" style="padding:0;">${onboardingDone}/${onboarding.length}</div>
+          </div>
+          <div class="progress-bar" style="margin-top:8px;"><div class="fill" style="width:${Math.round((100 * onboardingDone) / onboarding.length)}%;"></div></div>
+        </a>
+      </div>
     ` : ''}
     ${onThisDay.length ? `
       <a href="/strains/${onThisDay[0].checkin.strain_id}" class="card" style="display:flex;align-items:center;gap:10px;margin:10px 0 0;text-decoration:none;color:#2a2a2a;background:var(--bg-subtle,#f7f7f2);">
@@ -1996,6 +2010,10 @@ function pageSignup(req, res, query) {
       ${referrer ? `<input type="hidden" name="ref" value="${esc(referrer.username)}">` : ''}
       <label class="field-label" style="margin-top:0;">Username</label>
       <input type="text" name="username" id="signup-username" required minlength="3" maxlength="24" autocomplete="username">
+      <label class="field-label">First name</label>
+      <input type="text" name="first_name" required maxlength="50" autocomplete="given-name">
+      <label class="field-label">Last name</label>
+      <input type="text" name="last_name" required maxlength="50" autocomplete="family-name">
       <label class="field-label">Email</label>
       <input type="email" name="email" required autocomplete="email" placeholder="you@example.com">
       <label class="field-label">Date of birth</label>
@@ -2147,6 +2165,13 @@ function pageGoogleFinish(req, res, query) {
   if (db.getUserByUsername(suggestedUsername)) {
     suggestedUsername = (suggestedUsername.slice(0, 19) + Math.floor(1000 + Math.random() * 9000));
   }
+  // Google's profile.name is a single display name, not separate first/
+  // last fields -- split on the first space as a starting guess, but
+  // both stay required and editable since that split is often wrong
+  // (middle names, single names, non-Western name order).
+  const nameParts = String(profile.name || '').trim().split(/\s+/);
+  const suggestedFirst = nameParts[0] || '';
+  const suggestedLast = nameParts.slice(1).join(' ') || '';
   const body = `
     <h1 class="screen-title">Almost there</h1>
     <p class="screen-sub">Signed in as ${esc(profile.email)} with Google. Just need a couple more things.</p>
@@ -2154,6 +2179,10 @@ function pageGoogleFinish(req, res, query) {
     <form method="POST" action="/auth/google/finish">
       <label class="field-label" style="margin-top:0;">Username</label>
       <input type="text" name="username" required minlength="3" maxlength="24" value="${esc(suggestedUsername)}">
+      <label class="field-label">First name</label>
+      <input type="text" name="first_name" required maxlength="50" value="${esc(suggestedFirst)}" autocomplete="given-name">
+      <label class="field-label">Last name</label>
+      <input type="text" name="last_name" required maxlength="50" value="${esc(suggestedLast)}" autocomplete="family-name">
       <label class="field-label">Date of birth</label>
       <input type="date" name="birth_date" required>
       <button class="btn block" type="submit" style="margin-top:14px;">Finish Creating Account</button>
@@ -2170,10 +2199,12 @@ async function handleGoogleFinishSubmit(req, res) {
   const profile = JSON.parse(raw);
   const f = await parseForm(req);
   const username = String(f.username || '').trim();
-  if (!username || !f.birth_date) return redirect(res, '/auth/google/finish?err=invalid');
+  const firstName = String(f.first_name || '').trim();
+  const lastName = String(f.last_name || '').trim();
+  if (!username || !f.birth_date || !firstName || !lastName) return redirect(res, '/auth/google/finish?err=invalid');
   if (!isOldEnough(f.birth_date)) return redirect(res, '/auth/google/finish?err=age');
   if (db.getUserByUsername(username)) return redirect(res, '/auth/google/finish?err=taken');
-  const user = await db.createUserFromGoogle({ username, birth_date: f.birth_date, email: profile.email, google_id: profile.sub });
+  const user = await db.createUserFromGoogle({ username, birth_date: f.birth_date, email: profile.email, google_id: profile.sub, first_name: firstName, last_name: lastName });
   const token = auth.signUserSessionValue(user.id);
   res.setHeader('Set-Cookie', [
     `user_session=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000`,
@@ -2187,14 +2218,16 @@ async function handleSignupSubmit(req, res) {
   const f = await parseForm(req);
   const username = String(f.username || '').trim();
   const email = String(f.email || '').trim().toLowerCase();
-  if (!username || !email || !f.birth_date || !f.password || !f.password2) return redirect(res, '/signup?err=invalid');
+  const firstName = String(f.first_name || '').trim();
+  const lastName = String(f.last_name || '').trim();
+  if (!username || !email || !f.birth_date || !f.password || !f.password2 || !firstName || !lastName) return redirect(res, '/signup?err=invalid');
   if (!isOldEnough(f.birth_date)) return redirect(res, '/signup?err=age');
   if (f.password !== f.password2) return redirect(res, '/signup?err=mismatch');
   if (f.password.length < 8) return redirect(res, '/signup?err=short');
   if (db.getUserByUsername(username)) return redirect(res, '/signup?err=taken');
   if (db.getUserByEmail(email)) return redirect(res, '/signup?err=email_taken');
   const referrer = f.ref ? db.getUserByUsername(String(f.ref).trim()) : null;
-  const user = await db.createUser({ username, password: f.password, birth_date: f.birth_date, email, invited_by: referrer ? referrer.id : null });
+  const user = await db.createUser({ username, password: f.password, birth_date: f.birth_date, email, first_name: firstName, last_name: lastName, invited_by: referrer ? referrer.id : null });
   const token = auth.signUserSessionValue(user.id);
   res.setHeader('Set-Cookie', `user_session=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000`);
   redirect(res, '/onboarding');
@@ -2267,6 +2300,48 @@ function getOnboardingChecklist(userId) {
 // thing rather than stopping after whatever got them to sign up. Also
 // reachable any time (not just right after signup) via the compact card
 // on Home that shows while anything's still unchecked.
+// USER-CONFIRMED REQUIREMENT: every account must have a first and last
+// name. New signups (both the password and Google paths) now collect it
+// up front; this page is the forced catch-up path for accounts that
+// predate the requirement -- see the router gate further down, which
+// redirects any logged-in user missing either field here before letting
+// them reach anything else in the app. Don't make this optional, and
+// don't remove the router gate, without asking first.
+function pageCompleteProfile(req, res, query) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const user = db.getUserById(userId);
+  const err = query.get('err');
+  const body = `
+    <h1 class="screen-title">Just one more thing</h1>
+    <p class="screen-sub">We need your first and last name before you can continue.</p>
+    ${err === 'invalid' ? `<p style="color:#a13a3a;">Please fill in both fields.</p>` : ''}
+    <form method="POST" action="/complete-profile">
+      <label class="field-label" style="margin-top:0;">First name</label>
+      <input type="text" name="first_name" required maxlength="50" value="${esc(user.first_name || '')}" autocomplete="given-name">
+      <label class="field-label">Last name</label>
+      <input type="text" name="last_name" required maxlength="50" value="${esc(user.last_name || '')}" autocomplete="family-name">
+      <button class="btn block" type="submit" style="margin-top:14px;">Continue</button>
+    </form>
+  `;
+  sendHtml(res, layout({ title: 'Complete Your Profile', body, showBack: false }));
+}
+async function handleCompleteProfileSubmit(req, res) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const f = await parseForm(req);
+  const firstName = String(f.first_name || '').trim();
+  const lastName = String(f.last_name || '').trim();
+  if (!firstName || !lastName) return redirect(res, '/complete-profile?err=invalid');
+  await db.updateName(userId, firstName, lastName);
+  redirect(res, '/');
+}
+async function handleOnboardingDismiss(req, res) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  await db.dismissOnboardingCard(userId);
+  redirect(res, '/');
+}
 function pageOnboarding(req, res) {
   const userId = requireUser(req, res);
   if (userId == null) return;
@@ -3913,8 +3988,28 @@ function pageAccount(req, res, query) {
   const user = db.getUserById(userId);
   const error = query.get('error') || '';
   const success = query.get('ok') || '';
+  // USER-CONFIRMED: this is the checklist's permanent home -- it always
+  // shows here while incomplete, dismiss-state on the Home card (see
+  // pageHome) has no effect on it. Don't remove this without asking.
+  const onboarding = getOnboardingChecklist(userId);
+  const onboardingDone = onboarding.filter(o => o.done).length;
   const body = `
     <h1 class="screen-title" style="margin-top:8px;">Account Settings</h1>
+
+    ${onboardingDone < onboarding.length ? `
+      <div class="card" style="margin-bottom:14px;">
+        <h2 style="margin:0 0 10px;font-size:15px;">🚀 Finish setting up your account</h2>
+        <div class="progress-bar" style="margin-bottom:10px;"><div class="fill" style="width:${Math.round((100 * onboardingDone) / onboarding.length)}%;"></div></div>
+        ${onboarding.map(item => `
+          <a href="${item.href}" class="library-row" style="text-decoration:none;color:inherit;${item.done ? 'opacity:0.55;' : ''}">
+            <div class="strain-thumb strain-thumb-sm" style="display:flex;align-items:center;justify-content:center;font-size:20px;background:#e5e0d5;">${item.done ? '✅' : item.icon}</div>
+            <div class="info">
+              <div class="nm" style="${item.done ? 'text-decoration:line-through;' : ''}">${esc(item.title)}</div>
+            </div>
+          </a>
+        `).join('')}
+      </div>
+    ` : ''}
 
     <div class="card">
       <h2 style="margin:0 0 10px;font-size:15px;">Profile</h2>
@@ -5010,6 +5105,24 @@ const server = http.createServer(async (req, res) => {
       return redirect(res, '/login');
     }
 
+    // USER-CONFIRMED REQUIREMENT: every account needs a first and last
+    // name. New signups already collect it; this catches existing
+    // accounts that predate the requirement and forces a one-time stop at
+    // /complete-profile before they can reach anything else. /logout,
+    // /terms, and /privacy stay reachable so nobody gets stuck unable to
+    // log out or read a policy page. Don't remove this gate without
+    // asking first -- see pageCompleteProfile.
+    const NAME_GATE_EXEMPT = new Set(['/complete-profile', '/logout', '/terms', '/privacy']);
+    if (!NAME_GATE_EXEMPT.has(pathname) && !pathname.startsWith('/admin')) {
+      const gateUserId = auth.currentUserId(req);
+      if (gateUserId != null) {
+        const gateUser = db.getUserById(gateUserId);
+        if (gateUser && (!gateUser.first_name || !gateUser.last_name)) {
+          return redirect(res, '/complete-profile');
+        }
+      }
+    }
+
     let m;
     if (method === 'GET' && pathname === '/') return pageHome(req, res);
     if (method === 'GET' && pathname === '/strains') return pageStrains(req, res, url.searchParams);
@@ -5055,6 +5168,9 @@ const server = http.createServer(async (req, res) => {
     if (method === 'GET' && pathname === '/forgot-password') return pageForgotPassword(req, res, url.searchParams);
     if (method === 'POST' && pathname === '/forgot-password') return await handleForgotPasswordSubmit(req, res);
     if (method === 'GET' && pathname === '/onboarding') return pageOnboarding(req, res);
+    if (method === 'POST' && pathname === '/onboarding/dismiss') return await handleOnboardingDismiss(req, res);
+    if (method === 'GET' && pathname === '/complete-profile') return pageCompleteProfile(req, res, url.searchParams);
+    if (method === 'POST' && pathname === '/complete-profile') return await handleCompleteProfileSubmit(req, res);
     if (method === 'GET' && pathname === '/feedback') return pageFeedback(req, res, url.searchParams);
     if (method === 'POST' && pathname === '/feedback') return await handleFeedbackSubmit(req, res);
     if (method === 'GET' && pathname === '/support-the-app') return pageSupportTheApp(req, res);
