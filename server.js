@@ -242,6 +242,7 @@ function renderOnsetTimer(c) {
 // an uploaded image icon like /docs/joint-icon.png without asking first.
 // That exact swap happened once already and had to be reverted.
 const HOME_SAFETY_CAROUSEL = [
+  { href: '/feels-wrong', icon: '🆘', title: 'Feels Wrong?', s: 'What to do right now' },
   { href: '/mixing-cautions', icon: '⚠️', title: 'Mixing Cautions', s: 'What not to combine' },
   { href: '/legal-status', icon: '🏛️', title: 'Is It Legal?', s: 'Check your state' },
   { href: '/methods', icon: '💨', title: 'Ways to Enjoy It', s: 'Every method explained' },
@@ -504,6 +505,16 @@ const STRAIN_PHOTOS = [
   '/docs/jeff-w.jpg',
   '/docs/testeur-de-cbd.jpg',
 ];
+// Same strain for everyone on a given calendar day, changing at midnight
+// UTC -- deterministic from today's date string, same hashStr trick
+// already used to assign each strain a consistent stock photo, so there's
+// no separate table or stored state needed for this to work.
+function getStrainOfTheDay() {
+  const allStrains = db.listStrains({ limit: 5000 });
+  if (!allStrains.length) return null;
+  const todayKey = new Date().toISOString().slice(0, 10);
+  return allStrains[hashStr(todayKey) % allStrains.length];
+}
 function hashStr(str) {
   let h = 0;
   for (let i = 0; i < str.length; i++) { h = (h * 31 + str.charCodeAt(i)) | 0; }
@@ -636,6 +647,7 @@ async function pageHome(req, res) {
     .filter(c => c.user_id === userId || !db.isBlocked(userId, c.user_id))
     .slice(0, 15);
   const recs = getRecommendations(userId, 4);
+  const strainOfDay = getStrainOfTheDay();
   const hasFollowedDispensaries = db.anyDispensaryFollowed(userId);
   // Keeps the feed from ever reading as dead early on, before there's
   // enough check-in volume to fill it on its own -- blends in a little
@@ -782,6 +794,17 @@ async function pageHome(req, res) {
     <a class="btn block" href="/checkin" style="margin-bottom:18px;">🌿 Light It Up</a>
 
     ${renderSafetyCarousel()}
+
+    ${strainOfDay ? `
+      <div class="section-label">Strain of the Day</div>
+      <a href="/strains/${strainOfDay.id}" class="card" style="display:flex;align-items:center;gap:10px;margin-bottom:14px;text-decoration:none;color:inherit;">
+        ${strainPhotoTag(strainOfDay, 'sm')}
+        <div style="min-width:0;">
+          <div style="font-weight:700;">${esc(strainOfDay.name)} <span class="rarity-tag rarity-${strainOfDay.rarity}">${rarityLabel(strainOfDay.rarity)}</span></div>
+          <div class="empty-note" style="padding:2px 0 0;">${esc(strainOfDay.type)}${strainOfDay.lean ? ' · ' + esc(strainOfDay.lean) : ''}</div>
+        </div>
+      </a>
+    ` : ''}
 
     <div class="section-label">Recommended for you</div>
     <div class="hcarousel">
@@ -1611,12 +1634,94 @@ function linkGlossaryTerms(escapedText) {
   });
 }
 
+// Recipes' own comment thread -- deliberately simpler than
+// renderCheckinComments (no per-comment likes, no @mentions), since
+// recipes already have Kudos as their appreciation mechanic and this is
+// just meant to add discussion, not a second reaction system.
+function renderRecipeComments(r, userId, redirectPath) {
+  const comments = db.listRecipeComments(r.id, userId);
+  return `
+    ${comments.length ? `<div style="margin-top:8px;">${comments.map(cm => {
+      const author = db.getUserById(cm.user_id);
+      const canModerate = userId != null && cm.user_id !== userId;
+      return `<div class="empty-note" style="padding:3px 0;">
+        <b>${esc(author ? author.username : 'Someone')}:</b> ${esc(cm.body)}
+        ${canModerate ? `
+          <form method="POST" action="/report" style="display:inline;" onsubmit="return confirm('Report this comment for review?')">
+            <input type="hidden" name="content_type" value="recipe_comment">
+            <input type="hidden" name="content_id" value="${cm.id}">
+            <input type="hidden" name="redirect_to" value="${esc(redirectPath)}">
+            <button type="submit" style="background:none;border:none;padding:0;margin-left:6px;color:inherit;text-decoration:underline;cursor:pointer;font-size:inherit;">Report</button>
+          </form>
+          <form method="POST" action="/block/${cm.user_id}" style="display:inline;" onsubmit="return confirm('Block ' + ${JSON.stringify(author ? author.username : 'this person')} + '? You will no longer see their comments, check-ins, or grow tips, and any community connection will end.')">
+            <input type="hidden" name="redirect_to" value="${esc(redirectPath)}">
+            <button type="submit" style="background:none;border:none;padding:0;margin-left:6px;color:inherit;text-decoration:underline;cursor:pointer;font-size:inherit;">Block</button>
+          </form>
+        ` : ''}
+      </div>`;
+    }).join('')}</div>` : ''}
+    ${userId != null ? `
+      <form method="POST" action="/recipes/${r.id}/comment" style="display:flex;gap:6px;margin-top:6px;">
+        <input type="hidden" name="redirect_to" value="${esc(redirectPath)}">
+        <input type="text" name="body" placeholder="Add a comment..." required style="flex:1;margin:0;">
+        <button class="btn secondary" type="submit" style="padding:6px 12px;">Post</button>
+      </form>
+    ` : ''}
+  `;
+}
+async function handleRecipeCommentSubmit(req, res, recipeId) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const f = await parseForm(req);
+  const body = (f.body || '').trim();
+  if (body) await db.createRecipeComment({ recipe_id: recipeId, user_id: userId, body });
+  redirect(res, f.redirect_to || `/recipes/${recipeId}`);
+}
+async function handleRecipeFavoriteToggle(req, res, recipeId) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const f = await parseForm(req);
+  if (db.isRecipeFavorited(userId, recipeId)) {
+    await db.removeRecipeFavorite(userId, recipeId);
+  } else {
+    await db.addRecipeFavorite(userId, recipeId);
+  }
+  redirect(res, f.redirect_to || `/recipes/${recipeId}`);
+}
+function pageFavoriteRecipes(req, res) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const recipes = db.getFavoriteRecipes(userId);
+  const body = `
+    <h1 class="screen-title">Favorite Recipes</h1>
+    <p class="screen-sub">Recipes you've saved for later — separate from Kudos, which is just showing appreciation.</p>
+    ${recipes.length ? recipes.map(r => `
+      <a href="/recipes/${r.id}" class="library-row" style="text-decoration:none;color:inherit;">
+        <div class="strain-thumb strain-thumb-sm" style="display:flex;align-items:center;justify-content:center;font-size:20px;background:#e5e0d5;">${r.icon || '🍽️'}</div>
+        <div class="info">
+          <div class="nm">${esc(r.title)}</div>
+          <div class="sub">${esc(r.category || '')}${r.time ? ' · ' + esc(r.time) : ''}</div>
+        </div>
+      </a>
+    `).join('') : `<div class="empty-note">No favorites yet — browse <a href="/recipes">Recipes</a> and tap "Add to Favorites" on anything you want to save.</div>`}
+  `;
+  sendHtml(res, layout({ title: 'Favorite Recipes', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
+}
 function pageRecipeDetail(req, res, id) {
   const r = db.getRecipe(id);
   if (!r || r.status !== 'approved') return notFound(res);
+  const userId = auth.currentUserId(req);
   const body = `
     <div class="card" style="margin-top:10px;">
-      <b style="font-size:16px;">${r.icon || '🍽️'} ${esc(r.title)}</b>
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+        <b style="font-size:16px;">${r.icon || '🍽️'} ${esc(r.title)}</b>
+        ${userId != null ? `
+          <form method="POST" action="/recipes/${r.id}/favorite" style="margin:0;">
+            <input type="hidden" name="redirect_to" value="/recipes/${r.id}">
+            <button type="submit" title="${db.isRecipeFavorited(userId, r.id) ? 'Remove from Favorites' : 'Add to Favorites'}" style="background:none;border:none;cursor:pointer;font-size:20px;padding:0;line-height:1;">${db.isRecipeFavorited(userId, r.id) ? '★' : '☆'}</button>
+          </form>
+        ` : ''}
+      </div>
       <span class="recipe-source-tag ${r.source}">${r.source === 'official' ? 'Official' : 'Community'}</span>
       ${RECIPE_DIFFICULTY_LABELS[r.difficulty] ? `<span class="filter-pill">${RECIPE_DIFFICULTY_LABELS[r.difficulty].icon} ${esc(RECIPE_DIFFICULTY_LABELS[r.difficulty].label)}</span>` : ''}
       <div class="empty-note">${esc(r.category || '')}${r.time ? ' · ' + esc(r.time) : ''}${r.author ? ' · by ' + esc(r.author) : ''}</div>
@@ -1662,6 +1767,7 @@ function pageRecipeDetail(req, res, id) {
         <span class="empty-note" style="padding:0;">${r.kudos} people found this helpful</span>
         <button class="kudos-btn" onclick="giveKudos(${r.id}, this)">${KUDOS_BUD_ICON}Kudos</button>
       </div>
+      ${renderRecipeComments(r, userId, '/recipes/' + r.id)}
     </div>
   `;
   sendHtml(res, layout({ title: r.title, active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
@@ -3326,6 +3432,43 @@ function pageToleranceExplained(req, res) {
   sendHtml(res, layout({ title: 'Tolerance, Explained', active: 'education', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
+// The one piece of safety content this app didn't have yet: not general
+// education (dosing, mixing, storage) but what to actually do in the
+// moment if something feels wrong. Calm and practical, not alarmist --
+// cannabis alone is rarely dangerous, but the discomfort is real and
+// worth real, specific guidance rather than just "it'll pass."
+function pageFeelsWrong(req, res) {
+  const body = `
+    <h1 class="screen-title">If Something Feels Wrong</h1>
+    <p class="screen-sub">Calm, practical steps for the moment, not just general safety info. Not medical advice.</p>
+    <div class="card" style="margin-bottom:10px;">
+      <h2 style="margin:0 0 6px;font-size:15px;">Feeling too high, overwhelmed, or anxious</h2>
+      <p style="margin:0 0 6px;"><b>This will pass.</b> THC's effects are time-limited — usually a couple of hours for smoking or vaping, longer for edibles, but it does end.</p>
+      <p style="margin:0 0 6px;">Move somewhere calm, quiet, and familiar, and sit or lie down. Remind yourself this is uncomfortable, not dangerous — cannabis alone is very rarely medically dangerous.</p>
+      <p style="margin:0;">Grounding helps: slow, deliberate breathing, or naming 5 things you can see, 4 you can hear, 3 you can touch. Don\u2019t use more cannabis to try to fix it.</p>
+    </div>
+    <div class="card" style="margin-bottom:10px;">
+      <h2 style="margin:0 0 6px;font-size:15px;">Nausea or vomiting ("greening out")</h2>
+      <p style="margin:0;">Lie down on your side, sip water slowly, and give it time. A cool cloth on your forehead or neck can help. This is more common with edibles or combining with alcohol — see <a href="/mixing-cautions">Mixing With Other Substances</a>.</p>
+    </div>
+    <div class="card" style="margin-bottom:10px;">
+      <h2 style="margin:0 0 6px;font-size:15px;">Racing heart or panic</h2>
+      <p style="margin:0;">A racing heart from THC is usually not dangerous on its own, but it can feel alarming. Slow breathing (in for 4 counts, out for 6) can help bring it down. If it doesn\u2019t ease up, or you have a heart condition, treat it seriously — see below.</p>
+    </div>
+    <div class="card" style="margin-bottom:10px;">
+      <h2 style="margin:0 0 6px;font-size:15px;">A note on edibles specifically</h2>
+      <p style="margin:0;">Edibles take longer to hit and hit harder and longer than smoking. Most "too high" situations come from redosing too early because nothing seemed to be happening yet. See the <a href="/dosing-calculator">Dosing Calculator</a> before you start, not after.</p>
+    </div>
+    <div class="card" style="background:#fdecec;">
+      <h2 style="margin:0 0 6px;font-size:15px;">When to get real help</h2>
+      <p style="margin:0 0 6px;">Call Poison Control or your local emergency number for:</p>
+      <p style="margin:0 0 6px;">Chest pain, real difficulty breathing, or a racing heart that won\u2019t settle · severe or persistent vomiting · a child or pet accidentally eating cannabis · combining cannabis with something else and not knowing how they interact · anything that genuinely feels like a medical emergency.</p>
+      <p style="margin:0;"><b>US Poison Control: 1-800-222-1222</b> — free, confidential, available 24/7, and they handle exactly this kind of call regularly. You will not get in trouble for calling.</p>
+    </div>
+  `;
+  sendHtml(res, layout({ title: 'If Something Feels Wrong', active: 'education', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
+}
+
 function pageQuiz(req, res, query) {
   const exp = query.get('exp') || '';
   const feel = query.get('feel') || '';
@@ -3428,8 +3571,22 @@ function pageInsights(req, res) {
         <h2 style="margin:0 0 8px;font-size:15px;">Your leanings</h2>
         ${insights.topType ? `<p class="empty-note" style="padding:2px 0;">You gravitate toward <b>${esc(insights.topType.name)}</b> strains (${insights.topType.count} check-in${insights.topType.count === 1 ? '' : 's'}).</p>` : ''}
         ${insights.topMethod ? `<p class="empty-note" style="padding:2px 0;">Your most-used method is <b>${esc(insights.topMethod.name)}</b>.</p>` : ''}
-        ${insights.topTerpene ? `<p class="empty-note" style="padding:2px 0;">Your check-ins lean heaviest on <b>${esc(insights.topTerpene)}</b> as a terpene.</p>` : ''}
       </div>
+      ${insights.topTerpenes && insights.topTerpenes.length ? `
+        <div class="card" style="margin-top:12px;">
+          <h2 style="margin:0 0 8px;font-size:15px;">Your Terpene Profile</h2>
+          ${insights.topTerpenes.map(t => `
+            <div style="margin-bottom:8px;">
+              <div style="display:flex;justify-content:space-between;font-size:13px;">
+                <a href="/strains?terpene=${encodeURIComponent(t.name)}" style="color:inherit;text-decoration:none;font-weight:700;">${esc(t.name)}</a>
+                <span class="empty-note" style="padding:0;">${t.pct}%</span>
+              </div>
+              <div class="progress-bar" style="margin-top:2px;"><div class="fill" style="width:${t.pct}%;"></div></div>
+            </div>
+          `).join('')}
+          <a href="/terpene-guide" class="empty-note" style="display:block;padding:4px 0 0;">See what each of these actually does →</a>
+        </div>
+      ` : ''}
       ${insights.mostLoggedStrain ? `
         <a class="library-row" href="/strains/${insights.mostLoggedStrain.strain.id}" style="text-decoration:none;color:inherit;margin-top:12px;">
           ${strainPhotoTag(insights.mostLoggedStrain.strain, 'sm')}
@@ -4102,6 +4259,7 @@ function pageMore(req, res) {
     {
       title: 'Discover',
       tiles: [
+        { href: '/search', icon: '🔎', t: 'Search Everything', s: 'Strains, recipes, grow tips & FAQ at once' },
         { href: '/quiz', icon: '🧭', t: 'Find Your First Strain', s: '3-question strain matcher' },
         { href: '/mood-finder', icon: '🎯', t: 'Mood Finder', s: 'Pick a goal, get matched strains' },
         { href: '/compare', icon: '🆚', t: 'Compare Strains', s: 'Side-by-side lookup' },
@@ -4114,6 +4272,7 @@ function pageMore(req, res) {
       title: 'Recipes',
       tiles: [
         { href: '/recipes', icon: '🍯', t: 'Browse Recipes', s: 'Infusions, edibles & drinks' },
+        { href: '/recipes/favorites', icon: '⭐', t: 'Favorite Recipes', s: 'Recipes you\u2019ve saved for later' },
         { href: '/recipes/new', icon: '✏️', t: 'Submit a Recipe', s: 'Share your own' },
         { href: '/dosing-calculator', icon: '🧮', t: 'Dosing Calculator', s: 'mg per serving, figured out for you' },
         { href: '/best-by', icon: '📅', t: 'Best-By Calendar', s: 'Track what you\u2019ve made & when to use it' },
@@ -4174,6 +4333,7 @@ function pageEducation(req, res) {
     {
       title: 'Consumption & Safety',
       tiles: [
+        { href: '/feels-wrong', icon: '🆘', t: 'If Something Feels Wrong', s: 'Calm, practical steps for the moment' },
         { href: '/methods', icon: '💨', t: 'Ways to Enjoy It', s: 'Every method, explained' },
         { href: '/concentrates', icon: '💠', t: 'Concentrates & Extracts', s: 'Kief, rosin, live resin & more' },
         { href: '/using-whole-plant', icon: '♻️', t: 'Using the Whole Plant', s: 'Leaves, trim & stems — not just the bud' },
@@ -4226,7 +4386,7 @@ function pageTerms(req, res) {
       <p><b>4. Accounts.</b> You're responsible for keeping your credentials confidential and for all activity under your account. Provide accurate registration information. One account per person — accounts can't be sold, transferred, or shared. We can suspend or terminate accounts that violate these Terms, engage in fraud, or misrepresent age or eligibility.</p>
       <p><b>5. Your content.</b> You keep ownership of what you submit — check-ins, notes, tasting notes, photos, ratings, pairings. By submitting it, you give StrainDex permission to host, store, and display it within the app. You confirm you have the rights to anything you upload.</p>
       <p><b>6. Community-submitted content.</b> Recipes and growing tips are reviewed before publishing, but this is a basic appropriateness check, not a professional or medical certification. Dosing suggestions and techniques reflect individual contributors' opinions, not StrainDex's. You take on the risk of following any community-submitted instructions, especially around dosing.</p>
-      <p><b>7. Prohibited conduct.</b> Don't: break applicable law; harass or threaten other users; upload content that infringes someone else's rights; misrepresent your age; scrape or reverse-engineer the Service; or use StrainDex to actually sell, buy, or distribute cannabis or any controlled substance.</p>
+      <p><b>7. Prohibited conduct.</b> Don't: break applicable law; harass or threaten other users; upload content that infringes someone else's rights; misrepresent your age; scrape or reverse-engineer the Service; or use StrainDex to actually sell, buy, or distribute cannabis or any controlled substance. See the <a href="/community-guidelines">Community Guidelines</a> for the fuller, plain-language version of this.</p>
       <p><b>8. Not medical advice.</b> Strain effects, THC/CBD percentages, and terpene info come from user reports and published third-party sources, and may not reflect the actual composition of anything you encounter. Nothing here is medical advice or intended to diagnose, treat, cure, or prevent any condition. Talk to a healthcare provider about your own situation.</p>
       <p><b>9. Third-party services.</b> Dispensary information comes from third-party data providers and may be incomplete, outdated, or wrong. We don't verify dispensary licensing, inventory, pricing, or hours — always confirm with the dispensary directly.</p>
       <p><b>10. Intellectual property.</b> The StrainDex name, logo, and underlying software belong to StrainDex and its licensors. Strain photography is used under the Unsplash License and credited to its photographers where applicable.</p>
@@ -4263,6 +4423,91 @@ function pagePrivacy(req, res) {
     <p class="empty-note">Questions about this policy? Reach out through <a href="/feedback">Send Feedback</a>.</p>
   `;
   sendHtml(res, layout({ title: 'Privacy Policy', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
+}
+
+// One search box across everything, instead of four separate ones on
+// four separate pages. Grow tips have no listRecipes-style q param to
+// reuse (no per-tip detail page either), so they're filtered here
+// directly and linked to their category on the Growing Tips board --
+// the closest real destination that exists for one.
+function pageSearch(req, res, query) {
+  const userId = auth.currentUserId(req);
+  const q = (query.get('q') || '').trim();
+  const results = { strains: [], recipes: [], growTips: [], faqs: [] };
+  if (q) {
+    results.strains = db.listStrains({ q, limit: 5 });
+    results.recipes = db.listRecipes({ status: 'approved', q }).slice(0, 5);
+    const needle = q.toLowerCase();
+    results.growTips = db.listGrowTips({ viewerId: userId })
+      .filter(g => g.title.toLowerCase().includes(needle) || (g.body && g.body.toLowerCase().includes(needle)))
+      .slice(0, 5);
+    results.faqs = db.listFaqs(q).slice(0, 5);
+  }
+  const totalResults = results.strains.length + results.recipes.length + results.growTips.length + results.faqs.length;
+  const body = `
+    <h1 class="screen-title">Search</h1>
+    <form method="GET" action="/search" style="margin-bottom:14px;display:flex;gap:8px;">
+      <input type="search" name="q" value="${esc(q)}" placeholder="Search strains, recipes, grow tips, FAQ..." autocomplete="off" style="flex:1;">
+      <button class="btn" type="submit">Search</button>
+    </form>
+    ${!q ? `<p class="empty-note">Type something above to search across the whole app at once.</p>` : (totalResults === 0 ? `<p class="empty-note">No results anywhere for "${esc(q)}".</p>` : '')}
+    ${results.strains.length ? `
+      <div class="section-label">Strains</div>
+      ${results.strains.map(s => `
+        <a class="library-row" href="/strains/${s.id}" style="text-decoration:none;color:inherit;">
+          ${strainPhotoTag(s, 'sm')}
+          <div class="info"><div class="nm">${esc(s.name)}</div><div class="sub">${esc(s.type)} · THC ${esc(s.thc)}</div></div>
+        </a>
+      `).join('')}
+    ` : ''}
+    ${results.recipes.length ? `
+      <div class="section-label">Recipes</div>
+      ${results.recipes.map(r => `
+        <a class="library-row" href="/recipes/${r.id}" style="text-decoration:none;color:inherit;">
+          <div class="strain-thumb strain-thumb-sm" style="display:flex;align-items:center;justify-content:center;font-size:20px;background:#e5e0d5;">${r.icon || '🍽️'}</div>
+          <div class="info"><div class="nm">${esc(r.title)}</div><div class="sub">${esc(r.category || '')}</div></div>
+        </a>
+      `).join('')}
+    ` : ''}
+    ${results.growTips.length ? `
+      <div class="section-label">Growing Tips</div>
+      ${results.growTips.map(g => `
+        <a class="library-row" href="/growing?cat=${encodeURIComponent(g.category)}" style="text-decoration:none;color:inherit;">
+          <div class="strain-thumb strain-thumb-sm" style="display:flex;align-items:center;justify-content:center;font-size:20px;background:#e5e0d5;">🌱</div>
+          <div class="info"><div class="nm">${esc(g.title)}</div><div class="sub">${esc(g.category)}</div></div>
+        </a>
+      `).join('')}
+    ` : ''}
+    ${results.faqs.length ? `
+      <div class="section-label">FAQ</div>
+      ${results.faqs.map(f => `
+        <a class="library-row" href="/faq?q=${encodeURIComponent(q)}" style="text-decoration:none;color:inherit;">
+          <div class="strain-thumb strain-thumb-sm" style="display:flex;align-items:center;justify-content:center;font-size:20px;background:#e5e0d5;">❓</div>
+          <div class="info"><div class="nm">${esc(f.question)}</div></div>
+        </a>
+      `).join('')}
+    ` : ''}
+  `;
+  sendHtml(res, layout({ title: 'Search', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
+}
+
+function pageCommunityGuidelines(req, res) {
+  const body = `
+    <h1 class="screen-title">Community Guidelines</h1>
+    <p class="empty-note">Simple expectations for everyone here — worth having in place early, not after something's already gone wrong.</p>
+    <div class="card">
+      <p><b>1. Be someone you'd want to run into in your own feed.</b> Disagreement and honest reviews are fine; harassment, hate speech, and targeted attacks on other people aren't.</p>
+      <p><b>2. This is not a marketplace.</b> Don't use StrainDex to buy, sell, trade for money, or solicit cannabis or any controlled substance. The in-app "Trade" feature is for swapping duplicate cards in your own collection game, nothing else.</p>
+      <p><b>3. Respect other people's privacy.</b> Don't screenshot or share someone else's check-ins, photos, or personal info outside the app without their OK, and don't use anything shared here to identify or contact someone outside StrainDex.</p>
+      <p><b>4. Keep dosing and safety talk responsible.</b> Sharing your own experience is welcome; pushing a specific dose on someone else, especially with edibles, isn't — point them to the Dosing Calculator instead.</p>
+      <p><b>5. No content involving minors, ever,</b> in any form, including jokes. This is a strict, zero-exception rule.</p>
+      <p><b>6. Report, don't retaliate.</b> If someone's being a problem, use Report or Block rather than escalating publicly — see <a href="/blocked-users">Blocked Users</a> for how blocking works.</p>
+      <p><b>7. Recipes and grow tips are shared in good faith, not verified medical or legal advice.</b> Use your own judgment, especially with dosing.</p>
+      <p><b>8. Breaking these guidelines can lead to content removal or account suspension,</b> at our discretion, same as anything else in the <a href="/terms">Terms of Service</a>.</p>
+    </div>
+    <p class="empty-note">Questions, or something you think we got wrong here? Reach out through <a href="/feedback">Send Feedback</a>.</p>
+  `;
+  sendHtml(res, layout({ title: 'Community Guidelines', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
 function pageAccount(req, res, query) {
@@ -4538,6 +4783,7 @@ function pageFriends(req, res, query) {
       <a class="more-tile" href="/trade"><span class="ic">🔁</span><div class="t">Trade</div><div class="s">Swap dupes with your community</div></a>
       <a class="more-tile" href="/friends-picks"><span class="ic">🤝</span><div class="t">Community Picks</div><div class="s">What your circle loves that you haven't tried</div></a>
       <a class="more-tile" href="/invite"><span class="ic">📣</span><div class="t">Invite</div><div class="s">Bring someone into your community</div></a>
+      <a class="more-tile" href="/community-guidelines"><span class="ic">📋</span><div class="t">Community Guidelines</div><div class="s">What's expected of everyone here</div></a>
     </div>
 
     <form method="GET" action="/friends" style="margin:16px 0 14px;display:flex;gap:8px;">
@@ -5462,6 +5708,9 @@ const server = http.createServer(async (req, res) => {
     if (method === 'GET' && (m = pathname.match(/^\/recipes\/(\d+)$/))) return pageRecipeDetail(req, res, Number(m[1]));
     if (method === 'GET' && pathname === '/recipes/new') return pageRecipeNew(req, res);
     if (method === 'POST' && pathname === '/recipes/new') return await handleRecipeNewSubmit(req, res);
+    if (method === 'GET' && pathname === '/recipes/favorites') return pageFavoriteRecipes(req, res);
+    if (method === 'POST' && (m = pathname.match(/^\/recipes\/(\d+)\/comment$/))) return await handleRecipeCommentSubmit(req, res, Number(m[1]));
+    if (method === 'POST' && (m = pathname.match(/^\/recipes\/(\d+)\/favorite$/))) return await handleRecipeFavoriteToggle(req, res, Number(m[1]));
     if (method === 'GET' && pathname === '/dosing-calculator') return pageDosingCalculator(req, res);
     if (method === 'GET' && pathname === '/best-by') return pageBestBy(req, res);
     if (method === 'POST' && pathname === '/best-by') return await handleBestByAdd(req, res);
@@ -5488,6 +5737,8 @@ const server = http.createServer(async (req, res) => {
     if (method === 'POST' && pathname === '/account/delete') return await handleAccountDelete(req, res);
     if (method === 'GET' && pathname === '/terms') return pageTerms(req, res);
     if (method === 'GET' && pathname === '/privacy') return pagePrivacy(req, res);
+    if (method === 'GET' && pathname === '/community-guidelines') return pageCommunityGuidelines(req, res);
+    if (method === 'GET' && pathname === '/search') return pageSearch(req, res, url.searchParams);
     if (method === 'GET' && pathname === '/forgot-password') return pageForgotPassword(req, res, url.searchParams);
     if (method === 'POST' && pathname === '/forgot-password') return await handleForgotPasswordSubmit(req, res);
     if (method === 'GET' && pathname === '/onboarding') return pageOnboarding(req, res);
@@ -5594,6 +5845,7 @@ const server = http.createServer(async (req, res) => {
     if (method === 'GET' && pathname === '/storage-guide') return pageStorageGuide(req, res);
     if (method === 'GET' && pathname === '/lab-result-guide') return pageLabResultGuide(req, res);
     if (method === 'GET' && pathname === '/tolerance-explained') return pageToleranceExplained(req, res);
+    if (method === 'GET' && pathname === '/feels-wrong') return pageFeelsWrong(req, res);
     if (method === 'POST' && pathname === '/report') return await handleReport(req, res);
     if (method === 'POST' && (m = pathname.match(/^\/block\/(\d+)$/))) return await handleBlock(req, res, m[1]);
     if (method === 'POST' && (m = pathname.match(/^\/unblock\/(\d+)$/))) return await handleUnblock(req, res, m[1]);
