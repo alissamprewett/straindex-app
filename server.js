@@ -238,9 +238,9 @@ function renderOnsetTimer(c) {
 // priority the app is meant to lead with: community first, safety a very
 // visible second.
 // ICONS ARE USER-CONFIRMED PLAIN EMOJI -- do not swap any of these (or the
-// matching Education-page tiles below, around "Consumption & Safety") for
-// an uploaded image icon like /docs/joint-icon.png without asking first.
-// That exact swap happened once already and had to be reverted.
+// matching Education-page tiles below, in "In the Moment" / "Reference")
+// for an uploaded image icon like /docs/joint-icon.png without asking
+// first. That exact swap happened once already and had to be reverted.
 const HOME_SAFETY_CAROUSEL = [
   { href: '/feels-wrong', icon: '🆘', title: 'Feels Wrong?', s: 'What to do right now' },
   { href: '/mixing-cautions', icon: '⚠️', title: 'Mixing Cautions', s: 'What not to combine' },
@@ -1140,6 +1140,11 @@ const EFFECT_VOCAB = [
 // as a legal guarantee. Marijuana remains illegal under federal law everywhere in
 // the US regardless of state status.
 const LEGAL_STATUS_LAST_VERIFIED = '2026-06-01';
+// Same "last checked" trust signal as Legal Status, extended to the
+// guides where being current actually matters most -- Feels Wrong,
+// Mixing Cautions, Dosing Calculator, and the Lab Result Guide. Update
+// this whenever any of those four get a real content review.
+const SAFETY_GUIDES_LAST_REVIEWED = '2026-06-01';
 const LEGAL_STATUS = [
   { state: 'Alabama', status: 'medical', note: 'Medical program for qualifying conditions; no recreational sales.' },
   { state: 'Alaska', status: 'recreational', note: 'Adult-use legal since 2015; licensed retail available.' },
@@ -1898,6 +1903,7 @@ function pageDosingCalculator(req, res) {
   const body = `
     <h1 class="screen-title">🧮 Dosing Calculator</h1>
     <p class="screen-sub">Figure out mg per serving for any batch — not just StrainDex recipes.</p>
+    <p class="empty-note">Last reviewed: ${esc(SAFETY_GUIDES_LAST_REVIEWED)}.</p>
     <div class="card">
       <b style="font-size:14px;">Total THC ÷ servings</b>
       <p class="empty-note" style="padding:2px 0 8px;">Know the total mg in the batch and how many servings you're splitting it into.</p>
@@ -3434,12 +3440,14 @@ function pageMixingCautions(req, res) {
   const body = `
     <h1 class="screen-title">Mixing With Other Substances</h1>
     <p class="screen-sub">General, pattern-level cautions — not medical advice, not a complete interaction database, and not a substitute for talking to a doctor or pharmacist about your specific medications.</p>
+    <p class="empty-note">Last reviewed: ${esc(SAFETY_GUIDES_LAST_REVIEWED)}.</p>
     ${cautions.map(c => `
       <div class="card" style="margin-bottom:10px;">
         <h2 style="margin:0 0 6px;font-size:15px;">${esc(c.title)}</h2>
         <p style="margin:0;">${linkGlossaryTerms(esc(c.body))}</p>
       </div>
     `).join('')}
+    <p class="empty-note">If a dose or combination that used to work stops feeling like it does, that\u2019s often tolerance, not the mix itself — see <a href="/tolerance-explained">Tolerance, Explained</a>.</p>
   `;
   sendHtml(res, layout({ title: 'Mixing With Other Substances', active: 'education', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
@@ -3447,7 +3455,7 @@ function pageMixingCautions(req, res) {
 function pageStorageGuide(req, res) {
   const cards = [
     { title: 'Flower', body: 'Airtight, cool, and out of direct light is the whole game — a mason jar in a closet beats a plastic bag on a windowsill. Too dry and it loses flavor and harshness gets worse; too humid and mold becomes a real risk. Humidity-control packs (aiming for roughly 58–62% RH inside the jar) are the easiest way to hit the sweet spot without guessing.' },
-    { title: 'Concentrates', body: 'Heat and light are what actually degrade a concentrate\u2019s terpenes and potency over time, so cool and dark matters even more here than with flower. Use glass or silicone, not plastic — some concentrates will stick to or slowly degrade plastic containers. Many people keep concentrates in the fridge or freezer for longer-term storage; let them come back to room temperature before handling so they\u2019re easier to work with.' },
+    { title: 'Concentrates', body: 'Heat and light are what actually degrade a concentrate\u2019s terpenes and potency over time, so cool and dark matters even more here than with flower. Use glass or silicone, not plastic — some concentrates will stick to or slowly degrade plastic containers. Many people keep concentrates in the fridge or freezer for longer-term storage; let them come back to room temperature before handling so they\u2019re easier to work with.', link: '/concentrates', linkLabel: 'What those products actually are \u2192' },
     { title: 'Edibles', body: 'Treat them like any other food with the same ingredients — a baked good behaves like a baked good, a gummy behaves like a gummy. Airtight storage, and refrigerate anything with dairy, eggs, or fresh fruit the way you would if it weren\u2019t infused. Keep them clearly labeled and out of reach of anyone who might mistake them for a regular snack.' },
     { title: 'Seeds', body: 'Cool, dark, and dry, ideally in an airtight container in the fridge — viable seeds can last years stored well, but heat and humidity shorten that a lot.' },
   ];
@@ -3458,6 +3466,7 @@ function pageStorageGuide(req, res) {
       <div class="card" style="margin-bottom:10px;">
         <h2 style="margin:0 0 6px;font-size:15px;">${esc(c.title)}</h2>
         <p style="margin:0;">${linkGlossaryTerms(esc(c.body))}</p>
+        ${c.link ? `<a href="${c.link}" class="empty-note" style="display:inline-block;padding:4px 0 0;">${esc(c.linkLabel)}</a>` : ''}
       </div>
     `).join('')}
   `;
@@ -3476,6 +3485,7 @@ function pageLabResultGuide(req, res) {
   const body = `
     <h1 class="screen-title">How to Read a Lab Result</h1>
     <p class="screen-sub">What a real Certificate of Analysis (COA) actually shows, so you can tell a trustworthy one from a sketchy one. Not medical advice.</p>
+    <p class="empty-note">Last reviewed: ${esc(SAFETY_GUIDES_LAST_REVIEWED)}.</p>
     ${cards.map(c => `
       <div class="card" style="margin-bottom:10px;">
         <h2 style="margin:0 0 6px;font-size:15px;">${esc(c.title)}</h2>
@@ -3515,10 +3525,135 @@ function pageToleranceExplained(req, res) {
 // moment if something feels wrong. Calm and practical, not alarmist --
 // cannabis alone is rarely dangerous, but the discomfort is real and
 // worth real, specific guidance rather than just "it'll pass."
+// A genuinely different kind of content from the rest of Education --
+// everything else here explains things; this actively corrects
+// misconceptions people may already hold, rather than just teaching from
+// scratch. Not medical advice.
+const COMMON_MYTHS = [
+  { myth: 'Higher THC% always means a stronger high', truth: 'THC percentage is one input, not the whole formula. Terpenes and the ratio of cannabinoids present shape the actual experience a lot -- two strains at the same THC% can feel noticeably different. See the Terpene Guide.', link: '/terpene-guide', linkLabel: 'Terpene Guide \u2192' },
+  { myth: "You can't get dependent on cannabis", truth: 'Cannabis Use Disorder is a real, recognized condition, and regular use does build real tolerance. It\u2019s not comparable in severity to substances like opioids or alcohol, but "not possible" isn\u2019t accurate either.', link: '/tolerance-explained', linkLabel: 'Tolerance, Explained \u2192' },
+  { myth: "It's safe to drive the morning after edibles", truth: 'THC and its metabolites can still be active well after you feel "normal" again, especially after a heavier edible dose. If you\u2019re unsure, don\u2019t drive -- there\u2019s no reliable self-test for this.', link: '/feels-wrong', linkLabel: 'If Something Feels Wrong \u2192' },
+  { myth: "Smoking is safer than vaping since it's \"natural\"", truth: 'Combustion produces tar and carcinogens regardless of what\u2019s being burned -- "natural" doesn\u2019t mean the smoke itself is. See Ways to Enjoy It for how the methods actually compare.', link: '/methods', linkLabel: 'Ways to Enjoy It \u2192' },
+  { myth: "You can't overdose on cannabis", truth: 'There\u2019s no recorded death from THC alone, but a genuinely overwhelming reaction -- intense panic, vomiting, or in rare cases temporary psychosis in vulnerable people -- is real and worth taking seriously, even if it\u2019s not life-threatening the way an opioid overdose is.', link: '/feels-wrong', linkLabel: 'If Something Feels Wrong \u2192' },
+  { myth: 'Indica = body high, sativa = head high, always', truth: 'That\u2019s a real historical pattern, but modern hybrids blur it constantly -- genetics don\u2019t cleanly map to a guaranteed effect the way the old rule of thumb suggests. See the Genetics & Breeding Guide.', link: '/genetics-guide', linkLabel: 'Genetics & Breeding Guide \u2192' },
+  { myth: "CBD doesn't do anything", truth: "CBD won't get you high on its own, but that's different from having no effect -- it's just not intoxicating. Full-spectrum, broad-spectrum, and isolate products all use this distinction differently. See the Glossary.", link: '/glossary', linkLabel: 'Glossary \u2192' },
+];
+// A genuinely different way to engage with Education content -- everything
+// else here is passive reading; this is active recall, pulled from real
+// Glossary definitions rather than invented trivia. Entirely client-side
+// (no score to persist, nothing server-rendered per-question) since it's
+// just a quick knowledge check, not a tracked feature.
+const KNOWLEDGE_QUIZ = [
+  { q: 'What does "decarboxylation" actually do?', options: ['Converts THCA into THC', 'Removes THC entirely', 'Adds terpenes to flower', 'Cures the flower after harvest'], correct: 0 },
+  { q: 'What is a "landrace"?', options: ['A strain bred with itself repeatedly', 'A strain that developed naturally in one region over generations', 'A strain sold at only one dispensary', 'A strain bred to have zero THC'], correct: 1 },
+  { q: 'What\u2019s the real difference between a backcross and an IBL?', options: ['There isn\u2019t one', 'A backcross breeds back into a parent strain; an IBL breeds with its own line instead', 'A backcross is illegal, an IBL isn\u2019t', 'IBL is a type of concentrate'], correct: 1 },
+  { q: 'What does "Total THC" on a lab result actually represent?', options: ['Just the raw THC already present', 'THC plus the THCA that would convert once fully decarbed', 'The total weight of the product', 'CBD content'], correct: 1 },
+  { q: 'What\u2019s the safest first move if you feel too high?', options: ['Take more to push through it', 'Move somewhere calm, sit down, and let it pass', 'Drive somewhere else', 'Ignore it entirely'], correct: 1 },
+  { q: 'What\u2019s the real difference between full-spectrum and isolate products?', options: ['No real difference', 'Full-spectrum keeps the whole range of cannabinoids/terpenes; isolate is one purified compound', 'Isolate is always stronger', 'Full-spectrum has no THC at all'], correct: 1 },
+  { q: 'Why do edibles catch people off guard more than smoking?', options: ['They\u2019re weaker overall', 'They kick in immediately', 'They take much longer to start, so people redose before feeling anything', 'They contain no THC'], correct: 2 },
+  { q: 'What\u2019s a "phenotype"?', options: ['A type of fertilizer', 'The specific way a strain\u2019s genetics actually show up in one plant', 'A legal classification of cannabis', 'An extraction method for concentrates'], correct: 1 },
+];
+function pageKnowledgeQuiz(req, res) {
+  const body = `
+    <h1 class="screen-title">Test What You Know</h1>
+    <p class="screen-sub">A quick knowledge check, pulled from the same definitions in the Glossary and FAQ.</p>
+    <div id="quiz-root"></div>
+    <script>
+      (function() {
+        const QUESTIONS = ${JSON.stringify(KNOWLEDGE_QUIZ)};
+        let i = 0, score = 0, answered = false;
+        const root = document.getElementById('quiz-root');
+        function render() {
+          if (i >= QUESTIONS.length) {
+            root.innerHTML = '<div class="card" style="text-align:center;padding:24px;">'
+              + '<div style="font-size:32px;">' + (score >= QUESTIONS.length * 0.7 ? '\\ud83c\\udf89' : '\\ud83c\\udf3f') + '</div>'
+              + '<div style="font-weight:700;font-size:16px;margin-top:8px;">' + score + ' / ' + QUESTIONS.length + '</div>'
+              + '<a href="/knowledge-quiz" class="btn block" style="margin-top:14px;text-decoration:none;">Try Again</a>'
+              + '</div>';
+            return;
+          }
+          const item = QUESTIONS[i];
+          answered = false;
+          root.innerHTML = '<div class="card">'
+            + '<div class="empty-note" style="padding:0 0 8px;">Question ' + (i + 1) + ' of ' + QUESTIONS.length + '</div>'
+            + '<h2 style="margin:0 0 10px;font-size:15px;">' + item.q + '</h2>'
+            + item.options.map(function(opt, idx) {
+                return '<button type="button" class="btn secondary block quiz-opt" data-idx="' + idx + '" style="text-align:left;margin-bottom:8px;">' + opt + '</button>';
+              }).join('')
+            + '<div id="quiz-feedback" style="margin-top:6px;"></div>'
+            + '</div>';
+          Array.prototype.forEach.call(root.querySelectorAll('.quiz-opt'), function(btn) {
+            btn.addEventListener('click', function() {
+              if (answered) return;
+              answered = true;
+              const idx = Number(btn.getAttribute('data-idx'));
+              const correct = idx === item.correct;
+              if (correct) score++;
+              Array.prototype.forEach.call(root.querySelectorAll('.quiz-opt'), function(b, bi) {
+                if (bi === item.correct) b.style.borderColor = 'var(--brand-green-dark)';
+                if (bi === idx && !correct) b.style.borderColor = '#a13a3a';
+              });
+              document.getElementById('quiz-feedback').innerHTML = '<p class="empty-note" style="padding:0;font-weight:700;color:' + (correct ? 'var(--brand-green-dark)' : '#a13a3a') + ';">' + (correct ? 'Correct!' : 'Not quite -- correct answer highlighted above.') + '</p><button type="button" id="quiz-next" class="btn block" style="margin-top:8px;">' + (i + 1 < QUESTIONS.length ? 'Next' : 'See Score') + '</button>';
+              document.getElementById('quiz-next').addEventListener('click', function() { i++; render(); });
+            });
+          });
+        }
+        render();
+      })();
+    </script>
+  `;
+  sendHtml(res, layout({ title: 'Test What You Know', active: 'education', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
+}
+
+function pageCommonMyths(req, res) {
+  const body = `
+    <h1 class="screen-title">Common Myths, Debunked</h1>
+    <p class="screen-sub">Not medical advice -- just a few widely-held ideas worth double-checking.</p>
+    ${COMMON_MYTHS.map(m => `
+      <div class="card" style="margin-bottom:10px;">
+        <h2 style="margin:0 0 6px;font-size:15px;color:#a13a3a;">\u274c "${esc(m.myth)}"</h2>
+        <p style="margin:0 0 6px;">${linkGlossaryTerms(esc(m.truth))}</p>
+        <a href="${m.link}" class="empty-note" style="display:inline-block;padding:0;">${esc(m.linkLabel)}</a>
+      </div>
+    `).join('')}
+  `;
+  sendHtml(res, layout({ title: 'Common Myths, Debunked', active: 'education', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
+}
+
+// Rounds out Landrace/Genetics (the biological story) and Legal Status
+// (the current legal picture) with how cannabis actually got from
+// "illegal nearly everywhere" to today's state-by-state patchwork.
+// Sticking to well-documented dates and laws rather than contested claims
+// about motive.
+const CANNABIS_HISTORY = [
+  { era: 'Ancient use', body: 'Cannabis use for fiber, food, and medicine stretches back thousands of years across Asia, the Middle East, and Africa -- among the oldest documented references is its listing in Chinese medical texts dating back over 2,000 years.' },
+  { era: 'Global spread', body: 'Landrace populations developed independently across many regions over centuries (see the Landrace Guide) as cannabis spread along trade routes and took root in wildly different climates.' },
+  { era: '1937: The Marihuana Tax Act', body: 'The first major US federal restriction, effectively criminalizing cannabis nationwide through prohibitive taxation and regulation rather than an outright ban by name.' },
+  { era: '1970: Controlled Substances Act', body: 'Classified cannabis as a Schedule I substance -- the federal government\u2019s most restrictive category, reserved for drugs deemed to have no accepted medical use and a high potential for abuse. This classification remains in effect at the federal level today, regardless of state law.' },
+  { era: '1996: California\u2019s Prop 215', body: 'The first state medical marijuana law in the modern era, opening the door for the wave of state-level medical programs that followed over the next two decades.' },
+  { era: '2012: Colorado & Washington', body: 'The first two US states to legalize adult-use (recreational) cannabis by ballot measure, kicking off the state-by-state legalization wave that\u2019s continued since.' },
+  { era: 'Today: a real patchwork', body: 'Cannabis law now varies enormously by state -- recreational, medical-only, low-THC-only, or fully illegal, all coexisting in the same country, while federal law hasn\u2019t caught up. See Is It Legal Near Me? for where your state actually stands.' },
+];
+function pageCannabisHistory(req, res) {
+  const body = `
+    <h1 class="screen-title">A Brief History of Cannabis</h1>
+    <p class="screen-sub">How it got from "illegal nearly everywhere" to today's patchwork -- the legal and historical story, not the genetics (see the <a href="/landrace-guide">Landrace Guide</a> for that).</p>
+    ${CANNABIS_HISTORY.map(h => `
+      <div class="card" style="margin-bottom:10px;">
+        <h2 style="margin:0 0 6px;font-size:15px;">${esc(h.era)}</h2>
+        <p style="margin:0;">${linkGlossaryTerms(esc(h.body))}</p>
+      </div>
+    `).join('')}
+    <a href="/legal-status" class="empty-note" style="display:block;margin-top:4px;">See where your state stands today \u2192</a>
+  `;
+  sendHtml(res, layout({ title: 'A Brief History of Cannabis', active: 'education', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
+}
+
 function pageFeelsWrong(req, res) {
   const body = `
     <h1 class="screen-title">If Something Feels Wrong</h1>
     <p class="screen-sub">Calm, practical steps for the moment, not just general safety info. Not medical advice.</p>
+    <p class="empty-note">Last reviewed: ${esc(SAFETY_GUIDES_LAST_REVIEWED)}.</p>
     <div class="card" style="margin-bottom:10px;">
       <h2 style="margin:0 0 6px;font-size:15px;">Feeling too high, overwhelmed, or anxious</h2>
       <p style="margin:0 0 6px;"><b>This will pass.</b> THC's effects are time-limited — usually a couple of hours for smoking or vaping, longer for edibles, but it does end.</p>
@@ -3535,7 +3670,7 @@ function pageFeelsWrong(req, res) {
     </div>
     <div class="card" style="margin-bottom:10px;">
       <h2 style="margin:0 0 6px;font-size:15px;">A note on edibles specifically</h2>
-      <p style="margin:0;">${linkGlossaryTerms(esc('Edibles take longer to hit and hit harder and longer than smoking. Most "too high" situations come from redosing too early because nothing seemed to be happening yet.'))} See the <a href="/dosing-calculator">Dosing Calculator</a> before you start, not after.</p>
+      <p style="margin:0;">${linkGlossaryTerms(esc('Edibles take longer to hit and hit harder and longer than smoking. Most "too high" situations come from redosing too early because nothing seemed to be happening yet.'))} See the <a href="/dosing-calculator">Dosing Calculator</a> before you start, not after, and <a href="/lab-result-guide">how to read a lab result</a> to understand what the potency on the label actually means.</p>
     </div>
     <div class="card" style="background:#fdecec;">
       <h2 style="margin:0 0 6px;font-size:15px;">When to get real help</h2>
@@ -4409,30 +4544,42 @@ function pageEducation(req, res) {
   // anything else here) back to an uploaded image icon without asking.
   const sections = [
     {
-      title: 'Consumption & Safety',
+      // Split out of one 11-tile "Consumption & Safety" grid that had
+      // grown too large to scan at a glance -- urgent/practical-right-now
+      // content separated from read-when-curious reference material.
+      title: 'In the Moment',
       tiles: [
         { href: '/new-to-cannabis', icon: '🧭', t: 'New to Cannabis? Start Here', s: 'A roadmap through the basics' },
         { href: '/feels-wrong', icon: '🆘', t: 'If Something Feels Wrong', s: 'Calm, practical steps for the moment' },
+        { href: '/dosing-calculator', icon: '🧮', t: 'Dosing Calculator', s: 'Know your dose before you start' },
+        { href: '/mixing-cautions', icon: '⚠️', t: 'Mixing With Other Substances', s: 'General cautions, not medical advice' },
+      ],
+    },
+    {
+      title: 'Reference',
+      tiles: [
         { href: '/methods', icon: '💨', t: 'Ways to Enjoy It', s: 'Every method, explained' },
         { href: '/concentrates', icon: '💠', t: 'Concentrates & Extracts', s: 'Kief, rosin, live resin & more' },
         { href: '/using-whole-plant', icon: '♻️', t: 'Using the Whole Plant', s: 'Leaves, trim & stems — not just the bud' },
         { href: '/storage-guide', icon: '🗄️', t: 'Storage Guide', s: 'Keep flower, concentrates & edibles fresh' },
         { href: '/lab-result-guide', icon: '🧪', t: 'How to Read a Lab Result', s: 'What a real COA actually shows' },
         { href: '/tolerance-explained', icon: '⏳', t: 'Tolerance, Explained', s: 'Why breaks actually work' },
-        { href: '/mixing-cautions', icon: '⚠️', t: 'Mixing With Other Substances', s: 'General cautions, not medical advice' },
         { href: '/legal-status', icon: '🏛️', t: 'Is It Legal Near Me?', s: 'State-by-state cannabis law' },
+        { href: '/common-myths', icon: '❌', t: 'Common Myths, Debunked', s: 'A few widely-held ideas worth double-checking' },
       ],
     },
     {
       title: 'Strain Knowledge',
       tiles: [
         { href: '/faq', icon: '❓', t: 'FAQ', s: 'Strain school' },
+        { href: '/cannabis-history', icon: '📜', t: 'A Brief History of Cannabis', s: 'From prohibition to today\u2019s patchwork' },
         { href: '/terpene-guide', icon: '🌸', t: 'Terpene Guide', s: 'Aroma & effects by terpene' },
         { href: '/effects-guide', icon: '✨', t: 'Effects Guide', s: 'What each effect actually feels like' },
         { href: '/breeder-guide', icon: '🧬', t: 'Breeder Guide', s: 'Who\u2019s actually behind each strain' },
         { href: '/landrace-guide', icon: '🌍', t: 'Landrace Guide', s: 'The genetic root everything else grew from' },
         { href: '/genetics-guide', icon: '🔬', t: 'Genetics & Breeding Guide', s: 'Phenotype, backcross, cultivar & more' },
         { href: '/glossary', icon: '📚', t: 'Glossary', s: 'Every term used across the app' },
+        { href: '/knowledge-quiz', icon: '🎓', t: 'Test What You Know', s: 'A quick knowledge check' },
         { href: '/chat', icon: '💬', t: 'Ask', s: 'Chat with the assistant' },
       ],
     },
@@ -4519,12 +4666,15 @@ const EDUCATION_GUIDE_INDEX = [
   { title: 'Tolerance, Explained', desc: 'Why tolerance breaks actually work', href: '/tolerance-explained' },
   { title: 'Mixing With Other Substances', desc: 'General cautions, not medical advice', href: '/mixing-cautions' },
   { title: 'Is It Legal Near Me?', desc: 'State-by-state cannabis law', href: '/legal-status' },
+  { title: 'Common Myths, Debunked', desc: 'A few widely-held ideas worth double-checking', href: '/common-myths' },
+  { title: 'A Brief History of Cannabis', desc: "From prohibition to today's patchwork", href: '/cannabis-history' },
   { title: 'Terpene Guide', desc: 'Aroma & effects by terpene', href: '/terpene-guide' },
   { title: 'Effects Guide', desc: 'What each effect actually feels like', href: '/effects-guide' },
   { title: 'Breeder Guide', desc: "Who's actually behind each strain", href: '/breeder-guide' },
   { title: 'Landrace Guide', desc: 'The genetic root everything else grew from', href: '/landrace-guide' },
   { title: 'Genetics & Breeding Guide', desc: 'Phenotype, backcross, cultivar & more', href: '/genetics-guide' },
   { title: 'Glossary', desc: 'Every term used across the app', href: '/glossary' },
+  { title: 'Test What You Know', desc: 'A quick knowledge check', href: '/knowledge-quiz' },
   { title: "First-Time Grower's Guide", desc: 'A roadmap through your first grow', href: '/first-time-grower-guide' },
 ];
 // One search box across everything, instead of four separate ones on
@@ -5960,6 +6110,9 @@ const server = http.createServer(async (req, res) => {
     if (method === 'GET' && pathname === '/tolerance-explained') return pageToleranceExplained(req, res);
     if (method === 'GET' && pathname === '/feels-wrong') return pageFeelsWrong(req, res);
     if (method === 'GET' && pathname === '/new-to-cannabis') return pageNewToCannabis(req, res);
+    if (method === 'GET' && pathname === '/knowledge-quiz') return pageKnowledgeQuiz(req, res);
+    if (method === 'GET' && pathname === '/common-myths') return pageCommonMyths(req, res);
+    if (method === 'GET' && pathname === '/cannabis-history') return pageCannabisHistory(req, res);
     if (method === 'POST' && pathname === '/report') return await handleReport(req, res);
     if (method === 'POST' && (m = pathname.match(/^\/block\/(\d+)$/))) return await handleBlock(req, res, m[1]);
     if (method === 'POST' && (m = pathname.match(/^\/unblock\/(\d+)$/))) return await handleUnblock(req, res, m[1]);
