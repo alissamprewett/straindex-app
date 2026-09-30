@@ -611,9 +611,22 @@ function pageLandingPage(req, res) {
   sendHtml(res, layout({ title: 'StrainDex', body, isAdmin: false, showBack: false }));
 }
 
-function pageHome(req, res) {
+async function pageHome(req, res) {
   const userId = auth.currentUserId(req);
   if (userId == null) return pageLandingPage(req, res);
+  // Badge celebration moment: badges are still computed live from real
+  // stats every time (see computeBadges) -- this only checks which
+  // currently-earned ones haven't been celebrated yet (via
+  // user_badges_seen), shows a one-time banner for them, and marks them
+  // seen immediately so it never repeats. Home is the most-visited page,
+  // so it's the natural place to catch this rather than trying to detect
+  // "just crossed a threshold" at every possible triggering action.
+  const allBadges = computeBadges(userId);
+  const seenBadgeKeys = db.getSeenBadgeKeys(userId);
+  const newlyEarnedBadges = allBadges.filter(b => b.earned && !seenBadgeKeys.has(b.key));
+  for (const b of newlyEarnedBadges) {
+    await db.markBadgeSeen(userId, b.key);
+  }
   // Higher Community: an open, app-wide feed of everyone's public
   // check-ins, not just people you've connected with -- filterVisibleCheckins
   // already excludes anyone else's private entries, and the isBlocked check
@@ -660,6 +673,13 @@ function pageHome(req, res) {
       <h1 class="screen-title" style="margin:0;">${isFirstVisit ? 'Welcome to StrainDex 🌿' : 'Welcome back 🌿'}</h1>
       ${streak.current > 0 ? `<div title="${streak.current} day check-in streak${streak.longest > streak.current ? ` — best: ${streak.longest}` : ''}" style="display:flex;align-items:center;gap:4px;background:#fff1de;color:#8a4a1f;padding:4px 10px;border-radius:999px;font-size:13px;font-weight:700;flex-shrink:0;">🔥 ${streak.current}</div>` : ''}
     </div>
+    ${newlyEarnedBadges.map(b => `
+      <div class="card" style="margin:10px 0 0;background:#eef6ee;color:#123a24;text-align:center;padding:16px;">
+        <div style="font-size:32px;">${b.icon}</div>
+        <div style="font-weight:700;font-size:15px;margin-top:6px;">Badge earned: ${esc(b.title)}</div>
+        <div style="font-size:13px;opacity:0.8;margin-top:2px;">${esc(b.desc)}</div>
+      </div>
+    `).join('')}
     ${showOnboardingCard ? `
       <div class="card" style="margin:10px 0 0;background:var(--bg-subtle,#f7f7f2);color:#2a2a2a;position:relative;">
         <form method="POST" action="/onboarding/dismiss" style="position:absolute;top:6px;right:6px;margin:0;">
@@ -1426,6 +1446,15 @@ function pageFaq(req, res, query) {
 // says "how to make cannabutter" goes to one specific, canonical recipe
 // (Classic Cannabutter) rather than a search page showing every variant
 // (Instant Pot, Slow Cooker, Sous Vide...) mixed together.
+// Lets someone new to edibles filter away from an accidentally
+// high-potency recipe as their first one, rather than finding out the
+// hard way. 'beginner' is the default for anything that doesn't set one
+// (see the recipes migration in db.js).
+const RECIPE_DIFFICULTY_LABELS = {
+  beginner: { label: 'Beginner', icon: '🟢' },
+  intermediate: { label: 'Intermediate', icon: '🟡' },
+  advanced: { label: 'Advanced', icon: '🔴' },
+};
 const CANONICAL_BASE_RECIPE = {
   'coconut oil': 'Cannabis-Infused Coconut Oil',
   'olive oil': 'Canna-Infused Olive Oil',
@@ -1589,6 +1618,7 @@ function pageRecipeDetail(req, res, id) {
     <div class="card" style="margin-top:10px;">
       <b style="font-size:16px;">${r.icon || '🍽️'} ${esc(r.title)}</b>
       <span class="recipe-source-tag ${r.source}">${r.source === 'official' ? 'Official' : 'Community'}</span>
+      ${RECIPE_DIFFICULTY_LABELS[r.difficulty] ? `<span class="filter-pill">${RECIPE_DIFFICULTY_LABELS[r.difficulty].icon} ${esc(RECIPE_DIFFICULTY_LABELS[r.difficulty].label)}</span>` : ''}
       <div class="empty-note">${esc(r.category || '')}${r.time ? ' · ' + esc(r.time) : ''}${r.author ? ' · by ' + esc(r.author) : ''}</div>
       <p>${linkGlossaryTerms(esc(r.desc))}</p>
       ${Array.isArray(r.usesBase) && r.usesBase.length ? `<p class="empty-note" style="padding:0 0 6px;">Uses: ${r.usesBase.map(b => {
@@ -1639,24 +1669,29 @@ function pageRecipeDetail(req, res, id) {
 
 function pageRecipes(req, res, query) {
   const category = (query && query.get('category')) || 'All';
+  const difficulty = (query && query.get('difficulty')) || 'All';
   const q = (query && query.get('q')) || '';
-  const recipes = db.listRecipes({ status: 'approved', category, q });
+  const recipes = db.listRecipes({ status: 'approved', category, difficulty, q });
   const categories = ['All', 'Infusion Base', 'Baked Goods', 'Gummies & Candy', 'Drinks', 'Topicals', 'Savory & Snacks'];
-  const mk = (params) => '/recipes?' + new URLSearchParams({ category, q, ...params }).toString();
+  const difficulties = ['All', 'beginner', 'intermediate', 'advanced'];
+  const mk = (params) => '/recipes?' + new URLSearchParams({ category, difficulty, q, ...params }).toString();
   const body = `
     <h1 class="screen-title">Infused Recipes</h1>
     <a class="btn block lilac" href="/recipes/new" style="margin-bottom:14px;">✏️ Submit a Recipe</a>
     <form method="GET" action="/recipes" style="margin-bottom:12px;display:flex;gap:8px;">
       <input type="hidden" name="category" value="${esc(category)}">
+      <input type="hidden" name="difficulty" value="${esc(difficulty)}">
       <input type="search" name="q" value="${esc(q)}" placeholder="Search by name, ingredient, or description..." autocomplete="off" style="flex:1;">
       <button class="btn" type="submit">Search</button>
     </form>
-    <div style="margin-bottom:14px;">${categories.map(c => `<a class="filter-pill ${category === c ? 'active' : ''}" href="${mk({ category: c })}">${c}</a>`).join('')}</div>
+    <div style="margin-bottom:8px;">${categories.map(c => `<a class="filter-pill ${category === c ? 'active' : ''}" href="${mk({ category: c })}">${c}</a>`).join('')}</div>
+    <div style="margin-bottom:14px;">${difficulties.map(d => `<a class="filter-pill ${difficulty === d ? 'active' : ''}" href="${mk({ difficulty: d })}">${d === 'All' ? 'Any level' : `${RECIPE_DIFFICULTY_LABELS[d].icon} ${RECIPE_DIFFICULTY_LABELS[d].label}`}</a>`).join('')}</div>
     ${q ? `<p class="empty-note">${recipes.length} result${recipes.length === 1 ? '' : 's'} for "${esc(q)}"${category !== 'All' ? ' in ' + esc(category) : ''}</p>` : ''}
     ${recipes.map(r => `
       <div class="card">
         <a href="/recipes/${r.id}" style="text-decoration:none;color:inherit;"><b>${r.icon || '🍽️'} ${esc(r.title)}</b></a>
         <span class="recipe-source-tag ${r.source}">${r.source === 'official' ? 'Official' : 'Community'}</span>
+        ${RECIPE_DIFFICULTY_LABELS[r.difficulty] ? `<span class="filter-pill">${RECIPE_DIFFICULTY_LABELS[r.difficulty].icon} ${esc(RECIPE_DIFFICULTY_LABELS[r.difficulty].label)}</span>` : ''}
         <div class="empty-note">${esc(r.category || '')}${r.time ? ' · ' + esc(r.time) : ''}${r.author ? ' · by ' + esc(r.author) : ''}</div>
         <p>${linkGlossaryTerms(esc(r.desc))}</p>
         ${Array.isArray(r.usesBase) && r.usesBase.length ? `<p class="empty-note" style="padding:0 0 6px;">Uses: ${r.usesBase.map(b => {
@@ -1696,6 +1731,8 @@ function pageRecipeNew(req, res) {
       <textarea name="steps" required></textarea>
       <label class="field-label">Dosing note</label>
       <input type="text" name="dosing" placeholder="e.g. ~10mg THC per slice">
+      <label class="field-label">Difficulty</label>
+      <select name="difficulty">${Object.entries(RECIPE_DIFFICULTY_LABELS).map(([key, d]) => `<option value="${key}">${d.icon} ${esc(d.label)}</option>`).join('')}</select>
       <button class="btn block" type="submit">Submit for Review</button>
     </form>
     <p class="empty-note">Submissions are reviewed before they go live — check back, or ask the admin.</p>
@@ -1712,6 +1749,7 @@ async function handleRecipeNewSubmit(req, res) {
     ingredients: String(f.ingredients || '').split('\n').map(s => s.trim()).filter(Boolean),
     steps: String(f.steps || '').split('\n').map(s => s.trim()).filter(Boolean),
     dosing: f.dosing || '',
+    difficulty: RECIPE_DIFFICULTY_LABELS[f.difficulty] ? f.difficulty : 'beginner',
   });
   redirect(res, '/recipes?submitted=1');
 }
@@ -2878,6 +2916,16 @@ const EFFECTS_GUIDE = {
   Giggly: 'A lighthearted, laughter-prone mood.',
   'Clear-headed': 'A functional high without much mental fog, often reported with balanced hybrids.',
 };
+// Reverse lookup so each Effects Guide entry can link straight to a
+// pre-filled Mood Finder result when one exists, rather than leaving two
+// features that cover overlapping ground disconnected from each other.
+// First matching goal wins where an effect appears in more than one.
+function moodGoalKeyForEffect(effectName) {
+  for (const [key, goal] of Object.entries(MOOD_GOALS)) {
+    if (goal.effects.includes(effectName)) return key;
+  }
+  return null;
+}
 function pageEffectsGuide(req, res) {
   const allStrains = db.listStrains({ limit: 5000 });
   const counts = {};
@@ -2886,15 +2934,19 @@ function pageEffectsGuide(req, res) {
   const body = `
     <h1 class="screen-title">Effects Guide</h1>
     <p class="screen-sub">What people commonly report feeling from each effect tag — reported associations, not guaranteed outcomes. Everyone responds differently.</p>
-    ${entries.map(([name, description]) => `
+    ${entries.map(([name, description]) => {
+      const goalKey = moodGoalKeyForEffect(name);
+      return `
       <div class="card" style="margin-bottom:10px;">
         <div style="display:flex;justify-content:space-between;align-items:baseline;">
           <h2 style="margin:0;font-size:16px;">${esc(name)}</h2>
           <a href="/strains?effect=${encodeURIComponent(name)}" class="empty-note" style="padding:0;">${counts[name] || 0} strains →</a>
         </div>
         <p style="margin:6px 0 0;">${esc(description)}</p>
+        ${goalKey ? `<a href="/mood-finder?goal=${goalKey}" class="empty-note" style="display:inline-block;padding:6px 0 0;">${esc(MOOD_GOALS[goalKey].icon)} Find strains for ${esc(MOOD_GOALS[goalKey].label)} →</a>` : ''}
       </div>
-    `).join('')}
+    `;
+    }).join('')}
   `;
   sendHtml(res, layout({ title: 'Effects Guide', active: 'education', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
@@ -3208,6 +3260,72 @@ function pageMixingCautions(req, res) {
   sendHtml(res, layout({ title: 'Mixing With Other Substances', active: 'education', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
+function pageStorageGuide(req, res) {
+  const cards = [
+    { title: 'Flower', body: 'Airtight, cool, and out of direct light is the whole game — a mason jar in a closet beats a plastic bag on a windowsill. Too dry and it loses flavor and harshness gets worse; too humid and mold becomes a real risk. Humidity-control packs (aiming for roughly 58–62% RH inside the jar) are the easiest way to hit the sweet spot without guessing.' },
+    { title: 'Concentrates', body: 'Heat and light are what actually degrade a concentrate\u2019s terpenes and potency over time, so cool and dark matters even more here than with flower. Use glass or silicone, not plastic — some concentrates will stick to or slowly degrade plastic containers. Many people keep concentrates in the fridge or freezer for longer-term storage; let them come back to room temperature before handling so they\u2019re easier to work with.' },
+    { title: 'Edibles', body: 'Treat them like any other food with the same ingredients — a baked good behaves like a baked good, a gummy behaves like a gummy. Airtight storage, and refrigerate anything with dairy, eggs, or fresh fruit the way you would if it weren\u2019t infused. Keep them clearly labeled and out of reach of anyone who might mistake them for a regular snack.' },
+    { title: 'Seeds', body: 'Cool, dark, and dry, ideally in an airtight container in the fridge — viable seeds can last years stored well, but heat and humidity shorten that a lot.' },
+  ];
+  const body = `
+    <h1 class="screen-title">Storage Guide</h1>
+    <p class="screen-sub">How to actually keep what you\u2019ve got fresh — pairs well with the <a href="/best-by">Best-By Calendar</a>, which tracks *when* something\u2019s made rather than *how* to store it.</p>
+    ${cards.map(c => `
+      <div class="card" style="margin-bottom:10px;">
+        <h2 style="margin:0 0 6px;font-size:15px;">${esc(c.title)}</h2>
+        <p style="margin:0;">${esc(c.body)}</p>
+      </div>
+    `).join('')}
+  `;
+  sendHtml(res, layout({ title: 'Storage Guide', active: 'education', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
+}
+
+function pageLabResultGuide(req, res) {
+  const cards = [
+    { title: 'Potency (THC / CBD %)', body: 'The headline number, but not the whole picture. Raw flower contains mostly THCA, which converts to the THC that actually gets you high only once it\u2019s heated (see "Total THC" below). A gap between a product\u2019s THC and Total THC numbers is normal, not a red flag.' },
+    { title: 'Total THC', body: 'The calculated potential THC once everything convertible (mostly THCA) has been fully decarboxylated — usually the more meaningful number for judging real-world potency than raw "THC" alone.' },
+    { title: 'Terpene panel', body: 'A breakdown of which aromatic compounds are present and in what percentage. Not every lab tests for this, and not every product lists it, but it\u2019s a good sign of a more thorough test when it\u2019s there.' },
+    { title: 'Contaminant screening', body: 'The safety half of the report: pesticides, heavy metals, microbials (mold and bacteria), and residual solvents (for anything solvent-extracted). A legitimate COA will show "pass" results here, not just potency numbers — a report with potency but no contaminant screening is worth being skeptical of.' },
+    { title: 'Batch / lot number', body: 'Ties the specific report to the specific batch you\u2019re holding, not just "this product line in general." If a batch number on the product doesn\u2019t match the report, that\u2019s worth questioning.' },
+    { title: 'Lab name & license', body: 'A real COA names the testing lab and its license number, and is usually verifiable on that lab\u2019s own site or your state\u2019s regulatory portal. No lab name, or one you can\u2019t find anywhere, is a real warning sign.' },
+  ];
+  const body = `
+    <h1 class="screen-title">How to Read a Lab Result</h1>
+    <p class="screen-sub">What a real Certificate of Analysis (COA) actually shows, so you can tell a trustworthy one from a sketchy one. Not medical advice.</p>
+    ${cards.map(c => `
+      <div class="card" style="margin-bottom:10px;">
+        <h2 style="margin:0 0 6px;font-size:15px;">${esc(c.title)}</h2>
+        <p style="margin:0;">${esc(c.body)}</p>
+      </div>
+    `).join('')}
+  `;
+  sendHtml(res, layout({ title: 'How to Read a Lab Result', active: 'education', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
+}
+
+function pageToleranceExplained(req, res) {
+  const body = `
+    <h1 class="screen-title">Tolerance, Explained</h1>
+    <p class="screen-sub">The thinking behind the Tolerance Break tracker on <a href="/insights">Your Patterns</a>. Not medical advice.</p>
+    <div class="card" style="margin-bottom:10px;">
+      <h2 style="margin:0 0 6px;font-size:15px;">Why tolerance builds</h2>
+      <p style="margin:0;">With regular use, the body adjusts to a steady presence of THC, and the same dose gradually produces less effect. It\u2019s the same basic pattern behind tolerance to a lot of substances, not something specific to cannabis.</p>
+    </div>
+    <div class="card" style="margin-bottom:10px;">
+      <h2 style="margin:0 0 6px;font-size:15px;">Why a break actually works</h2>
+      <p style="margin:0;">Stepping away for a stretch lets that adjustment reverse, so a dose that stopped doing much starts working like it used to. This is the entire idea behind a "t-break" — time off, not a different strain or a bigger dose, is what resets it.</p>
+    </div>
+    <div class="card" style="margin-bottom:10px;">
+      <h2 style="margin:0 0 6px;font-size:15px;">How long is enough?</h2>
+      <p style="margin:0;">There\u2019s no single universal number — it depends on how heavy and how regular your use has been. Many people notice a real difference within a couple of weeks; a longer history of frequent use may take longer to fully reset. The point of tracking it (see Your Patterns) is seeing your own pattern, not hitting someone else\u2019s number.</p>
+    </div>
+    <div class="card">
+      <h2 style="margin:0 0 6px;font-size:15px;">What doesn\u2019t really help</h2>
+      <p style="margin:0;">Switching strains or methods doesn\u2019t reset tolerance the way a real break does — THC tolerance is fairly general, not specific to one strain. It can still be worth doing for variety, just don\u2019t expect it to substitute for actual time off.</p>
+    </div>
+  `;
+  sendHtml(res, layout({ title: 'Tolerance, Explained', active: 'education', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
+}
+
 function pageQuiz(req, res, query) {
   const exp = query.get('exp') || '';
   const feel = query.get('feel') || '';
@@ -3286,6 +3404,7 @@ function pageInsights(req, res) {
     <h1 class="screen-title">Your Patterns</h1>
     <div class="card" style="margin-bottom:14px;">
       <h2 style="margin:0 0 8px;font-size:15px;">🌿 Tolerance break</h2>
+      <p class="empty-note" style="padding:0 0 8px;"><a href="/tolerance-explained">Why this actually works →</a></p>
       ${activeBreak ? `
         <p class="empty-note" style="padding:0 0 8px;">You're on a break — started ${daysSince(activeBreak.started_at)} day${daysSince(activeBreak.started_at) === 1 ? '' : 's'} ago${activeBreak.note ? `: "${esc(activeBreak.note)}"` : '.'}</p>
         <form method="POST" action="/tolerance-break/end"><button class="btn secondary block" type="submit">End Break</button></form>
@@ -3800,6 +3919,8 @@ function pageAdminRecipes(req, res) {
         <textarea name="steps" required></textarea>
         <label class="field-label">Dosing note</label>
         <input type="text" name="dosing">
+        <label class="field-label">Difficulty</label>
+        <select name="difficulty">${Object.entries(RECIPE_DIFFICULTY_LABELS).map(([key, d]) => `<option value="${key}">${d.icon} ${esc(d.label)}</option>`).join('')}</select>
         <button class="btn block" type="submit">Add Recipe (published immediately)</button>
       </form>
     </div>
@@ -3832,6 +3953,7 @@ async function handleAdminRecipeNew(req, res) {
     title: f.title, desc: f.desc, dosing: f.dosing, category: f.category || 'Baked Goods', source: 'official', status: 'approved', author: null,
     ingredients: String(f.ingredients || '').split('\n').map(s => s.trim()).filter(Boolean),
     steps: String(f.steps || '').split('\n').map(s => s.trim()).filter(Boolean),
+    difficulty: RECIPE_DIFFICULTY_LABELS[f.difficulty] ? f.difficulty : 'beginner',
   });
   redirect(res, '/admin/recipes');
 }
@@ -4055,6 +4177,9 @@ function pageEducation(req, res) {
         { href: '/methods', icon: '💨', t: 'Ways to Enjoy It', s: 'Every method, explained' },
         { href: '/concentrates', icon: '💠', t: 'Concentrates & Extracts', s: 'Kief, rosin, live resin & more' },
         { href: '/using-whole-plant', icon: '♻️', t: 'Using the Whole Plant', s: 'Leaves, trim & stems — not just the bud' },
+        { href: '/storage-guide', icon: '🗄️', t: 'Storage Guide', s: 'Keep flower, concentrates & edibles fresh' },
+        { href: '/lab-result-guide', icon: '🧪', t: 'How to Read a Lab Result', s: 'What a real COA actually shows' },
+        { href: '/tolerance-explained', icon: '⏳', t: 'Tolerance, Explained', s: 'Why breaks actually work' },
         { href: '/mixing-cautions', icon: '⚠️', t: 'Mixing With Other Substances', s: 'General cautions, not medical advice' },
         { href: '/legal-status', icon: '🏛️', t: 'Is It Legal Near Me?', s: 'State-by-state cannabis law' },
       ],
@@ -4625,16 +4750,19 @@ function computeBadges(userId) {
   const invitedCount = db.listInvitedUsers(userId).length;
   const typesTried = new Set(db.getCollection(userId).map(o => o.strain.type).filter(Boolean));
   return [
-    { icon: '🌱', title: 'First Check-In', desc: 'Log your first check-in', earned: totalCheckins >= 1 },
-    { icon: '🔥', title: 'On Fire', desc: '7-day check-in streak', earned: streak.longest >= 7 },
-    { icon: '💪', title: 'Dedicated', desc: '30-day check-in streak', earned: streak.longest >= 30 },
-    { icon: '📖', title: 'Strain Explorer', desc: 'Try 5 unique strains', earned: uniqueStrains >= 5 },
-    { icon: '🎓', title: 'Strain Connoisseur', desc: 'Try 20 unique strains', earned: uniqueStrains >= 20 },
-    { icon: '🌈', title: 'Type Explorer', desc: 'Try Indica, Sativa & Hybrid', earned: ['Indica', 'Sativa', 'Hybrid'].every(t => typesTried.has(t)) },
-    { icon: '🧑\u200d🤝\u200d🧑', title: 'Community Builder', desc: 'Connect with 5 people', earned: friendsCount >= 5 },
-    { icon: '📣', title: 'Recruiter', desc: 'Invite someone who joins', earned: invitedCount >= 1 },
-    { icon: '🃏', title: 'Collector', desc: 'Catch 25 unique cards', earned: uniqueStrains >= 25 },
-    { icon: '💯', title: 'Century Club', desc: '100 check-ins', earned: totalCheckins >= 100 },
+    { key: 'first-checkin', icon: '🌱', title: 'First Check-In', desc: 'Log your first check-in', earned: totalCheckins >= 1 },
+    { key: 'on-fire', icon: '🔥', title: 'On Fire', desc: '7-day check-in streak', earned: streak.longest >= 7 },
+    { key: 'dedicated', icon: '💪', title: 'Dedicated', desc: '30-day check-in streak', earned: streak.longest >= 30 },
+    { key: 'strain-explorer', icon: '📖', title: 'Strain Explorer', desc: 'Try 5 unique strains', earned: uniqueStrains >= 5 },
+    { key: 'strain-connoisseur', icon: '🎓', title: 'Strain Connoisseur', desc: 'Try 20 unique strains', earned: uniqueStrains >= 20 },
+    { key: 'type-explorer', icon: '🌈', title: 'Type Explorer', desc: 'Try Indica, Sativa & Hybrid', earned: ['Indica', 'Sativa', 'Hybrid'].every(t => typesTried.has(t)) },
+    { key: 'community-builder', icon: '🧑\u200d🤝\u200d🧑', title: 'Community Builder', desc: 'Connect with 5 people', earned: friendsCount >= 5 },
+    { key: 'recruiter', icon: '📣', title: 'Recruiter', desc: 'Invite someone who joins', earned: invitedCount >= 1 },
+    { key: 'collector', icon: '🃏', title: 'Collector', desc: 'Catch 25 unique cards', earned: uniqueStrains >= 25 },
+    { key: 'century-club', icon: '💯', title: 'Century Club', desc: '100 check-ins', earned: totalCheckins >= 100 },
+    { key: 'recipe-contributor', icon: '🍯', title: 'Recipe Contributor', desc: 'Get a recipe approved', earned: db.hasUserApprovedRecipe(userId) },
+    { key: 'crowd-favorite', icon: '⭐', title: 'Crowd Favorite', desc: 'Get 10+ kudos on a recipe', earned: db.hasUserFavoriteRecipe(userId) },
+    { key: 'green-thumb', icon: '🌾', title: 'Green Thumb', desc: 'Share a grow tip', earned: db.hasUserSubmittedGrowTip(userId) },
   ];
 }
 // A shareable invite link -- ?ref=username on /signup, resolved by
@@ -5319,7 +5447,7 @@ const server = http.createServer(async (req, res) => {
     }
 
     let m;
-    if (method === 'GET' && pathname === '/') return pageHome(req, res);
+    if (method === 'GET' && pathname === '/') return await pageHome(req, res);
     if (method === 'GET' && pathname === '/strains') return pageStrains(req, res, url.searchParams);
     if (method === 'GET' && (m = pathname.match(/^\/strains\/([^/]+)$/))) return pageStrainDetail(req, res, m[1]);
     if (method === 'GET' && pathname === '/checkin') return pageCheckinForm(req, res, url.searchParams);
@@ -5463,6 +5591,9 @@ const server = http.createServer(async (req, res) => {
     if (method === 'GET' && pathname === '/genetics-guide') return pageGeneticsGuide(req, res);
     if (method === 'GET' && pathname === '/using-whole-plant') return pageUsingWholePlant(req, res);
     if (method === 'GET' && pathname === '/first-time-grower-guide') return pageFirstTimeGrowerGuide(req, res);
+    if (method === 'GET' && pathname === '/storage-guide') return pageStorageGuide(req, res);
+    if (method === 'GET' && pathname === '/lab-result-guide') return pageLabResultGuide(req, res);
+    if (method === 'GET' && pathname === '/tolerance-explained') return pageToleranceExplained(req, res);
     if (method === 'POST' && pathname === '/report') return await handleReport(req, res);
     if (method === 'POST' && (m = pathname.match(/^\/block\/(\d+)$/))) return await handleBlock(req, res, m[1]);
     if (method === 'POST' && (m = pathname.match(/^\/unblock\/(\d+)$/))) return await handleUnblock(req, res, m[1]);
