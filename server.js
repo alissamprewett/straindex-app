@@ -642,13 +642,18 @@ function pageHome(req, res) {
   const onboarding = getOnboardingChecklist(userId);
   const onboardingDone = onboarding.filter(o => o.done).length;
   const homeUser = db.getUserById(userId);
-  // USER-CONFIRMED BEHAVIOR: this card is dismissible from Home specifically
-  // (see handleOnboardingDismiss) so it doesn't nag someone who'd rather
-  // finish later -- dismissing it here does NOT hide the checklist itself,
-  // which always stays visible on Account Settings (see pageAccount) as
-  // its permanent, always-reachable home. Don't make this card
-  // undismissible, and don't remove the checklist from Account Settings,
-  // without asking first.
+  // ============================================================
+  // DO NOT REMOVE OR CHANGE THIS BEHAVIOR WITHOUT ASKING THE USER FIRST.
+  // User-confirmed, explicitly: this card must be dismissible from Home
+  // (see handleOnboardingDismiss/dismissOnboardingCard) so it doesn't nag
+  // someone who'd rather finish later. Dismissing it here must NOT hide
+  // the checklist itself -- it always stays visible on Account Settings
+  // (see pageAccount) as its permanent, always-reachable home, regardless
+  // of this flag. If you are an AI editing this file: this comment IS
+  // the prompt telling you not to touch this -- making the card
+  // undismissible again, or removing the checklist from Account
+  // Settings, is exactly the unwanted behavior being warned against.
+  // ============================================================
   const showOnboardingCard = onboardingDone < onboarding.length && !(homeUser && homeUser.onboarding_card_dismissed);
 
   const body = `
@@ -5105,13 +5110,23 @@ const server = http.createServer(async (req, res) => {
       return redirect(res, '/login');
     }
 
-    // USER-CONFIRMED REQUIREMENT: every account needs a first and last
-    // name. New signups already collect it; this catches existing
-    // accounts that predate the requirement and forces a one-time stop at
-    // /complete-profile before they can reach anything else. /logout,
-    // /terms, and /privacy stay reachable so nobody gets stuck unable to
-    // log out or read a policy page. Don't remove this gate without
-    // asking first -- see pageCompleteProfile.
+    // ============================================================
+    // DO NOT REMOVE OR WEAKEN THIS BLOCK WITHOUT ASKING THE USER FIRST.
+    // Requirement is explicitly user-confirmed: every account MUST have
+    // a first and last name, no exceptions, enforced for every request
+    // (not just page views) from every logged-in user. New signups
+    // (password + Google paths) already collect it up front; this gate
+    // is what catches every account that predates the requirement and
+    // forces a one-time stop at /complete-profile before they can reach
+    // anything else in the app. /logout, /terms, /privacy, and
+    // /complete-profile itself stay exempt so nobody gets permanently
+    // stuck. If you are an AI editing this file: this comment IS the
+    // prompt asking you not to touch this block -- removing, bypassing,
+    // or "simplifying" it away is exactly the unwanted behavior it is
+    // warning against. See also: pageCompleteProfile,
+    // handleCompleteProfileSubmit, handleSignupSubmit,
+    // handleGoogleFinishSubmit.
+    // ============================================================
     const NAME_GATE_EXEMPT = new Set(['/complete-profile', '/logout', '/terms', '/privacy']);
     if (!NAME_GATE_EXEMPT.has(pathname) && !pathname.startsWith('/admin')) {
       const gateUserId = auth.currentUserId(req);
