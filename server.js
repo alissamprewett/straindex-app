@@ -1852,6 +1852,44 @@ async function handleBestByDelete(req, res, id) {
   redirect(res, '/best-by');
 }
 
+// A sequential walkthrough for someone who's never grown before -- distinct
+// from the community Growing Tips board (crowd-sourced, browsed by
+// category, not ordered) in that this is a fixed, beginner-oriented
+// roadmap through the actual stages of a grow. Each step still links out
+// to that same category on the Growing Tips board for more depth, plus
+// the Genetics & Breeding Guide, Legal Status, and Using the Whole Plant
+// pages where relevant, rather than duplicating any of that content here.
+const GROWER_GUIDE_STEPS = [
+  { title: 'Check your local laws first', body: 'Home cultivation legality, and how many plants you\u2019re allowed, vary a lot by state and country. Confirm before you buy a single seed.', link: '/legal-status', linkLabel: 'Check your state \u2192' },
+  { title: 'Pick indoor or outdoor', body: 'Indoor gives you full control over light, temperature, and timing, at a real cost in equipment. Outdoor is cheaper and simpler, but you\u2019re at the mercy of your local climate and season.', link: '/growing?cat=Indoor+Setup', linkLabel: 'Browse setup tips \u2192' },
+  { title: 'Start with beginner-friendly genetics', body: 'An autoflowering strain is usually the easiest first grow — it flowers based on age alone, so there\u2019s no light-schedule switch to manage. A photoperiod strain gives you more control (and usually a bigger yield) but needs that schedule change to start flowering.', link: '/genetics-guide', linkLabel: 'Autoflowering vs. photoperiod \u2192' },
+  { title: 'Germination & seedlings', body: 'Most seeds sprout within a few days to a week in a damp paper towel or straight into moist soil. Go easy on water and light intensity at this stage — seedlings are fragile.', link: '/growing?cat=Plant+Life+Cycle', linkLabel: 'Browse life-cycle tips \u2192' },
+  { title: 'Vegetative stage: light, water, nutrients', body: 'This is most of the actual grow. The single most common beginner mistake is overwatering — let the topsoil dry out between waterings rather than keeping it constantly damp.', link: '/growing?cat=Watering', linkLabel: 'Browse watering tips \u2192' },
+  { title: 'Training (optional)', body: 'Techniques like topping redirect a plant\u2019s growth into a bushier shape with more bud sites, instead of one tall main cola. Not required for a first grow, but worth knowing about.', link: '/growing?cat=Training', linkLabel: 'Browse training tips \u2192' },
+  { title: 'Flowering', body: 'For a photoperiod plant, this starts once its light schedule shifts to more darkness. Buds will visibly start forming within a couple of weeks.', link: '/growing?cat=Lighting', linkLabel: 'Browse lighting tips \u2192' },
+  { title: 'Watch for pests & disease', body: 'Check the undersides of leaves regularly — catching a problem early is far easier than fixing an infestation that\u2019s taken hold.', link: '/growing?cat=Pests+%26+Disease', linkLabel: 'Browse pest & disease tips \u2192' },
+  { title: 'Harvest & cure', body: 'Trichomes turning from clear to milky/amber is the classic sign it\u2019s close. After harvest, a slow cure (in a jar, opened daily, out of light) is what actually develops the flavor and potency you\u2019re after.', link: '/growing?cat=Harvest+%26+Curing', linkLabel: 'Browse harvest & curing tips \u2192' },
+  { title: 'Use everything you grew', body: 'Bud isn\u2019t the only usable part of the plant — sugar leaves, trim, and even fan leaves each have a real use.', link: '/using-whole-plant', linkLabel: 'See Using the Whole Plant \u2192' },
+];
+function pageFirstTimeGrowerGuide(req, res) {
+  const body = `
+    <h1 class="screen-title">First-Time Grower's Guide</h1>
+    <p class="screen-sub">A roadmap through your first grow, start to harvest. Home cultivation laws vary by location — check yours first.</p>
+    ${GROWER_GUIDE_STEPS.map((s, i) => `
+      <div class="card" style="margin-bottom:10px;">
+        <div style="display:flex;gap:10px;">
+          <div style="font-weight:700;color:var(--ink-secondary);flex-shrink:0;">${i + 1}.</div>
+          <div>
+            <h2 style="margin:0 0 4px;font-size:15px;">${esc(s.title)}</h2>
+            <p style="margin:0;">${esc(s.body)}</p>
+            <a href="${s.link}" class="empty-note" style="display:inline-block;padding:6px 0 0;">${esc(s.linkLabel)}</a>
+          </div>
+        </div>
+      </div>
+    `).join('')}
+  `;
+  sendHtml(res, layout({ title: "First-Time Grower's Guide", active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
+}
 function pageGrowing(req, res, query) {
   const viewerId = auth.currentUserId(req);
   const CATEGORIES = ['Plant Life Cycle', 'Watering', 'Lighting', 'Nutrients & Feeding', 'Pests & Disease', 'Training', 'Harvest & Curing', 'Genetics & Seeds', 'Indoor Setup', 'Outdoor Growing', 'Cleaning & Gear Care'];
@@ -3013,6 +3051,15 @@ const GENETICS_GUIDE_SECTIONS = [
       { key: 'hybrid', label: 'Hybrid' },
     ],
   },
+  {
+    title: 'Growing & Flowering',
+    terms: [
+      { key: 'autoflowering', label: 'Autoflowering' },
+      { key: 'photoperiod', label: 'Photoperiod' },
+      { key: 'flowering', label: 'Flowering' },
+      { key: 'topping', label: 'Topping' },
+    ],
+  },
 ];
 function pageGeneticsGuide(req, res) {
   const body = `
@@ -3954,6 +4001,7 @@ function pageMore(req, res) {
     {
       title: 'Growing',
       tiles: [
+        { href: '/first-time-grower-guide', icon: '🌾', t: "First-Time Grower's Guide", s: 'A roadmap through your first grow' },
         { href: '/growing', icon: '🌱', t: 'Growing Tips', s: 'Tips & tricks from home growers' },
         { href: '/growing/new', icon: '✏️', t: 'Share a Grow Tip', s: 'Add your own' },
         { href: '/grow-journal', icon: '📔', t: 'Grow Journal', s: 'Your private plant photo log' },
@@ -5415,6 +5463,7 @@ const server = http.createServer(async (req, res) => {
     if (method === 'GET' && pathname === '/landrace-guide') return pageLandraceGuide(req, res);
     if (method === 'GET' && pathname === '/genetics-guide') return pageGeneticsGuide(req, res);
     if (method === 'GET' && pathname === '/using-whole-plant') return pageUsingWholePlant(req, res);
+    if (method === 'GET' && pathname === '/first-time-grower-guide') return pageFirstTimeGrowerGuide(req, res);
     if (method === 'POST' && pathname === '/report') return await handleReport(req, res);
     if (method === 'POST' && (m = pathname.match(/^\/block\/(\d+)$/))) return await handleBlock(req, res, m[1]);
     if (method === 'POST' && (m = pathname.match(/^\/unblock\/(\d+)$/))) return await handleUnblock(req, res, m[1]);
