@@ -1558,6 +1558,12 @@ const GLOSSARY_TERMS = [
     definition: 'A concentrate made exclusively from whole cured buds rather than trim or shake — generally considered a higher-quality starting material, and priced accordingly.' },
   { key: 'filial', variants: ['f1', 'f2', 'f3'],
     definition: "Shorthand for a cross's generation. F1 is the first-generation offspring of two different parent strains; F2 is grown from F1 seeds, F3 from F2, and so on — each generation further stabilizing (or occasionally destabilizing) the strain's traits." },
+  { key: 'heirloom', variants: ['heirloom', 'heirlooms'],
+    definition: "Landrace seed grown and preserved outside its native region for many generations — genetically still very close to the original landrace, but no longer growing in the environment that actually shaped it." },
+  { key: 'ibl', variants: ['ibl', 'inbred line', 'inbred lines'],
+    definition: "A strain bred with its own line repeatedly (rather than crossed with a different strain) to stabilize and lock in its traits — distinct from a backcross, which breeds back into one of its original parents instead." },
+  { key: 'polyhybrid', variants: ['polyhybrid', 'polyhybrids'],
+    definition: "A strain descended from many different crosses rather than one clean two-parent pairing, which is why its exact lineage sometimes can't be summarized as a simple X × Y formula." },
 ];
 // Builds one combined regex across every term/variant so each position in
 // the text is matched at most once, in a single pass -- this avoids ever
@@ -2973,6 +2979,57 @@ const LANDRACE_REGIONS = [
   { region: 'Nepal', names: ['Nepalese'] },
   { region: 'Lebanon', names: ['Lebanese'] },
 ];
+// Pulls real definitions straight from GLOSSARY_TERMS (by key) rather than
+// writing a second, possibly-diverging copy of the same explanation --
+// those definitions already exist for auto-linking inline in recipes and
+// grow tips; this just gives the genetics/breeding subset of them a real
+// standalone page to be read on their own, grouped for context rather
+// than encountered one at a time mid-sentence.
+function glossaryDef(key) {
+  const term = GLOSSARY_TERMS.find(t => t.key === key);
+  return term ? term.definition : '';
+}
+const GENETICS_GUIDE_SECTIONS = [
+  {
+    title: 'Lineage & Breeding',
+    terms: [
+      { key: 'landrace', label: 'Landrace' },
+      { key: 'heirloom', label: 'Heirloom' },
+      { key: 'backcross', label: 'Backcross (Bx1, Bx2...)' },
+      { key: 'ibl', label: 'IBL (Inbred Line)' },
+      { key: 'filial', label: 'Filial Generations (F1, F2, F3)' },
+      { key: 'polyhybrid', label: 'Polyhybrid' },
+    ],
+  },
+  {
+    title: 'Plant Types & Expression',
+    terms: [
+      { key: 'cultivar', label: 'Cultivar' },
+      { key: 'phenotype', label: 'Phenotype (Pheno)' },
+      { key: 'pheno-hunt', label: 'Pheno-Hunting' },
+      { key: 'clone-only', label: 'Clone-Only' },
+      { key: 'indica', label: 'Indica' },
+      { key: 'sativa', label: 'Sativa' },
+      { key: 'hybrid', label: 'Hybrid' },
+    ],
+  },
+];
+function pageGeneticsGuide(req, res) {
+  const body = `
+    <h1 class="screen-title">Genetics & Breeding Guide</h1>
+    <p class="screen-sub">The vocabulary behind how strains actually get made — see also the <a href="/landrace-guide">Landrace Guide</a> for where most of this traces back to.</p>
+    ${GENETICS_GUIDE_SECTIONS.map(sec => `
+      <div class="section-label" style="margin-top:18px;">${esc(sec.title)}</div>
+      ${sec.terms.map(t => `
+        <div class="card" style="margin-bottom:10px;">
+          <h2 style="margin:0 0 6px;font-size:16px;">${esc(t.label)}</h2>
+          <p style="margin:0;">${esc(glossaryDef(t.key))}</p>
+        </div>
+      `).join('')}
+    `).join('')}
+  `;
+  sendHtml(res, layout({ title: 'Genetics & Breeding Guide', active: 'education', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
+}
 function pageLandraceGuide(req, res) {
   const body = `
     <h1 class="screen-title">Landrace Guide</h1>
@@ -2983,9 +3040,10 @@ function pageLandraceGuide(req, res) {
       <p style="margin:0 0 10px;"><b>They're the product of natural selection plus generations of local cultivation</b> — not a breeder selecting for traits over a few generations, but a population adapting to its own environment over a long stretch of time.</p>
       <p style="margin:0 0 10px;"><b>They're relatively genetically stable.</b> Because a landrace was never crossed with anything else, plants grown from it tend to look and behave a lot like each other, unlike a strain with a complicated hybrid pedigree.</p>
       <p style="margin:0 0 10px;"><b>They're the foundation modern hybrids are built from.</b> Nearly every popular strain today traces back, through a chain of crosses, to landrace ancestors.</p>
-      <p style="margin:0;"><b>They're also genuinely at risk.</b> Commercial breeding overwhelmingly favors hybrids, so a lot of original landrace populations have become rare in cultivation — once a specific line is lost, it can't be recreated.</p>
+      <p style="margin:0 0 10px;"><b>They're also genuinely at risk.</b> Commercial breeding overwhelmingly favors hybrids, so a lot of original landrace populations have become rare in cultivation — once a specific line is lost, it can't be recreated.</p>
+      <p style="margin:0;"><b>Landrace vs. heirloom, a common mix-up:</b> a landrace is still growing in the region that shaped it. An <b>heirloom</b> is that same seed taken out of its native region and preserved/grown elsewhere for generations — genetically very close to the original, just no longer in the environment that produced it.</p>
     </div>
-    <p class="empty-note" style="margin-bottom:14px;">This is also why landraces and clone-only strains are deliberately left unparented elsewhere in this library — a landrace doesn't have two parent strains the way a hybrid does. It <i>is</i> the root of the tree, not a branch.</p>
+    <p class="empty-note" style="margin-bottom:14px;">This is also why landraces and clone-only strains are deliberately left unparented elsewhere in this library — a landrace doesn't have two parent strains the way a hybrid does. It <i>is</i> the root of the tree, not a branch. For more of this vocabulary — phenotype, backcross, cultivar, and the rest — see the <a href="/genetics-guide">Genetics & Breeding Guide</a>.</p>
     <div class="section-label">Known Landraces by Region</div>
     ${LANDRACE_REGIONS.map(r => `
       <div class="card" style="margin-bottom:10px;">
@@ -3961,6 +4019,7 @@ function pageEducation(req, res) {
         { href: '/effects-guide', icon: '✨', t: 'Effects Guide', s: 'What each effect actually feels like' },
         { href: '/breeder-guide', icon: '🧬', t: 'Breeder Guide', s: 'Who\u2019s actually behind each strain' },
         { href: '/landrace-guide', icon: '🌍', t: 'Landrace Guide', s: 'The genetic root everything else grew from' },
+        { href: '/genetics-guide', icon: '🔬', t: 'Genetics & Breeding Guide', s: 'Phenotype, backcross, cultivar & more' },
         { href: '/chat', icon: '💬', t: 'Ask', s: 'Chat with the assistant' },
       ],
     },
@@ -5326,6 +5385,7 @@ const server = http.createServer(async (req, res) => {
     if (method === 'GET' && pathname === '/mood-finder') return pageMoodFinder(req, res, url.searchParams);
     if (method === 'GET' && pathname === '/breeder-guide') return pageBreederGuide(req, res);
     if (method === 'GET' && pathname === '/landrace-guide') return pageLandraceGuide(req, res);
+    if (method === 'GET' && pathname === '/genetics-guide') return pageGeneticsGuide(req, res);
     if (method === 'POST' && pathname === '/report') return await handleReport(req, res);
     if (method === 'POST' && (m = pathname.match(/^\/block\/(\d+)$/))) return await handleBlock(req, res, m[1]);
     if (method === 'POST' && (m = pathname.match(/^\/unblock\/(\d+)$/))) return await handleUnblock(req, res, m[1]);
