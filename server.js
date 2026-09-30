@@ -202,6 +202,10 @@ function renderOnsetTimer(c) {
 // (dosing/mixing/legal before general strain trivia), matching the
 // priority the app is meant to lead with: community first, safety a very
 // visible second.
+// ICONS ARE USER-CONFIRMED PLAIN EMOJI -- do not swap any of these (or the
+// matching Education-page tiles below, around "Consumption & Safety") for
+// an uploaded image icon like /docs/joint-icon.png without asking first.
+// That exact swap happened once already and had to be reverted.
 const HOME_SAFETY_CAROUSEL = [
   { href: '/dosing-calculator', icon: '🧮', title: 'Dosing Calculator', s: 'Know your dose first' },
   { href: '/mixing-cautions', icon: '⚠️', title: 'Mixing Cautions', s: 'What not to combine' },
@@ -717,6 +721,9 @@ function pageHome(req, res) {
     </div>
 
     <div class="section-label">Dispensaries</div>
+    <!-- WORDING IS USER-CONFIRMED: "dispensaries", never "real dispensaries" --
+         anywhere this phrase appears in the file. Don't add "real" back
+         without asking; it was removed once already and came back. -->
     <a class="btn secondary block" href="/dispensaries" style="text-decoration:none;margin-bottom:4px;">${hasFollowedDispensaries ? '📍 View your followed dispensaries →' : '📍 Find dispensaries near you →'}</a>
 
     <h2 class="screen-title" style="margin-top:20px;">Higher Community</h2>
@@ -3746,11 +3753,14 @@ function pageMore(req, res) {
 function pageEducation(req, res) {
   const userId = requireUser(req, res);
   if (userId == null) return;
+  // ICONS ARE USER-CONFIRMED PLAIN EMOJI -- see the matching note on
+  // HOME_SAFETY_CAROUSEL above. Do not swap "Ways to Enjoy It" (or
+  // anything else here) back to an uploaded image icon without asking.
   const sections = [
     {
       title: 'Consumption & Safety',
       tiles: [
-        { href: '/methods', icon: '/docs/joint-icon.png', t: 'Ways to Enjoy It', s: 'Every method, explained' },
+        { href: '/methods', icon: '💨', t: 'Ways to Enjoy It', s: 'Every method, explained' },
         { href: '/concentrates', icon: '💠', t: 'Concentrates & Extracts', s: 'Kief, rosin, live resin & more' },
         { href: '/mixing-cautions', icon: '⚠️', t: 'Mixing With Other Substances', s: 'General cautions, not medical advice' },
         { href: '/legal-status', icon: '🏛️', t: 'Is It Legal Near Me?', s: 'State-by-state cannabis law' },
@@ -4062,19 +4072,35 @@ function pageHistory(req, res) {
 // after tapping the card (see pageFriendProfile) so there's one
 // consistent "click in for everything" place, matching how strain cards
 // work.
+// LAYOUT ORDER IS USER-CONFIRMED -- do not reorder these sections
+// (Community Features first, then search, then a single Requests button,
+// then the friends list) without asking first. Incoming/outgoing
+// requests deliberately do NOT render inline on this page -- they used
+// to, and the person specifically asked for that detail to move behind
+// a single "Requests" button (see pageFriendRequests below) so the main
+// page isn't cluttered with them.
 function pageFriends(req, res, query) {
   const userId = requireUser(req, res);
   if (userId == null) return;
   const q = (query.get('q') || '').trim();
   const results = q ? db.searchUsers(q, userId) : [];
   const friends = db.listFriends(userId);
-  const incoming = db.listIncomingRequests(userId);
-  const outgoing = db.listOutgoingRequests(userId);
+  const pendingCount = db.listIncomingRequests(userId).length + db.listOutgoingRequests(userId).length;
 
   const body = `
     <h1 class="screen-title">Community</h1>
     <p class="screen-sub">Your people, messages, trading, and community-wide features — all in one place.</p>
-    <form method="GET" action="/friends" style="margin-bottom:14px;display:flex;gap:8px;">
+
+    <div class="more-grid">
+      <a class="more-tile" href="/messages"><span class="ic">💬</span><div class="t">Messages</div><div class="s">${db.countUnreadMessages(userId) > 0 ? `${db.countUnreadMessages(userId)} unread` : 'Chat with your community'}</div></a>
+      <a class="more-tile" href="/notifications"><span class="ic">🔔</span><div class="t">Notifications</div><div class="s">${(db.countUnreadMentions(userId) + db.countUnreadCheckinNotifications(userId)) > 0 ? `${db.countUnreadMentions(userId) + db.countUnreadCheckinNotifications(userId)} new` : 'Mentions, comments & reactions'}</div></a>
+      <a class="more-tile" href="/puff-puff-ask"><span class="ic">💨</span><div class="t">Puff Puff Ask</div><div class="s">Ask the community, browse by section</div></a>
+      <a class="more-tile" href="/trade"><span class="ic">🔁</span><div class="t">Trade</div><div class="s">Swap dupes with your community</div></a>
+      <a class="more-tile" href="/friends-picks"><span class="ic">🤝</span><div class="t">Community Picks</div><div class="s">What your circle loves that you haven't tried</div></a>
+      <a class="more-tile" href="/invite"><span class="ic">📣</span><div class="t">Invite</div><div class="s">Bring someone into your community</div></a>
+    </div>
+
+    <form method="GET" action="/friends" style="margin:16px 0 14px;display:flex;gap:8px;">
       <input type="text" name="q" value="${esc(q)}" placeholder="Search by username..." autocomplete="off" style="flex:1;">
       <button class="btn" type="submit">Search</button>
     </form>
@@ -4087,41 +4113,19 @@ function pageFriends(req, res, query) {
           <div class="actions">
             ${status === 'none' ? `<form method="POST" action="/friends/${u.id}/request"><button class="btn" type="submit">Add to Community</button></form>` : ''}
             ${status === 'pending_sent' ? `<span class="empty-note">Request sent</span>` : ''}
-            ${status === 'pending_received' ? `<span class="empty-note">Check your requests below</span>` : ''}
+            ${status === 'pending_received' ? `<span class="empty-note">Check your requests</span>` : ''}
             ${status === 'friends' ? `<span class="empty-note">Already connected</span>` : ''}
           </div>
         </div>`;
       }).join('') : `<div class="empty-note">No users found matching "${esc(q)}".</div>`}
     ` : ''}
 
-    ${incoming.length ? `
-      <div class="section-label" style="margin-top:20px;color:var(--brand-green-dark);">🔔 Community requests (${incoming.length})</div>
-      ${incoming.map(u => `
-        <div class="admin-row">
-          <span>👤 ${esc(u.username)}</span>
-          <div class="actions">
-            <form method="POST" action="/friends/${u.id}/accept" style="display:inline;"><button class="btn" type="submit">Accept</button></form>
-            <form method="POST" action="/friends/${u.id}/decline" style="display:inline;"><button class="btn danger" style="color:#fff;" type="submit">Decline</button></form>
-          </div>
-        </div>`).join('')}
-    ` : ''}
+    <a href="/friends/requests" class="btn secondary block" style="text-decoration:none;display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+      <span>🔔 Requests</span>
+      ${pendingCount > 0 ? `<span class="rarity-tag rarity-rare">${pendingCount}</span>` : ''}
+    </a>
 
-    ${outgoing.length ? `
-      <div class="section-label" style="margin-top:20px;">Pending sent (${outgoing.length})</div>
-      ${outgoing.map(u => `
-        <div class="admin-row">
-          <span>👤 ${esc(u.username)}</span>
-          <div class="actions">
-            <span class="empty-note" style="padding:0;">Waiting for response</span>
-            <form method="POST" action="/friends/${u.id}/cancel" style="display:inline;" onsubmit="return confirm('Cancel your request to ${esc(u.username)}?')">
-              <button class="btn secondary" type="submit">Cancel</button>
-            </form>
-          </div>
-        </div>
-      `).join('')}
-    ` : ''}
-
-    <div class="section-label" style="margin-top:20px;">Your community (${friends.length})</div>
+    <div class="section-label">Your community (${friends.length})</div>
     ${friends.length ? friends.map(u => `
       <a class="library-row" href="/friends/${u.id}" style="text-decoration:none;color:inherit;">
         <div class="strain-thumb strain-thumb-sm" style="display:flex;align-items:center;justify-content:center;font-size:20px;background:#e5e0d5;">👤</div>
@@ -4130,18 +4134,43 @@ function pageFriends(req, res, query) {
           <div class="sub">Tap for messages, trading & more</div>
         </div>
       </a>`).join('') : `<div class="empty-note">No one in your community yet — search for a username above to get started.</div>`}
-
-    <div class="section-label" style="margin-top:24px;">Community Features</div>
-    <div class="more-grid">
-      <a class="more-tile" href="/messages"><span class="ic">💬</span><div class="t">Messages</div><div class="s">${db.countUnreadMessages(userId) > 0 ? `${db.countUnreadMessages(userId)} unread` : 'Chat with your community'}</div></a>
-      <a class="more-tile" href="/notifications"><span class="ic">🔔</span><div class="t">Notifications</div><div class="s">${(db.countUnreadMentions(userId) + db.countUnreadCheckinNotifications(userId)) > 0 ? `${db.countUnreadMentions(userId) + db.countUnreadCheckinNotifications(userId)} new` : 'Mentions, comments & reactions'}</div></a>
-      <a class="more-tile" href="/puff-puff-ask"><span class="ic">💨</span><div class="t">Puff Puff Ask</div><div class="s">Ask the community, browse by section</div></a>
-      <a class="more-tile" href="/trade"><span class="ic">🔁</span><div class="t">Trade</div><div class="s">Swap dupes with your community</div></a>
-      <a class="more-tile" href="/friends-picks"><span class="ic">🤝</span><div class="t">Community Picks</div><div class="s">What your circle loves that you haven't tried</div></a>
-      <a class="more-tile" href="/invite"><span class="ic">📣</span><div class="t">Invite</div><div class="s">Bring someone into your community</div></a>
-    </div>
   `;
   sendHtml(res, layout({ title: 'Community', active: 'friends', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
+}
+// Moved off the main Community page by request -- incoming and outgoing
+// community requests now live here, one tap behind the "Requests" button
+// above, instead of cluttering the main page with them.
+function pageFriendRequests(req, res) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const incoming = db.listIncomingRequests(userId);
+  const outgoing = db.listOutgoingRequests(userId);
+  const body = `
+    <h1 class="screen-title">Requests</h1>
+    <div class="section-label">Community requests (${incoming.length})</div>
+    ${incoming.length ? incoming.map(u => `
+      <div class="admin-row">
+        <span>👤 ${esc(u.username)}</span>
+        <div class="actions">
+          <form method="POST" action="/friends/${u.id}/accept" style="display:inline;"><button class="btn" type="submit">Accept</button></form>
+          <form method="POST" action="/friends/${u.id}/decline" style="display:inline;"><button class="btn danger" style="color:#fff;" type="submit">Decline</button></form>
+        </div>
+      </div>`).join('') : `<div class="empty-note">No incoming requests.</div>`}
+
+    <div class="section-label" style="margin-top:20px;">Pending sent (${outgoing.length})</div>
+    ${outgoing.length ? outgoing.map(u => `
+      <div class="admin-row">
+        <span>👤 ${esc(u.username)}</span>
+        <div class="actions">
+          <span class="empty-note" style="padding:0;">Waiting for response</span>
+          <form method="POST" action="/friends/${u.id}/cancel" style="display:inline;" onsubmit="return confirm('Cancel your request to ${esc(u.username)}?')">
+            <button class="btn secondary" type="submit">Cancel</button>
+          </form>
+        </div>
+      </div>
+    `).join('') : `<div class="empty-note">Nothing pending.</div>`}
+  `;
+  sendHtml(res, layout({ title: 'Requests', active: 'friends', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 // Every way someone can engage with your posts -- @mentions, comments,
 // and reactions -- merged into one inbox, most recent first. Mentions
@@ -5006,6 +5035,7 @@ const server = http.createServer(async (req, res) => {
     if (method === 'GET' && pathname === '/history') return pageHistory(req, res);
     if (method === 'GET' && pathname === '/trade') return pageTrade(req, res, url.searchParams);
     if (method === 'GET' && pathname === '/friends') return pageFriends(req, res, url.searchParams);
+    if (method === 'GET' && pathname === '/friends/requests') return pageFriendRequests(req, res);
     if (method === 'GET' && (m = pathname.match(/^\/friends\/(\d+)$/))) return pageFriendProfile(req, res, Number(m[1]));
     if (method === 'POST' && (m = pathname.match(/^\/friends\/(\d+)\/request$/))) return await handleFriendRequest(req, res, Number(m[1]));
     if (method === 'POST' && (m = pathname.match(/^\/friends\/(\d+)\/accept$/))) return await handleFriendAccept(req, res, Number(m[1]));
