@@ -1115,6 +1115,54 @@ function pageCheckinForm(req, res, query, existing) {
   sendHtml(res, layout({ title: isEdit ? 'Edit Check-In' : 'Check In', active: 'strains', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
+// A standalone single-post view -- what a tapped profile-grid photo links
+// to instead of the strain page. Renders the exact same feed-post card
+// used everywhere else (comments, reactions, pairings, onset timer), just
+// isolated to one specific check-in, matching Instagram's "tap a grid
+// photo, see the full post on its own" pattern.
+function pageCheckinDetail(req, res, id) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const c = db.getCheckin(id);
+  if (!c) return notFound(res);
+  // Same two visibility rules used everywhere else a check-in renders:
+  // filterVisibleCheckins for privacy, isBlocked for the poster-blocked
+  // case (see pageHome) -- a direct link to someone's private or
+  // blocked-from-you post 404s exactly like it would if you'd scrolled
+  // past it in a feed instead of landing here directly.
+  if (!db.filterVisibleCheckins([c], userId).length) return notFound(res);
+  if (c.user_id !== userId && db.isBlocked(userId, c.user_id)) return notFound(res);
+  const s = db.getStrain(c.strain_id);
+  const poster = db.getUserById(c.user_id);
+  const posterName = poster ? poster.username : 'Former user';
+  const isMine = c.user_id === userId;
+  const body = `
+    <div class="feed-post">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+        <div class="empty-note" style="padding:0;font-weight:${isMine ? 'normal' : '700'};">${isMine ? 'You' : `<a href="/friends/${c.user_id}" style="color:inherit;">${esc(posterName)}</a>`}</div>
+        ${isMine ? `<a href="/checkin/${c.id}/edit" class="empty-note" style="padding:0;">Edit</a>` : ''}
+      </div>
+      <a class="strain-chip" href="/strains/${c.strain_id}">
+        ${strainPhotoTag(s, 'xs')}
+        <span><b>${esc(s ? s.name : c.strain_id)}</b> ${s ? `<span class="rarity-tag rarity-${s.rarity}">${rarityLabel(s.rarity)}</span>` : ''}</span>
+      </a>
+      <div class="sub" style="margin-top:8px;">${esc(c.method)} · ${starString(c.rating)}</div>
+      ${c.photo ? `<img class="photo-thumb" src="${esc(c.photo)}" alt="photo">` : ''}
+      ${(c.effects || []).length ? `<div class="effect-tags">${c.effects.map(e => `<span>${esc(e)}</span>`).join('')}</div>` : ''}
+      ${c.note ? `<div class="note">"${esc(c.note)}"</div>` : ''}
+      ${renderCheckinPairings(c)}
+      ${renderOnsetTimer(c)}
+      ${renderCheckinComments(c, userId, '/checkin/' + c.id)}
+      <div style="display:flex;flex-direction:column;align-items:flex-end;margin-top:8px;">
+        ${renderReactionBar(c, userId)}
+        ${reactionGiversLabel(c.id)}
+      </div>
+    </div>
+    ${REACT_TO_CHECKIN_SCRIPT}
+  `;
+  sendHtml(res, layout({ title: s ? s.name : 'Check-In', active: 'home', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
+}
+
 function pageCheckinEditForm(req, res, id) {
   const userId = requireUser(req, res);
   if (userId == null) return;
@@ -3997,12 +4045,12 @@ function pageFriends(req, res, query) {
 }
 // Everywhere someone's tagged you with @username in a comment, most recent
 // first. Viewing this page marks them all read, same "opening it implies
-// you've seen it" pattern as a DM thread. The link target depends on
-// whether you can actually see that person's profile: your own posts go
-// to the strain page (where your own history renders), a friend's post
-// goes to their profile, and anyone else's (their check-in was public,
-// but you're not connected) falls back to the open community feed on
-// Home, since there's no other page that would show a stranger's post.
+// you've seen it" pattern as a DM thread. Links straight to the exact
+// post via pageCheckinDetail -- this used to have to fall back to the
+// poster's profile or just Home for anyone outside your community, since
+// there was no page that could show a single stranger's post on its own;
+// that's exactly what pageCheckinDetail is for, so every mention can now
+// point at precisely the right place regardless of who posted it.
 async function pageMentions(req, res) {
   const userId = requireUser(req, res);
   if (userId == null) return;
@@ -4011,10 +4059,7 @@ async function pageMentions(req, res) {
     if (!checkin) return null;
     const mentioner = db.getUserById(m.mentioning_user_id);
     const strain = db.getStrain(checkin.strain_id);
-    const link = checkin.user_id === userId
-      ? `/strains/${checkin.strain_id}`
-      : (db.getFriendshipStatus(userId, checkin.user_id) === 'friends' ? `/friends/${checkin.user_id}` : '/');
-    return { m, checkin, mentioner, strain, link };
+    return { m, checkin, mentioner, strain, link: `/checkin/${checkin.id}` };
   }).filter(Boolean);
   await db.markMentionsRead(userId);
   const body = `
@@ -4235,7 +4280,7 @@ function pageFriendProfile(req, res, friendId) {
       <div class="section-label">Photos</div>
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-bottom:16px;">
         ${photoPosts.map(c => `
-          <a href="/strains/${c.strain_id}" style="display:block;aspect-ratio:1;overflow:hidden;border-radius:6px;">
+          <a href="/checkin/${c.id}" style="display:block;aspect-ratio:1;overflow:hidden;border-radius:6px;">
             <img src="${esc(c.photo)}" alt="Check-in photo" style="width:100%;height:100%;object-fit:cover;display:block;">
           </a>
         `).join('')}
@@ -4681,6 +4726,7 @@ const server = http.createServer(async (req, res) => {
     if (method === 'GET' && (m = pathname.match(/^\/strains\/([^/]+)$/))) return pageStrainDetail(req, res, m[1]);
     if (method === 'GET' && pathname === '/checkin') return pageCheckinForm(req, res, url.searchParams);
     if (method === 'POST' && pathname === '/checkin') return await handleCheckinSubmit(req, res);
+    if (method === 'GET' && (m = pathname.match(/^\/checkin\/(\d+)$/))) return pageCheckinDetail(req, res, Number(m[1]));
     if (method === 'GET' && (m = pathname.match(/^\/checkin\/(\d+)\/edit$/))) return pageCheckinEditForm(req, res, Number(m[1]));
     if (method === 'POST' && (m = pathname.match(/^\/checkin\/(\d+)\/edit$/))) return await handleCheckinEditSubmit(req, res, Number(m[1]));
     if (method === 'POST' && (m = pathname.match(/^\/checkin\/(\d+)\/comment$/))) return await handleCheckinComment(req, res, Number(m[1]));
