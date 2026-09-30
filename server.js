@@ -169,13 +169,48 @@ function starString(n) { n = Number(n) || 0; return '★'.repeat(n) + '☆'.repe
 // check-in -- tasting notes plus food/drink, music/entertainment, and
 // activity pairings. Each is independently optional, so only show what's
 // actually filled in.
+// PAIRING TYPES ARE USER-CONFIRMED -- the form is a type dropdown (this
+// list) followed by a free-text note, submitted and stored as a real
+// pairings: [{type, note}] array (matching db.js's createCheckin /
+// updateCheckin / normalizePairings), NOT the old fixed pairing_food /
+// pairing_entertainment / pairing_activity columns. Those old columns
+// still exist ONLY for reading pre-migration check-ins (see
+// rowToCheckin's backward-compat synthesis in db.js) -- nothing should
+// ever be written to them again. Do not change this shape, the dropdown
+// options, or go back to three fixed text inputs without asking first --
+// this exact regression (silently dropping pairing data because the form
+// wrote to columns nothing reads anymore) has already happened once.
+const PAIRING_TYPES = [
+  { key: 'food', label: 'Food & Drink', icon: '🍽️' },
+  { key: 'music', label: 'Music & Entertainment', icon: '🎵' },
+  { key: 'activity', label: 'Activity', icon: '🎯' },
+  { key: 'other', label: 'Other', icon: '✨' },
+];
+const PAIRING_TYPE_BY_KEY = Object.fromEntries(PAIRING_TYPES.map(t => [t.key, t]));
+// One repeatable row: a type dropdown, then a free-text note -- pick the
+// type first, then describe it. Used both for the server-rendered initial
+// row(s) and cloned client-side when someone taps "+ Add Pairing" (see
+// the script in pageCheckinForm).
+function renderPairingRow(p) {
+  return `
+    <div class="pairing-row" style="display:flex;gap:8px;margin-bottom:8px;align-items:center;">
+      <select name="pairing_type" style="flex:0 0 150px;">
+        ${PAIRING_TYPES.map(t => `<option value="${t.key}" ${p.type === t.key ? 'selected' : ''}>${t.icon} ${esc(t.label)}</option>`).join('')}
+      </select>
+      <input type="text" name="pairing_note" placeholder="Add a note..." value="${esc(p.note || '')}" style="flex:1;margin:0;">
+      <button type="button" class="remove-pairing-btn" style="background:none;border:none;color:#a13a3a;cursor:pointer;font-size:18px;padding:4px;line-height:1;" onclick="this.closest('.pairing-row').remove()">×</button>
+    </div>
+  `;
+}
 function renderCheckinPairings(c) {
   return `
     ${c.is_private ? `<div class="empty-note" style="padding:4px 0 0;font-weight:700;">🔒 Private — only visible to you</div>` : ''}
+    ${c.brand ? `<div class="empty-note" style="padding:4px 0 0;">🏷️ ${esc(c.brand)}</div>` : ''}
     ${c.tasting_notes ? `<div class="empty-note" style="padding:4px 0 0;">🍃 Tasting notes: ${esc(c.tasting_notes)}</div>` : ''}
-    ${c.pairing_food ? `<div class="empty-note" style="padding:2px 0 0;">🍽️ Paired with: ${esc(c.pairing_food)}</div>` : ''}
-    ${c.pairing_entertainment ? `<div class="empty-note" style="padding:2px 0 0;">🎵 Listening/watching: ${esc(c.pairing_entertainment)}</div>` : ''}
-    ${c.pairing_activity ? `<div class="empty-note" style="padding:2px 0 0;">🎯 Doing: ${esc(c.pairing_activity)}</div>` : ''}
+    ${(c.pairings || []).map(p => {
+      const meta = PAIRING_TYPE_BY_KEY[p.type];
+      return p.note ? `<div class="empty-note" style="padding:2px 0 0;">${meta ? meta.icon : '✨'} ${esc(p.note)}</div>` : '';
+    }).join('')}
   `;
 }
 // Shows a live "started Xh Ym ago" onset reminder under any check-in logged
@@ -1117,6 +1152,10 @@ function pageCheckinForm(req, res, query, existing) {
   const strainId = existing ? existing.strain_id : (query.get('strain') || '');
   const s = strainId ? db.getStrain(strainId) : null;
   const isEdit = !!existing;
+  // Always show at least one pairing row -- a blank "Food & Drink" row by
+  // default on a new check-in, or the real existing pairings when editing.
+  // See the PAIRING TYPES comment on renderCheckinPairings above.
+  const initialPairings = (existing && existing.pairings && existing.pairings.length) ? existing.pairings : [{ type: 'food', note: '' }];
   const body = `
     <h1 class="screen-title">${isEdit ? 'Edit Check-In' : 'Check In'}</h1>
     ${isEdit ? `<p class="empty-note">Thoughts changed after the fact? That's normal, especially with edibles — update it below.</p>` : ''}
@@ -1164,14 +1203,14 @@ function pageCheckinForm(req, res, query, existing) {
       <label class="field-label">Tasting Notes</label>
       <textarea name="tasting_notes" placeholder="Flavor, smell, smoothness — what stood out?">${existing ? esc(existing.tasting_notes || '') : ''}</textarea>
 
-      <label class="field-label">Food / Drink Pairing</label>
-      <input type="text" name="pairing_food" placeholder="What went really well with it?" value="${existing ? esc(existing.pairing_food || '') : ''}">
+      <label class="field-label">Brand</label>
+      <input type="text" name="brand" placeholder="Dispensary or brand, if you know it" value="${existing ? esc(existing.brand || '') : ''}">
 
-      <label class="field-label">Music / Entertainment Pairing</label>
-      <input type="text" name="pairing_entertainment" placeholder="What you listened to or watched" value="${existing ? esc(existing.pairing_entertainment || '') : ''}">
-
-      <label class="field-label">Activity Pairing</label>
-      <input type="text" name="pairing_activity" placeholder="What you did while enjoying it" value="${existing ? esc(existing.pairing_activity || '') : ''}">
+      <label class="field-label">Pairings</label>
+      <div id="pairings-list">
+        ${initialPairings.map(renderPairingRow).join('')}
+      </div>
+      <button type="button" id="add-pairing-btn" class="btn secondary" style="margin-top:2px;">+ Add Pairing</button>
 
       <label style="display:flex;align-items:center;gap:8px;margin-top:16px;cursor:pointer;">
         <input type="checkbox" name="is_private" value="1" ${existing && existing.is_private ? 'checked' : ''} style="width:auto;margin:0;">
@@ -1196,6 +1235,18 @@ function pageCheckinForm(req, res, query, existing) {
         if (box) box.style.display = window.EDIBLE_METHODS.includes(method) ? 'block' : 'none';
       }
       toggleEdibleWarning(document.getElementById('checkin-method-select').value);
+      (function() {
+        const addBtn = document.getElementById('add-pairing-btn');
+        const list = document.getElementById('pairings-list');
+        if (!addBtn || !list) return;
+        addBtn.addEventListener('click', function() {
+          const rows = list.querySelectorAll('.pairing-row');
+          const clone = rows[rows.length - 1].cloneNode(true);
+          clone.querySelector('select').value = 'food';
+          clone.querySelector('input[type=text]').value = '';
+          list.appendChild(clone);
+        });
+      })();
     </script>
   `;
   sendHtml(res, layout({ title: isEdit ? 'Edit Check-In' : 'Check In', active: 'strains', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
@@ -1261,6 +1312,17 @@ function pageCheckinEditForm(req, res, id) {
   pageCheckinForm(req, res, new URLSearchParams(), existing);
 }
 
+// Zips the parallel pairing_type/pairing_note fields (one pair of values
+// per row rendered by renderPairingRow) back into the real
+// pairings: [{type, note}] shape createCheckin/updateCheckin expect.
+// parseForm gives a plain string when there was only one row, or an
+// array when there were several -- same pattern already used for
+// effects. Rows with no note are dropped rather than saved empty.
+function pairingsFromForm(fields) {
+  const types = Array.isArray(fields.pairing_type) ? fields.pairing_type : (fields.pairing_type ? [fields.pairing_type] : []);
+  const notes = Array.isArray(fields.pairing_note) ? fields.pairing_note : (fields.pairing_note ? [fields.pairing_note] : []);
+  return types.map((type, i) => ({ type, note: (notes[i] || '').trim() })).filter(p => p.note);
+}
 async function handleCheckinSubmit(req, res) {
   const userId = requireUser(req, res);
   if (userId == null) return;
@@ -1273,8 +1335,8 @@ async function handleCheckinSubmit(req, res) {
   await db.createCheckin({
     user_id: userId, strain_id: strainId, method: fields.method, rating: Number(fields.rating) || 0,
     note: fields.note || '', effects, photo: photoUrl,
-    tasting_notes: fields.tasting_notes || '', pairing_food: fields.pairing_food || '',
-    pairing_entertainment: fields.pairing_entertainment || '', pairing_activity: fields.pairing_activity || '',
+    tasting_notes: fields.tasting_notes || '', brand: fields.brand || '',
+    pairings: pairingsFromForm(fields),
     is_private: !!fields.is_private,
   });
   redirect(res, `/strains/${strainId}`);
@@ -1291,8 +1353,8 @@ async function handleCheckinEditSubmit(req, res, id) {
   await db.updateCheckin(id, {
     method: fields.method, rating: Number(fields.rating) || 0,
     note: fields.note || '', effects, photo: photoUrl,
-    tasting_notes: fields.tasting_notes || '', pairing_food: fields.pairing_food || '',
-    pairing_entertainment: fields.pairing_entertainment || '', pairing_activity: fields.pairing_activity || '',
+    tasting_notes: fields.tasting_notes || '', brand: fields.brand || '',
+    pairings: pairingsFromForm(fields),
     is_private: !!fields.is_private,
   });
   redirect(res, `/strains/${existing.strain_id}`);
