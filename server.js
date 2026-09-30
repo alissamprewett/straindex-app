@@ -246,7 +246,7 @@ const HOME_SAFETY_CAROUSEL = [
   { href: '/mixing-cautions', icon: '⚠️', title: 'Mixing Cautions', s: 'What not to combine' },
   { href: '/legal-status', icon: '🏛️', title: 'Is It Legal?', s: 'Check your state' },
   { href: '/methods', icon: '💨', title: 'Ways to Enjoy It', s: 'Every method explained' },
-  { href: '/faq', icon: '❓', title: 'FAQ', s: 'Strain school' },
+  { href: '/puff-puff-ask', icon: '💬', title: 'Puff Puff Ask', s: 'Ask the community' },
 ];
 function renderSafetyCarousel() {
   return `
