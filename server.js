@@ -399,10 +399,14 @@ function pageLandingPage(req, res) {
 function pageHome(req, res) {
   const userId = auth.currentUserId(req);
   if (userId == null) return pageLandingPage(req, res);
-  const friends = db.listFriends(userId);
-  const feedUserIds = [userId, ...friends.map(f => f.id)];
-  const userNames = new Map([[userId, 'You'], ...friends.map(f => [f.id, f.username])]);
-  const recentCheckins = db.filterVisibleCheckins(db.listCheckins({ userIds: feedUserIds, limit: 30 }), userId).slice(0, 15);
+  // Higher Community: an open, app-wide feed of everyone's public
+  // check-ins, not just people you've connected with -- filterVisibleCheckins
+  // already excludes anyone else's private entries, and the isBlocked check
+  // keeps a blocked person's posts out of your own feed specifically,
+  // matching the promise made on the Block action elsewhere in the app.
+  const recentCheckins = db.filterVisibleCheckins(db.listCheckins({ limit: 60 }), userId)
+    .filter(c => c.user_id === userId || !db.isBlocked(userId, c.user_id))
+    .slice(0, 15);
   const recs = getRecommendations(userId, 4);
   const hasFollowedDispensaries = db.anyDispensaryFollowed(userId);
   // "Welcome back" doesn't make sense the very first time someone lands
@@ -476,15 +480,16 @@ function pageHome(req, res) {
     <div class="section-label">Dispensaries</div>
     <a class="btn secondary block" href="/dispensaries" style="text-decoration:none;margin-bottom:4px;">${hasFollowedDispensaries ? '📍 View your followed dispensaries →' : '📍 Find real dispensaries near you →'}</a>
 
-    <h2 class="screen-title" style="margin-top:20px;">${friends.length ? 'Recent activity' : 'Recent check-ins'}</h2>
-    ${friends.length && recentCheckins.every(c => c.user_id === userId) ? `<p class="empty-note">None of your community has checked in yet — once they do, it'll show up here too.</p>` : ''}
+    <h2 class="screen-title" style="margin-top:20px;">Higher Community</h2>
+    <p class="empty-note" style="padding:2px 0 10px;">Public check-ins from everyone on StrainDex — not just people you're connected with.</p>
     ${recentCheckins.length ? recentCheckins.map(c => {
       const s = db.getStrain(c.strain_id);
-      const posterName = userNames.get(c.user_id) || 'Someone';
+      const poster = db.getUserById(c.user_id);
+      const posterName = poster ? poster.username : 'Former user';
       const isMine = c.user_id === userId;
       return `<div class="feed-post">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
-          ${friends.length ? `<div class="empty-note" style="padding:0;font-weight:${isMine ? 'normal' : '700'};">${isMine ? 'You' : `<a href="/friends/${c.user_id}" style="color:inherit;">${esc(posterName)}</a>`}</div>` : '<div></div>'}
+          <div class="empty-note" style="padding:0;font-weight:${isMine ? 'normal' : '700'};">${isMine ? 'You' : `<a href="/friends/${c.user_id}" style="color:inherit;">${esc(posterName)}</a>`}</div>
           ${isMine ? `<a href="/checkin/${c.id}/edit" class="empty-note" style="padding:0;">Edit</a>` : ''}
         </div>
         <a class="strain-chip" href="/strains/${c.strain_id}">
@@ -503,7 +508,7 @@ function pageHome(req, res) {
           ${kudosGiversLabel(c.id)}
         </div>
       </div>`;
-    }).join('') : `<div class="empty-note">No check-ins logged yet — <a href="/checkin">log your first one</a> to get your feed started.</div>`}
+    }).join('') : `<div class="empty-note">No public check-ins yet — <a href="/checkin">log your first one</a> to get the community feed started.</div>`}
   `;
   sendHtml(res, layout({ title: 'Home', active: 'home', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)), showBack: false }));
 }
@@ -1008,7 +1013,7 @@ function pageFaq(req, res, query) {
 
     <p class="empty-note" style="margin-top:16px;">Have a question you don't see here? Ask the assistant on the <a href="/chat">Ask</a> tab.</p>
   `;
-  sendHtml(res, layout({ title: 'FAQ', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: 'FAQ', active: 'education', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
 // Maps a usesBase keyword to the title of the one "core" recipe that
@@ -1037,6 +1042,40 @@ function canonicalBaseRecipeId(keyword) {
   if (!title) return null;
   const r = db.listRecipes({ status: null }).find(x => x.title === title);
   return r ? r.id : null;
+}
+
+// Best-By Calendar reference data -- rough, general shelf-life guidance
+// (days from the date made) for common homemade infusions and edibles.
+// Deliberately conservative, general kitchen-storage guidance in the same
+// spirit as the dosing notes elsewhere in this app -- not a food-safety
+// guarantee. Always store airtight and refrigerated/frozen where noted,
+// and use your own judgment (smell, appearance, mold) regardless of what
+// the calendar says.
+const INFUSION_SHELF_LIFE = [
+  { key: 'cannabutter', label: 'Cannabutter', days: 90, storage: 'Refrigerated (freeze for up to 6 months)' },
+  { key: 'coconut oil', label: 'Infused Coconut Oil', days: 180, storage: 'Refrigerated, airtight' },
+  { key: 'olive oil', label: 'Infused Olive Oil', days: 60, storage: 'Refrigerated, airtight' },
+  { key: 'avocado oil', label: 'Infused Avocado Oil', days: 60, storage: 'Refrigerated, airtight' },
+  { key: 'ghee', label: 'Infused Ghee', days: 90, storage: 'Cool, dark pantry or refrigerated' },
+  { key: 'infused milk', label: 'Infused Milk', days: 5, storage: 'Refrigerated' },
+  { key: 'infused sugar', label: 'Infused Sugar', days: 180, storage: 'Airtight, room temperature' },
+  { key: 'infused flour', label: 'Infused Flour', days: 30, storage: 'Refrigerated or frozen' },
+  { key: 'honey', label: 'Infused Honey', days: 365, storage: 'Room temperature, airtight' },
+  { key: 'finishing salt', label: 'Infused Finishing Salt', days: 365, storage: 'Airtight, room temperature' },
+  { key: 'simple syrup', label: 'Infused Simple Syrup', days: 30, storage: 'Refrigerated' },
+  { key: 'glycerin tincture', label: 'Glycerin Tincture', days: 180, storage: 'Cool, dark place' },
+  { key: 'tincture', label: 'Alcohol Tincture', days: 730, storage: 'Cool, dark place' },
+  { key: 'rso', label: 'RSO (Rick Simpson Oil)', days: 730, storage: 'Dark, airtight jar or syringe' },
+  { key: 'baked_goods', label: 'Baked Goods (brownies, cookies)', days: 7, storage: 'Airtight, room temperature (freeze for longer)' },
+  { key: 'gummies', label: 'Gummies & Candy', days: 180, storage: 'Airtight, cool & dry' },
+  { key: 'beverage', label: 'Infused Beverage', days: 5, storage: 'Refrigerated' },
+  { key: 'other', label: 'Something Else', days: 30, storage: 'Use your judgment — when in doubt, refrigerate' },
+];
+function infusionMeta(key) { return INFUSION_SHELF_LIFE.find(i => i.key === key) || INFUSION_SHELF_LIFE[INFUSION_SHELF_LIFE.length - 1]; }
+function addDaysToDateStr(dateStr, days) {
+  const d = new Date(`${dateStr}T00:00:00Z`);
+  d.setUTCDate(d.getUTCDate() + days);
+  return d.toISOString().slice(0, 10);
 }
 
 // ---------------------------------------------------------------- glossary
@@ -1184,7 +1223,7 @@ function pageRecipeDetail(req, res, id) {
       </div>
     </div>
   `;
-  sendHtml(res, layout({ title: r.title, active: 'recipes', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: r.title, active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
 function pageRecipes(req, res, query) {
@@ -1227,7 +1266,7 @@ function pageRecipes(req, res, query) {
         </div>
       </div>`).join('') || `<div class="empty-note">${q ? 'No recipes match your search.' : 'No recipes in this category yet.'}</div>`}
   `;
-  sendHtml(res, layout({ title: 'Recipes', active: 'recipes', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: 'Recipes', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
 function pageRecipeNew(req, res) {
@@ -1250,7 +1289,7 @@ function pageRecipeNew(req, res) {
     </form>
     <p class="empty-note">Submissions are reviewed before they go live — check back, or ask the admin.</p>
   `;
-  sendHtml(res, layout({ title: 'Submit a Recipe', active: 'recipes', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: 'Submit a Recipe', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
 async function handleRecipeNewSubmit(req, res) {
@@ -1264,6 +1303,141 @@ async function handleRecipeNewSubmit(req, res) {
     dosing: f.dosing || '',
   });
   redirect(res, '/recipes?submitted=1');
+}
+
+// ---------------------------------------------------------------- dosing calculator (standalone)
+// The same math as the calculator embedded on each recipe's page (see
+// pageRecipeDetail), but as its own destination for a batch that didn't
+// start from a StrainDex recipe at all -- plus the reverse direction
+// (target dose -> how many servings to split a batch into).
+function pageDosingCalculator(req, res) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const body = `
+    <h1 class="screen-title">🧮 Dosing Calculator</h1>
+    <p class="screen-sub">Figure out mg per serving for any batch — not just StrainDex recipes.</p>
+    <div class="card">
+      <b style="font-size:14px;">Total THC ÷ servings</b>
+      <p class="empty-note" style="padding:2px 0 8px;">Know the total mg in the batch and how many servings you're splitting it into.</p>
+      <label class="field-label" style="margin-top:0;">Total THC in the batch (mg)</label>
+      <input type="number" id="dose-total-mg" placeholder="e.g. 200" min="0" step="any">
+      <label class="field-label">Number of servings</label>
+      <input type="number" id="dose-servings" placeholder="e.g. 12" min="1" step="1">
+      <div id="dose-result" class="empty-note" style="padding:8px 0 0;font-weight:700;"></div>
+    </div>
+    <div class="card" style="margin-top:14px;">
+      <b style="font-size:14px;">Target dose → servings needed</b>
+      <p class="empty-note" style="padding:2px 0 8px;">Know the total mg and what dose you want per serving — this tells you how many servings to divide the batch into.</p>
+      <label class="field-label" style="margin-top:0;">Total THC in the batch (mg)</label>
+      <input type="number" id="target-total-mg" placeholder="e.g. 200" min="0" step="any">
+      <label class="field-label">Target dose per serving (mg)</label>
+      <input type="number" id="target-dose-mg" placeholder="e.g. 5" min="0" step="any">
+      <div id="target-result" class="empty-note" style="padding:8px 0 0;font-weight:700;"></div>
+    </div>
+    <p class="empty-note" style="margin-top:14px;">Not medical advice — potency varies by batch, and these numbers are only as accurate as the total mg you enter. Start low and go slow, especially with edibles.</p>
+    <script>
+      (function() {
+        const totalEl = document.getElementById('dose-total-mg');
+        const servingsEl = document.getElementById('dose-servings');
+        const resultEl = document.getElementById('dose-result');
+        function recalc() {
+          const total = parseFloat(totalEl.value);
+          const servings = parseFloat(servingsEl.value);
+          if (!total || !servings || total <= 0 || servings <= 0) { resultEl.textContent = ''; return; }
+          resultEl.textContent = (total / servings).toFixed(1) + ' mg THC per serving';
+        }
+        totalEl.addEventListener('input', recalc);
+        servingsEl.addEventListener('input', recalc);
+
+        const tTotalEl = document.getElementById('target-total-mg');
+        const tDoseEl = document.getElementById('target-dose-mg');
+        const tResultEl = document.getElementById('target-result');
+        function recalcTarget() {
+          const total = parseFloat(tTotalEl.value);
+          const dose = parseFloat(tDoseEl.value);
+          if (!total || !dose || total <= 0 || dose <= 0) { tResultEl.textContent = ''; return; }
+          const servings = total / dose;
+          tResultEl.textContent = 'Divide into about ' + Math.floor(servings) + ' serving' + (Math.floor(servings) === 1 ? '' : 's') + ' (' + servings.toFixed(1) + ' exactly)';
+        }
+        tTotalEl.addEventListener('input', recalcTarget);
+        tDoseEl.addEventListener('input', recalcTarget);
+      })();
+    </script>
+  `;
+  sendHtml(res, layout({ title: 'Dosing Calculator', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
+}
+
+// ---------------------------------------------------------------- best-by calendar
+// Tracks homemade infusions/edibles (cannabutter, infused oil, tincture,
+// etc.) so a person can see an actual use-by date instead of guessing --
+// e.g. "made oil on the 3rd" becomes "use by around the 1st of next month."
+function pageBestBy(req, res) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const today = new Date().toISOString().slice(0, 10);
+  const batches = db.listInfusionBatches(userId).map(b => {
+    const meta = infusionMeta(b.item_key);
+    const useBy = addDaysToDateStr(b.made_on, meta.days);
+    return { ...b, meta, useBy, isPast: useBy < today };
+  }).sort((a, b) => a.useBy.localeCompare(b.useBy));
+  const body = `
+    <h1 class="screen-title">📅 Best-By Calendar</h1>
+    <p class="screen-sub">Log what you've made and when — this tells you roughly when to use it by.</p>
+
+    <div class="card" style="margin-bottom:16px;">
+      <b style="font-size:14px;">Log a batch</b>
+      <form method="POST" action="/best-by" style="margin-top:8px;">
+        <label class="field-label" style="margin-top:0;">What did you make?</label>
+        <select name="item_key">${INFUSION_SHELF_LIFE.map(i => `<option value="${i.key}">${esc(i.label)}</option>`).join('')}</select>
+        <label class="field-label">Nickname (optional)</label>
+        <input type="text" name="custom_name" placeholder="e.g. Grandma's brownies, big batch">
+        <label class="field-label">Date made</label>
+        <input type="date" name="made_on" value="${today}" max="${today}" required>
+        <label class="field-label">Notes (optional)</label>
+        <textarea name="notes" placeholder="Potency, where it's stored, anything worth remembering"></textarea>
+        <button class="btn block" type="submit" style="margin-top:10px;">Add to Calendar</button>
+      </form>
+    </div>
+
+    <div class="section-label">Your batches (${batches.length})</div>
+    ${batches.length ? batches.map(b => `
+      <div class="card" style="margin-bottom:8px;${b.isPast ? 'opacity:0.7;' : ''}">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;">
+          <b>${esc(b.custom_name || b.meta.label)}</b>
+          <form method="POST" action="/best-by/${b.id}/delete" onsubmit="return confirm('Remove this from your calendar?')">
+            <button type="submit" class="empty-note" style="padding:0;background:none;border:none;color:#a13a3a;cursor:pointer;font-size:inherit;">Remove</button>
+          </form>
+        </div>
+        ${b.custom_name ? `<div class="empty-note" style="padding:0;">${esc(b.meta.label)}</div>` : ''}
+        <div class="empty-note" style="padding:4px 0 0;">Made ${esc(b.made_on)} · ${b.meta.storage}</div>
+        <div style="margin-top:6px;font-weight:700;color:${b.isPast ? '#a13a3a' : 'var(--brand-green-dark)'};">
+          ${b.isPast ? `⚠️ Past best-by (${esc(b.useBy)}) — check carefully before using` : `Use by around ${esc(b.useBy)}`}
+        </div>
+        ${b.notes ? `<div class="empty-note" style="padding:6px 0 0;">${esc(b.notes)}</div>` : ''}
+      </div>
+    `).join('') : `<div class="empty-note">Nothing logged yet — add your first batch above.</div>`}
+    <p class="empty-note" style="margin-top:14px;">General kitchen-storage guidance, not a food-safety guarantee. Always store airtight and refrigerated/frozen where noted, and trust your senses (smell, appearance, mold) over the calendar.</p>
+  `;
+  sendHtml(res, layout({ title: 'Best-By Calendar', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
+}
+async function handleBestByAdd(req, res) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const f = await parseForm(req);
+  const itemKey = INFUSION_SHELF_LIFE.some(i => i.key === f.item_key) ? f.item_key : 'other';
+  const madeOn = /^\d{4}-\d{2}-\d{2}$/.test(f.made_on || '') ? f.made_on : new Date().toISOString().slice(0, 10);
+  await db.createInfusionBatch({
+    user_id: userId, item_key: itemKey, custom_name: (f.custom_name || '').trim(), made_on: madeOn, notes: (f.notes || '').trim(),
+  });
+  redirect(res, '/best-by');
+}
+async function handleBestByDelete(req, res, id) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const batch = db.getInfusionBatch(id);
+  if (!batch || batch.user_id !== userId) return notFound(res);
+  await db.deleteInfusionBatch(id);
+  redirect(res, '/best-by');
 }
 
 function pageGrowing(req, res, query) {
@@ -1304,7 +1478,7 @@ function pageGrowing(req, res, query) {
         </div>
       </div>`).join('') || `<div class="empty-note">No tips in this category yet — be the first to <a href="/growing">share one</a>.</div>`}
   `;
-  sendHtml(res, layout({ title: 'Growing', active: 'growing', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: 'Growing', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
 function pageGrowingNew(req, res) {
@@ -1323,7 +1497,7 @@ function pageGrowingNew(req, res) {
       <button class="btn block" type="submit">Post Tip</button>
     </form>
   `;
-  sendHtml(res, layout({ title: 'Share a Grow Tip', active: 'growing', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: 'Share a Grow Tip', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
 async function handleGrowingNewSubmit(req, res) {
@@ -1363,7 +1537,7 @@ function pageChat(req, res) {
       }
     </script>
   `;
-  sendHtml(res, layout({ title: 'Ask', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: 'Ask', active: 'education', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
 async function handleChatApi(req, res) {
@@ -2162,7 +2336,7 @@ function pageTerpeneGuide(req, res) {
       </div>
     `).join('')}
   `;
-  sendHtml(res, layout({ title: 'Terpene Guide', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: 'Terpene Guide', active: 'education', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
 // Effects Guide -- same spirit as the Terpene Guide, built from the
@@ -2208,7 +2382,7 @@ function pageEffectsGuide(req, res) {
       </div>
     `).join('')}
   `;
-  sendHtml(res, layout({ title: 'Effects Guide', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: 'Effects Guide', active: 'education', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
 // Mood-Based Strain Finder -- a goal-first shortcut into the same effects
@@ -2327,7 +2501,7 @@ function pageBreederGuide(req, res) {
       </div>
     `).join('')}
   `;
-  sendHtml(res, layout({ title: 'Breeder Guide', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: 'Breeder Guide', active: 'education', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
 function pageWishlist(req, res) {
@@ -2411,7 +2585,7 @@ function pageMixingCautions(req, res) {
       </div>
     `).join('')}
   `;
-  sendHtml(res, layout({ title: 'Mixing With Other Substances', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: 'Mixing With Other Substances', active: 'education', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
 function pageQuiz(req, res, query) {
@@ -3088,10 +3262,13 @@ function pageMore(req, res) {
   const user = userId != null ? db.getUserById(userId) : null;
   // Grouped into sections rather than one long flat list -- this menu has
   // grown a lot as features shipped, and a flat grid stops being scannable
-  // well before a dozen tiles. /strains and /growing are intentionally left
-  // out entirely since they're already one tap away on the bottom nav.
-  // Events/Shop/Business stay hidden too -- still running on demo data,
-  // not deleted, just not surfaced here until they're real.
+  // well before a dozen tiles. /strains and /education are intentionally
+  // left out entirely since they're already one tap away on the bottom nav.
+  // Recipes and Growing use to live on the bottom nav too; now that
+  // Education has taken one of those five slots, they get their own
+  // sections here instead. Events/Shop/Business stay hidden too -- still
+  // running on demo data, not deleted, just not surfaced here until
+  // they're real.
   const sections = [
     {
       title: 'Discover',
@@ -3108,7 +3285,6 @@ function pageMore(req, res) {
       tiles: [
         { href: '/collection', icon: '/docs/leaf-kudos.png', t: 'My Collection', s: 'Your binder & rarity progress' },
         { href: '/wishlist', icon: '⭐', t: 'Wishlist', s: 'Strains you want to try next' },
-        { href: '/grow-journal', icon: '📔', t: 'Grow Journal', s: 'Your private plant photo log' },
         { href: '/lists', icon: '📋', t: 'Your Lists', s: 'Custom groupings — Morning, Sleep, anything' },
         { href: '/history', icon: '🕐', t: 'Check-In History', s: 'Your full timeline' },
         { href: '/insights', icon: '📊', t: 'Your Patterns', s: 'What your check-ins say about you' },
@@ -3116,17 +3292,20 @@ function pageMore(req, res) {
       ],
     },
     {
-      title: 'Learn & Stay Safe',
+      title: 'Recipes',
       tiles: [
-        { href: '/methods', icon: '/docs/joint-icon.png', t: 'Ways to Enjoy It', s: 'Every method, explained' },
-        { href: '/concentrates', icon: '💠', t: 'Concentrates & Extracts', s: 'Kief, rosin, live resin & more' },
-        { href: '/legal-status', icon: '🏛️', t: 'Is It Legal Near Me?', s: 'State-by-state cannabis law' },
-        { href: '/mixing-cautions', icon: '⚠️', t: 'Mixing With Other Substances', s: 'General cautions, not medical advice' },
-        { href: '/faq', icon: '❓', t: 'FAQ', s: 'Strain school' },
-        { href: '/terpene-guide', icon: '🌸', t: 'Terpene Guide', s: 'Aroma & effects by terpene' },
-        { href: '/effects-guide', icon: '✨', t: 'Effects Guide', s: 'What each effect actually feels like' },
-        { href: '/breeder-guide', icon: '🧬', t: 'Breeder Guide', s: 'Who\u2019s actually behind each strain' },
-        { href: '/chat', icon: '💬', t: 'Ask', s: 'Chat with the assistant' },
+        { href: '/recipes', icon: '🍯', t: 'Browse Recipes', s: 'Infusions, edibles & drinks' },
+        { href: '/recipes/new', icon: '✏️', t: 'Submit a Recipe', s: 'Share your own' },
+        { href: '/dosing-calculator', icon: '🧮', t: 'Dosing Calculator', s: 'mg per serving, figured out for you' },
+        { href: '/best-by', icon: '📅', t: 'Best-By Calendar', s: 'Track what you\u2019ve made & when to use it' },
+      ],
+    },
+    {
+      title: 'Growing',
+      tiles: [
+        { href: '/growing', icon: '🌱', t: 'Growing Tips', s: 'Tips & tricks from home growers' },
+        { href: '/growing/new', icon: '✏️', t: 'Share a Grow Tip', s: 'Add your own' },
+        { href: '/grow-journal', icon: '📔', t: 'Grow Journal', s: 'Your private plant photo log' },
       ],
     },
     {
@@ -3166,6 +3345,50 @@ function pageMore(req, res) {
     `).join('')}
   `;
   sendHtml(res, layout({ title: 'More', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
+}
+
+// ---------------------------------------------------------------- education
+// Everything that used to live under More > "Learn & Stay Safe" now gets its
+// own top-level destination on the bottom nav -- dosing safety, legal
+// status, and strain knowledge are core enough to what StrainDex actually
+// is that they shouldn't sit a level deeper inside More. This page itself
+// just organizes the same underlying pages into two clean, labeled groups;
+// none of those pages moved or changed.
+function pageEducation(req, res) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const sections = [
+    {
+      title: 'Consumption & Safety',
+      tiles: [
+        { href: '/methods', icon: '/docs/joint-icon.png', t: 'Ways to Enjoy It', s: 'Every method, explained' },
+        { href: '/concentrates', icon: '💠', t: 'Concentrates & Extracts', s: 'Kief, rosin, live resin & more' },
+        { href: '/mixing-cautions', icon: '⚠️', t: 'Mixing With Other Substances', s: 'General cautions, not medical advice' },
+        { href: '/legal-status', icon: '🏛️', t: 'Is It Legal Near Me?', s: 'State-by-state cannabis law' },
+      ],
+    },
+    {
+      title: 'Strain Knowledge',
+      tiles: [
+        { href: '/faq', icon: '❓', t: 'FAQ', s: 'Strain school' },
+        { href: '/terpene-guide', icon: '🌸', t: 'Terpene Guide', s: 'Aroma & effects by terpene' },
+        { href: '/effects-guide', icon: '✨', t: 'Effects Guide', s: 'What each effect actually feels like' },
+        { href: '/breeder-guide', icon: '🧬', t: 'Breeder Guide', s: 'Who\u2019s actually behind each strain' },
+        { href: '/chat', icon: '💬', t: 'Ask', s: 'Chat with the assistant' },
+      ],
+    },
+  ];
+  const body = `
+    <h1 class="screen-title">Education</h1>
+    <p class="screen-sub">Dosing safety, legal status, and strain knowledge — all in one place.</p>
+    ${sections.map(sec => `
+      <div class="section-label" style="margin-top:18px;">${esc(sec.title)}</div>
+      <div class="more-grid">
+        ${sec.tiles.map(t => `<a class="more-tile" href="${t.href}"><span class="ic">${t.icon.startsWith('/') ? `<img src="${t.icon}" alt="" class="ic-img-lg">` : t.icon}</span><div class="t">${esc(t.t)}</div><div class="s">${esc(t.s)}</div></a>`).join('')}
+      </div>
+    `).join('')}
+  `;
+  sendHtml(res, layout({ title: 'Education', active: 'education', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
 // ---------------------------------------------------------------- terms & privacy
@@ -4014,7 +4237,7 @@ function pageMethods(req, res) {
         <div class="mgdesc">${esc(m.desc)}</div>
       </div>`).join('')}
   `;
-  sendHtml(res, layout({ title: 'Ways to Enjoy It', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: 'Ways to Enjoy It', active: 'education', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
 // Concentrates & Extracts guide — a companion to "Ways to Enjoy It" that
@@ -4063,7 +4286,7 @@ function pageLegalStatus(req, res, query) {
       `).join('')}
     `).join('')}
   `;
-  sendHtml(res, layout({ title: 'Is It Legal Near Me?', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: 'Is It Legal Near Me?', active: 'education', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
 function pageConcentrates(req, res) {
@@ -4078,7 +4301,7 @@ function pageConcentrates(req, res) {
       </div>`).join('')}
     <p class="empty-note" style="margin-top:6px;">Not medical advice — potency varies by batch and producer even within these ranges.</p>
   `;
-  sendHtml(res, layout({ title: 'Concentrates & Extracts', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
+  sendHtml(res, layout({ title: 'Concentrates & Extracts', active: 'education', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
 function serveStatic(req, res, pathname) {
@@ -4136,6 +4359,10 @@ const server = http.createServer(async (req, res) => {
     if (method === 'GET' && (m = pathname.match(/^\/recipes\/(\d+)$/))) return pageRecipeDetail(req, res, Number(m[1]));
     if (method === 'GET' && pathname === '/recipes/new') return pageRecipeNew(req, res);
     if (method === 'POST' && pathname === '/recipes/new') return await handleRecipeNewSubmit(req, res);
+    if (method === 'GET' && pathname === '/dosing-calculator') return pageDosingCalculator(req, res);
+    if (method === 'GET' && pathname === '/best-by') return pageBestBy(req, res);
+    if (method === 'POST' && pathname === '/best-by') return await handleBestByAdd(req, res);
+    if (method === 'POST' && (m = pathname.match(/^\/best-by\/(\d+)\/delete$/))) return await handleBestByDelete(req, res, m[1]);
     if (method === 'GET' && pathname === '/growing') return pageGrowing(req, res, url.searchParams);
     if (method === 'GET' && pathname === '/growing/new') return pageGrowingNew(req, res);
     if (method === 'POST' && pathname === '/growing/new') return await handleGrowingNewSubmit(req, res);
@@ -4197,6 +4424,7 @@ const server = http.createServer(async (req, res) => {
     if (method === 'GET' && pathname === '/api/analytics-snapshot') return apiAnalyticsSnapshot(req, res, url.searchParams);
 
     if (method === 'GET' && pathname === '/more') return pageMore(req, res);
+    if (method === 'GET' && pathname === '/education') return pageEducation(req, res);
     if (method === 'GET' && pathname === '/collection') return pageCollection(req, res);
     if (method === 'GET' && pathname === '/history') return pageHistory(req, res);
     if (method === 'GET' && pathname === '/trade') return pageTrade(req, res, url.searchParams);
