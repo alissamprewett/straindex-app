@@ -227,6 +227,43 @@ function friendsBadgeCount(userId) {
   if (userId == null) return 0;
   return db.countUnreadMessages(userId) + db.listIncomingRequests(userId).length + db.countUnreadMentions(userId);
 }
+// A small "copy link" affordance for one specific post -- links to the
+// pageCheckinDetail permalink rather than making the whole card/photo
+// itself a mystery-meat link, since everywhere a check-in already renders
+// shows the full post inline (photo, comments, reactions) with nothing
+// hidden behind a tap. Uses the native share sheet where the browser
+// supports it (mobile Safari/Chrome), otherwise copies the link and
+// flashes a quick checkmark on the button itself -- deliberately not
+// relying on the sitewide #toast element or anything else in app.js, same
+// self-contained approach as REACT_TO_CHECKIN_SCRIPT.
+function renderShareButton(c) {
+  return `<button type="button" onclick="shareCheckin(${c.id}, this)" title="Copy link to this post" style="background:none;border:none;padding:0;color:inherit;cursor:pointer;font-size:inherit;">🔗</button>`;
+}
+const SHARE_CHECKIN_SCRIPT = `
+  <script>
+    if (!window.shareCheckin) {
+      window.shareCheckin = function(id, btn) {
+        var url = window.location.origin + '/checkin/' + id;
+        var flash = function(text) {
+          var original = btn.textContent;
+          btn.textContent = text;
+          setTimeout(function() { btn.textContent = original; }, 1500);
+        };
+        if (navigator.share) {
+          navigator.share({ url: url }).catch(function() {});
+          return;
+        }
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(url).then(function() { flash('✓'); }).catch(function() {
+            window.prompt('Copy this link:', url);
+          });
+        } else {
+          window.prompt('Copy this link:', url);
+        }
+      };
+    }
+  </script>
+`;
 // @mentions in check-in comments. Matches a conservative username charset
 // (letters/digits/underscore) -- a username with other characters can
 // still be typed and read fine, it just won't auto-link or notify, which
@@ -674,7 +711,10 @@ function pageHome(req, res) {
       return `<div class="feed-post">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
           <div class="empty-note" style="padding:0;font-weight:${isMine ? 'normal' : '700'};">${isMine ? 'You' : `<a href="/friends/${c.user_id}" style="color:inherit;">${esc(posterName)}</a>`}</div>
-          ${isMine ? `<a href="/checkin/${c.id}/edit" class="empty-note" style="padding:0;">Edit</a>` : ''}
+          <div style="display:flex;align-items:center;gap:10px;">
+            ${renderShareButton(c)}
+            ${isMine ? `<a href="/checkin/${c.id}/edit" class="empty-note" style="padding:0;">Edit</a>` : ''}
+          </div>
         </div>
         <a class="strain-chip" href="/strains/${c.strain_id}">
           ${strainPhotoTag(s, 'xs')}
@@ -694,6 +734,7 @@ function pageHome(req, res) {
       </div>`;
     }).join('') : `<div class="empty-note">No public check-ins yet — <a href="/checkin">log your first one</a> to get the community feed started.</div>`}
     ${REACT_TO_CHECKIN_SCRIPT}
+    ${SHARE_CHECKIN_SCRIPT}
   `;
   sendHtml(res, layout({ title: 'Home', active: 'home', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)), showBack: false }));
 }
@@ -907,7 +948,10 @@ function pageStrainDetail(req, res, id) {
         <div style="flex:1;min-width:0;">
           <div style="display:flex;justify-content:space-between;align-items:baseline;">
             <b>${esc(c.method)}</b>
-            <a href="/checkin/${c.id}/edit" class="empty-note" style="padding:0;">Edit</a>
+            <div style="display:flex;align-items:center;gap:10px;">
+              ${renderShareButton(c)}
+              <a href="/checkin/${c.id}/edit" class="empty-note" style="padding:0;">Edit</a>
+            </div>
           </div>
           ${starString(c.rating)}
           <div class="empty-note" style="padding:2px 0 0;"><span class="local-time" data-utc="${c.created_at}Z">${esc(c.created_at)} UTC</span></div>
@@ -923,6 +967,7 @@ function pageStrainDetail(req, res, id) {
         </div>
       </div>`).join('')}
       ${REACT_TO_CHECKIN_SCRIPT}
+    ${SHARE_CHECKIN_SCRIPT}
     ` : `<div class="empty-note">You haven't checked this one in yet.</div>`}
   `;
   sendHtml(res, layout({ title: s.name, active: 'strains', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
@@ -1140,7 +1185,10 @@ function pageCheckinDetail(req, res, id) {
     <div class="feed-post">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
         <div class="empty-note" style="padding:0;font-weight:${isMine ? 'normal' : '700'};">${isMine ? 'You' : `<a href="/friends/${c.user_id}" style="color:inherit;">${esc(posterName)}</a>`}</div>
-        ${isMine ? `<a href="/checkin/${c.id}/edit" class="empty-note" style="padding:0;">Edit</a>` : ''}
+        <div style="display:flex;align-items:center;gap:10px;">
+          ${renderShareButton(c)}
+          ${isMine ? `<a href="/checkin/${c.id}/edit" class="empty-note" style="padding:0;">Edit</a>` : ''}
+        </div>
       </div>
       <a class="strain-chip" href="/strains/${c.strain_id}">
         ${strainPhotoTag(s, 'xs')}
@@ -1159,6 +1207,7 @@ function pageCheckinDetail(req, res, id) {
       </div>
     </div>
     ${REACT_TO_CHECKIN_SCRIPT}
+    ${SHARE_CHECKIN_SCRIPT}
   `;
   sendHtml(res, layout({ title: s ? s.name : 'Check-In', active: 'home', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
@@ -4290,6 +4339,9 @@ function pageFriendProfile(req, res, friendId) {
     ${recentCheckins.length ? recentCheckins.map(c => {
       const s = db.getStrain(c.strain_id);
       return `<div class="feed-post">
+        <div style="display:flex;justify-content:flex-end;margin-bottom:4px;">
+          ${renderShareButton(c)}
+        </div>
         <a class="strain-chip" href="/strains/${c.strain_id}">
           ${strainPhotoTag(s, 'xs')}
           <span><b>${esc(s ? s.name : c.strain_id)}</b> ${s ? `<span class="rarity-tag rarity-${s.rarity}">${rarityLabel(s.rarity)}</span>` : ''}</span>
@@ -4308,6 +4360,7 @@ function pageFriendProfile(req, res, friendId) {
       </div>`;
     }).join('') : `<div class="empty-note">No check-ins yet.</div>`}
     ${REACT_TO_CHECKIN_SCRIPT}
+    ${SHARE_CHECKIN_SCRIPT}
   `;
   sendHtml(res, layout({ title: friend.username, active: 'friends', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
