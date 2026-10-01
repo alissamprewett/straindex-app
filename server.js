@@ -1024,7 +1024,7 @@ function pageStrainDetail(req, res, id) {
       ${renderAwardBadges(s)}
       ${(s.thc || s.cbd) ? `<p style="margin:12px 0 4px;">${s.thc ? `<b>THC:</b> ${esc(s.thc)}` : ''}${s.thc && s.cbd ? ' &nbsp; ' : ''}${s.cbd ? `<b>CBD:</b> ${esc(s.cbd)}` : ''}</p>` : `<p class="empty-note" style="padding:0 0 4px;">No verified THC/CBD data for this strain yet.</p>`}
       ${s.breeder ? `<p class="empty-note" style="padding:0;"><b>Bred by:</b> ${esc(s.breeder)}</p>` : ''}
-      ${s.flavor ? `<p style="font-style:italic;color:var(--ink-secondary);">"${esc(s.flavor)}"</p>` : ''}
+      ${s.flavor ? `<p style="font-style:italic;color:#6b6b6b;">"${esc(s.flavor)}"</p>` : ''}
       <p>${s.effects.map(e => `<span class="filter-pill">${esc(e)}</span>`).join('')}</p>
       ${s.terps.length ? `<p><b>Top terpenes:</b> ${s.terps.map(t => `${esc(t.n)} (${Math.round(t.p * 100)}%)`).join(', ')}</p>` : ''}
       ${Array.isArray(s.ailments) && s.ailments.length ? `
@@ -3523,24 +3523,24 @@ function pageMixingCautions(req, res) {
   const slug = s => s.replace(/[^a-zA-Z0-9]/g, '');
   const renderModal = c => `
     <div id="caution-${slug(c.title)}" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:1000;align-items:center;justify-content:center;padding:16px;" onclick="if(event.target===this) this.style.display='none';">
-      <div style="background:var(--bg-card,#fff);border-radius:16px;max-width:460px;width:100%;max-height:85vh;display:flex;flex-direction:column;overflow:hidden;color:#2a2a2a;">
+      <div style="background:#ffffff;border-radius:16px;max-width:460px;width:100%;max-height:85vh;display:flex;flex-direction:column;overflow:hidden;color:#2a2a2a;">
         <div style="overflow-y:auto;padding:22px;position:relative;">
-          <button type="button" onclick="document.getElementById('caution-${slug(c.title)}').style.display='none';" style="position:absolute;top:0;right:0;width:32px;height:32px;border-radius:8px;border:1px solid var(--border);background:none;cursor:pointer;font-size:16px;line-height:1;">\u2715</button>
+          <button type="button" onclick="document.getElementById('caution-${slug(c.title)}').style.display='none';" style="position:absolute;top:0;right:0;width:32px;height:32px;border-radius:8px;border:1px solid #e3e1d8;background:none;cursor:pointer;font-size:16px;line-height:1;color:#2a2a2a;">\u2715</button>
           <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;">
             <span style="width:8px;height:8px;border-radius:50%;background:${RISK_LEVELS[c.risk].color};display:inline-block;"></span>
-            <span style="font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:var(--ink-secondary);">${esc(RISK_LEVELS[c.risk].label)}</span>
+            <span style="font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:#6b6b6b;">${esc(RISK_LEVELS[c.risk].label)}</span>
           </div>
           <h2 style="margin:0 0 16px;font-size:22px;padding-right:30px;">${esc(c.title)}</h2>
           <div style="margin-bottom:14px;">
-            <div style="font-size:10px;letter-spacing:0.05em;text-transform:uppercase;color:var(--ink-secondary);margin-bottom:3px;">What to Know</div>
+            <div style="font-size:10px;letter-spacing:0.05em;text-transform:uppercase;color:#6b6b6b;margin-bottom:3px;">What to Know</div>
             <div>${linkGlossaryTerms(esc(c.whatToKnow))}</div>
           </div>
           <div>
-            <div style="font-size:10px;letter-spacing:0.05em;text-transform:uppercase;color:var(--ink-secondary);margin-bottom:3px;">What to Do</div>
+            <div style="font-size:10px;letter-spacing:0.05em;text-transform:uppercase;color:#6b6b6b;margin-bottom:3px;">What to Do</div>
             <div>${linkGlossaryTerms(esc(c.whatToDo))}</div>
           </div>
         </div>
-        <div style="background:var(--bg-subtle,#f2f1ec);padding:12px 22px;font-size:12px;color:var(--ink-secondary);flex-shrink:0;">
+        <div style="background:#f2f1ec;padding:12px 22px;font-size:12px;color:#6b6b6b;flex-shrink:0;">
           Not medical advice. If a combination that used to work stops feeling like it does, that's often <a href="/tolerance-explained">tolerance</a>, not the mix itself.
         </div>
       </div>
@@ -5075,10 +5075,10 @@ function pageCollection(req, res) {
     <div class="progress-bar"><div class="fill" style="width:${pct}%;"></div></div>
 
     <div class="badge-row" style="margin-bottom:16px;">
-      <div class="badge-chip rarity-common" style="background:none;color:var(--ink-secondary);">Common: ${rarityCounts.common}</div>
-      <div class="badge-chip rarity-uncommon" style="background:none;color:var(--ink-secondary);">Uncommon: ${rarityCounts.uncommon}</div>
-      <div class="badge-chip rarity-rare" style="background:none;color:var(--ink-secondary);">Rare: ${rarityCounts.rare}</div>
-      <div class="badge-chip rarity-legendary" style="background:none;color:var(--ink-secondary);">Legendary: ${rarityCounts.legendary}</div>
+      <div class="badge-chip rarity-common" style="background:none;color:#6b6b6b;">Common: ${rarityCounts.common}</div>
+      <div class="badge-chip rarity-uncommon" style="background:none;color:#6b6b6b;">Uncommon: ${rarityCounts.uncommon}</div>
+      <div class="badge-chip rarity-rare" style="background:none;color:#6b6b6b;">Rare: ${rarityCounts.rare}</div>
+      <div class="badge-chip rarity-legendary" style="background:none;color:#6b6b6b;">Legendary: ${rarityCounts.legendary}</div>
     </div>
 
     ${owned.length ? `<div class="binder-grid">
@@ -5896,16 +5896,16 @@ async function handleShopAdd(req, res, id) {
 function pageMethods(req, res) {
   const slug = s => s.replace(/[^a-zA-Z0-9]/g, '');
   const statBox = (label, value) => `
-    <div style="background:var(--bg-subtle,#f2f1ec);border-radius:10px;padding:10px 12px;">
-      <div style="font-size:10px;letter-spacing:0.05em;text-transform:uppercase;color:var(--ink-secondary);margin-bottom:4px;">${esc(label)}</div>
+    <div style="background:#f2f1ec;border-radius:10px;padding:10px 12px;">
+      <div style="font-size:10px;letter-spacing:0.05em;text-transform:uppercase;color:#6b6b6b;margin-bottom:4px;">${esc(label)}</div>
       <div style="font-weight:700;font-size:14px;">${esc(value)}</div>
     </div>
   `;
   const renderModal = m => `
     <div id="method-${slug(m.name)}" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:1000;align-items:center;justify-content:center;padding:16px;" onclick="if(event.target===this) this.style.display='none';">
-      <div style="background:var(--bg-card,#fff);border-radius:16px;max-width:460px;width:100%;max-height:85vh;display:flex;flex-direction:column;overflow:hidden;color:#2a2a2a;">
+      <div style="background:#ffffff;border-radius:16px;max-width:460px;width:100%;max-height:85vh;display:flex;flex-direction:column;overflow:hidden;color:#2a2a2a;">
         <div style="overflow-y:auto;padding:22px;position:relative;">
-          <button type="button" onclick="document.getElementById('method-${slug(m.name)}').style.display='none';" style="position:absolute;top:0;right:0;width:32px;height:32px;border-radius:8px;border:1px solid var(--border);background:none;cursor:pointer;font-size:16px;line-height:1;">\u2715</button>
+          <button type="button" onclick="document.getElementById('method-${slug(m.name)}').style.display='none';" style="position:absolute;top:0;right:0;width:32px;height:32px;border-radius:8px;border:1px solid #e3e1d8;background:none;cursor:pointer;font-size:16px;line-height:1;color:#2a2a2a;">\u2715</button>
           <h2 style="margin:0 0 16px;font-size:20px;padding-right:30px;">${m.icon.startsWith('/') ? `<img src="${m.icon}" alt="" class="mg-icon-photo">` : m.icon} ${esc(m.name)}</h2>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;">
             ${statBox('Onset', m.onset)}
@@ -5969,14 +5969,14 @@ function pageLegalStatus(req, res, query) {
   };
 
   const statBox = (label, value) => `
-    <div style="background:var(--bg-subtle,#f2f1ec);border-radius:10px;padding:10px 12px;">
-      <div style="font-size:10px;letter-spacing:0.05em;text-transform:uppercase;color:var(--ink-secondary);margin-bottom:4px;">${esc(label)}</div>
+    <div style="background:#f2f1ec;border-radius:10px;padding:10px 12px;">
+      <div style="font-size:10px;letter-spacing:0.05em;text-transform:uppercase;color:#6b6b6b;margin-bottom:4px;">${esc(label)}</div>
       <div style="font-weight:700;font-size:14px;">${esc(value)}</div>
     </div>
   `;
   const plainSection = (label, value) => value ? `
     <div style="margin-bottom:14px;">
-      <div style="font-size:10px;letter-spacing:0.05em;text-transform:uppercase;color:var(--ink-secondary);margin-bottom:3px;">${esc(label)}</div>
+      <div style="font-size:10px;letter-spacing:0.05em;text-transform:uppercase;color:#6b6b6b;margin-bottom:3px;">${esc(label)}</div>
       <div>${esc(value)}</div>
     </div>
   ` : '';
@@ -5990,12 +5990,12 @@ function pageLegalStatus(req, res, query) {
     ].filter(([, v]) => v);
     return `
       <div id="modal-${slug(s.state)}" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:1000;align-items:center;justify-content:center;padding:16px;" onclick="if(event.target===this) this.style.display='none';">
-        <div style="background:var(--bg-card,#fff);border-radius:16px;max-width:460px;width:100%;max-height:85vh;display:flex;flex-direction:column;overflow:hidden;color:#2a2a2a;">
+        <div style="background:#ffffff;border-radius:16px;max-width:460px;width:100%;max-height:85vh;display:flex;flex-direction:column;overflow:hidden;color:#2a2a2a;">
           <div style="overflow-y:auto;padding:22px;position:relative;">
-            <button type="button" onclick="document.getElementById('modal-${slug(s.state)}').style.display='none';" style="position:absolute;top:0;right:0;width:32px;height:32px;border-radius:8px;border:1px solid var(--border);background:none;cursor:pointer;font-size:16px;line-height:1;">\u2715</button>
+            <button type="button" onclick="document.getElementById('modal-${slug(s.state)}').style.display='none';" style="position:absolute;top:0;right:0;width:32px;height:32px;border-radius:8px;border:1px solid #e3e1d8;background:none;cursor:pointer;font-size:16px;line-height:1;color:#2a2a2a;">\u2715</button>
             <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;">
               <span style="width:8px;height:8px;border-radius:50%;background:${LEGAL_STATUS_LABELS[s.status].color};display:inline-block;"></span>
-              <span style="font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:var(--ink-secondary);">${esc(LEGAL_STATUS_LABELS[s.status].label)}</span>
+              <span style="font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:#6b6b6b;">${esc(LEGAL_STATUS_LABELS[s.status].label)}</span>
             </div>
             <h2 style="margin:0 0 16px;font-size:26px;padding-right:30px;">${esc(s.state)}</h2>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;">
@@ -6004,7 +6004,7 @@ function pageLegalStatus(req, res, query) {
               ${statBox('Home Grow', homeGrowStat(s))}
               ${statBox('Min Age', minAgeStat(s))}
             </div>
-            <div style="border-top:1px solid var(--border);margin-bottom:16px;"></div>
+            <div style="border-top:1px solid #e3e1d8;margin-bottom:16px;"></div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px;">
               ${detailBoxes.map(([label, value]) => statBox(label, value)).join('')}
             </div>
@@ -6012,13 +6012,13 @@ function pageLegalStatus(req, res, query) {
             ${plainSection('Hemp & THCA', s.hempThca)}
             ${plainSection('Penalties for Illegal Possession', s.penalties)}
             ${s.sourceUrl ? `
-              <div style="border:1px dashed var(--brand-green,#4a7c59);background:var(--brand-green-pale,#eef6ee);border-radius:10px;padding:10px 12px;margin-top:4px;">
-                <div style="font-size:10px;letter-spacing:0.05em;text-transform:uppercase;color:var(--ink-secondary);margin-bottom:4px;">Official Resources</div>
-                <a href="${esc(s.sourceUrl)}" target="_blank" rel="noopener noreferrer" style="color:var(--brand-green-dark);font-weight:700;">${esc(s.sourceLabel)} \u2197</a>
+              <div style="border:1px dashed #4a7c59;background:#eef6ee;border-radius:10px;padding:10px 12px;margin-top:4px;">
+                <div style="font-size:10px;letter-spacing:0.05em;text-transform:uppercase;color:#6b6b6b;margin-bottom:4px;">Official Resources</div>
+                <a href="${esc(s.sourceUrl)}" target="_blank" rel="noopener noreferrer" style="color:#1b5e3a;font-weight:700;">${esc(s.sourceLabel)} \u2197</a>
               </div>
             ` : ''}
           </div>
-          <div style="background:var(--bg-subtle,#f2f1ec);padding:12px 22px;font-size:12px;color:var(--ink-secondary);flex-shrink:0;">
+          <div style="background:#f2f1ec;padding:12px 22px;font-size:12px;color:#6b6b6b;flex-shrink:0;">
             For information only — not legal advice. Always verify with official state sources.
           </div>
         </div>
@@ -6078,17 +6078,17 @@ function pageConcentrates(req, res) {
   const slug = s => s.replace(/[^a-zA-Z0-9]/g, '');
   const renderModal = c => `
     <div id="conc-${slug(c.name)}" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:1000;align-items:center;justify-content:center;padding:16px;" onclick="if(event.target===this) this.style.display='none';">
-      <div style="background:var(--bg-card,#fff);border-radius:16px;max-width:460px;width:100%;max-height:85vh;display:flex;flex-direction:column;overflow:hidden;color:#2a2a2a;">
+      <div style="background:#ffffff;border-radius:16px;max-width:460px;width:100%;max-height:85vh;display:flex;flex-direction:column;overflow:hidden;color:#2a2a2a;">
         <div style="overflow-y:auto;padding:22px;position:relative;">
-          <button type="button" onclick="document.getElementById('conc-${slug(c.name)}').style.display='none';" style="position:absolute;top:0;right:0;width:32px;height:32px;border-radius:8px;border:1px solid var(--border);background:none;cursor:pointer;font-size:16px;line-height:1;">\u2715</button>
+          <button type="button" onclick="document.getElementById('conc-${slug(c.name)}').style.display='none';" style="position:absolute;top:0;right:0;width:32px;height:32px;border-radius:8px;border:1px solid #e3e1d8;background:none;cursor:pointer;font-size:16px;line-height:1;color:#2a2a2a;">\u2715</button>
           <h2 style="margin:0 0 16px;font-size:20px;padding-right:30px;">${c.icon} ${esc(c.name)}</h2>
-          <div style="background:var(--bg-subtle,#f2f1ec);border-radius:10px;padding:10px 12px;margin-bottom:16px;display:inline-block;">
-            <div style="font-size:10px;letter-spacing:0.05em;text-transform:uppercase;color:var(--ink-secondary);margin-bottom:4px;">THC Range</div>
+          <div style="background:#f2f1ec;border-radius:10px;padding:10px 12px;margin-bottom:16px;display:inline-block;">
+            <div style="font-size:10px;letter-spacing:0.05em;text-transform:uppercase;color:#6b6b6b;margin-bottom:4px;">THC Range</div>
             <div style="font-weight:700;font-size:14px;">${esc(c.thc)}</div>
           </div>
           <div>${linkGlossaryTerms(esc(c.desc))}</div>
         </div>
-        <div style="background:var(--bg-subtle,#f2f1ec);padding:12px 22px;font-size:12px;color:var(--ink-secondary);flex-shrink:0;">
+        <div style="background:#f2f1ec;padding:12px 22px;font-size:12px;color:#6b6b6b;flex-shrink:0;">
           Not medical advice — potency varies by batch and producer even within these ranges.
         </div>
       </div>
