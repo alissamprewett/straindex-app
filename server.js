@@ -253,7 +253,7 @@ function renderSafetyCarousel() {
     <div class="section-label">Safety & Education</div>
     <div class="hcarousel" style="margin-bottom:4px;">
       ${HOME_SAFETY_CAROUSEL.map(item => `
-        <a href="${item.href}" style="flex-shrink:0;min-width:140px;max-width:140px;background:var(--bg-subtle,#f7f7f2);border-radius:12px;padding:12px;text-decoration:none;color:#2a2a2a;">
+        <a href="${item.href}" style="flex-shrink:0;min-width:140px;max-width:140px;background:#eeebe1;border:1px solid #ddd6c4;border-radius:12px;padding:12px;text-decoration:none;color:#2a2a2a;">
           <div style="font-size:22px;">${item.icon}</div>
           <div style="font-weight:700;font-size:13px;margin-top:8px;">${esc(item.title)}</div>
           <div class="empty-note" style="padding:2px 0 0;">${esc(item.s)}</div>
@@ -648,6 +648,7 @@ async function pageHome(req, res) {
     .slice(0, 15);
   const recs = getRecommendations(userId, 4);
   const strainOfDay = getStrainOfTheDay();
+  const topForumThread = db.listForumThreads()[0] || null;
   const hasFollowedDispensaries = db.anyDispensaryFollowed(userId);
   // Keeps the feed from ever reading as dead early on, before there's
   // enough check-in volume to fill it on its own -- blends in a little
@@ -795,9 +796,21 @@ async function pageHome(req, res) {
 
     ${renderSafetyCarousel()}
 
+    <a href="${topForumThread ? `/puff-puff-ask/${topForumThread.id}` : '/puff-puff-ask'}" class="card" style="display:block;margin-bottom:14px;text-decoration:none;color:#2a2a2a;background:#f1ebf7;border:1px solid #ddd0ea;">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div style="font-weight:700;font-size:15px;">💨 Puff Puff Ask</div>
+        <span style="background:#6b3fa0;color:#fff;font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px;">Ask something \u2192</span>
+      </div>
+      ${topForumThread ? `
+        <div class="empty-note" style="padding:8px 0 0;color:#2a2a2a;">\ud83d\udd25 ${esc(topForumThread.title)} \u2014 ${topForumThread.replyCount} repl${topForumThread.replyCount === 1 ? 'y' : 'ies'}</div>
+      ` : `
+        <div class="empty-note" style="padding:8px 0 0;color:#2a2a2a;">Ask the community anything \u2014 be the first to post today.</div>
+      `}
+    </a>
+
     ${strainOfDay ? `
       <div class="section-label">Strain of the Day</div>
-      <a href="/strains/${strainOfDay.id}" class="card" style="display:flex;align-items:center;gap:10px;margin-bottom:14px;text-decoration:none;color:inherit;">
+      <a href="/strains/${strainOfDay.id}" class="card" style="display:flex;align-items:center;gap:10px;margin-bottom:14px;text-decoration:none;color:inherit;border:1px solid #ddd6c4;">
         ${strainPhotoTag(strainOfDay, 'sm')}
         <div style="min-width:0;">
           <div style="font-weight:700;">${esc(strainOfDay.name)} <span class="rarity-tag rarity-${strainOfDay.rarity}">${rarityLabel(strainOfDay.rarity)}</span></div>
