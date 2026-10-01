@@ -6030,6 +6030,13 @@ function pageLegalStatus(req, res, query) {
     <h1 class="screen-title">Is It Legal Near Me?</h1>
     <p class="screen-sub">Cannabis law is a fast-moving patchwork that changes with little notice. Tap a state for the full breakdown. This is a starting point, not legal advice — always verify with your state's official government site before relying on it.</p>
     <p class="empty-note">Last checked against current sources: ${esc(LEGAL_STATUS_LAST_VERIFIED)}.</p>
+    <div style="margin-bottom:16px;">
+      <label class="field-label" style="margin-top:0;">Jump to your state</label>
+      <select onchange="if(this.value){document.getElementById('modal-'+this.value).style.display='flex';this.value='';}">
+        <option value="">Select a state...</option>
+        ${sorted.map(s => `<option value="${slug(s.state)}">${esc(s.state)}</option>`).join('')}
+      </select>
+    </div>
     ${Object.entries(LEGAL_STATUS_LABELS).map(([key, meta]) => `
       <h3 style="font-size:13px;color:${meta.color};margin:16px 0 6px;">${esc(meta.label)}</h3>
       ${(grouped[key] || []).map(s => `
