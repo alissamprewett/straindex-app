@@ -1139,64 +1139,74 @@ const EFFECT_VOCAB = [
 // itself carries a strong "verify locally" disclaimer rather than presenting this
 // as a legal guarantee. Marijuana remains illegal under federal law everywhere in
 // the US regardless of state status.
-const LEGAL_STATUS_LAST_VERIFIED = '2026-06-01';
+const LEGAL_STATUS_LAST_VERIFIED = '2026-09-30';
 // Same "last checked" trust signal as Legal Status, extended to the
 // guides where being current actually matters most -- Feels Wrong,
 // Mixing Cautions, Dosing Calculator, and the Lab Result Guide. Update
 // this whenever any of those four get a real content review.
 const SAFETY_GUIDES_LAST_REVIEWED = '2026-06-01';
+// POSSESSION FIGURES ARE WEB-SEARCH-VERIFIED (not from memory), specifically
+// because getting a legal-compliance number wrong is a real harm, not a
+// cosmetic one. Only added for states already marked 'recreational' --
+// deliberately did NOT add medical-patient possession numbers (less
+// consistently documented) or touch any state's status/category. Hawaii
+// is a known, deliberate exception: current sources disagree both on
+// whether its recreational program has actually taken effect yet and on
+// the possession number itself, so it's left as 'medical' here rather
+// than guess wrong on something this sensitive -- flag this to the user
+// if better sourcing becomes available.
 const LEGAL_STATUS = [
   { state: 'Alabama', status: 'medical', note: 'Medical program for qualifying conditions; no recreational sales.' },
-  { state: 'Alaska', status: 'recreational', note: 'Adult-use legal since 2015; licensed retail available.' },
-  { state: 'Arizona', status: 'recreational', note: 'Adult-use legal since 2020.' },
+  { state: 'Alaska', status: 'recreational', note: 'Adult-use legal since 2015; licensed retail available.', possession: '1 oz flower, 7g concentrate. Home grow: 6 plants (3 mature) per adult, 12 max per household.' },
+  { state: 'Arizona', status: 'recreational', note: 'Adult-use legal since 2020.', possession: '1 oz flower, 5g concentrate. Home grow: 6 plants per adult, 12 max if 2+ adults live there.' },
   { state: 'Arkansas', status: 'medical', note: 'Medical program for qualifying conditions; no recreational sales.' },
-  { state: 'California', status: 'recreational', note: 'Adult-use legal since 2016.' },
-  { state: 'Colorado', status: 'recreational', note: 'One of the first two adult-use states, legal since 2012.' },
-  { state: 'Connecticut', status: 'recreational', note: 'Adult-use legal since 2021.' },
-  { state: 'Delaware', status: 'recreational', note: 'Adult-use legal since 2023.' },
+  { state: 'California', status: 'recreational', note: 'Adult-use legal since 2016.', possession: '1 oz flower, 8g concentrate. Home grow: 6 plants per household.' },
+  { state: 'Colorado', status: 'recreational', note: 'One of the first two adult-use states, legal since 2012.', possession: '2 oz flower, 8g concentrate. Home grow: 6 plants per adult (3 flowering), 12 max per household.' },
+  { state: 'Connecticut', status: 'recreational', note: 'Adult-use legal since 2021.', possession: '1.5 oz in public, 5 oz at home. Home grow: 6 plants per adult (3 mature), 12 max per household.' },
+  { state: 'Delaware', status: 'recreational', note: 'Adult-use legal since 2023.', possession: '1 oz. Home cultivation is not permitted.' },
   { state: 'Florida', status: 'medical', note: 'Medical program only; a 2024 recreational ballot measure fell short of the required supermajority.' },
   { state: 'Georgia', status: 'cbd_only', note: 'Low-THC medical program only, not full-plant medical or recreational.' },
-  { state: 'Hawaii', status: 'medical', note: 'Medical program for qualifying conditions; no recreational sales.' },
+  { state: 'Hawaii', status: 'medical', note: 'Medical program for qualifying conditions; no recreational sales. (Current sources disagree on whether/when a recreational program has actually taken effect -- confirm locally.)' },
   { state: 'Idaho', status: 'illegal', note: 'No legal program of any kind, medical or recreational.' },
-  { state: 'Illinois', status: 'recreational', note: 'Adult-use legal since 2020.' },
+  { state: 'Illinois', status: 'recreational', note: 'Adult-use legal since 2020.', possession: '30g (about 1 oz) flower, 5g concentrate for residents. Home cultivation is not permitted recreationally.' },
   { state: 'Indiana', status: 'cbd_only', note: 'Low-THC CBD products only; no medical or recreational program.' },
   { state: 'Iowa', status: 'cbd_only', note: 'Very restrictive low-THC medical program only.' },
   { state: 'Kansas', status: 'illegal', note: 'No legal program of any kind, medical or recreational.' },
   { state: 'Kentucky', status: 'medical', note: 'Medical program for qualifying conditions; no recreational sales.' },
   { state: 'Louisiana', status: 'medical', note: 'Medical program for qualifying conditions; no recreational sales.' },
-  { state: 'Maine', status: 'recreational', note: 'Adult-use legal since 2016.' },
-  { state: 'Maryland', status: 'recreational', note: 'Adult-use legal since 2022.' },
-  { state: 'Massachusetts', status: 'recreational', note: 'Adult-use legal since 2016.' },
-  { state: 'Michigan', status: 'recreational', note: 'Adult-use legal since 2018.' },
-  { state: 'Minnesota', status: 'recreational', note: 'Adult-use legal since 2023.' },
+  { state: 'Maine', status: 'recreational', note: 'Adult-use legal since 2016.', possession: '2.5 oz. Home grow: 3 mature plus 12 immature plants.' },
+  { state: 'Maryland', status: 'recreational', note: 'Adult-use legal since 2022.', possession: '1.5 oz flower, 12g concentrate. Home grow: 2 plants per person, 4 max per household.' },
+  { state: 'Massachusetts', status: 'recreational', note: 'Adult-use legal since 2016.', possession: '1 oz in public, 10 oz at home. Home grow: 6 plants per adult, 12 max per household.' },
+  { state: 'Michigan', status: 'recreational', note: 'Adult-use legal since 2018.', possession: '2.5 oz in public, 10 oz at home. Home grow: 12 plants per household.' },
+  { state: 'Minnesota', status: 'recreational', note: 'Adult-use legal since 2023.', possession: '2 oz flower, 8g concentrate in public. Home grow: 8 plants (4 mature) per household.' },
   { state: 'Mississippi', status: 'medical', note: 'Medical program for qualifying conditions; no recreational sales.' },
-  { state: 'Missouri', status: 'recreational', note: 'Adult-use legal since 2022.' },
-  { state: 'Montana', status: 'recreational', note: 'Adult-use legal since 2020.' },
+  { state: 'Missouri', status: 'recreational', note: 'Adult-use legal since 2022.', possession: '3 oz. Home grow: 6 flowering, 6 non-flowering, and 6 clones per adult.' },
+  { state: 'Montana', status: 'recreational', note: 'Adult-use legal since 2020.', possession: '1 oz. Home grow: 4 mature plus 4 seedling plants per adult.' },
   { state: 'Nebraska', status: 'medical', note: 'Medical program approved by voters; implementation has faced legal challenges, so confirm current availability locally.' },
-  { state: 'Nevada', status: 'recreational', note: 'Adult-use legal since 2016.' },
+  { state: 'Nevada', status: 'recreational', note: 'Adult-use legal since 2016.', possession: '1 oz flower, 3.5g concentrate. Home grow: 6 plants per person, only if more than 25 miles from a licensed dispensary.' },
   { state: 'New Hampshire', status: 'medical', note: 'Medical program only; recreational proposals have repeatedly failed to pass.' },
-  { state: 'New Jersey', status: 'recreational', note: 'Adult-use legal since 2020; among the higher possession limits nationally.' },
-  { state: 'New Mexico', status: 'recreational', note: 'Adult-use legal since 2021.' },
-  { state: 'New York', status: 'recreational', note: 'Adult-use legal since 2021.' },
+  { state: 'New Jersey', status: 'recreational', note: 'Adult-use legal since 2020; among the higher possession limits nationally.', possession: '1 oz. Home cultivation is not permitted.' },
+  { state: 'New Mexico', status: 'recreational', note: 'Adult-use legal since 2021.', possession: '2 oz flower, 16g concentrate, 800mg edibles. Home grow: 6 mature plus 6 immature plants per person.' },
+  { state: 'New York', status: 'recreational', note: 'Adult-use legal since 2021.', possession: '3 oz flower, 24g concentrate. Home grow: 3 mature plus 3 immature plants per person, 12 max per household.' },
   { state: 'North Carolina', status: 'illegal', note: 'No medical or recreational program, though small possession has been decriminalized to a civil fine since 1977.' },
   { state: 'North Dakota', status: 'medical', note: 'Medical program for qualifying conditions; no recreational sales.' },
-  { state: 'Ohio', status: 'recreational', note: 'Adult-use legal since 2023; retail sales began in 2024.' },
+  { state: 'Ohio', status: 'recreational', note: 'Adult-use legal since 2023; retail sales began in 2024.', possession: '2.5 oz flower, 15g concentrate. THC potency is capped at 35% for flower and 70% for concentrates.' },
   { state: 'Oklahoma', status: 'medical', note: 'Broad medical program with relatively accessible qualifying conditions; no recreational sales.' },
-  { state: 'Oregon', status: 'recreational', note: 'Adult-use legal since 2014.' },
+  { state: 'Oregon', status: 'recreational', note: 'Adult-use legal since 2014.', possession: '1 oz in public, 8 oz at home.' },
   { state: 'Pennsylvania', status: 'medical', note: 'Medical program only; often cited as the most likely next state to pursue recreational legalization.' },
-  { state: 'Rhode Island', status: 'recreational', note: 'Adult-use legal since 2022.' },
+  { state: 'Rhode Island', status: 'recreational', note: 'Adult-use legal since 2022.', possession: '1 oz in public, 10 oz at home, 5g concentrate. Home grow: 3 mature plus 3 immature plants.' },
   { state: 'South Carolina', status: 'illegal', note: 'No legal program of any kind, medical or recreational.' },
   { state: 'South Dakota', status: 'medical', note: 'Medical program for qualifying conditions; a recreational ballot measure did not pass.' },
   { state: 'Tennessee', status: 'cbd_only', note: 'Low-THC CBD products only; no medical or recreational program.' },
   { state: 'Texas', status: 'cbd_only', note: "Compassionate Use Program covers specific conditions with a strict 0.5% THC cap; not full medical or recreational." },
   { state: 'Utah', status: 'medical', note: 'Medical program for qualifying conditions; no recreational sales.' },
-  { state: 'Vermont', status: 'recreational', note: 'Adult-use legal since 2018; first state to legalize via legislature rather than ballot measure.' },
-  { state: 'Virginia', status: 'recreational', note: 'Adult-use possession legal since 2021, though retail sales have lagged behind legalization.' },
-  { state: 'Washington', status: 'recreational', note: 'One of the first two adult-use states, legal since 2012.' },
+  { state: 'Vermont', status: 'recreational', note: 'Adult-use legal since 2018; first state to legalize via legislature rather than ballot measure.', possession: '1 oz. Home grow: 6 plants total, no more than 2 mature.' },
+  { state: 'Virginia', status: 'recreational', note: 'Adult-use possession legal since 2021, though retail sales have lagged behind legalization.', possession: '2 oz in public as of July 2026 (recently raised from 1 oz); no stated limit on private, at-home possession. Home grow: 4 plants per household.' },
+  { state: 'Washington', status: 'recreational', note: 'One of the first two adult-use states, legal since 2012.', possession: '1 oz flower, 7g concentrate, 16 oz solid edibles, 72 oz liquid edibles. Home cultivation is not permitted recreationally.' },
   { state: 'West Virginia', status: 'medical', note: 'Medical program for qualifying conditions; no recreational sales.' },
   { state: 'Wisconsin', status: 'cbd_only', note: 'Low-THC CBD products only; no medical or recreational program.' },
   { state: 'Wyoming', status: 'illegal', note: 'No legal program of any kind, medical or recreational.' },
-  { state: 'Washington, D.C.', status: 'recreational', note: 'Adult possession and home cultivation are legal, but D.C. is barred by Congress from regulating commercial sales.' },
+  { state: 'Washington, D.C.', status: 'recreational', note: 'Adult possession and home cultivation are legal, but D.C. is barred by Congress from regulating commercial sales.', possession: '2 oz. Home grow: 6 plants per adult (3 mature), 12 max per household.' },
 ];
 const LEGAL_STATUS_LABELS = {
   recreational: { label: 'Recreational (21+)', color: '#1b5e3a' },
@@ -5806,40 +5816,43 @@ function pageMethods(req, res) {
 // a wrong auto-detected state here is a much worse failure mode than for,
 // say, nearby dispensaries. A manual picker is slower by one tap but never
 // silently wrong.
+// USER-CONFIRMED LAYOUT: real clickable cards, with the full detail
+// (status + possession/home-grow amounts) already visible directly on
+// each card -- not a dropdown-picker with the detail hidden behind a
+// separate selection step. Don't flatten this back into a plain list or
+// a picker-only UI without asking first; that exact regression already
+// happened once.
 function pageLegalStatus(req, res, query) {
   const selected = query.get('state') || '';
   const sorted = [...LEGAL_STATUS].sort((a, b) => a.state.localeCompare(b.state));
-  const current = sorted.find(s => s.state === selected);
   const grouped = {};
   sorted.forEach(s => { (grouped[s.status] = grouped[s.status] || []).push(s); });
+  const renderCard = (s, highlighted) => `
+    <a href="/legal-status?state=${encodeURIComponent(s.state)}" id="state-${esc(s.state.replace(/[^a-zA-Z0-9]/g, ''))}" class="card" style="display:block;text-decoration:none;color:inherit;margin-bottom:8px;border-left:4px solid ${LEGAL_STATUS_LABELS[s.status].color};${highlighted ? 'box-shadow:0 0 0 2px ' + LEGAL_STATUS_LABELS[s.status].color + ';' : ''}">
+      <h2 style="margin:0 0 4px;font-size:16px;">${esc(s.state)}</h2>
+      <div style="font-weight:700;font-size:13px;color:${LEGAL_STATUS_LABELS[s.status].color};margin-bottom:6px;">${esc(LEGAL_STATUS_LABELS[s.status].label)}</div>
+      <p style="margin:0;">${esc(s.note)}</p>
+      ${s.possession ? `<p style="margin:6px 0 0;"><b>Possession:</b> ${esc(s.possession)}</p>` : ''}
+    </a>
+  `;
   const body = `
     <h1 class="screen-title">Is It Legal Near Me?</h1>
     <p class="screen-sub">Cannabis law is a fast-moving patchwork that changes with little notice. This is a starting point, not legal advice — always verify with your state's official government site before relying on it. Regardless of state law, cannabis remains illegal under federal law everywhere in the US.</p>
     <p class="empty-note">Last checked against current sources: ${esc(LEGAL_STATUS_LAST_VERIFIED)}.</p>
     <form method="GET" action="/legal-status" style="margin-bottom:16px;">
-      <label class="field-label" style="margin-top:0;">Pick your state</label>
+      <label class="field-label" style="margin-top:0;">Jump to your state</label>
       <select name="state" onchange="this.form.submit()">
         <option value="">Select a state...</option>
         ${sorted.map(s => `<option value="${esc(s.state)}" ${selected === s.state ? 'selected' : ''}>${esc(s.state)}</option>`).join('')}
       </select>
     </form>
-    ${current ? `
-      <div class="card" style="border-left:4px solid ${LEGAL_STATUS_LABELS[current.status].color};margin-bottom:20px;">
-        <h2 style="margin:0 0 4px;font-size:17px;">${esc(current.state)}</h2>
-        <div style="font-weight:700;color:${LEGAL_STATUS_LABELS[current.status].color};margin-bottom:6px;">${esc(LEGAL_STATUS_LABELS[current.status].label)}</div>
-        <p style="margin:0;">${esc(current.note)}</p>
-      </div>
-    ` : ''}
-    <h2 class="screen-title" style="margin-top:8px;">Full list</h2>
     ${Object.entries(LEGAL_STATUS_LABELS).map(([key, meta]) => `
       <h3 style="font-size:13px;color:${meta.color};margin:16px 0 6px;">${esc(meta.label)}</h3>
-      ${(grouped[key] || []).map(s => `
-        <div class="card" style="padding:10px 14px;margin-bottom:6px;">
-          <b>${esc(s.state)}</b>
-          <p class="empty-note" style="padding:2px 0 0;">${esc(s.note)}</p>
-        </div>
-      `).join('')}
+      ${(grouped[key] || []).map(s => renderCard(s, s.state === selected)).join('')}
     `).join('')}
+    <script>
+      ${selected ? `document.getElementById('state-${selected.replace(/[^a-zA-Z0-9]/g, '')}').scrollIntoView({ behavior: 'smooth', block: 'center' });` : ''}
+    </script>
   `;
   sendHtml(res, layout({ title: 'Is It Legal Near Me?', active: 'education', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
