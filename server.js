@@ -4911,6 +4911,51 @@ function pageAccount(req, res, query) {
     ` : ''}
 
     <div class="card">
+      <h2 style="margin:0 0 10px;font-size:15px;">Appearance</h2>
+      <p class="empty-note" style="padding:0 0 10px;">Choose how StrainDex looks on this device. "System" follows your device's own light/dark setting.</p>
+      <div id="theme-options" style="display:flex;gap:8px;">
+        <button type="button" data-theme-choice="light" class="btn secondary" style="flex:1;">\u2600\ufe0f Light</button>
+        <button type="button" data-theme-choice="dark" class="btn secondary" style="flex:1;">\ud83c\udf19 Dark</button>
+        <button type="button" data-theme-choice="system" class="btn secondary" style="flex:1;">System</button>
+      </div>
+      <script>
+        (function() {
+          function currentChoice() {
+            try {
+              var t = localStorage.getItem('theme');
+              if (t === 'light' || t === 'dark') return t;
+            } catch (e) {}
+            return 'system';
+          }
+          function highlight() {
+            var current = currentChoice();
+            Array.prototype.forEach.call(document.querySelectorAll('#theme-options [data-theme-choice]'), function(btn) {
+              var active = btn.getAttribute('data-theme-choice') === current;
+              btn.style.borderColor = active ? 'var(--brand-green-dark)' : '';
+              btn.style.fontWeight = active ? '700' : 'normal';
+            });
+          }
+          Array.prototype.forEach.call(document.querySelectorAll('#theme-options [data-theme-choice]'), function(btn) {
+            btn.addEventListener('click', function() {
+              var choice = btn.getAttribute('data-theme-choice');
+              try {
+                if (choice === 'system') {
+                  localStorage.removeItem('theme');
+                  document.documentElement.removeAttribute('data-theme');
+                } else {
+                  localStorage.setItem('theme', choice);
+                  document.documentElement.setAttribute('data-theme', choice);
+                }
+              } catch (e) {}
+              highlight();
+            });
+          });
+          highlight();
+        })();
+      </script>
+    </div>
+
+    <div class="card" style="margin-top:14px;">
       <h2 style="margin:0 0 10px;font-size:15px;">Profile</h2>
       ${success === 'bio' ? `<p class="empty-note" style="color:var(--brand-green-dark);">Bio updated.</p>` : ''}
       <form method="POST" action="/account/bio">
