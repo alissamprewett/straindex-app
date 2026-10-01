@@ -3484,30 +3484,79 @@ function pageTrending(req, res) {
   sendHtml(res, layout({ title: 'Trending This Week', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
+// Risk tiers for the color-coded dot, same idea as LEGAL_STATUS_LABELS.
+// Genuinely reflects the underlying content rather than being invented
+// for visual variety -- nothing here is rated "low," because nothing in
+// this list actually is.
+const RISK_LEVELS = {
+  moderate: { label: 'Moderate Risk', color: '#8a6d1f' },
+  serious: { label: 'Serious Risk', color: '#a13a3a' },
+};
 // Mixing cautions -- deliberately conservative, pattern-level guidance
 // only (matching the app's existing "not medical advice" framing), never
 // dosing specifics. General public-health caution categories, not a
-// comprehensive drug-interaction database.
+// comprehensive drug-interaction database. USER-CONFIRMED LAYOUT: lean
+// list with a popup modal per item, same pattern as Is It Legal Near Me
+// -- don't flatten this back into stacked full-paragraph cards without
+// asking first.
+const MIXING_CAUTIONS = [
+  { title: 'Alcohol', risk: 'moderate',
+    whatToKnow: 'Combining cannabis and alcohol tends to intensify the effects of both, and impairment can hit harder and less predictably than either alone. This combination is also linked to a much higher risk of nausea ("greening out").',
+    whatToDo: 'If combining at all, go slower and lower on both than you normally would with either individually.' },
+  { title: 'Sedatives & sleep medication', risk: 'serious',
+    whatToKnow: 'Cannabis is itself sedating for many people, and combining it with prescription sedatives, sleep aids, or benzodiazepines can compound drowsiness and impaired coordination well beyond what either produces alone.',
+    whatToDo: 'Talk to the prescribing doctor before combining.' },
+  { title: 'Stimulants', risk: 'moderate',
+    whatToKnow: 'Combining cannabis with stimulants (including prescription ADHD medication or high caffeine intake) can mask how impaired or wired you actually are, since the two pull in different directions.',
+    whatToDo: "Pay extra attention to how you actually feel rather than assuming — it's easy to misjudge your own state in this combination." },
+  { title: 'Blood thinners & heart/blood pressure medications', risk: 'serious',
+    whatToKnow: 'Cannabis can affect heart rate and blood pressure, and may interact with how the liver processes certain medications, including some blood thinners.',
+    whatToDo: 'This is genuinely a "talk to your doctor or pharmacist" situation, not a guess-and-check one.' },
+  { title: 'Driving or operating machinery', risk: 'serious',
+    whatToKnow: "Cannabis impairs reaction time and judgment in ways that don't always feel as obvious as alcohol impairment does.",
+    whatToDo: "Treat any active THC in your system the same as you would being over a legal alcohol limit — don't drive." },
+  { title: 'Pregnancy & breastfeeding', risk: 'serious',
+    whatToKnow: 'Major health organizations advise against cannabis use during pregnancy and while breastfeeding due to potential effects on fetal and infant development.',
+    whatToDo: 'This one has clear medical consensus — talk to an OB or pediatrician directly rather than relying on general guidance here.' },
+];
 function pageMixingCautions(req, res) {
-  const cautions = [
-    { title: 'Alcohol', body: 'Combining cannabis and alcohol tends to intensify the effects of both, and impairment can hit harder and less predictably than either alone. This combination is also linked to a much higher risk of nausea ("greening out"). If combining at all, go slower and lower on both than you normally would with either individually.' },
-    { title: 'Sedatives & sleep medication', body: 'Cannabis is itself sedating for many people, and combining it with prescription sedatives, sleep aids, or benzodiazepines can compound drowsiness and impaired coordination well beyond what either produces alone. Talk to the prescribing doctor before combining.' },
-    { title: 'Stimulants', body: 'Combining cannabis with stimulants (including prescription ADHD medication or high caffeine intake) can mask how impaired or wired you actually are, since the two pull in different directions — makes it easy to misjudge your own state.' },
-    { title: 'Blood thinners & some heart/blood pressure medications', body: 'Cannabis can affect heart rate and blood pressure, and may interact with how the liver processes certain medications, including some blood thinners. This is genuinely a "talk to your doctor or pharmacist" situation, not a guess-and-check one.' },
-    { title: 'Driving or operating machinery', body: "Cannabis impairs reaction time and judgment in ways that don't always feel as obvious as alcohol impairment does. Treat any active THC in your system the same as you would being over a legal alcohol limit — don't drive." },
-    { title: 'Pregnancy & breastfeeding', body: 'Major health organizations advise against cannabis use during pregnancy and while breastfeeding due to potential effects on fetal and infant development. This one has clear medical consensus — talk to an OB or pediatrician directly rather than relying on general guidance here.' },
-  ];
+  const slug = s => s.replace(/[^a-zA-Z0-9]/g, '');
+  const renderModal = c => `
+    <div id="caution-${slug(c.title)}" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:1000;align-items:center;justify-content:center;padding:16px;" onclick="if(event.target===this) this.style.display='none';">
+      <div style="background:var(--bg-card,#fff);border-radius:16px;max-width:460px;width:100%;max-height:85vh;display:flex;flex-direction:column;overflow:hidden;color:#2a2a2a;">
+        <div style="overflow-y:auto;padding:22px;position:relative;">
+          <button type="button" onclick="document.getElementById('caution-${slug(c.title)}').style.display='none';" style="position:absolute;top:0;right:0;width:32px;height:32px;border-radius:8px;border:1px solid var(--border);background:none;cursor:pointer;font-size:16px;line-height:1;">\u2715</button>
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;">
+            <span style="width:8px;height:8px;border-radius:50%;background:${RISK_LEVELS[c.risk].color};display:inline-block;"></span>
+            <span style="font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:var(--ink-secondary);">${esc(RISK_LEVELS[c.risk].label)}</span>
+          </div>
+          <h2 style="margin:0 0 16px;font-size:22px;padding-right:30px;">${esc(c.title)}</h2>
+          <div style="margin-bottom:14px;">
+            <div style="font-size:10px;letter-spacing:0.05em;text-transform:uppercase;color:var(--ink-secondary);margin-bottom:3px;">What to Know</div>
+            <div>${linkGlossaryTerms(esc(c.whatToKnow))}</div>
+          </div>
+          <div>
+            <div style="font-size:10px;letter-spacing:0.05em;text-transform:uppercase;color:var(--ink-secondary);margin-bottom:3px;">What to Do</div>
+            <div>${linkGlossaryTerms(esc(c.whatToDo))}</div>
+          </div>
+        </div>
+        <div style="background:var(--bg-subtle,#f2f1ec);padding:12px 22px;font-size:12px;color:var(--ink-secondary);flex-shrink:0;">
+          Not medical advice. If a combination that used to work stops feeling like it does, that's often <a href="/tolerance-explained">tolerance</a>, not the mix itself.
+        </div>
+      </div>
+    </div>
+  `;
   const body = `
     <h1 class="screen-title">Mixing With Other Substances</h1>
-    <p class="screen-sub">General, pattern-level cautions — not medical advice, not a complete interaction database, and not a substitute for talking to a doctor or pharmacist about your specific medications.</p>
+    <p class="screen-sub">General, pattern-level cautions — tap one for the full breakdown. Not medical advice, not a complete interaction database, and not a substitute for talking to a doctor or pharmacist about your specific medications.</p>
     <p class="empty-note">Last reviewed: ${esc(SAFETY_GUIDES_LAST_REVIEWED)}.</p>
-    ${cautions.map(c => `
-      <div class="card" style="margin-bottom:10px;">
-        <h2 style="margin:0 0 6px;font-size:15px;">${esc(c.title)}</h2>
-        <p style="margin:0;">${linkGlossaryTerms(esc(c.body))}</p>
-      </div>
+    ${MIXING_CAUTIONS.map(c => `
+      <button type="button" onclick="document.getElementById('caution-${slug(c.title)}').style.display='flex';" class="library-row" style="width:100%;text-align:left;border:none;background:var(--bg-card,#fff);cursor:pointer;">
+        <span style="width:10px;height:10px;border-radius:50%;background:${RISK_LEVELS[c.risk].color};flex-shrink:0;"></span>
+        <div class="info"><div class="nm">${esc(c.title)}</div><div class="sub">${esc(RISK_LEVELS[c.risk].label)}</div></div>
+      </button>
     `).join('')}
-    <p class="empty-note">If a dose or combination that used to work stops feeling like it does, that\u2019s often tolerance, not the mix itself — see <a href="/tolerance-explained">Tolerance, Explained</a>.</p>
+    ${MIXING_CAUTIONS.map(renderModal).join('')}
   `;
   sendHtml(res, layout({ title: 'Mixing With Other Substances', active: 'education', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
@@ -5841,16 +5890,42 @@ async function handleShopAdd(req, res, id) {
 
 // ---------------------------------------------------------------- consumption methods guide
 
+// USER-CONFIRMED LAYOUT: lean list with a popup modal per method, same
+// pattern as Is It Legal Near Me and Mixing Cautions -- don't flatten
+// this back into stacked full cards without asking first.
 function pageMethods(req, res) {
+  const slug = s => s.replace(/[^a-zA-Z0-9]/g, '');
+  const statBox = (label, value) => `
+    <div style="background:var(--bg-subtle,#f2f1ec);border-radius:10px;padding:10px 12px;">
+      <div style="font-size:10px;letter-spacing:0.05em;text-transform:uppercase;color:var(--ink-secondary);margin-bottom:4px;">${esc(label)}</div>
+      <div style="font-weight:700;font-size:14px;">${esc(value)}</div>
+    </div>
+  `;
+  const renderModal = m => `
+    <div id="method-${slug(m.name)}" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:1000;align-items:center;justify-content:center;padding:16px;" onclick="if(event.target===this) this.style.display='none';">
+      <div style="background:var(--bg-card,#fff);border-radius:16px;max-width:460px;width:100%;max-height:85vh;display:flex;flex-direction:column;overflow:hidden;color:#2a2a2a;">
+        <div style="overflow-y:auto;padding:22px;position:relative;">
+          <button type="button" onclick="document.getElementById('method-${slug(m.name)}').style.display='none';" style="position:absolute;top:0;right:0;width:32px;height:32px;border-radius:8px;border:1px solid var(--border);background:none;cursor:pointer;font-size:16px;line-height:1;">\u2715</button>
+          <h2 style="margin:0 0 16px;font-size:20px;padding-right:30px;">${m.icon.startsWith('/') ? `<img src="${m.icon}" alt="" class="mg-icon-photo">` : m.icon} ${esc(m.name)}</h2>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;">
+            ${statBox('Onset', m.onset)}
+            ${statBox('Lasts', m.duration)}
+          </div>
+          <div>${linkGlossaryTerms(esc(m.desc))}</div>
+        </div>
+      </div>
+    </div>
+  `;
   const body = `
     <h1 class="screen-title">Ways to Enjoy It</h1>
-    <p class="screen-sub">Every ingestion method, with realistic onset and duration windows.</p>
+    <p class="screen-sub">Every ingestion method — tap one for onset, duration, and the full picture.</p>
     ${mock.methodGuide.map(m => `
-      <div class="method-guide-card">
-        <div class="mgtitle">${m.icon.startsWith('/') ? `<img src="${m.icon}" alt="" class="mg-icon-photo">` : m.icon} ${esc(m.name)}</div>
-        <div class="mgstats"><span>Onset: ${esc(m.onset)}</span><span>Lasts: ${esc(m.duration)}</span></div>
-        <div class="mgdesc">${linkGlossaryTerms(esc(m.desc))}</div>
-      </div>`).join('')}
+      <button type="button" onclick="document.getElementById('method-${slug(m.name)}').style.display='flex';" class="library-row" style="width:100%;text-align:left;border:none;background:var(--bg-card,#fff);cursor:pointer;">
+        <div class="strain-thumb strain-thumb-sm" style="display:flex;align-items:center;justify-content:center;font-size:20px;background:#e5e0d5;">${m.icon.startsWith('/') ? `<img src="${m.icon}" alt="" class="mg-icon-photo">` : m.icon}</div>
+        <div class="info"><div class="nm">${esc(m.name)}</div><div class="sub">Onset ${esc(m.onset)} · Lasts ${esc(m.duration)}</div></div>
+      </button>
+    `).join('')}
+    ${mock.methodGuide.map(renderModal).join('')}
   `;
   sendHtml(res, layout({ title: 'Ways to Enjoy It', active: 'education', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
@@ -5996,17 +6071,39 @@ function pageUsingWholePlant(req, res) {
   `;
   sendHtml(res, layout({ title: 'Using the Whole Plant', active: 'education', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
+// USER-CONFIRMED LAYOUT: lean list with a popup modal per concentrate,
+// same pattern as Is It Legal Near Me / Mixing Cautions / Ways to Enjoy
+// It -- don't flatten this back into stacked full cards without asking.
 function pageConcentrates(req, res) {
+  const slug = s => s.replace(/[^a-zA-Z0-9]/g, '');
+  const renderModal = c => `
+    <div id="conc-${slug(c.name)}" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:1000;align-items:center;justify-content:center;padding:16px;" onclick="if(event.target===this) this.style.display='none';">
+      <div style="background:var(--bg-card,#fff);border-radius:16px;max-width:460px;width:100%;max-height:85vh;display:flex;flex-direction:column;overflow:hidden;color:#2a2a2a;">
+        <div style="overflow-y:auto;padding:22px;position:relative;">
+          <button type="button" onclick="document.getElementById('conc-${slug(c.name)}').style.display='none';" style="position:absolute;top:0;right:0;width:32px;height:32px;border-radius:8px;border:1px solid var(--border);background:none;cursor:pointer;font-size:16px;line-height:1;">\u2715</button>
+          <h2 style="margin:0 0 16px;font-size:20px;padding-right:30px;">${c.icon} ${esc(c.name)}</h2>
+          <div style="background:var(--bg-subtle,#f2f1ec);border-radius:10px;padding:10px 12px;margin-bottom:16px;display:inline-block;">
+            <div style="font-size:10px;letter-spacing:0.05em;text-transform:uppercase;color:var(--ink-secondary);margin-bottom:4px;">THC Range</div>
+            <div style="font-weight:700;font-size:14px;">${esc(c.thc)}</div>
+          </div>
+          <div>${linkGlossaryTerms(esc(c.desc))}</div>
+        </div>
+        <div style="background:var(--bg-subtle,#f2f1ec);padding:12px 22px;font-size:12px;color:var(--ink-secondary);flex-shrink:0;">
+          Not medical advice — potency varies by batch and producer even within these ranges.
+        </div>
+      </div>
+    </div>
+  `;
   const body = `
     <h1 class="screen-title">Concentrates &amp; Extracts</h1>
-    <p class="screen-sub">Flower typically runs 15–30% THC — concentrates are a different category entirely. Real lab-testing data, cross-checked against published sources.</p>
+    <p class="screen-sub">Flower typically runs 15–30% THC — concentrates are a different category entirely. Tap one for the real lab-testing range.</p>
     ${mock.concentrateGuide.map(c => `
-      <div class="method-guide-card">
-        <div class="mgtitle">${c.icon} ${esc(c.name)}</div>
-        <div class="mgstats"><span>THC: ${esc(c.thc)}</span></div>
-        <div class="mgdesc">${linkGlossaryTerms(esc(c.desc))}</div>
-      </div>`).join('')}
-    <p class="empty-note" style="margin-top:6px;">Not medical advice — potency varies by batch and producer even within these ranges.</p>
+      <button type="button" onclick="document.getElementById('conc-${slug(c.name)}').style.display='flex';" class="library-row" style="width:100%;text-align:left;border:none;background:var(--bg-card,#fff);cursor:pointer;">
+        <div class="strain-thumb strain-thumb-sm" style="display:flex;align-items:center;justify-content:center;font-size:20px;background:#e5e0d5;">${c.icon}</div>
+        <div class="info"><div class="nm">${esc(c.name)}</div><div class="sub">THC ${esc(c.thc)}</div></div>
+      </button>
+    `).join('')}
+    ${mock.concentrateGuide.map(renderModal).join('')}
   `;
   sendHtml(res, layout({ title: 'Concentrates & Extracts', active: 'education', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
