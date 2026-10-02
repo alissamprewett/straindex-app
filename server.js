@@ -155,6 +155,15 @@ const SUPPORT_EMAIL = 'straindex420@gmail.com';
 // actually reach anything in /admin; this just stops the link itself from
 // being advertised to every logged-in user, which it was before.
 const OWNER_USER_ID = 1;
+// Only ever follow a redirect_to that's a real internal path -- guards
+// against someone crafting a link like redirect_to=https://evil.example
+// or redirect_to=//evil.example (protocol-relative) and using this app's
+// own signup/login flow to bounce people off to a phishing site.
+function safeRedirectPath(path) {
+  if (typeof path !== 'string' || !path.startsWith('/') || path.startsWith('//')) return null;
+  if (path.includes('://')) return null;
+  return path;
+}
 function isOldEnough(birthDateStr) {
   const dob = new Date(birthDateStr);
   if (isNaN(dob.getTime())) return false;
@@ -1015,6 +1024,126 @@ function renderFamilyTree(s) {
     </div>
   `;
 }
+// USER-CONFIRMED FEATURE: a compact share button in the upper-right of a
+// strain's header, not a permanently-visible "share to a friend" form.
+// Offers both an in-app share (to a friend, via the existing
+// /strains/:id/share endpoint) and a real external share -- native share
+// sheet where supported, clipboard copy otherwise -- same self-contained
+// pattern as SHARE_CHECKIN_SCRIPT. A logged-out visitor who opens a
+// shared strain link gets a contextual signup/login prompt naming the
+// strain (see the login-wall gate and pageSignup/pageLogin) rather than a
+// bare login wall. Don't revert this back to an inline always-visible
+// share form without asking first.
+function renderStrainShareButton(s, userId) {
+  const friends = userId != null ? db.listFriends(userId) : [];
+  return `
+    <div class="strain-share-wrap" style="position:absolute;top:12px;right:12px;">
+      <button type="button" onclick="var m=this.nextElementSibling;m.style.display=m.style.display==='block'?'none':'block';" title="Share this strain" style="background:none;border:1px solid var(--border);border-radius:8px;width:36px;height:36px;cursor:pointer;font-size:16px;">🔗</button>
+      <div class="strain-share-menu" style="display:none;position:absolute;top:42px;right:0;background:var(--bg-card,#fff);border:1px solid var(--border);border-radius:10px;box-shadow:0 4px 16px rgba(0,0,0,0.18);z-index:50;min-width:200px;padding:8px;">
+        <button type="button" onclick="shareStrainLink(${s.id}, ${JSON.stringify(s.name)}, this)" style="display:block;width:100%;text-align:left;background:none;border:none;padding:8px;cursor:pointer;font-size:14px;border-radius:6px;color:inherit;">🔗 Share Link</button>
+        ${friends.length ? `
+          <div style="border-top:1px solid var(--border);margin:4px 0;"></div>
+          <div style="padding:6px 8px 2px;font-size:11px;color:#6b6b6b;text-transform:uppercase;letter-spacing:0.05em;">Share to a friend</div>
+          ${friends.map(f => `
+            <form method="POST" action="/strains/${s.id}/share" style="margin:0;">
+              <input type="hidden" name="friend_id" value="${f.id}">
+              <button type="submit" style="display:block;width:100%;text-align:left;background:none;border:none;padding:8px;cursor:pointer;font-size:14px;border-radius:6px;color:inherit;">${esc(f.username)}</button>
+            </form>
+          `).join('')}
+        ` : ''}
+      </div>
+    </div>
+    <script>
+      if (!window.shareStrainLink) {
+        window.shareStrainLink = function(id, name, btn) {
+          var url = window.location.origin + '/strains/' + id;
+          if (navigator.share) {
+            navigator.share({ url: url, title: name }).catch(function() {});
+            return;
+          }
+          var flash = function(text) {
+            var original = btn.textContent;
+            btn.textContent = text;
+            setTimeout(function() { btn.textContent = original; }, 1500);
+          };
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(url).then(function() { flash('✓ Copied'); }).catch(function() {
+              window.prompt('Copy this link:', url);
+            });
+          } else {
+            window.prompt('Copy this link:', url);
+          }
+        };
+      }
+      if (!window.__shareMenuOutsideClickBound) {
+        window.__shareMenuOutsideClickBound = true;
+        document.addEventListener('click', function(e) {
+          document.querySelectorAll('.strain-share-wrap').forEach(function(wrap) {
+            if (!wrap.contains(e.target)) {
+              var menu = wrap.querySelector('.strain-share-menu');
+              if (menu) menu.style.display = 'none';
+            }
+          });
+        });
+      }
+    </script>
+  `;
+}
+// USER-CONFIRMED FEATURE, DO NOT CHANGE WITHOUT ASKING FIRST: Wishlist and
+// custom lists used to be two separate UI blocks (a Wishlist button, then
+// a whole separate card for custom lists). This is deliberately one
+// button that pops open ONE menu with Wishlist as just the first entry,
+// every custom list below it, and a quick "create a list" field at the
+// bottom that adds the current strain to the new list immediately (see
+// handleListCreate). Don't split this back into separate Wishlist and
+// Lists sections without asking first.
+function renderAddToListsButton(s, userId) {
+  const myLists = db.listCustomLists(userId);
+  const inWishlist = db.isInWishlist(userId, s.id);
+  const savedAnywhere = inWishlist || myLists.some(l => db.isStrainInList(l.id, s.id));
+  return `
+    <div class="add-to-lists-wrap" style="position:relative;margin-top:8px;">
+      <button type="button" onclick="var m=this.nextElementSibling;m.style.display=m.style.display==='block'?'none':'block';" class="btn secondary block">${savedAnywhere ? '✓ Saved to Lists' : '☆ Add to Lists'}</button>
+      <div class="add-to-lists-menu" style="display:none;position:absolute;top:100%;left:0;right:0;margin-top:4px;background:var(--bg-card,#fff);border:1px solid var(--border);border-radius:10px;box-shadow:0 4px 16px rgba(0,0,0,0.18);z-index:50;padding:8px;">
+        <form method="POST" action="/wishlist/${s.id}/toggle" style="margin:0;">
+          <input type="hidden" name="redirect_to" value="/strains/${s.id}">
+          <button type="submit" style="display:flex;justify-content:space-between;align-items:center;width:100%;text-align:left;background:none;border:none;padding:8px;cursor:pointer;font-size:14px;border-radius:6px;color:inherit;">
+            <span>⭐ Wishlist</span><span>${inWishlist ? '✓' : ''}</span>
+          </button>
+        </form>
+        ${myLists.length ? `<div style="border-top:1px solid var(--border);margin:4px 0;"></div>` : ''}
+        ${myLists.map(l => `
+          <form method="POST" action="/lists/${l.id}/items/${s.id}/toggle" style="margin:0;">
+            <input type="hidden" name="redirect_to" value="/strains/${s.id}">
+            <button type="submit" style="display:flex;justify-content:space-between;align-items:center;width:100%;text-align:left;background:none;border:none;padding:8px;cursor:pointer;font-size:14px;border-radius:6px;color:inherit;">
+              <span>${esc(l.name)}</span><span>${db.isStrainInList(l.id, s.id) ? '✓' : ''}</span>
+            </button>
+          </form>
+        `).join('')}
+        <div style="border-top:1px solid var(--border);margin:4px 0;"></div>
+        <form method="POST" action="/lists" style="margin:0;display:flex;gap:4px;padding:4px;">
+          <input type="hidden" name="strain_id" value="${s.id}">
+          <input type="hidden" name="redirect_to" value="/strains/${s.id}">
+          <input type="text" name="name" placeholder="New list name..." required style="flex:1;margin:0;font-size:13px;padding:6px 8px;">
+          <button type="submit" style="background:none;border:none;color:var(--brand-green-dark);font-weight:700;cursor:pointer;padding:0 8px;font-size:18px;">+</button>
+        </form>
+      </div>
+    </div>
+    <script>
+      if (!window.__listsMenuOutsideClickBound) {
+        window.__listsMenuOutsideClickBound = true;
+        document.addEventListener('click', function(e) {
+          document.querySelectorAll('.add-to-lists-wrap').forEach(function(wrap) {
+            if (!wrap.contains(e.target)) {
+              var menu = wrap.querySelector('.add-to-lists-menu');
+              if (menu) menu.style.display = 'none';
+            }
+          });
+        });
+      }
+    </script>
+  `;
+}
 function pageStrainDetail(req, res, id) {
   const s = db.getStrain(id);
   if (!s) return notFound(res);
@@ -1023,8 +1152,9 @@ function pageStrainDetail(req, res, id) {
   const ratingStats = db.getStrainRatingStats(id);
   const similar = db.getSimilarStrains(s, 4);
   const body = `
-    <div class="card" style="margin-top:10px;">
-      <div style="display:flex;align-items:center;gap:12px;">
+    <div class="card" style="margin-top:10px;position:relative;">
+      ${renderStrainShareButton(s, userId)}
+      <div style="display:flex;align-items:center;gap:12px;padding-right:44px;">
         ${strainPhotoTag(s, 'lg')}
         <div>
           <h1 style="margin:0;font-size:19px;">${esc(s.name)}</h1>
@@ -1047,37 +1177,7 @@ function pageStrainDetail(req, res, id) {
     ${renderFamilyTree(s)}
     <a class="btn block" href="/checkin?strain=${s.id}">＋ Check in this strain</a>
     <a class="btn secondary block" href="/compare?a=${s.id}" style="margin-top:8px;">🆚 Compare this strain</a>
-    ${userId != null && db.listFriends(userId).length ? `
-      <form method="POST" action="/strains/${s.id}/share" style="display:flex;gap:8px;margin-top:8px;">
-        <select name="friend_id" style="flex:1;">
-          ${db.listFriends(userId).map(f => `<option value="${f.id}">${esc(f.username)}</option>`).join('')}
-        </select>
-        <button class="btn secondary" type="submit">🌿 Share</button>
-      </form>
-    ` : ''}
-    ${userId != null ? `
-      <form method="POST" action="/wishlist/${s.id}/toggle" style="margin-top:8px;">
-        <input type="hidden" name="redirect_to" value="/strains/${s.id}">
-        <button type="submit" class="btn secondary block">${db.isInWishlist(userId, s.id) ? '★ Remove from Wishlist' : '☆ Add to Wishlist'}</button>
-      </form>
-      ${(() => {
-        const myLists = db.listCustomLists(userId);
-        return myLists.length ? `
-          <div class="card" style="margin-top:8px;">
-            <b style="font-size:13px;">Add to a list</b>
-            <p style="margin:6px 0 0;display:flex;flex-wrap:wrap;gap:6px;">
-              ${myLists.map(l => `
-                <form method="POST" action="/lists/${l.id}/items/${s.id}/toggle" style="display:inline;">
-                  <input type="hidden" name="redirect_to" value="/strains/${s.id}">
-                  <button type="submit" class="filter-pill ${db.isStrainInList(l.id, s.id) ? 'active' : ''}" style="border:none;cursor:pointer;">${db.isStrainInList(l.id, s.id) ? '✓ ' : '+ '}${esc(l.name)}</button>
-                </form>
-              `).join('')}
-            </p>
-            <p class="empty-note" style="padding:6px 0 0;"><a href="/lists">Manage your lists →</a></p>
-          </div>
-        ` : `<p class="empty-note" style="margin-top:8px;"><a href="/lists">Create a list</a> to organize strains your own way.</p>`;
-      })()}
-    ` : ''}
+    ${userId != null ? renderAddToListsButton(s, userId) : ''}
     ${similar.length ? `
       <h2 class="screen-title" style="margin-top:20px;">If you like this, try...</h2>
       <div class="hcarousel">
@@ -2327,9 +2427,15 @@ function pageSignup(req, res, query) {
   // handleSignupSubmit, which resolves it into invited_by on the new row.
   const refParam = (query.get('ref') || '').trim();
   const referrer = refParam ? db.getUserByUsername(refParam) : null;
+  // ?strain=id + redirect_to -- see the strain-share signup prompt note on
+  // the router's login wall above. Shows which strain was shared and
+  // carries the path through so a new account lands back on it.
+  const sharedStrain = query.get('strain') ? db.getStrain(query.get('strain')) : null;
+  const redirectTo = safeRedirectPath(query.get('redirect_to') || '');
   const body = `
     <h1 class="screen-title">Create an Account</h1>
     <p class="screen-sub">You must be ${MIN_AGE}+ to use StrainDex.</p>
+    ${sharedStrain ? `<p class="empty-note" style="color:var(--brand-green-dark);padding:0 0 10px;">🌿 Someone shared <b>${esc(sharedStrain.name)}</b> with you on StrainDex — sign up to see it.</p>` : ''}
     ${referrer ? `<p class="empty-note" style="color:var(--brand-green-dark);padding:0 0 10px;">🌿 ${esc(referrer.username)} invited you to StrainDex.</p>` : ''}
     ${deleted ? `<p class="empty-note" style="color:var(--brand-green-dark);">Your account and data have been deleted.</p>` : ''}
     ${err && errMessages[err] ? `<p style="color:#a13a3a;">${esc(errMessages[err])}</p>` : ''}
@@ -2340,6 +2446,7 @@ function pageSignup(req, res, query) {
     <p class="empty-note" style="text-align:center;margin:0 0 14px;">or</p>
     <form method="POST" action="/signup">
       ${referrer ? `<input type="hidden" name="ref" value="${esc(referrer.username)}">` : ''}
+      ${redirectTo ? `<input type="hidden" name="redirect_to" value="${esc(redirectTo)}">` : ''}
       <label class="field-label" style="margin-top:0;">Username</label>
       <input type="text" name="username" id="signup-username" required minlength="3" maxlength="24" autocomplete="username">
       <label class="field-label">First name</label>
@@ -2562,7 +2669,7 @@ async function handleSignupSubmit(req, res) {
   const user = await db.createUser({ username, password: f.password, birth_date: f.birth_date, email, first_name: firstName, last_name: lastName, invited_by: referrer ? referrer.id : null });
   const token = auth.signUserSessionValue(user.id);
   res.setHeader('Set-Cookie', `user_session=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000`);
-  redirect(res, '/onboarding');
+  redirect(res, safeRedirectPath(f.redirect_to) || '/onboarding');
 }
 function pageLogin(req, res, query) {
   const err = query.get('err');
@@ -2574,8 +2681,13 @@ function pageLogin(req, res, query) {
     google_profile: "Google didn't send back enough account info to sign you in. Try again, or use your username and password instead.",
     google_error: "Something went wrong finishing Google sign-in. Try again, or use your username and password instead.",
   };
+  // Same redirect_to carry-through as signup, for someone who already has
+  // an account and followed a shared strain link while logged out.
+  const redirectTo = safeRedirectPath(query.get('redirect_to') || '');
+  const sharedStrain = query.get('strain') ? db.getStrain(query.get('strain')) : null;
   const body = `
     <h1 class="screen-title">Log In</h1>
+    ${sharedStrain ? `<p class="empty-note" style="color:var(--brand-green-dark);padding:0 0 10px;">🌿 Someone shared <b>${esc(sharedStrain.name)}</b> with you on StrainDex — log in to see it.</p>` : ''}
     ${err && errMessages[err] ? `<p style="color:#a13a3a;">${esc(errMessages[err])}</p>` : ''}
     <a href="/auth/google" class="btn secondary block" style="text-decoration:none;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:14px;">
       <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.72v2.26h2.9c1.7-1.57 2.7-3.88 2.7-6.62z"/><path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.9-2.26c-.8.54-1.84.86-3.06.86-2.35 0-4.34-1.59-5.05-3.72H.98v2.33A9 9 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.95 10.7A5.4 5.4 0 0 1 3.67 9c0-.59.1-1.17.28-1.7V4.97H.98A9 9 0 0 0 0 9c0 1.45.35 2.83.98 4.03l2.97-2.33z"/><path fill="#EA4335" d="M9 3.58c1.32 0 2.5.46 3.44 1.35l2.58-2.58C13.46.89 11.43 0 9 0A9 9 0 0 0 .98 4.97l2.97 2.33C4.66 5.17 6.65 3.58 9 3.58z"/></svg>
@@ -2583,6 +2695,7 @@ function pageLogin(req, res, query) {
     </a>
     <p class="empty-note" style="text-align:center;margin:0 0 14px;">or</p>
     <form method="POST" action="/login">
+      ${redirectTo ? `<input type="hidden" name="redirect_to" value="${esc(redirectTo)}">` : ''}
       <label class="field-label" style="margin-top:0;">Username or email</label>
       <input type="text" name="username" id="login-username" required autocomplete="username">
       <label class="field-label">Password</label>
@@ -2594,7 +2707,7 @@ function pageLogin(req, res, query) {
     </form>
     <script>document.getElementById('login-username').focus();</script>
     <p class="empty-note" style="margin-top:12px;">Forgot your password? <a href="/forgot-password">Reset it</a></p>
-    <p class="empty-note">New here? <a href="/signup">Create an account</a></p>
+    <p class="empty-note">New here? <a href="/signup${sharedStrain || redirectTo ? '?' + new URLSearchParams({ ...(sharedStrain ? { strain: sharedStrain.id } : {}), ...(redirectTo ? { redirect_to: redirectTo } : {}) }).toString() : ''}">Create an account</a></p>
   `;
   sendHtml(res, layout({ title: 'Log In', body, showBack: false }));
 }
@@ -3072,13 +3185,22 @@ function pageListDetail(req, res, id) {
   `;
   sendHtml(res, layout({ title: list.name, active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
+// USER-CONFIRMED: creating a list from the unified "Add to Lists" popup
+// (see renderAddToListsButton on the strain page) immediately adds the
+// strain that was open, in one step, rather than creating an empty list
+// and making the person come back separately to add it. strain_id and
+// redirect_to are both optional -- the plain /lists "Create" form doesn't
+// send them, and still works exactly as before.
 async function handleListCreate(req, res) {
   const userId = requireUser(req, res);
   if (userId == null) return;
   const f = await parseForm(req);
   const name = String(f.name || '').trim();
-  if (name) await db.createCustomList(userId, name);
-  redirect(res, '/lists');
+  if (name) {
+    const list = await db.createCustomList(userId, name);
+    if (f.strain_id) await db.addStrainToList(list.id, f.strain_id);
+  }
+  redirect(res, safeRedirectPath(f.redirect_to) || '/lists');
 }
 async function handleListDelete(req, res, id) {
   const userId = requireUser(req, res);
@@ -4094,7 +4216,7 @@ async function handleLoginSubmit(req, res) {
   clearLoginAttempts(req, username);
   const token = auth.signUserSessionValue(user.id);
   res.setHeader('Set-Cookie', `user_session=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000`);
-  redirect(res, '/');
+  redirect(res, safeRedirectPath(f.redirect_to) || '/');
 }
 function handleLogout(req, res) {
   res.setHeader('Set-Cookie', `user_session=; Path=/; HttpOnly; Max-Age=0`);
@@ -6209,6 +6331,18 @@ const server = http.createServer(async (req, res) => {
     // (which has its own, unrelated password gate below).
     const PUBLIC_PATHS = new Set(['/', '/signup', '/login', '/logout', '/terms', '/privacy', '/forgot-password', '/reset-password', '/api/analytics-snapshot', '/auth/google', '/auth/google/callback', '/auth/google/finish']);
     if (!PUBLIC_PATHS.has(pathname) && !pathname.startsWith('/admin') && auth.currentUserId(req) == null) {
+      // USER-CONFIRMED BEHAVIOR: a shared strain link opened while logged
+      // out goes to a contextual signup prompt (showing which strain was
+      // shared) rather than a bare login wall, and carries the strain
+      // page through as redirect_to so a brand-new account lands right
+      // back on it instead of the generic onboarding flow. See
+      // pageSignup, handleSignupSubmit, and the strain-page share button
+      // (renderStrainShareButton). Don't revert this to a plain /login
+      // redirect without asking first.
+      const strainShareMatch = pathname.match(/^\/strains\/([^/]+)$/);
+      if (strainShareMatch) {
+        return redirect(res, `/signup?strain=${encodeURIComponent(strainShareMatch[1])}&redirect_to=${encodeURIComponent(pathname)}`);
+      }
       return redirect(res, '/login');
     }
 
