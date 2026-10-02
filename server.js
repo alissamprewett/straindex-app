@@ -1175,7 +1175,7 @@ function pageStrainDetail(req, res, id) {
       ` : ''}
     </div>
     ${renderFamilyTree(s)}
-    <a class="btn block" href="/checkin?strain=${s.id}">＋ Check in this strain</a>
+    <a class="btn block" href="/checkin?strain=${s.id}">🌿 Light It Up</a>
     <a class="btn secondary block" href="/compare?a=${s.id}" style="margin-top:8px;">🆚 Compare this strain</a>
     ${userId != null ? renderAddToListsButton(s, userId) : ''}
     ${similar.length ? `
@@ -1217,7 +1217,12 @@ function pageStrainDetail(req, res, id) {
       </div>`).join('')}
       ${REACT_TO_CHECKIN_SCRIPT}
     ${SHARE_CHECKIN_SCRIPT}
-    ` : `<div class="empty-note">You haven't checked this one in yet.</div>`}
+    ` : `
+      <div class="empty-note">You haven't checked this one in yet.</div>
+      ${ratingStats.count > 0 ? `
+        <div class="empty-note" style="padding:4px 0 0;">${starString(Math.round(ratingStats.avg))} ${ratingStats.avg}★ average from ${ratingStats.count} other check-in${ratingStats.count === 1 ? '' : 's'} in the community.</div>
+      ` : ''}
+    `}
   `;
   sendHtml(res, layout({ title: s.name, active: 'strains', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
@@ -1407,7 +1412,7 @@ function pageCheckinForm(req, res, query, existing) {
         ${s ? `${s.icon} <b>${esc(s.name)}</b> ${isEdit ? '' : `<button type="button" id="strain-picker-change" class="btn secondary" style="float:right;padding:2px 10px;">Change</button>`}` : ''}
       </div>
       <input type="hidden" name="strain_id" id="strain-picker-hidden" value="${s ? s.id : ''}">
-      ${isEdit ? '' : `<p class="empty-note" id="strain-picker-hint" ${s ? 'style="display:none;"' : ''}>Tip: search from <a href="/strains">the Strain Library</a> and tap "Check in" on the strain page for a pre-filled form.</p>`}
+      ${isEdit ? '' : `<p class="empty-note" id="strain-picker-hint" ${s ? 'style="display:none;"' : ''}>Tip: search from <a href="/strains">the Strain Library</a> and tap "Light It Up" on the strain page for a pre-filled form.</p>`}
 
       <label class="field-label">Method</label>
       <select name="method" id="checkin-method-select" onchange="toggleEdibleWarning(this.value)">${METHOD_GROUPS.map(g => `<optgroup label="${esc(g.group)}">${g.items.map(m => `<option ${existing && existing.method === m ? 'selected' : ''}>${esc(m)}</option>`).join('')}</optgroup>`).join('')}</select>
