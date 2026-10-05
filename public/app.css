@@ -396,3 +396,10 @@ p.screen-sub.geo-live a{color:inherit;text-decoration:underline;font-weight:600;
 .feed-post .note{font-style:italic;font-size:0.8438rem;color:var(--ink-secondary);margin-top:8px;}
 .effect-tags{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 0;}
 .effect-tags span{background:#eef2ea;color:var(--brand-green-dark);font-size:0.7188rem;padding:5px 10px;border-radius:999px;}
+
+/* Self-added (free-text) strains: deliberately loud so nobody mistakes an
+   unverified, member-typed strain for library data. Fixed colors (not
+   theme variables) so it reads as a warning in both light and dark mode. */
+.unverified-badge{display:inline-block;background:#ffb300;color:#3b2600;border:1.5px dashed #7a4b00;border-radius:6px;font-size:0.6875rem;font-weight:800;letter-spacing:.03em;text-transform:uppercase;padding:1px 7px;line-height:1.55;vertical-align:middle;white-space:nowrap;}
+.search-result-row.custom-strain-row{background:#fff8e1;color:#3b2600;font-weight:600;border-top:2px dashed #e0a100;}
+.search-result-row.custom-strain-row:hover{background:#ffecb3;}

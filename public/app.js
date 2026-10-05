@@ -553,7 +553,13 @@ if ('serviceWorker' in navigator) {
   const hiddenInput = document.getElementById('strain-picker-hidden');
   const hintBox = document.getElementById('strain-picker-hint');
   const changeBtn = document.getElementById('strain-picker-change');
+  const customNameInput = document.getElementById('strain-picker-custom-name');
+  const checkinForm = document.getElementById('checkin-form');
   if (!picker || !searchInput) return;
+
+  // Same tag the server renders on every self-added check-in.
+  const BADGE = '<span class="unverified-badge" title="Typed in by a member. This strain isn\'t in the StrainDex library yet, so nothing about it has been verified.">⚠ Self-added · Not verified</span>';
+  function normName(str) { return String(str || '').toLowerCase().replace(/[^a-z0-9]+/g, ''); }
 
   function escHtml(str) {
     return String(str ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -561,7 +567,19 @@ if ('serviceWorker' in navigator) {
 
   function selectStrain(s) {
     hiddenInput.value = s.id;
+    if (customNameInput) customNameInput.value = '';
     selectedBox.innerHTML = `${escHtml(s.icon)} <b>${escHtml(s.name)}</b> <button type="button" id="strain-picker-change" class="btn secondary" style="float:right;padding:2px 10px;">Change</button>`;
+    selectedBox.style.display = '';
+    picker.style.display = 'none';
+    hintBox.style.display = 'none';
+    document.getElementById('strain-picker-change').onclick = clearSelection;
+  }
+  // Free-text strain: the one they want isn't in the library yet.
+  function selectCustom(name) {
+    hiddenInput.value = 'custom';
+    if (customNameInput) customNameInput.value = name;
+    selectedBox.innerHTML = `🌿 <b>${escHtml(name)}</b> ${BADGE} <button type="button" id="strain-picker-change" class="btn secondary" style="float:right;padding:2px 10px;">Change</button>` +
+      `<div class="empty-note" style="padding:6px 0 0;clear:both;">Everyone who sees this check-in will see the “Not verified” tag. We'll look into adding it to the library.</div>`;
     selectedBox.style.display = '';
     picker.style.display = 'none';
     hintBox.style.display = 'none';
@@ -569,6 +587,7 @@ if ('serviceWorker' in navigator) {
   }
   function clearSelection() {
     hiddenInput.value = '';
+    if (customNameInput) customNameInput.value = '';
     selectedBox.style.display = 'none';
     picker.style.display = '';
     hintBox.style.display = '';
@@ -588,10 +607,26 @@ if ('serviceWorker' in navigator) {
       const res = await fetch(`/api/strains?${new URLSearchParams({ q, limit: '8' })}`);
       if (!res.ok) return;
       const data = await res.json();
-      resultsBox.innerHTML = data.results.length
-        ? data.results.map(s => `<div class="search-result-row" data-id="${s.id}">${escHtml(s.icon)} ${escHtml(s.name)} <span class="empty-note" style="padding:0;">— ${escHtml(s.type)}</span></div>`).join('')
-        : `<div class="search-no-results">No matches — try a different spelling, or <a href="/strains">browse the library</a>.</div>`;
+      // Show which alias matched, so searching "Garlic Butter" and seeing
+      // "Garlic Budder" doesn't look like a wrong result.
+      const aliasNote = s => {
+        const aka = String(s.aka || '').split(',').map(t => t.trim()).filter(Boolean);
+        if (!aka.length || normName(s.name).includes(normName(q))) return '';
+        const hit = aka.find(t => normName(t).includes(normName(q)));
+        return hit ? ` <span class="empty-note" style="padding:0;">(also known as ${escHtml(hit)})</span>` : '';
+      };
+      // Offer the free-text option unless what they typed is already an
+      // exact library name (then there's nothing to add).
+      const exactMatch = data.results.some(s => normName(s.name) === normName(q));
+      const customRow = (!exactMatch && q.length >= 2)
+        ? `<div class="search-result-row custom-strain-row" data-custom="1">＋ Not in the library? Log “${escHtml(q)}” as a self-added strain ${BADGE}</div>`
+        : '';
+      resultsBox.innerHTML = (data.results.length
+        ? data.results.map(s => `<div class="search-result-row" data-id="${s.id}">${escHtml(s.icon)} ${escHtml(s.name)}${aliasNote(s)} <span class="empty-note" style="padding:0;">— ${escHtml(s.type)}</span></div>`).join('')
+        : `<div class="search-no-results">No matches in the library — try a different spelling, or <a href="/strains">browse it</a>.</div>`) + customRow;
       resultsBox.classList.add('open');
+      const customEl = resultsBox.querySelector('[data-custom]');
+      if (customEl) customEl.onclick = () => { selectCustom(q); resultsBox.classList.remove('open'); };
       resultsBox.querySelectorAll('[data-id]').forEach(row => {
         row.onclick = () => {
           const match = data.results.find(s => s.id === row.dataset.id);
@@ -601,6 +636,19 @@ if ('serviceWorker' in navigator) {
       });
     }, 200);
   });
+
+  // Pressing Enter in the search box (or Light It Up with no strain
+  // chosen) shouldn't submit a form with no strain -- nudge them to pick
+  // one, or to choose the self-added option, instead of a dead-end error.
+  if (checkinForm) {
+    checkinForm.addEventListener('submit', (e) => {
+      if (hiddenInput.value) return;
+      e.preventDefault();
+      searchInput.focus();
+      searchInput.placeholder = 'Pick a strain from the list, or choose “self-added”';
+      if (searchInput.value.trim()) searchInput.dispatchEvent(new Event('input'));
+    });
+  }
 })();
 
 // ---------------------------------------------------------------- check-in

@@ -174,6 +174,34 @@ function isOldEnough(birthDateStr) {
   return age >= MIN_AGE;
 }
 function starString(n) { n = Number(n) || 0; return '★'.repeat(n) + '☆'.repeat(5 - n); }
+
+// ---------------------------------------------------------------- self-added (free-text) strains
+// When the strain someone wants to log isn't in the library yet, they can
+// type its name instead. Those check-ins point at the hidden placeholder
+// strain (db.CUSTOM_STRAIN_ID) and carry the typed name in
+// custom_strain_name. Everywhere one is shown it gets a loud, unmissable
+// "Self-added - Not verified" tag so nobody mistakes it for library data.
+const CUSTOM_STRAIN_ID = db.CUSTOM_STRAIN_ID;
+function isCustomCheckin(c) { return !!c && c.strain_id === CUSTOM_STRAIN_ID; }
+function unverifiedBadge() {
+  return `<span class="unverified-badge" title="Typed in by a member. This strain isn't in the StrainDex library yet, so nothing about it has been verified.">⚠ Self-added · Not verified</span>`;
+}
+function checkinStrainName(c, s) {
+  if (isCustomCheckin(c)) return c.custom_strain_name || 'Unnamed strain';
+  return s ? s.name : c.strain_id;
+}
+function checkinStrainHref(c) {
+  return isCustomCheckin(c) ? `/checkin/${c.id}` : `/strains/${c.strain_id}`;
+}
+function checkinStrainTag(c, s) {
+  if (isCustomCheckin(c)) return unverifiedBadge();
+  return s ? `<span class="rarity-tag rarity-${s.rarity}">${rarityLabel(s.rarity)}</span>` : '';
+}
+// Tidies the typed name: collapses whitespace, strips control characters
+// and angle brackets, caps the length. Returns '' if nothing usable is left.
+function cleanCustomStrainName(raw) {
+  return String(raw || '').replace(/[\u0000-\u001f\u007f<>]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 60);
+}
 // Shared renderer for the optional "pairings" a user can log with a
 // check-in -- tasting notes plus food/drink, music/entertainment, and
 // activity pairings. Each is independently optional, so only show what's
@@ -716,11 +744,11 @@ async function pageHome(req, res) {
       </div>
     ` : ''}
     ${onThisDay.length ? `
-      <a href="/strains/${onThisDay[0].checkin.strain_id}" class="card" style="display:flex;align-items:center;gap:10px;margin:10px 0 0;text-decoration:none;color:#2a2a2a;background:var(--bg-subtle,#f7f7f2);">
+      <a href="${checkinStrainHref(onThisDay[0].checkin)}" class="card" style="display:flex;align-items:center;gap:10px;margin:10px 0 0;text-decoration:none;color:#2a2a2a;background:var(--bg-subtle,#f7f7f2);">
         ${strainPhotoTag(onThisDay[0].strain, 'sm')}
         <div style="min-width:0;">
           <div style="font-weight:700;font-size:13px;">📅 On this day, ${onThisDay[0].yearsAgo} year${onThisDay[0].yearsAgo === 1 ? '' : 's'} ago</div>
-          <div class="empty-note" style="padding:2px 0 0;">${esc(onThisDay[0].strain ? onThisDay[0].strain.name : onThisDay[0].checkin.strain_id)}${onThisDay[0].checkin.note ? ` — "${esc(onThisDay[0].checkin.note)}"` : ''}</div>
+          <div class="empty-note" style="padding:2px 0 0;">${esc(checkinStrainName(onThisDay[0].checkin, onThisDay[0].strain))}${isCustomCheckin(onThisDay[0].checkin) ? ' ' + unverifiedBadge() : ''}${onThisDay[0].checkin.note ? ` — "${esc(onThisDay[0].checkin.note)}"` : ''}</div>
         </div>
       </a>
     ` : ''}
@@ -858,9 +886,9 @@ async function pageHome(req, res) {
             ${isMine ? `<a href="/checkin/${c.id}/edit" class="empty-note" style="padding:0;">Edit</a>` : ''}
           </div>
         </div>
-        <a class="strain-chip" href="/strains/${c.strain_id}">
+        <a class="strain-chip" href="${checkinStrainHref(c)}">
           ${strainPhotoTag(s, 'xs')}
-          <span><b>${esc(s ? s.name : c.strain_id)}</b> ${s ? `<span class="rarity-tag rarity-${s.rarity}">${rarityLabel(s.rarity)}</span>` : ''}</span>
+          <span><b>${esc(checkinStrainName(c, s))}</b> ${checkinStrainTag(c, s)}</span>
         </a>
         <div class="sub" style="margin-top:8px;">${esc(c.method)} · ${starString(c.rating)}</div>
         ${c.photo ? `<img class="photo-thumb" src="${esc(c.photo)}" alt="photo">` : ''}
@@ -1395,6 +1423,8 @@ function pageCheckinForm(req, res, query, existing) {
   const strainId = existing ? existing.strain_id : (query.get('strain') || '');
   const s = strainId ? db.getStrain(strainId) : null;
   const isEdit = !!existing;
+  const isCustomExisting = isCustomCheckin(existing);
+  const hasPick = !!s || isCustomExisting;
   // Always show at least one pairing row -- a blank "Food & Drink" row by
   // default on a new check-in, or the real existing pairings when editing.
   // See the PAIRING TYPES comment on renderCheckinPairings above.
@@ -1404,15 +1434,16 @@ function pageCheckinForm(req, res, query, existing) {
     ${isEdit ? `<p class="empty-note">Thoughts changed after the fact? That's normal, especially with edibles — update it below.</p>` : ''}
     <form method="POST" action="${isEdit ? `/checkin/${existing.id}/edit` : '/checkin'}" id="checkin-form">
       <label class="field-label">Strain</label>
-      <div id="strain-picker" ${s ? 'style="display:none;"' : ''}>
+      <div id="strain-picker" ${hasPick ? 'style="display:none;"' : ''}>
         <input type="text" id="strain-picker-search" placeholder="Type a strain name..." autocomplete="off" ${isEdit ? 'disabled' : ''}>
         <div class="effect-results" id="strain-picker-results"></div>
       </div>
-      <div id="strain-picker-selected" class="card" ${s ? '' : 'style="display:none;"'}>
-        ${s ? `${s.icon} <b>${esc(s.name)}</b> ${isEdit ? '' : `<button type="button" id="strain-picker-change" class="btn secondary" style="float:right;padding:2px 10px;">Change</button>`}` : ''}
+      <div id="strain-picker-selected" class="card" ${hasPick ? '' : 'style="display:none;"'}>
+        ${s ? `${s.icon} <b>${esc(s.name)}</b> ${isEdit ? '' : `<button type="button" id="strain-picker-change" class="btn secondary" style="float:right;padding:2px 10px;">Change</button>`}` : (isCustomExisting ? `🌿 <b>${esc(existing.custom_strain_name || 'Unnamed strain')}</b> ${unverifiedBadge()}` : '')}
       </div>
-      <input type="hidden" name="strain_id" id="strain-picker-hidden" value="${s ? s.id : ''}">
-      ${isEdit ? '' : `<p class="empty-note" id="strain-picker-hint" ${s ? 'style="display:none;"' : ''}>Tip: search from <a href="/strains">the Strain Library</a> and tap "Light It Up" on the strain page for a pre-filled form.</p>`}
+      <input type="hidden" name="strain_id" id="strain-picker-hidden" value="${s ? s.id : (isCustomExisting ? CUSTOM_STRAIN_ID : '')}">
+      <input type="hidden" name="custom_strain_name" id="strain-picker-custom-name" value="${isCustomExisting ? esc(existing.custom_strain_name || '') : ''}">
+      ${isEdit ? '' : `<p class="empty-note" id="strain-picker-hint" ${hasPick ? 'style="display:none;"' : ''}>Tip: search from <a href="/strains">the Strain Library</a> and tap "Light It Up" on the strain page for a pre-filled form.<br>Can't find it? Type the name and choose “Log as self-added” — everyone will see it tagged ${unverifiedBadge()} until we verify it.</p>`}
 
       <label class="field-label">Method</label>
       <select name="method" id="checkin-method-select" onchange="toggleEdibleWarning(this.value)">${METHOD_GROUPS.map(g => `<optgroup label="${esc(g.group)}">${g.items.map(m => `<option ${existing && existing.method === m ? 'selected' : ''}>${esc(m)}</option>`).join('')}</optgroup>`).join('')}</select>
@@ -1464,7 +1495,7 @@ function pageCheckinForm(req, res, query, existing) {
     </form>
     ${isEdit ? `
       <form method="POST" action="/checkin/${existing.id}/delete" style="margin-top:10px;text-align:center;" onsubmit="return confirm('Delete this check-in? This cannot be undone.')">
-        <input type="hidden" name="redirect_to" value="/strains/${existing.strain_id}">
+        <input type="hidden" name="redirect_to" value="${isCustomExisting ? '/history' : '/strains/' + existing.strain_id}">
         <button type="submit" style="background:none;border:none;color:#a13a3a;cursor:pointer;font-size:12px;padding:4px;">Delete this check-in</button>
       </form>
     ` : ''}
@@ -1525,9 +1556,9 @@ function pageCheckinDetail(req, res, id) {
           ${isMine ? `<a href="/checkin/${c.id}/edit" class="empty-note" style="padding:0;">Edit</a>` : ''}
         </div>
       </div>
-      <a class="strain-chip" href="/strains/${c.strain_id}">
+      <a class="strain-chip" href="${checkinStrainHref(c)}">
         ${strainPhotoTag(s, 'xs')}
-        <span><b>${esc(s ? s.name : c.strain_id)}</b> ${s ? `<span class="rarity-tag rarity-${s.rarity}">${rarityLabel(s.rarity)}</span>` : ''}</span>
+        <span><b>${esc(checkinStrainName(c, s))}</b> ${checkinStrainTag(c, s)}</span>
       </a>
       <div class="sub" style="margin-top:8px;">${esc(c.method)} · ${starString(c.rating)}</div>
       ${c.photo ? `<img class="photo-thumb" src="${esc(c.photo)}" alt="photo">` : ''}
@@ -1570,18 +1601,45 @@ async function handleCheckinSubmit(req, res) {
   const userId = requireUser(req, res);
   if (userId == null) return;
   const fields = await parseForm(req);
-  const strainId = fields.strain_id;
+  let strainId = fields.strain_id;
   if (!strainId) { sendHtml(res, layout({ title: 'Check In', body: `<p>Please pick a valid strain. <a href="/checkin">Try again</a></p>` }), 400); return; }
+  // Free-text ("self-added") strain: the person typed a name because the
+  // strain isn't in the library yet.
+  let customName = '';
+  if (strainId === CUSTOM_STRAIN_ID) {
+    customName = cleanCustomStrainName(fields.custom_strain_name);
+    if (customName.length < 2) { sendHtml(res, layout({ title: 'Check In', body: `<p>Please type the strain's name (at least 2 characters). <a href="/checkin">Try again</a></p>` }), 400); return; }
+    // If what they typed is actually a library strain (by name or alias),
+    // link it to the real entry instead of creating a duplicate.
+    const libraryMatch = db.findStrainByNameOrAka(customName);
+    if (libraryMatch) { strainId = libraryMatch.id; customName = ''; }
+  }
   let effects = Array.isArray(fields.effects) ? fields.effects : (fields.effects ? [fields.effects] : []);
   effects = effects.filter(Boolean).slice(0, 5);
   const photoUrl = await storage.uploadCheckinPhoto(fields.photo || null);
-  await db.createCheckin({
+  const created = await db.createCheckin({
     user_id: userId, strain_id: strainId, method: fields.method, rating: Number(fields.rating) || 0,
     note: fields.note || '', effects, photo: photoUrl,
     tasting_notes: fields.tasting_notes || '', brand: fields.brand || '',
     pairings: pairingsFromForm(fields),
     is_private: !!fields.is_private,
+    custom_strain_name: customName,
   });
+  if (customName) {
+    // Queue it for review (once per person per name) so the strain can be
+    // researched and added to the library, and these check-ins linked to it.
+    const alreadyQueued = db.listStrainSubmissions().some(sub =>
+      sub.user_id === userId && sub.status !== 'reviewed' && String(sub.strain_name).trim().toLowerCase() === customName.toLowerCase());
+    if (!alreadyQueued) {
+      const brandNote = String(fields.brand || '').trim();
+      await db.createStrainSubmission({
+        user_id: userId, strain_name: customName,
+        description: 'Self-added at check-in' + (brandNote ? ` · brand: ${brandNote.slice(0, 80)}` : ''),
+        photo: null,
+      });
+    }
+    return redirect(res, `/checkin/${created.id}`);
+  }
   redirect(res, `/strains/${strainId}`);
 }
 async function handleCheckinEditSubmit(req, res, id) {
@@ -1600,7 +1658,7 @@ async function handleCheckinEditSubmit(req, res, id) {
     pairings: pairingsFromForm(fields),
     is_private: !!fields.is_private,
   });
-  redirect(res, `/strains/${existing.strain_id}`);
+  redirect(res, isCustomCheckin(existing) ? `/checkin/${existing.id}` : `/strains/${existing.strain_id}`);
 }
 async function handleCheckinDelete(req, res, id) {
   const userId = requireUser(req, res);
@@ -4237,6 +4295,7 @@ function pageAdminHome(req, res) {
     <div class="card"><a href="/admin/faqs">📋 Manage FAQ (${db.listFaqs().length})</a></div>
     <div class="card"><a href="/admin/recipes">🍽️ Manage Recipes (${db.listRecipes({ status: null }).length}${pendingCount ? `, ${pendingCount} pending` : ''})</a></div>
     <div class="card"><a href="/admin/strains">🌿 Manage Strains (${db.countStrains().toLocaleString()})</a></div>
+    <div class="card"><a href="/admin/strain-submissions">🆕 Self-added strains (${db.listStrainSubmissions().filter(x => x.status !== 'reviewed').length} pending)</a></div>
     <div class="card"><a href="/admin/users">👤 Manage Users (${db.listUsers().length})</a></div>
     <div class="card"><a href="/admin/logout">🚪 Log out</a></div>
   `;
@@ -5287,10 +5346,10 @@ function pageHistory(req, res) {
     ${history.length ? history.map(c => {
       const s = db.getStrain(c.strain_id);
       return `<div class="library-row">
-        <a href="/strains/${c.strain_id}" style="text-decoration:none;color:inherit;display:flex;align-items:center;gap:10px;flex:1;min-width:0;">
+        <a href="${checkinStrainHref(c)}" style="text-decoration:none;color:inherit;display:flex;align-items:center;gap:10px;flex:1;min-width:0;">
           ${strainPhotoTag(s, 'sm')}
           <div class="info">
-            <div class="nm">${esc(s ? s.name : c.strain_id)}</div>
+            <div class="nm">${esc(checkinStrainName(c, s))}${isCustomCheckin(c) ? ' ' + unverifiedBadge() : ''}</div>
             <div class="sub">${esc(c.method)} · ${starString(c.rating)} · <span class="local-time" data-utc="${c.created_at}Z">${esc(c.created_at)} UTC</span></div>
           </div>
         </a>
@@ -5454,7 +5513,7 @@ async function pageNotifications(req, res) {
         ${strainPhotoTag(strain, 'sm')}
         <div class="info">
           <div class="nm">${esc(actor ? actor.username : 'Someone')} ${esc(verb)}</div>
-          <div class="sub">on ${esc(strain ? strain.name : checkin.strain_id)} · <span class="local-time" data-utc="${created_at}Z">${esc(created_at)} UTC</span></div>
+          <div class="sub">on ${esc(checkinStrainName(checkin, strain))}${isCustomCheckin(checkin) ? ' ' + unverifiedBadge() : ''} · <span class="local-time" data-utc="${created_at}Z">${esc(created_at)} UTC</span></div>
         </div>
       </a>
     `).join('') : `<div class="empty-note">Nothing yet — comments, reactions, and @mentions on your posts will show up here.</div>`}
@@ -5535,6 +5594,63 @@ async function handleAdminReportReviewed(req, res, id) {
   if (!requireAdmin(req, res)) return;
   await db.markReportReviewed(Number(id));
   redirect(res, '/admin/reports');
+}
+
+// Review queue for self-added (free-text) strains. Each row is a name that
+// someone typed at check-in because it wasn't in the library. Once the
+// strain has been researched and added, "Link check-ins" moves every
+// check-in logged under that typed name onto the real strain.
+function pageAdminStrainSubmissions(req, res, query) {
+  if (!requireAdmin(req, res)) return;
+  const linked = query.get('linked');
+  const subs = db.listStrainSubmissions();
+  const pending = subs.filter(x => x.status !== 'reviewed');
+  const done = subs.filter(x => x.status === 'reviewed');
+  const card = (x, isPending) => {
+    const user = x.user_id != null ? db.getUserById(x.user_id) : null;
+    const uses = db.countCustomCheckins(x.strain_name);
+    const match = db.findStrainByNameOrAka(x.strain_name);
+    return `
+      <div class="card" style="margin-bottom:8px;${isPending ? '' : 'opacity:0.55;'}">
+        <b>${esc(x.strain_name)}</b> ${isPending ? unverifiedBadge() : ''}
+        <p class="empty-note" style="padding:2px 0;">From ${esc(user ? user.username : 'a former user')} · ${esc(x.created_at)} UTC · ${uses} self-added check-in${uses === 1 ? '' : 's'} still using this name</p>
+        ${x.description ? `<p class="empty-note" style="padding:2px 0;">${esc(x.description)}</p>` : ''}
+        ${match ? `<p class="empty-note" style="padding:2px 0;color:var(--brand-green-dark);">Now matches library strain <b>${esc(match.name)}</b> (${esc(match.id)}).</p>` : ''}
+        ${isPending ? `
+          <form method="POST" action="/admin/strain-submissions/${x.id}/link" style="display:flex;gap:6px;margin-top:6px;">
+            <input type="text" name="strain_id" placeholder="Library strain ID, e.g. s6927" value="${match ? esc(match.id) : ''}" required style="flex:1;margin:0;">
+            <button class="btn" type="submit" style="white-space:nowrap;">Link check-ins</button>
+          </form>
+          <form method="POST" action="/admin/strain-submissions/${x.id}/reviewed" style="margin-top:6px;">
+            <button type="submit" class="btn secondary" style="padding:6px 12px;">Mark reviewed (don't link)</button>
+          </form>` : ''}
+      </div>`;
+  };
+  const body = `
+    <h1 class="screen-title">Self-added strains</h1>
+    <p class="screen-sub">Names people typed at check-in because the strain wasn't in the library. Research it, add it, then link the check-ins to the real entry.</p>
+    ${linked != null ? `<p class="empty-note" style="color:var(--brand-green-dark);">Linked ${esc(linked)} check-in${linked === '1' ? '' : 's'}.</p>` : ''}
+    <div class="section-label">Pending (${pending.length})</div>
+    ${pending.length ? pending.map(x => card(x, true)).join('') : `<div class="empty-note">Nothing waiting.</div>`}
+    ${done.length ? `<div class="section-label" style="margin-top:18px;">Reviewed (${done.length})</div>${done.map(x => card(x, false)).join('')}` : ''}
+  `;
+  sendHtml(res, layout({ title: 'Self-added strains', body, isAdmin: true }));
+}
+async function handleAdminStrainSubmissionLink(req, res, id) {
+  if (!requireAdmin(req, res)) return;
+  const sub = db.listStrainSubmissions().find(x => x.id === Number(id));
+  if (!sub) return notFound(res);
+  const f = await parseForm(req);
+  const strainId = String(f.strain_id || '').trim();
+  if (!db.getStrain(strainId)) return redirect(res, '/admin/strain-submissions');
+  const moved = await db.relinkCustomCheckins(sub.strain_name, strainId);
+  await db.markStrainSubmissionReviewed(sub.id);
+  redirect(res, `/admin/strain-submissions?linked=${moved}`);
+}
+async function handleAdminStrainSubmissionReviewed(req, res, id) {
+  if (!requireAdmin(req, res)) return;
+  await db.markStrainSubmissionReviewed(Number(id));
+  redirect(res, '/admin/strain-submissions');
 }
 
 // ---------- Direct messages ----------
@@ -5761,9 +5877,9 @@ function pageFriendProfile(req, res, friendId) {
         <div style="display:flex;justify-content:flex-end;margin-bottom:4px;">
           ${renderShareButton(c)}
         </div>
-        <a class="strain-chip" href="/strains/${c.strain_id}">
+        <a class="strain-chip" href="${checkinStrainHref(c)}">
           ${strainPhotoTag(s, 'xs')}
-          <span><b>${esc(s ? s.name : c.strain_id)}</b> ${s ? `<span class="rarity-tag rarity-${s.rarity}">${rarityLabel(s.rarity)}</span>` : ''}</span>
+          <span><b>${esc(checkinStrainName(c, s))}</b> ${checkinStrainTag(c, s)}</span>
         </a>
         <div class="sub" style="margin-top:8px;">${esc(c.method)} · ${starString(c.rating)}</div>
         ${c.photo ? `<img class="photo-thumb" src="${esc(c.photo)}" alt="photo">` : ''}
@@ -6544,6 +6660,9 @@ const server = http.createServer(async (req, res) => {
     if (method === 'GET' && pathname === '/blocked-users') return pageBlockedUsers(req, res);
     if (method === 'GET' && pathname === '/admin/reports') return pageAdminReports(req, res);
     if (method === 'POST' && (m = pathname.match(/^\/admin\/reports\/(\d+)\/reviewed$/))) return await handleAdminReportReviewed(req, res, m[1]);
+    if (method === 'GET' && pathname === '/admin/strain-submissions') return pageAdminStrainSubmissions(req, res, url.searchParams);
+    if (method === 'POST' && (m = pathname.match(/^\/admin\/strain-submissions\/(\d+)\/link$/))) return await handleAdminStrainSubmissionLink(req, res, m[1]);
+    if (method === 'POST' && (m = pathname.match(/^\/admin\/strain-submissions\/(\d+)\/reviewed$/))) return await handleAdminStrainSubmissionReviewed(req, res, m[1]);
 
     return notFound(res);
   } catch (err) {
