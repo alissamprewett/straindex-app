@@ -69,7 +69,7 @@
     ],
     "flavor": "Pungent diesel.",
     "icon": "⛽",
-    "aka": "Sour D, ECSD"
+    "aka": "Sour D"
   },
   {
     "id": "s4",
@@ -100,7 +100,7 @@
     ],
     "flavor": "Sweet earthy dough with a minty finish.",
     "icon": "🍪",
-    "breeder": "Cookie Family",
+    "breeder": "Cookie Fam Genetics",
     "aka": "GSC",
     "parents": [
       "OG Kush",
@@ -197,8 +197,8 @@
     ],
     "flavor": "Sweet dessert citrus with a creamy exhale.",
     "icon": "🍨",
-    "breeder": "Holistic Healing Collective",
-    "aka": "Gelato 33, Gelato #33, Larry Bird, Larry Bird Kush, Gelato Cookies, Gelato Kush",
+    "breeder": "Cookie Fam Genetics",
+    "aka": "Gelato 33, Gelato #33, Larry Bird",
     "parents": [
       "Sunset Sherbet",
       "Thin Mint GSC"
@@ -1691,7 +1691,8 @@
       "Pain",
       "Depression",
       "Inflammation"
-    ]
+    ],
+    "aka": "ECSD"
   },
   {
     "id": "s50",
@@ -2366,9 +2367,9 @@
     "id": "s70",
     "name": "Querkle",
     "type": "Hybrid",
-    "lean": "",
+    "lean": "Indica-leaning",
     "rarity": "common",
-    "thc": "15–20%",
+    "thc": "",
     "cbd": "<1%",
     "terps": [
       {
@@ -2399,6 +2400,10 @@
       "Insomnia",
       "Lack of Appetite",
       "Depression"
+    ],
+    "parents": [
+      "Purple Urkle",
+      "Space Queen"
     ]
   },
   {
@@ -7156,13 +7161,13 @@
       "Depression",
       "Inflammation"
     ],
-    "aka": "Purple Trainwreck"
+    "aka": ""
   },
   {
     "id": "s201",
     "name": "ReCON",
     "type": "Hybrid",
-    "lean": "",
+    "lean": "Indica-leaning",
     "rarity": "common",
     "thc": "21–27%",
     "cbd": "<1%",
@@ -7195,6 +7200,10 @@
       "Nausea",
       "Pain",
       "Lack of Appetite"
+    ],
+    "parents": [
+      "LA Confidential",
+      "Cannadential"
     ]
   },
   {
@@ -14206,8 +14215,8 @@
     "type": "Hybrid",
     "lean": "",
     "rarity": "rare",
-    "thc": "13–22%",
-    "cbd": "<1%",
+    "thc": "7–15%",
+    "cbd": "4–10%",
     "terps": [
       {
         "n": "Myrcene",
@@ -14241,7 +14250,8 @@
       "Thai",
       "Swiss",
       "Nepali Indica"
-    ]
+    ],
+    "breeder": "House of David Collective"
   },
   {
     "id": "s394",
@@ -47683,7 +47693,7 @@
   },
   {
     "id": "s1406",
-    "name": "Durban Thai Highflier",
+    "name": "Durban-Thai Highflyer",
     "type": "Hybrid",
     "lean": "",
     "rarity": "legendary",
@@ -47710,7 +47720,8 @@
     ],
     "flavor": "Caryophyllene-forward with a ocimene undertone.",
     "icon": "🌿",
-    "breeder": "SSSC"
+    "breeder": "SSSC",
+    "aka": ""
   },
   {
     "id": "s1407",
@@ -51134,7 +51145,7 @@
     ],
     "flavor": "Pungent diesel and earth with a sour, chocolatey undertone.",
     "icon": "🦍",
-    "breeder": "Joesy Whales",
+    "breeder": "GG Strains",
     "aka": "GG4, Original Glue",
     "parents": [
       "Chem's Sister",
@@ -51716,7 +51727,7 @@
     "flavor": "Pungent garlic and diesel over an earthy, savory base.",
     "icon": "🧄",
     "breeder": "Mamiko Seeds",
-    "aka": "Garlic Mushroom Onion, GMO 41, Garlic Cookies, GMO Cookies",
+    "aka": "Garlic Mushroom Onion, Garlic Cookies, GMO Cookies, GMO Garlic Cookies",
     "parents": [
       "Chemdawg",
       "Girl Scout Cookies"
@@ -52837,7 +52848,8 @@
     "parents": [
       "Ghost OG",
       "Neville's Wreck"
-    ]
+    ],
+    "breeder": "Rare Dankness Seeds"
   },
   {
     "id": "s1577",
@@ -53432,7 +53444,7 @@
     ],
     "flavor": "Sweet cream and citrus with a smooth, gassy finish.",
     "icon": "🍨",
-    "breeder": "Cookie Family"
+    "breeder": "Cookie Fam Genetics"
   },
   {
     "id": "s1600",
@@ -54113,7 +54125,7 @@
     "id": "s1624",
     "name": "Rainbow Belts",
     "type": "Hybrid",
-    "lean": "",
+    "lean": "Indica-leaning",
     "rarity": "uncommon",
     "thc": "18–24%",
     "cbd": "<1%",
@@ -54139,7 +54151,12 @@
     ],
     "flavor": "Sweet candy and berry with a tropical, tangy finish.",
     "icon": "🌈",
-    "aka": "Rainbow Beltz, Rainbow Belt, RaB"
+    "aka": "Rainbow Beltz, Rainbow Belt, RaB",
+    "breeder": "Archive Seed Bank",
+    "parents": [
+      "Zkittlez",
+      "Moonbow"
+    ]
   },
   {
     "id": "s1625",
@@ -60887,11 +60904,8 @@
     "flavor": "Sweet dessert and ripe fruit with gas and vanilla frosting.",
     "icon": "🌿",
     "breeder": "Grandiflora Genetics",
-    "parents": [
-      "Wedding Cake",
-      "Project 4516"
-    ],
-    "aka": "Ethanol, E-85",
+    "parents": [],
+    "aka": "E-85",
     "id": "s1944"
   },
   {
@@ -101981,7 +101995,7 @@
     "breeder": "Lucky Dog Seed Co",
     "parents": [
       "Chemdog 91 BX3",
-      "Durban Thai High Flyer"
+      "Durban-Thai Highflyer"
     ],
     "id": "s3650"
   },
@@ -149004,7 +149018,7 @@
   },
   {
     "name": "Rainbow Cheddar",
-    "type": "Indica",
+    "type": "Hybrid",
     "lean": "Indica-leaning",
     "rarity": "uncommon",
     "thc": "17-18%",
@@ -185685,6 +185699,380 @@
       "Pakistani Chitral Kush"
     ],
     "aka": "",
+    "ailments": null
+  },
+  {
+    "id": "s7249",
+    "name": "Royal Gorilla",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "Royal Queen",
+    "parents": [],
+    "aka": "",
+    "ailments": null
+  },
+  {
+    "id": "s7250",
+    "name": "Purple Trainwreck",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "Humboldt Seed Organization",
+    "parents": [
+      "Mendocino Purps",
+      "Trainwreck"
+    ],
+    "aka": "",
+    "ailments": null
+  },
+  {
+    "id": "s7251",
+    "name": "Purpurea Ticinensis",
+    "type": "Sativa",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "",
+    "parents": [],
+    "aka": "",
+    "ailments": null
+  },
+  {
+    "id": "s7252",
+    "name": "Pursang Haze",
+    "type": "Hybrid",
+    "lean": "Sativa-dominant",
+    "rarity": "rare",
+    "thc": "17–24%",
+    "cbd": "0–2%",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "",
+    "parents": [
+      "Super Silver Haze",
+      "Jack Herer",
+      "Northern Lights x Thailand"
+    ],
+    "aka": "",
+    "ailments": null
+  },
+  {
+    "id": "s7253",
+    "name": "Puta Breath",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "23–29%",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "ThugPug Genetics",
+    "parents": [
+      "Wedding Cake",
+      "Mendo Breath F2"
+    ],
+    "aka": "",
+    "ailments": null
+  },
+  {
+    "id": "s7254",
+    "name": "Pyxy Styx",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "Cannarado Genetics",
+    "parents": [],
+    "aka": "Pyxystyx",
+    "ailments": null
+  },
+  {
+    "id": "s7255",
+    "name": "Queen of the South",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "21–22%",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "Relentless Genetics",
+    "parents": [
+      "Tropicana Cherry",
+      "#1 Stunna"
+    ],
+    "aka": "",
+    "ailments": null
+  },
+  {
+    "id": "s7256",
+    "name": "Queso Perro",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "Cloud Cover Cannabis",
+    "parents": [
+      "Stardawg",
+      "UK Cheese"
+    ],
+    "aka": "",
+    "ailments": null
+  },
+  {
+    "id": "s7257",
+    "name": "Race Fuel OG",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "",
+    "parents": [
+      "OG Kush",
+      "Face Off OG"
+    ],
+    "aka": "Race Fuel",
+    "ailments": null
+  },
+  {
+    "id": "s7258",
+    "name": "Rainbow Driver",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "",
+    "parents": [],
+    "aka": "",
+    "ailments": null
+  },
+  {
+    "id": "s7259",
+    "name": "Rainbow Pie",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "27–33%",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "",
+    "parents": [
+      "Zkittlez",
+      "Grand Blueberry Pie"
+    ],
+    "aka": "",
+    "ailments": null
+  },
+  {
+    "id": "s7260",
+    "name": "Raspberry Bellini",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "",
+    "parents": [],
+    "aka": "",
+    "ailments": null
+  },
+  {
+    "id": "s7261",
+    "name": "Raspberry Breath",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "ThugPug Genetics",
+    "parents": [],
+    "aka": "",
+    "ailments": null
+  },
+  {
+    "id": "s7262",
+    "name": "Raspberry Shortcake",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "",
+    "parents": [],
+    "aka": "",
+    "ailments": null
+  },
+  {
+    "id": "s7263",
+    "name": "Rebel OG",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "21–22%",
+    "cbd": "0–1%",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "",
+    "parents": [
+      "Triangle Kush",
+      "Longbottom"
+    ],
+    "aka": "",
+    "ailments": null
+  },
+  {
+    "id": "s7264",
+    "name": "Reckless Rainbow",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "20–24%",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "Lumpy's Flowers",
+    "parents": [],
+    "aka": "",
+    "ailments": null
+  },
+  {
+    "id": "s7265",
+    "name": "Red Delicious",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "16–17%",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "Exotic Genetix",
+    "parents": [
+      "Apple Fritter",
+      "Red Pop"
+    ],
+    "aka": "",
+    "ailments": null
+  },
+  {
+    "id": "s7266",
+    "name": "Red Kross",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "Pharmers Hemp",
+    "parents": [
+      "Baox",
+      "Finola"
+    ],
+    "aka": "",
+    "ailments": null
+  },
+  {
+    "id": "s7267",
+    "name": "Red Piegasm",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "26–27%",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "",
+    "parents": [],
+    "aka": "",
+    "ailments": null
+  },
+  {
+    "id": "s7268",
+    "name": "Red Poison Auto",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "Sweet Seeds",
+    "parents": [
+      "Green Poison",
+      "Autoflowering purple strain (Pakistani Kush ancestry)"
+    ],
+    "aka": "Red Poison",
     "ailments": null
   }
 ]
