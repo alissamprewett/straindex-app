@@ -2989,7 +2989,7 @@
       "Insomnia",
       "Lack of Appetite"
     ],
-    "aka": "Dosi, Dosidos, Do-Si-Do, Do Si Do, Do Si Dos, Dosido",
+    "aka": "Dosidos, Do Si Dos",
     "parents": [
       "OG Kush Breath",
       "Face Off OG"
@@ -8942,7 +8942,8 @@
     "parents": [
       "Tangie",
       "Lemon Skunk"
-    ]
+    ],
+    "breeder": "Crockett Family Farms"
   },
   {
     "id": "s250",
@@ -51310,7 +51311,7 @@
     ],
     "flavor": "Sweet vanilla and earthy cookie notes.",
     "icon": "🍪",
-    "aka": "Cookies & Cream",
+    "aka": "Cookies & Cream, Cookies N Cream",
     "parents": [
       "Starfighter",
       "Girl Scout Cookies"
@@ -57621,7 +57622,8 @@
       "Chemdog 91",
       "SFV OG Kush"
     ],
-    "id": "s1787"
+    "id": "s1787",
+    "aka": "Dead Head, Deadhead, Deadhead OG Kush"
   },
   {
     "name": "Starberry",
@@ -177257,37 +177259,6 @@
     ]
   },
   {
-    "id": "s6814",
-    "name": "Kosher Tangie",
-    "type": "Hybrid",
-    "lean": "Sativa-leaning",
-    "rarity": "uncommon",
-    "thc": "18-27%",
-    "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Myrcene",
-        "p": 0.3
-      },
-      {
-        "n": "Limonene",
-        "p": 0.2
-      }
-    ],
-    "effects": [
-      "Uplifted",
-      "Relaxed",
-      "Creative"
-    ],
-    "flavor": "Earthy citrus with a mandarin orange peel finish.",
-    "icon": "🍊",
-    "breeder": "DNA Genetics",
-    "parents": [
-      "Kosher Kush",
-      "Tangie"
-    ]
-  },
-  {
     "id": "s6815",
     "name": "Beach Wedding",
     "type": "Hybrid",
@@ -184573,7 +184544,7 @@
       "OG Eddy Lepp",
       "Zkittlez"
     ],
-    "aka": "Oz Kush",
+    "aka": "Oz Kush, OZK",
     "ailments": null
   },
   {
@@ -185693,6 +185664,26 @@
     "icon": "🌿",
     "breeder": "",
     "parents": [],
+    "aka": "",
+    "ailments": null
+  },
+  {
+    "id": "s7248",
+    "name": "Chillz",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "Capulator",
+    "parents": [
+      "Freezer Burn",
+      "Pakistani Chitral Kush"
+    ],
     "aka": "",
     "ailments": null
   }
