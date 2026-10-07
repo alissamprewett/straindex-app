@@ -353,6 +353,10 @@ function renderSafetyCarousel() {
 // is remembered so they are never asked about that strain again. Pending prompts are derived live from
 // current data (db.listPendingCustomStrainPrompts), so it works whether the strain was added by an admin,
 // a library update, or a name/alias that now matches.
+// NOTE ON THE MARKUP: each choice is its OWN <form> with a hidden `action` input -- not one form with two named
+// submit buttons. The app-wide "Saving..." handler in public/app.js disables a form's first submit button the
+// moment it is submitted, and a disabled button's name/value is NOT sent, so with a shared form "Use verified
+// strain" arrived with no action and silently did nothing. A hidden input can't be disabled. Don't merge them.
 function renderCustomStrainPrompts(req, userId, redirectTo, { onlyNormName } = {}) {
   let prompts = db.listPendingCustomStrainPrompts(userId);
   if (onlyNormName) prompts = prompts.filter(p => p.normName === onlyNormName);
@@ -366,15 +370,18 @@ function renderCustomStrainPrompts(req, userId, redirectTo, { onlyNormName } = {
         <span><b>${esc(p.strain.name)}</b> <span class="rarity-tag rarity-${esc(p.strain.rarity)}">${rarityLabel(p.strain.rarity)}</span></span>
       </a>
       <div class="empty-note" style="padding:4px 0 0;">${esc(p.strain.type)}${p.strain.thc ? ' · THC ' + esc(p.strain.thc) : ''}${p.strain.breeder ? ' · ' + esc(p.strain.breeder) : ''}</div>
-      <form method="POST" action="/custom-strain/resolve" style="display:flex;gap:8px;margin-top:10px;">
-        ${csrfField(req)}
-        <input type="hidden" name="norm_name" value="${esc(p.normName)}">
-        <input type="hidden" name="strain_id" value="${esc(p.strain.id)}">
-        <input type="hidden" name="redirect_to" value="${esc(redirectTo)}">
-        <button class="btn" type="submit" name="action" value="link" style="flex:1;">Use verified strain</button>
-        <button class="btn secondary" type="submit" name="action" value="keep" style="flex:1;">Keep as self-added</button>
-      </form>
-      <p class="empty-note" style="padding:6px 0 0;">Switching only changes the strain — your rating, notes, photos and date stay exactly as they are.</p>
+      <div style="display:flex;gap:8px;margin-top:10px;">
+        ${['link', 'keep'].map(action => `
+        <form method="POST" action="/custom-strain/resolve" style="flex:1;display:flex;margin:0;">
+          ${csrfField(req)}
+          <input type="hidden" name="norm_name" value="${esc(p.normName)}">
+          <input type="hidden" name="strain_id" value="${esc(p.strain.id)}">
+          <input type="hidden" name="redirect_to" value="${esc(redirectTo)}">
+          <input type="hidden" name="action" value="${action}">
+          <button class="btn${action === 'keep' ? ' secondary' : ''}" type="submit" style="flex:1;">${action === 'link' ? 'Use verified strain' : 'Keep as self-added'}</button>
+        </form>`).join('')}
+      </div>
+      <p class="empty-note" style="padding:6px 0 0;">Switching only changes the strain — your rating, notes, photos and date stay exactly as they are. <b>Either choice clears this reminder.</b></p>
     </div>`).join('');
 }
 async function handleCustomStrainResolve(req, res) {
@@ -383,8 +390,33 @@ async function handleCustomStrainResolve(req, res) {
   const f = await parseForm(req);
   const back = safeRedirectPath(f.redirect_to) || '/notifications';
   // Only a prompt that is genuinely pending for THIS person can be answered (checked again inside db).
-  await db.resolveCustomStrainPrompt(userId, String(f.norm_name || ''), String(f.strain_id || ''), f.action === 'link' ? 'link' : f.action === 'keep' ? 'keep' : '');
-  redirect(res, back);
+  const result = await db.resolveCustomStrainPrompt(userId, String(f.norm_name || ''), String(f.strain_id || ''), f.action === 'link' ? 'link' : f.action === 'keep' ? 'keep' : '');
+  const sep = back.includes('?') ? '&' : '?';
+  redirect(res, result.ok
+    ? `${back}${sep}cs=${result.action}&csn=${encodeURIComponent(result.strainName)}&csc=${result.action === 'link' ? result.moved : result.count}`
+    : `${back}${sep}cs=gone`);
+}
+// One-line description of what is waiting in Notifications, so a number is never a mystery.
+function notificationsSummary(userId) {
+  const n = db.countUnreadMentions(userId) + db.countUnreadCheckinNotifications(userId);
+  const q = db.listPendingCustomStrainPrompts(userId).length;
+  const parts = [];
+  if (n) parts.push(`${n} new`);
+  if (q) parts.push(`${q} question${q === 1 ? '' : 's'} for you`);
+  return parts.length ? parts.join(' \u00b7 ') : null;
+}
+// Confirmation shown after someone answers a verified-strain question (see handleCustomStrainResolve): says what
+// happened, so it's obvious the question is cleared. Values come from the URL, so everything is escaped/clamped.
+function renderCustomStrainAnswered(req) {
+  const q = new URL(req.url, 'http://x').searchParams;
+  const cs = q.get('cs');
+  if (!cs) return '';
+  const name = esc((q.get('csn') || '').slice(0, 80));
+  const n = Math.max(0, Math.min(999, Number(q.get('csc')) || 0));
+  const msg = cs === 'link' ? `\u2705 Done \u2014 your ${n} check-in${n === 1 ? '' : 's'} now use <b>${name}</b> (verified).`
+    : cs === 'keep' ? `\ud83d\udc4d Okay \u2014 your check-in${n === 1 ? '' : 's'} stay${n === 1 ? 's' : ''} self-added, and we won't ask about <b>${name}</b> again.`
+    : cs === 'gone' ? 'That question was already answered \u2014 nothing more to do.' : '';
+  return msg ? `<div class="card" style="border-left:4px solid var(--brand-green);margin-bottom:12px;">${msg}</div>` : '';
 }
 function friendsBadgeCount(userId) {
   if (userId == null) return 0;
@@ -916,6 +948,7 @@ async function pageHome(req, res) {
       })();
     </script>
     <p class="screen-sub">Your personal cannabis companion — check-ins, discovery, safety info, and your community, all in one place.</p>
+    ${renderCustomStrainAnswered(req)}
     ${renderCustomStrainPrompts(req, userId, '/')}
     <a class="btn block" href="/checkin" style="margin-bottom:18px;">🌿 Light It Up</a>
 
@@ -1671,6 +1704,7 @@ function pageCheckinDetail(req, res, id) {
         ${strainPhotoTag(s, 'xs')}
         <span><b>${esc(checkinStrainName(c, s))}</b> ${checkinStrainTag(c, s)}</span>
       </a>
+      ${isMine ? renderCustomStrainAnswered(req) : ''}
       ${isMine && isCustomCheckin(c) ? renderCustomStrainPrompts(req, userId, '/checkin/' + c.id, { onlyNormName: db.normalizeCustomName(c.custom_strain_name) }) : ''}
       <div class="sub" style="margin-top:8px;">${esc(c.method)} · ${starString(c.rating)}</div>
       ${c.photo ? `<img class="photo-thumb" src="${esc(c.photo)}" alt="photo">` : ''}
@@ -5584,7 +5618,7 @@ function pageFriends(req, res, query) {
 
     <div class="more-grid">
       <a class="more-tile" href="/messages"><span class="ic">💬</span><div class="t">Messages</div><div class="s">${db.countUnreadMessages(userId) > 0 ? `${db.countUnreadMessages(userId)} unread` : 'Chat with your community'}</div></a>
-      <a class="more-tile" href="/notifications"><span class="ic">🔔</span><div class="t">Notifications</div><div class="s">${(db.countUnreadMentions(userId) + db.countUnreadCheckinNotifications(userId) + db.listPendingCustomStrainPrompts(userId).length) > 0 ? `${db.countUnreadMentions(userId) + db.countUnreadCheckinNotifications(userId) + db.listPendingCustomStrainPrompts(userId).length} new` : 'Mentions, comments & reactions'}</div></a>
+      <a class="more-tile" href="/notifications"><span class="ic">🔔</span><div class="t">Notifications</div><div class="s">${notificationsSummary(userId) || 'Mentions, comments & reactions'}</div></a>
       <a class="more-tile" href="/puff-puff-ask"><span class="ic">💨</span><div class="t">Puff Puff Ask</div><div class="s">Ask the community, browse by section</div></a>
       <a class="more-tile" href="/trade"><span class="ic">🔁</span><div class="t">Trade</div><div class="s">Swap dupes with your community</div></a>
       <a class="more-tile" href="/friends-picks"><span class="ic">🤝</span><div class="t">Community Picks</div><div class="s">What your circle loves that you haven't tried</div></a>
@@ -5699,9 +5733,12 @@ async function pageNotifications(req, res) {
   await db.markCheckinNotificationsRead(userId);
   const body = `
     <h1 class="screen-title">Notifications</h1>
-    <p class="screen-sub">Mentions, comments, and reactions on your posts.</p>
-    ${renderCustomStrainPrompts(req, userId, '/notifications')}
-    ${rows.length ? rows.map(({ checkin, actor, strain, verb, created_at }) => `
+    <p class="screen-sub">Questions that need your answer, plus mentions, comments, and reactions on your posts.</p>
+    ${renderCustomStrainAnswered(req)}
+    ${db.listPendingCustomStrainPrompts(userId).length ? `<div class="section-label">Needs your answer (${db.listPendingCustomStrainPrompts(userId).length})</div>
+      <p class="empty-note" style="margin-top:0;">These stay here, and keep the red dot on, until you choose. Either choice clears them.</p>
+      ${renderCustomStrainPrompts(req, userId, '/notifications')}` : ''}
+    ${rows.length ? '<div class="section-label" style="margin-top:16px;">Activity</div>' + rows.map(({ checkin, actor, strain, verb, created_at }) => `
       <a class="library-row" href="/checkin/${checkin.id}" style="text-decoration:none;color:inherit;">
         ${strainPhotoTag(strain, 'sm')}
         <div class="info">
