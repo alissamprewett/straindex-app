@@ -41,11 +41,28 @@ const missing = [
 // A raw (unvalidated) redirect target would reopen the open-redirect hole.
 const rawRedirects = (server.match(/(?<!safeRedirectPath\()f\.redirect_to \|\|/g) || []).length;
 if (rawRedirects) missing.push(`server.js: ${rawRedirects} unvalidated redirect_to use(s)`);
+// Wrong-folder check. GitHub's web uploader puts a file in the repo ROOT unless you drag in the folder it belongs to.
+// Files that must live in lib/ and files that must live at the root:
+{
+  const LIB_FILES = ['db.js', 'auth.js', 'storage.js', 'data-migrations.js', 'render.js', 'body.js', 'chat.js', 'mockdata.js', 'geodispensaries.js'];
+  for (const f of LIB_FILES) {
+    const inLib = fs.existsSync(__dirname + '/lib/' + f), inRoot = fs.existsSync(__dirname + '/' + f);
+    if (inRoot) missing.push(`${f} is in the repo ROOT -- it belongs in lib/${f}. Move it (GitHub: open the file > pencil > change the name to lib/${f} > Commit).`);
+    if (!inLib && f === 'data-migrations.js') missing.push('lib/data-migrations.js is MISSING (the app requires it at startup)');
+  }
+  // Only meaningful inside a FULL repo checkout (the unzipped upload folder has no package.json).
+  if (fs.existsSync(__dirname + '/package.json')) {
+    for (const f of ['server.js', 'seed.js', 'instrument.js']) {
+      if (!fs.existsSync(__dirname + '/' + f)) missing.push(`${f} is missing from the repo root`);
+      if (fs.existsSync(__dirname + '/lib/' + f)) missing.push(`${f} is inside lib/ -- it belongs in the repo root.`);
+    }
+  }
+}
 try { require(__dirname + '/lib/data-migrations').assertValidMerges(); }
 catch (e) { missing.push('lib/data-migrations.js: ' + e.message); }
 if (missing.length) {
-  console.error('CANARY FAILED -- this looks like an OLDER file than expected. Missing:\n  - ' + missing.join('\n  - '));
-  console.error('\nDo NOT deploy. Re-download the latest server.js / lib/db.js and check line counts (server.js should be ~7,500 lines).');
+  console.error('CANARY FAILED -- something is missing, outdated, or in the wrong folder:\n  - ' + missing.join('\n  - '));
+  console.error('\nDo NOT deploy until this is fixed. (If a file is simply old, re-download the latest; server.js should be ~7,500 lines.)');
   process.exit(1);
 }
 console.log('canary OK: security + restored features present (' + server.split('\n').length + ' lines in server.js)');
