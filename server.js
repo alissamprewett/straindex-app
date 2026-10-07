@@ -18,6 +18,25 @@ const crypto = require('node:crypto');
 const db = require('./lib/db');
 const auth = require('./lib/auth');
 const { layout, esc } = require('./lib/render');
+// The one, real, branded domain -- used for every outbound link this app
+// generates (shared check-ins, invite links, recap links, password reset
+// emails, admin notification emails), rather than building the origin
+// dynamically from req.headers.host. Deliberately hardcoded rather than
+// derived per-request: this app is deployed on Render, which also exposes
+// its own *.onrender.com hostname alongside the custom domain, and
+// req.headers.host reflects whichever hostname actually served that
+// particular request. A link generated from a request that happened to
+// arrive on the Render-assigned hostname would silently leak that
+// internal URL to whoever it's shared with, instead of the clean, correct
+// domain people actually expect to see and click. Update this in exactly
+// one place if the domain ever changes.
+const SITE_URL = 'https://www.strain-dex.com';
+// Renders the hidden CSRF field for server-rendered forms. Most forms get
+// their token injected client-side (see injectCsrfTokens in public/app.js),
+// but any form can include this directly as well -- both carry the same value.
+function csrfField(req) {
+  return `<input type="hidden" name="_csrf" value="${esc(auth.csrfToken(req))}">`;
+}
 const { parseForm, parseJson } = require('./lib/body');
 const { answerFromKnowledgeBase } = require('./lib/chat');
 const mock = require('./lib/mockdata');
@@ -27,11 +46,13 @@ const storage = require('./lib/storage');
 const PORT = process.env.PORT || 3000;
 
 // ---------------------------------------------------------------- basic signup rate limiting
-// A simple in-memory per-IP throttle -- not bulletproof (resets on
-// restart, doesn't help behind a shared IP like a school or office), but
-// stops the easy case: a bot or script hammering /signup. Max 5 signup
-// attempts per IP per 15 minutes.
-const signupAttempts = new Map(); // ip -> array of timestamps (ms)
+// Backed by the persistent rate_limit_attempts table (see db.js) rather
+// than an in-memory Map, specifically so this survives a server restart or
+// redeploy -- a Map-based limiter resets every time Render restarts the
+// process, which on a free/hobby tier can happen often enough to make the
+// protection meaningless. Not bulletproof (doesn't help behind a shared IP
+// like a school or office), but stops the easy case: a bot or script
+// hammering /signup. Max 5 signup attempts per IP per 15 minutes.
 const SIGNUP_WINDOW_MS = 15 * 60 * 1000;
 const SIGNUP_MAX_ATTEMPTS = 5;
 function clientIp(req) {
@@ -39,13 +60,11 @@ function clientIp(req) {
   if (fwd) return fwd.split(',')[0].trim();
   return req.socket.remoteAddress || 'unknown';
 }
-function isSignupRateLimited(req) {
+async function isSignupRateLimited(req) {
   const ip = clientIp(req);
-  const now = Date.now();
-  const attempts = (signupAttempts.get(ip) || []).filter(t => now - t < SIGNUP_WINDOW_MS);
-  attempts.push(now);
-  signupAttempts.set(ip, attempts);
-  return attempts.length > SIGNUP_MAX_ATTEMPTS;
+  const existing = await db.pruneAndCountAttempts('signup', ip, SIGNUP_WINDOW_MS);
+  await db.recordRateLimitAttempt('signup', ip);
+  return (existing + 1) > SIGNUP_MAX_ATTEMPTS;
 }
 
 // ---------------------------------------------------------------- basic login rate limiting
@@ -53,28 +72,50 @@ function isSignupRateLimited(req) {
 // brute-forcing one account's password, without penalizing everyone on a
 // shared network (school, office) for one person's typos. Only failed
 // attempts count -- a successful login clears the counter. Max 5 failed
-// attempts per 15 minutes per IP+username combination.
-const loginAttempts = new Map(); // "ip:username" -> array of failed-attempt timestamps
+// attempts per 15 minutes per IP+username combination. Same persistent
+// storage as signup, for the same restart-survival reason.
 const LOGIN_WINDOW_MS = 15 * 60 * 1000;
 const LOGIN_MAX_ATTEMPTS = 5;
 function loginAttemptKey(req, username) {
   return `${clientIp(req)}:${String(username || '').trim().toLowerCase()}`;
 }
-function isLoginRateLimited(req, username) {
+async function isLoginRateLimited(req, username) {
   const key = loginAttemptKey(req, username);
-  const now = Date.now();
-  const attempts = (loginAttempts.get(key) || []).filter(t => now - t < LOGIN_WINDOW_MS);
-  return attempts.length >= LOGIN_MAX_ATTEMPTS;
+  const count = await db.pruneAndCountAttempts('login', key, LOGIN_WINDOW_MS);
+  return count >= LOGIN_MAX_ATTEMPTS;
 }
-function recordFailedLogin(req, username) {
-  const key = loginAttemptKey(req, username);
-  const now = Date.now();
-  const attempts = (loginAttempts.get(key) || []).filter(t => now - t < LOGIN_WINDOW_MS);
-  attempts.push(now);
-  loginAttempts.set(key, attempts);
+async function recordFailedLogin(req, username) {
+  await db.recordRateLimitAttempt('login', loginAttemptKey(req, username));
 }
-function clearLoginAttempts(req, username) {
-  loginAttempts.delete(loginAttemptKey(req, username));
+async function clearLoginAttempts(req, username) {
+  await db.clearRateLimitAttempts('login', loginAttemptKey(req, username));
+}
+
+// ---------------------------------------------------------------- submission rate limiting
+// A generous per-account limit on the four authenticated submission
+// endpoints (feedback, recipes, grow tips, strain suggestions) -- every
+// one of them now sends an email to SUPPORT_EMAIL the moment it's used,
+// so without this, a bored or malicious logged-in user could spam
+// dozens of emails in seconds and burn through the transactional email
+// provider's sending quota. Reuses the same persistent rate_limit_attempts
+// table built for signup/login, just keyed by user id instead of IP,
+// since these actions always require being logged in already -- no need
+// to worry about one shared IP (a school, an office) penalizing everyone
+// on it the way login's IP-based limiting has to. The threshold is
+// deliberately generous: this exists to stop an obvious burst, not to
+// second-guess someone submitting a handful of genuine reports in one
+// sitting.
+const SUBMISSION_WINDOW_MS = 15 * 60 * 1000;
+const SUBMISSION_MAX_ATTEMPTS = 10;
+async function isSubmissionRateLimited(bucket, userId) {
+  const existing = await db.pruneAndCountAttempts(bucket, String(userId), SUBMISSION_WINDOW_MS);
+  await db.recordRateLimitAttempt(bucket, String(userId));
+  return (existing + 1) > SUBMISSION_MAX_ATTEMPTS;
+}
+
+// Friendly response for a tripped submission limiter (see isSubmissionRateLimited).
+function sendRateLimited(res, backHref) {
+  sendHtml(res, layout({ title: 'Slow down a little', body: `<h1 class="screen-title">Slow down a little</h1><p>You've submitted a lot in a short time — give it a few minutes and try again.</p><p><a href="${esc(backHref)}">Go back</a></p>` }), 429);
 }
 const PUBLIC_DIR = path.join(__dirname, 'public');
 const DOCS_DIR = path.join(__dirname, 'docs');
@@ -410,7 +451,7 @@ const REACT_TO_CHECKIN_SCRIPT = `
     if (!window.reactToCheckin) {
       window.reactToCheckin = function(checkinId, reaction) {
         fetch('/api/checkins/' + checkinId + '/react', {
-          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          method: 'POST', headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': ((document.cookie.match(/(?:^|; )csrf_token=([^;]*)/) || [])[1] ? decodeURIComponent(document.cookie.match(/(?:^|; )csrf_token=([^;]*)/)[1]) : '') },
           body: JSON.stringify({ reaction: reaction })
         }).then(function(r) { return r.json(); }).then(function(data) {
           var bar = document.getElementById('reaction-bar-' + checkinId);
@@ -1667,7 +1708,7 @@ async function handleCheckinDelete(req, res, id) {
   if (!existing || existing.user_id !== userId) return notFound(res);
   const f = await parseForm(req);
   await db.deleteCheckin(id);
-  redirect(res, f.redirect_to || '/history');
+  redirect(res, safeRedirectPath(f.redirect_to) || '/history');
 }
 
 function pageFaq(req, res, query) {
@@ -1942,7 +1983,7 @@ async function handleRecipeCommentSubmit(req, res, recipeId) {
   const f = await parseForm(req);
   const body = (f.body || '').trim();
   if (body) await db.createRecipeComment({ recipe_id: recipeId, user_id: userId, body });
-  redirect(res, f.redirect_to || `/recipes/${recipeId}`);
+  redirect(res, safeRedirectPath(f.redirect_to) || `/recipes/${recipeId}`);
 }
 async function handleRecipeFavoriteToggle(req, res, recipeId) {
   const userId = requireUser(req, res);
@@ -1953,7 +1994,7 @@ async function handleRecipeFavoriteToggle(req, res, recipeId) {
   } else {
     await db.addRecipeFavorite(userId, recipeId);
   }
-  redirect(res, f.redirect_to || `/recipes/${recipeId}`);
+  redirect(res, safeRedirectPath(f.redirect_to) || `/recipes/${recipeId}`);
 }
 function pageFavoriteRecipes(req, res) {
   const userId = requireUser(req, res);
@@ -2116,6 +2157,7 @@ function pageRecipeNew(req, res) {
 async function handleRecipeNewSubmit(req, res) {
   const userId = requireUser(req, res);
   if (userId == null) return;
+  if (await isSubmissionRateLimited('recipe_submit', userId)) return sendRateLimited(res, '/recipes/new');
   const f = await parseForm(req);
   await db.createRecipe({
     title: f.title, desc: f.desc, author: f.author, user_id: userId, source: 'community', status: 'pending',
@@ -2399,6 +2441,7 @@ function pageGrowingNew(req, res) {
 async function handleGrowingNewSubmit(req, res) {
   const userId = requireUser(req, res);
   if (userId == null) return;
+  if (await isSubmissionRateLimited('grow_tip_submit', userId)) return sendRateLimited(res, '/growing/new');
   const f = await parseForm(req);
   await db.createGrowTip({ title: f.title, category: f.category, author: f.author, user_id: userId, body: f.body });
   redirect(res, '/growing');
@@ -2448,7 +2491,7 @@ function pageAdminLogin(req, res, query) {
   const err = query.get('err');
   const body = `
     <h1 class="screen-title">Admin Login</h1>
-    ${err ? `<p style="color:#a13a3a;">Wrong password.</p>` : ''}
+    ${err === 'rate_limited' ? `<p style="color:#a13a3a;">Too many failed attempts. Try again in a few minutes.</p>` : (err ? `<p style="color:#a13a3a;">Wrong password.</p>` : '')}
     <form method="POST" action="/admin/login">
       <label class="field-label">Password</label>
       <input type="password" name="password" required>
@@ -2459,16 +2502,30 @@ function pageAdminLogin(req, res, query) {
 }
 async function handleAdminLoginSubmit(req, res) {
   const f = await parseForm(req);
+  // Same persistent limiter as user login, keyed by IP only (there's just
+  // one admin password, so there's no per-username dimension to key on).
+  const adminKey = clientIp(req);
+  if (await db.pruneAndCountAttempts('admin_login', adminKey, LOGIN_WINDOW_MS) >= LOGIN_MAX_ATTEMPTS) {
+    return redirect(res, '/admin/login?err=rate_limited');
+  }
   if (auth.checkPassword(f.password)) {
+    await db.clearRateLimitAttempts('admin_login', adminKey);
     const token = auth.sign('admin');
-    res.setHeader('Set-Cookie', `admin_session=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=2592000`);
+    res.setHeader('Set-Cookie', [
+      `admin_session=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=2592000`,
+      `admin_csrf_token=${encodeURIComponent(auth.csrfTokenFor(token))}; Path=/; SameSite=Lax; Max-Age=2592000`,
+    ]);
     redirect(res, '/admin');
   } else {
+    await db.recordRateLimitAttempt('admin_login', adminKey);
     redirect(res, '/admin/login?err=1');
   }
 }
 function handleAdminLogout(req, res) {
-  res.setHeader('Set-Cookie', `admin_session=; Path=/; HttpOnly; Max-Age=0`);
+  res.setHeader('Set-Cookie', [
+    `admin_session=; Path=/; HttpOnly; Max-Age=0`,
+    `admin_csrf_token=; Path=/; Max-Age=0`,
+  ]);
   redirect(res, '/');
 }
 
@@ -2634,7 +2691,10 @@ async function handleGoogleCallback(req, res, query) {
     }
     if (user) {
       const token = auth.signUserSessionValue(user.id);
-      res.setHeader('Set-Cookie', `user_session=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000`);
+      res.setHeader('Set-Cookie', [
+        `user_session=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000`,
+        `csrf_token=${encodeURIComponent(auth.csrfTokenFor(token))}; Path=/; SameSite=Lax; Max-Age=31536000`,
+      ]);
       return redirect(res, '/');
     }
     // 3) Genuinely new person -- Google doesn't give us a birth date, and
@@ -2710,13 +2770,14 @@ async function handleGoogleFinishSubmit(req, res) {
   const token = auth.signUserSessionValue(user.id);
   res.setHeader('Set-Cookie', [
     `user_session=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000`,
+    `csrf_token=${encodeURIComponent(auth.csrfTokenFor(token))}; Path=/; SameSite=Lax; Max-Age=31536000`,
     `google_pending=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0`,
   ]);
   redirect(res, '/onboarding');
 }
 
 async function handleSignupSubmit(req, res) {
-  if (isSignupRateLimited(req)) return redirect(res, '/signup?err=rate_limited');
+  if (await isSignupRateLimited(req)) return redirect(res, '/signup?err=rate_limited');
   const f = await parseForm(req);
   const username = String(f.username || '').trim();
   const email = String(f.email || '').trim().toLowerCase();
@@ -2731,7 +2792,10 @@ async function handleSignupSubmit(req, res) {
   const referrer = f.ref ? db.getUserByUsername(String(f.ref).trim()) : null;
   const user = await db.createUser({ username, password: f.password, birth_date: f.birth_date, email, first_name: firstName, last_name: lastName, invited_by: referrer ? referrer.id : null });
   const token = auth.signUserSessionValue(user.id);
-  res.setHeader('Set-Cookie', `user_session=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000`);
+  res.setHeader('Set-Cookie', [
+    `user_session=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000`,
+    `csrf_token=${encodeURIComponent(auth.csrfTokenFor(token))}; Path=/; SameSite=Lax; Max-Age=31536000`,
+  ]);
   redirect(res, safeRedirectPath(f.redirect_to) || '/onboarding');
 }
 function pageLogin(req, res, query) {
@@ -2966,7 +3030,7 @@ async function handleWishlistToggle(req, res, strainId) {
   } else {
     await db.addToWishlist(userId, strainId);
   }
-  redirect(res, f.redirect_to || `/strains/${strainId}`);
+  redirect(res, safeRedirectPath(f.redirect_to) || `/strains/${strainId}`);
 }
 
 // Grow journal -- a private photo/note timeline, separate from the public
@@ -3284,7 +3348,7 @@ async function handleListItemToggle(req, res, listId, strainId) {
   } else {
     await db.addStrainToList(list.id, strainId);
   }
-  redirect(res, f.redirect_to || `/strains/${strainId}`);
+  redirect(res, safeRedirectPath(f.redirect_to) || `/strains/${strainId}`);
 }
 
 // Terpene guide -- built directly from the terpenes actually present in
@@ -4179,6 +4243,7 @@ function pageFeedback(req, res, query) {
 async function handleFeedbackSubmit(req, res) {
   const userId = requireUser(req, res);
   if (userId == null) return;
+  if (await isSubmissionRateLimited('feedback', userId)) return sendRateLimited(res, '/feedback');
   const fields = await parseForm(req);
   const message = String(fields.message || '').trim();
   if (!message) return redirect(res, '/feedback');
@@ -4270,19 +4335,25 @@ async function handleResetPasswordSubmit(req, res) {
 async function handleLoginSubmit(req, res) {
   const f = await parseForm(req);
   const username = String(f.username || '').trim();
-  if (isLoginRateLimited(req, username)) return redirect(res, '/login?err=rate_limited');
+  if (await isLoginRateLimited(req, username)) return redirect(res, '/login?err=rate_limited');
   const user = db.verifyLogin(username, f.password || '');
   if (!user) {
-    recordFailedLogin(req, username);
+    await recordFailedLogin(req, username);
     return redirect(res, '/login?err=1');
   }
-  clearLoginAttempts(req, username);
+  await clearLoginAttempts(req, username);
   const token = auth.signUserSessionValue(user.id);
-  res.setHeader('Set-Cookie', `user_session=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000`);
+  res.setHeader('Set-Cookie', [
+    `user_session=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000`,
+    `csrf_token=${encodeURIComponent(auth.csrfTokenFor(token))}; Path=/; SameSite=Lax; Max-Age=31536000`,
+  ]);
   redirect(res, safeRedirectPath(f.redirect_to) || '/');
 }
 function handleLogout(req, res) {
-  res.setHeader('Set-Cookie', `user_session=; Path=/; HttpOnly; Max-Age=0`);
+  res.setHeader('Set-Cookie', [
+    `user_session=; Path=/; HttpOnly; Max-Age=0`,
+    `csrf_token=; Path=/; Max-Age=0`,
+  ]);
   redirect(res, '/login');
 }
 
@@ -4663,12 +4734,28 @@ function apiListStrains(req, res, query) {
     results: db.listStrains({ q, type, rarity, effect, thc, terpene, ailment, breeder, verified, limit }),
   });
 }
+// Shared CSRF guard for the /api/* JSON endpoints below -- these are hit
+// via fetch() rather than a native form submission, so there's no hidden
+// _csrf field to check; the same token travels as a header instead (see
+// getCsrfCookie/X-CSRF-Token in app.js). Every other POST route gets this
+// enforced centrally, once, in the router; these few are the exception
+// specifically because they're JSON, not form-encoded (see the /api/
+// carve-out on that central check).
+function requireCsrfHeader(req, res) {
+  if (!auth.verifyCsrfToken(req, req.headers['x-csrf-token'])) {
+    sendJson(res, { error: 'CSRF check failed -- please refresh the page and try again' }, 403);
+    return false;
+  }
+  return true;
+}
 async function apiKudos(req, res, id) {
+  if (!requireCsrfHeader(req, res)) return;
   const r = await db.addKudos(id);
   if (!r) return sendJson(res, { error: 'not found' }, 404);
   sendJson(res, { kudos: r.kudos });
 }
 async function apiGrowLike(req, res, id) {
+  if (!requireCsrfHeader(req, res)) return;
   await db.likeGrowTip(id);
   const tip = db.listGrowTips().find(t => t.id === id);
   sendJson(res, { likes: tip ? tip.likes : 0 });
@@ -4678,6 +4765,7 @@ async function apiGrowLike(req, res, id) {
 // REACT_TO_CHECKIN_SCRIPT, which just swaps this straight into the DOM,
 // so there's no separate client-side rendering logic to keep in sync.
 async function apiCheckinReaction(req, res, id) {
+  if (!requireCsrfHeader(req, res)) return;
   const userId = requireUser(req, res);
   if (userId == null) return;
   const checkin = db.getCheckin(id);
@@ -4694,6 +4782,7 @@ async function apiCheckinReaction(req, res, id) {
   sendJson(res, { html: renderReactionBar(checkin, userId) });
 }
 async function apiCommentLike(req, res, id) {
+  if (!requireCsrfHeader(req, res)) return;
   const userId = requireUser(req, res);
   if (userId == null) return;
   const result = await db.toggleCommentLike(id, userId);
@@ -4726,7 +4815,7 @@ async function handleCheckinComment(req, res, checkinId) {
       await db.createCommentNotification({ user_id: checkin.user_id, actor_user_id: userId, checkin_id: checkinId, comment_id: comment.id });
     }
   }
-  redirect(res, f.redirect_to || '/');
+  redirect(res, safeRedirectPath(f.redirect_to) || '/');
 }
 // Protected analytics endpoint for the Google Sheets automation -- returns
 // real usernames, emails, and birth dates, so it's gated behind a shared
@@ -4774,6 +4863,7 @@ function pageMore(req, res) {
         { href: '/history', icon: '🕐', t: 'Check-In History', s: 'Your full timeline' },
         { href: '/insights', icon: '📊', t: 'Your Patterns', s: 'What your check-ins say about you' },
         { href: '/insights', icon: '🌿', t: 'Tolerance Break', s: 'Start, track, or end a break' },
+        { href: '/recap', icon: '🎉', t: 'Your Year in Review', s: 'A shareable recap of your year' },
       ],
     },
     {
@@ -4786,6 +4876,7 @@ function pageMore(req, res) {
         { href: '/surprise-me', icon: '🎲', t: 'Surprise Me', s: 'One random strain you haven\u2019t tried' },
         { href: '/trending', icon: '🔥', t: 'Trending This Week', s: 'Most checked-into right now' },
         { href: '/dispensaries', icon: '📍', t: 'Dispensaries', s: 'Locator & live menus' },
+        { href: '/leaderboard', icon: '🏆', t: 'Top Contributors', s: 'Most-appreciated check-ins this month' },
       ],
     },
     {
@@ -4805,6 +4896,7 @@ function pageMore(req, res) {
         { href: '/growing', icon: '🌱', t: 'Growing Tips', s: 'Tips & tricks from home growers' },
         { href: '/growing/new', icon: '✏️', t: 'Share a Grow Tip', s: 'Add your own' },
         { href: '/grow-journal', icon: '📔', t: 'Grow Journal', s: 'Your private plant photo log' },
+        { href: '/gear-care', icon: '🧼', t: 'Cleaning & Gear Care', s: 'Keep your pipes, rigs & vapes running well' },
       ],
     },
     {
@@ -4812,6 +4904,7 @@ function pageMore(req, res) {
       tiles: [
         { href: '/feedback', icon: '📝', t: 'Send Feedback', s: 'Bugs, ideas — anything' },
         { href: '/support-the-app', icon: '💚', t: 'Support the App', s: 'Help cover hosting costs' },
+        { href: '/add-to-home-screen', icon: '📲', t: 'Add to Home Screen', s: 'Install StrainDex like an app' },
       ],
     },
   ];
@@ -5238,7 +5331,10 @@ async function handleAccountDelete(req, res) {
   const userId = requireUser(req, res);
   if (userId == null) return;
   await db.deleteUserAccount(userId);
-  res.setHeader('Set-Cookie', `user_session=; Path=/; HttpOnly; Max-Age=0`);
+  res.setHeader('Set-Cookie', [
+    `user_session=; Path=/; HttpOnly; Max-Age=0`,
+    `csrf_token=; Path=/; Max-Age=0`,
+  ]);
   redirect(res, '/signup?deleted=1');
 }
 async function handleAccountBio(req, res) {
@@ -5532,14 +5628,14 @@ async function handleReport(req, res) {
   if (f.content_type && f.content_id) {
     await db.createReport({ reporter_id: userId, content_type: f.content_type, content_id: f.content_id, reason: f.reason || '' });
   }
-  redirect(res, f.redirect_to || '/');
+  redirect(res, safeRedirectPath(f.redirect_to) || '/');
 }
 async function handleBlock(req, res, blockedId) {
   const userId = requireUser(req, res);
   if (userId == null) return;
   const f = await parseForm(req);
   await db.blockUser(userId, Number(blockedId));
-  redirect(res, f.redirect_to || '/friends');
+  redirect(res, safeRedirectPath(f.redirect_to) || '/friends');
 }
 async function handleUnblock(req, res, blockedId) {
   const userId = requireUser(req, res);
@@ -6433,6 +6529,370 @@ function serveStatic(req, res, pathname) {
   });
 }
 
+// ================================================================ restored pages
+// Brought back from earlier commits after whole-file uploads overwrote them
+// (see RESTORE_NOTES.md). Gear Care, Add to Home Screen, public shared
+// check-ins (/c/:id), Year in Review (+ shareable link), Top Contributors.
+
+// Cleaning & Gear Care -- split out of the general Growing tips page into
+// its own spot (More tab) since it's really a separate topic (maintaining
+// gear you already own) from cultivation (growing a plant), and was easy
+// to miss buried as just one filter pill among eleven growing categories.
+const GEAR_CARE_CATEGORY = 'Cleaning & Gear Care';
+
+function pageGearCare(req, res) {
+  const viewerId = auth.currentUserId(req);
+  const tips = db.listGrowTips({ category: GEAR_CARE_CATEGORY, viewerId });
+  const body = `
+    <h1 class="screen-title">Cleaning &amp; Gear Care</h1>
+    <p class="screen-sub">Keeping pipes, rigs, grinders, and vapes resin-free and running well -- tips from real users.</p>
+    <a class="btn block lilac" href="/gear-care/new" style="margin-bottom:14px;">🧼 Share a Cleaning Tip</a>
+    ${tips.map(g => `
+      <div class="card grow-tip-card">
+        <b>${esc(g.title)}</b>
+        <p>${linkGlossaryTerms(esc(g.body))}</p>
+        ${g.source_url ? `<p class="empty-note" style="padding:2px 0 0;">Source: <a href="${esc(g.source_url)}" target="_blank" rel="noopener noreferrer">${esc(g.source_name || g.source_url)}</a></p>` : ''}
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <span class="empty-note" style="padding:0;">by ${esc(g.author || 'Anonymous')}
+            ${viewerId != null && g.user_id != null && g.user_id !== viewerId ? `
+              <form method="POST" action="/report" style="display:inline;" onsubmit="return confirm('Report this tip for review?')">${csrfField(req)}
+                <input type="hidden" name="content_type" value="grow_tip">
+                <input type="hidden" name="content_id" value="${g.id}">
+                <input type="hidden" name="redirect_to" value="/gear-care">
+                <button type="submit" style="background:none;border:none;padding:0;margin-left:6px;color:inherit;text-decoration:underline;cursor:pointer;font-size:inherit;">Report</button>
+              </form>
+              <form method="POST" action="/block/${g.user_id}" style="display:inline;" onsubmit="return confirm('Block ${esc(g.author || 'this person')}? You will no longer see their comments, check-ins, or grow tips, and any friendship will end.')">${csrfField(req)}
+                <input type="hidden" name="redirect_to" value="/gear-care">
+                <button type="submit" style="background:none;border:none;padding:0;margin-left:6px;color:inherit;text-decoration:underline;cursor:pointer;font-size:inherit;">Block</button>
+              </form>
+            ` : ''}
+          </span>
+          <button class="kudos-btn" onclick="likeGrowTip(${g.id}, this)">${KUDOS_BUD_ICON}Kudos (${g.likes})</button>
+        </div>
+      </div>`).join('') || `<div class="empty-note">No cleaning tips yet — be the first to <a href="/gear-care/new">share one</a>.</div>`}
+  `;
+  sendHtml(res, layout({ title: 'Cleaning & Gear Care', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
+}
+
+function pageGearCareNew(req, res) {
+  const body = `
+    <h1 class="screen-title">Share a Cleaning Tip</h1>
+    <form method="POST" action="/gear-care/new">${csrfField(req)}
+      <label class="field-label">Your name</label>
+      <input type="text" name="author" placeholder="e.g. Sam" required>
+      <label class="field-label">Title</label>
+      <input type="text" name="title" required>
+      <label class="field-label">Your tip</label>
+      <textarea name="body" required></textarea>
+      <button class="btn block" type="submit">Post Tip</button>
+    </form>
+  `;
+  sendHtml(res, layout({ title: 'Share a Cleaning Tip', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
+}
+
+async function handleGearCareNewSubmit(req, res) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const f = await parseForm(req);
+  await db.createGrowTip({ title: f.title, category: GEAR_CARE_CATEGORY, author: f.author, user_id: userId, body: f.body });
+  redirect(res, '/gear-care');
+}
+
+// ---------------------------------------------------------------- add to home screen
+// StrainDex is a PWA, not something distributed through the App Store or
+// Play Store -- most people have never installed a website before, so this
+// exists as the permanent, findable version of "how do I actually do that"
+// (the onboarding install step covers the same ground once, right after
+// signup, but this is here for anyone who skipped it, switched devices, or
+// just wants the instructions again). Shows all three platforms rather
+// than trying to guess right from the server side (no reliable signal
+// pre-JS), then a small inline script auto-selects the tab that matches
+// the visitor's actual device and reveals the one-tap install button only
+// where the browser has actually offered one (see StrainDexInstall in
+// app.js) -- Chromium never fires that offer on the very first page view,
+// so the button starts hidden and appears if/when the browser decides to.
+function pageAddToHomeScreen(req, res) {
+  const body = `
+    <h1 class="screen-title">📲 Add StrainDex to Your Home Screen</h1>
+    <p class="screen-sub">StrainDex is a <b>web app</b>, not something you download from an app store — but you can still add it to your home screen so it opens full-screen with its own icon, just like any other app.</p>
+
+    <button type="button" class="btn block" data-install-trigger style="display:none;margin-bottom:8px;">📲 Install StrainDex</button>
+    <p class="empty-note" id="a2hs-auto-note" style="display:none;padding:0 0 14px;">Tap above and confirm — your browser will add the icon automatically.</p>
+
+    <div style="margin-bottom:14px;">
+      <button type="button" class="filter-pill active" data-a2hs-tab="ios">📱 iPhone / iPad</button>
+      <button type="button" class="filter-pill" data-a2hs-tab="android">🤖 Android</button>
+      <button type="button" class="filter-pill" data-a2hs-tab="desktop">💻 Desktop</button>
+    </div>
+
+    <div class="card a2hs-panel" data-a2hs-panel="ios">
+      <h2 style="margin:0 0 8px;font-size:0.9375rem;">iPhone &amp; iPad (Safari)</h2>
+      <ol style="margin:0;padding-left:20px;">
+        <li style="margin-bottom:8px;">Open StrainDex in <b>Safari</b> — this only works in Safari itself, not Chrome, Instagram, or another in-app browser.</li>
+        <li style="margin-bottom:8px;">Tap the <b>Share</b> icon (the square with an arrow pointing up) in the toolbar.</li>
+        <li style="margin-bottom:8px;">Scroll down and tap <b>Add to Home Screen</b>.</li>
+        <li>Tap <b>Add</b> in the top right — that's it.</li>
+      </ol>
+      <p class="empty-note" style="padding-top:8px;">Apple doesn't let any website trigger this automatically — the Share menu is the only way in on iOS.</p>
+    </div>
+
+    <div class="card a2hs-panel" data-a2hs-panel="android" style="display:none;">
+      <h2 style="margin:0 0 8px;font-size:0.9375rem;">Android (Chrome)</h2>
+      <ol style="margin:0;padding-left:20px;">
+        <li style="margin-bottom:8px;">Tap the <b>Install StrainDex</b> button above if you see it — Chrome will prompt you and add the icon for you.</li>
+        <li style="margin-bottom:8px;">Don't see the button? Tap the <b>⋮</b> menu in the top right of Chrome.</li>
+        <li>Tap <b>Install app</b> (or <b>Add to Home screen</b>), then confirm.</li>
+      </ol>
+    </div>
+
+    <div class="card a2hs-panel" data-a2hs-panel="desktop" style="display:none;">
+      <h2 style="margin:0 0 8px;font-size:0.9375rem;">Desktop (Chrome / Edge)</h2>
+      <ol style="margin:0;padding-left:20px;">
+        <li style="margin-bottom:8px;">Tap the <b>Install StrainDex</b> button above if you see it.</li>
+        <li style="margin-bottom:8px;">Or click the install icon at the right edge of the address bar.</li>
+        <li>Or open the <b>⋮</b> menu and choose <b>Install StrainDex…</b>.</li>
+      </ol>
+      <p class="empty-note" style="padding-top:8px;">Firefox and Safari on desktop don't currently support installing websites this way — StrainDex still works fine in a regular browser tab either way.</p>
+    </div>
+
+    <p class="empty-note" style="margin-top:14px;">Already installed? Look for the StrainDex leaf icon on your home screen or desktop next time instead of coming back to a browser tab.</p>
+
+    <script>
+      (function () {
+        const tabs = document.querySelectorAll('[data-a2hs-tab]');
+        const panels = document.querySelectorAll('[data-a2hs-panel]');
+        function selectTab(name) {
+          tabs.forEach(t => t.classList.toggle('active', t.dataset.a2hsTab === name));
+          panels.forEach(p => { p.style.display = p.dataset.a2hsPanel === name ? '' : 'none'; });
+        }
+        tabs.forEach(t => t.addEventListener('click', () => selectTab(t.dataset.a2hsTab)));
+
+        const install = window.StrainDexInstall;
+        const autoNote = document.getElementById('a2hs-auto-note');
+        if (install && install.isInstalled && install.isInstalled()) {
+          if (autoNote) { autoNote.textContent = 'StrainDex is already installed on this device.'; autoNote.style.display = ''; }
+        } else if (install && install.onAvailable) {
+          install.onAvailable(() => { if (autoNote) autoNote.style.display = ''; });
+        }
+
+        // Auto-select whichever tab matches this device -- doesn't affect
+        // the button above, just saves a tap for the common case.
+        if (install && install.isIOS && install.isIOS()) selectTab('ios');
+        else if (/android/i.test(navigator.userAgent)) selectTab('android');
+        else selectTab('desktop');
+      })();
+    </script>
+  `;
+  sendHtml(res, layout({ title: 'Add to Home Screen', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
+}
+
+// Public, read-only, unauthenticated view of a single non-private
+// check-in -- the landing page behind the "Share" button on any check-in
+// card (see renderShareButton). Deliberately outside the login wall (see
+// isPublicSharedCheckin in the router) so a link pasted into a text or
+// social post actually works for whoever opens it, logged in or not.
+// Carries real Open Graph tags built from the check-in's own strain photo
+// and rating so it unfurls as an actual preview card in iMessage/Discord/
+// Twitter instead of a bare link. Ends with a signup pitch -- the entire
+// point of a public share surface is to convert whoever receives it, not
+// just to display data at them.
+function pageSharedCheckin(req, res, id) {
+  const c = db.getCheckin(Number(id));
+  if (!c || c.is_private) return notFound(res);
+  const s = db.getStrain(c.strain_id);
+  const poster = db.getUserById(c.user_id);
+  const posterName = poster ? poster.username : 'Someone';
+  const origin = SITE_URL;
+  const pageUrl = `${origin}/c/${c.id}`;
+  const imageUrl = c.photo || (s ? `${origin}${strainPhotoUrl(s)}` : `${origin}/icons/icon-512.png`);
+
+  const body = `
+    <div class="card" style="margin-top:10px;">
+      <div style="display:flex;align-items:center;gap:12px;">
+        ${strainPhotoTag(s, 'lg')}
+        <div>
+          <div class="empty-note" style="padding:0;">${esc(posterName)} checked in on StrainDex</div>
+          <h1 style="margin:2px 0 0;font-size:1.1875rem;">${esc(checkinStrainName(c, s))}</h1>
+          ${s && !isCustomCheckin(c) ? `<div class="empty-note" style="padding:0;">${linkGlossaryTerms(esc(s.type))}${s.lean ? ' · ' + linkGlossaryTerms(esc(s.lean)) : ''} · <span class="rarity-tag rarity-${s.rarity}">${rarityLabel(s.rarity)}</span></div>` : ''}
+        </div>
+      </div>
+      <div class="sub" style="margin-top:12px;">${esc(c.method)} · ${starString(c.rating)}</div>
+      ${c.photo ? `<img class="photo-thumb" src="${esc(c.photo)}" alt="photo" style="margin-top:8px;">` : ''}
+      ${(c.effects || []).length ? `<div class="effect-tags" style="margin-top:8px;">${c.effects.map(e => `<span>${esc(e)}</span>`).join('')}</div>` : ''}
+      ${c.note ? `<div class="note" style="margin-top:8px;">"${esc(c.note)}"</div>` : ''}
+      ${renderCheckinPairings(c)}
+    </div>
+    ${s && !isCustomCheckin(c) ? `<a class="btn secondary block" href="/strains/${s.id}" style="margin-top:14px;text-decoration:none;">View ${esc(s.name)} in the Strain Library →</a>` : ''}
+    <div class="card" style="margin-top:14px;text-align:center;">
+      <p style="margin:0 0 10px;font-weight:700;">See what StrainDex looks like inside.</p>
+      <a href="/signup" class="btn block" style="text-decoration:none;">Create Free Account</a>
+      <p class="empty-note" style="margin-top:8px;">Already have an account? <a href="/login">Log in</a></p>
+    </div>
+  `;
+  sendHtml(res, layout({
+    title: `${posterName}'s ${checkinStrainName(c, s)} check-in`,
+    body,
+    showBack: false,
+    ogTitle: `${posterName} checked into ${checkinStrainName(c, s)} on StrainDex`,
+    ogDescription: c.note || (s ? `${c.method} · ${starString(c.rating)}` : 'A cannabis check-in on StrainDex.'),
+    ogImage: imageUrl,
+    ogUrl: pageUrl,
+  }));
+}
+
+// Community leaderboard -- see getKudosLeaderboard in lib/db.js for the
+// ranking logic itself and why it's reactions RECEIVED (not raw check-in
+// count) on a rolling 30-day window rather than all-time. Requires login,
+// unlike Trending, since ranking a real person needs a real viewerId --
+// to filter out anyone the viewer has blocked, and to compute "your own
+// rank" below the list so showing up here still feels personal even for
+// someone who isn't near the top.
+function pageLeaderboard(req, res) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const { top, viewerEntry, windowDays } = db.getKudosLeaderboard(userId, { limit: 20, windowDays: 30 });
+  const medal = (rank) => ({ 1: '🥇', 2: '🥈', 3: '🥉' }[rank] || rank);
+  const renderRow = (r, isViewer) => `
+    <div class="library-row" style="${isViewer ? 'border:1.5px solid var(--brand-green);' : ''}">
+      <span style="font-weight:700;color:var(--ink-secondary);width:28px;text-align:center;flex-shrink:0;">${medal(r.rank)}</span>
+      <div class="info">
+        <div class="nm">${isViewer ? 'You' : esc(r.user.username)}</div>
+        <div class="sub">${r.allTimeKudos.toLocaleString()} reactions all-time</div>
+      </div>
+      <span style="font-weight:800;color:var(--accent-text);flex-shrink:0;">🌿 ${r.monthKudos}</span>
+    </div>
+  `;
+  const viewerInTop = top.some(r => r.user.id === userId);
+  const body = `
+    <h1 class="screen-title">Top Contributors</h1>
+    <p class="screen-sub">Ranked by reactions received in the last ${windowDays} days — the community's own way of saying "this check-in helped." Resets over time, so everyone gets a fair shot at climbing, not just whoever joined first.</p>
+    ${top.length ? top.map(r => renderRow(r, r.user.id === userId)).join('') : `<div class="empty-note">No reactions given out yet this month — be the first check-in someone appreciates.</div>`}
+    ${!viewerInTop ? (viewerEntry
+      ? `<div class="section-label" style="margin-top:16px;">Your rank</div>${renderRow(viewerEntry, true)}`
+      : `<p class="empty-note" style="margin-top:16px;">You haven't received a reaction yet this month — <a href="/checkin">log a check-in</a> and share it to start climbing.</p>`
+    ) : ''}
+  `;
+  sendHtml(res, layout({ title: 'Top Contributors', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
+}
+
+// Shared rendering for both the private recap page and its public share
+// link -- the data (from db.getYearInReview) is identical either way, only
+// the surrounding chrome (signup CTA vs. a "share yours" button, private
+// vs. public layout()) differs between the two callers.
+function renderRecapBody(recap, { longestStreak } = {}) {
+  return `
+    <div class="card" style="text-align:center;background:linear-gradient(135deg,#123a24,#1b5e3a);color:#fff;border:none;">
+      <div style="font-size:0.75rem;opacity:.85;letter-spacing:.5px;text-transform:uppercase;">${recap.year} Year in Review</div>
+      <div style="font-size:2.75rem;font-weight:800;margin:6px 0 2px;">${recap.totalCheckins}</div>
+      <div style="font-size:0.8125rem;opacity:.9;">check-in${recap.totalCheckins === 1 ? '' : 's'} logged</div>
+    </div>
+    <div class="collection-stats" style="margin-top:14px;">
+      <div class="stat-tile"><div class="num">${recap.uniqueStrains}</div><div class="lbl">Unique strains</div></div>
+      <div class="stat-tile"><div class="num">${recap.totalKudos}</div><div class="lbl">Kudos received</div></div>
+      ${longestStreak != null ? `<div class="stat-tile"><div class="num">${longestStreak}</div><div class="lbl">Longest streak</div></div>` : ''}
+    </div>
+    ${recap.topEffects.length ? `
+      <div class="card" style="margin-top:14px;">
+        <h2 style="margin:0 0 8px;font-size:0.9375rem;">Most common effects</h2>
+        <p>${recap.topEffects.map(e => `<span class="filter-pill">${esc(e.name)} (${e.count})</span>`).join('')}</p>
+      </div>
+    ` : ''}
+    <div class="card" style="margin-top:12px;">
+      <h2 style="margin:0 0 8px;font-size:0.9375rem;">Leanings</h2>
+      ${recap.topType ? `<p class="empty-note" style="padding:2px 0;">Gravitated toward <b>${esc(recap.topType.name)}</b> strains (${recap.topType.count} check-in${recap.topType.count === 1 ? '' : 's'}).</p>` : ''}
+      ${recap.topMethod ? `<p class="empty-note" style="padding:2px 0;">Most-used method: <b>${esc(recap.topMethod.name)}</b>.</p>` : ''}
+      ${recap.topTerpene ? `<p class="empty-note" style="padding:2px 0;">Leaned heaviest on <b>${esc(recap.topTerpene)}</b> as a terpene.</p>` : ''}
+    </div>
+    ${recap.mostLoggedStrain ? `
+      <a class="library-row" href="/strains/${recap.mostLoggedStrain.strain.id}" style="text-decoration:none;color:inherit;margin-top:12px;">
+        ${strainPhotoTag(recap.mostLoggedStrain.strain, 'sm')}
+        <div class="info">
+          <div class="nm">Most logged: ${esc(recap.mostLoggedStrain.strain.name)}</div>
+          <div class="sub">${recap.mostLoggedStrain.count} check-in${recap.mostLoggedStrain.count === 1 ? '' : 's'}</div>
+        </div>
+      </a>` : ''}
+    ${recap.topRatedStrain ? `
+      <a class="library-row" href="/strains/${recap.topRatedStrain.strain.id}" style="text-decoration:none;color:inherit;margin-top:8px;">
+        ${strainPhotoTag(recap.topRatedStrain.strain, 'sm')}
+        <div class="info">
+          <div class="nm">Highest rated: ${esc(recap.topRatedStrain.strain.name)}</div>
+          <div class="sub">${starString(Math.round(recap.topRatedStrain.avg))} (${recap.topRatedStrain.avg}★ average)</div>
+        </div>
+      </a>` : ''}
+  `;
+}
+
+// Stateless share codes for a recap, same pattern as makeInviteCode --
+// signs (userId, year) together rather than just userId, since a recap
+// link is specific to one particular year, not "whatever year it is now."
+function makeRecapCode(userId, year) {
+  return auth.sign(`recap:${userId}:${year}`);
+}
+
+function resolveRecapCode(code) {
+  const value = auth.verify(code);
+  if (!value || !value.startsWith('recap:')) return null;
+  const [userIdStr, yearStr] = value.slice('recap:'.length).split(':');
+  const userId = Number(userIdStr);
+  const year = Number(yearStr);
+  if (!Number.isFinite(userId) || !Number.isFinite(year)) return null;
+  return { userId, year };
+}
+
+function pageRecap(req, res, query) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const currentYear = new Date().getUTCFullYear();
+  const requestedYear = Number(query.get('year')) || currentYear;
+  const recap = db.getYearInReview(userId, requestedYear);
+  const shareUrl = recap ? `${SITE_URL}/recap/s/${makeRecapCode(userId, requestedYear)}` : null;
+
+  const body = `
+    <h1 class="screen-title">Your Year in StrainDex</h1>
+    ${!recap ? `
+      <div class="empty-note">No check-ins logged in ${requestedYear} yet.${requestedYear === currentYear ? ' Come back once you have a few check-ins to see your recap.' : ''}</div>
+      ${requestedYear > 2024 ? `<a href="/recap?year=${requestedYear - 1}" class="empty-note" style="display:block;margin-top:8px;">See ${requestedYear - 1} instead →</a>` : ''}
+    ` : `
+      ${renderRecapBody(recap, { longestStreak: db.getCheckinStreak(userId).longest })}
+      <button type="button" class="btn block" style="margin-top:14px;" onclick="shareLink(${esc(JSON.stringify(shareUrl))}, ${esc(JSON.stringify(`My ${requestedYear} in StrainDex`))})">🔗 Share your recap</button>
+      ${requestedYear > 2024 ? `<a href="/recap?year=${requestedYear - 1}" class="empty-note" style="display:block;margin-top:10px;text-align:center;">See ${requestedYear - 1} instead →</a>` : ''}
+    `}
+  `;
+  sendHtml(res, layout({ title: 'Your Year in StrainDex', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
+}
+
+// Public, read-only, unauthenticated view of someone else's recap -- same
+// data shape as pageRecap, just resolved from a signed (userId, year) code
+// instead of the current session, and framed with a signup pitch instead
+// of the "share yours" button. Carries OG tags so it unfurls with real
+// numbers rather than a bare link when posted externally.
+function pageSharedRecap(req, res, code) {
+  const resolved = resolveRecapCode(code);
+  if (!resolved) return notFound(res);
+  const user = db.getUserById(resolved.userId);
+  const recap = user ? db.getYearInReview(resolved.userId, resolved.year) : null;
+  if (!user || !recap) return notFound(res);
+  const pageUrl = `${SITE_URL}/recap/s/${code}`;
+
+  const body = `
+    <h1 class="screen-title">${esc(user.username)}'s ${resolved.year} in StrainDex</h1>
+    ${renderRecapBody(recap, { longestStreak: db.getCheckinStreak(resolved.userId).longest })}
+    <div class="card" style="margin-top:14px;text-align:center;">
+      <p style="margin:0 0 10px;font-weight:700;">Track your own strains, effects, and check-ins.</p>
+      <a href="/signup" class="btn block" style="text-decoration:none;">Create Free Account</a>
+      <p class="empty-note" style="margin-top:8px;">Already have an account? <a href="/login">Log in</a></p>
+    </div>
+  `;
+  sendHtml(res, layout({
+    title: `${user.username}'s ${resolved.year} in StrainDex`,
+    body,
+    showBack: false,
+    ogTitle: `${user.username}'s ${resolved.year} in StrainDex 🌿`,
+    ogDescription: `${recap.totalCheckins} check-in${recap.totalCheckins === 1 ? '' : 's'}, ${recap.uniqueStrains} unique strain${recap.uniqueStrains === 1 ? '' : 's'}${recap.topType ? `, mostly ${recap.topType.name}` : ''}.`,
+    ogUrl: pageUrl,
+  }));
+}
+
 // ---------------------------------------------------------------- router
 
 const server = http.createServer(async (req, res) => {
@@ -6450,8 +6910,28 @@ const server = http.createServer(async (req, res) => {
     // individually, everything requires a logged-in user except the
     // signup/login/logout routes themselves and the separate admin panel
     // (which has its own, unrelated password gate below).
+    // Backfill/repair the CSRF cookie for anyone already logged in from before
+    // CSRF enforcement existed (or whose cookie went stale). Without this,
+    // every currently-logged-in user's next form post would be rejected until
+    // they logged out and back in. The token is a pure function of the
+    // session cookie, so it can be (re)derived on any GET.
+    if (method === 'GET') {
+      const ck = auth.parseCookies(req);
+      const add = [];
+      if (ck.user_session && auth.currentUserId(req) != null && ck.csrf_token !== auth.csrfTokenFor(ck.user_session)) {
+        add.push(`csrf_token=${encodeURIComponent(auth.csrfTokenFor(ck.user_session))}; Path=/; SameSite=Lax; Max-Age=31536000`);
+      }
+      if (ck.admin_session && auth.isAdmin(req) && ck.admin_csrf_token !== auth.csrfTokenFor(ck.admin_session)) {
+        add.push(`admin_csrf_token=${encodeURIComponent(auth.csrfTokenFor(ck.admin_session))}; Path=/; SameSite=Lax; Max-Age=2592000`);
+      }
+      if (add.length) res.setHeader('Set-Cookie', add);
+    }
+
+    // Pages meant to be opened by people who aren't logged in: a shared
+    // check-in, a shared year-in-review, and the install instructions.
+    const isPublicSharePath = /^\/c\/[^/]+$/.test(pathname) || /^\/recap\/s\/[^/]+$/.test(pathname) || pathname === '/add-to-home-screen';
     const PUBLIC_PATHS = new Set(['/', '/signup', '/login', '/logout', '/terms', '/privacy', '/forgot-password', '/reset-password', '/api/analytics-snapshot', '/auth/google', '/auth/google/callback', '/auth/google/finish']);
-    if (!PUBLIC_PATHS.has(pathname) && !pathname.startsWith('/admin') && auth.currentUserId(req) == null) {
+    if (!PUBLIC_PATHS.has(pathname) && !isPublicSharePath && !pathname.startsWith('/admin') && auth.currentUserId(req) == null) {
       // USER-CONFIRMED BEHAVIOR: a shared strain link opened while logged
       // out goes to a contextual signup prompt (showing which strain was
       // shared) rather than a bare login wall, and carries the strain
@@ -6495,8 +6975,37 @@ const server = http.createServer(async (req, res) => {
       }
     }
 
+    // CSRF protection for every form-encoded POST past this point. Exempt: the
+    // few POST routes that fire before any session exists (signup, login,
+    // password reset, admin login, finishing a Google signup) -- there's no
+    // token to check until one of THESE creates the session. /api/* JSON
+    // endpoints check an X-CSRF-Token header themselves (requireCsrfHeader).
+    // A second, independent layer on top of SameSite=Lax. Any non-exempt,
+    // non-API POST that ISN'T form-encoded is rejected outright: the body
+    // parser accepts any content type, so letting those through would let a
+    // cross-site text/plain form post slip past the token check.
+    const CSRF_EXEMPT_POST_PATHS = new Set(['/signup', '/login', '/forgot-password', '/reset-password', '/admin/login', '/auth/google/finish']);
+    if (method === 'POST' && !CSRF_EXEMPT_POST_PATHS.has(pathname) && !pathname.startsWith('/api/')) {
+      const contentType = req.headers['content-type'] || '';
+      const fields = contentType.includes('application/x-www-form-urlencoded') ? await parseForm(req) : null;
+      if (!fields || !auth.verifyCsrfToken(req, fields._csrf)) {
+        return sendHtml(res, layout({
+          title: 'Please try again',
+          body: `<h1 class="screen-title">Please try again</h1><p>That form couldn't be verified — it may have been open a long time, or submitted from somewhere unexpected. <a href="javascript:history.back()">Go back</a>, refresh the page, and resubmit.</p>`,
+        }), 403);
+      }
+    }
+
     let m;
     if (method === 'GET' && pathname === '/') return await pageHome(req, res);
+    if (method === 'GET' && (m = pathname.match(/^\/c\/([^/]+)$/))) return pageSharedCheckin(req, res, m[1]);
+    if (method === 'GET' && pathname === '/gear-care') return pageGearCare(req, res);
+    if (method === 'GET' && pathname === '/gear-care/new') return pageGearCareNew(req, res);
+    if (method === 'POST' && pathname === '/gear-care/new') return await handleGearCareNewSubmit(req, res);
+    if (method === 'GET' && pathname === '/recap') return pageRecap(req, res, url.searchParams);
+    if (method === 'GET' && (m = pathname.match(/^\/recap\/s\/([^/]+)$/))) return pageSharedRecap(req, res, m[1]);
+    if (method === 'GET' && pathname === '/leaderboard') return pageLeaderboard(req, res);
+    if (method === 'GET' && pathname === '/add-to-home-screen') return pageAddToHomeScreen(req, res);
     if (method === 'GET' && pathname === '/strains') return pageStrains(req, res, url.searchParams);
     if (method === 'GET' && (m = pathname.match(/^\/strains\/([^/]+)$/))) return pageStrainDetail(req, res, m[1]);
     if (method === 'GET' && pathname === '/checkin') return pageCheckinForm(req, res, url.searchParams);
