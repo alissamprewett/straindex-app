@@ -166,28 +166,14 @@
     "type": "Hybrid",
     "lean": "Sativa-leaning",
     "rarity": "common",
-    "thc": "17–25%",
-    "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Caryophyllene",
-        "p": 0.3
-      },
-      {
-        "n": "Limonene",
-        "p": 0.3
-      },
-      {
-        "n": "Pinene",
-        "p": 0.2
-      }
-    ],
+    "thc": "",
+    "cbd": "",
+    "terps": [],
     "effects": [
       "Energetic",
-      "Happy",
-      "Focused"
+      "Happy"
     ],
-    "flavor": "Tropical pineapple with a cedar finish.",
+    "flavor": "Pineapple and citrus with earthy pine and cedar.",
     "icon": "🍍",
     "breeder": "G13 Labs",
     "parents": [
@@ -2174,29 +2160,13 @@
     "type": "Hybrid",
     "lean": "",
     "rarity": "common",
-    "thc": "23–31%",
-    "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Myrcene",
-        "p": 0.4
-      },
-      {
-        "n": "Linalool",
-        "p": 0.27
-      },
-      {
-        "n": "Pinene",
-        "p": 0.16
-      }
-    ],
+    "thc": "",
+    "cbd": "",
+    "terps": [],
     "effects": [
-      "Relaxed",
-      "Happy",
-      "Hungry",
-      "Euphoric"
+      "Relaxed"
     ],
-    "flavor": "Earthy and sweet on the palate with a myrcene-leaning finish.",
+    "flavor": "",
     "icon": "🌰",
     "ailments": [
       "Stress",
@@ -4823,31 +4793,16 @@
     "id": "s135",
     "name": "Obama Kush",
     "type": "Hybrid",
-    "lean": "",
+    "lean": "Indica-leaning",
     "rarity": "uncommon",
-    "thc": "17–22%",
-    "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Myrcene",
-        "p": 0.4
-      },
-      {
-        "n": "Linalool",
-        "p": 0.27
-      },
-      {
-        "n": "Limonene",
-        "p": 0.16
-      }
-    ],
+    "thc": "",
+    "cbd": "",
+    "terps": [],
     "effects": [
       "Relaxed",
-      "Uplifted",
-      "Euphoric",
-      "Happy"
+      "Euphoric"
     ],
-    "flavor": "Earthy and sweet on the palate with a myrcene-leaning finish.",
+    "flavor": "Earthy pine with pepper and citrus.",
     "icon": "🌰",
     "ailments": [
       "Pain",
@@ -4979,29 +4934,14 @@
     "type": "Indica",
     "lean": "",
     "rarity": "uncommon",
-    "thc": "20–24%",
-    "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Myrcene",
-        "p": 0.4
-      },
-      {
-        "n": "Humulene",
-        "p": 0.27
-      },
-      {
-        "n": "Pinene",
-        "p": 0.16
-      }
-    ],
+    "thc": "",
+    "cbd": "",
+    "terps": [],
     "effects": [
       "Relaxed",
-      "Sleepy",
-      "Happy",
-      "Euphoric"
+      "Sleepy"
     ],
-    "flavor": "Earthy and coffee on the palate with a myrcene-leaning finish.",
+    "flavor": "Rich earth and coffee with musk and a spicy finish.",
     "icon": "🌰",
     "ailments": [
       "Pain",
@@ -5010,7 +4950,12 @@
       "Inflammation",
       "Lack of Appetite"
     ],
-    "aka": "Pre 98 Bubba Kush"
+    "aka": "Pre 98 Bubba Kush, Pre-98 Bubba, P98, Pre-98, Pre'98 Bubba Kush",
+    "breeder": "Matt \"Bubba\" Berger",
+    "parents": [
+      "OG Kush",
+      "Northern Lights"
+    ]
   },
   {
     "id": "s140",
@@ -5608,7 +5553,7 @@
       "Lack of Appetite",
       "Pain"
     ],
-    "aka": "ATF, Alaskan Thunder, Alaskan Thunder F, Matanuska Thunder Fuck, Alaskan Thunderfuck",
+    "aka": "ATF, Alaskan Thunderfuck",
     "parents": [
       "Northern California Sativa",
       "Russian Ruderalis",
@@ -7058,7 +7003,7 @@
       "Nausea",
       "Inflammation"
     ],
-    "aka": "Pure Kush"
+    "aka": ""
   },
   {
     "id": "s197",
@@ -8149,33 +8094,19 @@
     "id": "s227",
     "name": "Phantom OG",
     "type": "Indica",
-    "lean": "",
+    "lean": "Indica-leaning",
     "rarity": "uncommon",
-    "thc": "14–22%",
-    "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Myrcene",
-        "p": 0.4
-      },
-      {
-        "n": "Limonene",
-        "p": 0.27
-      },
-      {
-        "n": "Pinene",
-        "p": 0.16
-      }
-    ],
+    "thc": "",
+    "cbd": "",
+    "terps": [],
     "effects": [
       "Euphoric",
-      "Relaxed",
-      "Hungry",
-      "Happy"
+      "Giggly",
+      "Focused"
     ],
-    "flavor": "Earthy and lemon on the palate with a myrcene-leaning finish.",
+    "flavor": "Pine and lemon with a menthol note.",
     "icon": "🌰",
-    "breeder": "N.E.",
+    "breeder": "",
     "ailments": [
       "Depression",
       "Pain",
@@ -12667,7 +12598,7 @@
       "Muscle Spasms",
       "Lack of Appetite"
     ],
-    "aka": "PCK, Pakistan Chitral Kush, Chitral Kush, Purple Pakistani, Purple Chitral"
+    "aka": "PCK, Pakistan Chitral Kush, Chitral Kush, Purple Pakistani, Purple Chitral, Old Man Purps, Old Man's Purp, Old Man's Purple"
   },
   {
     "id": "s349",
@@ -12787,34 +12718,19 @@
   {
     "id": "s352",
     "name": "Presidential OG",
-    "type": "Hybrid",
-    "lean": "",
+    "type": "Indica",
+    "lean": "Indica-leaning",
     "rarity": "rare",
-    "thc": "18–25%",
-    "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Myrcene",
-        "p": 0.4
-      },
-      {
-        "n": "Pinene",
-        "p": 0.27
-      },
-      {
-        "n": "Limonene",
-        "p": 0.16
-      }
-    ],
+    "thc": "",
+    "cbd": "",
+    "terps": [],
     "effects": [
       "Relaxed",
-      "Sleepy",
-      "Happy",
-      "Euphoric"
+      "Sleepy"
     ],
-    "flavor": "Earthy and pine on the palate with a myrcene-leaning finish.",
+    "flavor": "Intense citrus and pine, turning earthy.",
     "icon": "🌰",
-    "breeder": "Royal Queen",
+    "breeder": "Royal Queen Seeds",
     "ailments": [
       "Insomnia",
       "Stress",
@@ -12822,7 +12738,11 @@
       "Lack of Appetite",
       "Depression"
     ],
-    "aka": "OG Presidential, Presidential"
+    "aka": "OG Presidential, Presidential, Presidential Kush, Presidential OG Kush",
+    "parents": [
+      "Bubble Gum",
+      "OG Kush"
+    ]
   },
   {
     "id": "s353",
@@ -12945,35 +12865,24 @@
     "type": "Indica",
     "lean": "",
     "rarity": "uncommon",
-    "thc": "13–18%",
-    "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Myrcene",
-        "p": 0.4
-      },
-      {
-        "n": "Linalool",
-        "p": 0.27
-      },
-      {
-        "n": "Limonene",
-        "p": 0.16
-      }
-    ],
+    "thc": "",
+    "cbd": "",
+    "terps": [],
     "effects": [
       "Relaxed",
-      "Euphoric",
-      "Happy",
-      "Uplifted"
+      "Sleepy"
     ],
-    "flavor": "Grape and earthy on the palate with a myrcene-leaning finish.",
+    "flavor": "Sweet grape aroma.",
     "icon": "🍇",
     "ailments": [
       "Pain",
       "Stress",
       "Depression",
       "Insomnia"
+    ],
+    "parents": [
+      "Granddaddy Purple",
+      "Chemdawg"
     ]
   },
   {
@@ -13862,29 +13771,13 @@
     "type": "Indica",
     "lean": "",
     "rarity": "common",
-    "thc": "18–22%",
-    "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Linalool",
-        "p": 0.4
-      },
-      {
-        "n": "Myrcene",
-        "p": 0.27
-      },
-      {
-        "n": "Limonene",
-        "p": 0.16
-      }
-    ],
+    "thc": "",
+    "cbd": "",
+    "terps": [],
     "effects": [
-      "Relaxed",
-      "Happy",
-      "Euphoric",
-      "Uplifted"
+      "Relaxed"
     ],
-    "flavor": "Sweet and berry on the palate with a linalool-leaning finish.",
+    "flavor": "",
     "icon": "🍬",
     "ailments": [
       "Stress",
@@ -13892,7 +13785,7 @@
       "Pain",
       "Muscle Spasms"
     ],
-    "aka": "Zkittles OG, Skittles, Zkittles, Z Skittles, Z, Original Z, Grape Zkittlez, Grape Z",
+    "aka": "Zkittles OG, Skittles, Zkittles, Z Skittles, Z, Original Z, The Original Z, Grape Zkittlez, Grape Z",
     "parents": [
       "Grape Ape",
       "Grapefruit"
@@ -14918,37 +14811,27 @@
     "type": "Indica",
     "lean": "",
     "rarity": "rare",
-    "thc": "22–27%",
-    "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Myrcene",
-        "p": 0.4
-      },
-      {
-        "n": "Pinene",
-        "p": 0.27
-      },
-      {
-        "n": "Humulene",
-        "p": 0.16
-      }
-    ],
+    "thc": "",
+    "cbd": "",
+    "terps": [],
     "effects": [
       "Relaxed",
-      "Happy",
-      "Euphoric",
       "Sleepy"
     ],
-    "flavor": "Earthy on the palate with a myrcene-leaning finish.",
+    "flavor": "Floral and kushy spice with a sweet finish.",
     "icon": "🌰",
-    "breeder": "Holistic Healing Collective",
+    "breeder": "",
     "ailments": [
       "Pain",
       "Stress",
       "Insomnia",
       "Depression",
       "Inflammation"
+    ],
+    "aka": "Platinum Bubba, PBK",
+    "parents": [
+      "Platinum Kush",
+      "Bubba Kush"
     ]
   },
   {
@@ -15030,32 +14913,17 @@
   {
     "id": "s414",
     "name": "Purple Afghani",
-    "type": "Hybrid",
-    "lean": "",
+    "type": "Indica",
+    "lean": "Indica-leaning",
     "rarity": "common",
-    "thc": "12–20%",
-    "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Linalool",
-        "p": 0.4
-      },
-      {
-        "n": "Myrcene",
-        "p": 0.27
-      },
-      {
-        "n": "Limonene",
-        "p": 0.16
-      }
-    ],
+    "thc": "",
+    "cbd": "",
+    "terps": [],
     "effects": [
       "Relaxed",
-      "Sleepy",
-      "Happy",
-      "Euphoric"
+      "Sleepy"
     ],
-    "flavor": "Sweet and grape on the palate with a linalool-leaning finish.",
+    "flavor": "",
     "icon": "🍬",
     "breeder": "BC Bud Depot",
     "ailments": [
@@ -16337,31 +16205,16 @@
     "id": "s449",
     "name": "DelaHaze",
     "type": "Hybrid",
-    "lean": "",
+    "lean": "Sativa-leaning",
     "rarity": "uncommon",
-    "thc": "21–25%",
-    "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Myrcene",
-        "p": 0.4
-      },
-      {
-        "n": "Limonene",
-        "p": 0.27
-      },
-      {
-        "n": "Linalool",
-        "p": 0.16
-      }
-    ],
+    "thc": "",
+    "cbd": "",
+    "terps": [],
     "effects": [
       "Uplifted",
-      "Happy",
-      "Energetic",
-      "Euphoric"
+      "Energetic"
     ],
-    "flavor": "Mango and citrus on the palate with a myrcene-leaning finish.",
+    "flavor": "",
     "icon": "🥭",
     "breeder": "Paradise Seeds",
     "ailments": [
@@ -16369,6 +16222,20 @@
       "Stress",
       "Pain",
       "Lack of Appetite"
+    ],
+    "awards": [
+      {
+        "name": "High Times Cannabis Cup, Amsterdam — 2nd Place, Sativa",
+        "year": 2008
+      },
+      {
+        "name": "Cannabis Champions Cup, Spain — 2nd Place",
+        "year": 2009
+      },
+      {
+        "name": "Treating Yourself Medical Cannabis Cup, Canada — 1st Place, Sativa",
+        "year": 2011
+      }
     ]
   },
   {
@@ -17162,29 +17029,11 @@
     "type": "Hybrid",
     "lean": "",
     "rarity": "common",
-    "thc": "13–18%",
-    "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Myrcene",
-        "p": 0.4
-      },
-      {
-        "n": "Linalool",
-        "p": 0.27
-      },
-      {
-        "n": "Ocimene",
-        "p": 0.16
-      }
-    ],
-    "effects": [
-      "Happy",
-      "Relaxed",
-      "Uplifted",
-      "Euphoric"
-    ],
-    "flavor": "Grape and sweet on the palate with a myrcene-leaning finish.",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
     "icon": "🍇",
     "breeder": "Stoney Girl Gardens",
     "ailments": [
@@ -17193,6 +17042,11 @@
       "Pain",
       "Stress",
       "Insomnia"
+    ],
+    "aka": "Pinot Noir",
+    "parents": [
+      "Hawaiian Purple Kush",
+      "Pitbull"
     ]
   },
   {
@@ -19752,7 +19606,7 @@
       "Insomnia",
       "Lack of Appetite"
     ],
-    "aka": "Katsu Bubba"
+    "aka": ""
   },
   {
     "id": "s541",
@@ -20040,29 +19894,11 @@
     "type": "Hybrid",
     "lean": "",
     "rarity": "common",
-    "thc": "20–28%",
-    "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Pinene",
-        "p": 0.4
-      },
-      {
-        "n": "Humulene",
-        "p": 0.27
-      },
-      {
-        "n": "Caryophyllene",
-        "p": 0.16
-      }
-    ],
-    "effects": [
-      "Relaxed",
-      "Happy",
-      "Sleepy",
-      "Focused"
-    ],
-    "flavor": "Pine on the palate with a pinene-leaning finish.",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Skunk and sweet citrus with berries and spice.",
     "icon": "🌲",
     "breeder": "Mr. Nice",
     "ailments": [
@@ -20071,43 +19907,37 @@
       "Depression",
       "Inflammation",
       "Muscle Spasms"
+    ],
+    "aka": "Afghan Skunk",
+    "parents": [
+      "Afghani",
+      "Skunk #1"
     ]
   },
   {
     "id": "s550",
     "name": "Oregon Diesel",
     "type": "Hybrid",
-    "lean": "",
+    "lean": "Indica-leaning",
     "rarity": "common",
-    "thc": "13–20%",
-    "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Myrcene",
-        "p": 0.4
-      },
-      {
-        "n": "Pinene",
-        "p": 0.27
-      },
-      {
-        "n": "Limonene",
-        "p": 0.16
-      }
-    ],
+    "thc": "",
+    "cbd": "",
+    "terps": [],
     "effects": [
-      "Relaxed",
-      "Happy",
-      "Euphoric",
-      "Uplifted"
+      "Relaxed"
     ],
-    "flavor": "Earthy on the palate with a myrcene-leaning finish.",
+    "flavor": "Diesel.",
     "icon": "🌰",
     "ailments": [
       "Depression",
       "Stress",
       "Insomnia",
       "Pain"
+    ],
+    "breeder": "Homegrown Natural Wonders",
+    "parents": [
+      "NYC Diesel",
+      "Blackberry"
     ]
   },
   {
@@ -21844,31 +21674,17 @@
     "id": "s598",
     "name": "Power Plant",
     "type": "Hybrid",
-    "lean": "",
+    "lean": "Sativa-leaning",
     "rarity": "uncommon",
-    "thc": "20–29%",
-    "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Myrcene",
-        "p": 0.4
-      },
-      {
-        "n": "Terpinolene",
-        "p": 0.27
-      },
-      {
-        "n": "Pinene",
-        "p": 0.16
-      }
-    ],
+    "thc": "",
+    "cbd": "",
+    "terps": [],
     "effects": [
-      "Happy",
+      "Energetic",
       "Uplifted",
-      "Relaxed",
-      "Euphoric"
+      "Happy"
     ],
-    "flavor": "Earthy on the palate with a myrcene-leaning finish.",
+    "flavor": "Earthy, woody and peppery with a sweet finish.",
     "icon": "🌰",
     "breeder": "Dutch Passion Seed Company",
     "ailments": [
@@ -21876,7 +21692,8 @@
       "Stress",
       "Depression",
       "Inflammation"
-    ]
+    ],
+    "aka": "Original Power Plant"
   },
   {
     "id": "s599",
@@ -23861,39 +23678,23 @@
   {
     "id": "s653",
     "name": "OCD",
-    "type": "Sativa",
+    "type": "Hybrid",
     "lean": "",
     "rarity": "common",
-    "thc": "19–27%",
-    "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Myrcene",
-        "p": 0.4
-      },
-      {
-        "n": "Humulene",
-        "p": 0.27
-      },
-      {
-        "n": "Caryophyllene",
-        "p": 0.16
-      }
-    ],
-    "effects": [
-      "Energetic",
-      "Creative",
-      "Aroused",
-      "Uplifted"
-    ],
-    "flavor": "Myrcene-forward with a humulene undertone.",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Sweet orange with pine and diesel.",
     "icon": "🌿",
     "ailments": [
       "Stress",
       "Nausea",
       "Pain",
       "Depression"
-    ]
+    ],
+    "breeder": "Capulator",
+    "aka": "Orange Cookie Dawg, Orange Cookie Dawgs"
   },
   {
     "id": "s654",
@@ -28379,37 +28180,26 @@
   {
     "id": "s775",
     "name": "Purple Thai",
-    "type": "Hybrid",
-    "lean": "",
+    "type": "Sativa",
+    "lean": "Sativa-leaning",
     "rarity": "legendary",
-    "thc": "22–27%",
-    "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Myrcene",
-        "p": 0.4
-      },
-      {
-        "n": "Limonene",
-        "p": 0.27
-      },
-      {
-        "n": "Linalool",
-        "p": 0.16
-      }
-    ],
+    "thc": "",
+    "cbd": "",
+    "terps": [],
     "effects": [
       "Happy",
-      "Relaxed",
-      "Uplifted",
-      "Euphoric"
+      "Uplifted"
     ],
-    "flavor": "Earthy and citrus on the palate with a myrcene-leaning finish.",
+    "flavor": "",
     "icon": "🌰",
     "breeder": "DJ Short",
     "ailments": [
       "Stress",
       "Depression"
+    ],
+    "parents": [
+      "Highland Oaxacan Gold",
+      "Chocolate Thai"
     ]
   },
   {
@@ -33886,11 +33676,12 @@
       "Insomnia",
       "Lack of Appetite"
     ],
-    "aka": "Phishhead OG, Phish Head OG, Phish Kush",
+    "aka": "Phishhead OG, Phish Kush",
     "parents": [
       "OG Kush",
       "Lowland Afghani"
-    ]
+    ],
+    "breeder": ""
   },
   {
     "id": "s928",
@@ -36195,31 +35986,17 @@
     "type": "Hybrid",
     "lean": "",
     "rarity": "rare",
-    "thc": "22–30%",
-    "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Pinene",
-        "p": 0.4
-      },
-      {
-        "n": "Myrcene",
-        "p": 0.27
-      },
-      {
-        "n": "Ocimene",
-        "p": 0.16
-      }
-    ],
-    "effects": [
-      "Happy",
-      "Sleepy",
-      "Hungry",
-      "Talkative"
-    ],
-    "flavor": "Pinene-forward with a myrcene undertone.",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Sweet pine and tropical fruit.",
     "icon": "🌿",
-    "breeder": "3rd Generation Family"
+    "breeder": "Apothecary Genetics",
+    "parents": [
+      "OG Kush",
+      "Grape Ape"
+    ]
   },
   {
     "id": "s997",
@@ -38497,7 +38274,7 @@
     "flavor": "Caryophyllene-forward with a myrcene undertone.",
     "icon": "🌿",
     "breeder": "Brothers Grimm",
-    "aka": "Cindy, C-99 Cindy, C99",
+    "aka": "Cindy 99, Cindy, C99",
     "parents": [
       "Jack Herer",
       "Shiva Skunk"
@@ -41021,31 +40798,22 @@
     "id": "s1169",
     "name": "Orange Dream",
     "type": "Hybrid",
-    "lean": "",
+    "lean": "Sativa-leaning",
     "rarity": "uncommon",
-    "thc": "23–27%",
-    "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Terpinolene",
-        "p": 0.4
-      },
-      {
-        "n": "Myrcene",
-        "p": 0.27
-      },
-      {
-        "n": "Caryophyllene",
-        "p": 0.16
-      }
-    ],
+    "thc": "",
+    "cbd": "",
+    "terps": [],
     "effects": [
-      "Euphoric",
-      "Focused",
-      "Relaxed"
+      "Energetic",
+      "Uplifted"
     ],
-    "flavor": "Terpinolene-forward with a myrcene undertone.",
-    "icon": "🌿"
+    "flavor": "Orange creamsicle with citrus and vanilla.",
+    "icon": "🌿",
+    "breeder": "DutchFem",
+    "parents": [
+      "Orange Crush",
+      "Blue Dream"
+    ]
   },
   {
     "id": "s1170",
@@ -41063,7 +40831,7 @@
     ],
     "flavor": "Orange creamsicle, creamy orange and citrus.",
     "icon": "🌿",
-    "breeder": "",
+    "breeder": "MzJill Genetics",
     "aka": "Melvin"
   },
   {
@@ -41161,31 +40929,18 @@
     "id": "s1174",
     "name": "Permafrost",
     "type": "Hybrid",
-    "lean": "",
+    "lean": "Sativa-leaning",
     "rarity": "common",
-    "thc": "12–16%",
-    "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Linalool",
-        "p": 0.4
-      },
-      {
-        "n": "Terpinolene",
-        "p": 0.27
-      },
-      {
-        "n": "Myrcene",
-        "p": 0.16
-      }
-    ],
+    "thc": "",
+    "cbd": "",
+    "terps": [],
     "effects": [
-      "Social",
-      "Calm",
-      "Happy"
+      "Relaxed"
     ],
-    "flavor": "Linalool-forward with a terpinolene undertone.",
-    "icon": "🌿"
+    "flavor": "Fresh pine and pepper with a cool menthol undertone.",
+    "icon": "🌿",
+    "breeder": "Rogue Buds",
+    "aka": "Blue Permafrost"
   },
   {
     "id": "s1175",
@@ -41193,28 +40948,14 @@
     "type": "Hybrid",
     "lean": "",
     "rarity": "rare",
-    "thc": "19–28%",
-    "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Linalool",
-        "p": 0.4
-      },
-      {
-        "n": "Limonene",
-        "p": 0.27
-      },
-      {
-        "n": "Pinene",
-        "p": 0.16
-      }
-    ],
+    "thc": "",
+    "cbd": "",
+    "terps": [],
     "effects": [
       "Creative",
-      "Clear-headed",
       "Energetic"
     ],
-    "flavor": "Linalool-forward with a limonene undertone.",
+    "flavor": "Sweet tropical pineapple with citrus and a slight diesel note.",
     "icon": "🌿"
   },
   {
@@ -43885,7 +43626,7 @@
       "Green Crack",
       "Tres Dawg"
     ],
-    "breeder": "High & Lonesome Seeds"
+    "breeder": ""
   },
   {
     "id": "s1270",
@@ -51430,7 +51171,7 @@
     ],
     "flavor": "Sweet cherry with an earthy, slightly sour exhale.",
     "icon": "🍒",
-    "breeder": "Holistic Healing Collective",
+    "breeder": "",
     "parents": [
       "Granddaddy Purple",
       "Durban Poison"
@@ -52076,7 +51817,7 @@
     ],
     "flavor": "Dark chocolate cookie and vanilla with a diesel twang.",
     "icon": "🍫",
-    "aka": "Oooze, Ooze, Cream Cookiez, Ooz",
+    "aka": "Oooze, Ooze, Cream Cookiez",
     "parents": [
       "Cookies and Cream",
       "Secret Weapon"
@@ -52090,28 +51831,13 @@
     "lean": "Indica-leaning",
     "rarity": "legendary",
     "thc": "25–30%",
-    "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Caryophyllene",
-        "p": 0.3
-      },
-      {
-        "n": "Limonene",
-        "p": 0.25
-      },
-      {
-        "n": "Linalool",
-        "p": 0.15
-      }
-    ],
+    "cbd": "",
+    "terps": [],
     "effects": [
       "Relaxed",
-      "Euphoric",
-      "Happy",
-      "Uplifted"
+      "Euphoric"
     ],
-    "flavor": "Candy-sweet gas with an inky, funky edge.",
+    "flavor": "Grape candy and gas with a floral, soapy, marker-like edge.",
     "icon": "🖊️",
     "aka": "Adios MF, Gunnpowwder",
     "parents": [
@@ -52124,7 +51850,8 @@
         "name": "Leafly Strain of the Year",
         "year": 2023
       }
-    ]
+    ],
+    "breeder": "Seed Junky Genetics"
   },
   {
     "id": "s1540",
@@ -52434,7 +52161,8 @@
     ],
     "flavor": "Earthy pine and citrus with a diesel edge.",
     "icon": "👻",
-    "breeder": ""
+    "breeder": "",
+    "aka": "4-Way OG"
   },
   {
     "id": "s1551",
@@ -52816,7 +52544,7 @@
     ],
     "flavor": "Sweet berry and cream with a tart, fruity edge.",
     "icon": "🫐",
-    "aka": "Acai Berry",
+    "aka": "Acai Gelato, Gelato #49, Acaiberry Gelato",
     "parents": [
       "Sunset Sherbet",
       "Thin Mint GSC"
@@ -53009,7 +52737,7 @@
       "Sunset Sherbet",
       "Thin Mint GSC"
     ],
-    "aka": "Gelato #41, Gelato 41, Bacio 41, Bacio, BACIO 33",
+    "aka": "Gelato #41, Gelato 41, Bacio",
     "breeder": "Sherbinskis"
   },
   {
@@ -53312,10 +53040,10 @@
     ],
     "flavor": "Sweet banana over an earthy, diesel OG base.",
     "icon": "🍌",
-    "aka": "OG Banana, Nana OG",
+    "aka": "Nana OG, Nana",
     "parents": [
-      "Ghost OG",
-      "Sagarmatha 60/40 (Banana pheno)"
+      "OG Kush",
+      "Banana Kush"
     ],
     "breeder": "OrgnKid"
   },
@@ -53462,7 +53190,7 @@
       "The White",
       "Fire OG"
     ],
-    "breeder": "OG Raskal Genetics"
+    "breeder": ""
   },
   {
     "id": "s1590",
@@ -53571,10 +53299,12 @@
     "thc": "",
     "cbd": "",
     "terps": [],
-    "effects": [],
+    "effects": [
+      "Energetic"
+    ],
     "flavor": "Strong diesel with a piney-lemon aftertaste.",
     "icon": "⚗️",
-    "aka": "Chem 91, Chemdawg 91, Chem 91 Skunk VA, Chem91 Skunk VA, 91 Skunk VA, 91 Chem",
+    "aka": "Chem 91, Chem #91, Chemdawg 91, 91 Chemdawg, Chem 91 Skunk VA, Chem91 Skunk VA, 91 Skunk VA, 91 Chem",
     "breeder": "Greg \"Chemdog\" Krzanowski"
   },
   {
@@ -53818,32 +53548,23 @@
     "id": "s1604",
     "name": "Pancakes",
     "type": "Hybrid",
-    "lean": "Indica-leaning",
+    "lean": "",
     "rarity": "uncommon",
-    "thc": "18–24%",
-    "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Limonene",
-        "p": 0.3
-      },
-      {
-        "n": "Caryophyllene",
-        "p": 0.25
-      },
-      {
-        "n": "Linalool",
-        "p": 0.15
-      }
-    ],
+    "thc": "",
+    "cbd": "",
+    "terps": [],
     "effects": [
       "Relaxed",
-      "Happy",
-      "Euphoric",
+      "Focused",
       "Uplifted"
     ],
-    "flavor": "Sweet maple and vanilla with a doughy, earthy finish.",
-    "icon": "🥞"
+    "flavor": "Buttery, doughy pancake batter with sweet berries.",
+    "icon": "🥞",
+    "breeder": "Cookies x Seed Junky Genetics",
+    "parents": [
+      "London Pound Cake",
+      "Kush Mints"
+    ]
   },
   {
     "id": "s1605",
@@ -54782,7 +54503,7 @@
     ],
     "flavor": "Sweet tropical fruit candy with a creamy finish.",
     "icon": "🍬",
-    "aka": "Gusherz, White Gushers, White Gusherz, Fruit Gushers, TK41",
+    "aka": "Gusherz",
     "parents": [
       "Gelato 41",
       "Triangle Kush"
@@ -55559,7 +55280,7 @@
     "flavor": "Sweet cherry and berry with a nutty, sour citrus finish.",
     "icon": "🍒",
     "breeder": "Blockhead",
-    "aka": "Frosted Boof, Superboof, Blockberry",
+    "aka": "Superboof, Blockberry",
     "parents": [
       "Black Cherry Punch",
       "Tropicana Cookies"
@@ -55720,26 +55441,12 @@
     "type": "Indica",
     "lean": null,
     "rarity": "uncommon",
-    "thc": "18–25%",
-    "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Terpinolene",
-        "p": 0.35
-      },
-      {
-        "n": "Myrcene",
-        "p": 0.25
-      },
-      {
-        "n": "Limonene",
-        "p": 0.15
-      }
-    ],
+    "thc": "",
+    "cbd": "",
+    "terps": [],
     "effects": [
       "Relaxed",
-      "Sleepy",
-      "Happy"
+      "Sleepy"
     ],
     "flavor": "Pungent earthy skunk with hints of lemon and sour grape citrus.",
     "icon": "🌿",
@@ -55747,7 +55454,8 @@
     "parents": [
       "Pure Kush",
       "OG Kush"
-    ]
+    ],
+    "aka": "Old School OG Kush"
   },
   {
     "id": "s1678",
@@ -59404,7 +59112,24 @@
     "icon": "🌿",
     "breeder": "Reserva Privada",
     "id": "s1863",
-    "aka": "Private Reserve, Reserve OG, OG 18, The OG #18"
+    "aka": "Private Reserve, Private Reserve OG, Reserve OG, OG 18, The OG #18, OG Kush #18",
+    "parents": [
+      "OG Kush"
+    ],
+    "awards": [
+      {
+        "name": "Spannabis Cup — 1st Place, Indoor Hydro",
+        "year": 2011
+      },
+      {
+        "name": "High Times Cannabis Cup — 2nd Place, Indica",
+        "year": 2009
+      },
+      {
+        "name": "High Times Cannabis Cup — 3rd Place, Indica",
+        "year": 2007
+      }
+    ]
   },
   {
     "name": "Grape Pie",
@@ -60544,7 +60269,7 @@
       "Zkittlez",
       "Sherbanger"
     ],
-    "aka": "Fumez, Candy Fumes",
+    "aka": "Candy Fumes",
     "id": "s1916"
   },
   {
@@ -60975,12 +60700,13 @@
     "type": "Hybrid",
     "lean": "Indica-leaning",
     "rarity": "uncommon",
-    "thc": "18-25%",
+    "thc": "",
     "cbd": "",
     "terps": [],
     "effects": [
-      "Uplifted",
-      "Relaxed"
+      "Relaxed",
+      "Happy",
+      "Creative"
     ],
     "flavor": "Zesty citrus with sweet and sour vanilla, woody on exhale.",
     "icon": "🌿",
@@ -60995,22 +60721,24 @@
     "name": "Pave",
     "type": "Hybrid",
     "rarity": "uncommon",
-    "thc": "26.8%",
+    "thc": "",
     "cbd": "",
     "terps": [],
     "effects": [
       "Relaxed",
+      "Euphoric",
       "Focused"
     ],
-    "flavor": "Minty and gassy with vanilla, like Dr. Pepper.",
+    "flavor": "Sweet plum and grape with menthol and diesel.",
     "icon": "🌿",
     "breeder": "Compound Genetics",
     "parents": [
       "Paris OG",
       "The Menthol"
     ],
-    "aka": "Pavé, Pav",
-    "id": "s1937"
+    "aka": "Pavé",
+    "id": "s1937",
+    "lean": "Indica-leaning"
   },
   {
     "name": "Humboldt",
@@ -61095,7 +60823,7 @@
       "Cherry Pie",
       "GSC"
     ],
-    "aka": "Cherry Cookie",
+    "aka": "",
     "id": "s1941"
   },
   {
@@ -61348,7 +61076,7 @@
       "Orange Blossom Trail"
     ],
     "id": "s1952",
-    "aka": "Mojito #1, Lime Mojito, Lime Mi'jito"
+    "aka": "Mojito #1"
   },
   {
     "name": "Kiwi",
@@ -65099,7 +64827,7 @@
     "type": "Hybrid",
     "lean": "",
     "rarity": "rare",
-    "thc": "27-34%",
+    "thc": "",
     "cbd": "<1%",
     "terps": [
       {
@@ -65114,12 +64842,12 @@
     ],
     "flavor": "Chemical fuel with sweet berry, blueberry jam, and custard.",
     "icon": "🌿",
-    "breeder": "Seed Junky Genetics x BeLeaf Cannabis",
+    "breeder": "Highrule Genetics",
     "parents": [
-      "Chimera #2",
-      "Permanent Marker"
+      "Chimera 3",
+      "Cap Junky"
     ],
-    "aka": "Permanent Chimera",
+    "aka": "",
     "id": "s2097"
   },
   {
@@ -67863,18 +67591,9 @@
     "type": "Hybrid",
     "lean": "Indica-leaning",
     "rarity": "uncommon",
-    "thc": "20-26%",
-    "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Myrcene",
-        "p": 0.3
-      },
-      {
-        "n": "Limonene",
-        "p": 0.2
-      }
-    ],
+    "thc": "",
+    "cbd": "",
+    "terps": [],
     "effects": [
       "Uplifted",
       "Creative",
@@ -71123,23 +70842,17 @@
   },
   {
     "name": "Platinum Cookies",
-    "type": "Indica",
-    "lean": "Indica-leaning",
+    "type": "Hybrid",
+    "lean": "",
     "rarity": "uncommon",
-    "thc": "17-28%",
-    "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Caryophyllene",
-        "p": 0.3
-      }
-    ],
+    "thc": "",
+    "cbd": "",
+    "terps": [],
     "effects": [
-      "Relaxed",
       "Euphoric",
-      "Uplifted"
+      "Happy"
     ],
-    "flavor": "Sweet berry and candy with fruity spiciness.",
+    "flavor": "Heavy, musky and pungent with a slightly piney aroma.",
     "icon": "🌿",
     "breeder": "Cookie Fam Genetics",
     "parents": [
@@ -72419,7 +72132,7 @@
     ],
     "flavor": "Cool mint and cookie dough with coffee and subtle gas.",
     "icon": "🌿",
-    "breeder": "Exotic Genetix",
+    "breeder": "",
     "parents": [
       "Mint Chocolate Chip",
       "Triple OG"
@@ -73890,7 +73603,7 @@
     "type": "Indica",
     "lean": "Indica-leaning",
     "rarity": "uncommon",
-    "thc": "17-18%",
+    "thc": "",
     "cbd": "",
     "terps": [],
     "effects": [
@@ -73900,12 +73613,13 @@
     ],
     "flavor": "Super woody pine with touches of sweet fruitiness.",
     "icon": "🌿",
-    "aka": "Pine Soul OG",
+    "aka": "Pine Soul OG, PineSoul, Pinesoul",
     "parents": [
       "Nepali OG",
       "Snow Lotus"
     ],
-    "id": "s2408"
+    "id": "s2408",
+    "breeder": "Bodhi Seeds"
   },
   {
     "name": "Pink Pellegrino",
@@ -77253,7 +76967,7 @@
     ],
     "flavor": "Sweet smells of cola, cherry pipe tobacco, skunk, and hash.",
     "icon": "🇨🇴",
-    "aka": "Punta Roja",
+    "aka": "Punta Roja, Punto Rojo",
     "id": "s2566"
   },
   {
@@ -86045,27 +85759,6 @@
       "True OG"
     ],
     "id": "s2985"
-  },
-  {
-    "name": "88G (88 G13 Hashplant)",
-    "type": "Indica",
-    "lean": "Indica-leaning",
-    "rarity": "rare",
-    "thc": "",
-    "cbd": "",
-    "terps": [],
-    "effects": [
-      "Calming",
-      "Sedated"
-    ],
-    "flavor": "Deep array of flavors, from pine to incense, like smoking a bowl of bubble hash.",
-    "icon": "🕰️",
-    "breeder": "NDNguy (circulated by Hazeman)",
-    "parents": [
-      "G13",
-      "Hash Plant"
-    ],
-    "id": "s2986"
   },
   {
     "name": "92 Cookies",
@@ -140514,7 +140207,8 @@
       "Alien Rift",
       "Ghost OG"
     ],
-    "id": "s5277"
+    "id": "s5277",
+    "aka": "ObiWan OG, Obi-Wan OG, Obiwan OG Kush"
   },
   {
     "name": "Offwhite OG",
@@ -141958,21 +141652,16 @@
   },
   {
     "name": "Oregon Pineapple",
-    "type": "Indica",
-    "lean": "Indica-leaning",
+    "type": "Hybrid",
+    "lean": "",
     "rarity": "uncommon",
-    "thc": "18-20%",
+    "thc": "",
     "cbd": "",
-    "terps": [
-      {
-        "n": "Caryophyllene",
-        "p": 0.2
-      }
-    ],
+    "terps": [],
     "effects": [
       "Happy",
       "Giggly",
-      "Energized"
+      "Energetic"
     ],
     "flavor": "Sweet earthy pineapple, tropical, sage.",
     "icon": "🍍",
@@ -142318,40 +142007,6 @@
       "The OX"
     ],
     "id": "s5347"
-  },
-  {
-    "name": "Ozk",
-    "type": "Hybrid",
-    "lean": "",
-    "rarity": "uncommon",
-    "thc": "22-28%",
-    "cbd": "0-2%",
-    "terps": [
-      {
-        "n": "Limonene",
-        "p": 0.2
-      },
-      {
-        "n": "Caryophyllene",
-        "p": 0.15
-      },
-      {
-        "n": "Myrcene",
-        "p": 0.1
-      }
-    ],
-    "effects": [
-      "Relaxed",
-      "Euphoric",
-      "Happy"
-    ],
-    "flavor": "Honey, butter, woody.",
-    "icon": "🍬",
-    "parents": [
-      "OG Kush",
-      "Zkittlez"
-    ],
-    "id": "s5348"
   },
   {
     "name": "Ozma",
@@ -176434,29 +176089,6 @@
     "aka": "Bernie HanaButter, BHB"
   },
   {
-    "id": "s6766",
-    "name": "Acai",
-    "type": "Hybrid",
-    "lean": "Sativa-dominant",
-    "rarity": "uncommon",
-    "thc": "15-25%",
-    "cbd": "<1%",
-    "terps": [],
-    "effects": [
-      "Euphoric",
-      "Uplifted",
-      "Focused"
-    ],
-    "flavor": "Sweet fruity creamy berry with a sour tropical exhale.",
-    "icon": "leaf",
-    "breeder": "Sherbinskis",
-    "parents": [
-      "Pink Panties",
-      "Sunset Sherbet"
-    ],
-    "aka": "Acai Gelato, Acai Berry Gelato"
-  },
-  {
     "id": "s6767",
     "name": "Blue Nightmare",
     "type": "Hybrid",
@@ -176739,12 +176371,12 @@
     ],
     "flavor": "Pine, incense, hashy, bubble hash notes.",
     "icon": "leaf",
-    "breeder": "NDNguy",
+    "breeder": "",
     "parents": [
       "G13",
       "Hash Plant"
     ],
-    "aka": "88 G13, 88 G13/Hash Plant, 88G13HP, 88HP"
+    "aka": ""
   },
   {
     "id": "s6779",
@@ -180613,7 +180245,7 @@
     "effects": [],
     "flavor": "",
     "icon": "🌿",
-    "aka": "Dogshit",
+    "aka": "Dogshit, PNW Dogshit, Pacific Northwest Dogshit, Electric Boogaloo",
     "ailments": null
   },
   {
@@ -183333,7 +182965,7 @@
     "flavor": "",
     "icon": "🌿",
     "breeder": "Cookie Fam Genetics",
-    "aka": "The Original Lemonnade, Lemonade",
+    "aka": "The Original Lemonnade, Original Lemonnade, Original Lemonade, Lemonade",
     "ailments": null
   },
   {
@@ -184351,6 +183983,1717 @@
     "flavor": "",
     "icon": "🌿",
     "aka": "Nigerian",
+    "ailments": null
+  },
+  {
+    "id": "s7154",
+    "name": "NineTails",
+    "type": "Indica",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Sweet, fruity skunk with anise, berry and spicy cherry.",
+    "icon": "🌿",
+    "breeder": "BSV Genetics",
+    "parents": [
+      "Hindu Kush"
+    ],
+    "aka": "Ninetails, Nine Tails",
+    "ailments": null
+  },
+  {
+    "id": "s7155",
+    "name": "Ninja Fruit",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "Ocean Grown Seeds",
+    "parents": [
+      "Grapefruit Haze",
+      "Grape Ape"
+    ],
+    "ailments": null
+  },
+  {
+    "id": "s7156",
+    "name": "Nitro Cookies",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Diesel and fuel with vanilla cookie dough and a touch of citrus.",
+    "icon": "🌿",
+    "parents": [
+      "Gas Mask",
+      "Animal Cookies"
+    ],
+    "ailments": null
+  },
+  {
+    "id": "s7157",
+    "name": "NorCal Cat Piss",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "aka": "Norcal Catpiss",
+    "ailments": null
+  },
+  {
+    "id": "s7158",
+    "name": "Norton",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Strawberry-lemon with plum, red fruit and grapefruit.",
+    "icon": "🌿",
+    "parents": [
+      "Sour Diesel",
+      "Exodus Cheese"
+    ],
+    "ailments": null
+  },
+  {
+    "id": "s7159",
+    "name": "Now N Later",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Sweet and full with earthy, spicy notes.",
+    "icon": "🌿",
+    "breeder": "EarthFire Genetics",
+    "parents": [
+      "Candyland",
+      "Blue Power"
+    ],
+    "aka": "Now & Later, Now and Later",
+    "ailments": null
+  },
+  {
+    "id": "s7160",
+    "name": "Octane Mint Sorbet",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Mint and diesel with lime, floral and musky notes.",
+    "icon": "🌿",
+    "breeder": "Seed Junky Genetics",
+    "parents": [
+      "Sunset Octane",
+      "Wedding Cake"
+    ],
+    "aka": "Octane Mint, OMS",
+    "ailments": null
+  },
+  {
+    "id": "s7161",
+    "name": "Ringo's Gift",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Earthy, citrus and nutty.",
+    "icon": "🌿",
+    "breeder": "Southern Humboldt Seed Collective",
+    "parents": [
+      "Harle-Tsu",
+      "ACDC"
+    ],
+    "aka": "Ringo Gift",
+    "ailments": null
+  },
+  {
+    "id": "s7162",
+    "name": "OG Deluxe",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Sweet gassy berry with woody earth, floral and spice.",
+    "icon": "🌿",
+    "breeder": "Ethos Collective",
+    "parents": [
+      "OG Kush Breath",
+      "Triangle Kush",
+      "Josh D OG"
+    ],
+    "ailments": null
+  },
+  {
+    "id": "s7163",
+    "name": "Old Family Purple",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Sweet, skunky grape with sour citrus on the exhale.",
+    "icon": "🌿",
+    "breeder": "CSI Humboldt",
+    "parents": [
+      "Triangle Kush",
+      "Purple Urkle"
+    ],
+    "ailments": null
+  },
+  {
+    "id": "s7164",
+    "name": "OG Love",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Sour lemon-lime with earthy wood, kush and spicy diesel.",
+    "icon": "🌿",
+    "breeder": "Love Genetics",
+    "parents": [
+      "OG Kush"
+    ],
+    "aka": "O.G. Love",
+    "ailments": null
+  },
+  {
+    "id": "s7165",
+    "name": "Old Mendo Haze",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Lime margarita, pine and eucalyptus with sweet tropical pineapple.",
+    "icon": "🌿",
+    "ailments": null
+  },
+  {
+    "id": "s7166",
+    "name": "Old Mother Ghani",
+    "type": "Indica",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "aka": "OMG, Old Mother Ghani (OMG)",
+    "ailments": null
+  },
+  {
+    "id": "s7167",
+    "name": "OMFG",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Loud strawberry candy and soda with herbal tropical notes.",
+    "icon": "🌿",
+    "breeder": "Exotic Genetix",
+    "parents": [
+      "Runtz",
+      "Red Pop"
+    ],
+    "ailments": null
+  },
+  {
+    "id": "s7168",
+    "name": "Omrita",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Fresh earthy with a hint of skunk and a slightly peppery exhale.",
+    "icon": "🌿",
+    "aka": "Omrita RX, Omrita RX3",
+    "ailments": null
+  },
+  {
+    "id": "s7169",
+    "name": "Onion Ringz",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Classic garlic and gas.",
+    "icon": "🌿",
+    "ailments": null
+  },
+  {
+    "id": "s7170",
+    "name": "Orange Diesel",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Sweet citrus with a subtle diesel aftertaste.",
+    "icon": "🌿",
+    "breeder": "TGA Subcool Seeds",
+    "parents": [
+      "Sour Diesel",
+      "Agent Orange"
+    ],
+    "aka": "Agent D, Agent Diesel",
+    "ailments": null
+  },
+  {
+    "id": "s7171",
+    "name": "Orange Cannoli",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Orange peel and sweet cream over earth.",
+    "icon": "🌿",
+    "breeder": "Solfire Gardens",
+    "parents": [
+      "Tropicana Cookies",
+      "Don Mega"
+    ],
+    "ailments": null
+  },
+  {
+    "id": "s7172",
+    "name": "Orange Headrush",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "Terp Fi3nd",
+    "parents": [
+      "Orange Zkittlez",
+      "501st OG",
+      "Deep Chunk"
+    ],
+    "ailments": null
+  },
+  {
+    "id": "s7173",
+    "name": "Orange Juice",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Orange and lemon with diesel and sweet earthy citrus.",
+    "icon": "🌿",
+    "breeder": "Gage Green Genetics",
+    "parents": [
+      "Joseph OG",
+      "California Orange",
+      "OG Kush"
+    ],
+    "ailments": null
+  },
+  {
+    "id": "s7174",
+    "name": "Orange Julius",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "Fancy Weed",
+    "parents": [
+      "Agent Orange",
+      "Keebler Cookies"
+    ],
+    "ailments": null
+  },
+  {
+    "id": "s7175",
+    "name": "Orange Poison",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Sweet tangerine and citrus peel over pine and herbs.",
+    "icon": "🌿",
+    "breeder": "Franchise Genetics",
+    "parents": [
+      "Orange Juice Bud",
+      "Durban Poison"
+    ],
+    "aka": "Orange Durban",
+    "ailments": null
+  },
+  {
+    "id": "s7176",
+    "name": "Orange Cookie MAC",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "Capulator",
+    "aka": "Orange Alien Cookies, Orange Mac Cookies",
+    "ailments": null
+  },
+  {
+    "id": "s7177",
+    "name": "Orange Valley OG",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Pine, tea and citrus.",
+    "icon": "🌿",
+    "breeder": "Relentless Genetics",
+    "ailments": null
+  },
+  {
+    "id": "s7178",
+    "name": "Orange Skunk",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "parents": [
+      "California Orange",
+      "Skunk #1"
+    ],
+    "ailments": null
+  },
+  {
+    "id": "s7179",
+    "name": "Oregon Blues",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "Homegrown Natural Wonders",
+    "parents": [
+      "Oregon Diesel",
+      "Jamaican Blueberry"
+    ],
+    "aka": "Oregon Blue",
+    "ailments": null
+  },
+  {
+    "id": "s7180",
+    "name": "Oregon Lemons",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Sour lemon and spicy diesel.",
+    "icon": "🌿",
+    "breeder": "Archive Seed Bank",
+    "parents": [
+      "Lemon Diesel",
+      "Face Off OG"
+    ],
+    "ailments": null
+  },
+  {
+    "id": "s7181",
+    "name": "Oregon Huckleberry",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "DJ Short",
+    "ailments": null
+  },
+  {
+    "id": "s7182",
+    "name": "Oregon Silver Haze",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Grassy citrus and kush with a touch of haze.",
+    "icon": "🌿",
+    "ailments": null
+  },
+  {
+    "id": "s7183",
+    "name": "Original Cookies",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "Paisa Grow Seeds",
+    "parents": [
+      "Thin Mint GSC"
+    ],
+    "ailments": null
+  },
+  {
+    "id": "s7184",
+    "name": "Otto II",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "Centennial Seeds",
+    "aka": "Otto #2, Otto 2",
+    "ailments": null
+  },
+  {
+    "id": "s7185",
+    "name": "Outlaw Orange",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "RedEyed Genetics",
+    "ailments": null
+  },
+  {
+    "id": "s7186",
+    "name": "OZ Kush",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Euphoric"
+    ],
+    "flavor": "Sweet citrus candy and cream with gassy pine.",
+    "icon": "🌿",
+    "breeder": "Dying Breed Seeds",
+    "parents": [
+      "OG Eddy Lepp",
+      "Zkittlez"
+    ],
+    "aka": "Oz Kush",
+    "ailments": null
+  },
+  {
+    "id": "s7187",
+    "name": "OZ Kush BX2",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "Full Moon Genetics",
+    "parents": [
+      "OZ Kush",
+      "Peach Ozz"
+    ],
+    "aka": "OZ Kush Bx2",
+    "ailments": null
+  },
+  {
+    "id": "s7188",
+    "name": "Ozark",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "Grounded Genetics",
+    "parents": [
+      "OZ Kush",
+      "Jealousy"
+    ],
+    "ailments": null
+  },
+  {
+    "id": "s7189",
+    "name": "Purple Jar",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Sweet grape and berries with a spicy skunk.",
+    "icon": "🌿",
+    "breeder": "Cannabis Family Seeds",
+    "parents": [],
+    "ailments": null
+  },
+  {
+    "id": "s7190",
+    "name": "Pablo's Revenge",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Diesel-soaked berry with sweet mint.",
+    "icon": "🌿",
+    "breeder": "Tiki Madman",
+    "parents": [
+      "Animal Mints",
+      "Sherb Cake"
+    ],
+    "ailments": null
+  },
+  {
+    "id": "s7191",
+    "name": "Pai Gow",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Sweet with undertones of pine.",
+    "icon": "🌿",
+    "parents": [
+      "Super Silver Haze",
+      "Critical Jack"
+    ],
+    "ailments": null
+  },
+  {
+    "id": "s7192",
+    "name": "Pacoima Kush",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "ailments": null
+  },
+  {
+    "id": "s7193",
+    "name": "Panama Dragon",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "7 East Genetics",
+    "parents": [
+      "Breath of Purple Dragon",
+      "Panama Red"
+    ],
+    "ailments": null
+  },
+  {
+    "id": "s7194",
+    "name": "Panda OG",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Spicy and earthy with sour tones and a slight berry finish.",
+    "icon": "🌿",
+    "breeder": "Phat Panda",
+    "parents": [
+      "OG Chem",
+      "Berry Sour Creme"
+    ],
+    "ailments": null
+  },
+  {
+    "id": "s7195",
+    "name": "Paradise Island",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "Cannabis Family Seeds",
+    "parents": [
+      "Chocolope",
+      "Purple Jar"
+    ],
+    "ailments": null
+  },
+  {
+    "id": "s7196",
+    "name": "Paris Larry",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "Skunk House Genetics",
+    "parents": [
+      "Paris OG",
+      "Larry OG"
+    ],
+    "ailments": null
+  },
+  {
+    "id": "s7197",
+    "name": "PB & Jealous",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "Robin Hood Seeds",
+    "parents": [
+      "Oregon Raspberry",
+      "Peanut Butter Breath"
+    ],
+    "ailments": null
+  },
+  {
+    "id": "s7198",
+    "name": "Peach Ozz",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Sweet peach candy with a citrus finish.",
+    "icon": "🌿",
+    "breeder": "Dying Breed Seeds",
+    "parents": [
+      "OZ Kush",
+      "Peach Ringz"
+    ],
+    "aka": "Peach Oz",
+    "ailments": null
+  },
+  {
+    "id": "s7199",
+    "name": "Peach Maraschino",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "Compound Genetics",
+    "parents": [
+      "Peach Ringz",
+      "Maraschino"
+    ],
+    "ailments": null
+  },
+  {
+    "id": "s7200",
+    "name": "Pearadise",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Ripe pear and peach with pine, florals and earth.",
+    "icon": "🌿",
+    "breeder": "Team Elite Genetics",
+    "parents": [
+      "Peach Ozz",
+      "Kosher Kush"
+    ],
+    "ailments": null
+  },
+  {
+    "id": "s7201",
+    "name": "Pearl Scout Cookies",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Zesty lemon and orange citrus.",
+    "icon": "🌿",
+    "breeder": "Fireline",
+    "ailments": null
+  },
+  {
+    "id": "s7202",
+    "name": "Petrol OG",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "parents": [
+      "Sour Diesel",
+      "Petrolia Headstash",
+      "Tahoe OG"
+    ],
+    "aka": "Petrol",
+    "ailments": null
+  },
+  {
+    "id": "s7203",
+    "name": "Pestilence",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Coffee and caramel with pungent earth.",
+    "icon": "🌿",
+    "parents": [
+      "Abusive OG",
+      "West Coast Dawg"
+    ],
+    "ailments": null
+  },
+  {
+    "id": "s7204",
+    "name": "Phantom Cookies",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Sweet berries and grapes with roasted nuts and citrus.",
+    "icon": "🌿",
+    "breeder": "Grand Daddy Purp",
+    "parents": [
+      "Cherry Pie",
+      "Granddaddy Purple"
+    ],
+    "aka": "Phantom Cookie",
+    "ailments": null
+  },
+  {
+    "id": "s7205",
+    "name": "Pie Face",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Sweet cherry and earthy hash.",
+    "icon": "🌿",
+    "breeder": "Archive Seed Bank",
+    "parents": [
+      "Cherry Pie",
+      "Face Off OG"
+    ],
+    "aka": "Pie Face OG, Pie Face OG Kush",
+    "ailments": null
+  },
+  {
+    "id": "s7206",
+    "name": "Pie Dough",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "Cannarado Genetics",
+    "parents": [
+      "Animal Cookies Star Dog",
+      "Grape Pie"
+    ],
+    "ailments": null
+  },
+  {
+    "id": "s7207",
+    "name": "Pina Acai",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Sweet blueberry and citrus with a light woody pine exhale.",
+    "icon": "🌿",
+    "breeder": "Grandiflora Genetics",
+    "aka": "Piña Acai",
+    "ailments": null
+  },
+  {
+    "id": "s7208",
+    "name": "Pineapple Tart",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "ailments": null
+  },
+  {
+    "id": "s7209",
+    "name": "Pink Dream",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "Annunaki Genetics",
+    "ailments": null
+  },
+  {
+    "id": "s7210",
+    "name": "Pink Lady",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "Offensive Selections",
+    "ailments": null
+  },
+  {
+    "id": "s7211",
+    "name": "Pink Grapefruit",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Tart citrus and pink grapefruit zest with sweet berry.",
+    "icon": "🌿",
+    "breeder": "Ethos Genetics",
+    "parents": [
+      "Skunkberry",
+      "Mandarin Sunset"
+    ],
+    "aka": "Pink Grapefruit pheno of Member Berry",
+    "ailments": null
+  },
+  {
+    "id": "s7212",
+    "name": "Pink LemonAid",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "Annunaki Genetics",
+    "parents": [
+      "Huckleberry Hound",
+      "Lemon Cheesecake"
+    ],
+    "aka": "Pink Lemonaid",
+    "ailments": null
+  },
+  {
+    "id": "s7213",
+    "name": "Platinum Candy",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Sweet candy with earthy, herbal undertones.",
+    "icon": "🌿",
+    "parents": [
+      "Platinum Wreck",
+      "Candy Kush"
+    ],
+    "ailments": null
+  },
+  {
+    "id": "s7214",
+    "name": "Platinum Huckleberry Cookies",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "Dynasty Seeds",
+    "parents": [
+      "Platinum Cookies",
+      "Oregon Huckleberry"
+    ],
+    "ailments": null
+  },
+  {
+    "id": "s7215",
+    "name": "Platinum Kush Mints",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Earthy fuel with minty, doughy funk.",
+    "icon": "🌿",
+    "breeder": "In-House Genetics",
+    "parents": [
+      "Platinum Kush",
+      "Kush Mints"
+    ],
+    "aka": "Platinum Kush Mintz",
+    "ailments": null
+  },
+  {
+    "id": "s7216",
+    "name": "Platinum Punch",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Herbal, with citrus and pepper.",
+    "icon": "🌿",
+    "parents": [
+      "Platinum Wreck",
+      "Fruit Punch"
+    ],
+    "ailments": null
+  },
+  {
+    "id": "s7217",
+    "name": "Predator Pink",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Sweet berry and earthy tea with a tart finish.",
+    "icon": "🌿",
+    "breeder": "Exotic Genetix",
+    "parents": [
+      "Plushberry",
+      "Starfighter"
+    ],
+    "ailments": null
+  },
+  {
+    "id": "s7218",
+    "name": "Prizm",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "Maven Genetics",
+    "parents": [
+      "Permanent Marker",
+      "Opal"
+    ],
+    "ailments": null
+  },
+  {
+    "id": "s7219",
+    "name": "Project 4516",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "Grandiflora Genetics",
+    "parents": [
+      "Gelato #45",
+      "Platinum Kush",
+      "Grateful Puff"
+    ],
+    "ailments": null
+  },
+  {
+    "id": "s7220",
+    "name": "Princess",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "parents": [
+      "Jack Herer"
+    ],
+    "ailments": null
+  },
+  {
+    "id": "s7221",
+    "name": "Puck",
+    "type": "Indica",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "aka": "Skelly, Skelly Hashplant, The Puck",
+    "ailments": null
+  },
+  {
+    "id": "s7222",
+    "name": "Puffy Payton",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "Cannarado Genetics",
+    "parents": [
+      "Gary Payton",
+      "Banana Puffy"
+    ],
+    "ailments": null
+  },
+  {
+    "id": "s7223",
+    "name": "Purple Apricot",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "Compound Genetics",
+    "parents": [
+      "Purple Punch",
+      "Legend Orange Apricot"
+    ],
+    "ailments": null
+  },
+  {
+    "id": "s7224",
+    "name": "Purple Caper",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "Purple Caper Seeds",
+    "parents": [
+      "Granddaddy Purple",
+      "Sour Diesel",
+      "White Widow"
+    ],
+    "ailments": null
+  },
+  {
+    "id": "s7225",
+    "name": "Purple Hulk",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "In House Genetics",
+    "ailments": null
+  },
+  {
+    "id": "s7226",
+    "name": "Purple Lemon Chem",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "Massive Seeds",
+    "ailments": null
+  },
+  {
+    "id": "s7227",
+    "name": "Purple Lemonade",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "Fast Buds",
+    "parents": [
+      "Lemonnade",
+      "LSD (25)"
+    ],
+    "ailments": null
+  },
+  {
+    "id": "s7228",
+    "name": "P85",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "parents": [
+      "Legend's Ultimate Indica",
+      "Bubblegum"
+    ],
+    "ailments": null
+  },
+  {
+    "id": "s7229",
+    "name": "Papa's Candy",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Sweet with a light aniseed note.",
+    "icon": "🌿",
+    "breeder": "Eva Seeds",
+    "aka": "Papas Candy",
+    "ailments": null,
+    "awards": [
+      {
+        "name": "Spannabis Cannabis Champions Cup, Bio category, 1st place",
+        "year": 2013
+      }
+    ]
+  },
+  {
+    "id": "s7230",
+    "name": "Permanent Chimera",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "Beleaf Cannabis",
+    "parents": [
+      "Chimera",
+      "Permanent Marker"
+    ],
+    "ailments": null
+  },
+  {
+    "id": "s7231",
+    "name": "Perris OG",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Pungent orange and citrus.",
+    "icon": "🌿",
+    "ailments": null
+  },
+  {
+    "id": "s7232",
+    "name": "Piescream",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Doughy pie with sweet, creamy vanilla and a gassy exhale.",
+    "icon": "🌿",
+    "breeder": "Mean Gene Mendocino",
+    "parents": [
+      "Wedding Pie",
+      "Gelato",
+      "Cherry Limeade"
+    ],
+    "aka": "Pie Scream",
+    "ailments": null,
+    "awards": [
+      {
+        "name": "California State Fair Cannabis Awards, six medals",
+        "year": 2024
+      }
+    ]
+  },
+  {
+    "id": "s7233",
+    "name": "Pink Candy Kush",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Sweet and sour candy with bubblegum, blueberry and citrus.",
+    "icon": "🌿",
+    "breeder": "New420Guy Seeds",
+    "parents": [
+      "Stinky Pinky",
+      "Cotton Candy"
+    ],
+    "aka": "Pink Candy, Pink Gummy",
+    "ailments": null
+  },
+  {
+    "id": "s7234",
+    "name": "Pink Kitty",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Mint and sweet gas with creamy fruit and vanilla.",
+    "icon": "🌿",
+    "breeder": "Lit Farms",
+    "parents": [
+      "Wap",
+      "Zoap"
+    ],
+    "aka": "PK",
+    "ailments": null
+  },
+  {
+    "id": "s7235",
+    "name": "Platinum Blueberry",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Sweet blueberry with herbal kush.",
+    "icon": "🌿",
+    "parents": [
+      "Platinum OG Kush",
+      "Blueberry"
+    ],
+    "aka": "Platinum Blueberry Kush",
+    "ailments": null
+  },
+  {
+    "id": "s7236",
+    "name": "Platinum Punch (In House Genetics)",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Creamy, sweet and floral.",
+    "icon": "🌿",
+    "breeder": "In House Genetics",
+    "parents": [
+      "Platinum",
+      "Purple Punch"
+    ],
+    "ailments": null
+  },
+  {
+    "id": "s7237",
+    "name": "Platinum",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Dank, skunky and peppery pine.",
+    "icon": "🌿",
+    "breeder": "In House Genetics",
+    "parents": [
+      "UW Hashplant",
+      "Permafrost"
+    ],
+    "ailments": null
+  },
+  {
+    "id": "s7238",
+    "name": "Plum Crazy",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Sweet plum with sage and lavender.",
+    "icon": "🌿",
+    "parents": [
+      "Blueberry",
+      "Purple Afghani"
+    ],
+    "ailments": null
+  },
+  {
+    "id": "s7239",
+    "name": "Poison Gushers",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Sweet and sour tropical candy with pine and diesel.",
+    "icon": "🌿",
+    "breeder": "Connected Cannabis Co",
+    "parents": [
+      "Durban Poison",
+      "Gushers"
+    ],
+    "aka": "PGs",
+    "ailments": null
+  },
+  {
+    "id": "s7240",
+    "name": "Prime Moonshine",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Sweet blueberry with lemony citrus and mint.",
+    "icon": "🌿",
+    "breeder": "Bigworm Genetics",
+    "parents": [
+      "Blue Moonshine",
+      "Northern Lights #5",
+      "Optimus Prime"
+    ],
+    "ailments": null
+  },
+  {
+    "id": "s7241",
+    "name": "Project 4510",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "Grandiflora Genetics",
+    "ailments": null
+  },
+  {
+    "id": "s7242",
+    "name": "Pure Gooey",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Earthy herbs and woody pine.",
+    "icon": "🌿",
+    "breeder": "Gooey Breeder Seeds",
+    "parents": [
+      "Gooey",
+      "Skunk #1"
+    ],
+    "ailments": null
+  },
+  {
+    "id": "s7243",
+    "name": "Pure Haze",
+    "type": "Sativa",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Peppery soil and citrus.",
+    "icon": "🌿",
+    "breeder": "Breeder Choice Organisation",
+    "ailments": null
+  },
+  {
+    "id": "s7244",
+    "name": "Pure Kush",
+    "type": "Indica",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Pungent, skunky kush with pine.",
+    "icon": "🌿",
+    "parents": [
+      "OG Kush"
+    ],
+    "ailments": null
+  },
+  {
+    "id": "s7245",
+    "name": "Purple Afghan Kush",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Fresh pineapple with sweet kush.",
+    "icon": "🌿",
+    "breeder": "Dinafem Seeds",
+    "parents": [
+      "Purple Kush",
+      "Pre-98 Bubba Kush"
+    ],
+    "aka": "PAK",
+    "ailments": null
+  },
+  {
+    "id": "s7246",
+    "name": "Purple Churro",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "Sweet vanilla and cinnamon churro.",
+    "icon": "🌿",
+    "breeder": "Compound Genetics",
+    "parents": [
+      "Cinnamon Horchata",
+      "Apples and Bananas"
+    ],
+    "ailments": null
+  },
+  {
+    "id": "s7247",
+    "name": "Paloma",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "",
+    "parents": [],
+    "aka": "",
     "ailments": null
   }
 ]
