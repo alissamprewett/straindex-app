@@ -117,9 +117,17 @@ async function isSubmissionRateLimited(bucket, userId) {
 function sendRateLimited(res, backHref) {
   sendHtml(res, layout({ title: 'Slow down a little', body: `<h1 class="screen-title">Slow down a little</h1><p>You've submitted a lot in a short time — give it a few minutes and try again.</p><p><a href="${esc(backHref)}">Go back</a></p>` }), 429);
 }
+// Generic "N attempts per window" limiter on the persistent table. Counts
+// every call (including this one) and returns true once over the limit.
+async function isGenericRateLimited(bucket, key, max, windowMs) {
+  const existing = await db.pruneAndCountAttempts(bucket, key, windowMs);
+  await db.recordRateLimitAttempt(bucket, key);
+  return (existing + 1) > max;
+}
 const PUBLIC_DIR = path.join(__dirname, 'public');
 const DOCS_DIR = path.join(__dirname, 'docs');
 
+const zlib = require('node:zlib');
 const MIME = {
   '.css': 'text/css', '.js': 'application/javascript', '.json': 'application/json',
   '.png': 'image/png', '.svg': 'image/svg+xml', '.ico': 'image/x-icon',
@@ -1708,6 +1716,7 @@ async function handleCheckinDelete(req, res, id) {
   if (!existing || existing.user_id !== userId) return notFound(res);
   const f = await parseForm(req);
   await db.deleteCheckin(id);
+  storage.deletePhotos([existing.photo]).catch(e => console.error('[storage]', e));
   redirect(res, safeRedirectPath(f.redirect_to) || '/history');
 }
 
@@ -3108,6 +3117,7 @@ async function handleGrowJournalDelete(req, res, id) {
   const entry = db.getGrowJournalEntry(Number(id));
   if (!entry || entry.user_id !== userId) return notFound(res);
   await db.deleteGrowJournalEntry(Number(id));
+  storage.deletePhotos([entry.photo]).catch(e => console.error('[storage]', e));
   redirect(res, '/grow-journal');
 }
 
@@ -4282,7 +4292,13 @@ function pageForgotPassword(req, res, query) {
 async function handleForgotPasswordSubmit(req, res) {
   const f = await parseForm(req);
   const email = String(f.email || '').trim().toLowerCase();
-  const user = email ? db.getUserByEmail(email) : null;
+  // Limit per IP and per target address so this can't be used to flood
+  // someone's inbox or burn the email quota. When limited we behave EXACTLY
+  // as if it worked (same redirect, nothing sent) so the limiter itself
+  // can't be used to probe which emails have accounts.
+  const ipLimited = await isGenericRateLimited('forgot_ip', clientIp(req), 5, 15 * 60 * 1000);
+  const emailLimited = email ? await isGenericRateLimited('forgot_email', email, 3, 60 * 60 * 1000) : false;
+  const user = (email && !ipLimited && !emailLimited) ? db.getUserByEmail(email) : null;
   // Always show the same "check your inbox" message whether or not the
   // email matched an account -- confirming which emails ARE registered
   // is its own small privacy leak, so this path stays silent either way.
@@ -4360,11 +4376,16 @@ function handleLogout(req, res) {
 function pageAdminHome(req, res) {
   if (!requireAdmin(req, res)) return;
   const pendingCount = db.listRecipes({ status: 'pending' }).length;
+  const pendingGrowTips = db.listGrowTips({ status: 'pending' }).length;
+  const pendingSubmissions = db.listStrainSubmissions().filter(x => x.status !== 'reviewed').length;
+  const totalPending = pendingCount + pendingGrowTips + pendingSubmissions;
   const body = `
     <h1 class="screen-title">Admin</h1>
+    <div class="card" style="background:${totalPending ? 'var(--brand-green-dark)' : 'var(--bg-card)'};${totalPending ? 'color:#fff;' : ''}"><a href="/admin/inbox" style="${totalPending ? 'color:#fff;' : ''}">📥 Inbox${totalPending ? ` (${totalPending} need attention)` : ' — all caught up'}</a></div>
     <div class="card"><a href="/admin/feedback">💬 Feedback (${db.listFeedback().length})</a></div>
     <div class="card"><a href="/admin/faqs">📋 Manage FAQ (${db.listFaqs().length})</a></div>
     <div class="card"><a href="/admin/recipes">🍽️ Manage Recipes (${db.listRecipes({ status: null }).length}${pendingCount ? `, ${pendingCount} pending` : ''})</a></div>
+    <div class="card"><a href="/admin/grow-tips">🌱 Manage Grow Tips (${db.listGrowTips({ status: null }).length}${pendingGrowTips ? `, ${pendingGrowTips} pending` : ''})</a></div>
     <div class="card"><a href="/admin/strains">🌿 Manage Strains (${db.countStrains().toLocaleString()})</a></div>
     <div class="card"><a href="/admin/strain-submissions">🆕 Self-added strains (${db.listStrainSubmissions().filter(x => x.status !== 'reviewed').length} pending)</a></div>
     <div class="card"><a href="/admin/users">👤 Manage Users (${db.listUsers().length})</a></div>
@@ -4383,6 +4404,7 @@ function pageAdminUsers(req, res, query) {
     ${users.map(u => `
       <div class="admin-row">
         <span>👤 <b>${esc(u.username)}</b>${u.email ? ` · ${esc(u.email)}` : ''}<br><span class="empty-note" style="padding:0;">Joined ${esc((u.created_at || '').slice(0, 10))}</span></span>
+        <a href="/admin/users/${u.id}/edit" class="btn secondary" style="text-decoration:none;">Edit</a>
         <form method="POST" action="/admin/users/${u.id}/delete" onsubmit="return confirm('Permanently delete ${esc(u.username)}\\'s account, check-ins, messages, and community connections? This cannot be undone.')">
           <button class="btn danger" style="color:#fff;" type="submit">Delete</button>
         </form>
@@ -4395,7 +4417,9 @@ async function handleAdminUserDelete(req, res, userId) {
   if (!requireAdmin(req, res)) return;
   const user = db.getUserById(userId);
   const username = user ? user.username : 'that user';
+  const photoUrls = db.listUserPhotoUrls(Number(userId));
   await db.deleteUserAccount(userId);
+  storage.deletePhotos(photoUrls).catch(e => console.error('[storage]', e));
   redirect(res, `/admin/users?deleted=${encodeURIComponent(username)}`);
 }
 
@@ -4686,6 +4710,7 @@ function pageAdminRecipes(req, res) {
       <div class="admin-row">
         <span>${esc(r.title)} <span class="recipe-source-tag ${r.source}">${r.status}</span> <span class="empty-note">${esc(r.category || '')}</span></span>
         <div class="actions">
+          <a href="/admin/recipes/${r.id}/edit" class="btn secondary" style="text-decoration:none;">Edit</a>
           <form method="POST" action="/admin/recipes/${r.id}/delete" style="display:inline;" onsubmit="return confirm('Delete this recipe?')">
             <button class="btn danger" style="color:#fff;" type="submit">Delete</button>
           </form>
@@ -5330,7 +5355,9 @@ async function handleAccountExport(req, res) {
 async function handleAccountDelete(req, res) {
   const userId = requireUser(req, res);
   if (userId == null) return;
+  const photoUrls = db.listUserPhotoUrls(userId);
   await db.deleteUserAccount(userId);
+  storage.deletePhotos(photoUrls).catch(e => console.error('[storage]', e));
   res.setHeader('Set-Cookie', [
     `user_session=; Path=/; HttpOnly; Max-Age=0`,
     `csrf_token=; Path=/; Max-Age=0`,
@@ -5379,6 +5406,12 @@ async function handleAccountPassword(req, res) {
   if (new_password !== confirm_password) return redirect(res, '/account?error=password_mismatch');
   try {
     await db.updatePassword(userId, current_password || '', new_password);
+    // updatePassword just revoked every session; give THIS device a fresh one.
+    const token = auth.signUserSessionValue(userId);
+    res.setHeader('Set-Cookie', [
+      `user_session=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000`,
+      `csrf_token=${encodeURIComponent(auth.csrfTokenFor(token))}; Path=/; SameSite=Lax; Max-Age=31536000`,
+    ]);
     redirect(res, '/account?ok=password');
   } catch (err) {
     redirect(res, '/account?error=wrong_password');
@@ -6511,11 +6544,20 @@ function pageConcentrates(req, res) {
   sendHtml(res, layout({ title: 'Concentrates & Extracts', active: 'education', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
 
+// Static files: ETag (so repeat visits get an empty 304), gzip for text assets,
+// and caching that matches how often each kind of file changes.
+//   - app.css / app.js / manifest / sw.js change on every deploy, so they use
+//     `no-cache` (= always revalidate; the ETag makes that a cheap 304). A long
+//     max-age here would leave browsers running OLD JavaScript for weeks after
+//     a deploy -- the exact stale-client bug the service worker comments warn about.
+//   - images under /docs and /icons rarely change, so they cache for 7 days.
+const COMPRESSIBLE_EXTS = new Set(['.css', '.js', '.json', '.svg']);
+const CODE_ASSETS = new Set(['/app.css', '/app.js', '/manifest.json', '/sw.js']);
+const IMAGE_CACHE_SECONDS = 60 * 60 * 24 * 7;
 function serveStatic(req, res, pathname) {
   // The strain bud photos ended up committed under /docs (repo root) rather
-  // than /public/images — rather than requiring a re-upload, serve requests
-  // for /docs/* directly from that folder. Everything else still serves from
-  // /public as before.
+  // than /public/images -- serve /docs/* from that folder; everything else
+  // from /public.
   const isDocsRequest = pathname.startsWith('/docs/');
   const baseDir = isDocsRequest ? DOCS_DIR : PUBLIC_DIR;
   const relativePath = isDocsRequest ? pathname.slice('/docs'.length) : pathname;
@@ -6524,9 +6566,216 @@ function serveStatic(req, res, pathname) {
   fs.readFile(filePath, (err, data) => {
     if (err) return notFound(res);
     const ext = path.extname(filePath);
-    res.writeHead(200, { 'Content-Type': MIME[ext] || 'application/octet-stream' });
+    const etag = '"' + crypto.createHash('sha1').update(data).digest('hex') + '"';
+    const headers = {
+      'Content-Type': MIME[ext] || 'application/octet-stream',
+      'Cache-Control': CODE_ASSETS.has(pathname) ? 'no-cache' : `public, max-age=${IMAGE_CACHE_SECONDS}`,
+      ETag: etag,
+      Vary: 'Accept-Encoding',
+    };
+    if (req.headers['if-none-match'] === etag) { res.writeHead(304, headers); return res.end(); }
+    const acceptsGzip = (req.headers['accept-encoding'] || '').includes('gzip');
+    if (COMPRESSIBLE_EXTS.has(ext) && acceptsGzip) {
+      return zlib.gzip(data, (gzErr, compressed) => {
+        if (gzErr) { res.writeHead(200, headers); return res.end(data); }
+        res.writeHead(200, { ...headers, 'Content-Encoding': 'gzip' });
+        res.end(compressed);
+      });
+    }
+    res.writeHead(200, headers);
     res.end(data);
   });
+}
+
+// ================================================================ restored admin pages
+// Inbox, Grow Tips, Recipe edit, User edit. Grow-tip moderation is OFF: tips
+// still publish immediately (see handleGrowingNewSubmit); to turn the queue on,
+// pass status: 'pending' to db.createGrowTip there.
+
+const RECIPE_CATEGORIES = ['Infusion Base', 'Baked Goods', 'Gummies & Candy', 'Drinks', 'Topicals', 'Savory & Snacks'];
+
+// Shared row renderer for a pending recipe, used both on the dedicated
+// Manage Recipes page and the unified admin Inbox, so a pending recipe
+// looks and behaves identically no matter which page it's reviewed from.
+function renderPendingRecipeRow(r) {
+  return `
+    <div class="admin-row" style="flex-direction:column;align-items:stretch;">
+      <b>${esc(r.title)}</b> <span class="empty-note">by ${esc(r.author || 'Anonymous')} · ${esc(r.category || '')}</span>
+      <p class="empty-note">${esc(r.desc)}</p>
+      <div class="actions">
+        <a href="/admin/recipes/${r.id}/edit" class="btn secondary" style="text-decoration:none;">Edit</a>
+        <form method="POST" action="/admin/recipes/${r.id}/approve" style="display:inline;"><button class="btn" type="submit">Approve</button></form>
+        <form method="POST" action="/admin/recipes/${r.id}/delete" style="display:inline;" onsubmit="return confirm('Reject and delete?')"><button class="btn danger" style="color:#fff;" type="submit">Reject</button></form>
+      </div>
+    </div>`;
+}
+
+// Grow tip review queue -- same shape as recipe review: pending tips wait
+// here until approved, only then do they show up on the public Growing
+// page (see listGrowTips's default status='approved' filter).
+// Shared row renderer for a pending grow tip -- same reasoning as
+// renderPendingRecipeRow above.
+function renderPendingGrowTipRow(g) {
+  return `
+    <div class="admin-row" style="flex-direction:column;align-items:stretch;">
+      <b>${esc(g.title)}</b> <span class="empty-note">by ${esc(g.author || 'Anonymous')} · ${esc(g.category)}</span>
+      <p class="empty-note">${esc(g.body)}</p>
+      <div class="actions">
+        <form method="POST" action="/admin/grow-tips/${g.id}/approve" style="display:inline;"><button class="btn" type="submit">Approve</button></form>
+        <form method="POST" action="/admin/grow-tips/${g.id}/delete" style="display:inline;" onsubmit="return confirm('Reject and delete?')"><button class="btn danger" style="color:#fff;" type="submit">Reject</button></form>
+      </div>
+    </div>`;
+}
+
+function pageAdminGrowTips(req, res) {
+  if (!requireAdmin(req, res)) return;
+  const pending = db.listGrowTips({ status: 'pending' });
+  const all = db.listGrowTips({ status: null });
+  const body = `
+    <h1 class="screen-title">Manage Grow Tips</h1>
+    ${pending.length ? `<h2 class="screen-title">Pending review (${pending.length})</h2>` + pending.map(renderPendingGrowTipRow).join('') : `<div class="empty-note">No pending grow tips.</div>`}
+    <h2 class="screen-title" style="margin-top:20px;">All grow tips (${all.length})</h2>
+    ${all.map(g => `
+      <div class="admin-row">
+        <span>${esc(g.title)} <span class="recipe-source-tag ${g.status === 'approved' ? 'official' : 'community'}">${g.status}</span> <span class="empty-note">${esc(g.category)}</span></span>
+        <div class="actions">
+          <form method="POST" action="/admin/grow-tips/${g.id}/delete" style="display:inline;" onsubmit="return confirm('Delete this grow tip?')">
+            <button class="btn danger" style="color:#fff;" type="submit">Delete</button>
+          </form>
+        </div>
+      </div>`).join('')}
+  `;
+  sendHtml(res, layout({ title: 'Manage Grow Tips', body, isAdmin: true }));
+}
+
+async function handleAdminGrowTipApprove(req, res, id) {
+  if (!requireAdmin(req, res)) return;
+  await db.updateGrowTipStatus(Number(id), 'approved');
+  redirect(res, '/admin/grow-tips');
+}
+
+async function handleAdminGrowTipDelete(req, res, id) {
+  if (!requireAdmin(req, res)) return;
+  await db.deleteGrowTip(Number(id));
+  redirect(res, '/admin/grow-tips');
+}
+
+function pageAdminRecipeEdit(req, res, id) {
+  if (!requireAdmin(req, res)) return;
+  const r = db.getRecipe(Number(id));
+  if (!r) return notFound(res);
+  const body = `
+    <h1 class="screen-title">Edit Recipe</h1>
+    <form method="POST" action="/admin/recipes/${r.id}/edit">
+      <label class="field-label" style="margin-top:0;">Title</label>
+      <input type="text" name="title" value="${esc(r.title)}" required>
+      <label class="field-label">Description</label>
+      <input type="text" name="desc" value="${esc(r.desc)}" required>
+      <label class="field-label">Category</label>
+      <select name="category">${RECIPE_CATEGORIES.map(c => `<option value="${c}" ${r.category === c ? 'selected' : ''}>${c}</option>`).join('')}</select>
+      <label class="field-label">Ingredients (one per line)</label>
+      <textarea name="ingredients" required>${esc((r.ingredients || []).join('\n'))}</textarea>
+      <label class="field-label">Steps (one per line)</label>
+      <textarea name="steps" required>${esc((r.steps || []).join('\n'))}</textarea>
+      <label class="field-label">Difficulty</label>
+      <select name="difficulty">${Object.entries(RECIPE_DIFFICULTY_LABELS).map(([k, v]) => `<option value="${esc(k)}" ${(r.difficulty || 'beginner') === k ? 'selected' : ''}>${esc(typeof v === 'string' ? v : (v.label || k))}</option>`).join('')}</select>
+      <label class="field-label">Dosing note</label>
+      <input type="text" name="dosing" value="${esc(r.dosing || '')}">
+      <button class="btn block" type="submit" style="margin-top:14px;">Save Changes</button>
+    </form>
+  `;
+  sendHtml(res, layout({ title: 'Edit Recipe', body, isAdmin: true }));
+}
+
+async function handleAdminRecipeEditSubmit(req, res, id) {
+  if (!requireAdmin(req, res)) return;
+  const f = await parseForm(req);
+  await db.updateRecipe(Number(id), {
+    title: f.title, desc: f.desc, category: RECIPE_CATEGORIES.includes(f.category) ? f.category : 'Baked Goods',
+    ingredients: String(f.ingredients || '').split('\n').map(s => s.trim()).filter(Boolean),
+    steps: String(f.steps || '').split('\n').map(s => s.trim()).filter(Boolean),
+    dosing: f.dosing || '',
+    difficulty: RECIPE_DIFFICULTY_LABELS[f.difficulty] ? f.difficulty : 'beginner',
+  });
+  redirect(res, '/admin/recipes');
+}
+
+// Admin correction tool for a mistyped username/email/name/birth date, or
+// filling in an old account that predates first/last name being collected.
+// Deliberately has no password field -- see adminUpdateUser in db.js for
+// why that's a hard line rather than an oversight.
+function pageAdminUserEdit(req, res, id, query) {
+  if (!requireAdmin(req, res)) return;
+  const u = db.getUserById(Number(id));
+  if (!u) return notFound(res);
+  const error = query.get('error') || '';
+  const errMessages = { username_taken: 'That username is already taken.', email_taken: 'That email is already in use by another account.' };
+  const body = `
+    <h1 class="screen-title">Edit User</h1>
+    ${error && errMessages[error] ? `<p style="color:#a13a3a;">${esc(errMessages[error])}</p>` : ''}
+    <form method="POST" action="/admin/users/${u.id}/edit">
+      <label class="field-label" style="margin-top:0;">Username</label>
+      <input type="text" name="username" value="${esc(u.username)}" required>
+      <label class="field-label">Email</label>
+      <input type="email" name="email" value="${esc(u.email || '')}">
+      <label class="field-label">First name</label>
+      <input type="text" name="first_name" value="${esc(u.first_name || '')}">
+      <label class="field-label">Last name</label>
+      <input type="text" name="last_name" value="${esc(u.last_name || '')}">
+      <label class="field-label">Date of birth</label>
+      <input type="date" name="birth_date" value="${esc((u.birth_date || '').slice(0, 10))}" required>
+      <button class="btn block" type="submit" style="margin-top:14px;">Save Changes</button>
+    </form>
+    <p class="empty-note" style="margin-top:12px;">Password changes still have to go through the normal "Forgot Password" email flow — an admin can't set someone else's password directly.</p>
+  `;
+  sendHtml(res, layout({ title: 'Edit User', body, isAdmin: true }));
+}
+
+async function handleAdminUserEditSubmit(req, res, id) {
+  if (!requireAdmin(req, res)) return;
+  const f = await parseForm(req);
+  try {
+    await db.adminUpdateUser(Number(id), {
+      username: (f.username || '').trim(), email: (f.email || '').trim().toLowerCase() || null,
+      first_name: f.first_name || null, last_name: f.last_name || null, birth_date: f.birth_date,
+    });
+    redirect(res, '/admin/users');
+  } catch (err) {
+    const code = /username/i.test(err.message) ? 'username_taken' : /email/i.test(err.message) ? 'email_taken' : '';
+    redirect(res, `/admin/users/${id}/edit${code ? `?error=${code}` : ''}`);
+  }
+}
+
+// A single screen combining everything waiting on admin action -- pending
+// recipes, pending grow tips (only ever non-empty if grow-tip moderation is
+// turned on), self-added strains waiting to be linked, and the latest
+// feedback -- so a routine check-in doesn't mean clicking through four pages.
+function pageAdminInbox(req, res) {
+  if (!requireAdmin(req, res)) return;
+  const pendingRecipes = db.listRecipes({ status: 'pending' });
+  const pendingGrowTips = db.listGrowTips({ status: 'pending' });
+  const pendingStrains = db.listStrainSubmissions().filter(s => s.status !== 'reviewed');
+  const recentFeedback = db.listFeedback().slice(0, 5);
+  const totalPending = pendingRecipes.length + pendingGrowTips.length + pendingStrains.length;
+  const body = `
+    <h1 class="screen-title">Inbox</h1>
+    <p class="screen-sub">${totalPending ? `${totalPending} item${totalPending === 1 ? '' : 's'} need${totalPending === 1 ? 's' : ''} your attention.` : 'Nothing pending \u2014 you\u2019re all caught up.'}</p>
+    ${pendingStrains.length ? `<h2 class="screen-title">🆕 Self-added strains (${pendingStrains.length})</h2>
+      ${pendingStrains.slice(0, 10).map(s => `<div class="admin-row"><span><b>${esc(s.strain_name)}</b> <span class="empty-note">${esc(s.created_at)} UTC</span></span><a href="/admin/strain-submissions" class="btn secondary" style="text-decoration:none;">Review</a></div>`).join('')}
+      ${pendingStrains.length > 10 ? `<p class="empty-note"><a href="/admin/strain-submissions">See all ${pendingStrains.length} →</a></p>` : ''}` : ''}
+    ${pendingRecipes.length ? `<h2 class="screen-title" style="margin-top:20px;">🍽️ Recipes (${pendingRecipes.length})</h2>${pendingRecipes.map(renderPendingRecipeRow).join('')}` : ''}
+    ${pendingGrowTips.length ? `<h2 class="screen-title" style="margin-top:20px;">🌱 Grow Tips (${pendingGrowTips.length})</h2>${pendingGrowTips.map(renderPendingGrowTipRow).join('')}` : ''}
+    <h2 class="screen-title" style="margin-top:20px;">💬 Recent Feedback</h2>
+    ${recentFeedback.length ? recentFeedback.map(f => {
+      const user = f.user_id != null ? db.getUserById(f.user_id) : null;
+      return `<div class="admin-row" style="flex-direction:column;align-items:stretch;">
+        <span class="empty-note" style="padding:0;">${user ? esc(user.username) : 'Anonymous'} · <span class="local-time" data-utc="${esc(f.created_at)}Z">${esc(f.created_at)}</span></span>
+        <p style="margin:6px 0 0;white-space:pre-wrap;">${esc(f.message)}</p>
+      </div>`;
+    }).join('') : `<div class="empty-note">No feedback yet.</div>`}
+    <p class="empty-note" style="padding:6px 0 0;"><a href="/admin/feedback">See all feedback →</a></p>
+  `;
+  sendHtml(res, layout({ title: 'Inbox', body, isAdmin: true }));
 }
 
 // ================================================================ restored pages
@@ -6895,8 +7144,42 @@ function pageSharedRecap(req, res, code) {
 
 // ---------------------------------------------------------------- router
 
+// Transparent gzip for dynamic responses (HTML pages, JSON). Wraps res.writeHead/
+// res.end so every existing handler keeps working unchanged; only string bodies
+// of 512+ bytes are compressed, and only for browsers that advertise gzip.
+function wrapResponseWithGzip(req, res) {
+  if (!(req.headers['accept-encoding'] || '').includes('gzip')) return;
+  const originalWriteHead = res.writeHead.bind(res);
+  const originalEnd = res.end.bind(res);
+  let headersPending = false, statusCode = 200, headersArg = {};
+  res.writeHead = (code, headers) => { statusCode = code; headersArg = headers || {}; headersPending = true; return res; };
+  res.end = (body) => {
+    const compressible = headersPending && typeof body === 'string' && body.length >= 512 && !headersArg['Content-Encoding'];
+    if (!compressible) { if (headersPending) { originalWriteHead(statusCode, headersArg); headersPending = false; } return originalEnd(body); }
+    headersPending = false;
+    zlib.gzip(Buffer.from(body, 'utf8'), (err, compressed) => {
+      if (err) { originalWriteHead(statusCode, headersArg); return originalEnd(body); }
+      originalWriteHead(statusCode, { ...headersArg, 'Content-Encoding': 'gzip', Vary: 'Accept-Encoding' });
+      originalEnd(compressed);
+    });
+  };
+}
+
 const server = http.createServer(async (req, res) => {
   try {
+    wrapResponseWithGzip(req, res);
+    // Mark every cookie `Secure` when the request arrived over HTTPS (Render
+    // terminates TLS and sets x-forwarded-proto). Plain-http local development
+    // is left alone so cookies still work there.
+    if (req.headers['x-forwarded-proto'] === 'https' || req.socket.encrypted) {
+      const origSetHeader = res.setHeader.bind(res);
+      res.setHeader = (name, value) => {
+        if (String(name).toLowerCase() === 'set-cookie') {
+          value = (Array.isArray(value) ? value : [value]).map(c => /;\s*secure/i.test(c) ? c : c + '; Secure');
+        }
+        return origSetHeader(name, value);
+      };
+    }
     const url = new URL(req.url, `http://${req.headers.host}`);
     const { pathname } = url;
     const method = req.method;
@@ -7069,6 +7352,14 @@ const server = http.createServer(async (req, res) => {
     if (method === 'GET' && pathname === '/admin/logout') return handleAdminLogout(req, res);
     if (method === 'GET' && pathname === '/admin') return pageAdminHome(req, res);
     if (method === 'GET' && pathname === '/admin/users') return pageAdminUsers(req, res, url.searchParams);
+    if (method === 'GET' && pathname === '/admin/inbox') return pageAdminInbox(req, res);
+    if (method === 'GET' && pathname === '/admin/grow-tips') return pageAdminGrowTips(req, res);
+    if (method === 'POST' && (m = pathname.match(/^\/admin\/grow-tips\/(\d+)\/approve$/))) return await handleAdminGrowTipApprove(req, res, m[1]);
+    if (method === 'POST' && (m = pathname.match(/^\/admin\/grow-tips\/(\d+)\/delete$/))) return await handleAdminGrowTipDelete(req, res, m[1]);
+    if (method === 'GET' && (m = pathname.match(/^\/admin\/recipes\/(\d+)\/edit$/))) return pageAdminRecipeEdit(req, res, m[1]);
+    if (method === 'POST' && (m = pathname.match(/^\/admin\/recipes\/(\d+)\/edit$/))) return await handleAdminRecipeEditSubmit(req, res, m[1]);
+    if (method === 'GET' && (m = pathname.match(/^\/admin\/users\/(\d+)\/edit$/))) return pageAdminUserEdit(req, res, m[1], url.searchParams);
+    if (method === 'POST' && (m = pathname.match(/^\/admin\/users\/(\d+)\/edit$/))) return await handleAdminUserEditSubmit(req, res, m[1]);
     if (method === 'POST' && (m = pathname.match(/^\/admin\/users\/(\d+)\/delete$/))) return await handleAdminUserDelete(req, res, Number(m[1]));
     if (method === 'GET' && pathname === '/admin/feedback') return pageAdminFeedback(req, res);
     if (method === 'GET' && pathname === '/admin/faqs') return pageAdminFaqs(req, res);
