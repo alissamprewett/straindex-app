@@ -13,7 +13,7 @@ const mustHaveInServer = [
   'safeRedirectPath', 'pageSharedCheckin', 'pageRecap', 'pageSharedRecap', 'pageGearCare',
   'pageLeaderboard', 'pageAddToHomeScreen', 'isPublicSharePath', 'SITE_URL',
 ];
-const mustHaveInDb = ['pruneAndCountAttempts', 'getYearInReview', 'getKudosLeaderboard'];
+const mustHaveInDb = ['pruneAndCountAttempts', 'getYearInReview', 'getKudosLeaderboard', 'DELETE FROM forum_threads WHERE user_id', 'DELETE FROM grow_journal_entries WHERE user_id', 'DELETE FROM checkin_reactions WHERE checkin_id = ?'];
 const missing = [
   ...mustHaveInServer.filter(s => !server.includes(s)).map(s => 'server.js: ' + s),
   ...mustHaveInDb.filter(s => !db.includes(s)).map(s => 'lib/db.js: ' + s),
