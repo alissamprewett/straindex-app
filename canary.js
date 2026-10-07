@@ -9,6 +9,7 @@ const server = fs.readFileSync(__dirname + '/server.js', 'utf8');
 const db = fs.readFileSync(__dirname + '/lib/db.js', 'utf8');
 const auth = fs.readFileSync(__dirname + '/lib/auth.js', 'utf8');
 const storage = fs.readFileSync(__dirname + '/lib/storage.js', 'utf8');
+const migrations = fs.existsSync(__dirname + '/lib/data-migrations.js') ? fs.readFileSync(__dirname + '/lib/data-migrations.js', 'utf8') : '';
 const mustHaveInServer = [
   'requireCsrfHeader', 'verifyCsrfToken', 'CSRF_EXEMPT_POST_PATHS', 'csrfTokenFor',
   'isSubmissionRateLimited', 'db.pruneAndCountAttempts', 'db.recordRateLimitAttempt',
@@ -16,19 +17,32 @@ const mustHaveInServer = [
   'pageLeaderboard', 'pageAddToHomeScreen', 'isPublicSharePath', 'SITE_URL',
   'pageAdminInbox', 'pageAdminGrowTips', 'pageAdminRecipeEdit', 'pageAdminUserEdit',
   'wrapResponseWithGzip', 'isGenericRateLimited', 'storage.deletePhotos', '; Secure',
+  // user-confirmed behaviors that must never be removed without asking (see HANDOFF.md "Protected behaviors")
+  'renderEffectPills', '/strains?effect=', 'DO NOT REMOVE, SIMPLIFY, OR TURN THIS BACK INTO PLAIN TEXT',
+  'renderCustomStrainPrompts', 'handleCustomStrainResolve', 'USER-CONFIRMED BEHAVIOR', 'DO NOT REMOVE OR WEAKEN THIS BLOCK',
 ];
-const mustHaveInDb = ['pruneAndCountAttempts', 'getYearInReview', 'getKudosLeaderboard', 'bumpSessionVersion', 'listUserPhotoUrls', 'DELETE FROM forum_threads WHERE user_id', 'DELETE FROM grow_journal_entries WHERE user_id', 'DELETE FROM checkin_reactions WHERE checkin_id = ?'];
+const mustHaveInDb = ['listPendingCustomStrainPrompts', 'resolveCustomStrainPrompt', 'custom_strain_choices', 'pruneAndCountAttempts', 'getYearInReview', 'getKudosLeaderboard', 'bumpSessionVersion', 'listUserPhotoUrls', 'DELETE FROM forum_threads WHERE user_id', 'DELETE FROM grow_journal_entries WHERE user_id', 'DELETE FROM checkin_reactions WHERE checkin_id = ?'];
 const mustHaveInAuth = ['setSessionVersionLookup', 'timingSafeEqual'];
 const mustHaveInStorage = ['deletePhotos'];
+const mustHaveInMigrations = ['STRAIN_MERGES', 'strains_audit_sync_2026_10_07', 'strain_merge_log'];
 const missing = [
   ...mustHaveInServer.filter(s => !server.includes(s)).map(s => 'server.js: ' + s),
   ...mustHaveInDb.filter(s => !db.includes(s)).map(s => 'lib/db.js: ' + s),
   ...mustHaveInAuth.filter(s => !auth.includes(s)).map(s => 'lib/auth.js: ' + s),
   ...mustHaveInStorage.filter(s => !storage.includes(s)).map(s => 'lib/storage.js: ' + s),
+  ...mustHaveInMigrations.filter(s => !migrations.includes(s)).map(s => 'lib/data-migrations.js: ' + s),
+  ...(db.includes("require('./data-migrations')") ? [] : ['lib/db.js: data-migrations is not wired into init()']),
 ];
+// Menu placement the user asked for: Cleaning & Gear Care belongs in Discover, not Growing.
+{
+  const disc = server.indexOf("title: 'Discover'"), gear = server.indexOf("t: 'Cleaning & Gear Care'"), nextSec = server.indexOf("title: 'Recipes'", disc);
+  if (!(disc > -1 && gear > disc && gear < nextSec)) missing.push("server.js: 'Cleaning & Gear Care' is no longer in the More menu's Discover section");
+}
 // A raw (unvalidated) redirect target would reopen the open-redirect hole.
 const rawRedirects = (server.match(/(?<!safeRedirectPath\()f\.redirect_to \|\|/g) || []).length;
 if (rawRedirects) missing.push(`server.js: ${rawRedirects} unvalidated redirect_to use(s)`);
+try { require(__dirname + '/lib/data-migrations').assertValidMerges(); }
+catch (e) { missing.push('lib/data-migrations.js: ' + e.message); }
 if (missing.length) {
   console.error('CANARY FAILED -- this looks like an OLDER file than expected. Missing:\n  - ' + missing.join('\n  - '));
   console.error('\nDo NOT deploy. Re-download the latest server.js / lib/db.js and check line counts (server.js should be ~7,500 lines).');

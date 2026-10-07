@@ -347,9 +347,48 @@ function renderSafetyCarousel() {
     </div>
   `;
 }
+// "Your self-added strain now has a verified version" prompt -- the strain-library version of the
+// "use the verified address?" pop-up. Shown on Home, on Notifications (and counted in the badge), and on
+// the check-in itself. NOTHING is moved until the person picks "Use verified strain"; "Keep as self-added"
+// is remembered so they are never asked about that strain again. Pending prompts are derived live from
+// current data (db.listPendingCustomStrainPrompts), so it works whether the strain was added by an admin,
+// a library update, or a name/alias that now matches.
+function renderCustomStrainPrompts(req, userId, redirectTo, { onlyNormName } = {}) {
+  let prompts = db.listPendingCustomStrainPrompts(userId);
+  if (onlyNormName) prompts = prompts.filter(p => p.normName === onlyNormName);
+  if (!prompts.length) return '';
+  return prompts.map(p => `
+    <div class="card custom-strain-prompt" style="border:1.5px solid var(--brand-green);margin-bottom:12px;">
+      <div style="font-weight:700;">✅ &ldquo;${esc(p.name)}&rdquo; is now a verified StrainDex strain</div>
+      <p class="empty-note" style="padding:4px 0 8px;">You logged ${p.count} check-in${p.count === 1 ? '' : 's'} as a self-added strain, which isn't verified. The library now has a matching, verified entry — want ${p.count === 1 ? 'it' : 'them'} to use it?</p>
+      <a class="strain-chip" href="/strains/${esc(p.strain.id)}" style="text-decoration:none;">
+        ${strainPhotoTag(p.strain, 'xs')}
+        <span><b>${esc(p.strain.name)}</b> <span class="rarity-tag rarity-${esc(p.strain.rarity)}">${rarityLabel(p.strain.rarity)}</span></span>
+      </a>
+      <div class="empty-note" style="padding:4px 0 0;">${esc(p.strain.type)}${p.strain.thc ? ' · THC ' + esc(p.strain.thc) : ''}${p.strain.breeder ? ' · ' + esc(p.strain.breeder) : ''}</div>
+      <form method="POST" action="/custom-strain/resolve" style="display:flex;gap:8px;margin-top:10px;">
+        ${csrfField(req)}
+        <input type="hidden" name="norm_name" value="${esc(p.normName)}">
+        <input type="hidden" name="strain_id" value="${esc(p.strain.id)}">
+        <input type="hidden" name="redirect_to" value="${esc(redirectTo)}">
+        <button class="btn" type="submit" name="action" value="link" style="flex:1;">Use verified strain</button>
+        <button class="btn secondary" type="submit" name="action" value="keep" style="flex:1;">Keep as self-added</button>
+      </form>
+      <p class="empty-note" style="padding:6px 0 0;">Switching only changes the strain — your rating, notes, photos and date stay exactly as they are.</p>
+    </div>`).join('');
+}
+async function handleCustomStrainResolve(req, res) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const f = await parseForm(req);
+  const back = safeRedirectPath(f.redirect_to) || '/notifications';
+  // Only a prompt that is genuinely pending for THIS person can be answered (checked again inside db).
+  await db.resolveCustomStrainPrompt(userId, String(f.norm_name || ''), String(f.strain_id || ''), f.action === 'link' ? 'link' : f.action === 'keep' ? 'keep' : '');
+  redirect(res, back);
+}
 function friendsBadgeCount(userId) {
   if (userId == null) return 0;
-  return db.countUnreadMessages(userId) + db.listIncomingRequests(userId).length + db.countUnreadMentions(userId) + db.countUnreadCheckinNotifications(userId);
+  return db.countUnreadMessages(userId) + db.listIncomingRequests(userId).length + db.countUnreadMentions(userId) + db.countUnreadCheckinNotifications(userId) + db.listPendingCustomStrainPrompts(userId).length;
 }
 // A small "copy link" affordance for one specific post -- links to the
 // pageCheckinDetail permalink rather than making the whole card/photo
@@ -877,6 +916,7 @@ async function pageHome(req, res) {
       })();
     </script>
     <p class="screen-sub">Your personal cannabis companion — check-ins, discovery, safety info, and your community, all in one place.</p>
+    ${renderCustomStrainPrompts(req, userId, '/')}
     <a class="btn block" href="/checkin" style="margin-bottom:18px;">🌿 Light It Up</a>
 
     ${renderSafetyCarousel()}
@@ -989,6 +1029,9 @@ function pageStrains(req, res, query) {
   const typeOpts = ['All', 'Indica', 'Sativa', 'Hybrid'];
   const rarityOpts = ['All', 'common', 'uncommon', 'rare', 'legendary'];
   const effectOpts = ['All', 'Happy', 'Relaxed', 'Euphoric', 'Uplifted', 'Sleepy', 'Energetic', 'Creative', 'Focused', 'Hungry', 'Talkative', 'Calm', 'Social'];
+  // Arriving from a trait link on a strain page with a trait that isn't in the list above (Tingly, Giggly...):
+  // add it so the dropdown shows what's actually being filtered instead of "Any effect".
+  if (effect && effect !== 'All' && !effectOpts.includes(effect)) effectOpts.push(effect);
   const thcOpts = ['All', 'Low', 'Medium', 'High'];
   const terpeneOpts = ['All', 'Myrcene', 'Limonene', 'Caryophyllene', 'Pinene', 'Linalool', 'Terpinolene', 'Humulene', 'Ocimene'];
   const ailmentOpts = ['All', 'Stress', 'Pain', 'Depression', 'Insomnia', 'Lack of Appetite', 'Nausea', 'Inflammation', 'Muscle Spasms', 'Seizures'];
@@ -1221,6 +1264,25 @@ function renderAddToListsButton(s, userId) {
     </script>
   `;
 }
+// ============================================================
+// DO NOT REMOVE, SIMPLIFY, OR TURN THIS BACK INTO PLAIN TEXT WITHOUT
+// ASKING THE USER FIRST.
+// Requirement is explicitly user-confirmed: on a strain's page, every
+// effect trait (Relaxed, Happy, Energetic, ...) MUST be a link to
+// /strains?effect=<trait>, so a person can jump straight to other strains
+// with that same characteristic. This feature has already been lost once:
+// an older copy of this file was uploaded over a newer one and the traits
+// quietly went back to plain, unclickable text. It was restored on
+// 2026-10-07. If you are an AI editing this file: this comment IS the prompt
+// asking you not to touch this block -- removing it, "simplifying" it, or
+// swapping the <a> for a <span> is exactly the unwanted behavior it is
+// warning against. The Library page's effect filter already accepts any
+// trait (see pageStrains), so every trait on every strain works as a link.
+// See also: pageStrainDetail, canary.js.
+// ============================================================
+function renderEffectPills(effects) {
+  return (effects || []).map(e => `<a class="filter-pill" href="/strains?effect=${encodeURIComponent(e)}" style="text-decoration:none;">${esc(e)}</a>`).join('');
+}
 function pageStrainDetail(req, res, id) {
   const s = db.getStrain(id);
   if (!s) return notFound(res);
@@ -1244,7 +1306,7 @@ function pageStrainDetail(req, res, id) {
       ${(s.thc || s.cbd) ? `<p style="margin:12px 0 4px;">${s.thc ? `<b>THC:</b> ${esc(s.thc)}` : ''}${s.thc && s.cbd ? ' &nbsp; ' : ''}${s.cbd ? `<b>CBD:</b> ${esc(s.cbd)}` : ''}</p>` : `<p class="empty-note" style="padding:0 0 4px;">No verified THC/CBD data for this strain yet.</p>`}
       ${s.breeder ? `<p class="empty-note" style="padding:0;"><b>Bred by:</b> ${esc(s.breeder)}</p>` : ''}
       ${s.flavor ? `<p style="font-style:italic;color:#6b6b6b;">"${esc(s.flavor)}"</p>` : ''}
-      <p>${s.effects.map(e => `<span class="filter-pill">${esc(e)}</span>`).join('')}</p>
+      <p>${renderEffectPills(s.effects)}</p>
       ${s.terps.length ? `<p><b>Top terpenes:</b> ${s.terps.map(t => `${esc(t.n)} (${Math.round(t.p * 100)}%)`).join(', ')}</p>` : ''}
       ${Array.isArray(s.ailments) && s.ailments.length ? `
         <p style="margin:10px 0 2px;"><b>Users report relief from:</b> ${s.ailments.map(a => `<span class="filter-pill">${esc(a)}</span>`).join(' ')}</p>
@@ -1609,6 +1671,7 @@ function pageCheckinDetail(req, res, id) {
         ${strainPhotoTag(s, 'xs')}
         <span><b>${esc(checkinStrainName(c, s))}</b> ${checkinStrainTag(c, s)}</span>
       </a>
+      ${isMine && isCustomCheckin(c) ? renderCustomStrainPrompts(req, userId, '/checkin/' + c.id, { onlyNormName: db.normalizeCustomName(c.custom_strain_name) }) : ''}
       <div class="sub" style="margin-top:8px;">${esc(c.method)} · ${starString(c.rating)}</div>
       ${c.photo ? `<img class="photo-thumb" src="${esc(c.photo)}" alt="photo">` : ''}
       ${(c.effects || []).length ? `<div class="effect-tags">${c.effects.map(e => `<span>${esc(e)}</span>`).join('')}</div>` : ''}
@@ -4902,6 +4965,7 @@ function pageMore(req, res) {
         { href: '/trending', icon: '🔥', t: 'Trending This Week', s: 'Most checked-into right now' },
         { href: '/dispensaries', icon: '📍', t: 'Dispensaries', s: 'Locator & live menus' },
         { href: '/leaderboard', icon: '🏆', t: 'Top Contributors', s: 'Most-appreciated check-ins this month' },
+        { href: '/gear-care', icon: '🧼', t: 'Cleaning & Gear Care', s: 'Keep your pipes, rigs & vapes running well' },
       ],
     },
     {
@@ -4921,7 +4985,6 @@ function pageMore(req, res) {
         { href: '/growing', icon: '🌱', t: 'Growing Tips', s: 'Tips & tricks from home growers' },
         { href: '/growing/new', icon: '✏️', t: 'Share a Grow Tip', s: 'Add your own' },
         { href: '/grow-journal', icon: '📔', t: 'Grow Journal', s: 'Your private plant photo log' },
-        { href: '/gear-care', icon: '🧼', t: 'Cleaning & Gear Care', s: 'Keep your pipes, rigs & vapes running well' },
       ],
     },
     {
@@ -5521,7 +5584,7 @@ function pageFriends(req, res, query) {
 
     <div class="more-grid">
       <a class="more-tile" href="/messages"><span class="ic">💬</span><div class="t">Messages</div><div class="s">${db.countUnreadMessages(userId) > 0 ? `${db.countUnreadMessages(userId)} unread` : 'Chat with your community'}</div></a>
-      <a class="more-tile" href="/notifications"><span class="ic">🔔</span><div class="t">Notifications</div><div class="s">${(db.countUnreadMentions(userId) + db.countUnreadCheckinNotifications(userId)) > 0 ? `${db.countUnreadMentions(userId) + db.countUnreadCheckinNotifications(userId)} new` : 'Mentions, comments & reactions'}</div></a>
+      <a class="more-tile" href="/notifications"><span class="ic">🔔</span><div class="t">Notifications</div><div class="s">${(db.countUnreadMentions(userId) + db.countUnreadCheckinNotifications(userId) + db.listPendingCustomStrainPrompts(userId).length) > 0 ? `${db.countUnreadMentions(userId) + db.countUnreadCheckinNotifications(userId) + db.listPendingCustomStrainPrompts(userId).length} new` : 'Mentions, comments & reactions'}</div></a>
       <a class="more-tile" href="/puff-puff-ask"><span class="ic">💨</span><div class="t">Puff Puff Ask</div><div class="s">Ask the community, browse by section</div></a>
       <a class="more-tile" href="/trade"><span class="ic">🔁</span><div class="t">Trade</div><div class="s">Swap dupes with your community</div></a>
       <a class="more-tile" href="/friends-picks"><span class="ic">🤝</span><div class="t">Community Picks</div><div class="s">What your circle loves that you haven't tried</div></a>
@@ -5637,6 +5700,7 @@ async function pageNotifications(req, res) {
   const body = `
     <h1 class="screen-title">Notifications</h1>
     <p class="screen-sub">Mentions, comments, and reactions on your posts.</p>
+    ${renderCustomStrainPrompts(req, userId, '/notifications')}
     ${rows.length ? rows.map(({ checkin, actor, strain, verb, created_at }) => `
       <a class="library-row" href="/checkin/${checkin.id}" style="text-decoration:none;color:inherit;">
         ${strainPhotoTag(strain, 'sm')}
@@ -5645,7 +5709,7 @@ async function pageNotifications(req, res) {
           <div class="sub">on ${esc(checkinStrainName(checkin, strain))}${isCustomCheckin(checkin) ? ' ' + unverifiedBadge() : ''} · <span class="local-time" data-utc="${created_at}Z">${esc(created_at)} UTC</span></div>
         </div>
       </a>
-    `).join('') : `<div class="empty-note">Nothing yet — comments, reactions, and @mentions on your posts will show up here.</div>`}
+    `).join('') : (db.listPendingCustomStrainPrompts(userId).length ? '' : `<div class="empty-note">Nothing yet — comments, reactions, and @mentions on your posts will show up here.</div>`)}
   `;
   sendHtml(res, layout({ title: 'Notifications', active: 'friends', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
@@ -5727,11 +5791,13 @@ async function handleAdminReportReviewed(req, res, id) {
 
 // Review queue for self-added (free-text) strains. Each row is a name that
 // someone typed at check-in because it wasn't in the library. Once the
-// strain has been researched and added, "Link check-ins" moves every
-// check-in logged under that typed name onto the real strain.
+// strain has been researched and added, "Verify & ask people" records that the
+// typed name is that strain; every person who used the name is then asked (see
+// renderCustomStrainPrompts) whether to move their own check-ins onto it.
 function pageAdminStrainSubmissions(req, res, query) {
   if (!requireAdmin(req, res)) return;
   const linked = query.get('linked');
+  const asked = query.get('asked');
   const subs = db.listStrainSubmissions();
   const pending = subs.filter(x => x.status !== 'reviewed');
   const done = subs.filter(x => x.status === 'reviewed');
@@ -5748,7 +5814,7 @@ function pageAdminStrainSubmissions(req, res, query) {
         ${isPending ? `
           <form method="POST" action="/admin/strain-submissions/${x.id}/link" style="display:flex;gap:6px;margin-top:6px;">
             <input type="text" name="strain_id" placeholder="Library strain ID, e.g. s6927" value="${match ? esc(match.id) : ''}" required style="flex:1;margin:0;">
-            <button class="btn" type="submit" style="white-space:nowrap;">Link check-ins</button>
+            <button class="btn" type="submit" style="white-space:nowrap;">Verify &amp; ask people</button>
           </form>
           <form method="POST" action="/admin/strain-submissions/${x.id}/reviewed" style="margin-top:6px;">
             <button type="submit" class="btn secondary" style="padding:6px 12px;">Mark reviewed (don't link)</button>
@@ -5757,7 +5823,8 @@ function pageAdminStrainSubmissions(req, res, query) {
   };
   const body = `
     <h1 class="screen-title">Self-added strains</h1>
-    <p class="screen-sub">Names people typed at check-in because the strain wasn't in the library. Research it, add it, then link the check-ins to the real entry.</p>
+    <p class="screen-sub">Names people typed at check-in because the strain wasn't in the library. Research it, add it, then link it to the real entry — everyone who used that name is then <b>asked</b> whether to switch their check-ins to the verified strain (nothing moves without their OK).</p>
+    ${asked != null ? `<p class="empty-note" style="color:var(--brand-green-dark);">Done — ${esc(asked)} ${asked === '1' ? 'person was' : 'people were'} asked whether to switch to the verified strain.</p>` : ''}
     ${linked != null ? `<p class="empty-note" style="color:var(--brand-green-dark);">Linked ${esc(linked)} check-in${linked === '1' ? '' : 's'}.</p>` : ''}
     <div class="section-label">Pending (${pending.length})</div>
     ${pending.length ? pending.map(x => card(x, true)).join('') : `<div class="empty-note">Nothing waiting.</div>`}
@@ -5772,9 +5839,10 @@ async function handleAdminStrainSubmissionLink(req, res, id) {
   const f = await parseForm(req);
   const strainId = String(f.strain_id || '').trim();
   if (!db.getStrain(strainId)) return redirect(res, '/admin/strain-submissions');
-  const moved = await db.relinkCustomCheckins(sub.strain_name, strainId);
+  // Doesn't move anyone's check-ins: it makes each affected person get a "use the verified strain?" prompt.
+  const people = await db.setCustomStrainLink(sub.strain_name, strainId);
   await db.markStrainSubmissionReviewed(sub.id);
-  redirect(res, `/admin/strain-submissions?linked=${moved}`);
+  redirect(res, `/admin/strain-submissions?asked=${people}`);
 }
 async function handleAdminStrainSubmissionReviewed(req, res, id) {
   if (!requireAdmin(req, res)) return;
@@ -7427,6 +7495,7 @@ const server = http.createServer(async (req, res) => {
     if (method === 'POST' && (m = pathname.match(/^\/grow-journal\/(\d+)\/delete$/))) return await handleGrowJournalDelete(req, res, m[1]);
     if (method === 'GET' && pathname === '/friends-picks') return pageFriendsPicks(req, res);
     if (method === 'GET' && pathname === '/notifications') return await pageNotifications(req, res);
+    if (method === 'POST' && pathname === '/custom-strain/resolve') return await handleCustomStrainResolve(req, res);
     if (method === 'GET' && pathname === '/invite') return pageInvite(req, res);
     if (method === 'GET' && pathname === '/puff-puff-ask') return pagePuffPuffAsk(req, res, url.searchParams);
     if (method === 'GET' && (m = pathname.match(/^\/puff-puff-ask\/(\d+)$/))) return pagePuffPuffAskThread(req, res, Number(m[1]));
