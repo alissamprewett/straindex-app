@@ -1067,7 +1067,7 @@ function pageStrains(req, res, query) {
   if (effect && effect !== 'All' && !effectOpts.includes(effect)) effectOpts.push(effect);
   const thcOpts = ['All', 'Low', 'Medium', 'High'];
   const terpeneOpts = ['All', 'Myrcene', 'Limonene', 'Caryophyllene', 'Pinene', 'Linalool', 'Terpinolene', 'Humulene', 'Ocimene'];
-  const ailmentOpts = ['All', 'Stress', 'Pain', 'Depression', 'Insomnia', 'Lack of Appetite', 'Nausea', 'Inflammation', 'Muscle Spasms', 'Seizures'];
+  const ailmentOpts = ['All', 'Stress', 'Pain', 'Depression', 'Insomnia', 'Anxiety', 'Lack of Appetite', 'Nausea', 'Inflammation', 'Muscle Spasms', 'Seizures'];
   const verifiedOpts = ['All', 'verified', 'partial', 'listed'];
   const verifiedLabel = { All: 'Any data quality', verified: '✅ Verified', partial: '🔹 Partially verified', listed: '⚪ Listed only' };
   const thcLabel = { All: 'Any THC', Low: 'Low (≤15%)', Medium: 'Medium (15–25%)', High: 'High (25%+)' };
@@ -1316,6 +1316,12 @@ function renderAddToListsButton(s, userId) {
 function renderEffectPills(effects) {
   return (effects || []).map(e => `<a class="filter-pill" href="/strains?effect=${encodeURIComponent(e)}" style="text-decoration:none;">${esc(e)}</a>`).join('');
 }
+// Same idea for the "Users report relief from" tags: each one links to the
+// library filtered by that relief (/strains?ailment=...), exactly like the
+// effect tags above link to /strains?effect=...
+function renderAilmentPills(ailments) {
+  return (ailments || []).map(a => `<a class="filter-pill" href="/strains?ailment=${encodeURIComponent(a)}" style="text-decoration:none;">${esc(a)}</a>`).join(' ');
+}
 function pageStrainDetail(req, res, id) {
   const s = db.getStrain(id);
   if (!s) return notFound(res);
@@ -1342,7 +1348,7 @@ function pageStrainDetail(req, res, id) {
       <p>${renderEffectPills(s.effects)}</p>
       ${s.terps.length ? `<p><b>Top terpenes:</b> ${s.terps.map(t => `${esc(t.n)} (${Math.round(t.p * 100)}%)`).join(', ')}</p>` : ''}
       ${Array.isArray(s.ailments) && s.ailments.length ? `
-        <p style="margin:10px 0 2px;"><b>Users report relief from:</b> ${s.ailments.map(a => `<span class="filter-pill">${esc(a)}</span>`).join(' ')}</p>
+        <p style="margin:10px 0 2px;"><b>Users report relief from:</b> ${renderAilmentPills(s.ailments)}</p>
         <p class="empty-note" style="padding:0;">User-reported, not medical advice — see a doctor for real guidance.</p>
       ` : ''}
     </div>
