@@ -17,7 +17,7 @@
 // someone hits a real behavior change and it looks broken. Icons don't
 // change this often, so they stay cache-first for speed.
 
-const CACHE_NAME = 'straindex-static-v2';
+const CACHE_NAME = 'straindex-static-v3';
 const CODE_ASSETS = ['/app.css', '/app.js', '/manifest.json'];
 const ICON_ASSETS = ['/icons/icon-192.png', '/icons/icon-512.png'];
 

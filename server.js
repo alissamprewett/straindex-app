@@ -481,7 +481,7 @@ function linkMentions(escapedText) {
   return escapedText.replace(MENTION_REGEX, (match, username) => {
     const user = db.getUserByUsername(username);
     if (!user) return match;
-    return `<a href="/friends/${user.id}" class="mention-tag" style="font-weight:700;color:var(--brand-green-dark);text-decoration:none;">@${esc(user.username)}</a>`;
+    return `<a href="/friends/${user.id}" class="mention-tag" style="font-weight:700;color:var(--accent-text);text-decoration:none;">@${esc(user.username)}</a>`;
   });
 }
 // Replaces the old single Kudos button on check-ins with a small,
@@ -506,7 +506,7 @@ function renderReactionBar(c, userId) {
     const count = summary.counts[r.key] || 0;
     const active = summary.myReaction === r.key;
     const action = userId != null ? `reactToCheckin(${c.id}, '${r.key}', this)` : `window.location.href='/login'`;
-    return `<button type="button" onclick="${action}" title="${esc(r.label)}" style="display:flex;align-items:center;gap:4px;padding:4px 10px;border-radius:999px;border:1px solid ${active ? 'var(--brand-green-dark)' : 'var(--border)'};background:${active ? 'var(--brand-green-pale,#eef6ee)' : 'none'};cursor:pointer;font-size:13px;line-height:1.4;">
+    return `<button type="button" onclick="${action}" title="${esc(r.label)}" style="display:flex;align-items:center;gap:4px;padding:4px 10px;border-radius:999px;border:1px solid ${active ? 'var(--brand-strong)' : 'var(--border)'};background:${active ? 'var(--brand-green-pale,#edf2e3)' : 'none'};cursor:pointer;font-size:13px;line-height:1.4;">
       <span>${r.icon}</span>${count > 0 ? `<span>${count}</span>` : ''}
     </button>`;
   }).join('');
@@ -840,10 +840,10 @@ async function pageHome(req, res) {
   const body = `
     <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
       <h1 class="screen-title" style="margin:0;">${isFirstVisit ? 'Welcome to StrainDex 🌿' : 'Welcome back 🌿'}</h1>
-      ${streak.current > 0 ? `<div title="${streak.current} day check-in streak${streak.longest > streak.current ? ` — best: ${streak.longest}` : ''}" style="display:flex;align-items:center;gap:4px;background:#fff1de;color:#8a4a1f;padding:4px 10px;border-radius:999px;font-size:13px;font-weight:700;flex-shrink:0;">🔥 ${streak.current}</div>` : ''}
+      ${streak.current > 0 ? `<div title="${streak.current} day check-in streak${streak.longest > streak.current ? ` — best: ${streak.longest}` : ''}" style="display:flex;align-items:center;gap:4px;background:#fff0dc;color:#B84300;padding:4px 10px;border-radius:999px;font-size:13px;font-weight:700;flex-shrink:0;">🔥 ${streak.current}</div>` : ''}
     </div>
     ${newlyEarnedBadges.map(b => `
-      <div class="card" style="margin:10px 0 0;background:#eef6ee;color:#123a24;text-align:center;padding:16px;">
+      <div class="card" style="margin:10px 0 0;background:#edf2e3;color:#044002;text-align:center;padding:16px;">
         <div style="font-size:32px;">${b.icon}</div>
         <div style="font-weight:700;font-size:15px;margin-top:6px;">Badge earned: ${esc(b.title)}</div>
         <div style="font-size:13px;opacity:0.8;margin-top:2px;">${esc(b.desc)}</div>
@@ -954,10 +954,10 @@ async function pageHome(req, res) {
 
     ${renderSafetyCarousel()}
 
-    <a href="${topForumThread ? `/puff-puff-ask/${topForumThread.id}` : '/puff-puff-ask'}" class="card" style="display:block;margin-bottom:14px;text-decoration:none;color:#2a2a2a;background:#f1ebf7;border:1px solid #ddd0ea;">
+    <a href="${topForumThread ? `/puff-puff-ask/${topForumThread.id}` : '/puff-puff-ask'}" class="card" style="display:block;margin-bottom:14px;text-decoration:none;color:#2a2a2a;background:#fdeee0;border:1px solid #f6cf9c;">
       <div style="display:flex;justify-content:space-between;align-items:center;">
         <div style="font-weight:700;font-size:15px;">💨 Puff Puff Ask</div>
-        <span style="background:#6b3fa0;color:#fff;font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px;">Ask something \u2192</span>
+        <span style="background:#C74A00;color:#fff;font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px;">Ask something \u2192</span>
       </div>
       ${topForumThread ? `
         <div class="empty-note" style="padding:8px 0 0;color:#2a2a2a;">\ud83d\udd25 ${esc(topForumThread.title)} \u2014 ${topForumThread.replyCount} repl${topForumThread.replyCount === 1 ? 'y' : 'ies'}</div>
@@ -1278,7 +1278,7 @@ function renderAddToListsButton(s, userId) {
           <input type="hidden" name="strain_id" value="${s.id}">
           <input type="hidden" name="redirect_to" value="/strains/${s.id}">
           <input type="text" name="name" placeholder="New list name..." required style="flex:1;margin:0;font-size:13px;padding:6px 8px;">
-          <button type="submit" style="background:none;border:none;color:var(--brand-green-dark);font-weight:700;cursor:pointer;padding:0 8px;font-size:18px;">+</button>
+          <button type="submit" style="background:none;border:none;color:var(--accent-text);font-weight:700;cursor:pointer;padding:0 8px;font-size:18px;">+</button>
         </form>
       </div>
     </div>
@@ -1548,9 +1548,9 @@ const LEGAL_STATUS = [
     homeGrow: '6 plants per adult (3 mature), 12 max per household.', possessionLimit: '2 oz', concentrateLimit: '', publicConsumption: 'Prohibited.', licensing: 'DC Alcoholic Beverage & Cannabis Administration; commercial sales remain federally blocked, so a gift-based model operates around the ban.', hempThca: 'Intoxicating hemp has been restricted by emergency rule.', penalties: 'Over 2 oz is a misdemeanor, up to 6 months.', sourceLabel: 'DC ABCA', sourceUrl: 'https://abca.dc.gov' },
 ];
 const LEGAL_STATUS_LABELS = {
-  recreational: { label: 'Recreational (21+)', color: '#1b5e3a' },
-  medical: { label: 'Medical only', color: '#8a6d1f' },
-  cbd_only: { label: 'Low-THC / CBD only', color: '#8a4a1f' },
+  recreational: { label: 'Recreational (21+)', color: '#4A6126' },
+  medical: { label: 'Medical only', color: '#9A5200' },
+  cbd_only: { label: 'Low-THC / CBD only', color: '#B84300' },
   illegal: { label: 'Illegal', color: '#8a1f2a' },
 };
 
@@ -2219,7 +2219,7 @@ function pageRecipes(req, res, query) {
           return targetId ? `<a href="/recipes/${targetId}">${esc(b)}</a>` : esc(b);
         }).join(', ')} <span style="opacity:.7;">(tap to see how to make it)</span></p>` : ''}
         <details>
-          <summary style="cursor:pointer;font-size:12.5px;font-weight:700;color:var(--brand-green-dark);">Ingredients &amp; steps</summary>
+          <summary style="cursor:pointer;font-size:12.5px;font-weight:700;color:var(--accent-text);">Ingredients &amp; steps</summary>
           <p><b>Ingredients:</b></p>
           <ul>${r.ingredients.map(i => `<li>${linkGlossaryTerms(esc(i))}</li>`).join('')}</ul>
           <p><b>Steps:</b></p>
@@ -2381,7 +2381,7 @@ function pageBestBy(req, res) {
         </div>
         ${b.custom_name ? `<div class="empty-note" style="padding:0;">${esc(b.meta.label)}</div>` : ''}
         <div class="empty-note" style="padding:4px 0 0;">Made ${esc(b.made_on)} · ${b.meta.storage}</div>
-        <div style="margin-top:6px;font-weight:700;color:${b.isPast ? '#a13a3a' : 'var(--brand-green-dark)'};">
+        <div style="margin-top:6px;font-weight:700;color:${b.isPast ? '#a13a3a' : 'var(--accent-text)'};">
           ${b.isPast ? `⚠️ Past best-by (${esc(b.useBy)}) — check carefully before using` : `Use by around ${esc(b.useBy)}`}
         </div>
         ${b.notes ? `<div class="empty-note" style="padding:6px 0 0;">${esc(b.notes)}</div>` : ''}
@@ -2661,9 +2661,9 @@ function pageSignup(req, res, query) {
   const body = `
     <h1 class="screen-title">Create an Account</h1>
     <p class="screen-sub">You must be ${MIN_AGE}+ to use StrainDex.</p>
-    ${sharedStrain ? `<p class="empty-note" style="color:var(--brand-green-dark);padding:0 0 10px;">🌿 Someone shared <b>${esc(sharedStrain.name)}</b> with you on StrainDex — sign up to see it.</p>` : ''}
-    ${referrer ? `<p class="empty-note" style="color:var(--brand-green-dark);padding:0 0 10px;">🌿 ${esc(referrer.username)} invited you to StrainDex.</p>` : ''}
-    ${deleted ? `<p class="empty-note" style="color:var(--brand-green-dark);">Your account and data have been deleted.</p>` : ''}
+    ${sharedStrain ? `<p class="empty-note" style="color:var(--accent-text);padding:0 0 10px;">🌿 Someone shared <b>${esc(sharedStrain.name)}</b> with you on StrainDex — sign up to see it.</p>` : ''}
+    ${referrer ? `<p class="empty-note" style="color:var(--accent-text);padding:0 0 10px;">🌿 ${esc(referrer.username)} invited you to StrainDex.</p>` : ''}
+    ${deleted ? `<p class="empty-note" style="color:var(--accent-text);">Your account and data have been deleted.</p>` : ''}
     ${err && errMessages[err] ? `<p style="color:#a13a3a;">${esc(errMessages[err])}</p>` : ''}
     <a href="/auth/google" class="btn secondary block" style="text-decoration:none;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:14px;">
       <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.72v2.26h2.9c1.7-1.57 2.7-3.88 2.7-6.62z"/><path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.9-2.26c-.8.54-1.84.86-3.06.86-2.35 0-4.34-1.59-5.05-3.72H.98v2.33A9 9 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.95 10.7A5.4 5.4 0 0 1 3.67 9c0-.59.1-1.17.28-1.7V4.97H.98A9 9 0 0 0 0 9c0 1.45.35 2.83.98 4.03l2.97-2.33z"/><path fill="#EA4335" d="M9 3.58c1.32 0 2.5.46 3.44 1.35l2.58-2.58C13.46.89 11.43 0 9 0A9 9 0 0 0 .98 4.97l2.97 2.33C4.66 5.17 6.65 3.58 9 3.58z"/></svg>
@@ -2920,7 +2920,7 @@ function pageLogin(req, res, query) {
   const sharedStrain = query.get('strain') ? db.getStrain(query.get('strain')) : null;
   const body = `
     <h1 class="screen-title">Log In</h1>
-    ${sharedStrain ? `<p class="empty-note" style="color:var(--brand-green-dark);padding:0 0 10px;">🌿 Someone shared <b>${esc(sharedStrain.name)}</b> with you on StrainDex — log in to see it.</p>` : ''}
+    ${sharedStrain ? `<p class="empty-note" style="color:var(--accent-text);padding:0 0 10px;">🌿 Someone shared <b>${esc(sharedStrain.name)}</b> with you on StrainDex — log in to see it.</p>` : ''}
     ${err && errMessages[err] ? `<p style="color:#a13a3a;">${esc(errMessages[err])}</p>` : ''}
     <a href="/auth/google" class="btn secondary block" style="text-decoration:none;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:14px;">
       <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.72v2.26h2.9c1.7-1.57 2.7-3.88 2.7-6.62z"/><path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.9-2.26c-.8.54-1.84.86-3.06.86-2.35 0-4.34-1.59-5.05-3.72H.98v2.33A9 9 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.95 10.7A5.4 5.4 0 0 1 3.67 9c0-.59.1-1.17.28-1.7V4.97H.98A9 9 0 0 0 0 9c0 1.45.35 2.83.98 4.03l2.97-2.33z"/><path fill="#EA4335" d="M9 3.58c1.32 0 2.5.46 3.44 1.35l2.58-2.58C13.46.89 11.43 0 9 0A9 9 0 0 0 .98 4.97l2.97 2.33C4.66 5.17 6.65 3.58 9 3.58z"/></svg>
@@ -3494,7 +3494,7 @@ function pageTerpeneGuide(req, res) {
         </div>
         <p style="margin:6px 0 2px;"><b>Aroma:</b> ${esc(info.aroma)}</p>
         <p style="margin:2px 0 0;"><b>Commonly associated with:</b> ${esc(info.effects)}</p>
-        ${myPct[name] ? `<p style="margin:4px 0 0;color:var(--brand-green-dark);font-weight:700;font-size:13px;">🌿 ${myPct[name]}% of your own check-in history</p>` : ''}
+        ${myPct[name] ? `<p style="margin:4px 0 0;color:var(--accent-text);font-weight:700;font-size:13px;">🌿 ${myPct[name]}% of your own check-in history</p>` : ''}
       </div>
     `).join('')}
   `;
@@ -3560,7 +3560,7 @@ function pageEffectsGuide(req, res) {
           <a href="/strains?effect=${encodeURIComponent(name)}" class="empty-note" style="padding:0;">${counts[name] || 0} strains →</a>
         </div>
         <p style="margin:6px 0 0;">${esc(description)}</p>
-        ${myCount[name] ? `<p style="margin:4px 0 0;color:var(--brand-green-dark);font-weight:700;font-size:13px;">🌿 You've logged this ${myCount[name]} time${myCount[name] === 1 ? '' : 's'}</p>` : ''}
+        ${myCount[name] ? `<p style="margin:4px 0 0;color:var(--accent-text);font-weight:700;font-size:13px;">🌿 You've logged this ${myCount[name]} time${myCount[name] === 1 ? '' : 's'}</p>` : ''}
         ${goalKey ? `<a href="/mood-finder?goal=${goalKey}" class="empty-note" style="display:inline-block;padding:6px 0 0;">${esc(MOOD_GOALS[goalKey].icon)} Find strains for ${esc(MOOD_GOALS[goalKey].label)} →</a>` : ''}
       </div>
     `;
@@ -3857,7 +3857,7 @@ function pageTrending(req, res) {
 // for visual variety -- nothing here is rated "low," because nothing in
 // this list actually is.
 const RISK_LEVELS = {
-  moderate: { label: 'Moderate Risk', color: '#8a6d1f' },
+  moderate: { label: 'Moderate Risk', color: '#9A5200' },
   serious: { label: 'Serious Risk', color: '#a13a3a' },
 };
 // Mixing cautions -- deliberately conservative, pattern-level guidance
@@ -4067,10 +4067,10 @@ function pageKnowledgeQuiz(req, res) {
               const correct = idx === item.correct;
               if (correct) score++;
               Array.prototype.forEach.call(root.querySelectorAll('.quiz-opt'), function(b, bi) {
-                if (bi === item.correct) b.style.borderColor = 'var(--brand-green-dark)';
+                if (bi === item.correct) b.style.borderColor = 'var(--brand-strong)';
                 if (bi === idx && !correct) b.style.borderColor = '#a13a3a';
               });
-              document.getElementById('quiz-feedback').innerHTML = '<p class="empty-note" style="padding:0;font-weight:700;color:' + (correct ? 'var(--brand-green-dark)' : '#a13a3a') + ';">' + (correct ? 'Correct!' : 'Not quite -- correct answer highlighted above.') + '</p><button type="button" id="quiz-next" class="btn block" style="margin-top:8px;">' + (i + 1 < QUESTIONS.length ? 'Next' : 'See Score') + '</button>';
+              document.getElementById('quiz-feedback').innerHTML = '<p class="empty-note" style="padding:0;font-weight:700;color:' + (correct ? 'var(--accent-text)' : '#a13a3a') + ';">' + (correct ? 'Correct!' : 'Not quite -- correct answer highlighted above.') + '</p><button type="button" id="quiz-next" class="btn block" style="margin-top:8px;">' + (i + 1 < QUESTIONS.length ? 'Next' : 'See Score') + '</button>';
               document.getElementById('quiz-next').addEventListener('click', function() { i++; render(); });
             });
           });
@@ -4194,7 +4194,7 @@ function pageQuiz(req, res, query) {
     results = (scored[0] && scored[0].score > 0 ? scored.filter(x => x.score > 0) : scored).slice(0, 5).map(x => x.s);
   }
   const radioGroup = (name, opts, current) => opts.map(([val, label]) =>
-    `<label style="display:block;padding:10px 12px;margin-bottom:6px;border:1px solid var(--border);border-radius:10px;cursor:pointer;${current === val ? 'border-color:var(--brand-green);background:var(--brand-green-pale,#eef6ee);' : ''}">
+    `<label style="display:block;padding:10px 12px;margin-bottom:6px;border:1px solid var(--border);border-radius:10px;cursor:pointer;${current === val ? 'border-color:var(--brand-green);background:var(--brand-green-pale,#edf2e3);' : ''}">
       <input type="radio" name="${name}" value="${val}" ${current === val ? 'checked' : ''} style="margin-right:8px;">${esc(label)}
     </label>`).join('');
   const body = `
@@ -4338,7 +4338,7 @@ function pageFeedback(req, res, query) {
     <h1 class="screen-title">Send Feedback</h1>
     <p class="screen-sub">StrainDex is in beta — bugs, ideas, confusing screens, anything at all. This goes straight to the person building the app.</p>
     <p class="empty-note">For anything urgent — a compromised account, a safety concern, or a bad actor on the app — email <a href="mailto:${SUPPORT_EMAIL}">${SUPPORT_EMAIL}</a> directly instead of using the form below, since it's monitored more closely.</p>
-    ${sent ? `<p class="empty-note" style="color:var(--brand-green-dark);">Thanks — your feedback was sent.</p>` : ''}
+    ${sent ? `<p class="empty-note" style="color:var(--accent-text);">Thanks — your feedback was sent.</p>` : ''}
     <form method="POST" action="/feedback">
       <label class="field-label" style="margin-top:0;">Your feedback</label>
       <textarea name="message" required minlength="3" maxlength="4000" placeholder="What's on your mind?" style="min-height:140px;"></textarea>
@@ -4478,7 +4478,7 @@ function pageAdminHome(req, res) {
   const totalPending = pendingCount + pendingGrowTips + pendingSubmissions;
   const body = `
     <h1 class="screen-title">Admin</h1>
-    <div class="card" style="background:${totalPending ? 'var(--brand-green-dark)' : 'var(--bg-card)'};${totalPending ? 'color:#fff;' : ''}"><a href="/admin/inbox" style="${totalPending ? 'color:#fff;' : ''}">📥 Inbox${totalPending ? ` (${totalPending} need attention)` : ' — all caught up'}</a></div>
+    <div class="card" style="background:${totalPending ? 'var(--brand-strong)' : 'var(--bg-card)'};${totalPending ? 'color:#fff;' : ''}"><a href="/admin/inbox" style="${totalPending ? 'color:#fff;' : ''}">📥 Inbox${totalPending ? ` (${totalPending} need attention)` : ' — all caught up'}</a></div>
     <div class="card"><a href="/admin/feedback">💬 Feedback (${db.listFeedback().length})</a></div>
     <div class="card"><a href="/admin/faqs">📋 Manage FAQ (${db.listFaqs().length})</a></div>
     <div class="card"><a href="/admin/recipes">🍽️ Manage Recipes (${db.listRecipes({ status: null }).length}${pendingCount ? `, ${pendingCount} pending` : ''})</a></div>
@@ -4497,7 +4497,7 @@ function pageAdminUsers(req, res, query) {
   const users = db.listUsers();
   const body = `
     <h1 class="screen-title">Manage Users (${users.length})</h1>
-    ${deleted ? `<p class="empty-note" style="color:var(--brand-green-dark);">User "${esc(deleted)}" was deleted.</p>` : ''}
+    ${deleted ? `<p class="empty-note" style="color:var(--accent-text);">User "${esc(deleted)}" was deleted.</p>` : ''}
     ${users.map(u => `
       <div class="admin-row">
         <span>👤 <b>${esc(u.username)}</b>${u.email ? ` · ${esc(u.email)}` : ''}<br><span class="empty-note" style="padding:0;">Joined ${esc((u.created_at || '').slice(0, 10))}</span></span>
@@ -4644,7 +4644,7 @@ function renderAwardBadges(s, { compact = false } = {}) {
   if (compact) {
     return `<span title="${esc(awards.map(a => `${a.name}${a.year ? ' ' + a.year : ''}`).join(', '))}">${AWARD_ICON}</span>`;
   }
-  return `<div class="award-badges" style="margin:6px 0;">${awards.map(a => `<span class="filter-pill" style="background:var(--brand-gold,#a9822a);color:#fff;border:none;">${AWARD_ICON} ${esc(a.name)}${a.year ? ` ${a.year}` : ''}</span>`).join(' ')}</div>`;
+  return `<div class="award-badges" style="margin:6px 0;">${awards.map(a => `<span class="filter-pill" style="background:var(--brand-gold,#F28705);color:var(--on-orange,#181712);border:none;">${AWARD_ICON} ${esc(a.name)}${a.year ? ` ${a.year}` : ''}</span>`).join(' ')}</div>`;
 }
 
 function strainFormFields(s) {
@@ -5344,7 +5344,7 @@ function pageAccount(req, res, query) {
             var current = currentChoice();
             Array.prototype.forEach.call(document.querySelectorAll('#theme-options [data-theme-choice]'), function(btn) {
               var active = btn.getAttribute('data-theme-choice') === current;
-              btn.style.borderColor = active ? 'var(--brand-green-dark)' : '';
+              btn.style.borderColor = active ? 'var(--brand-strong)' : '';
               btn.style.fontWeight = active ? '700' : 'normal';
             });
           }
@@ -5370,7 +5370,7 @@ function pageAccount(req, res, query) {
 
     <div class="card" style="margin-top:14px;">
       <h2 style="margin:0 0 10px;font-size:15px;">Profile</h2>
-      ${success === 'bio' ? `<p class="empty-note" style="color:var(--brand-green-dark);">Bio updated.</p>` : ''}
+      ${success === 'bio' ? `<p class="empty-note" style="color:var(--accent-text);">Bio updated.</p>` : ''}
       <form method="POST" action="/account/bio">
         <label class="field-label" style="margin-top:0;">Bio</label>
         <textarea name="bio" maxlength="160" placeholder="What should people see on your profile?">${esc(user.bio || '')}</textarea>
@@ -5382,7 +5382,7 @@ function pageAccount(req, res, query) {
     <div class="card" style="margin-top:14px;">
       <h2 style="margin:0 0 10px;font-size:15px;">Username</h2>
       ${error === 'username_taken' ? `<p class="dosing-note">That username is already taken — try another.</p>` : ''}
-      ${success === 'username' ? `<p class="empty-note" style="color:var(--brand-green-dark);">Username updated.</p>` : ''}
+      ${success === 'username' ? `<p class="empty-note" style="color:var(--accent-text);">Username updated.</p>` : ''}
       <form method="POST" action="/account/username">
         <label class="field-label" style="margin-top:0;">Username</label>
         <input type="text" name="username" value="${esc(user.username)}" required minlength="2" maxlength="30">
@@ -5394,7 +5394,7 @@ function pageAccount(req, res, query) {
       <h2 style="margin:0 0 10px;font-size:15px;">Email</h2>
       <p class="empty-note" style="padding:0 0 10px;">Used for password resets.${!user.email ? ' Your account currently has no email on file.' : ''}</p>
       ${error === 'email_taken' ? `<p class="dosing-note">That email is already in use on another account.</p>` : ''}
-      ${success === 'email' ? `<p class="empty-note" style="color:var(--brand-green-dark);">Email updated.</p>` : ''}
+      ${success === 'email' ? `<p class="empty-note" style="color:var(--accent-text);">Email updated.</p>` : ''}
       <form method="POST" action="/account/email">
         <label class="field-label" style="margin-top:0;">Email</label>
         <input type="email" name="email" value="${esc(user.email || '')}" required autocomplete="email">
@@ -5407,7 +5407,7 @@ function pageAccount(req, res, query) {
       ${error === 'wrong_password' ? `<p class="dosing-note">Current password is incorrect.</p>` : ''}
       ${error === 'password_mismatch' ? `<p class="dosing-note">New password and confirmation don't match.</p>` : ''}
       ${error === 'password_short' ? `<p class="dosing-note">New password needs to be at least 8 characters.</p>` : ''}
-      ${success === 'password' ? `<p class="empty-note" style="color:var(--brand-green-dark);">Password updated.</p>` : ''}
+      ${success === 'password' ? `<p class="empty-note" style="color:var(--accent-text);">Password updated.</p>` : ''}
       <form method="POST" action="/account/password">
         <label class="field-label" style="margin-top:0;">Current password</label>
         <input type="password" name="current_password" required>
@@ -5787,7 +5787,7 @@ function pageBlockedUsers(req, res) {
       <div class="library-row">
         <div class="info"><div class="nm">${esc(u.username)}</div></div>
         <form method="POST" action="/unblock/${u.id}">
-          <button type="submit" class="empty-note" style="padding:0 6px;background:none;border:none;color:var(--brand-green-dark);cursor:pointer;font-size:inherit;text-decoration:underline;">Unblock</button>
+          <button type="submit" class="empty-note" style="padding:0 6px;background:none;border:none;color:var(--accent-text);cursor:pointer;font-size:inherit;text-decoration:underline;">Unblock</button>
         </form>
       </div>
     `).join('') : `<div class="empty-note">You haven't blocked anyone.</div>`}
@@ -5847,7 +5847,7 @@ function pageAdminStrainSubmissions(req, res, query) {
         <b>${esc(x.strain_name)}</b> ${isPending ? unverifiedBadge() : ''}
         <p class="empty-note" style="padding:2px 0;">From ${esc(user ? user.username : 'a former user')} · ${esc(x.created_at)} UTC · ${uses} self-added check-in${uses === 1 ? '' : 's'} still using this name</p>
         ${x.description ? `<p class="empty-note" style="padding:2px 0;">${esc(x.description)}</p>` : ''}
-        ${match ? `<p class="empty-note" style="padding:2px 0;color:var(--brand-green-dark);">Now matches library strain <b>${esc(match.name)}</b> (${esc(match.id)}).</p>` : ''}
+        ${match ? `<p class="empty-note" style="padding:2px 0;color:var(--accent-text);">Now matches library strain <b>${esc(match.name)}</b> (${esc(match.id)}).</p>` : ''}
         ${isPending ? `
           <form method="POST" action="/admin/strain-submissions/${x.id}/link" style="display:flex;gap:6px;margin-top:6px;">
             <input type="text" name="strain_id" placeholder="Library strain ID, e.g. s6927" value="${match ? esc(match.id) : ''}" required style="flex:1;margin:0;">
@@ -5861,8 +5861,8 @@ function pageAdminStrainSubmissions(req, res, query) {
   const body = `
     <h1 class="screen-title">Self-added strains</h1>
     <p class="screen-sub">Names people typed at check-in because the strain wasn't in the library. Research it, add it, then link it to the real entry — everyone who used that name is then <b>asked</b> whether to switch their check-ins to the verified strain (nothing moves without their OK).</p>
-    ${asked != null ? `<p class="empty-note" style="color:var(--brand-green-dark);">Done — ${esc(asked)} ${asked === '1' ? 'person was' : 'people were'} asked whether to switch to the verified strain.</p>` : ''}
-    ${linked != null ? `<p class="empty-note" style="color:var(--brand-green-dark);">Linked ${esc(linked)} check-in${linked === '1' ? '' : 's'}.</p>` : ''}
+    ${asked != null ? `<p class="empty-note" style="color:var(--accent-text);">Done — ${esc(asked)} ${asked === '1' ? 'person was' : 'people were'} asked whether to switch to the verified strain.</p>` : ''}
+    ${linked != null ? `<p class="empty-note" style="color:var(--accent-text);">Linked ${esc(linked)} check-in${linked === '1' ? '' : 's'}.</p>` : ''}
     <div class="section-label">Pending (${pending.length})</div>
     ${pending.length ? pending.map(x => card(x, true)).join('') : `<div class="empty-note">Nothing waiting.</div>`}
     ${done.length ? `<div class="section-label" style="margin-top:18px;">Reviewed (${done.length})</div>${done.map(x => card(x, false)).join('')}` : ''}
@@ -6009,7 +6009,7 @@ function pageConversation(req, res, friendId) {
               </div>
             </a>
           ` : ''}
-          ${m.body ? `<div class="admin-row" style="background:${mine ? 'var(--brand-green-dark)' : 'var(--bg-card)'};color:${mine ? '#fff' : 'inherit'};margin-top:${strain ? '4px' : '0'};">${esc(m.body)}</div>` : ''}
+          ${m.body ? `<div class="admin-row" style="background:${mine ? 'var(--brand-strong)' : 'var(--bg-card)'};color:${mine ? '#fff' : 'inherit'};margin-top:${strain ? '4px' : '0'};">${esc(m.body)}</div>` : ''}
         </div>`;
       }).join('') : `<div class="empty-note">Say hi to ${esc(friend.username)} 👋</div>`}
     </div>
@@ -6546,9 +6546,9 @@ function pageLegalStatus(req, res, query) {
             ${plainSection('Hemp & THCA', s.hempThca)}
             ${plainSection('Penalties for Illegal Possession', s.penalties)}
             ${s.sourceUrl ? `
-              <div style="border:1px dashed #4a7c59;background:#eef6ee;border-radius:10px;padding:10px 12px;margin-top:4px;">
+              <div style="border:1px dashed #58732F;background:#edf2e3;border-radius:10px;padding:10px 12px;margin-top:4px;">
                 <div style="font-size:10px;letter-spacing:0.05em;text-transform:uppercase;color:#6b6b6b;margin-bottom:4px;">Official Resources</div>
-                <a href="${esc(s.sourceUrl)}" target="_blank" rel="noopener noreferrer" style="color:#1b5e3a;font-weight:700;">${esc(s.sourceLabel)} \u2197</a>
+                <a href="${esc(s.sourceUrl)}" target="_blank" rel="noopener noreferrer" style="color:var(--accent-text);font-weight:700;">${esc(s.sourceLabel)} \u2197</a>
               </div>
             ` : ''}
           </div>
@@ -7135,7 +7135,7 @@ function pageLeaderboard(req, res) {
 // vs. public layout()) differs between the two callers.
 function renderRecapBody(recap, { longestStreak } = {}) {
   return `
-    <div class="card" style="text-align:center;background:linear-gradient(135deg,#123a24,#1b5e3a);color:#fff;border:none;">
+    <div class="card" style="text-align:center;background:linear-gradient(135deg,#044002,#58732F);color:#fff;border:none;">
       <div style="font-size:0.75rem;opacity:.85;letter-spacing:.5px;text-transform:uppercase;">${recap.year} Year in Review</div>
       <div style="font-size:2.75rem;font-weight:800;margin:6px 0 2px;">${recap.totalCheckins}</div>
       <div style="font-size:0.8125rem;opacity:.9;">check-in${recap.totalCheckins === 1 ? '' : 's'} logged</div>
