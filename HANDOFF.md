@@ -79,6 +79,34 @@ edits (awards, breeder, aka, THC...). That is why deploys took 4-6 minutes.
   …/upload/main/data). Do NOT assume a push auto-deploys. After deploy, the
   strain count should read 7,201 + 72 = about 7,273.
 
+
+### Post-deploy verification (Oct 16 2026, after shipping the safe seed)
+Checked on the live site and Render logs:
+- Two deploys happened: `1aaa429` ran the OLD seed (only strains.json had been
+  uploaded; 4m49s, "Seeding 7238 strains..."), then `ce6ad50` ran the NEW seed
+  (44.8s, "0 inserted, 0 filled, 7238 left exactly as-is"). The corrections
+  migration logged `applied: 0` because the old seed had already applied the
+  file. End state is correct.
+- Live strain library: 7,273 strains. Spot checks pass: Sunset Octane and
+  Str8 Lemonade renamed, The HOG is Indica with blank THC, Red Velvet Runtz
+  exists. Main pages all return 200; /api/analytics-snapshot returns 401 without
+  its key (correct).
+- **BUG FOUND: `docs/leaf-kudos.png` and `docs/joint-icon.png` were deleted from
+  the repo in commit 245bf72 (Oct 7 2026, a bulk upload) and 404 on the live
+  site.** The kudos leaf is referenced on every recipe card. Recovered from git
+  history; re-upload both files to `docs/`. Lesson: when a GitHub upload shows
+  deletions, check them before committing.
+- Seed counts: DB has 41 FAQs and 107 recipes vs 42 and 108 in the files.
+  Explained: one FAQ ("Terpene color key", answer `__TERPLEGEND__`) is a
+  deliberate placeholder the seed skips, and `recipes.json` has two DIFFERENT
+  recipes titled "Cannabis Rice Krispie Treats" (Gummies & Candy vs Baked
+  Goods) -- the seed dedupes by title, so only the first is live. Rename one
+  in recipes.json to publish both.
+- **Node version floats.** package.json says `"node": ">=18.0.0"`, and Render
+  picked Node 26.12.0. A future major Node release could break dependencies
+  on a deploy with no code change. Consider pinning to a tested major (e.g.
+  `"node": "22.x"`) after confirming the site runs on it.
+
 ### Housekeeping flags
 - `docs/` is served publicly by `serveStatic()` (everything under /docs/ is
   readable on the live site), and it holds `docs/HANDOFF.md` (an older,
