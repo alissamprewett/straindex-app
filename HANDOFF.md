@@ -91,11 +91,13 @@ Checked on the live site and Render logs:
   Str8 Lemonade renamed, The HOG is Indica with blank THC, Red Velvet Runtz
   exists. Main pages all return 200; /api/analytics-snapshot returns 401 without
   its key (correct).
-- **BUG FOUND: `docs/leaf-kudos.png` and `docs/joint-icon.png` were deleted from
-  the repo in commit 245bf72 (Oct 7 2026, a bulk upload) and 404 on the live
-  site.** The kudos leaf is referenced on every recipe card. Recovered from git
-  history; re-upload both files to `docs/`. Lesson: when a GitHub upload shows
-  deletions, check them before committing.
+- **`docs/leaf-kudos.png` and `docs/joint-icon.png` were removed from the repo
+  on purpose (commit 245bf72, Oct 7 2026) and must NOT be restored.** They
+  404 on the live site by design. Open follow-up: `server.js` still references
+  the leaf (`KUDOS_BUD_ICON` and the `/docs/leaf-kudos.png` path, ~107 uses
+  on the recipes page alone), so users see a broken-image icon until that
+  constant is replaced with something that exists. Do not re-add the PNGs to
+  fix this; change the code.
 - Seed counts: DB has 41 FAQs and 107 recipes vs 42 and 108 in the files.
   Explained: one FAQ ("Terpene color key", answer `__TERPLEGEND__`) is a
   deliberate placeholder the seed skips, and `recipes.json` has two DIFFERENT
