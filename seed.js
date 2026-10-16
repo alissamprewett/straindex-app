@@ -19,8 +19,31 @@ async function main() {
   const recipes = loadJSON('recipes.json');
   const growTips = loadJSON('growtips.json');
 
-  console.log(`Seeding ${strains.length} strains (this takes a minute or two)...`);
-  for (const s of strains) await db.insertStrain(s);
+  // STRAINS: never overwrite what is already live.
+  // Every Render deploy runs this file (build command: `npm install && npm run seed`),
+  // and db.insertStrain() is INSERT OR REPLACE. The old loop therefore reset every
+  // strain in the database to whatever strains.json said, wiping admin-panel edits
+  // (awards, breeder, aka, THC...) on every deploy. New rules:
+  //   * strain id not in the database yet  -> insert it
+  //   * strain id already in the database  -> keep the live row, and only FILL fields
+  //     that are blank live but have a value in strains.json (never replace a value)
+  // To change a value that is already live, use the admin panel, or add a one-shot
+  // entry to STRAIN_FIXES in lib/data-migrations.js.
+  const isBlank = v => v == null || v === '' || (Array.isArray(v) && v.length === 0);
+  const FILLABLE = ['lean', 'thc', 'cbd', 'terps', 'effects', 'flavor', 'breeder', 'ailments', 'parents', 'aka', 'awards'];
+  let inserted = 0, filled = 0, untouched = 0;
+  console.log(`Checking ${strains.length} strains against the database...`);
+  for (const s of strains) {
+    const live = db.getStrain(s.id);
+    if (!live) { await db.insertStrain(s); inserted++; continue; }
+    const patch = {};
+    for (const f of FILLABLE) {
+      if (isBlank(live[f]) && !isBlank(s[f])) patch[f] = s[f];
+    }
+    if (Object.keys(patch).length) { await db.insertStrain({ ...live, ...patch }); filled++; }
+    else untouched++;
+  }
+  console.log(`Strains: ${inserted} inserted, ${filled} had blank fields filled, ${untouched} left exactly as-is.`);
 
   {
     const existingQuestions = new Set(db.listFaqs().map(f => f.question));

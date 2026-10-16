@@ -1,7 +1,109 @@
+# NOTE: updated Oct 16 2026 -- the VERIFIED STATE section near the top is the source of truth.
+
 # StrainDex — Handoff Notes for a Future Claude Session
 
 Written by a prior Claude session for whichever Claude picks this up next.
 Read this whole thing before doing anything — it'll save both of you time.
+
+
+## VERIFIED STATE -- Oct 16, 2026 (read this first; it overrides older numbers below)
+
+Checked directly against the live Render dashboard, the live site, the
+Analytics Google Sheet, and the code in the repo zip.
+
+- **Live site**: https://strain-dex.com (also reachable at
+  https://straindex-dber.onrender.com). Both load directly; neither
+  redirects to the other.
+- **Live strain count**: 7,201 (strain library page). `data/strains.json`
+  in GitHub HEAD has 7,166. The difference is strains that exist only in the
+  database (e.g. approved user submissions, NEW_STRAINS in
+  `lib/data-migrations.js`), so **the database is NOT simply a copy of
+  strains.json**.
+- **Content counts in the repo**: 108 recipes, 42 FAQs, 45 grow tips.
+  (Older numbers further down -- 88 / 13 / 2,005 / 1,649 -- are stale.)
+- **Render**: web service `straindex` (srv-da1qjkht0dsc73ae4rc0), Oregon,
+  `main` branch of alissamprewett/straindex-app. Build command is
+  `npm install && npm run seed`; start command is `npm start`; no
+  pre-deploy command. Latest deploy: commit `bf2ce3f` ("df"), Oct 7 2026,
+  succeeded in 4m32s. All 30 deploys on record were manual. Logs older than
+  a few days are gone (retention limit), so debug soon after a deploy.
+- **Analytics**: the "StrainDex Analytics" Google Sheet is syncing hourly
+  (Summary last updated Oct 16). Snapshot that day: 16 registered users,
+  58 total check-ins, 2 active in last 7 days, 3 in last 30 days, 25%
+  activation. Tabs: daily tabs, Contacts (user PII -- treat as private),
+  Summary, Discovered Candidates (strain research queue, ~10.4k rows, ~7.5k
+  marked "needs research"), Services & Costs (current spend ~ $7/mo, Render).
+- **Dependencies**: three, not zero -- `@libsql/client`, `@sentry/node`,
+  `@aws-sdk/client-s3`.
+
+### Deploy behavior: every deploy runs the seed (now made safe, Oct 16 2026)
+Render's build command is `npm install && npm run seed`, so **every deploy
+executes `seed.js`**. Until Oct 16 2026 it called `db.insertStrain()`
+(INSERT OR REPLACE) for every strain in `data/strains.json`, which reset each
+of those strains to the file's contents on every deploy -- wiping admin-panel
+edits (awards, breeder, aka, THC...). That is why deploys took 4-6 minutes.
+
+**New behavior (seed.js + lib/data-migrations.js, tested on a scratch DB):**
+- Strain id not in the database -> inserted.
+- Strain id already in the database -> left exactly as-is, except fields that
+  are blank live and have a value in strains.json are filled in. Existing
+  values are never replaced by the seed.
+- To CHANGE a value that is already live, use the admin panel, or add a
+  one-shot entry to `lib/data-migrations.js`. `STRAIN_CORRECTIONS` there is a
+  compare-and-set list: each entry only applies if the live value still
+  equals its `from` value, so hand edits are never overwritten. The current
+  list (migration `strain_corrections_2026_10_09`, 53 entries) carries the
+  research corrections made in strains.json on Oct 9 (placeholder THC/
+  terpenes blanked, breeder fixes, type changes, two renames). Add future
+  corrections as a NEW migration with a new name; never rename one that ran.
+- Merged-duplicate strain ids are NOT in strains.json (checked: 0 of 65), so
+  the seed does not resurrect them.
+- strains.json is therefore now a source of NEW strains and blank-fills, not
+  the source of truth for existing rows. The live database is.
+- Fresh database note: on a brand-new DB the migrations log "incomplete ...
+  will retry next boot" on the first boot (strains don't exist yet). Normal.
+
+### Uncommitted work found in the Oct 9 upload
+`data/strains.json` in the zip differs from GitHub HEAD (and is not live):
+- 72 new strains (ids s7269 onward). All 72 are rarity "rare" (a default,
+  not researched), 63 have no THC, none have terpenes/effects/flavor, 21
+  have no parents recorded. They are names + lineage stubs.
+- 44 existing strains edited: lineage (23), lean (21), aka (20), breeder (10),
+  THC (10 -- 7 blanked, 2 filled, 1 changed), type (4: SFV OG Kush, The HOG,
+  Super Sour Diesel, Sucker Punch (Lit Farms)), name (2: "Shocktane (aka
+  Sunset Octane)" -> "Sunset Octane"; "Str8 Lemonade (aka Straight
+  Lemonade)" -> "Str8 Lemonade").
+- To ship (with the safe seed): upload `seed.js` (repo root), `lib/data-migrations.js`
+  (into lib/), and `data/strains.json` (into data/), commit, then Render ->
+  Manual Deploy. Upload each to its own folder URL (…/upload/main, …/upload/main/lib,
+  …/upload/main/data). Do NOT assume a push auto-deploys. After deploy, the
+  strain count should read 7,201 + 72 = about 7,273.
+
+### Housekeeping flags
+- `docs/` is served publicly by `serveStatic()` (everything under /docs/ is
+  readable on the live site), and it holds `docs/HANDOFF.md` (an older,
+  stale copy) plus the research logs. Keep working notes out of `docs/`;
+  keep only images there. Delete `docs/HANDOFF.md` and keep this file at the
+  repo root (root files are not served).
+- `data/straindex.db` is a leftover SQLite file from before Turso; unused.
+- `canary.js` refers to a "Protected behaviors" section of this file and to
+  RESTORE_NOTES.md. Neither exists in the copies reviewed. The protected
+  behaviors themselves ARE enforced by strings in server.js (search
+  "USER-CONFIRMED BEHAVIOR" and "DO NOT REMOVE") -- read those blocks before
+  changing the check-in effect pills or custom-strain prompts.
+- The Services & Costs sheet notes are partly stale (says dispensary lookup
+  uses OpenStreetMap only; says photo object storage not set up; code
+  supports Google Places with an OSM fallback and Cloudflare R2). Confirm
+  against Render's environment variable NAMES before relying on either.
+- Do not store account passwords in the Google Sheet. A plaintext password
+  was found in the Services & Costs tab on Oct 16 2026 and should be rotated
+  and removed.
+- Render's Settings page shows a deploy-hook URL containing a secret key.
+  Treat it as a secret; rotate it if it has been pasted anywhere.
+- The "Relief from..." strain filter includes Depression and Seizures.
+  Earlier project decisions avoided implying cannabis treats clinical
+  conditions; confirm that is intended and that the "user-reported, not
+  medical advice" label is visible next to it.
 
 ## The absolute basics
 
@@ -12,7 +114,7 @@ Read this whole thing before doing anything — it'll save both of you time.
   minimal terminal experience (has run a couple of Python scripts with very
   literal step-by-step help). Give exact click-paths and exact commands to
   type, never assume familiarity with dev tooling.
-- **Stack**: Zero-dependency Node.js (`http` module, no Express), server-
+- **Stack**: Node.js (`http` module, no Express; three small dependencies, see Verified State), server-
   rendered HTML via template literals, Turso (hosted libSQL/SQLite-compatible)
   for the database, vanilla JS on the client (no framework, no build step).
 - **This is a real, live app with real users now** — Alissa's friends are
@@ -138,9 +240,7 @@ Alissa has no local dev environment and no git CLI. The workflow is:
 - No photo uploaded → nothing renders in that slot (no placeholder icon
   box). Only real uploaded photos ever show.
 
-**Strain library** (2,005 strains as of the latest Weedmaps directory audit
-session -- this count will keep climbing across sessions, treat "1,649"
-above as stale rather than current)
+**Strain library** (7,201 live as of Oct 16 2026; see Verified State at the top -- older counts in this section are stale)
 - Search by name/flavor text, **and now also alias/aka text** (`lib/db.js`
   `matchesFilters()` -- previously only checked `name` and `flavor`, so a
   strain search for e.g. "Tallyman" or "Better Than Yours OG" returned
@@ -177,7 +277,7 @@ above as stale rather than current)
   and reasoning — the old numbers weren't "wrong," just reflecting older/
   more conservative reference ranges vs. today's more potent legal market).
 
-**Recipes** (88 recipes across 6 categories, ~equally distributed)
+**Recipes** (108 recipes across 6 categories, ~equally distributed)
 - Search by name, ingredient, or description text.
 - Individual recipe detail pages (`/recipes/:id`).
 - **Cross-linking**: recipes that use an infusion base (cannabutter,
@@ -191,7 +291,7 @@ above as stale rather than current)
   what's covered, what sources were checked (and which were rejected and
   why), and what's queued for the next batch.
 
-**Growing tips** (13 tips, real sourced content with citations)
+**Growing tips** (45 tips, real sourced content with citations)
 - Kudos button updated to match the same leaf-icon style as recipes
   (previously a plain "👍 Helpful" button).
 
