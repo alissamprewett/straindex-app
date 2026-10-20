@@ -671,3 +671,57 @@ XXX 420 s379 and XXX OG s380 held sample-style placeholder data from the origina
 - **Zkittlez, by Flower Power Cannabis**: no source found for a Flower Power Cannabis version. No data.
 - **Zkittlez autoflowering**: many unrelated autoflower versions by different breeders (Linda Seeds, Semyanich, Seeds66, Advanced Seeds, United Cannabis Seeds, Sensible Seeds, etc.), each single-source (jointcommerce copies not independent). No single version supported by 2 sources. No data. Auto crosses already in library (Amnesia Zkittlez Auto s3083, Gorilla Zkittlez Auto s4499).
 - **Zkittlez s381 (existing entry, fixed because the research helped it)**: Leafly, AllBud, Weedmaps all call it a hybrid (library had Indica) -> type Hybrid, lean left blank (Leafly indica-leaning, AllBud indica-dominant 70/30, Weedmaps indica-heavy: sources disagree on degree). Effects Relaxed + Happy + Sleepy (Relaxed all three; Happy AllBud + Weedmaps; Sleepy Leafly + AllBud). Flavor filled: sweet berry and grape with tropical grapefruit (all three). Parents Grape Ape x Grapefruit confirmed (Leafly, AllBud, Weedmaps). Aliases Z, The Original Z (Leafly + Weedmaps) already present. Held: THC (conflict: AllBud 13–15, Weedmaps 17–26, Leafly ~20, breeder 15–23), terpenes (Leafly only), and the existing ailments (not re-audited). Corrections via migration batch12.
+
+## Sheet row-by-row research — Batch S26 (rows 2984–2989)
+
+No library changes. All five rows are cuts, backcrosses, brand versions or descriptor text built on Zkittlez (already covered, s381); none has two independent sources for its own data.
+
+- **Zkittlez Baller Ben Cut**: a named cut; no strain page or product source found. Only a parent label of Dirty Z s3984. No data.
+- **Zkittlez BX2**: no page for it. SeedFinder lists ZBX2 (Doja Seeds, derived from an Original Z phenotype, ~27% THC) but does not say "BX2" means Zkittlez BX2; single source, not confirmed as the same thing. Parent label of Tropical Burst s2194 and Blackberry Gary s3309. No data.
+- **Zkittlez Grape Ape**: no strain of that name found; Grape Ape is one of Zkittlez's parents (Grape Ape x Grapefruit, s381). No data.
+- **Zkittlez High Supply**: High Supply is a Texas cannabis brand; no Zkittlez product page found. No data.
+- **Zkittlez Pheno Zkittles**: descriptor-style name for a Zkittlez phenotype; no source. No data.
+
+## Sheet row-by-row research — Batch S27 (rows 2990–2994)
+
+- **Zkittlez The Original Z**: The Original Z is already an alias of Zkittlez s381 (Leafly + Weedmaps). Nothing new. (SeedFinder lists The Original Z as a Dying Breed Seeds strain and as Zkittlez's ancestor; flagged in S23.)
+- **Zkittlez Z OG**: same as Z OG s7376 (Leafly names it Zkittlez OG / Z OG). Alias "Zkittlez OG" still held (a separate Nasha Genetics Zkittlez OG exists).
+- **Zkittlez aka Gorittlez**: AllBud lists Gorittlez as its own strain (Gorilla Glue #4 x Zkittlez, indica-dominant 60/40, 20–30%, creative/euphoric/giggly/happy/sleepy/sociable, berry/candy/grape/sweet), single source; no source says Gorittlez = Gorilla Zkittlez, though the genetics match. Held; no data. Possible duplicate of Gorilla Zkittlez s7379 if a second source confirms.
+- **Zkittlez aka Sticky Zkittlez Glue**: SeedFinder only (Cream of the Crop Seeds, "Gorilla Glue #4 x Zkittlez" in the description, Original Glue x The Original Z in the tree, mostly indica, super-sweet). Zkittlez Glue s6456 (Expert Seeds) is a different breeder's version. Single source. No data.
+- **Zkittzy Gorilla Gorilla Glue #4**: descriptor for the Gorilla Glue #4 x Zkittlez cross. Added as **Gorilla Zkittlez s7379** (four sources): breeder Barney's Farm (Leafly, SeedFinder, Weedmaps), parents Gorilla Glue #4 (Original Glue) x Zkittlez (Leafly, SeedFinder, Weedmaps, AllBud), Hybrid, Indica-leaning (SeedFinder and AllBud 60/40, Weedmaps slightly indica-forward, Leafly indica), THC 20–24% (Leafly 20, AllBud 20–24, breeder 24), effects Relaxed/Happy/Giggly/Sleepy, flavor sweet tropical fruit and chocolate (AllBud, Weedmaps; SeedFinder fruity sugar). Held: terpenes (Leafly only), aliases Gorilla Z / Goz (Leafly lists them, Weedmaps says Gorilla Z is distinct), Gorilla Zkittles (Weedmaps only). Leafly's flavor tags (tar, tobacco, earthy) disagree with the other three and were dropped. Other breeders' versions (Philosopher Seeds, GG4 x Zkittlez) not merged in. Related: Gorilla Zkittlez Auto s4499.
+
+## Gorittlez duplicate check
+
+Searched for a second source tying Gorittlez to Gorilla Zkittlez (s7379): none found (AllBud alone lists Gorittlez; Leafly's Gorilla Zkittlez page does not mention it). No merge. Stays a flagged possible duplicate.
+
+## Sheet row-by-row research — Batch S28 (rows 2996–3000)
+
+- **Zoap**: already in library as s1658 (Deo Farms). Research (Leafly + AllBud) fixed sample-style data via migration batch13: THC 20–26% -> 21–26% (Leafly 21, AllBud 25–26); effects Euphoric/Relaxed/Happy -> Relaxed/Giggly/Hungry (both sources); flavor -> sweet and fruity with an earthy finish (replaced "soapy-clean finish"); generic terpene set cleared; parents Pink Guava x Rainbow Sherbet filled (both sources). Held: alias Zop (Leafly only), terpenes caryophyllene/limonene/humulene (Leafly only), lean (AllBud 50/50). Parent of Space Lemonade s1856, Zealousy s6444, Croissant s6509, Cherry Zoap s6633, Platinum Zoap s5497, Pink Kitty s7234, Sex Panther s5757, Bubbly Boof s3519.
+- **Zoda collab with Raw Genetics**: Zoda is already s6460 (Umami Seed Co; Zkittlez x Acai Gelato x Seattle Soda). Leafly credits Umami Seed Co + Super Seed Co and does not mention Raw Genetics; no source for a Raw Genetics collab. s6460 unchanged. No data for the collab claim.
+- **Zombie Virus** (added s7381): Indica (Leafly "indica", SeedFinder "mostly indica"), flavor diesel with grape undertones (Leafly diesel/grape/chemical, SeedFinder diesel taste with grape undertones). Held: parents pure indica x Diesel (SeedFinder only, with "probably"; a Leafly reviewer says the same, unverified), breeder Lineage Genetics (SeedFinder only), THC 22% and CBD 0.05% (breeder), effects (Leafly sleepy/euphoric/energetic only), alias ZVr (Leafly only). Parent of Black Zombie s3313 and Sweet Zombie s6102.
+- **Zonuts** (added s7380): Umami Seed Co, Runtz x Zuchi, Hybrid (Leafly + SeedFinder); flavor creamy and sweet (Leafly vanilla/butter/sweet/creamy dough, SeedFinder creamy sweet fruit and gas). Held: effects (Leafly energetic/talkative/happy, "mostly calming"), THC, alias Zut, ailments (all Leafly only). Parent of Zeclair s7377, Kreme Pie s2714, Blue Ivory s3365, Gumi s4616 and Cheetah Mintz (not in library). Parent label Zuchi has no entry yet.
+- **Zoolander's Banana OG BX1**: SeedFinder's Zoolander Seeds Banana OG page has no BX1 version (Wedding Cake BX1 is only a Banana Mints parent). Parent label of Banana Mints s3180. No data.
+
+## Sheet row-by-row research — Batch S29 (rows 3001–3006)
+
+- **ZOZ**: sources conflict on genetics. SeedFinder (Dying Breed Seeds): OZ Kush x The Original Z. AllBud ("Zkittlez ZOZ"): Zkittlez x (Zkittlez x OG Eddy Lepp), indica-dominant 70/30, 20–33%, giggly/happy/hungry/sleepy, berry/citrus/sour. Parent-label name only in library (Dozicot s4062 uses Dozizoz). No data.
+- **Zuava**: SeedFinder only (Terp Hogz; description says Zkittlez x Guava, lineage tree says The Original Z x Guava Gelato; effects and flavor on the page are speculative). Parent of Honey Banana Zuava s4684 and So Fresa s5855. No data.
+- **Monkey Bunz**: SeedFinder only (The Bakery Genetics; GG#4 Josey Whales cut x Wedding Cake F2 male; no effects, flavor or THC). No data.
+- **Gummy Bunz** (added s7382): aliases Gummy Buns (Leafly, SeedFinder, GrowDiaries), breeder Exotic Genetix (SeedFinder, GrowDiaries), parents Biscotti x Grease Monkey (SeedFinder, GrowDiaries), Hybrid, effects Happy + Energetic + Focused (Leafly happy/focused/energetic; GrowDiaries happy, "energizing and focusing" early), flavor sweet (Leafly, GrowDiaries). Held: lean (SeedFinder indica 70/30, GrowDiaries leaning indica, Leafly "mostly energizing"), THC ~22% (GrowDiaries only), alias GuB (Leafly only), Relaxed/Creative (GrowDiaries only), the other flavor notes (sources differ: honey/diesel vs earthy/spicy/cinnamon). AllBud had no page. Premium Cultivars also sells a Gummy Buns version. Not the same as White Gummies s7369.
+- **Honey Bunz**: no page under this name. Two different Honey Bun strains exist: Cookies' (Leafly: 23% THC, hungry/tingly/relaxed, honey/tobacco/sage) and Taylormade Selections' (SeedFinder: Honey B x Wedding Cake); a jointcommerce article says Gelatti x Honey B (not independent). No two sources agree on one version. No data.
+
+## Sheet row-by-row research — Batch S30 (rows 3007–3012)
+
+- **Blue Burnout**: already in library as s6566 (Bio Bomb Selections; Bubba Blumese x Purple 710 Gum; SeedFinder + AllBud agree; AllBud 20–21% THC, indica-dominant 70/30, relaxing/euphoric/sleepy, blueberry/grape candy). No changes. Note: library type is "Indica" while AllBud calls it an indica-dominant hybrid (single source), so type left as is.
+- **Burnout Cookies**: no strain page under this name on Leafly, AllBud, SeedFinder or GrowDiaries; only a LivWell dispensary product listing. Burnt Cookies (s3540, Fire OG x GSC) is a different name and was not merged. No data.
+- **Burnout Chem**: SeedFinder only (Dominion Seed Company; Chemdog [D] x Dominion Skunk; breeder's description of a head high and chem/hash flavor). No second source. No data.
+- **Princess Buttercup** (added s7383): breeder Twenty 20 Genetics and parents Dirty Blonde (A5) x Gorilla Butter agreed by SeedFinder + GrowDiaries. Type Hybrid. Held: lean (SeedFinder sativa-dominant, GrowDiaries indica-driven), THC 20% and effects happy/relaxed/sleepy (GrowDiaries only), flavor (both repeat the breeder's raisins/garlic butter/French onion soup line, so not independent). Dirty Blonde (A5) has no library entry.
+- **Butter Cup**: SeedFinder only (SubCool's The Dank, by Badger; Cookies & Cream x Goji OG; 60/40 sativa). No second source. Different from Banana Butter Cup s3167. No data.
+
+## Sheet row-by-row research — Batch S31 (rows 3014–3019)
+
+- **Caked Up Candy** (existing s3552, corrected): AllBud + Weedmaps agree Runtz x Caked Up Cherries, Relentless Genetics (Weedmaps also lists a second, unrelated Captain Seeds Gelato x Wedding Cake version, ignored), and both call it a hybrid. Both report relaxation and appetite. Type Indica → Hybrid; effects Euphoric/Uplifted/Sociable → Relaxed + Hungry; unsupported Caryophyllene/Limonene terps blanked (migration batch14). Kept: lean Indica-leaning (AllBud 60/40), THC 30–38% (AllBud only, left as is), flavor, breeder, parents.
+- **Double Baked Cake**: AllBud only (Layer Cake x Wedding Cake, 31–32% THC, hybrid 50/50). Binske/IKHCO listings are brand products, not strain sources. Leafly page unreachable. No data.
+- **Hellcat #15**: only a Kings & Queens dispensary product listing (no genetics). AllBud's Hellcat (Raskal's OG x SFV OG Kush) does not mention a #15 cut. No data.
+- **RO93**: no strain page found on any source. No data.
+- **Runtz S1**: SeedFinder lists Nasha Genetics, Turn It Up Genetics (also Exotic Genetix and Clone Quest guides exist), each a Runtz x Runtz reversal/selfing with no effects, flavor or THC. Different breeders' versions of the same name, and the only source is SeedFinder. Plain Runtz s1517 unchanged. No data.

@@ -55000,30 +55000,21 @@
     "type": "Hybrid",
     "lean": null,
     "rarity": "rare",
-    "thc": "20–26%",
+    "thc": "21–26%",
     "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Caryophyllene",
-        "p": 0.3
-      },
-      {
-        "n": "Limonene",
-        "p": 0.25
-      },
-      {
-        "n": "Myrcene",
-        "p": 0.2
-      }
-    ],
+    "terps": [],
     "effects": [
-      "Euphoric",
       "Relaxed",
-      "Happy"
+      "Giggly",
+      "Hungry"
     ],
-    "flavor": "Sweet floral and tropical fruit with a distinctive soapy-clean finish.",
+    "flavor": "sweet and fruity with an earthy finish",
     "icon": "🧼",
-    "breeder": "Deo Farms"
+    "breeder": "Deo Farms",
+    "parents": [
+      "Pink Guava",
+      "Rainbow Sherbet"
+    ]
   },
   {
     "id": "s1659",
@@ -99644,25 +99635,15 @@
   },
   {
     "name": "Caked Up Candy",
-    "type": "Indica",
+    "type": "Hybrid",
     "lean": "Indica-leaning",
     "rarity": "uncommon",
     "thc": "30-38%",
     "cbd": "",
-    "terps": [
-      {
-        "n": "Caryophyllene",
-        "p": 0.2
-      },
-      {
-        "n": "Limonene",
-        "p": 0.15
-      }
-    ],
+    "terps": [],
     "effects": [
-      "Euphoric",
-      "Uplifted",
-      "Sociable"
+      "Relaxed",
+      "Hungry"
     ],
     "flavor": "Sugary sweet vanilla, fruity berry candy.",
     "icon": "🍬",
@@ -188551,6 +188532,112 @@
       "Mexican Sativa Landrace (Jalisco)"
     ],
     "aka": "Zacatecas Purple",
+    "ailments": []
+  },
+  {
+    "id": "s7379",
+    "name": "Gorilla Zkittlez",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20–24%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Giggly",
+      "Sleepy"
+    ],
+    "flavor": "sweet tropical fruit and chocolate",
+    "icon": "🌿",
+    "breeder": "Barney's Farm",
+    "parents": [
+      "Gorilla Glue #4",
+      "Zkittlez"
+    ],
+    "aka": "",
+    "ailments": []
+  },
+  {
+    "id": "s7380",
+    "name": "Zonuts",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "creamy and sweet",
+    "icon": "🌿",
+    "breeder": "Umami Seed Co",
+    "parents": [
+      "Runtz",
+      "Zuchi"
+    ],
+    "aka": "",
+    "ailments": []
+  },
+  {
+    "id": "s7381",
+    "name": "Zombie Virus",
+    "type": "Indica",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "diesel with grape undertones",
+    "icon": "🌿",
+    "breeder": "",
+    "parents": [],
+    "aka": "",
+    "ailments": []
+  },
+  {
+    "id": "s7382",
+    "name": "Gummy Bunz",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Energetic",
+      "Focused"
+    ],
+    "flavor": "sweet",
+    "icon": "🌿",
+    "breeder": "Exotic Genetix",
+    "parents": [
+      "Biscotti",
+      "Grease Monkey"
+    ],
+    "aka": "Gummy Buns",
+    "ailments": []
+  },
+  {
+    "id": "s7383",
+    "name": "Princess Buttercup",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "Twenty 20 Genetics",
+    "parents": [
+      "Dirty Blonde (A5)",
+      "Gorilla Butter"
+    ],
+    "aka": "",
     "ailments": []
   }
 ]
