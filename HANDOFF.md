@@ -150,10 +150,14 @@ History scan found features lost to old whole-file uploads (server.js dropped
 - **Duplicate recipe fixed:** the second recipe is now titled "Cannabis Rice
   Krispie Treats (Leftover Cannabutter)", so both publish (expect 108 recipes
   live after the next deploy).
-- **The 72 new strains are not "broken stubs."** 61% of the existing library
-  has no terpene data, and "rare" is the normal rating for strains with no
-  data. Terpenes/effects stay blank until a source clears the 2-source rule
-  in docs/strain-research-log.md; never fill them in by guesswork.
+- **The 72 new strains (s7269+) are not "broken stubs."** 61% of the existing
+  library has no terpene data, and "rare" is the normal rating for strains with
+  no data. They still have blank terpenes/effects/flavor; fill those in only
+  by per-strain research following docs/strain-research-log.md (real sources,
+  honest empties, never guessed). A research batch on them has NOT been done.
+  (The "2+ independent sources" rule in that log is specifically for lineage
+  of ambiguous/multi-version names; THC is cross-checked against Cannlytics
+  lab data.)
 
 ### Housekeeping flags
 - `docs/` is for images only (the server now refuses to serve anything else
@@ -557,3 +561,6 @@ desktop browser) hasn't been confirmed by Alissa since this fix shipped.
 - Prefers being given a short menu of concrete options (via the
   `ask_user_input_v0` tool) over open-ended "what do you want?" questions,
   especially for visual/creative decisions.
+
+## Strain research batch 1 (2026-10-19)
+s7269–s7273 researched one name at a time (see docs/strain-research-log.md for sources). Standing rules from Alissa: speed never overrides research integrity; never bulk-search; fix related entries when a finding warrants it. Shipped via seed blank-fills + migration `strain_research_batch1_2026_10_19` (2 compare-and-set THC changes). Open questions: terpene storage convention (templated p-values in ~1,360 strains are not measurements), Depression/Cramps/Migraine ailments, La Reunion landrace entry missing from library.

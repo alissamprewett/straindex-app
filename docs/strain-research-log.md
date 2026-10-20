@@ -252,3 +252,24 @@ agreeing with one of the versions already found.
   among the three, and the plain "Boss" (without "OG") wasn't confirmably
   distinguished from "Boss OG" in any source, adding another layer of
   ambiguity on top of the parentage conflict itself.
+
+---
+
+## Rules added 2026-10-19 (Alissa)
+- **Speed never influences research integrity.** Never bulk search. Every strain name is searched on its own, and each source is fetched and read separately.
+- **If a finding helps another entry, fix that entry too** (and report it). Goal: as much corroborated information per strain as possible.
+- Only write a value when 2+ independent sources agree. Single-source facts are logged and held back, not written.
+- Terpene *names* are held back for now (see open question below); never write percentages that are not real measurements.
+
+## Batch 1 — s7269 to s7273 (2026-10-19)
+Changes ship as blank-fills via seed.js plus compare-and-set migration `strain_research_batch1_2026_10_19`.
+- **s7269 Red Velvet Runtz**: breeder LIT Farms; THC 15–31% -> 28–31% (AllBud header 31%, Weedmaps 30.7%, LAX 28.1%); effects, flavor, ailments added; parents/type confirmed by 7 sources.
+- **s7270 Redneck Wedding**: breeder Surfr Seeds; THC 22–29%; effects Relaxed/Giggly/Uplifted; flavor; ailment Anxiety. Parents confirmed (AllBud, SeedFinder, Surfr, Weedmaps, Cropking). Rejected: jointcommerce blog (self-contradicting).
+- **s7271 Reina Madre (aka Queen Mother)**: breeder Delicatessen Seeds; parents La Reunion x Congo #1 (AllBud, SeedFinder, Cannapedia, Strainpedia agree in substance); THC 17–18% -> 17–22%; effects/flavor added. Conflicting versions NOT used: Mexican sativa parent (marijuanaseeds), Spanish landrace x (Jack Herer x Black Domina) (PiffinTen).
+- **s7272 Reunion OG**: breeder Skunk House Genetics (SeedFinder; single source); parents confirmed (AllBud + SeedFinder). Effects/flavor/ailments HELD (AllBud only).
+- **s7273 Ripped Bubba**: CBD 0–2%; effects Creative/Relaxed; flavor; ailments Stress/Pain. THC HELD BLANK (Leafly 16%, AllBud 22–26% [maybe parent's], BC retail 28–32%). Breeder kept as "TGA Seeds" (library convention).
+
+### Unconfirmed / held back
+- Terpenes for all five (names corroborated for some, but storage convention undecided).
+- Ailments "Depression" (s7270, s7273), "Cramps" (s7270), "Migraines/Headaches" (s7271): not written pending Alissa's decision.
+- Reunion OG effects/flavor; Ripped Bubba THC.

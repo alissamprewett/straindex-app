@@ -186083,19 +186083,29 @@
     "type": "Hybrid",
     "lean": "Indica-leaning",
     "rarity": "rare",
-    "thc": "15–31%",
+    "thc": "28–31%",
     "cbd": "0–1%",
     "terps": [],
-    "effects": [],
-    "flavor": "",
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Uplifted",
+      "Tingly",
+      "Euphoric"
+    ],
+    "flavor": "sweet cherry candy over creamy chocolate and vanilla cake, faint gassy finish",
     "icon": "🌿",
-    "breeder": "",
+    "breeder": "LIT Farms",
     "parents": [
       "Red Velvet",
       "Runtz"
     ],
     "aka": "",
-    "ailments": null
+    "ailments": [
+      "Stress",
+      "Insomnia",
+      "Pain"
+    ]
   },
   {
     "id": "s7270",
@@ -186103,19 +186113,25 @@
     "type": "Hybrid",
     "lean": "Indica-leaning",
     "rarity": "rare",
-    "thc": "",
+    "thc": "22–29%",
     "cbd": "",
     "terps": [],
-    "effects": [],
-    "flavor": "",
+    "effects": [
+      "Relaxed",
+      "Giggly",
+      "Uplifted"
+    ],
+    "flavor": "fresh coffee and skunk with a sweet, spicy finish",
     "icon": "🌿",
-    "breeder": "",
+    "breeder": "Surfr Seeds",
     "parents": [
       "GMO",
       "Trophy Wife"
     ],
     "aka": "",
-    "ailments": null
+    "ailments": [
+      "Anxiety"
+    ]
   },
   {
     "id": "s7271",
@@ -186123,14 +186139,23 @@
     "type": "Hybrid",
     "lean": "Sativa-leaning",
     "rarity": "rare",
-    "thc": "17–18%",
+    "thc": "17–22%",
     "cbd": "",
     "terps": [],
-    "effects": [],
-    "flavor": "",
+    "effects": [
+      "Creative",
+      "Euphoric",
+      "Uplifted",
+      "Focused",
+      "Energetic"
+    ],
+    "flavor": "herbal, earthy spice with a piney edge",
     "icon": "🌿",
-    "breeder": "",
-    "parents": [],
+    "breeder": "Delicatessen Seeds",
+    "parents": [
+      "La Reunion",
+      "Congo #1"
+    ],
     "aka": "Queen Mother",
     "ailments": null
   },
@@ -186146,7 +186171,7 @@
     "effects": [],
     "flavor": "",
     "icon": "🌿",
-    "breeder": "",
+    "breeder": "Skunk House Genetics",
     "parents": [
       "Chemdawg #4",
       "Larry OG"
@@ -186161,10 +186186,13 @@
     "lean": "Indica-leaning",
     "rarity": "rare",
     "thc": "",
-    "cbd": "",
+    "cbd": "0–2%",
     "terps": [],
-    "effects": [],
-    "flavor": "",
+    "effects": [
+      "Creative",
+      "Relaxed"
+    ],
+    "flavor": "sweet cherry and lemon with an herbal, spicy, earthy finish",
     "icon": "🌿",
     "breeder": "TGA Seeds",
     "parents": [
@@ -186172,7 +186200,10 @@
       "Jack the Ripper"
     ],
     "aka": "Ripped Bubba Kush",
-    "ailments": null
+    "ailments": [
+      "Stress",
+      "Pain"
+    ]
   },
   {
     "id": "s7274",
