@@ -162,6 +162,11 @@
     "parents": [
       "Brazilian Sativa",
       "South Indian Indica"
+    ],
+    "ailments": [
+      "Pain",
+      "Stress",
+      "Anxiety"
     ]
   },
   {
@@ -2350,7 +2355,7 @@
     "type": "Hybrid",
     "lean": "Indica-leaning",
     "rarity": "common",
-    "thc": "",
+    "thc": "18–21%",
     "cbd": "",
     "terps": [],
     "effects": [
@@ -7694,7 +7699,7 @@
     "id": "s214",
     "name": "White Rhino",
     "type": "Hybrid",
-    "lean": "",
+    "lean": "Indica-dominant",
     "rarity": "common",
     "thc": "14–20%",
     "cbd": "<1%",
@@ -7727,6 +7732,10 @@
       "Insomnia",
       "Depression",
       "Lack of Appetite"
+    ],
+    "parents": [
+      "White Widow",
+      "North American Indica"
     ]
   },
   {
@@ -13712,35 +13721,20 @@
     "type": "Indica",
     "lean": "",
     "rarity": "uncommon",
-    "thc": "16–24%",
-    "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Linalool",
-        "p": 0.4
-      },
-      {
-        "n": "Myrcene",
-        "p": 0.27
-      },
-      {
-        "n": "Terpinolene",
-        "p": 0.16
-      }
-    ],
+    "thc": "",
+    "cbd": "",
+    "terps": [],
     "effects": [
       "Relaxed",
-      "Talkative",
-      "Happy",
-      "Uplifted"
+      "Euphoric",
+      "Talkative"
     ],
-    "flavor": "Sweet and berry on the palate with a linalool-leaning finish.",
+    "flavor": "sweet honey and berry",
     "icon": "🍬",
-    "ailments": [
-      "Depression",
-      "Stress",
-      "Insomnia",
-      "Lack of Appetite"
+    "ailments": [],
+    "parents": [
+      "Sweet Tooth #3",
+      "Chemo"
     ]
   },
   {
@@ -13749,51 +13743,37 @@
     "type": "Indica",
     "lean": "",
     "rarity": "common",
-    "thc": "12–19%",
+    "thc": "12–21%",
     "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Myrcene",
-        "p": 0.4
-      },
-      {
-        "n": "Pinene",
-        "p": 0.27
-      },
-      {
-        "n": "Caryophyllene",
-        "p": 0.16
-      }
-    ],
+    "terps": [],
     "effects": [
       "Sleepy",
       "Relaxed",
-      "Happy",
       "Euphoric"
     ],
-    "flavor": "Earthy and pine on the palate with a myrcene-leaning finish.",
+    "flavor": "pine and woody with lemon notes",
     "icon": "🌰",
-    "ailments": [
-      "Stress",
-      "Pain",
-      "Insomnia",
-      "Depression",
-      "Lack of Appetite"
+    "ailments": [],
+    "parents": [
+      "OG Kush",
+      "XXX"
     ]
   },
   {
     "id": "s381",
     "name": "Zkittlez",
-    "type": "Indica",
+    "type": "Hybrid",
     "lean": "",
     "rarity": "common",
     "thc": "",
     "cbd": "",
     "terps": [],
     "effects": [
-      "Relaxed"
+      "Relaxed",
+      "Happy",
+      "Sleepy"
     ],
-    "flavor": "",
+    "flavor": "sweet berry and grape with tropical grapefruit",
     "icon": "🍬",
     "ailments": [
       "Stress",
@@ -15243,6 +15223,9 @@
       "Insomnia",
       "Pain",
       "Depression"
+    ],
+    "parents": [
+      "OG Kush"
     ]
   },
   {
@@ -20997,7 +20980,7 @@
     "id": "s580",
     "name": "White OG",
     "type": "Hybrid",
-    "lean": "",
+    "lean": "Indica-dominant",
     "rarity": "uncommon",
     "thc": "22–29%",
     "cbd": "<1%",
@@ -21030,6 +21013,10 @@
       "Insomnia",
       "Depression",
       "Nausea"
+    ],
+    "parents": [
+      "The White",
+      "SFV OG Kush"
     ]
   },
   {
@@ -26948,10 +26935,10 @@
     "id": "s742",
     "name": "White Fire 43",
     "type": "Indica",
-    "lean": "",
+    "lean": "Indica-dominant",
     "rarity": "common",
     "thc": "22–28%",
-    "cbd": "19–21%",
+    "cbd": "",
     "terps": [
       {
         "n": "Linalool",
@@ -26979,7 +26966,12 @@
       "Pain",
       "Depression",
       "Insomnia"
-    ]
+    ],
+    "breeder": "OG Raskal Genetics",
+    "parents": [
+      "White Fire OG"
+    ],
+    "aka": "WiFi 43"
   },
   {
     "id": "s743",
@@ -42765,7 +42757,7 @@
     "type": "Hybrid",
     "lean": "",
     "rarity": "rare",
-    "thc": "",
+    "thc": "20–23%",
     "cbd": "",
     "terps": [],
     "effects": [
@@ -42778,6 +42770,12 @@
     "aka": "Cheese, Cognitiva",
     "parents": [
       "Skunk #1"
+    ],
+    "ailments": [
+      "Stress",
+      "Pain",
+      "Anxiety",
+      "Insomnia"
     ]
   },
   {
@@ -53969,9 +53967,9 @@
     "id": "s1618",
     "name": "White Truffle",
     "type": "Hybrid",
-    "lean": "Indica-leaning",
+    "lean": "Indica-dominant",
     "rarity": "rare",
-    "thc": "",
+    "thc": "23–28%",
     "cbd": "",
     "terps": [],
     "effects": [
@@ -67881,7 +67879,7 @@
       "Gelato",
       "White Cherry"
     ],
-    "aka": "White Gelato, White Cherry, White Cherry Truffle",
+    "aka": "White Gelato, White Cherry",
     "id": "s2198"
   },
   {
@@ -84206,7 +84204,7 @@
     "id": "s2912"
   },
   {
-    "name": "TMZ (True Mintz)",
+    "name": "TMZ",
     "type": "Indica",
     "lean": "Indica-leaning",
     "rarity": "uncommon",
@@ -84219,7 +84217,7 @@
     ],
     "flavor": "Sweet minty flavor.",
     "icon": "🌿",
-    "aka": "True Mintz",
+    "aka": "",
     "breeder": "Seed Junky Genetics",
     "parents": [
       "Triangle Kush",
@@ -167470,9 +167468,9 @@
   {
     "name": "Z Face",
     "type": "Hybrid",
-    "lean": "Sativa-dominant",
+    "lean": "Sativa-leaning",
     "rarity": "uncommon",
-    "thc": "20-29%",
+    "thc": "20–26%",
     "cbd": "",
     "terps": [],
     "effects": [
@@ -167482,12 +167480,13 @@
     ],
     "flavor": "Sweet sugary fruity citrus candy, spicy kush.",
     "icon": "🍬",
-    "breeder": null,
+    "breeder": "Archive Seed Bank",
     "parents": [
       "Zkittlez",
       "Face Off OG"
     ],
-    "id": "s6434"
+    "id": "s6434",
+    "aka": "Z-Face, ZFace"
   },
   {
     "name": "Z Mints",
@@ -178772,6 +178771,11 @@
     "parents": [
       "MAC",
       "The White"
+    ],
+    "ailments": [
+      "Anxiety",
+      "Depression",
+      "Pain"
     ]
   },
   {
@@ -186380,7 +186384,7 @@
     "parents": [
       "OG Kush"
     ],
-    "aka": "San Fernando Valley OG, San Fernando Valley, SFVOG, SFV O.G., Valley OG",
+    "aka": "San Fernando Valley OG, San Fernando Valley, SFVOG, SFV O.G.",
     "ailments": [
       "Stress",
       "Pain",
@@ -187074,16 +187078,23 @@
     "thc": "",
     "cbd": "",
     "terps": [],
-    "effects": [],
-    "flavor": "",
+    "effects": [
+      "Relaxed",
+      "Happy"
+    ],
+    "flavor": "sweet and earthy",
     "icon": "🌿",
     "breeder": "Archive Seed Bank",
     "parents": [
       "Paris OG",
       "Face Off OG"
     ],
-    "aka": "Stuffed French Toast",
-    "ailments": null
+    "aka": "",
+    "ailments": [
+      "Stress",
+      "Anxiety",
+      "Depression"
+    ]
   },
   {
     "id": "s7313",
@@ -187857,6 +187868,689 @@
       "Permanent Marker"
     ],
     "aka": "",
+    "ailments": []
+  },
+  {
+    "id": "s7349",
+    "name": "Rozé",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "19–21%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Creative",
+      "Happy",
+      "Uplifted"
+    ],
+    "flavor": "sweet and floral with strawberry",
+    "icon": "🌿",
+    "breeder": "Dying Breed Seeds",
+    "parents": [
+      "Zkittlez"
+    ],
+    "aka": "Roze",
+    "ailments": [
+      "Stress",
+      "Depression",
+      "Nausea",
+      "Anxiety"
+    ]
+  },
+  {
+    "id": "s7350",
+    "name": "Banana Pudding",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Giggly"
+    ],
+    "flavor": "vanilla",
+    "icon": "🌿",
+    "breeder": "",
+    "parents": [
+      "Girl Scout Cookies",
+      "Banana OG"
+    ],
+    "aka": "",
+    "ailments": [
+      "Stress",
+      "Depression"
+    ]
+  },
+  {
+    "id": "s7351",
+    "name": "Slurricane #7",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "In House Genetics",
+    "parents": [
+      "Do-Si-Dos",
+      "Purple Punch"
+    ],
+    "aka": "",
+    "ailments": []
+  },
+  {
+    "id": "s7352",
+    "name": "Sweatband",
+    "type": "Hybrid",
+    "lean": "Sativa-dominant",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "sour and chemical",
+    "icon": "🌿",
+    "breeder": "",
+    "parents": [
+      "707 Headband",
+      "Chemdawg"
+    ],
+    "aka": "",
+    "ailments": []
+  },
+  {
+    "id": "s7353",
+    "name": "Tropical Papayaz",
+    "type": "Hybrid",
+    "lean": "Indica-dominant",
+    "rarity": "rare",
+    "thc": "23–25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed"
+    ],
+    "flavor": "sweet tropical papaya",
+    "icon": "🌿",
+    "breeder": "808 Genetics",
+    "parents": [
+      "Papaya",
+      "Zkittlez"
+    ],
+    "aka": "",
+    "ailments": [
+      "Stress"
+    ]
+  },
+  {
+    "id": "s7354",
+    "name": "True Chocolate",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "Copycat Genetix",
+    "parents": [
+      "Chocolate Diesel",
+      "Chocolate Thai",
+      "Chocolate Strawberry"
+    ],
+    "aka": "",
+    "ailments": []
+  },
+  {
+    "id": "s7355",
+    "name": "True Mints",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "rare",
+    "thc": "30–32%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Focused",
+      "Relaxed",
+      "Uplifted"
+    ],
+    "flavor": "mint with sweet and sour citrus",
+    "icon": "🌿",
+    "breeder": "",
+    "parents": [
+      "True OG",
+      "Kush Mints"
+    ],
+    "aka": "True Mint, True Mintz",
+    "ailments": []
+  },
+  {
+    "id": "s7356",
+    "name": "Turbo Diesel",
+    "type": "Hybrid",
+    "lean": "Sativa-leaning",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Uplifted",
+      "Happy"
+    ],
+    "flavor": "diesel",
+    "icon": "🌿",
+    "breeder": "MTG Seeds",
+    "parents": [
+      "Sour Diesel",
+      "Sour Kush"
+    ],
+    "aka": "",
+    "ailments": [
+      "Depression"
+    ]
+  },
+  {
+    "id": "s7357",
+    "name": "Ultimate Purple",
+    "type": "Hybrid",
+    "lean": "Indica-dominant",
+    "rarity": "uncommon",
+    "thc": "19–24%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Euphoric",
+      "Sleepy"
+    ],
+    "flavor": "sweet grape",
+    "icon": "🌿",
+    "breeder": "BC Bud Depot",
+    "parents": [
+      "The Purps",
+      "Purple Urkle",
+      "Granddaddy Purple",
+      "Grape Ape",
+      "SR71 Purple Kush"
+    ],
+    "aka": "",
+    "ailments": [
+      "Pain",
+      "Stress",
+      "Insomnia"
+    ]
+  },
+  {
+    "id": "s7358",
+    "name": "UW Purple",
+    "type": "Hybrid",
+    "lean": "Indica-dominant",
+    "rarity": "uncommon",
+    "thc": "19–21%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Sleepy"
+    ],
+    "flavor": "sweet grape and berry",
+    "icon": "🌿",
+    "breeder": "",
+    "parents": [],
+    "aka": "UW Purp",
+    "ailments": [
+      "Insomnia",
+      "Stress",
+      "Pain"
+    ]
+  },
+  {
+    "id": "s7359",
+    "name": "Valley OG",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "24–25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Creative",
+      "Happy",
+      "Energetic"
+    ],
+    "flavor": "lemon and citrus with a cheesy skunk note",
+    "icon": "🌿",
+    "breeder": "",
+    "parents": [
+      "SFV OG"
+    ],
+    "aka": "",
+    "ailments": []
+  },
+  {
+    "id": "s7360",
+    "name": "Vanilla Cheesecake",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed"
+    ],
+    "flavor": "sweet vanilla cream with a cheesy note",
+    "icon": "🌿",
+    "breeder": "Happy Dreams Genetics",
+    "parents": [
+      "Vanilla Frosting"
+    ],
+    "aka": "",
+    "ailments": [
+      "Pain",
+      "Stress",
+      "Migraines"
+    ]
+  },
+  {
+    "id": "s7361",
+    "name": "Vietnamese Black",
+    "type": "Sativa",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Focused",
+      "Creative"
+    ],
+    "flavor": "citrus with earthy, spicy herbal notes",
+    "icon": "🌿",
+    "breeder": "",
+    "parents": [],
+    "aka": "Vietnam Black",
+    "ailments": [
+      "Depression",
+      "Stress"
+    ]
+  },
+  {
+    "id": "s7362",
+    "name": "Wagyu",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed"
+    ],
+    "flavor": "gassy diesel",
+    "icon": "🌿",
+    "breeder": "Clout King",
+    "parents": [
+      "Meat Breath"
+    ],
+    "aka": "",
+    "ailments": []
+  },
+  {
+    "id": "s7363",
+    "name": "Wakanda OG",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Creative",
+      "Happy"
+    ],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "",
+    "parents": [
+      "Cookies",
+      "OG Kush",
+      "Gorilla Glue #4"
+    ],
+    "aka": "Wakanda",
+    "ailments": []
+  },
+  {
+    "id": "s7364",
+    "name": "Wellness OG",
+    "type": "Hybrid",
+    "lean": "Sativa-dominant",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric"
+    ],
+    "flavor": "pine and diesel with lime",
+    "icon": "🌿",
+    "breeder": "",
+    "parents": [
+      "OG Kush"
+    ],
+    "aka": "",
+    "ailments": [
+      "Depression",
+      "Pain",
+      "Stress"
+    ]
+  },
+  {
+    "id": "s7365",
+    "name": "White Alien",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "DNA Genetics",
+    "parents": [
+      "Martian Mean Green",
+      "White Widow"
+    ],
+    "aka": "",
+    "ailments": []
+  },
+  {
+    "id": "s7366",
+    "name": "White Cherry Truffle",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20–25%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Uplifted",
+      "Relaxed"
+    ],
+    "flavor": "sweet cherry and chocolate over diesel and rose",
+    "icon": "🌿",
+    "breeder": "Aficionado Seed Collection",
+    "parents": [
+      "Cherry Noir",
+      "Highland Afghani"
+    ],
+    "aka": "",
+    "ailments": [
+      "Insomnia",
+      "Pain"
+    ]
+  },
+  {
+    "id": "s7367",
+    "name": "White Chocolate",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Creative"
+    ],
+    "flavor": "coffee with cherry notes",
+    "icon": "🌿",
+    "breeder": "",
+    "parents": [
+      "Chocolope",
+      "White Moonshine"
+    ],
+    "aka": "",
+    "ailments": []
+  },
+  {
+    "id": "s7368",
+    "name": "Walter White",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "citrus",
+    "icon": "🌿",
+    "breeder": "Mephisto Genetics",
+    "parents": [
+      "The White"
+    ],
+    "aka": "",
+    "ailments": []
+  },
+  {
+    "id": "s7369",
+    "name": "White Gummies",
+    "type": "Hybrid",
+    "lean": "Indica-dominant",
+    "rarity": "uncommon",
+    "thc": "26–28%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Uplifted"
+    ],
+    "flavor": "sweet blueberry and vanilla candy",
+    "icon": "🌿",
+    "breeder": "Compound Genetics",
+    "parents": [
+      "White Runtz",
+      "Gummiez"
+    ],
+    "aka": "White Gummiez, White Gummy",
+    "ailments": []
+  },
+  {
+    "id": "s7370",
+    "name": "White Taffi",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "creamy menthol with nutty and tropical fruit notes",
+    "icon": "🌿",
+    "breeder": "Doja Seeds",
+    "parents": [],
+    "aka": "",
+    "ailments": []
+  },
+  {
+    "id": "s7371",
+    "name": "William's Wonder",
+    "type": "Indica",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "19–23%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Euphoric"
+    ],
+    "flavor": "sweet citrus and tropical fruit",
+    "icon": "🌿",
+    "breeder": "Super Sativa Seed Club",
+    "parents": [
+      "Afghani"
+    ],
+    "aka": "Willy's Wonder, Willie's Wonder",
+    "ailments": []
+  },
+  {
+    "id": "s7372",
+    "name": "Wonder Woman",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "16–18%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Focused",
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "sweet and skunky with fruity notes",
+    "icon": "🌿",
+    "breeder": "",
+    "parents": [],
+    "aka": "",
+    "ailments": []
+  },
+  {
+    "id": "s7373",
+    "name": "Wowzers",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "sweet strawberry candy and berry with gassy notes",
+    "icon": "🌿",
+    "breeder": "Exotic Genetix",
+    "parents": [
+      "Runtz",
+      "Strawberries and Cream"
+    ],
+    "aka": "",
+    "ailments": []
+  },
+  {
+    "id": "s7374",
+    "name": "Yeti OG",
+    "type": "Indica",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "20–23%",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "gassy diesel",
+    "icon": "🌿",
+    "breeder": "Loompa Farms",
+    "parents": [],
+    "aka": "Headband BX",
+    "ailments": []
+  },
+  {
+    "id": "s7375",
+    "name": "Yellow Brick Road",
+    "type": "Hybrid",
+    "lean": "Sativa-dominant",
+    "rarity": "uncommon",
+    "thc": "14–21%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Relaxed"
+    ],
+    "flavor": "spicy",
+    "icon": "🌿",
+    "breeder": "",
+    "parents": [
+      "Ghost Train Haze",
+      "OZ Kush BX1"
+    ],
+    "aka": "",
+    "ailments": []
+  },
+  {
+    "id": "s7376",
+    "name": "Z OG",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Happy",
+      "Uplifted"
+    ],
+    "flavor": "sweet berry and blueberry with pineapple",
+    "icon": "🌿",
+    "breeder": "",
+    "parents": [
+      "Zkittlez",
+      "OG Kush"
+    ],
+    "aka": "ZOG, Z-OG",
+    "ailments": []
+  },
+  {
+    "id": "s7377",
+    "name": "Zeclair",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed"
+    ],
+    "flavor": "vanilla and sweet with gassy notes",
+    "icon": "🌿",
+    "breeder": "Umami Seed Co",
+    "parents": [
+      "Cold Heat",
+      "Zonuts"
+    ],
+    "aka": "",
+    "ailments": []
+  },
+  {
+    "id": "s7378",
+    "name": "Purple Zacatecas",
+    "type": "Sativa",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "",
+    "parents": [
+      "Mexican Sativa Landrace (Jalisco)"
+    ],
+    "aka": "Zacatecas Purple",
     "ailments": []
   }
 ]
