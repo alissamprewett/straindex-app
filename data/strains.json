@@ -186130,7 +186130,9 @@
     ],
     "aka": "",
     "ailments": [
-      "Anxiety"
+      "Anxiety",
+      "Depression",
+      "Cramps"
     ]
   },
   {
@@ -186157,7 +186159,9 @@
       "Congo #1"
     ],
     "aka": "Queen Mother",
-    "ailments": null
+    "ailments": [
+      "Migraines"
+    ]
   },
   {
     "id": "s7272",
@@ -186202,7 +186206,8 @@
     "aka": "Ripped Bubba Kush",
     "ailments": [
       "Stress",
-      "Pain"
+      "Pain",
+      "Depression"
     ]
   },
   {
@@ -187484,5 +187489,24 @@
     ],
     "aka": "",
     "ailments": null
+  },
+  {
+    "id": "s7341",
+    "name": "La Reunion",
+    "type": "Sativa",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic"
+    ],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "",
+    "parents": [],
+    "aka": "La Reunion Sativa",
+    "ailments": []
   }
 ]

@@ -564,3 +564,5 @@ desktop browser) hasn't been confirmed by Alissa since this fix shipped.
 
 ## Strain research batch 1 (2026-10-19)
 s7269–s7273 researched one name at a time (see docs/strain-research-log.md for sources). Standing rules from Alissa: speed never overrides research integrity; never bulk-search; fix related entries when a finding warrants it. Shipped via seed blank-fills + migration `strain_research_batch1_2026_10_19` (2 compare-and-set THC changes). Open questions: terpene storage convention (templated p-values in ~1,360 strains are not measurements), Depression/Cramps/Migraine ailments, La Reunion landrace entry missing from library.
+
+Follow-up same day: Depression/Cramps/Migraines ailments approved (asterisk + 'not medical advice' on strain page; Cramps/Migraines added to the By Relief filter); migration `strain_research_batch1b_2026_10_19`; new entry s7341 La Reunion. Open: Zamal entry, Congo #1 vs Congo, terpene storage convention.

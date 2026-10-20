@@ -1240,7 +1240,7 @@ function pageStrains(req, res, query) {
   if (effect && effect !== 'All' && !effectOpts.includes(effect)) effectOpts.push(effect);
   const thcOpts = ['All', 'Low', 'Medium', 'High'];
   const terpeneOpts = ['All', 'Myrcene', 'Limonene', 'Caryophyllene', 'Pinene', 'Linalool', 'Terpinolene', 'Humulene', 'Ocimene'];
-  const ailmentOpts = ['All', 'Stress', 'Pain', 'Depression', 'Insomnia', 'Anxiety', 'Lack of Appetite', 'Nausea', 'Inflammation', 'Muscle Spasms', 'Seizures'];
+  const ailmentOpts = ['All', 'Stress', 'Pain', 'Depression', 'Insomnia', 'Anxiety', 'Lack of Appetite', 'Nausea', 'Inflammation', 'Muscle Spasms', 'Cramps', 'Migraines', 'Seizures'];
   const verifiedOpts = ['All', 'verified', 'partial', 'listed'];
   const verifiedLabel = { All: 'Any data quality', verified: '✅ Verified', partial: '🔹 Partially verified', listed: '⚪ Listed only' };
   const thcLabel = { All: 'Any THC', Low: 'Low (≤15%)', Medium: 'Medium (15–25%)', High: 'High (25%+)' };
@@ -1544,8 +1544,8 @@ function pageStrainDetail(req, res, id) {
         `;
       })()}
       ${Array.isArray(s.ailments) && s.ailments.length ? `
-        <p style="margin:10px 0 2px;"><b>Users report relief from:</b> ${renderAilmentPills(s.ailments)}</p>
-        <p class="empty-note" style="padding:0;">User-reported, not medical advice — see a doctor for real guidance.</p>
+        <p style="margin:10px 0 2px;"><b>Users report relief from<span title="Not medical advice" style="color:#c0392b;">*</span>:</b> ${renderAilmentPills(s.ailments)}</p>
+        <p class="empty-note" style="padding:0;"><b style="color:#c0392b;">*</b> User-reported associations only. <b>This is not medical advice</b> — see a doctor for real guidance.</p>
       ` : ''}
     </div>
     ${renderFamilyTree(s)}
