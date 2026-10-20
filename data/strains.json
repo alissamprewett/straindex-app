@@ -186250,10 +186250,12 @@
     "cbd": "",
     "terps": [],
     "effects": [],
-    "flavor": "",
+    "flavor": "bright, unmistakable citrus and lemon Haze flavor",
     "icon": "🌿",
     "breeder": "Ripper Seeds",
-    "parents": [],
+    "parents": [
+      "Amnesia Haze"
+    ],
     "aka": "",
     "ailments": null
   },
@@ -186266,8 +186268,12 @@
     "thc": "",
     "cbd": "",
     "terps": [],
-    "effects": [],
-    "flavor": "",
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Sleepy"
+    ],
+    "flavor": "pungent skunk and diesel with an earthy edge",
     "icon": "🌿",
     "breeder": "CannaVenture Seeds",
     "parents": [
@@ -186284,10 +186290,15 @@
     "lean": "Indica-leaning",
     "rarity": "rare",
     "thc": "",
-    "cbd": "",
-    "terps": [],
+    "cbd": "0–1%",
+    "terps": [
+      {
+        "n": "Limonene",
+        "p": 0.4
+      }
+    ],
     "effects": [],
-    "flavor": "",
+    "flavor": "classic root beer and frothy vanilla, sweet and earthy",
     "icon": "🌿",
     "breeder": "",
     "parents": [
@@ -186325,9 +186336,14 @@
     "rarity": "rare",
     "thc": "",
     "cbd": "",
-    "terps": [],
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.4
+      }
+    ],
     "effects": [],
-    "flavor": "",
+    "flavor": "sweet floral aroma with rose notes",
     "icon": "🌿",
     "breeder": "Dying Breed Seeds",
     "parents": [
@@ -187555,7 +187571,54 @@
     "flavor": "sweet mango and carrot with ripe-fruit and herbal notes",
     "icon": "🌿",
     "breeder": "",
-    "parents": [],
+    "parents": [
+      "La Reunion"
+    ],
+    "aka": "",
+    "ailments": []
+  },
+  {
+    "id": "s7343",
+    "name": "Mangu' Karot",
+    "type": "Sativa",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Uplifted"
+    ],
+    "flavor": "ripe mango with a light carrot sweetness",
+    "icon": "🌿",
+    "breeder": "French Touch Seeds",
+    "parents": [
+      "Zamal"
+    ],
+    "aka": "Mangu Karot",
+    "ailments": []
+  },
+  {
+    "id": "s7344",
+    "name": "Mango Pepper",
+    "type": "Sativa",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Uplifted"
+    ],
+    "flavor": "spicy, peppery aroma with fruity notes",
+    "icon": "🌿",
+    "breeder": "French Touch Seeds",
+    "parents": [
+      "Mangu' Karot",
+      "Mauve Poivrée"
+    ],
     "aka": "",
     "ailments": []
   }

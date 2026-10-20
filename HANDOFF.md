@@ -569,3 +569,4 @@ Follow-up same day: Depression/Cramps/Migraines ailments approved (asterisk + 'n
 
 Terpene convention (approved): ranked names only; percentage shown only for entries with `m:true` (real lab measurement). Admin form: bare 'Name' = ranked, 'Name:Percent' = measured. New entries s7341 La Reunion, s7342 Zamal. Reina Madre parents = La Reunion + Congo (ACE Congo pheno #1).
 Trophy Wife (s2067) parents corrected to Triangle Mints (F2 = generation); GMO confirmed unchanged.
+Batch 2 (s7274-s7278) researched; plus new entries s7343 Mangu' Karot and s7344 Mango Pepper. Low-THC placeholder question closed by Alissa (confirmed correct earlier). Standing rule: only deliver files that changed since the last delivery.
