@@ -21,7 +21,7 @@ const mustHaveInServer = [
   'renderEffectPills', '/strains?effect=', 'DO NOT REMOVE, SIMPLIFY, OR TURN THIS BACK INTO PLAIN TEXT',
   'renderCustomStrainPrompts', 'handleCustomStrainResolve', 'USER-CONFIRMED BEHAVIOR', 'DO NOT REMOVE OR WEAKEN THIS BLOCK',
   // restored Oct 2026 after an old whole-file upload had dropped them (user confirmed these must stay):
-  'pageTradeHistory', "pathname === '/trade-history'", 'pageBadges', "pathname === '/badges'",
+  'TERP_RANK_WEIGHT', 't.m ? `${esc(t.n)}', 'pageTradeHistory', "pathname === '/trade-history'", 'pageBadges', "pathname === '/badges'",
   'effectEnergyPercent', 'renderMiniEnergyBar', 'thcBarPercent', 'dominantTerpColor', 'strainSimilarity', 'strainSimilarity(a, b)',
   // restored Oct 19 2026 (user confirmed):
   'pageMentions', "pathname === '/mentions'", 'handleAccountName', "pathname === '/account/name'",

@@ -1519,7 +1519,7 @@ function pageStrainDetail(req, res, id) {
       ${s.breeder ? `<p class="empty-note" style="padding:0;"><b>Bred by:</b> ${esc(s.breeder)}</p>` : ''}
       ${s.flavor ? `<p style="font-style:italic;color:#6b6b6b;">"${esc(s.flavor)}"</p>` : ''}
       <p>${renderEffectPills(s.effects)}</p>
-      ${s.terps.length ? `<p><b>Top terpenes:</b> ${s.terps.map(t => `${esc(t.n)} (${Math.round(t.p * 100)}%)`).join(', ')}</p>` : ''}
+      ${s.terps.length ? `<p><b>Top terpenes:</b> ${s.terps.map(t => t.m ? `${esc(t.n)} (${Math.round(t.p * 1000) / 10}%)` : esc(t.n)).join(', ')}</p>` : ''}
       ${(() => {
         const topFlavorTerps = [...s.terps].sort((a, b) => b.p - a.p).filter(t => TERPENE_FLAVOR_TAG[t.n]).slice(0, 3);
         if (!topFlavorTerps.length) return '';
@@ -4834,14 +4834,19 @@ async function handleAdminFaqDelete(req, res, id) {
 function parseEffectsInput(str) {
   return String(str || '').split(',').map(s => s.trim()).filter(Boolean);
 }
+// Terpene storage convention: a percentage is only SHOWN when the entry carries m:true (a real lab
+// measurement, typed as "Name:Percent"). A bare "Name" is a ranked name with no number; its p is an
+// internal rank weight (used for sorting / recommendations) and is never displayed.
+const TERP_RANK_WEIGHT = [0.4, 0.27, 0.16, 0.1, 0.07];
 function parseTerpsInput(str) {
-  return String(str || '').split(',').map(s => s.trim()).filter(Boolean).map(pair => {
+  return String(str || '').split(',').map(s => s.trim()).filter(Boolean).map((pair, i) => {
     const [n, p] = pair.split(':').map(x => (x || '').trim());
-    return { n: n || '', p: p ? Number(p) / 100 : 0 };
+    if (p && Number(p) > 0) return { n: n || '', p: Number(p) / 100, m: true };
+    return { n: n || '', p: TERP_RANK_WEIGHT[i] || 0.05 };
   }).filter(t => t.n);
 }
 function effectsToInput(effects) { return (effects || []).join(', '); }
-function terpsToInput(terps) { return (terps || []).map(t => `${t.n}:${Math.round((t.p || 0) * 100)}`).join(', '); }
+function terpsToInput(terps) { return (terps || []).map(t => t.m ? `${t.n}:${Math.round((t.p || 0) * 1000) / 10}` : t.n).join(', '); }
 // Awards use the same "Name:Year" shorthand as terpenes' "Name:Percent" --
 // e.g. "Leafly Strain of the Year:2025, High Times Cannabis Cup:2019".
 // Only ever meant to hold a real, verifiable, named award -- never
@@ -4889,7 +4894,7 @@ function strainFormFields(s) {
     <input type="text" name="icon" value="${v(s ? s.icon : '🌿')}" maxlength="4">
     <label class="field-label">Effects (comma-separated, e.g. "Relaxed, Happy, Euphoric")</label>
     <input type="text" name="effects" value="${v(effectsToInput(s && s.effects))}">
-    <label class="field-label">Top terpenes (comma-separated "Name:Percent", e.g. "Myrcene:30, Limonene:25")</label>
+    <label class="field-label">Top terpenes, most dominant first (comma-separated names, e.g. "Myrcene, Limonene"). Only add ":Percent" (e.g. "Myrcene:1.2") for a real lab measurement</label>
     <input type="text" name="terps" value="${v(terpsToInput(s && s.terps))}">
     <label class="field-label">Breeder (optional)</label>
     <input type="text" name="breeder" value="${v(s && s.breeder)}">

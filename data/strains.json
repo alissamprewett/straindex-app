@@ -63867,8 +63867,7 @@
     "icon": "🌿",
     "breeder": "Surfr Seeds",
     "parents": [
-      "Triangle Mints",
-      "Triangle Mints F2"
+      "Triangle Mints"
     ],
     "id": "s2067"
   },
@@ -186085,7 +186084,20 @@
     "rarity": "rare",
     "thc": "28–31%",
     "cbd": "0–1%",
-    "terps": [],
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.4
+      },
+      {
+        "n": "Limonene",
+        "p": 0.27
+      },
+      {
+        "n": "Linalool",
+        "p": 0.16
+      }
+    ],
     "effects": [
       "Relaxed",
       "Happy",
@@ -186143,7 +186155,20 @@
     "rarity": "rare",
     "thc": "17–22%",
     "cbd": "",
-    "terps": [],
+    "terps": [
+      {
+        "n": "Terpinolene",
+        "p": 0.4
+      },
+      {
+        "n": "Myrcene",
+        "p": 0.27
+      },
+      {
+        "n": "Pinene",
+        "p": 0.16
+      }
+    ],
     "effects": [
       "Creative",
       "Euphoric",
@@ -186156,7 +186181,7 @@
     "breeder": "Delicatessen Seeds",
     "parents": [
       "La Reunion",
-      "Congo #1"
+      "Congo"
     ],
     "aka": "Queen Mother",
     "ailments": [
@@ -186191,7 +186216,12 @@
     "rarity": "rare",
     "thc": "",
     "cbd": "0–2%",
-    "terps": [],
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.4
+      }
+    ],
     "effects": [
       "Creative",
       "Relaxed"
@@ -187507,6 +187537,26 @@
     "breeder": "",
     "parents": [],
     "aka": "La Reunion Sativa",
+    "ailments": []
+  },
+  {
+    "id": "s7342",
+    "name": "Zamal",
+    "type": "Sativa",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Energetic",
+      "Uplifted"
+    ],
+    "flavor": "sweet mango and carrot with ripe-fruit and herbal notes",
+    "icon": "🌿",
+    "breeder": "",
+    "parents": [],
+    "aka": "",
     "ailments": []
   }
 ]
