@@ -687,6 +687,133 @@ function strainPhotoStyle(strain) {
     : '';
 }
 // sizeClass controls the CSS box size; see .strain-thumb-* rules in app.css.
+// ---------------------------------------------------------------- strain-card extras (restored Oct 2026)
+// Calming<->energizing and THC bars, per-terpene color dots, and the Compare-page
+// similarity score. Lost in an old whole-file overwrite and restored from git history
+// (commit de324ab, Sep 9 2026). canary.js now checks these exist.
+// Maps each mood/effect tag to a position on a calming <-> energizing
+// spectrum, from -1 (deeply calming) to +1 (highly energizing). Used to
+// compute the visual bar on a strain's detail page. Genuine side-effect
+// tags (Dry Mouth, Paranoid, Red-eyed...) and relief tags (Pain relief,
+// Nausea relief...) are left out of this map entirely rather than forced
+// into a direction they don't really have -- they're skipped when
+// averaging, not counted as neutral, since neutral would still be a
+// claim about them that isn't really true.
+const EFFECT_ENERGY_MAP = {
+  'Energetic': 1, 'Wired': 1, 'Alert': 1, 'Motivated': 1, 'Spirited': 1, 'Jittery': 1,
+  'Uplifted': 0.7, 'Talkative': 0.7, 'Focused': 0.7, 'Chatty': 0.7, 'Social': 0.7,
+  'Sociable': 0.7, 'Productive': 0.7, 'In-the-zone': 0.7, 'Adventurous': 0.7,
+  'Curious': 0.7, 'Sharp': 0.7, 'Confident': 0.7, 'Elevated': 0.7,
+  'Euphoric': 0.4, 'Creative': 0.4, 'Giggly': 0.4, 'Playful': 0.4, 'Silly': 0.4,
+  'Inspired': 0.4, 'Refreshed': 0.4, 'Rejuvenated': 0.4, 'Buzzy': 0.4, 'Loose': 0.4,
+  'Free-spirited': 0.4,
+  'Happy': 0, 'Blissful': 0, 'Present': 0, 'Grounded': 0, 'Warm': 0, 'Observant': 0,
+  'Airy': 0, 'Introspective': 0, 'Dreamy': 0, 'Nostalgic': 0, 'Cuddly': 0, 'Cozy': 0,
+  'Easygoing': 0, 'Clear-headed': 0,
+  'Calm': -0.4, 'Mellow': -0.4, 'Chill': -0.4, 'Peaceful': -0.4, 'Serene': -0.4,
+  'Tranquil': -0.4, 'Floaty': -0.4, 'Light-headed': -0.4,
+  'Relaxed': -0.7, 'Sedated': -0.7, 'Groggy': -0.7, 'Spacey': -0.7, 'Foggy': -0.7,
+  'Zoned-out': -0.7, 'Heavy-limbed': -0.7, 'Slowed-down': -0.7, 'Heavy-eyed': -0.7,
+  'Yawny': -0.7,
+  'Sleepy': -1, 'Couch-locked': -1,
+};
+// Returns 0-100 (0 = fully calming end, 100 = fully energizing end) or
+// null if none of the strain's tagged effects have a mapped direction --
+// showing no bar at all is more honest than a fake halfway point.
+function effectEnergyPercent(effects) {
+  const scores = (effects || []).map(e => EFFECT_ENERGY_MAP[e]).filter(v => v !== undefined);
+  if (!scores.length) return null;
+  const avg = scores.reduce((a, b) => a + b, 0) / scores.length;
+  return Math.round(((avg + 1) / 2) * 100);
+}
+// A condensed version of the calming/energizing spectrum bar for tight
+// spaces (comparison table cells, recommendation cards) -- just a thin
+// track with a single dot marker, no labels. Returns '' when a strain
+// has no usable effect data, same rule as the full-size bar.
+function renderMiniEnergyBar(effects) {
+  const pct = effectEnergyPercent(effects);
+  if (pct === null) return '';
+  return `<div class="mini-spectrum" title="Calming ↔ Energizing"><div class="track"><div class="dot" style="left:${pct}%;"></div></div></div>`;
+}
+// Parses a THC string like "20-25%", "23%", or "88-93%" into a 0-100 bar
+// position. Anything at or above THC_BAR_CEILING reads as fully "high" --
+// this is a flower-scaled bar, so a concentrate-potency strain (Live
+// Rosin, Liquid Diamonds...) simply pins to the right edge rather than
+// needing its own separate scale. Returns null for strains with no THC
+// data on file, rather than guessing a position.
+const THC_BAR_CEILING = 35;
+function thcBarPercent(thcStr) {
+  if (!thcStr) return null;
+  const nums = String(thcStr).match(/\d+(\.\d+)?/g);
+  if (!nums || !nums.length) return null;
+  const avg = nums.map(Number).reduce((a, b) => a + b, 0) / nums.length;
+  return Math.min(100, Math.round((avg / THC_BAR_CEILING) * 100));
+}
+
+// A consistent color per terpene, used for the small dot next to each
+// name in the "Top terpenes" line -- same terpene always gets the same
+// color everywhere it appears on a strain's page.
+const TERPENE_COLOR = {
+  Myrcene: '#4a5fc1', Caryophyllene: '#c0397a', Pinene: '#3d8b52', Limonene: '#d4a017',
+  Linalool: '#8a63c9', Humulene: '#8a6d4a', Terpinolene: '#2a9d8f', Ocimene: '#e07b39',
+};
+// The color of a strain's single most-dominant terpene (by percentage),
+// for a quick visual hint on cards where there's no room for a full
+// terpene breakdown. Returns null for a strain with no terpene data.
+function dominantTerpColor(terps) {
+  if (!terps || !terps.length) return null;
+  const top = [...terps].sort((a, b) => b.p - a.p)[0];
+  return TERPENE_COLOR[top.n] || null;
+}
+// Average of a THC range string like "20-25%" -> 22.5. Returns null if
+// the field is blank -- used only for the similarity score below, kept
+// separate from thcBarPercent() since that one needs a 0-100 bar
+// position, not a raw percentage.
+function thcAverage(thcStr) {
+  if (!thcStr) return null;
+  const nums = String(thcStr).match(/\d+(\.\d+)?/g);
+  if (!nums || !nums.length) return null;
+  return nums.map(Number).reduce((a, b) => a + b, 0) / nums.length;
+}
+// A transparent, explainable "how similar are these two strains"
+// percentage for the Compare page. Combines type match, effect overlap,
+// terpene overlap, and THC closeness -- each only counted if BOTH
+// strains actually have that data, with the remaining weights
+// renormalized so a strain missing one field isn't unfairly marked
+// "dissimilar" on it. Returns null only if there's no comparable data
+// between the two at all.
+function strainSimilarity(a, b) {
+  let totalWeight = 0, weightedScore = 0;
+
+  totalWeight += 20;
+  weightedScore += 20 * (a.type === b.type ? 1 : 0.3);
+
+  if (a.effects.length && b.effects.length) {
+    const setA = new Set(a.effects), setB = new Set(b.effects);
+    const intersection = [...setA].filter(x => setB.has(x)).length;
+    const union = new Set([...setA, ...setB]).size;
+    totalWeight += 35;
+    weightedScore += 35 * (union > 0 ? intersection / union : 0);
+  }
+
+  if (a.terps.length && b.terps.length) {
+    const setA = new Set(a.terps.map(t => t.n)), setB = new Set(b.terps.map(t => t.n));
+    const intersection = [...setA].filter(x => setB.has(x)).length;
+    const union = new Set([...setA, ...setB]).size;
+    totalWeight += 30;
+    weightedScore += 30 * (union > 0 ? intersection / union : 0);
+  }
+
+  const aThc = thcAverage(a.thc), bThc = thcAverage(b.thc);
+  if (aThc !== null && bThc !== null) {
+    totalWeight += 15;
+    weightedScore += 15 * Math.max(0, 1 - Math.abs(aThc - bThc) / 30);
+  }
+
+  if (totalWeight === 0) return null;
+  return Math.round((weightedScore / totalWeight) * 100);
+}
+
 function strainPhotoTag(strain, sizeClass = 'md') {
   if (!strain) return `<div class="strain-thumb strain-thumb-${sizeClass}" style="display:flex;align-items:center;justify-content:center;font-size:20px;">🌿</div>`;
   return `<img class="strain-thumb strain-thumb-${sizeClass}" src="${strainPhotoUrl(strain)}" style="${strainPhotoStyle(strain)}" alt="${esc(strain.name)} bud" loading="lazy" onerror="this.onerror=null;this.replaceWith(Object.assign(document.createElement('div'),{className:this.className,textContent:'🌿',style:'display:flex;align-items:center;justify-content:center;font-size:20px;background:#e5e0d5;'}))">`;
@@ -982,8 +1109,9 @@ async function pageHome(req, res) {
       ${recs.map(r => `
         <a class="rec-card rarity-${r.s.rarity}" href="/strains/${r.s.id}">
           ${strainPhotoTag(r.s, 'sm')}
-          <span class="n">${esc(r.s.name)}</span>
+          <span class="n">${(() => { const c = dominantTerpColor(r.s.terps); return c ? `<span class="terp-dot" style="background:${c};"></span>` : ''; })()}${esc(r.s.name)}</span>
           <span class="why">${r.why ? 'Because you like ' + esc(r.why) : 'New for you'}</span>
+          ${renderMiniEnergyBar(r.s.effects)}
         </a>`).join('')}
     </div>
 
@@ -1347,6 +1475,24 @@ function pageStrainDetail(req, res, id) {
       ${s.flavor ? `<p style="font-style:italic;color:#6b6b6b;">"${esc(s.flavor)}"</p>` : ''}
       <p>${renderEffectPills(s.effects)}</p>
       ${s.terps.length ? `<p><b>Top terpenes:</b> ${s.terps.map(t => `${esc(t.n)} (${Math.round(t.p * 100)}%)`).join(', ')}</p>` : ''}
+      ${(() => {
+        const energyPct = effectEnergyPercent(s.effects);
+        const thcPct = thcBarPercent(s.thc);
+        return `
+          ${energyPct !== null ? `
+            <div class="spectrum-bar">
+              <div class="labels"><span>Calming</span><span>Energizing</span></div>
+              <div class="track"><div class="fill" style="width:${energyPct}%;"></div></div>
+            </div>
+          ` : ''}
+          ${thcPct !== null ? `
+            <div class="spectrum-bar">
+              <div class="labels"><span>Low THC</span><span>High THC</span></div>
+              <div class="track"><div class="fill" style="width:${thcPct}%;"></div></div>
+            </div>
+          ` : ''}
+        `;
+      })()}
       ${Array.isArray(s.ailments) && s.ailments.length ? `
         <p style="margin:10px 0 2px;"><b>Users report relief from:</b> ${renderAilmentPills(s.ailments)}</p>
         <p class="empty-note" style="padding:0;">User-reported, not medical advice — see a doctor for real guidance.</p>
@@ -1362,8 +1508,9 @@ function pageStrainDetail(req, res, id) {
         ${similar.map(r => `
           <a class="rec-card rarity-${r.s.rarity}" href="/strains/${r.s.id}">
             ${strainPhotoTag(r.s, 'sm')}
-            <span class="n">${esc(r.s.name)}</span>
+            <span class="n">${(() => { const c = dominantTerpColor(r.s.terps); return c ? `<span class="terp-dot" style="background:${c};"></span>` : ''; })()}${esc(r.s.name)}</span>
             <span class="why">${r.why ? 'Shares ' + esc(r.why) : 'Similar profile'}</span>
+            ${renderMiniEnergyBar(r.s.effects)}
           </a>`).join('')}
       </div>
     ` : ''}
@@ -3102,6 +3249,15 @@ function pageCompare(req, res, query) {
       ${pickerBox('a', a)}
       ${pickerBox('b', b)}
     </div>
+    ${a && b ? (() => {
+      const sim = strainSimilarity(a, b);
+      return sim === null ? '' : `
+        <div class="card" style="text-align:center;margin-bottom:12px;">
+          <div style="font-size:26px;font-weight:800;color:var(--brand-green-dark);">${sim}%</div>
+          <div class="empty-note" style="padding:2px 0 0;">similar vibe, based on type, effects, terpenes, and THC</div>
+        </div>
+      `;
+    })() : ''}
     ${a && b ? `
       <table style="width:100%;border-collapse:collapse;font-size:13px;">
         ${rows.map(([label, av, bv]) => `
@@ -3110,6 +3266,13 @@ function pageCompare(req, res, query) {
             <td style="padding:8px 6px;vertical-align:top;">${esc(av)}</td>
             <td style="padding:8px 6px;vertical-align:top;">${esc(bv)}</td>
           </tr>`).join('')}
+        ${(renderMiniEnergyBar(a.effects) || renderMiniEnergyBar(b.effects)) ? `
+          <tr style="border-bottom:1px solid var(--border);">
+            <td style="padding:8px 6px;font-weight:700;color:var(--ink-secondary);width:28%;vertical-align:top;">Feel</td>
+            <td style="padding:8px 6px;vertical-align:top;">${renderMiniEnergyBar(a.effects)}</td>
+            <td style="padding:8px 6px;vertical-align:top;">${renderMiniEnergyBar(b.effects)}</td>
+          </tr>
+        ` : ''}
       </table>
     ` : `<div class="empty-note">Pick a strain in each box above to compare them.</div>`}
   `;
@@ -4992,6 +5155,7 @@ function pageMore(req, res) {
         { href: '/insights', icon: '📊', t: 'Your Patterns', s: 'What your check-ins say about you' },
         { href: '/insights', icon: '🌿', t: 'Tolerance Break', s: 'Start, track, or end a break' },
         { href: '/recap', icon: '🎉', t: 'Your Year in Review', s: 'A shareable recap of your year' },
+        { href: '/badges', icon: '🏅', t: 'Badges', s: 'Full directory' },
       ],
     },
     {
@@ -5561,7 +5725,7 @@ function pageCollection(req, res) {
         <a class="card-slot rarity-${o.strain.rarity}" href="/strains/${o.strain.id}">
           ${o.copies > 1 ? `<div class="copies">×${o.copies}</div>` : ''}
           ${strainPhotoTag(o.strain, 'md')}
-          <div class="name">${esc(o.strain.name)}</div>
+          <div class="name">${(() => { const c = dominantTerpColor(o.strain.terps); return c ? `<span class="terp-dot" style="background:${c};"></span>` : ''; })()}${esc(o.strain.name)}</div>
         </a>`).join('')}
     </div>` : `<div class="empty-note">No cards caught yet — <a href="/checkin">log a check-in</a> to unlock your first one.</div>`}
   `;
@@ -5627,6 +5791,7 @@ function pageFriends(req, res, query) {
       <a class="more-tile" href="/notifications"><span class="ic">🔔</span><div class="t">Notifications</div><div class="s">${notificationsSummary(userId) || 'Mentions, comments & reactions'}</div></a>
       <a class="more-tile" href="/puff-puff-ask"><span class="ic">💨</span><div class="t">Puff Puff Ask</div><div class="s">Ask the community, browse by section</div></a>
       <a class="more-tile" href="/trade"><span class="ic">🔁</span><div class="t">Trade</div><div class="s">Swap dupes with your community</div></a>
+      <a class="more-tile" href="/trade-history"><span class="ic">📜</span><div class="t">Trade History</div><div class="s">Every trade you\u2019ve made</div></a>
       <a class="more-tile" href="/friends-picks"><span class="ic">🤝</span><div class="t">Community Picks</div><div class="s">What your circle loves that you haven't tried</div></a>
       <a class="more-tile" href="/invite"><span class="ic">📣</span><div class="t">Invite</div><div class="s">Bring someone into your community</div></a>
       <a class="more-tile" href="/community-guidelines"><span class="ic">📋</span><div class="t">Community Guidelines</div><div class="s">What's expected of everyone here</div></a>
@@ -5899,6 +6064,30 @@ async function handleAdminStrainSubmissionReviewed(req, res, id) {
 // philosophy as getOnboardingChecklist/getCheckinStreak. Locked badges
 // still render (greyed out, not hidden) since showing what's *not*
 // earned yet is part of what makes a badge shelf worth coming back to.
+// ---------------------------------------------------------------- badges directory (restored Oct 2026)
+// Full list of every badge with what it takes to earn it. computeBadges() is the single
+// source of truth for the badges themselves; this page only displays them.
+function pageBadges(req, res) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const badges = computeBadges(userId);
+  const earnedCount = badges.filter(b => b.earned).length;
+  const body = `
+    <h1 class="screen-title">Badges</h1>
+    <p class="screen-sub">${earnedCount} of ${badges.length} earned.</p>
+    ${badges.map(b => `
+      <div class="card" style="display:flex;align-items:center;gap:12px;margin-bottom:8px;${b.earned ? '' : 'opacity:0.55;'}">
+        <div style="font-size:28px;${b.earned ? '' : 'filter:grayscale(1);'}">${b.icon}</div>
+        <div style="flex:1;min-width:0;">
+          <div style="font-weight:700;">${esc(b.title)}</div>
+          <div class="empty-note" style="padding:0;">${esc(b.desc)}</div>
+        </div>
+        <div style="font-size:12px;font-weight:700;">${b.earned ? '✓ Earned' : 'Locked'}</div>
+      </div>`).join('')}
+  `;
+  sendHtml(res, layout({ title: 'Badges', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
+}
+
 function computeBadges(userId) {
   const totalCheckins = db.listCheckins({ userId, limit: 100000 }).length;
   const streak = db.getCheckinStreak(userId);
@@ -6172,6 +6361,41 @@ async function handleFriendCancel(req, res, addresseeId) {
 
 // ---------------------------------------------------------------- trading (real friends, or demo)
 
+// A simple newest-first log of every trade a person has completed --
+// createTrade already saves everything needed for this, it just never had
+// anywhere to be read back from before now.
+function pageTradeHistory(req, res) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const trades = db.listTrades(userId);
+  const body = `
+    <h1 class="screen-title">Trade History</h1>
+    <p class="screen-sub">${db.countTrades(userId)} trade${db.countTrades(userId) === 1 ? '' : 's'} total.</p>
+    ${trades.length ? trades.map(t => {
+      const gave = db.getStrain(t.gave_strain_id);
+      const got = db.getStrain(t.got_strain_id);
+      return `
+      <div class="card" style="margin-bottom:10px;">
+        <div class="empty-note" style="padding:0 0 6px;">With ${esc(t.friend_name)} · <span class="local-time" data-utc="${t.created_at}Z">${esc(t.created_at)}</span> UTC</div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="flex:1;min-width:0;text-align:center;">
+            <div class="empty-note" style="padding:0 0 4px;">You gave</div>
+            ${strainPhotoTag(gave, 'sm')}
+            <div style="font-weight:700;font-size:12.5px;margin-top:4px;">${esc(gave ? gave.name : t.gave_strain_id)}</div>
+          </div>
+          <div style="font-size:18px;">⇄</div>
+          <div style="flex:1;min-width:0;text-align:center;">
+            <div class="empty-note" style="padding:0 0 4px;">You got</div>
+            ${strainPhotoTag(got, 'sm')}
+            <div style="font-weight:700;font-size:12.5px;margin-top:4px;">${esc(got ? got.name : t.got_strain_id)}</div>
+          </div>
+        </div>
+      </div>`;
+    }).join('') : `<div class="empty-note">No trades yet — head to <a href="/trade">Trade</a> to swap dupes with your community.</div>`}
+  `;
+  sendHtml(res, layout({ title: 'Trade History', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
+}
+
 function pageTrade(req, res, query) {
   const userId = requireUser(req, res);
   if (userId == null) return;
@@ -6200,7 +6424,7 @@ function pageTrade(req, res, query) {
   const mk = (params) => '/trade?' + new URLSearchParams({ friend: friendId, your: yourPick, their: theirPick, ...params }).toString();
 
   const body = `
-    <h1 class="screen-title">Trade</h1>
+    <h1 class="screen-title">Trade <a href="/trade-history" class="empty-note" style="padding:0;font-size:13px;font-weight:normal;">History →</a></h1>
     ${usingReal
       ? `<div class="trade-caveat">Trading against ${esc(friend.name)}'s real collection.</div>`
       : `<div class="trade-caveat">Demo feature: you don't have anyone in your community added yet, so this trades against sample collections. <a href="/friends">Add someone to your community</a> to trade for real.</div>`}
@@ -7397,6 +7621,7 @@ const server = http.createServer(async (req, res) => {
     if (method === 'GET' && pathname === '/gear-care/new') return pageGearCareNew(req, res);
     if (method === 'POST' && pathname === '/gear-care/new') return await handleGearCareNewSubmit(req, res);
     if (method === 'GET' && pathname === '/recap') return pageRecap(req, res, url.searchParams);
+    if (method === 'GET' && pathname === '/badges') return pageBadges(req, res);
     if (method === 'GET' && (m = pathname.match(/^\/recap\/s\/([^/]+)$/))) return pageSharedRecap(req, res, m[1]);
     if (method === 'GET' && pathname === '/leaderboard') return pageLeaderboard(req, res);
     if (method === 'GET' && pathname === '/add-to-home-screen') return pageAddToHomeScreen(req, res);
@@ -7500,6 +7725,7 @@ const server = http.createServer(async (req, res) => {
     if (method === 'GET' && pathname === '/collection') return pageCollection(req, res);
     if (method === 'GET' && pathname === '/history') return pageHistory(req, res);
     if (method === 'GET' && pathname === '/trade') return pageTrade(req, res, url.searchParams);
+    if (method === 'GET' && pathname === '/trade-history') return pageTradeHistory(req, res);
     if (method === 'GET' && pathname === '/friends') return pageFriends(req, res, url.searchParams);
     if (method === 'GET' && pathname === '/friends/requests') return pageFriendRequests(req, res);
     if (method === 'GET' && (m = pathname.match(/^\/friends\/(\d+)$/))) return pageFriendProfile(req, res, Number(m[1]));

@@ -109,6 +109,28 @@ Checked on the live site and Render logs:
   on a deploy with no code change. Consider pinning to a tested major (e.g.
   `"node": "22.x"`) after confirming the site runs on it.
 
+
+### Features restored Oct 16 2026 (user confirmed these were meant to stay)
+History scan found features lost to old whole-file uploads (server.js dropped
+494 lines on Sep 9, 648 on Sep 17, 825 on Sep 29). Restored from git history
+(commits de324ab, 56f7c4b, 55c3e0d) and adapted to current code:
+- **Trade History** (`/trade-history`, `pageTradeHistory`): linked from the
+  Trade page heading and a tile on the Community tab.
+- **Badges directory** (`/badges`, `pageBadges`): tile added at the END of the
+  More menu's "Your Journey" section (no existing tile was moved). Reads from
+  `computeBadges()`, the single source of truth for badges.
+- **Strain-card extras**: calming/energizing and THC bars on strain detail,
+  similarity % and "Feel" row on Compare, terpene color dots and mini energy
+  bars on recommendation cards / "If you like this" / binder cards
+  (`effectEnergyPercent`, `thcBarPercent`, `renderMiniEnergyBar`,
+  `dominantTerpColor`, `strainSimilarity`). Strains with no effect/terpene/THC
+  data deliberately show no bar or dot rather than a fake one.
+- `canary.js` now fails if any of the above are missing, so run
+  `node canary.js` before uploading server.js.
+- NOT restored (found in history, not confirmed wanted): "Top flavors" tags
+  (`TERPENE_FLAVOR_TAG`), per-effect emoji icons (`EFFECT_ICON`), the old
+  /mentions page, /account/name, /strains/suggest. Ask before restoring.
+
 ### Housekeeping flags
 - `docs/` is served publicly by `serveStatic()` (everything under /docs/ is
   readable on the live site), and it holds `docs/HANDOFF.md` (an older,
