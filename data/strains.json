@@ -73761,7 +73761,8 @@
       "Purple Punch",
       "Roze"
     ],
-    "id": "s2414"
+    "id": "s2414",
+    "aka": "Purple Rozé"
   },
   {
     "name": "Razzleberry Kush",
@@ -187535,13 +187536,19 @@
     "thc": "",
     "cbd": "",
     "terps": [],
-    "effects": [],
-    "flavor": "",
+    "effects": [
+      "Euphoric",
+      "Creative"
+    ],
+    "flavor": "tropical with nectarine and peach",
     "icon": "🌿",
     "breeder": "Beleaf Cannabis",
     "parents": [],
     "aka": "",
-    "ailments": null
+    "ailments": [
+      "Depression",
+      "Stress"
+    ]
   },
   {
     "id": "s7335",
@@ -187549,11 +187556,13 @@
     "type": "Hybrid",
     "lean": "",
     "rarity": "rare",
-    "thc": "",
+    "thc": "21–23%",
     "cbd": "",
     "terps": [],
-    "effects": [],
-    "flavor": "",
+    "effects": [
+      "Euphoric"
+    ],
+    "flavor": "orange and citrus",
     "icon": "🌿",
     "breeder": "Exotic Genetix",
     "parents": [
@@ -187561,7 +187570,9 @@
       "Orange Valley OG"
     ],
     "aka": "Guice",
-    "ailments": null
+    "ailments": [
+      "Stress"
+    ]
   },
   {
     "id": "s7336",
@@ -187572,8 +187583,12 @@
     "thc": "",
     "cbd": "",
     "terps": [],
-    "effects": [],
-    "flavor": "",
+    "effects": [
+      "Creative",
+      "Happy",
+      "Giggly"
+    ],
+    "flavor": "berry and grape",
     "icon": "🌿",
     "breeder": "Insanity Strains",
     "parents": [
@@ -187582,7 +187597,10 @@
       "Volcano Hash"
     ],
     "aka": "",
-    "ailments": null
+    "ailments": [
+      "Depression",
+      "Insomnia"
+    ]
   },
   {
     "id": "s7337",
@@ -187593,8 +187611,12 @@
     "thc": "",
     "cbd": "",
     "terps": [],
-    "effects": [],
-    "flavor": "",
+    "effects": [
+      "Relaxed",
+      "Euphoric",
+      "Sleepy"
+    ],
+    "flavor": "earthy and diesel",
     "icon": "🌿",
     "breeder": "Exotic Genetix",
     "parents": [
@@ -187602,7 +187624,11 @@
       "Triple OG"
     ],
     "aka": "",
-    "ailments": null
+    "ailments": [
+      "Insomnia",
+      "Anxiety",
+      "Stress"
+    ]
   },
   {
     "id": "s7338",
@@ -187613,8 +187639,11 @@
     "thc": "",
     "cbd": "",
     "terps": [],
-    "effects": [],
-    "flavor": "",
+    "effects": [
+      "Euphoric",
+      "Relaxed"
+    ],
+    "flavor": "lemon",
     "icon": "🌿",
     "breeder": "Jungle Boys",
     "parents": [
@@ -187622,7 +187651,10 @@
       "Triangle Larry"
     ],
     "aka": "Triangle Kush BX1, TK Bx1",
-    "ailments": null
+    "ailments": [
+      "Stress",
+      "Pain"
+    ]
   },
   {
     "id": "s7339",
@@ -187630,16 +187662,27 @@
     "type": "Hybrid",
     "lean": "Indica-dominant",
     "rarity": "rare",
-    "thc": "",
+    "thc": "28–30%",
     "cbd": "",
     "terps": [],
-    "effects": [],
-    "flavor": "",
+    "effects": [
+      "Happy",
+      "Uplifted",
+      "Relaxed"
+    ],
+    "flavor": "sweet and woody with orange notes",
     "icon": "🌿",
-    "breeder": "",
-    "parents": [],
-    "aka": "Topanga OG, Topanga Canyon, 91 Hollywood Pure Kush, HPK",
-    "ailments": null
+    "breeder": "Jungle Boys",
+    "parents": [
+      "Topanga OG",
+      "Sweatband"
+    ],
+    "aka": "Topanga OG, Topanga Canyon",
+    "ailments": [
+      "Depression",
+      "Pain",
+      "Stress"
+    ]
   },
   {
     "id": "s7340",
@@ -187673,7 +187716,7 @@
     "effects": [
       "Energetic"
     ],
-    "flavor": "",
+    "flavor": "tropical mango with herbal and spicy notes",
     "icon": "🌿",
     "breeder": "",
     "parents": [],
@@ -187748,44 +187791,31 @@
     "ailments": []
   },
   {
-    "id": "s7345",
-    "name": "Purple Rozé",
+    "id": "s7346",
+    "name": "Banana Rozé",
     "type": "Hybrid",
-    "lean": "",
+    "lean": "Indica-leaning",
     "rarity": "rare",
-    "thc": "",
+    "thc": "20–21%",
     "cbd": "",
     "terps": [],
     "effects": [
       "Euphoric",
       "Relaxed"
     ],
-    "flavor": "sweet floral aroma with an earthy edge",
-    "icon": "🌿",
-    "breeder": "Ethos Genetics",
-    "parents": [
-      "Purple Punch",
-      "Roze"
-    ],
-    "aka": "Purple Roze",
-    "ailments": []
-  },
-  {
-    "id": "s7346",
-    "name": "Banana Rozé",
-    "type": "Hybrid",
-    "lean": "",
-    "rarity": "rare",
-    "thc": "",
-    "cbd": "",
-    "terps": [],
-    "effects": [],
     "flavor": "banana with tropical, fruity sweetness",
     "icon": "🌿",
     "breeder": "",
-    "parents": [],
+    "parents": [
+      "Banana Pudding",
+      "Roze"
+    ],
     "aka": "Banana Roze",
-    "ailments": []
+    "ailments": [
+      "Anxiety",
+      "Insomnia",
+      "Pain"
+    ]
   },
   {
     "id": "s7347",
