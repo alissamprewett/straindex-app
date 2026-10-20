@@ -12614,7 +12614,7 @@
       "Muscle Spasms",
       "Lack of Appetite"
     ],
-    "aka": "PCK, Pakistan Chitral Kush, Chitral Kush, Purple Pakistani, Purple Chitral, Old Man Purps, Old Man's Purp, Old Man's Purple"
+    "aka": "PCK, Pakistan Chitral Kush, Chitral Kush, Purple Pakistani, Purple Chitral, Purple Citral, Old Man Purps, Old Man's Purp, Old Man's Purple"
   },
   {
     "id": "s349",
@@ -147034,26 +147034,6 @@
     "id": "s5547"
   },
   {
-    "name": "Purple Citral",
-    "type": "Indica",
-    "lean": "",
-    "rarity": "rare",
-    "thc": "",
-    "cbd": "",
-    "terps": [],
-    "effects": [
-      "Relaxed",
-      "Sleepy"
-    ],
-    "flavor": "Earthy caramel, sweet fruits, berries.",
-    "icon": "🟣",
-    "parents": [
-      "Pakistani Chitral Kush landrace selection"
-    ],
-    "aka": "Pakistani Chitral Kush, PCK, Purple Pakistani, Purple Chitral",
-    "id": "s5548"
-  },
-  {
     "name": "Purple Cookie",
     "type": "Hybrid",
     "lean": "",
@@ -187338,10 +187318,12 @@
     "type": "Hybrid",
     "lean": "Sativa-dominant",
     "rarity": "rare",
-    "thc": "",
+    "thc": "20–21%",
     "cbd": "",
     "terps": [],
-    "effects": [],
+    "effects": [
+      "Uplifted"
+    ],
     "flavor": "",
     "icon": "🌿",
     "breeder": "",
@@ -187350,7 +187332,11 @@
       "Sour Apple"
     ],
     "aka": "",
-    "ailments": null
+    "ailments": [
+      "Anxiety",
+      "Cramps",
+      "Depression"
+    ]
   },
   {
     "id": "s7325",
@@ -187435,11 +187421,11 @@
     "type": "Hybrid",
     "lean": "Indica-dominant",
     "rarity": "rare",
-    "thc": "",
+    "thc": "26–27%",
     "cbd": "",
     "terps": [],
     "effects": [],
-    "flavor": "",
+    "flavor": "citrus",
     "icon": "🌿",
     "breeder": "",
     "parents": [
@@ -187447,19 +187433,21 @@
       "Orange Zkittlez"
     ],
     "aka": "Terpee Slerpee",
-    "ailments": null
+    "ailments": [
+      "Pain"
+    ]
   },
   {
     "id": "s7330",
     "name": "Terple",
     "type": "Hybrid",
-    "lean": "",
+    "lean": "Indica-leaning",
     "rarity": "rare",
     "thc": "",
     "cbd": "",
     "terps": [],
     "effects": [],
-    "flavor": "",
+    "flavor": "blueberry",
     "icon": "🌿",
     "breeder": "In House Genetics",
     "parents": [
@@ -187498,13 +187486,19 @@
     "thc": "",
     "cbd": "",
     "terps": [],
-    "effects": [],
-    "flavor": "",
+    "effects": [
+      "Relaxed"
+    ],
+    "flavor": "berry",
     "icon": "🌿",
     "breeder": "",
     "parents": [],
     "aka": "Black '84, UW Black '84, UW Black, Black 1984",
-    "ailments": null
+    "ailments": [
+      "Insomnia",
+      "Pain",
+      "Stress"
+    ]
   },
   {
     "id": "s7333",
@@ -187512,16 +187506,25 @@
     "type": "Hybrid",
     "lean": "",
     "rarity": "rare",
-    "thc": "",
+    "thc": "18–19%",
     "cbd": "",
     "terps": [],
-    "effects": [],
-    "flavor": "",
+    "effects": [
+      "Euphoric",
+      "Focused"
+    ],
+    "flavor": "sweet and floral with lime notes",
     "icon": "🌿",
     "breeder": "Humboldt Seed Company",
-    "parents": [],
+    "parents": [
+      "Humboldt Frost",
+      "Humboldt OG",
+      "Humboldt Gelato"
+    ],
     "aka": "Bling",
-    "ailments": null
+    "ailments": [
+      "Depression"
+    ]
   },
   {
     "id": "s7334",
@@ -187800,6 +187803,28 @@
     "parents": [
       "Roze",
       "Lemonade x Oz Kush"
+    ],
+    "aka": "",
+    "ailments": []
+  },
+  {
+    "id": "s7348",
+    "name": "Purple Pop Rocks",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Creative"
+    ],
+    "flavor": "sweet grape candy with berry and gas",
+    "icon": "🌿",
+    "breeder": "StarFire Genetix",
+    "parents": [
+      "Rainbow Belts",
+      "Permanent Marker"
     ],
     "aka": "",
     "ailments": []

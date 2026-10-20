@@ -396,3 +396,34 @@ Blank-fills only (no migration needed).
 - **s7322 Sweets** (Karma Genetics): parents Guava Gelato x Karma Sour Diesel and breeder confirmed (Leafly, SeedFinder). Neither source states a lean, so existing Sativa-dominant is unsupported (left, flag). Effects/flavor/ailments Leafly only.
 - **s7323 Tahiti Lime** (Archive Seed Bank): flavor lime (Leafly + SeedFinder). Breeder confirmed. Parents NOT changed: SeedFinder says (Dosidos x Zkittles #25) x unknown lemon-lime strain; Leafly lists Dosidos and Zkittlez. Held: THC (16% vs 26.5%), terps (Leafly self-contradicts), effects (no overlap), lean (Leafly only).
 - Not in library (to add to sheet): Karma Sour Diesel, Illmatic, Sweet Mendo B.O.G, Chem Valley LSD, Sweet Chem Kush, Sweets Biker, Secret Weapon #103, Big Pun, Odd Job, Sticky Situation.
+
+## Batch 12 — s7324 to s7328 (2026-10-20)
+Blank-fills only (no migration needed).
+- **s7324 Tahitian Punch**: parents (Sour Tangie x Sour Apple, SeedFinder marks Sour Apple "probably") and Sativa-dominant lean confirmed (Leafly, AllBud, SeedFinder). THC 20-21% (Leafly 20.5%, AllBud 20-21%); effects Uplifted; ailments Anxiety, Cramps, Depression. Held: flavor (no overlap), terps, breeder (none; SeedFinder lists "Unknown or Legendary").
+- **s7325 Tangerine Borealis** (Bred by 42): SeedFinder only ((Northern Lights x G-13) x London Pound Cake, 75% indica). Single source, nothing written.
+- **s7326 Tangie Cookie Burger** (Skunk House): breeder and parents (Han Solo Burger x Tangimal = Animal Cookies x Tangie) confirmed by SeedFinder + a retail listing; Indica-dominant matches the retail listing (70%). Effects/flavor are retail-copy only; nothing new written.
+- **s7327 Tangistan**: AllBud lists 1% THC / ~17% CBD, which looks like the CBD-rich "Tangistan R4" (SeedFinder: (Dudes Diesel x Pakistani Chitral Kush) x R4), not necessarily this cross. Version ambiguity plus single source, so nothing written. Library parents match AllBud.
+- **s7328 Temptation** (LIT Farms): parents and breeder confirmed (Leafly + SeedFinder). All other data is Leafly only (20% THC, caryophyllene/limonene/pinene, 50/50, effects, flavor, anxiety/stress/pain). Multiple filial versions exist (F2/F3), so nothing written.
+- Not in library (to add to sheet): Satsuma Tree, Tangimal, Bazooka Burgers, Chets Freebie, Grape Boogers, Key West Dump Truck, Stoner's Delight, Whopper with Pickles, Tangistan R4, Shaolin Gleaux, Dudes Diesel.
+- Possible library duplicate: Pakistani Chitral Kush exists twice (s348 and s5548); not investigated yet.
+
+### Follow-up (2026-10-20): Purple Citral merged into Pakistani Chitral Kush
+- s5548 Purple Citral carried exactly the same aliases as s348 Pakistani Chitral Kush (PCK, Purple Pakistani, Purple Chitral...), and "Citral" appears to be a misspelling of "Chitral"; user approved combining them.
+- Merge pair ['s5548','s348'] added to STRAIN_MERGES (check-ins etc. move to s348; undo trail written to strain_merge_log). Alias "Purple Citral" added to s348 via compare-and-set migration `strain_research_batch3_2026_10_20`. s5548 removed from data/strains.json so seed.js cannot re-insert it. Tested on a live-state sim: s5548 gone, aka updated.
+- s5548's own values (effects Relaxed/Sleepy) were not copied; s348 keeps Relaxed. Sleepy not added (single entry).
+- Standing rule (user, 2026-10-20): add newly discovered names to the Discovered Candidates sheet after EVERY batch.
+
+## Batch 13 — s7329 to s7333 (2026-10-20)
+Blank-fills only (no migration needed).
+- **s7329 Terpee Slurpee**: parents GMO x Orange Zkittlez confirmed (Leafly "GMOG", GrowDiaries "GMO Cookies"); Indica-dominant agrees. THC 26-27% (26% vs 27%); flavor citrus (grapefruit vs lime/lemon); ailments Pain. Held: breeder Surfr Seeds (GrowDiaries only; Leafly "unknown"), terps (Leafly limonene vs GrowDiaries myrcene), effects (no overlap).
+- **s7330 Terple** (In House Genetics): parents Tropicana Cookies x Slurricane #7 and breeder confirmed (SeedFinder, GrowDiaries; GrowDiaries says "supposedly"). Lean Indica-leaning (SeedFinder "mostly indica" + GrowDiaries); flavor blueberry. Held: THC 23%, effects, ailments (GrowDiaries only).
+- **s7331 Thanoz** (Dark Horse): parents Zkittlez x Bitch Slap and breeder confirmed (Leafly + SeedFinder description; SeedFinder's lineage tree says The Original Z, same plant). No change. Held: THC 24%, myrcene, 60/40 indica, effects (Leafly only).
+- **s7332 Black 84** (UW Black '84): effects Relaxed; flavor berry; ailments Insomnia, Pain, Stress (Leafly + AllBud). No parents (sources only say "believed Afghani-family"). Held: THC (13% vs 22%), terps (Leafly only), breeder (none; University of Washington escape), lean (type Indica already).
+- **s7333 The Bling** (Humboldt Seed Company): parents Humboldt Frost x Humboldt OG x Humboldt Gelato (SeedFinder + GrowDiaries; Leafly says "Reserve OG" instead of Humboldt OG); THC 18-19%; effects Euphoric/Focused; flavor sweet and floral with lime; ailments Depression. Held: lean (50/50 vs 75% vs indica-dominant), terps (Leafly only), Leafly's Reserve OG variant.
+- Not in library (added to sheet below): Humboldt Gelato, Slurricane #7, BC Bling Cheesecake, UW, UW Purp.
+
+## Self-added check-ins (2026-10-20)
+Alissa's three self-added check-ins (Vanilla Sky, Sweet lemon gilato, Purple Pop Rocks) researched individually.
+- **Purple Pop Rocks → new entry s7348.** Parents Rainbow Belts (library s1624; sources spell "Rainbow Beltz") x Permanent Marker (s1539) confirmed by AllBud, StarFire Genetix listing (seed-city), Floyd's Cannabis. Breeder StarFire Genetix (seed-city, puresativa listing title). Effects Creative (AllBud + breeder listing). Flavor sweet grape candy with berry and gas (AllBud, Floyd's, SeedsHereNow). Held: THC 30-31% (AllBud, SeedsHereNow which copies it), lean (balanced vs indica-leaning), other effects/ailments (AllBud only), terps (none shared).
+- **Vanilla Sky: not added.** Name belongs to unrelated strains: Wanted Seeds (GG4 x UK Monkey, 70% sativa), Eskobar (Vanilluna x G13 Haze, balanced), AskGrowers (Blueberry x White Widow), and a Gelato-brand indica joint with no published genetics. No two sources agree. Needs the product/brand she had.
+- **Sweet lemon gilato: not added.** No strain by that name found; closest is Lemon Gelato (several unrelated versions, not in library). Needs the brand/product.
