@@ -100,14 +100,12 @@ Checked on the live site and Render logs:
   fix this; change the code.
 - Seed counts: DB has 41 FAQs and 107 recipes vs 42 and 108 in the files.
   Explained: one FAQ ("Terpene color key", answer `__TERPLEGEND__`) is a
-  deliberate placeholder the seed skips, and `recipes.json` has two DIFFERENT
-  recipes titled "Cannabis Rice Krispie Treats" (Gummies & Candy vs Baked
-  Goods) -- the seed dedupes by title, so only the first is live. Rename one
-  in recipes.json to publish both.
+  deliberate placeholder the seed skips, and `recipes.json` had two DIFFERENT
+  recipes with the same title -- the seed dedupes by title, so only the first
+  was live. Fixed Oct 19 (see below); keep recipe titles unique.
 - **Node version floats.** package.json says `"node": ">=18.0.0"`, and Render
   picked Node 26.12.0. A future major Node release could break dependencies
-  on a deploy with no code change. Consider pinning to a tested major (e.g.
-  `"node": "22.x"`) after confirming the site runs on it.
+  on a deploy with no code change. FIXED Oct 19: now pinned to `26.x`.
 
 
 ### Features restored Oct 16 2026 (user confirmed these were meant to stay)
@@ -127,17 +125,41 @@ History scan found features lost to old whole-file uploads (server.js dropped
   data deliberately show no bar or dot rather than a fake one.
 - `canary.js` now fails if any of the above are missing, so run
   `node canary.js` before uploading server.js.
-- NOT restored (found in history, not confirmed wanted): "Top flavors" tags
-  (`TERPENE_FLAVOR_TAG`), per-effect emoji icons (`EFFECT_ICON`), the old
-  /mentions page, /account/name, /strains/suggest. Ask before restoring.
+
+### Oct 19 2026 round (all user-confirmed; tested on a scratch server, 37 checks)
+- **Also restored from history:** "Top flavors" tags on strain pages
+  (`TERPENE_FLAVOR_TAG`) and per-effect emoji (`EFFECT_ICON`, shown on strain
+  pages and check-in cards -- NOT in the check-in effect picker, which is a
+  protected behavior); the **/mentions** page (tile on the Community tab; the
+  Notifications page also lists mentions); **Name** card on /account with
+  `POST /account/name`; **/strains/suggest** ("Suggest a Strain": More >
+  Discover tile, plus a link on the empty strain-search state; submissions go
+  to the existing /admin/strain-submissions queue and email support).
+  `canary.js` guards all of these.
+- **ROUTE ORDER GOTCHA:** `GET /strains/suggest` must stay ABOVE the generic
+  `GET /strains/<id>` route in server.js, or it is swallowed as a strain id.
+- **Kudos buttons now use the plain emoji 🌿** (`KUDOS_BUD_ICON`). The leaf
+  PNG is gone for good; there should be no remaining image references.
+- **`/docs/` now serves image files only** (jpg/png/webp/gif/svg). Notes and
+  research logs in that folder (including the old `docs/HANDOFF.md`) are no
+  longer reachable from the web, but should still be deleted from GitHub.
+- **Node pinned to `26.x`** in package.json (the version Render was already
+  running, so no behavior change). Change it deliberately, after testing, not
+  by accident. There is no package-lock.json in the repo, so dependency minor
+  versions still float within their ^ ranges on each deploy.
+- **Duplicate recipe fixed:** the second recipe is now titled "Cannabis Rice
+  Krispie Treats (Leftover Cannabutter)", so both publish (expect 108 recipes
+  live after the next deploy).
+- **The 72 new strains are not "broken stubs."** 61% of the existing library
+  has no terpene data, and "rare" is the normal rating for strains with no
+  data. Terpenes/effects stay blank until a source clears the 2-source rule
+  in docs/strain-research-log.md; never fill them in by guesswork.
 
 ### Housekeeping flags
-- `docs/` is served publicly by `serveStatic()` (everything under /docs/ is
-  readable on the live site), and it holds `docs/HANDOFF.md` (an older,
-  stale copy) plus the research logs. Keep working notes out of `docs/`;
-  keep only images there. Delete `docs/HANDOFF.md` and keep this file at the
-  repo root (root files are not served).
+- `docs/` is for images only (the server now refuses to serve anything else
+  from it). Delete `docs/HANDOFF.md` on GitHub; this root file is the one to keep.
 - `data/straindex.db` is a leftover SQLite file from before Turso; unused.
+  Delete it on GitHub (nothing in the code reads it).
 - `canary.js` refers to a "Protected behaviors" section of this file and to
   RESTORE_NOTES.md. Neither exists in the copies reviewed. The protected
   behaviors themselves ARE enforced by strings in server.js (search

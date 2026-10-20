@@ -636,7 +636,9 @@ function renderCheckinComments(c, userId, redirectPath) {
 function rarityLabel(r) { return { common: 'Common', uncommon: 'Uncommon', rare: 'Rare', legendary: 'Legendary' }[r] || r; }
 // A small original cartoon-bud icon used on kudos buttons — hand-drawn SVG,
 // not a stock asset, so there's no licensing question about using it.
-const KUDOS_BUD_ICON = `<img src="/docs/leaf-kudos.png" alt="" width="15" height="15" style="vertical-align:-3px;margin-right:4px;">`;
+// Kudos buttons use a plain emoji (user decision, Oct 2026). The old leaf-kudos.png image was removed
+// from the repo on purpose -- do not re-add it. Constant name kept so call sites did not have to change.
+const KUDOS_BUD_ICON = `<span aria-hidden="true" style="margin-right:4px;">🌿</span>`;
 
 // Real cannabis bud photos, all free-for-commercial-use / no-attribution-required
 // under the Unsplash License (https://unsplash.com/license). These are generic
@@ -813,6 +815,49 @@ function strainSimilarity(a, b) {
   if (totalWeight === 0) return null;
   return Math.round((weightedScore / totalWeight) * 100);
 }
+
+// ---------------------------------------------------------------- flavor tags + effect icons (restored Oct 2026)
+// A short flavor-family tag + icon per terpene, used to build a "Top
+// Flavors" section directly from a strain's real, already-verified
+// terpene percentages -- rather than trying to re-derive flavor tags by
+// keyword-guessing the free-text flavor sentence, which risks reading
+// something into it that isn't really there. A strain with no terpene
+// data on file simply doesn't get this section, same principle as the
+// spectrum bars above.
+const TERPENE_FLAVOR_TAG = {
+  Myrcene: { label: 'Earthy', icon: '🌍' },
+  Linalool: { label: 'Floral', icon: '🌸' },
+  Limonene: { label: 'Citrus', icon: '🍋' },
+  Caryophyllene: { label: 'Peppery', icon: '🌶️' },
+  Pinene: { label: 'Piney', icon: '🌲' },
+  Humulene: { label: 'Woody', icon: '🪵' },
+  Terpinolene: { label: 'Herbal', icon: '🌿' },
+  Ocimene: { label: 'Sweet', icon: '🍯' },
+};
+
+// One small icon per mood/effect tag, shown next to the effect's name
+// wherever it's displayed on a strain's page.
+const EFFECT_ICON = {
+  Relaxed: '😌', Happy: '😊', Euphoric: '🤩', Uplifted: '🎈', Creative: '🎨',
+  Energetic: '⚡', Focused: '🎯', Talkative: '💬', Sleepy: '😴', Hungry: '🍕',
+  Calm: '🕊️', 'Clear-headed': '🧠', Giggly: '😄', Social: '👥', Tingly: '✨',
+  Aroused: '💗', Anxious: '😟', Paranoid: '👀', 'Dry Mouth': '🥤', 'Dry Eyes': '👁️',
+  Dizzy: '💫', Mellow: '🍃', Chill: '🧊', 'Zoned-out': '🌀', Introspective: '🪞',
+  Blissful: '😇', Sedated: '💤', 'Couch-locked': '🛋️', Buzzy: '🔋', Floaty: '🎈',
+  Grounded: '🌳', Present: '🧘', Warm: '☀️', 'Light-headed': '💫', 'Heavy-limbed': '🏋️',
+  Alert: '👀', Sharp: '🔪', Inspired: '💡', Playful: '🎉', Silly: '🤪',
+  Confident: '💪', Chatty: '🗣️', Cuddly: '🤗', Dreamy: '💭', Nostalgic: '📼',
+  Peaceful: '🕊️', Serene: '🌊', Refreshed: '🌿', Rejuvenated: '🌱', Cozy: '🧸',
+  Sociable: '🎊', Easygoing: '🌤️', Adventurous: '🧭', Curious: '🔍', Observant: '👁️',
+  'In-the-zone': '🎯', Productive: '✅', Wired: '🔌', Jittery: '⚡', Foggy: '🌫️',
+  Groggy: '🥱', Spacey: '🌌', Munchies: '🍔', Thirsty: '🥤', 'Red-eyed': '👁️',
+  Lightweight: '🪶', 'Heavy-eyed': '😑', Yawny: '🥱', Motivated: '🚀', Amorous: '💕',
+  Loose: '🎐', 'Free-spirited': '🦋', Tranquil: '🌅', Elevated: '🎈', Airy: '☁️',
+  'Slowed-down': '🐌', Spirited: '🔥', 'Numb (localized)': '🧊',
+  'Stress relief': '🧘', 'Pain relief': '💊', 'Sleep support': '🌙', 'Nausea relief': '🍵',
+  'Appetite boost': '🍽️', 'Inflammation relief': '❄️', 'Muscle relief': '💆', 'Mood lift': '☀️',
+};
+function effectLabelHtml(e) { return `${EFFECT_ICON[e] ? EFFECT_ICON[e] + ' ' : ''}${esc(e)}`; }
 
 function strainPhotoTag(strain, sizeClass = 'md') {
   if (!strain) return `<div class="strain-thumb strain-thumb-${sizeClass}" style="display:flex;align-items:center;justify-content:center;font-size:20px;">🌿</div>`;
@@ -1142,7 +1187,7 @@ async function pageHome(req, res) {
         </a>
         <div class="sub" style="margin-top:8px;">${esc(c.method)} · ${starString(c.rating)}</div>
         ${c.photo ? `<img class="photo-thumb" src="${esc(c.photo)}" alt="photo">` : ''}
-        ${(c.effects || []).length ? `<div class="effect-tags">${c.effects.map(e => `<span>${esc(e)}</span>`).join('')}</div>` : ''}
+        ${(c.effects || []).length ? `<div class="effect-tags">${c.effects.map(e => `<span>${effectLabelHtml(e)}</span>`).join('')}</div>` : ''}
         ${c.note ? `<div class="note">"${esc(c.note)}"</div>` : ''}
         ${renderCheckinPairings(c)}
         ${renderOnsetTimer(c)}
@@ -1248,7 +1293,7 @@ function pageStrains(req, res, query) {
           <div class="sub">${esc(s.type)} · ${rarityLabel(s.rarity)} · THC ${esc(s.thc)}</div>
         </div>
         <span class="rarity-tag rarity-${s.rarity}">${rarityLabel(s.rarity)}</span>
-      </a>`).join('') || `<div class="empty-note">No strains match your filters.</div>`}</div>
+      </a>`).join('') || `<div class="empty-note">No strains match your filters. <a href="/strains/suggest${q ? `?name=${encodeURIComponent(q)}` : ''}">Can't find it? Suggest it →</a></div>`}</div>
   `;
   sendHtml(res, layout({ title: 'Strains', active: 'strains', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
 }
@@ -1442,7 +1487,7 @@ function renderAddToListsButton(s, userId) {
 // See also: pageStrainDetail, canary.js.
 // ============================================================
 function renderEffectPills(effects) {
-  return (effects || []).map(e => `<a class="filter-pill" href="/strains?effect=${encodeURIComponent(e)}" style="text-decoration:none;">${esc(e)}</a>`).join('');
+  return (effects || []).map(e => `<a class="filter-pill" href="/strains?effect=${encodeURIComponent(e)}" style="text-decoration:none;">${effectLabelHtml(e)}</a>`).join('');
 }
 // Same idea for the "Users report relief from" tags: each one links to the
 // library filtered by that relief (/strains?ailment=...), exactly like the
@@ -1475,6 +1520,11 @@ function pageStrainDetail(req, res, id) {
       ${s.flavor ? `<p style="font-style:italic;color:#6b6b6b;">"${esc(s.flavor)}"</p>` : ''}
       <p>${renderEffectPills(s.effects)}</p>
       ${s.terps.length ? `<p><b>Top terpenes:</b> ${s.terps.map(t => `${esc(t.n)} (${Math.round(t.p * 100)}%)`).join(', ')}</p>` : ''}
+      ${(() => {
+        const topFlavorTerps = [...s.terps].sort((a, b) => b.p - a.p).filter(t => TERPENE_FLAVOR_TAG[t.n]).slice(0, 3);
+        if (!topFlavorTerps.length) return '';
+        return `<p><b>Top flavors:</b> ${topFlavorTerps.map(t => `<span class="filter-pill">${TERPENE_FLAVOR_TAG[t.n].icon} ${TERPENE_FLAVOR_TAG[t.n].label}</span>`).join('')}</p>`;
+      })()}
       ${(() => {
         const energyPct = effectEnergyPercent(s.effects);
         const thcPct = thcBarPercent(s.thc);
@@ -1529,7 +1579,7 @@ function pageStrainDetail(req, res, id) {
           </div>
           ${starString(c.rating)}
           <div class="empty-note" style="padding:2px 0 0;"><span class="local-time" data-utc="${c.created_at}Z">${esc(c.created_at)} UTC</span></div>
-          ${(c.effects || []).length ? `<p style="margin:6px 0 0;">${c.effects.map(e => `<span class="filter-pill">${esc(e)}</span>`).join('')}</p>` : ''}
+          ${(c.effects || []).length ? `<p style="margin:6px 0 0;">${c.effects.map(e => `<span class="filter-pill">${effectLabelHtml(e)}</span>`).join('')}</p>` : ''}
           ${c.note ? `<span class="empty-note" style="display:block;padding:4px 0 0;">${esc(c.note)}</span>` : ''}
         ${renderCheckinPairings(c)}
         ${renderOnsetTimer(c)}
@@ -1861,7 +1911,7 @@ function pageCheckinDetail(req, res, id) {
       ${isMine && isCustomCheckin(c) ? renderCustomStrainPrompts(req, userId, '/checkin/' + c.id, { onlyNormName: db.normalizeCustomName(c.custom_strain_name) }) : ''}
       <div class="sub" style="margin-top:8px;">${esc(c.method)} · ${starString(c.rating)}</div>
       ${c.photo ? `<img class="photo-thumb" src="${esc(c.photo)}" alt="photo">` : ''}
-      ${(c.effects || []).length ? `<div class="effect-tags">${c.effects.map(e => `<span>${esc(e)}</span>`).join('')}</div>` : ''}
+      ${(c.effects || []).length ? `<div class="effect-tags">${c.effects.map(e => `<span>${effectLabelHtml(e)}</span>`).join('')}</div>` : ''}
       ${c.note ? `<div class="note">"${esc(c.note)}"</div>` : ''}
       ${renderCheckinPairings(c)}
       ${renderOnsetTimer(c)}
@@ -5170,6 +5220,7 @@ function pageMore(req, res) {
         { href: '/dispensaries', icon: '📍', t: 'Dispensaries', s: 'Locator & live menus' },
         { href: '/leaderboard', icon: '🏆', t: 'Top Contributors', s: 'Most-appreciated check-ins this month' },
         { href: '/gear-care', icon: '🧼', t: 'Cleaning & Gear Care', s: 'Keep your pipes, rigs & vapes running well' },
+        { href: '/strains/suggest', icon: '💡', t: 'Suggest a Strain', s: 'Seen one we don\u2019t have yet?' },
       ],
     },
     {
@@ -5573,6 +5624,20 @@ function pageAccount(req, res, query) {
     </div>
 
     <div class="card" style="margin-top:14px;">
+      <h2 style="margin:0 0 10px;font-size:15px;">Name</h2>
+      <p class="empty-note" style="padding:0 0 10px;">Not shown to other users, just yours to keep accurate.</p>
+      ${error === 'name_invalid' ? `<p class="dosing-note">First and last name are both required.</p>` : ''}
+      ${success === 'name' ? `<p class="empty-note" style="color:var(--accent-text);">Name updated.</p>` : ''}
+      <form method="POST" action="/account/name">
+        <label class="field-label" style="margin-top:0;">First name</label>
+        <input type="text" name="first_name" value="${esc(user.first_name || '')}" required maxlength="50" autocomplete="given-name">
+        <label class="field-label">Last name</label>
+        <input type="text" name="last_name" value="${esc(user.last_name || '')}" required maxlength="50" autocomplete="family-name">
+        <button class="btn block" type="submit" style="margin-top:10px;">Update Name</button>
+      </form>
+    </div>
+
+    <div class="card" style="margin-top:14px;">
       <h2 style="margin:0 0 10px;font-size:15px;">Password</h2>
       ${error === 'wrong_password' ? `<p class="dosing-note">Current password is incorrect.</p>` : ''}
       ${error === 'password_mismatch' ? `<p class="dosing-note">New password and confirmation don't match.</p>` : ''}
@@ -5650,6 +5715,16 @@ async function handleAccountUsername(req, res) {
   } catch (err) {
     redirect(res, '/account?error=username_taken');
   }
+}
+async function handleAccountName(req, res) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const fields = await parseForm(req);
+  const firstName = String(fields.first_name || '').trim();
+  const lastName = String(fields.last_name || '').trim();
+  if (!firstName || !lastName) return redirect(res, '/account?error=name_invalid');
+  await db.updateName(userId, firstName, lastName);
+  redirect(res, '/account?ok=name');
 }
 async function handleAccountEmail(req, res) {
   const userId = requireUser(req, res);
@@ -5789,6 +5864,7 @@ function pageFriends(req, res, query) {
     <div class="more-grid">
       <a class="more-tile" href="/messages"><span class="ic">💬</span><div class="t">Messages</div><div class="s">${db.countUnreadMessages(userId) > 0 ? `${db.countUnreadMessages(userId)} unread` : 'Chat with your community'}</div></a>
       <a class="more-tile" href="/notifications"><span class="ic">🔔</span><div class="t">Notifications</div><div class="s">${notificationsSummary(userId) || 'Mentions, comments & reactions'}</div></a>
+      <a class="more-tile" href="/mentions"><span class="ic">🏷️</span><div class="t">Mentions</div><div class="s">${db.countUnreadMentions(userId) > 0 ? `${db.countUnreadMentions(userId)} new` : 'Posts you\u2019ve been tagged in'}</div></a>
       <a class="more-tile" href="/puff-puff-ask"><span class="ic">💨</span><div class="t">Puff Puff Ask</div><div class="s">Ask the community, browse by section</div></a>
       <a class="more-tile" href="/trade"><span class="ic">🔁</span><div class="t">Trade</div><div class="s">Swap dupes with your community</div></a>
       <a class="more-tile" href="/trade-history"><span class="ic">📜</span><div class="t">Trade History</div><div class="s">Every trade you\u2019ve made</div></a>
@@ -6064,6 +6140,121 @@ async function handleAdminStrainSubmissionReviewed(req, res, id) {
 // philosophy as getOnboardingChecklist/getCheckinStreak. Locked badges
 // still render (greyed out, not hidden) since showing what's *not*
 // earned yet is part of what makes a badge shelf worth coming back to.
+// ---------------------------------------------------------------- suggest a strain (restored Oct 2026)
+// "Suggest a Strain" -- lets someone report a strain they've actually seen
+// (at a dispensary, on a menu, wherever) that isn't in the library yet.
+// Goes into its own review queue rather than straight into the real strain
+// table, so nothing unverified ever shows up in search before a human's
+// looked at it -- see the strain_submissions table comment in db.js.
+function pageStrainSuggest(req, res, query) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const sent = query.get('sent');
+  const error = query.get('error');
+  const prefill = query.get('name') || '';
+  const body = `
+    <h1 class="screen-title">Suggest a Strain</h1>
+    <p class="screen-sub">Seen something at a dispensary that's not in the library yet? Tell us about it and we'll research it and add it.</p>
+    ${error === 'rate_limited' ? `<p class="dosing-note">You've suggested a lot of strains in a short time — give it a few minutes and try again.</p>` : ''}
+    ${sent ? `<p class="empty-note" style="color:var(--brand-green-dark);">Thanks — your suggestion was sent for review.</p>` : ''}
+    <form method="POST" action="/strains/suggest">
+      <label class="field-label" style="margin-top:0;">Strain name</label>
+      <input type="text" name="strain_name" value="${esc(prefill)}" required placeholder="e.g. Cherry Hearts">
+      <label class="field-label">Anything you know about it (optional)</label>
+      <textarea name="description" placeholder="Breeder, dispensary, flavor, anything on the label..."></textarea>
+      <label class="field-label">Photo of the label or menu (optional)</label>
+      <div class="photo-picker">
+        <div class="photo-upload-box" id="ss-photo-upload-box" onclick="document.getElementById('ss-photo-file-input').click()">
+          <div class="up-ic">📷</div>
+          <div class="up-txt">Tap to snap or upload a photo (optional)</div>
+        </div>
+        <input type="file" id="ss-photo-file-input" accept="image/*" style="display:none;">
+        <input type="hidden" name="photo" id="ss-photo-data-input">
+      </div>
+      <button class="btn block" type="submit" style="margin-top:14px;">Submit Suggestion</button>
+    </form>
+    <script>
+      (function() {
+        const fileInput = document.getElementById('ss-photo-file-input');
+        const photoData = document.getElementById('ss-photo-data-input');
+        const uploadBox = document.getElementById('ss-photo-upload-box');
+        fileInput.addEventListener('change', () => {
+          const file = fileInput.files && fileInput.files[0];
+          if (!file) return;
+          const reader = new FileReader();
+          reader.onload = () => {
+            photoData.value = reader.result;
+            uploadBox.innerHTML = '<div class="photo-preview-wrap"><img src="' + reader.result + '" alt="Preview"></div>';
+          };
+          reader.readAsDataURL(file);
+        });
+      })();
+    </script>
+  `;
+  sendHtml(res, layout({ title: 'Suggest a Strain', active: 'more', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
+}
+async function handleStrainSuggestSubmit(req, res) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  if (await isSubmissionRateLimited('strain_suggest', userId)) return redirect(res, '/strains/suggest?error=rate_limited');
+  const f = await parseForm(req);
+  const strainName = (f.strain_name || '').trim();
+  if (!strainName) return redirect(res, '/strains/suggest');
+  const photoUrl = await storage.uploadPhoto(f.photo || null, 'strain-suggestions');
+  const description = f.description || '';
+  await db.createStrainSubmission({ user_id: userId, strain_name: strainName, description, photo: photoUrl });
+
+  const user = db.getUserById(userId);
+  const photoAbsUrl = photoUrl && !/^https?:\/\//.test(photoUrl) ? `${req.headers['x-forwarded-proto'] || 'https'}://${req.headers.host}${photoUrl}` : photoUrl;
+  sendEmail({
+    to: SUPPORT_EMAIL,
+    subject: `StrainDex: strain suggestion — ${strainName}`,
+    html: `<p><b>${esc(user ? user.username : 'A user')}</b> suggested a strain that's not in the library yet:</p>
+      <p style="font-size:16px;"><b>${esc(strainName)}</b></p>
+      ${description ? `<p style="white-space:pre-wrap;">${esc(description)}</p>` : ''}
+      ${photoAbsUrl ? `<p><img src="${esc(photoAbsUrl)}" alt="Submitted photo" style="max-width:300px;"></p>` : ''}
+      <p><a href="https://${req.headers.host}/admin/strain-submissions">Review it in the admin panel</a></p>`,
+  }).catch(err => console.error('[email] strain suggestion notification failed:', err));
+
+  redirect(res, '/strains/suggest?sent=1');
+}
+
+// ---------------------------------------------------------------- mentions (restored Oct 2026)
+// Everywhere someone's tagged you with @username in a comment, most recent
+// first. Viewing this page marks them all read, same "opening it implies
+// you've seen it" pattern as a DM thread. Links straight to the exact
+// post via pageCheckinDetail -- this used to have to fall back to the
+// poster's profile or just Home for anyone outside your community, since
+// there was no page that could show a single stranger's post on its own;
+// that's exactly what pageCheckinDetail is for, so every mention can now
+// point at precisely the right place regardless of who posted it.
+async function pageMentions(req, res) {
+  const userId = requireUser(req, res);
+  if (userId == null) return;
+  const rows = db.listMentionsForUser(userId).map(m => {
+    const checkin = db.getCheckin(m.checkin_id);
+    if (!checkin) return null;
+    const mentioner = db.getUserById(m.mentioning_user_id);
+    const strain = db.getStrain(checkin.strain_id);
+    return { m, checkin, mentioner, strain, link: `/checkin/${checkin.id}` };
+  }).filter(Boolean);
+  await db.markMentionsRead(userId);
+  const body = `
+    <h1 class="screen-title">Mentions</h1>
+    <p class="screen-sub">Posts where someone tagged you with @username in a comment.</p>
+    ${rows.length ? rows.map(({ m, checkin, mentioner, strain, link }) => `
+      <a class="library-row" href="${link}" style="text-decoration:none;color:inherit;">
+        ${strainPhotoTag(strain, 'sm')}
+        <div class="info">
+          <div class="nm">${esc(mentioner ? mentioner.username : 'Someone')} tagged you</div>
+          <div class="sub">on ${esc(strain ? strain.name : checkin.strain_id)} · <span class="local-time" data-utc="${m.created_at}Z">${esc(m.created_at)} UTC</span></div>
+        </div>
+      </a>
+    `).join('') : `<div class="empty-note">No one's tagged you yet — use @username in a comment to tag someone yourself.</div>`}
+  `;
+  sendHtml(res, layout({ title: 'Mentions', active: 'friends', body, isAdmin: auth.isAdmin(req), unreadMessages: friendsBadgeCount(auth.currentUserId(req)) }));
+}
+
 // ---------------------------------------------------------------- badges directory (restored Oct 2026)
 // Full list of every badge with what it takes to earn it. computeBadges() is the single
 // source of truth for the badges themselves; this page only displays them.
@@ -6312,7 +6503,7 @@ function pageFriendProfile(req, res, friendId) {
         </a>
         <div class="sub" style="margin-top:8px;">${esc(c.method)} · ${starString(c.rating)}</div>
         ${c.photo ? `<img class="photo-thumb" src="${esc(c.photo)}" alt="photo">` : ''}
-        ${(c.effects || []).length ? `<div class="effect-tags">${c.effects.map(e => `<span>${esc(e)}</span>`).join('')}</div>` : ''}
+        ${(c.effects || []).length ? `<div class="effect-tags">${c.effects.map(e => `<span>${effectLabelHtml(e)}</span>`).join('')}</div>` : ''}
         ${c.note ? `<div class="note">"${esc(c.note)}"</div>` : ''}
         ${renderCheckinPairings(c)}
         ${renderOnsetTimer(c)}
@@ -6894,6 +7085,9 @@ function serveStatic(req, res, pathname) {
   // than /public/images -- serve /docs/* from that folder; everything else
   // from /public.
   const isDocsRequest = pathname.startsWith('/docs/');
+  // /docs/ holds images only. Working notes (HANDOFF.md, research logs) used to be readable by
+  // anyone on the live site -- only these image types are served from that folder now.
+  if (isDocsRequest && !/\.(jpe?g|png|webp|gif|svg)$/i.test(pathname)) return notFound(res);
   const baseDir = isDocsRequest ? DOCS_DIR : PUBLIC_DIR;
   const relativePath = isDocsRequest ? pathname.slice('/docs'.length) : pathname;
   const filePath = path.join(baseDir, relativePath);
@@ -7302,7 +7496,7 @@ function pageSharedCheckin(req, res, id) {
       </div>
       <div class="sub" style="margin-top:12px;">${esc(c.method)} · ${starString(c.rating)}</div>
       ${c.photo ? `<img class="photo-thumb" src="${esc(c.photo)}" alt="photo" style="margin-top:8px;">` : ''}
-      ${(c.effects || []).length ? `<div class="effect-tags" style="margin-top:8px;">${c.effects.map(e => `<span>${esc(e)}</span>`).join('')}</div>` : ''}
+      ${(c.effects || []).length ? `<div class="effect-tags" style="margin-top:8px;">${c.effects.map(e => `<span>${effectLabelHtml(e)}</span>`).join('')}</div>` : ''}
       ${c.note ? `<div class="note" style="margin-top:8px;">"${esc(c.note)}"</div>` : ''}
       ${renderCheckinPairings(c)}
     </div>
@@ -7626,6 +7820,8 @@ const server = http.createServer(async (req, res) => {
     if (method === 'GET' && pathname === '/leaderboard') return pageLeaderboard(req, res);
     if (method === 'GET' && pathname === '/add-to-home-screen') return pageAddToHomeScreen(req, res);
     if (method === 'GET' && pathname === '/strains') return pageStrains(req, res, url.searchParams);
+    // must stay ABOVE the generic /strains/<id> route below, or it is swallowed as a strain id
+    if (method === 'GET' && pathname === '/strains/suggest') return pageStrainSuggest(req, res, url.searchParams);
     if (method === 'GET' && (m = pathname.match(/^\/strains\/([^/]+)$/))) return pageStrainDetail(req, res, m[1]);
     if (method === 'GET' && pathname === '/checkin') return pageCheckinForm(req, res, url.searchParams);
     if (method === 'POST' && pathname === '/checkin') return await handleCheckinSubmit(req, res);
@@ -7684,6 +7880,7 @@ const server = http.createServer(async (req, res) => {
     if (method === 'POST' && pathname === '/account/bio') return await handleAccountBio(req, res);
     if (method === 'POST' && pathname === '/account/username') return await handleAccountUsername(req, res);
     if (method === 'POST' && pathname === '/account/email') return await handleAccountEmail(req, res);
+    if (method === 'POST' && pathname === '/account/name') return await handleAccountName(req, res);
     if (method === 'POST' && pathname === '/account/password') return await handleAccountPassword(req, res);
     if (method === 'GET' && pathname === '/admin/logout') return handleAdminLogout(req, res);
     if (method === 'GET' && pathname === '/admin') return pageAdminHome(req, res);
@@ -7726,6 +7923,8 @@ const server = http.createServer(async (req, res) => {
     if (method === 'GET' && pathname === '/history') return pageHistory(req, res);
     if (method === 'GET' && pathname === '/trade') return pageTrade(req, res, url.searchParams);
     if (method === 'GET' && pathname === '/trade-history') return pageTradeHistory(req, res);
+    if (method === 'GET' && pathname === '/mentions') return await pageMentions(req, res);
+    if (method === 'POST' && pathname === '/strains/suggest') return await handleStrainSuggestSubmit(req, res);
     if (method === 'GET' && pathname === '/friends') return pageFriends(req, res, url.searchParams);
     if (method === 'GET' && pathname === '/friends/requests') return pageFriendRequests(req, res);
     if (method === 'GET' && (m = pathname.match(/^\/friends\/(\d+)$/))) return pageFriendProfile(req, res, Number(m[1]));

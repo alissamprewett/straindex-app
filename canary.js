@@ -23,6 +23,10 @@ const mustHaveInServer = [
   // restored Oct 2026 after an old whole-file upload had dropped them (user confirmed these must stay):
   'pageTradeHistory', "pathname === '/trade-history'", 'pageBadges', "pathname === '/badges'",
   'effectEnergyPercent', 'renderMiniEnergyBar', 'thcBarPercent', 'dominantTerpColor', 'strainSimilarity', 'strainSimilarity(a, b)',
+  // restored Oct 19 2026 (user confirmed):
+  'pageMentions', "pathname === '/mentions'", 'handleAccountName', "pathname === '/account/name'",
+  'pageStrainSuggest', 'handleStrainSuggestSubmit', "pathname === '/strains/suggest'",
+  'TERPENE_FLAVOR_TAG', 'EFFECT_ICON',
 ];
 const mustHaveInDb = ['listPendingCustomStrainPrompts', 'resolveCustomStrainPrompt', 'custom_strain_choices', 'pruneAndCountAttempts', 'getYearInReview', 'getKudosLeaderboard', 'bumpSessionVersion', 'listUserPhotoUrls', 'DELETE FROM forum_threads WHERE user_id', 'DELETE FROM grow_journal_entries WHERE user_id', 'DELETE FROM checkin_reactions WHERE checkin_id = ?'];
 const mustHaveInAuth = ['setSessionVersionLookup', 'timingSafeEqual'];
