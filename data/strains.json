@@ -186361,8 +186361,12 @@
     "thc": "27%",
     "cbd": "",
     "terps": [],
-    "effects": [],
-    "flavor": "",
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Creative"
+    ],
+    "flavor": "chocolate mint cookie sweetness over a skunky, nutty kush funk",
     "icon": "🌿",
     "breeder": "Archive Seed Bank",
     "parents": [
@@ -186370,7 +186374,10 @@
       "Face Off OG BX1"
     ],
     "aka": "Samoa, Samoa Cookies",
-    "ailments": null
+    "ailments": [
+      "Stress",
+      "Depression"
+    ]
   },
   {
     "id": "s7280",
@@ -186378,18 +186385,26 @@
     "type": "Hybrid",
     "lean": "",
     "rarity": "rare",
-    "thc": "",
+    "thc": "17–22%",
     "cbd": "",
     "terps": [],
-    "effects": [],
-    "flavor": "",
+    "effects": [
+      "Focused",
+      "Relaxed",
+      "Happy"
+    ],
+    "flavor": "lemon and pine over an earthy, woody OG base",
     "icon": "🌿",
     "breeder": "The Cali Connection",
     "parents": [
       "OG Kush"
     ],
     "aka": "San Fernando Valley OG, San Fernando Valley, SFVOG, SFV O.G., Valley OG",
-    "ailments": null
+    "ailments": [
+      "Stress",
+      "Pain",
+      "Anxiety"
+    ]
   },
   {
     "id": "s7281",
@@ -186400,10 +186415,13 @@
     "thc": "23–28%",
     "cbd": "",
     "terps": [],
-    "effects": [],
-    "flavor": "",
+    "effects": [
+      "Relaxed",
+      "Sleepy"
+    ],
+    "flavor": "pungent lemon over an earthy kush base",
     "icon": "🌿",
-    "breeder": "",
+    "breeder": "Rare Dankness Seeds",
     "parents": [
       "Rare Dankness #1",
       "Triangle Kush"
@@ -186417,11 +186435,14 @@
     "type": "Hybrid",
     "lean": "",
     "rarity": "rare",
-    "thc": "",
+    "thc": "20–24%",
     "cbd": "",
     "terps": [],
-    "effects": [],
-    "flavor": "",
+    "effects": [
+      "Creative",
+      "Relaxed"
+    ],
+    "flavor": "fruity pine with a sweet, diesel-tinged finish",
     "icon": "🌿",
     "breeder": "",
     "parents": [
@@ -186429,7 +186450,11 @@
       "Abusive OG x Diesel"
     ],
     "aka": "Secret OG",
-    "ailments": null
+    "ailments": [
+      "Stress",
+      "Pain",
+      "Depression"
+    ]
   },
   {
     "id": "s7283",
@@ -186443,7 +186468,7 @@
     "effects": [],
     "flavor": "",
     "icon": "🌿",
-    "breeder": "",
+    "breeder": "Covert Genetics",
     "parents": [
       "Critical Sensi Star",
       "Rug Burn OG"
@@ -186460,8 +186485,11 @@
     "thc": "",
     "cbd": "",
     "terps": [],
-    "effects": [],
-    "flavor": "",
+    "effects": [
+      "Energetic",
+      "Uplifted"
+    ],
+    "flavor": "earthy and citrusy with a sweet finish",
     "icon": "🌿",
     "breeder": "Jinxproof Genetics",
     "parents": [
@@ -186521,7 +186549,7 @@
     "cbd": "",
     "terps": [],
     "effects": [],
-    "flavor": "",
+    "flavor": "sweet grape",
     "icon": "🌿",
     "breeder": "Mephisto Genetics",
     "parents": [
@@ -186540,7 +186568,11 @@
     "thc": "15–22%",
     "cbd": "",
     "terps": [],
-    "effects": [],
+    "effects": [
+      "Euphoric",
+      "Creative",
+      "Relaxed"
+    ],
     "flavor": "",
     "icon": "🌿",
     "breeder": "",
@@ -186549,7 +186581,10 @@
       "White Fire Alien OG"
     ],
     "aka": "",
-    "ailments": null
+    "ailments": [
+      "Stress",
+      "Depression"
+    ]
   },
   {
     "id": "s7289",
@@ -186560,8 +186595,10 @@
     "thc": "",
     "cbd": "",
     "terps": [],
-    "effects": [],
-    "flavor": "",
+    "effects": [
+      "Relaxed"
+    ],
+    "flavor": "lemon and honey",
     "icon": "🌿",
     "breeder": "Aficionado Seeds",
     "parents": [
@@ -186582,7 +186619,7 @@
     "cbd": "",
     "terps": [],
     "effects": [],
-    "flavor": "",
+    "flavor": "fruity pineapple",
     "icon": "🌿",
     "breeder": "Mosca Seeds",
     "parents": [],
@@ -186599,7 +186636,7 @@
     "cbd": "",
     "terps": [],
     "effects": [],
-    "flavor": "",
+    "flavor": "pungent sour garlic with diesel and earthy notes",
     "icon": "🌿",
     "breeder": "Mosca Seeds",
     "parents": [
@@ -186618,8 +186655,12 @@
     "thc": "",
     "cbd": "",
     "terps": [],
-    "effects": [],
-    "flavor": "",
+    "effects": [
+      "Creative",
+      "Happy",
+      "Uplifted"
+    ],
+    "flavor": "sweet berry",
     "icon": "🌿",
     "breeder": "",
     "parents": [
@@ -186627,7 +186668,11 @@
       "Stardawg"
     ],
     "aka": "",
-    "ailments": null
+    "ailments": [
+      "Stress",
+      "Depression",
+      "Nausea"
+    ]
   },
   {
     "id": "s7293",
@@ -186638,8 +186683,11 @@
     "thc": "",
     "cbd": "",
     "terps": [],
-    "effects": [],
-    "flavor": "",
+    "effects": [
+      "Creative",
+      "Relaxed"
+    ],
+    "flavor": "tropical fruity sweetness",
     "icon": "🌿",
     "breeder": "DEO Farms",
     "parents": [
@@ -186647,7 +186695,9 @@
       "Pink Guava"
     ],
     "aka": "RS54, Rainbow Sherbert #54",
-    "ailments": null
+    "ailments": [
+      "Depression"
+    ]
   },
   {
     "id": "s7294",
@@ -186657,9 +186707,14 @@
     "rarity": "rare",
     "thc": "",
     "cbd": "",
-    "terps": [],
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.4
+      }
+    ],
     "effects": [],
-    "flavor": "",
+    "flavor": "sweet strawberry",
     "icon": "🌿",
     "breeder": "Raw Genetics",
     "parents": [
@@ -186667,19 +186722,25 @@
       "Georgia Pie"
     ],
     "aka": "",
-    "ailments": null
+    "ailments": [
+      "Anxiety",
+      "Pain"
+    ]
   },
   {
     "id": "s7295",
     "name": "Styrofoam Cup",
     "type": "Hybrid",
-    "lean": "",
+    "lean": "Indica-leaning",
     "rarity": "rare",
     "thc": "",
     "cbd": "",
     "terps": [],
-    "effects": [],
-    "flavor": "",
+    "effects": [
+      "Energetic",
+      "Creative"
+    ],
+    "flavor": "citrus",
     "icon": "🌿",
     "breeder": "Cannarado Genetics",
     "parents": [
@@ -186687,7 +186748,12 @@
       "Sunset Sherbet"
     ],
     "aka": "MSG",
-    "ailments": null
+    "ailments": [
+      "Anxiety",
+      "Stress",
+      "Depression",
+      "Pain"
+    ]
   },
   {
     "id": "s7296",
@@ -186735,8 +186801,10 @@
     "thc": "",
     "cbd": "",
     "terps": [],
-    "effects": [],
-    "flavor": "",
+    "effects": [
+      "Relaxed"
+    ],
+    "flavor": "sweet red fruit and cola",
     "icon": "🌿",
     "breeder": "Exotic Seed",
     "parents": [
@@ -186772,8 +186840,11 @@
     "thc": "",
     "cbd": "",
     "terps": [],
-    "effects": [],
-    "flavor": "",
+    "effects": [
+      "Happy",
+      "Uplifted"
+    ],
+    "flavor": "citrus with fruity notes",
     "icon": "🌿",
     "breeder": "Twenty20 Mendocino Seeds",
     "parents": [
@@ -186792,13 +186863,17 @@
     "thc": "",
     "cbd": "",
     "terps": [],
-    "effects": [],
-    "flavor": "",
+    "effects": [
+      "Energetic"
+    ],
+    "flavor": "grape and berry with floral notes",
     "icon": "🌿",
     "breeder": "Mass Medical Strains",
     "parents": [],
     "aka": "",
-    "ailments": null
+    "ailments": [
+      "Stress"
+    ]
   },
   {
     "id": "s7302",
@@ -186840,10 +186915,13 @@
     "type": "Hybrid",
     "lean": "",
     "rarity": "rare",
-    "thc": "",
+    "thc": "26–27%",
     "cbd": "",
     "terps": [],
-    "effects": [],
+    "effects": [
+      "Happy",
+      "Uplifted"
+    ],
     "flavor": "",
     "icon": "🌿",
     "breeder": "",
@@ -186852,7 +186930,9 @@
       "Orange Cookies"
     ],
     "aka": "",
-    "ailments": null
+    "ailments": [
+      "Depression"
+    ]
   },
   {
     "id": "s7305",
@@ -186864,10 +186944,13 @@
     "cbd": "",
     "terps": [],
     "effects": [],
-    "flavor": "",
+    "flavor": "strawberry and plum",
     "icon": "🌿",
     "breeder": "Lovin' in Her Eyes",
-    "parents": [],
+    "parents": [
+      "Pearl Cadillac",
+      "Dreamers Disease"
+    ],
     "aka": "",
     "ailments": null
   },
@@ -186884,7 +186967,10 @@
     "flavor": "",
     "icon": "🌿",
     "breeder": "Raw Genetics",
-    "parents": [],
+    "parents": [
+      "Apple Fritter",
+      "Strawberries and Cream"
+    ],
     "aka": "",
     "ailments": null
   },
@@ -186898,7 +186984,7 @@
     "cbd": "",
     "terps": [],
     "effects": [],
-    "flavor": "",
+    "flavor": "strawberry with tart citrus",
     "icon": "🌿",
     "breeder": "The Cali Connection",
     "parents": [
@@ -186918,7 +187004,7 @@
     "cbd": "",
     "terps": [],
     "effects": [],
-    "flavor": "",
+    "flavor": "strawberry",
     "icon": "🌿",
     "breeder": "Holy Smoke Seeds",
     "parents": [
@@ -186937,8 +187023,12 @@
     "thc": "",
     "cbd": "",
     "terps": [],
-    "effects": [],
-    "flavor": "",
+    "effects": [
+      "Euphoric",
+      "Uplifted",
+      "Focused"
+    ],
+    "flavor": "sweet strawberry",
     "icon": "🌿",
     "breeder": "Bodhi Seeds",
     "parents": [
@@ -186946,7 +187036,10 @@
       "Instant Karma"
     ],
     "aka": "",
-    "ailments": null
+    "ailments": [
+      "Depression",
+      "Pain"
+    ]
   },
   {
     "id": "s7310",
@@ -186957,8 +187050,11 @@
     "thc": "",
     "cbd": "",
     "terps": [],
-    "effects": [],
-    "flavor": "",
+    "effects": [
+      "Relaxed",
+      "Happy"
+    ],
+    "flavor": "strawberry and berry",
     "icon": "🌿",
     "breeder": "",
     "parents": [
@@ -186966,7 +187062,10 @@
       "White Fire Alien OG"
     ],
     "aka": "",
-    "ailments": null
+    "ailments": [
+      "Stress",
+      "Depression"
+    ]
   },
   {
     "id": "s7311",
@@ -187031,16 +187130,23 @@
     "thc": "",
     "cbd": "",
     "terps": [],
-    "effects": [],
-    "flavor": "",
+    "effects": [
+      "Creative",
+      "Focused"
+    ],
+    "flavor": "citrus and grapefruit",
     "icon": "🌿",
     "breeder": "Capulator",
     "parents": [
-      "Sunset",
+      "Sunset Sherbet",
       "MAC"
     ],
     "aka": "",
-    "ailments": null
+    "ailments": [
+      "Anxiety",
+      "Depression",
+      "Stress"
+    ]
   },
   {
     "id": "s7315",
@@ -187051,7 +187157,9 @@
     "thc": "",
     "cbd": "",
     "terps": [],
-    "effects": [],
+    "effects": [
+      "Creative"
+    ],
     "flavor": "",
     "icon": "🌿",
     "breeder": "",
@@ -187060,7 +187168,9 @@
       "White Widow"
     ],
     "aka": "",
-    "ailments": null
+    "ailments": [
+      "Depression"
+    ]
   },
   {
     "id": "s7316",
@@ -187088,8 +187198,13 @@
     "thc": "",
     "cbd": "",
     "terps": [],
-    "effects": [],
-    "flavor": "",
+    "effects": [
+      "Euphoric",
+      "Uplifted",
+      "Relaxed",
+      "Sleepy"
+    ],
+    "flavor": "diesel with citrus",
     "icon": "🌿",
     "breeder": "",
     "parents": [
@@ -187097,7 +187212,10 @@
       "Grease Monkey"
     ],
     "aka": "",
-    "ailments": null
+    "ailments": [
+      "Insomnia",
+      "Pain"
+    ]
   },
   {
     "id": "s7318",
@@ -187169,7 +187287,11 @@
     "flavor": "",
     "icon": "🌿",
     "breeder": "Twisty Seeds",
-    "parents": [],
+    "parents": [
+      "Afghani",
+      "Purple Thai",
+      "ATF"
+    ],
     "aka": "",
     "ailments": null
   },
@@ -187203,7 +187325,7 @@
     "cbd": "",
     "terps": [],
     "effects": [],
-    "flavor": "",
+    "flavor": "lime",
     "icon": "🌿",
     "breeder": "Archive Seed Bank",
     "parents": [],
@@ -187618,6 +187740,66 @@
     "parents": [
       "Mangu' Karot",
       "Mauve Poivrée"
+    ],
+    "aka": "",
+    "ailments": []
+  },
+  {
+    "id": "s7345",
+    "name": "Purple Rozé",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Relaxed"
+    ],
+    "flavor": "sweet floral aroma with an earthy edge",
+    "icon": "🌿",
+    "breeder": "Ethos Genetics",
+    "parents": [
+      "Purple Punch",
+      "Roze"
+    ],
+    "aka": "Purple Roze",
+    "ailments": []
+  },
+  {
+    "id": "s7346",
+    "name": "Banana Rozé",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "banana with tropical, fruity sweetness",
+    "icon": "🌿",
+    "breeder": "",
+    "parents": [],
+    "aka": "Banana Roze",
+    "ailments": []
+  },
+  {
+    "id": "s7347",
+    "name": "Lemon Roze",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "Dying Breed Seeds",
+    "parents": [
+      "Roze",
+      "Lemonade x Oz Kush"
     ],
     "aka": "",
     "ailments": []

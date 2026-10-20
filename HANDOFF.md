@@ -153,7 +153,7 @@ History scan found features lost to old whole-file uploads (server.js dropped
 - **The 72 new strains (s7269+) are not "broken stubs."** 61% of the existing
   library has no terpene data, and "rare" is the normal rating for strains with
   no data. They still have blank terpenes/effects/flavor; fill those in only
-  by per-strain research following docs/strain-research-log.md (real sources,
+  by per-strain research following strain-research-log.md (real sources,
   honest empties, never guessed). A research batch on them has NOT been done.
   (The "2+ independent sources" rule in that log is specifically for lineage
   of ambiguous/multi-version names; THC is cross-checked against Cannlytics
@@ -265,7 +265,7 @@ Alissa has no local dev environment and no git CLI. The workflow is:
   explicitly worked through for Leafly and SeedFinder.eu (both declined).
 - **Openly-licensed datasets are fair game**: `openthc/vdb` (GPL-3.0, strain
   *names* only, ~11,175 unused candidates saved — see
-  `docs/strain-research-log.md`), the Kushy Cannabis Dataset (MIT license,
+  `strain-research-log.md`), the Kushy Cannabis Dataset (MIT license,
   name + type + occasional effects/flavor, ~7,928 unused candidates with
   type already tagged, same log), and the Cannlytics lab-results dataset on
   Hugging Face (CC BY 4.0, *real* lab-tested THC/CBD/terpene data — used to
@@ -336,7 +336,7 @@ Alissa has no local dev environment and no git CLI. The workflow is:
 - **Ongoing Weedmaps directory audit**: cross-referencing
   `weedmaps.com/strains?page=N` (1,106 pages total) against the library to
   find missing strains and duplicate/misspelled entries. See
-  `docs/strain-research-log.md` for the standing research methodology
+  `strain-research-log.md` for the standing research methodology
   (specifically the "multi-version / ambiguous-lineage strains" section --
   read this before researching any strain whose name is generic enough
   that multiple unrelated breeders might have used it) and the running
@@ -349,7 +349,7 @@ Alissa has no local dev environment and no git CLI. The workflow is:
   wrong via real Cannlytics lab data and fixed. **74 remain unverified** —
   some may be genuinely accurate (e.g. ACDC really is low-THC/high-CBD),
   so each needs individual checking, not a bulk overwrite. List and method
-  are in `docs/strain-research-log.md`.
+  are in `strain-research-log.md`.
 - 32 other strains had their THC ranges updated to real current-market
   data from a Cannlytics California pull (see that log for the full list
   and reasoning — the old numbers weren't "wrong," just reflecting older/
@@ -365,7 +365,7 @@ Alissa has no local dev environment and no git CLI. The workflow is:
   68 of 88 recipes are tagged via a `usesBase` array field (schema: new
   `uses_base` column on the `recipes` table, JSON-encoded).
 - Kudos (leaf icon) on every recipe card and detail page.
-- Full sourcing/research history in `docs/recipe-research-log.md` —
+- Full sourcing/research history in `recipe-research-log.md` —
   what's covered, what sources were checked (and which were rejected and
   why), and what's queued for the next batch.
 
@@ -504,10 +504,10 @@ desktop browser) hasn't been confirmed by Alissa since this fix shipped.
 - **Continue the 74-strain "1–6% THC" cleanup** (see Strain library above).
 - **More batches from the saved candidate pools** (openthc/vdb ~11,100
   unused names; Kushy ~7,928 unused names with type already tagged) —
-  see `docs/strain-research-log.md` for the exact counts and where they're
+  see `strain-research-log.md` for the exact counts and where they're
   saved.
 - **More recipes** — every category is now reasonably balanced (11-19
-  each), no urgent gap, but `docs/recipe-research-log.md` has a running
+  each), no urgent gap, but `recipe-research-log.md` has a running
   "up next" list (e.g. a dedicated whipped-cream-charger infusion method,
   cold-infusion honey variant).
 - **More cartoon-style icons from Alissa's artwork** — only the leaf and
@@ -563,10 +563,14 @@ desktop browser) hasn't been confirmed by Alissa since this fix shipped.
   especially for visual/creative decisions.
 
 ## Strain research batch 1 (2026-10-19)
-s7269–s7273 researched one name at a time (see docs/strain-research-log.md for sources). Standing rules from Alissa: speed never overrides research integrity; never bulk-search; fix related entries when a finding warrants it. Shipped via seed blank-fills + migration `strain_research_batch1_2026_10_19` (2 compare-and-set THC changes). Open questions: terpene storage convention (templated p-values in ~1,360 strains are not measurements), Depression/Cramps/Migraine ailments, La Reunion landrace entry missing from library.
+s7269–s7273 researched one name at a time (see strain-research-log.md for sources). Standing rules from Alissa: speed never overrides research integrity; never bulk-search; fix related entries when a finding warrants it. Shipped via seed blank-fills + migration `strain_research_batch1_2026_10_19` (2 compare-and-set THC changes). Open questions: terpene storage convention (templated p-values in ~1,360 strains are not measurements), Depression/Cramps/Migraine ailments, La Reunion landrace entry missing from library.
 
 Follow-up same day: Depression/Cramps/Migraines ailments approved (asterisk + 'not medical advice' on strain page; Cramps/Migraines added to the By Relief filter); migration `strain_research_batch1b_2026_10_19`; new entry s7341 La Reunion. Open: Zamal entry, Congo #1 vs Congo, terpene storage convention.
 
 Terpene convention (approved): ranked names only; percentage shown only for entries with `m:true` (real lab measurement). Admin form: bare 'Name' = ranked, 'Name:Percent' = measured. New entries s7341 La Reunion, s7342 Zamal. Reina Madre parents = La Reunion + Congo (ACE Congo pheno #1).
 Trophy Wife (s2067) parents corrected to Triangle Mints (F2 = generation); GMO confirmed unchanged.
 Batch 2 (s7274-s7278) researched; plus new entries s7343 Mangu' Karot and s7344 Mango Pepper. Low-THC placeholder question closed by Alissa (confirmed correct earlier). Standing rule: only deliver files that changed since the last delivery.
+Added Roze family entries s7345 Purple Roze, s7346 Banana Roze (lineage unconfirmed, two conflicting versions), s7347 Lemon Roze.
+Batch 3 (s7279-s7283) researched. Next batch starts at s7284 Shangri-La.
+
+Research logs moved by Alissa: `strain-research-log.md` and `recipe-research-log.md` now live at the repo ROOT (not docs/). No code reads them by path; the server only serves /public and image files under /docs, so root .md files are not web-reachable. `docs/` is images only.
