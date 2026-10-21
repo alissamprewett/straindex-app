@@ -1196,37 +1196,23 @@
     "type": "Indica",
     "lean": "",
     "rarity": "common",
-    "thc": "16–24%",
-    "cbd": "10–21%",
-    "terps": [
-      {
-        "n": "Myrcene",
-        "p": 0.4
-      },
-      {
-        "n": "Linalool",
-        "p": 0.27
-      },
-      {
-        "n": "Pinene",
-        "p": 0.16
-      }
-    ],
+    "thc": "18–21%",
+    "cbd": "",
+    "terps": [],
     "effects": [
       "Relaxed",
       "Sleepy",
       "Happy",
       "Hungry"
     ],
-    "flavor": "Berry and blueberry on the palate with a myrcene-leaning finish.",
+    "flavor": "sweet blueberry",
     "icon": "🫐",
-    "ailments": [
-      "Stress",
-      "Insomnia",
-      "Pain",
-      "Depression",
-      "Lack of Appetite"
-    ]
+    "ailments": [],
+    "parents": [
+      "Blueberry",
+      "Jerry Berry"
+    ],
+    "aka": "MOB, Mother of All Berries, Maine Original Blueberry"
   },
   {
     "id": "s37",
@@ -3289,41 +3275,27 @@
   {
     "id": "s94",
     "name": "Chocolate Thai",
-    "type": "Hybrid",
+    "type": "Sativa",
     "lean": "",
     "rarity": "common",
     "thc": "12–16%",
-    "cbd": "16–20%",
-    "terps": [
-      {
-        "n": "Myrcene",
-        "p": 0.4
-      },
-      {
-        "n": "Humulene",
-        "p": 0.27
-      },
-      {
-        "n": "Pinene",
-        "p": 0.16
-      }
-    ],
+    "cbd": "",
+    "terps": [],
     "effects": [
-      "Relaxed",
+      "Creative",
+      "Focused",
       "Uplifted",
-      "Happy",
-      "Focused"
+      "Aroused"
     ],
-    "flavor": "Earthy and coffee on the palate with a myrcene-leaning finish.",
+    "flavor": "coffee and nutty with spicy notes",
     "icon": "🌰",
-    "breeder": "DJ Short",
+    "breeder": "",
     "ailments": [
-      "Stress",
+      "Anxiety",
       "Depression",
-      "Pain",
-      "Insomnia",
-      "Nausea"
-    ]
+      "Stress"
+    ],
+    "aka": "Thai Sticks"
   },
   {
     "id": "s95",
@@ -4957,23 +4929,22 @@
     "id": "s139",
     "name": "Pre-98 Bubba Kush",
     "type": "Indica",
-    "lean": "",
+    "lean": "Indica-dominant",
     "rarity": "uncommon",
-    "thc": "",
-    "cbd": "",
+    "thc": "20%",
+    "cbd": "<1%",
     "terps": [],
     "effects": [
       "Relaxed",
-      "Sleepy"
+      "Sleepy",
+      "Hungry"
     ],
     "flavor": "Rich earth and coffee with musk and a spicy finish.",
     "icon": "🌰",
     "ailments": [
       "Pain",
       "Stress",
-      "Insomnia",
-      "Inflammation",
-      "Lack of Appetite"
+      "Insomnia"
     ],
     "aka": "Pre 98 Bubba Kush, Pre-98 Bubba, P98, Pre-98, Pre'98 Bubba Kush",
     "breeder": "Matt \"Bubba\" Berger",
@@ -7996,40 +7967,28 @@
   {
     "id": "s222",
     "name": "Chocolate Chunk",
-    "type": "Hybrid",
+    "type": "Indica",
     "lean": "",
     "rarity": "uncommon",
-    "thc": "13–19%",
+    "thc": "18–23%",
     "cbd": "<1%",
     "terps": [
       {
         "n": "Myrcene",
         "p": 0.4
-      },
-      {
-        "n": "Linalool",
-        "p": 0.27
-      },
-      {
-        "n": "Ocimene",
-        "p": 0.16
       }
     ],
     "effects": [
       "Relaxed",
       "Sleepy",
-      "Happy",
-      "Euphoric"
+      "Hungry"
     ],
-    "flavor": "Earthy and sweet on the palate with a myrcene-leaning finish.",
+    "flavor": "coffee and nutty with earthy pine notes",
     "icon": "🌰",
     "breeder": "T.H.Seeds",
-    "ailments": [
-      "Insomnia",
-      "Pain",
-      "Stress",
-      "Depression",
-      "Nausea"
+    "ailments": [],
+    "parents": [
+      "Afghani"
     ]
   },
   {
@@ -16375,39 +16334,22 @@
   {
     "id": "s454",
     "name": "Hawaiian Haze",
-    "type": "Hybrid",
+    "type": "Sativa",
     "lean": "",
     "rarity": "rare",
-    "thc": "17–22%",
+    "thc": "",
     "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Myrcene",
-        "p": 0.4
-      },
-      {
-        "n": "Terpinolene",
-        "p": 0.27
-      },
-      {
-        "n": "Linalool",
-        "p": 0.16
-      }
-    ],
+    "terps": [],
     "effects": [
-      "Uplifted",
-      "Happy",
-      "Talkative",
-      "Hungry"
+      "Creative",
+      "Euphoric"
     ],
-    "flavor": "Skunk on the palate with a myrcene-leaning finish.",
+    "flavor": "tropical pineapple",
     "icon": "🦨",
-    "ailments": [
-      "Stress",
-      "Pain",
-      "Depression",
-      "Nausea",
-      "Insomnia"
+    "ailments": [],
+    "parents": [
+      "Haze",
+      "Hawaiian"
     ]
   },
   {
@@ -20309,37 +20251,23 @@
     "id": "s562",
     "name": "Snow Monster",
     "type": "Indica",
-    "lean": "",
+    "lean": "Indica-dominant",
     "rarity": "legendary",
-    "thc": "12–19%",
+    "thc": "17–25%",
     "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Linalool",
-        "p": 0.4
-      },
-      {
-        "n": "Myrcene",
-        "p": 0.27
-      },
-      {
-        "n": "Caryophyllene",
-        "p": 0.16
-      }
-    ],
+    "terps": [],
     "effects": [
       "Relaxed",
-      "Happy",
-      "Hungry",
-      "Uplifted"
+      "Sleepy",
+      "Giggly"
     ],
-    "flavor": "Sweet and earthy on the palate with a linalool-leaning finish.",
+    "flavor": "earthy skunk and blue cheese",
     "icon": "🍬",
-    "ailments": [
-      "Pain",
-      "Insomnia",
-      "Stress",
-      "Lack of Appetite"
+    "ailments": [],
+    "breeder": "Exotic Genetix",
+    "parents": [
+      "The White",
+      "Starfighter"
     ]
   },
   {
@@ -24948,39 +24876,26 @@
   {
     "id": "s689",
     "name": "Cookie Monster",
-    "type": "Hybrid",
+    "type": "Indica",
     "lean": "",
     "rarity": "rare",
-    "thc": "17–22%",
+    "thc": "17–21%",
     "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Myrcene",
-        "p": 0.4
-      },
-      {
-        "n": "Pinene",
-        "p": 0.27
-      },
-      {
-        "n": "Humulene",
-        "p": 0.16
-      }
-    ],
+    "terps": [],
     "effects": [
       "Relaxed",
       "Euphoric",
       "Happy",
       "Sleepy"
     ],
-    "flavor": "Grape on the palate with a myrcene-leaning finish.",
+    "flavor": "sweet vanilla and mint with woody pine notes",
     "icon": "🍇",
     "ailments": [
-      "Stress",
-      "Pain",
-      "Insomnia",
-      "Lack of Appetite",
-      "Muscle Spasms"
+      "Pain"
+    ],
+    "parents": [
+      "Girl Scout Cookies",
+      "OG Kush"
     ]
   },
   {
@@ -28999,36 +28914,29 @@
     "type": "Indica",
     "lean": "",
     "rarity": "common",
-    "thc": "16–25%",
+    "thc": "",
     "cbd": "<1%",
     "terps": [
       {
-        "n": "Linalool",
-        "p": 0.4
-      },
-      {
         "n": "Myrcene",
-        "p": 0.27
-      },
-      {
-        "n": "Terpinolene",
-        "p": 0.16
+        "p": 0.4
       }
     ],
     "effects": [
-      "Happy",
       "Relaxed",
-      "Sleepy",
-      "Uplifted"
+      "Sleepy"
     ],
-    "flavor": "Sweet and earthy on the palate with a linalool-leaning finish.",
+    "flavor": "nutty and coffee with earthy notes",
     "icon": "🍬",
     "ailments": [
-      "Stress",
-      "Pain",
-      "Depression",
-      "Inflammation"
-    ]
+      "Pain"
+    ],
+    "breeder": "THClones",
+    "parents": [
+      "True OG",
+      "Chocolate Rain"
+    ],
+    "aka": "Champion City Chocolate"
   },
   {
     "id": "s800",
@@ -34043,29 +33951,16 @@
     "type": "Indica",
     "lean": "",
     "rarity": "common",
-    "thc": "22–30%",
+    "thc": "13–19%",
     "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Terpinolene",
-        "p": 0.4
-      },
-      {
-        "n": "Pinene",
-        "p": 0.27
-      },
-      {
-        "n": "Caryophyllene",
-        "p": 0.16
-      }
-    ],
+    "terps": [],
     "effects": [
       "Happy",
       "Relaxed",
-      "Uplifted",
-      "Talkative"
+      "Euphoric",
+      "Sleepy"
     ],
-    "flavor": "Terpinolene-forward with a pinene undertone.",
+    "flavor": "spicy herbal and woody with mint",
     "icon": "🌿",
     "breeder": "Obsoul33t Genetics",
     "ailments": [
@@ -36456,32 +36351,19 @@
     "id": "s1013",
     "name": "Alien Kush",
     "type": "Hybrid",
-    "lean": "",
+    "lean": "Balanced",
     "rarity": "common",
-    "thc": "21–27%",
+    "thc": "20–21%",
     "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Myrcene",
-        "p": 0.4
-      },
-      {
-        "n": "Humulene",
-        "p": 0.27
-      },
-      {
-        "n": "Terpinolene",
-        "p": 0.16
-      }
-    ],
+    "terps": [],
     "effects": [
-      "Uplifted",
-      "Aroused",
-      "Tingly"
+      "Euphoric",
+      "Happy",
+      "Relaxed"
     ],
-    "flavor": "Earthy on the palate with a myrcene-leaning finish.",
+    "flavor": "earthy pine with spicy herbal notes",
     "icon": "🌰",
-    "breeder": "The Cali Connection",
+    "breeder": "",
     "parents": [
       "LVPK",
       "Alien Dawg"
@@ -38619,37 +38501,6 @@
     "breeder": "Royal Queen"
   },
   {
-    "id": "s1091",
-    "name": "Exodus Cheese",
-    "type": "Hybrid",
-    "lean": "",
-    "rarity": "uncommon",
-    "thc": "22–31%",
-    "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Linalool",
-        "p": 0.4
-      },
-      {
-        "n": "Pinene",
-        "p": 0.27
-      },
-      {
-        "n": "Terpinolene",
-        "p": 0.16
-      }
-    ],
-    "effects": [
-      "Talkative",
-      "Clear-headed",
-      "Calm"
-    ],
-    "flavor": "Linalool-forward with a pinene undertone.",
-    "icon": "🌿",
-    "breeder": "Green House Seed Co."
-  },
-  {
     "id": "s1092",
     "name": "Fire OG",
     "type": "Hybrid",
@@ -40700,31 +40551,21 @@
     "type": "Hybrid",
     "lean": "",
     "rarity": "common",
-    "thc": "13–18%",
+    "thc": "15–22%",
     "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Myrcene",
-        "p": 0.4
-      },
-      {
-        "n": "Terpinolene",
-        "p": 0.27
-      },
-      {
-        "n": "Limonene",
-        "p": 0.16
-      }
-    ],
+    "terps": [],
     "effects": [
-      "Talkative",
-      "Tingly",
-      "Hungry"
+      "Happy",
+      "Uplifted"
     ],
-    "flavor": "Myrcene-forward with a terpinolene undertone.",
+    "flavor": "sweet and tangy orange",
     "icon": "🌿",
     "breeder": "BC Growers Association",
-    "aka": "Orange Krush"
+    "aka": "Orange Krush",
+    "parents": [
+      "California Orange",
+      "Blueberry"
+    ]
   },
   {
     "id": "s1169",
@@ -42715,26 +42556,21 @@
     "type": "Hybrid",
     "lean": "",
     "rarity": "rare",
-    "thc": "20–23%",
+    "thc": "17–20%",
     "cbd": "",
     "terps": [],
     "effects": [
-      "Energetic",
-      "Euphoric",
-      "Relaxed"
+      "Happy",
+      "Relaxed",
+      "Euphoric"
     ],
-    "flavor": "Berry and spicy cheese undertones.",
+    "flavor": "pungent cheese and skunk",
     "icon": "🌿",
-    "aka": "Cheese, Cognitiva",
+    "aka": "Cheese, Cognitiva, Exodus Cheese",
     "parents": [
       "Skunk #1"
     ],
-    "ailments": [
-      "Stress",
-      "Pain",
-      "Anxiety",
-      "Insomnia"
-    ]
+    "ailments": []
   },
   {
     "id": "s1241",
@@ -45887,32 +45723,23 @@
     "id": "s1347",
     "name": "Cherry Thai",
     "type": "Hybrid",
-    "lean": "",
+    "lean": "Sativa-dominant",
     "rarity": "common",
-    "thc": "14–22%",
+    "thc": "16–19%",
     "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Pinene",
-        "p": 0.4
-      },
-      {
-        "n": "Ocimene",
-        "p": 0.27
-      },
-      {
-        "n": "Myrcene",
-        "p": 0.16
-      }
-    ],
+    "terps": [],
     "effects": [
-      "Energetic",
-      "Clear-headed",
-      "Creative"
+      "Euphoric",
+      "Uplifted",
+      "Tingly"
     ],
-    "flavor": "Pinene-forward with a ocimene undertone.",
+    "flavor": "sour diesel with spicy herbal notes",
     "icon": "🌿",
-    "breeder": "Reeferman Seeds"
+    "breeder": "",
+    "parents": [
+      "Cherry Bomb",
+      "Oregon Purple Thai"
+    ]
   },
   {
     "id": "s1348",
@@ -51245,27 +51072,14 @@
     "rarity": "uncommon",
     "thc": "19–24%",
     "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Caryophyllene",
-        "p": 0.3
-      },
-      {
-        "n": "Linalool",
-        "p": 0.2
-      },
-      {
-        "n": "Limonene",
-        "p": 0.15
-      }
-    ],
+    "terps": [],
     "effects": [
       "Relaxed",
       "Happy",
       "Sleepy",
       "Euphoric"
     ],
-    "flavor": "Sweet vanilla and earthy cookie notes.",
+    "flavor": "sweet vanilla and nutty",
     "icon": "🍪",
     "aka": "Cookies & Cream, Cookies N Cream",
     "parents": [
@@ -62201,18 +62015,16 @@
     "type": "Hybrid",
     "lean": "",
     "rarity": "uncommon",
-    "thc": "14-29%",
+    "thc": "",
     "cbd": "",
     "terps": [],
     "effects": [
       "Euphoric",
-      "Happy",
-      "Talkative",
-      "Relaxed"
+      "Happy"
     ],
-    "flavor": "Pear and tea with lavender and sweet earth.",
+    "flavor": "sweet",
     "icon": "🌿",
-    "breeder": "Seedism Seeds",
+    "breeder": "",
     "parents": [
       "Hindu Kush",
       "Hash Plant"
@@ -69751,7 +69563,7 @@
   {
     "name": "Soul Assassin OG",
     "type": "Indica",
-    "lean": "Indica-leaning",
+    "lean": "Indica-dominant",
     "rarity": "uncommon",
     "thc": "18-24%",
     "cbd": "<1%",
@@ -72300,7 +72112,7 @@
   },
   {
     "name": "T.I.T.S.",
-    "type": "Sativa",
+    "type": "Hybrid",
     "lean": "Sativa-leaning",
     "rarity": "uncommon",
     "thc": "25-30%",
@@ -82400,7 +82212,7 @@
   },
   {
     "name": "Princess Leia",
-    "type": "Sativa",
+    "type": "Hybrid",
     "lean": "Sativa-leaning",
     "rarity": "uncommon",
     "thc": "22-28%",
@@ -101325,41 +101137,6 @@
     "id": "s3625"
   },
   {
-    "name": "Champion City Chocolate (Chocolate OG)",
-    "type": "Indica",
-    "lean": "Indica-leaning",
-    "rarity": "uncommon",
-    "thc": "19-26%",
-    "cbd": "",
-    "terps": [
-      {
-        "n": "Pinene",
-        "p": 0.2
-      },
-      {
-        "n": "Myrcene",
-        "p": 0.15
-      },
-      {
-        "n": "Limonene",
-        "p": 0.1
-      }
-    ],
-    "effects": [
-      "Sleepy",
-      "Relaxed",
-      "Euphoric"
-    ],
-    "flavor": "Nutty, chocolate, cheese.",
-    "icon": "🍫",
-    "breeder": "THClones",
-    "parents": [
-      "True OG",
-      "Chocolate Rain"
-    ],
-    "id": "s3626"
-  },
-  {
     "name": "Channel+",
     "type": "Hybrid",
     "lean": "",
@@ -102044,16 +101821,15 @@
   },
   {
     "name": "Chem Tange (The Tange)",
-    "type": "Sativa",
+    "type": "Hybrid",
     "lean": "Sativa-leaning",
     "rarity": "uncommon",
-    "thc": "21-29%",
+    "thc": "",
     "cbd": "",
     "terps": [],
     "effects": [
-      "Uplifting",
-      "Focused",
-      "Motivated"
+      "Euphoric",
+      "Focused"
     ],
     "flavor": "Candied orange, diesel funk, chemical.",
     "icon": "🍊",
@@ -102062,7 +101838,8 @@
       "Tangerine",
       "Chemdog"
     ],
-    "id": "s3656"
+    "id": "s3656",
+    "aka": "The Tange"
   },
   {
     "name": "Chem Tini",
@@ -110902,23 +110679,15 @@
   },
   {
     "name": "Don Shula",
-    "type": "Indica",
+    "type": "Hybrid",
     "lean": "Indica-leaning",
     "rarity": "uncommon",
     "thc": "22%",
-    "cbd": "low",
+    "cbd": "<1%",
     "terps": [
       {
-        "n": "Limonene",
-        "p": 0.2
-      },
-      {
-        "n": "Myrcene",
-        "p": 0.15
-      },
-      {
         "n": "Caryophyllene",
-        "p": 0.1
+        "p": 0.4
       }
     ],
     "effects": [
@@ -110933,7 +110702,10 @@
       "The White",
       "Diagonal"
     ],
-    "id": "s4015"
+    "id": "s4015",
+    "ailments": [
+      "Depression"
+    ]
   },
   {
     "name": "Donatello",
@@ -120580,24 +120352,6 @@
       "Forum Cut Cookies"
     ],
     "id": "s4413"
-  },
-  {
-    "name": "Glazed Cherries",
-    "type": "Hybrid",
-    "lean": "",
-    "rarity": "uncommon",
-    "thc": "",
-    "cbd": "",
-    "terps": [],
-    "effects": [],
-    "flavor": "Balsamic cherry, sweet pez candy.",
-    "icon": "🍒",
-    "breeder": "Kief Sweat",
-    "parents": [
-      "Cherry OG",
-      "Forum Cut Cookies"
-    ],
-    "id": "s4414"
   },
   {
     "name": "Glazed Lemon Thai",
@@ -131467,13 +131221,12 @@
     "type": "Hybrid",
     "lean": "",
     "rarity": "uncommon",
-    "thc": "16-19%",
+    "thc": "23%",
     "cbd": "0-2%",
     "terps": [],
     "effects": [
-      "Energetic",
-      "Creative",
-      "Aroused"
+      "Uplifted",
+      "Relaxed"
     ],
     "flavor": "Citrus and apricot.",
     "icon": "🍑",
@@ -134848,9 +134601,9 @@
   {
     "name": "Malverde",
     "type": "Sativa",
-    "lean": "",
+    "lean": "Sativa-dominant",
     "rarity": "rare",
-    "thc": "20-25%",
+    "thc": "",
     "cbd": "",
     "terps": [],
     "effects": [
@@ -134860,7 +134613,8 @@
     ],
     "flavor": "Sweet-and-sour citrus, fresh lemon-lime, with a touch of spice.",
     "icon": "🍋",
-    "id": "s5059"
+    "id": "s5059",
+    "aka": "Mexican Survivor"
   },
   {
     "name": "Mama Mia",
@@ -179436,7 +179190,7 @@
     "cbd": "",
     "terps": [],
     "effects": [],
-    "flavor": "",
+    "flavor": "sweet baked cookies",
     "icon": "🌿",
     "breeder": "Greenlife Seeds US",
     "parents": [
@@ -188623,6 +188377,153 @@
     "parents": [
       "Forbidden Fruit",
       "Gelato"
+    ],
+    "aka": "",
+    "ailments": []
+  },
+  {
+    "id": "s7386",
+    "name": "Zawtlatti",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "rare",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "pine and gas",
+    "icon": "🌿",
+    "breeder": "Cannarado Genetics",
+    "parents": [
+      "Zawtz",
+      "Gelatti"
+    ],
+    "aka": "",
+    "ailments": []
+  },
+  {
+    "id": "s7387",
+    "name": "Golden Strawberry",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "20–23%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted"
+    ],
+    "flavor": "sweet berry",
+    "icon": "🌿",
+    "breeder": "",
+    "parents": [
+      "Golden Goat",
+      "Sour Strawberry"
+    ],
+    "aka": "Golden Strawberries",
+    "ailments": []
+  },
+  {
+    "id": "s7388",
+    "name": "Cherry Icee",
+    "type": "Hybrid",
+    "lean": "Balanced",
+    "rarity": "uncommon",
+    "thc": "12–14%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Creative",
+      "Happy"
+    ],
+    "flavor": "sweet cherry and berry",
+    "icon": "🌿",
+    "breeder": "",
+    "parents": [],
+    "aka": "",
+    "ailments": []
+  },
+  {
+    "id": "s7389",
+    "name": "Cherry Cola",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Hungry",
+      "Uplifted"
+    ],
+    "flavor": "sweet berry and tree fruit",
+    "icon": "🌿",
+    "breeder": "",
+    "parents": [],
+    "aka": "",
+    "ailments": []
+  },
+  {
+    "id": "s7390",
+    "name": "Tropical Gelato",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Creative",
+      "Euphoric",
+      "Relaxed"
+    ],
+    "flavor": "tropical pineapple with citrus",
+    "icon": "🌿",
+    "breeder": "",
+    "parents": [],
+    "aka": "",
+    "ailments": []
+  },
+  {
+    "id": "s7391",
+    "name": "Strawberry Banana Sherbet",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Creative",
+      "Euphoric",
+      "Happy"
+    ],
+    "flavor": "sweet strawberry",
+    "icon": "🌿",
+    "breeder": "",
+    "parents": [],
+    "aka": "Strawberry Banana Sherbert",
+    "ailments": []
+  },
+  {
+    "id": "s7392",
+    "name": "Fire Lady",
+    "type": "Hybrid",
+    "lean": "Indica-dominant",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Uplifted"
+    ],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "",
+    "parents": [
+      "Purple Caper"
     ],
     "aka": "",
     "ailments": []
