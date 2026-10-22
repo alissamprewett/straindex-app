@@ -2794,39 +2794,24 @@
     "id": "s81",
     "name": "Hawaiian",
     "type": "Hybrid",
-    "lean": "",
+    "lean": "Sativa-leaning",
     "rarity": "uncommon",
-    "thc": "19–28%",
+    "thc": "20%",
     "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Linalool",
-        "p": 0.4
-      },
-      {
-        "n": "Limonene",
-        "p": 0.27
-      },
-      {
-        "n": "Humulene",
-        "p": 0.16
-      }
-    ],
+    "terps": [],
     "effects": [
       "Happy",
-      "Uplifted",
-      "Relaxed",
-      "Creative"
+      "Creative",
+      "Euphoric"
     ],
-    "flavor": "Sweet and citrus on the palate with a linalool-leaning finish.",
+    "flavor": "sweet citrus and pineapple with tropical notes",
     "icon": "🍬",
-    "breeder": "Super Sativa Seed Club",
+    "breeder": "",
     "ailments": [
       "Stress",
       "Depression",
       "Pain",
-      "Lack of Appetite",
-      "Nausea"
+      "Anxiety"
     ]
   },
   {
@@ -23241,28 +23226,18 @@
       {
         "n": "Myrcene",
         "p": 0.4
-      },
-      {
-        "n": "Linalool",
-        "p": 0.27
-      },
-      {
-        "n": "Caryophyllene",
-        "p": 0.16
       }
     ],
     "effects": [
       "Energetic",
-      "Focused",
       "Uplifted",
-      "Relaxed"
+      "Creative"
     ],
-    "flavor": "Earthy on the palate with a myrcene-leaning finish.",
+    "flavor": "sweet lemon and woody",
     "icon": "🌰",
     "ailments": [
       "Stress",
-      "Depression",
-      "Nausea"
+      "Depression"
     ]
   },
   {
@@ -42287,11 +42262,24 @@
     "effects": [
       "Euphoric",
       "Creative",
-      "Happy"
+      "Happy",
+      "Uplifted"
     ],
-    "flavor": "Sweet lemon and spicy pine.",
+    "flavor": "pine and lemon with earthy notes",
     "icon": "🌿",
-    "aka": "Arcata Trainwreck"
+    "aka": "Arcata Trainwreck",
+    "parents": [
+      "Mexican",
+      "Thai",
+      "Afghani"
+    ],
+    "ailments": [
+      "Pain",
+      "Depression",
+      "Migraines",
+      "Anxiety",
+      "Stress"
+    ]
   },
   {
     "id": "s1237",
@@ -52833,33 +52821,25 @@
   {
     "id": "s1593",
     "name": "Chem 4",
-    "type": "Indica",
+    "type": "Hybrid",
     "lean": "Indica-leaning",
     "rarity": "rare",
     "thc": "20-30%",
     "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Myrcene",
-        "p": 0.3
-      },
-      {
-        "n": "Limonene",
-        "p": 0.2
-      },
-      {
-        "n": "Caryophyllene",
-        "p": 0.15
-      }
-    ],
+    "terps": [],
     "effects": [
       "Relaxed",
       "Euphoric",
-      "Talkative"
+      "Tingly"
     ],
-    "flavor": "Pungent citrus, sweet earth, pine, and fuel.",
+    "flavor": "pungent chemical with pine notes",
     "icon": "⚗️",
-    "aka": "Chem #4, Chemdawg #4, Chem Dog #4, Chemdog 4, Chemdawg 4, Reunion pheno"
+    "aka": "Chem #4, Chemdawg #4, Chem Dog #4, Chemdog 4, Chemdawg 4, Reunion pheno",
+    "ailments": [
+      "Stress",
+      "Pain",
+      "Anxiety"
+    ]
   },
   {
     "id": "s1594",
@@ -175828,7 +175808,7 @@
     "id": "s6777",
     "name": "Snow Lotus",
     "type": "Hybrid",
-    "lean": "",
+    "lean": "Indica-leaning",
     "rarity": "uncommon",
     "thc": "16–22%",
     "cbd": "",
@@ -179139,16 +179119,21 @@
     "effects": [
       "Relaxed",
       "Happy",
-      "Euphoric"
+      "Euphoric",
+      "Uplifted"
     ],
-    "flavor": "Pine, citrus and diesel, smooth and creamy.",
+    "flavor": "citrus and pine with diesel and tropical notes",
     "icon": "🌿",
     "breeder": "Phinest Cannabis",
     "parents": [
       "Wedding Cake",
       "Daily Driver"
     ],
-    "ailments": null
+    "ailments": [
+      "Anxiety",
+      "Depression",
+      "Stress"
+    ]
   },
   {
     "id": "s6913",
@@ -179297,17 +179282,22 @@
     "type": "Hybrid",
     "lean": "Sativa-leaning",
     "rarity": "rare",
-    "thc": "",
+    "thc": "21–22%",
     "cbd": "",
     "terps": [],
-    "effects": [],
-    "flavor": "",
+    "effects": [
+      "Focused"
+    ],
+    "flavor": "tropical fruit",
     "icon": "🌿",
     "breeder": "Cookie Fam Genetics",
     "parents": [
       "Gelato"
     ],
-    "ailments": null
+    "ailments": [
+      "Anxiety",
+      "Stress"
+    ]
   },
   {
     "id": "s6922",
@@ -183148,12 +183138,17 @@
     "id": "s7135",
     "name": "Milk & Cookies",
     "type": "Hybrid",
-    "lean": "Indica-leaning",
+    "lean": "Indica-dominant",
     "rarity": "rare",
-    "thc": "",
+    "thc": "20%",
     "cbd": "",
     "terps": [],
-    "effects": [],
+    "effects": [
+      "Happy",
+      "Sleepy",
+      "Hungry",
+      "Tingly"
+    ],
     "flavor": "Creamy and buttery with sweet vanilla and a nutty edge.",
     "icon": "🌿",
     "breeder": "Exotic Genetix",
@@ -183162,7 +183157,11 @@
       "Triple OG"
     ],
     "aka": "Milk and Cookies, Milk N Cookies",
-    "ailments": null
+    "ailments": [
+      "Depression",
+      "Stress",
+      "Cramps"
+    ]
   },
   {
     "id": "s7136",
@@ -183907,14 +183906,39 @@
     "type": "Hybrid",
     "lean": "",
     "rarity": "rare",
-    "thc": "",
+    "thc": "20–22%",
     "cbd": "",
-    "terps": [],
-    "effects": [],
-    "flavor": "Pine, tea and citrus.",
+    "terps": [
+      {
+        "n": "Caryophyllene",
+        "p": 0.4
+      },
+      {
+        "n": "Limonene",
+        "p": 0.27
+      },
+      {
+        "n": "Humulene",
+        "p": 0.16
+      }
+    ],
+    "effects": [
+      "Giggly",
+      "Talkative",
+      "Focused"
+    ],
+    "flavor": "orange and citrus with coffee and pine notes",
     "icon": "🌿",
     "breeder": "Relentless Genetics",
-    "ailments": null
+    "ailments": [
+      "Anxiety",
+      "Stress"
+    ],
+    "parents": [
+      "SFV OG",
+      "Agent Orange"
+    ],
+    "aka": "OVO"
   },
   {
     "id": "s7178",
@@ -188784,6 +188808,163 @@
       "Stress",
       "Depression",
       "Anxiety"
+    ]
+  },
+  {
+    "id": "s7408",
+    "name": "Tahoe Alien",
+    "type": "Hybrid",
+    "lean": "Indica-leaning",
+    "rarity": "uncommon",
+    "thc": "20–21%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Happy",
+      "Euphoric",
+      "Hungry"
+    ],
+    "flavor": "lemon and pine with earthy notes",
+    "icon": "🌿",
+    "breeder": "Alien Genetics",
+    "parents": [
+      "Tahoe OG",
+      "Alien Kush"
+    ],
+    "aka": null,
+    "ailments": [
+      "Stress",
+      "Insomnia",
+      "Pain",
+      "Nausea"
+    ]
+  },
+  {
+    "id": "s7409",
+    "name": "Grape Octane OG",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "24–26%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Creative",
+      "Happy",
+      "Relaxed",
+      "Uplifted"
+    ],
+    "flavor": "grape and berry with diesel and peppery spice",
+    "icon": "🌿",
+    "breeder": "",
+    "parents": [
+      "Grape Pie",
+      "High Octane OG"
+    ],
+    "aka": "Grape Octane",
+    "ailments": [
+      "Insomnia",
+      "Pain",
+      "Stress"
+    ]
+  },
+  {
+    "id": "s7410",
+    "name": "Flavor Crystals",
+    "type": "Hybrid",
+    "lean": "Indica-dominant",
+    "rarity": "uncommon",
+    "thc": "21%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Uplifted",
+      "Relaxed"
+    ],
+    "flavor": "sweet citrus with apricot notes",
+    "icon": "🌿",
+    "breeder": "Compound Genetics",
+    "parents": [
+      "Grape Pie",
+      "Legend Orange Apricot"
+    ],
+    "aka": null,
+    "ailments": [
+      "Depression",
+      "Nausea",
+      "Pain"
+    ]
+  },
+  {
+    "id": "s7411",
+    "name": "Gorilla Dawg",
+    "type": "Hybrid",
+    "lean": "Indica-dominant",
+    "rarity": "uncommon",
+    "thc": "25–32%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Giggly"
+    ],
+    "flavor": "sour diesel and chemical with spicy herbal notes",
+    "icon": "🌿",
+    "breeder": "",
+    "parents": [
+      "Gorilla Glue #4",
+      "3 Chems"
+    ],
+    "aka": null,
+    "ailments": []
+  },
+  {
+    "id": "s7412",
+    "name": "Silver Fox",
+    "type": "Hybrid",
+    "lean": "Sativa-dominant",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Creative"
+    ],
+    "flavor": "cheese",
+    "icon": "🌿",
+    "breeder": "",
+    "parents": [],
+    "aka": null,
+    "ailments": [
+      "Stress"
+    ]
+  },
+  {
+    "id": "s7413",
+    "name": "Gelato #25",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "19–20%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Talkative",
+      "Relaxed",
+      "Happy",
+      "Euphoric"
+    ],
+    "flavor": "sweet berry and citrus",
+    "icon": "🌿",
+    "breeder": "",
+    "parents": [],
+    "aka": null,
+    "ailments": [
+      "Depression",
+      "Stress",
+      "Pain"
     ]
   }
 ]

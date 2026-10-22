@@ -1509,21 +1509,21 @@ function pageStrainDetail(req, res, id) {
         ${strainPhotoTag(s, 'lg')}
         <div>
           <h1 style="margin:0;font-size:19px;">${esc(s.name)}</h1>
-          <div class="empty-note" style="padding:0;">${esc(s.type)}${s.lean ? ' · ' + esc(s.lean) : ''} · <span class="rarity-tag rarity-${s.rarity}">${rarityLabel(s.rarity)}</span></div>
+          <div class="empty-note" style="padding:0;"><a href="/strains?type=${encodeURIComponent(s.type)}" style="color:inherit;">${esc(s.type)}</a>${s.lean ? ' · ' + esc(s.lean) : ''} · <a href="/strains?rarity=${encodeURIComponent(s.rarity)}" style="text-decoration:none;"><span class="rarity-tag rarity-${s.rarity}">${rarityLabel(s.rarity)}</span></a></div>
           <div style="margin-top:2px;" title="${esc(VERIFICATION_BADGE[strainVerificationTier(s)].note)}"><a href="/lab-result-guide" class="empty-note" style="padding:0;text-decoration:none;color:inherit;">${VERIFICATION_BADGE[strainVerificationTier(s)].icon} ${VERIFICATION_BADGE[strainVerificationTier(s)].label}</a></div>
           ${ratingStats.count ? `<div style="margin-top:2px;">${starString(Math.round(ratingStats.avg))} <span class="empty-note" style="padding:0;">${ratingStats.avg}★ from ${ratingStats.count} check-in${ratingStats.count === 1 ? '' : 's'}</span></div>` : `<div class="empty-note" style="padding:2px 0 0;">No community ratings yet — be the first to check in.</div>`}
         </div>
       </div>
       ${renderAwardBadges(s)}
       ${(s.thc || s.cbd) ? `<p style="margin:12px 0 4px;">${s.thc ? `<b>THC:</b> ${esc(s.thc)}` : ''}${s.thc && s.cbd ? ' &nbsp; ' : ''}${s.cbd ? `<b>CBD:</b> ${esc(s.cbd)}` : ''}</p>` : `<p class="empty-note" style="padding:0 0 4px;">No verified THC/CBD data for this strain yet.</p>`}
-      ${s.breeder ? `<p class="empty-note" style="padding:0;"><b>Bred by:</b> ${esc(s.breeder)}</p>` : ''}
+      ${s.breeder ? `<p class="empty-note" style="padding:0;"><b>Bred by:</b> <a href="/strains?breeder=${encodeURIComponent(s.breeder)}">${esc(s.breeder)}</a></p>` : ''}
       ${s.flavor ? `<p style="font-style:italic;color:#6b6b6b;">"${esc(s.flavor)}"</p>` : ''}
       <p>${renderEffectPills(s.effects)}</p>
-      ${s.terps.length ? `<p><b>Top terpenes:</b> ${s.terps.map(t => t.m ? `${esc(t.n)} (${Math.round(t.p * 1000) / 10}%)` : esc(t.n)).join(', ')}</p>` : ''}
+      ${s.terps.length ? `<p><b>Top terpenes:</b> ${s.terps.map(t => `<a href="/strains?terpene=${encodeURIComponent(t.n)}">${t.m ? `${esc(t.n)} (${Math.round(t.p * 1000) / 10}%)` : esc(t.n)}</a>`).join(', ')}</p>` : ''}
       ${(() => {
         const topFlavorTerps = [...s.terps].sort((a, b) => b.p - a.p).filter(t => TERPENE_FLAVOR_TAG[t.n]).slice(0, 3);
         if (!topFlavorTerps.length) return '';
-        return `<p><b>Top flavors:</b> ${topFlavorTerps.map(t => `<span class="filter-pill">${TERPENE_FLAVOR_TAG[t.n].icon} ${TERPENE_FLAVOR_TAG[t.n].label}</span>`).join('')}</p>`;
+        return `<p><b>Top flavors:</b> ${topFlavorTerps.map(t => `<a class="filter-pill" href="/strains?terpene=${encodeURIComponent(t.n)}" style="text-decoration:none;">${TERPENE_FLAVOR_TAG[t.n].icon} ${TERPENE_FLAVOR_TAG[t.n].label}</a>`).join('')}</p>`;
       })()}
       ${(() => {
         const energyPct = effectEnergyPercent(s.effects);
@@ -1579,7 +1579,7 @@ function pageStrainDetail(req, res, id) {
           </div>
           ${starString(c.rating)}
           <div class="empty-note" style="padding:2px 0 0;"><span class="local-time" data-utc="${c.created_at}Z">${esc(c.created_at)} UTC</span></div>
-          ${(c.effects || []).length ? `<p style="margin:6px 0 0;">${c.effects.map(e => `<span class="filter-pill">${effectLabelHtml(e)}</span>`).join('')}</p>` : ''}
+          ${(c.effects || []).length ? `<p style="margin:6px 0 0;">${renderEffectPills(c.effects)}</p>` : ''}
           ${c.note ? `<span class="empty-note" style="display:block;padding:4px 0 0;">${esc(c.note)}</span>` : ''}
         ${renderCheckinPairings(c)}
         ${renderOnsetTimer(c)}
@@ -2340,8 +2340,8 @@ function pageRecipeDetail(req, res, id) {
         ` : ''}
       </div>
       <span class="recipe-source-tag ${r.source}">${r.source === 'official' ? 'Official' : 'Community'}</span>
-      ${RECIPE_DIFFICULTY_LABELS[r.difficulty] ? `<span class="filter-pill">${RECIPE_DIFFICULTY_LABELS[r.difficulty].icon} ${esc(RECIPE_DIFFICULTY_LABELS[r.difficulty].label)}</span>` : ''}
-      <div class="empty-note">${esc(r.category || '')}${r.time ? ' · ' + esc(r.time) : ''}${r.author ? ' · by ' + esc(r.author) : ''}</div>
+      ${RECIPE_DIFFICULTY_LABELS[r.difficulty] ? `<a class="filter-pill" href="/recipes?difficulty=${encodeURIComponent(r.difficulty)}" style="text-decoration:none;">${RECIPE_DIFFICULTY_LABELS[r.difficulty].icon} ${esc(RECIPE_DIFFICULTY_LABELS[r.difficulty].label)}</a>` : ''}
+      <div class="empty-note">${r.category ? `<a href="/recipes?category=${encodeURIComponent(r.category)}" style="color:inherit;">${esc(r.category)}</a>` : ''}${r.time ? ' · ' + esc(r.time) : ''}${r.author ? ' · by ' + esc(r.author) : ''}</div>
       <p>${linkGlossaryTerms(esc(r.desc))}</p>
       ${Array.isArray(r.usesBase) && r.usesBase.length ? `<p class="empty-note" style="padding:0 0 6px;">Uses: ${r.usesBase.map(b => {
         const targetId = canonicalBaseRecipeId(b);
@@ -2414,8 +2414,8 @@ function pageRecipes(req, res, query) {
       <div class="card">
         <a href="/recipes/${r.id}" style="text-decoration:none;color:inherit;"><b>${r.icon || '🍽️'} ${esc(r.title)}</b></a>
         <span class="recipe-source-tag ${r.source}">${r.source === 'official' ? 'Official' : 'Community'}</span>
-        ${RECIPE_DIFFICULTY_LABELS[r.difficulty] ? `<span class="filter-pill">${RECIPE_DIFFICULTY_LABELS[r.difficulty].icon} ${esc(RECIPE_DIFFICULTY_LABELS[r.difficulty].label)}</span>` : ''}
-        <div class="empty-note">${esc(r.category || '')}${r.time ? ' · ' + esc(r.time) : ''}${r.author ? ' · by ' + esc(r.author) : ''}</div>
+        ${RECIPE_DIFFICULTY_LABELS[r.difficulty] ? `<a class="filter-pill" href="/recipes?difficulty=${encodeURIComponent(r.difficulty)}" style="text-decoration:none;">${RECIPE_DIFFICULTY_LABELS[r.difficulty].icon} ${esc(RECIPE_DIFFICULTY_LABELS[r.difficulty].label)}</a>` : ''}
+        <div class="empty-note">${r.category ? `<a href="/recipes?category=${encodeURIComponent(r.category)}" style="color:inherit;">${esc(r.category)}</a>` : ''}${r.time ? ' · ' + esc(r.time) : ''}${r.author ? ' · by ' + esc(r.author) : ''}</div>
         <p>${linkGlossaryTerms(esc(r.desc))}</p>
         ${Array.isArray(r.usesBase) && r.usesBase.length ? `<p class="empty-note" style="padding:0 0 6px;">Uses: ${r.usesBase.map(b => {
           const targetId = canonicalBaseRecipeId(b);
@@ -4473,7 +4473,7 @@ function pageInsights(req, res) {
       ${insights.topEffects.length ? `
         <div class="card">
           <h2 style="margin:0 0 8px;font-size:15px;">Your most common effects</h2>
-          <p>${insights.topEffects.map(e => `<span class="filter-pill">${esc(e.name)} (${e.count})</span>`).join('')}</p>
+          <p>${insights.topEffects.map(e => `<a class="filter-pill" href="/strains?effect=${encodeURIComponent(e.name)}" style="text-decoration:none;">${esc(e.name)} (${e.count})</a>`).join('')}</p>
         </div>
       ` : ''}
       <div class="card" style="margin-top:12px;">
@@ -7496,7 +7496,7 @@ function pageSharedCheckin(req, res, id) {
         <div>
           <div class="empty-note" style="padding:0;">${esc(posterName)} checked in on StrainDex</div>
           <h1 style="margin:2px 0 0;font-size:1.1875rem;">${esc(checkinStrainName(c, s))}</h1>
-          ${s && !isCustomCheckin(c) ? `<div class="empty-note" style="padding:0;">${linkGlossaryTerms(esc(s.type))}${s.lean ? ' · ' + linkGlossaryTerms(esc(s.lean)) : ''} · <span class="rarity-tag rarity-${s.rarity}">${rarityLabel(s.rarity)}</span></div>` : ''}
+          ${s && !isCustomCheckin(c) ? `<div class="empty-note" style="padding:0;"><a href="/strains?type=${encodeURIComponent(s.type)}" style="color:inherit;">${esc(s.type)}</a>${s.lean ? ' · ' + linkGlossaryTerms(esc(s.lean)) : ''} · <a href="/strains?rarity=${encodeURIComponent(s.rarity)}" style="text-decoration:none;"><span class="rarity-tag rarity-${s.rarity}">${rarityLabel(s.rarity)}</span></a></div>` : ''}
         </div>
       </div>
       <div class="sub" style="margin-top:12px;">${esc(c.method)} · ${starString(c.rating)}</div>
@@ -7577,7 +7577,7 @@ function renderRecapBody(recap, { longestStreak } = {}) {
     ${recap.topEffects.length ? `
       <div class="card" style="margin-top:14px;">
         <h2 style="margin:0 0 8px;font-size:0.9375rem;">Most common effects</h2>
-        <p>${recap.topEffects.map(e => `<span class="filter-pill">${esc(e.name)} (${e.count})</span>`).join('')}</p>
+        <p>${recap.topEffects.map(e => `<a class="filter-pill" href="/strains?effect=${encodeURIComponent(e.name)}" style="text-decoration:none;">${esc(e.name)} (${e.count})</a>`).join('')}</p>
       </div>
     ` : ''}
     <div class="card" style="margin-top:12px;">
