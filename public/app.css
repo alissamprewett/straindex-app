@@ -135,7 +135,7 @@ body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;backgrou
 a{color:inherit;}
 header.topbar{background:linear-gradient(135deg,var(--brand-green-dark),var(--brand-green));box-shadow:inset 0 -3px 0 var(--brand-green-light);color:#fff;padding:calc(13px + env(safe-area-inset-top)) 18px 11px;display:flex;align-items:center;justify-content:space-between;}
 header.topbar .brand{display:flex;align-items:center;gap:8px;font-weight:800;font-size:1.1875rem;text-decoration:none;color:#fff;}
-header.topbar .brand-logo{width:28px;height:28px;border-radius:6px;object-fit:cover;}
+header.topbar .brand-logo{height:22px;width:auto;display:block;}
 .disclaimer{background:#fff0dc;color:#5a3300;font-size:0.6875rem;padding:5px 16px;text-align:center;border-bottom:1px solid #f6cf9c;}
 main{padding:14px 14px calc(90px + env(safe-area-inset-bottom));}
 h1.screen-title, h2.screen-title{font-size:1.25rem;margin:2px 0 10px;}

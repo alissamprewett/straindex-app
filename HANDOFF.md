@@ -243,9 +243,13 @@ Alissa has no local dev environment and no git CLI. The workflow is:
   transparent background, used as the kudos icon everywhere and as the
   Strains nav tab icon), `joint-icon.png` (cropped from Alissa's own
   rolodex artwork, used on the "Ways to Enjoy It" tile).
-- The app icon (`public/icons/icon-192.png` and `icon-512.png`) is Alissa's
-  own AI-generated rolodex artwork, center-cropped to a square. This is also
-  now used in the page header next to "StrainDex".
+- Brand logo (Oct 2026): the old rolodex artwork was replaced by the dark-green
+  "SD" monogram + "STRAIN-DEX" lockup. Vector files live in `public/icons/`:
+  `logo-full.svg` (monogram + wordmark + tagline), `logo-mark.svg` (monogram,
+  #344e39), `logo-mark-light.svg` (white monogram, used in the green header),
+  `icon.svg` (square favicon), and `icon-192.png` / `icon-512.png` (monogram on
+  the #f6f5f1 cream, home-screen icon, apple-touch icon and default og:image).
+  The service worker cache was bumped to v4 so installed apps refresh the icons.
 - **Strain photos**: every strain shows a real photo via `strainPhotoTag()`
   in `server.js` — a small rotating pool of real, free-licensed Unsplash/
   Pixabay bud photos (self-hosted, same `/docs/` pattern), assigned
