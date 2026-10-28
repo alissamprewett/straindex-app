@@ -1671,3 +1671,184 @@ No library changes.
 - Purple Romulan: added (new s7450). AllBud + Leafly: Hybrid, effects Creative/Uplifted (both), flavor berry (AllBud berry/cherry; Leafly blueberry). HELD: lean (AllBud 70/30 indica, Leafly Hybrid), parents (Purple Kush x Romulan) x White Rhino (AllBud only), THC ~18% (AllBud), Body High/Happy/Relaxing (AllBud), Euphoric (Leafly), ailments (AllBud only).
 - GT Dragon: no data. AllBud only (Trainwreck x Blue Dragon, 70/30 indica-dominant, 20-22% THC); no second source. Held.
 - Migration batch 96 (name strain_research_batch96_2026_10_22) tested on a fresh seed.
+
+## S157 (2026-10-26) rows 3703-3712
+- Trim: skip (cannabis trim, not a strain).
+- Snow White OG: no data. Only Snow White (existing s2210) and OG Snow AllBud pages; not proven the same.
+- Confidential Alien...: skip (truncated name, unidentifiable).
+- Wifi (N): skip (letter label; the strain is White Fire OG s1588, aliases WiFi/WiFi OG already set).
+- Outdoor Blue Dream: skip (growing descriptor of Blue Dream s1).
+- Mr. Nice Guy: added (existing Mr. Nice s620, aliases Mr. Nice Guy already set; mig batch 97, 5 corrections + THC blank-fill). AllBud + Leafly: type Indica -> Hybrid with lean Indica-dominant (AllBud 80/20 indica-dominant, Leafly Indica), THC 13-19% (AllBud 13-19, Leafly 17), flavor -> "earthy and woody", ailments Stress/Pain (both; Depression/Insomnia AllBud only), aka junk "Mr. Nice G13 x Hash Plant" removed (Leafly aliases: Mr. Nice Guy, Mister Nice Guy, Mister Nice). G13 x Hash Plant confirmed by both. HELD: breeder Sensi Seeds (AllBud only, left in place), Myrcene dominant (Leafly only), CBD, Hungry/Euphoric/Happy.
+- Mad Scientist Platinum...: skip (truncated name).
+- Premium Cherry: no data. Only generic Cherry / Primo Cherry patent pages; not proven.
+- Double Double Blue Dream: no data. Only Double Dream (AllBud/Leafly) and Double Trouble s2587; not proven the same.
+- O.D. Green Crack: added (label of existing Green Crack s180; mig batch 97, 2 corrections). Leafly + GreenState + Riverfront Times: effects Energetic/Focused (all three; Uplifted/Happy unsupported), flavor -> "citrus and mango" (Leafly + RFT; "Skunk" dropped). HELD: type (Leafly + GreenState Sativa, RFT Sativa-dominant, no AllBud; kept Hybrid / Sativa-leaning), parents (Leafly Skunk #1 x unknown indica; GreenState Super Sativa Seed Club x Afghani or unknown indica; kept Skunk #1 x Afghani), breeder Cecil C. (GreenState only), THC (Leafly 17, RFT up to 25). "O.D." prefix unexplained.
+- Migration batch 97 (name strain_research_batch97_2026_10_22) tested on a fresh seed.
+
+## S158 (2026-10-27) rows 3713-3722
+- Game Changers: added (new s7451 "Game Changer", aka Game Changers). AllBud + Leafly: Hybrid (AllBud 60/40 indica-dominant, Leafly Hybrid), parents Purple Dragon x Green Thai (both; Leafly genetics section says "Thai"), THC 15-21% (AllBud 15-21, Leafly 16), flavor grape (both), ailments Stress/Anxiety/Depression (both). HELD: lean, effects (AllBud Euphoric/Happy/Hungry vs Leafly Relaxed/Uplifted/Aroused, no overlap), CBD (AllBud 1%, Leafly 0%), terps (Leafly only: limonene > pinene > caryophyllene), alias Game Changer OG / Gch (Leafly only).
+- Strawberry Banana Kush: no data. GreenState (Strawnana Kush; Serious Seeds Farms; Strawberry Bubble Gum x Crockett's Banana Kush; indica-dominant ~70%) treats it as Strawberry Banana, but Cannigma lists only Strawnana as an alias and Banana Kush as a parent. Possible alias of Strawberry Banana s1544; not proven. Flag: s1544 breeder "Reserva Privada" vs Cannigma (DNA Genetics + Crockett Family Farms) and GreenState (Serious Seeds).
+- Louis Og: no data. AllBud only (Hybrid 50/50, description "indica dominant", 20% THC, Body High/Happy, lemon/pine); Weedmaps King Louis OG listings are not independent and it is not proven to be King Louis XIII s131.
+- Mendo Afgoo: added (existing s7133; blank-fills only, no migration). Leafly + SeedFinder: effects Uplifted (Leafly Uplifted, SeedFinder "uplift the mind"), ailments Stress (both), flavor "pungent and earthy" already matches both. HELD: parents (contested: Afgooey rebrand vs Mendocino Madness x Afghani), type (Leafly Indica, SeedFinder "mostly indica"; kept Hybrid / Indica-leaning), Creative/Happy, terps myrcene > ocimene > pinene, THC 17% (Leafly only), Depression/Insomnia (Leafly small sample).
+- East Coast Blue Dream: skip (descriptor; no such strain page).
+- Pure Kush (Q): added (label of existing Pure Kush s7244; mig batch 98). AllBud (85/15 indica-dominant) + Leafly (Indica): type Indica -> Hybrid (lean Indica-dominant already set), parents OG Kush, Sleepy, skunk/woody, Insomnia/Stress/Pain already match. HELD: THC (AllBud 19-24, Leafly 16). "(Q)" suffix unexplained. LA Pure Kush s4863 left separate.
+- Kosher Kush (H): added (label of existing Kosher Kush s234; mig batch 98, 6 corrections + parents blank-fill). Cannigma + Leafly + AllBud: type Hybrid -> Indica (Cannigma indica-dominant, Leafly/AllBud Indica; lean left blank), breeder Reserva Privada -> DNA Genetics (Cannigma + Leafly), parents OG Kush (Leafly; Cannigma "OG Kush-derived"), THC 21-29% -> 18-25% (Cannigma 18.5, Leafly 21, AllBud 22-25), effects Relaxed/Sleepy/Happy/Euphoric/Hungry (each in 2+ sources), flavor "earthy, woody and sweet", ailments Pain/Stress/Insomnia (all three; Depression and Lack of Appetite single). HELD: terps (Leafly myrcene first; Cannigma limonene = myrcene), alias JG (AllBud review only). "(H)" suffix unexplained.
+- Girl Scout Cookies (J): added (label of existing Girl Scout Cookies s4; verified in S156, no change).
+- Amst Laughing Buddha: added (label of existing Laughing Buddha s463; mig batch 98, 7 corrections + parents blank-fill). AllBud (Sativa-dominant 75/25) + Leafly (Sativa): type Sativa -> Hybrid, lean Sativa-dominant, parents Thai x Jamaican (both), THC 18-22% (AllBud 18, Leafly 22), generic terps and default CBD blanked (Leafly: myrcene > caryophyllene > limonene), effects -> Giggly (both), flavor "herbal and spicy" (both), ailments Depression/Stress (both). HELD: breeder Barney's Farm (Leafly only), Creative/Euphoric/Happy (AllBud), Energetic/Uplifted (Leafly), alias Buddha / LGB (Leafly only). "Amst" prefix not added as an alias.
+- Kabers: no data. Nothing found for the name.
+- Migration batch 98 (name strain_research_batch98_2026_10_22) tested on a fresh seed.
+
+## S159 (2026-10-27) rows 3723-3732
+- Peter Tosh: no data. Only the musician's brand/news pages; not a strain.
+- Lemon Diesel (H) / Lemon Diesel (S): added (label of existing Lemon Diesel s1141, aka Lemon Sour Diesel; mig batch 99). AllBud, Leafly, GreenState: California Sour x Lost Coast OG (already set, all three), lean Indica-dominant (AllBud 70/30 + GreenState ~70% indica; Leafly Hybrid), THC 15-20% (AllBud 18-20, Leafly 17, GreenState 15-18), terps Myrcene > Caryophyllene > Pinene (Leafly + GreenState), effects Euphoric/Focused/Uplifted/Relaxed (each in 2+ sources; Energetic/Happy dropped), flavor "lemon, diesel and citrus", ailments Stress/Anxiety/Depression (AllBud + Leafly), breeder Green Lantern Seeds blanked (no source). HELD: Giggly/Sociable (AllBud), CBD. "(H)"/"(S)" suffixes unexplained.
+- Kali Mist (Red): added (label of existing Kali Mist s22; mig batch 99). AllBud (Sativa-dominant 90/10) + Leafly (Sativa): type Hybrid, lean Sativa-dominant, THC 15-16% (AllBud 15, Leafly 16), generic sample terps blanked (Leafly: myrcene > caryophyllene > pinene, single), effects Creative/Focused (both), flavor "herbal" (both), ailments Stress (both). HELD: breeder Serious Seeds (neither lists one; left in place, flag), Energetic (Leafly), Happy/Motivation (AllBud), alias Km, offspring K47 / Yg Y Griega.
+- O.D. Sour Diesel: added (label of existing Sour Diesel s3; mig batch 99, 1 correction). Leafly + OCS: flavor "Pungent diesel." -> "diesel and skunk" (Leafly diesel/chemical/skunk; OCS gassy/skunky/sour). HELD: type (Leafly Hybrid, OCS Sativa-dominant; no AllBud page), parents Chemdawg x Super Skunk kept (OCS: Chemdawg 91 plus an uncertain second parent), terps (Leafly caryophyllene first, OCS linalool first), effects, alias Sour Deez. "O.D." prefix unexplained.
+- Purple Mango: added (new s7452). AllBud + Leafly: Hybrid, THC 14-20% (AllBud 14-20, Leafly 20), effects Giggly/Uplifted (both), flavor mango (AllBud, Leafly, GreenState), ailments Pain/Depression (both). HELD: parents (AllBud + GreenState Dewey: Purple Tahoe x Mango Sherbet vs Leafly + GreenState alternate: Mango Kush x unknown; likely two versions), lean (AllBud 60/40 indica, Leafly Hybrid), other effects/ailments.
+- Super Confidential: no data. Only Super / Confidential-family pages.
+- Zeta: no data. Only Zeta Sage (s791), Zeta OG and Zeta by Prolific Coast pages; not proven the same.
+- Unknown: skip (placeholder name).
+- OG CD 1021: no data. Nothing for the code.
+- Migration batch 99 (name strain_research_batch99_2026_10_22) tested on a fresh seed.
+
+## S160 (2026-10-27) rows 3733-3742
+- O.D. Midnight: no data. AllBud "Midnight" (Sativa-dominant 60/40, THC 11%, CBD 8-12%) and Leafly "Midnight" (Hybrid, reviews only) may be different strains; several unrelated cultivars share the name (Tikum Olam, 3rd Coast Genetics, a plant patent). Held; not in library.
+- O.D. Cherry Pie: added (label of existing Cherry Pie s1519; mig batch 100, 2 corrections + ailments blank-fill). GreenState + Leafly (reviews): effects -> Relaxed/Euphoric (both), ailments Stress/Anxiety/Pain, default CBD "<1%" blanked (no source). Parents Granddaddy Purple x Durban Poison confirmed (GreenState; Leafly reviewer claim). HELD: lean (GreenState indica-dominant ~60%, Leafly Hybrid), terps (GreenState: caryophyllene, myrcene, limonene; Leafly none), flavor "Sweet cherry with an earthy, slightly sour exhale" (GreenState blackberry/mint, Leafly reviews split: unsupported, left in place), Happy (Leafly), Uplifted (GreenState), THC (no source). "O.D." prefix unexplained.
+- Grandfire OG: no data. AllBud "Grand Fire OG" only (80/20 indica, Blueberry x Granddaddy Purple x White Fire OG, 22-27% THC); no second source. Held.
+- O.D. Guava: added (label of existing Guava s6921; mig batch 100, 3 corrections). AllBud (Sativa-dominant 80/20, Gelato phenotype, 22%) + Vivosun (Gelato #33 phenotype, sativa-dominant, 20-24%): lean Sativa-leaning -> Sativa-dominant, effects Uplifted/Focused (both; AllBud also Focus), flavor "sweet, fruity and creamy" (both). HELD: breeder Cookie Fam Genetics (Vivosun attributes Gelato #33 to Sherbinskis; neither source names a Guava breeder; flag), terps (Vivosun only), parents Gelato kept (phenotype, not a cross).
+- Indi Cough: skip (Organigram "Indi" brand product, not a strain; the strain is The Cough).
+- OG Master Kush: no data. Only Master Kush (s403), Super OG Master Kush and Master OG pages; not proven the same.
+- Imperial Kush: no data. Only Imperial Dank / IG Kush / Empire Kush pages.
+- Tahoe: no data. Ambiguous short name (Tahoe OG s1229, Tahoe Alien and others); not assumed.
+- DJ Flo Smoothie: no data. Only Flo pages (existing s1093); not proven.
+- Rock Glacier Kush: no data. Only Glacier Kush Mints (brand product) and Rockstar Kush pages.
+- Migration batch 100 (name strain_research_batch100_2026_10_22) tested on a fresh seed.
+
+## S161 (2026-10-27) rows 3743-3752
+- Kyptonite: added (misspelling of existing Kryptonite s54; mig batch 101). Leafly.ca (Indica) + AllBud (Indica-dominant hybrid 85/15): lean Indica-dominant (type stays Hybrid per precedent), effects Relaxed/Sleepy (both), ailments Stress/Pain/Anxiety (both), flavor "sweet" (only shared flavor). Blanked unsupported sample-style values: terps Linalool/Myrcene/Pinene 0.4/0.27/0.16, THC 12-21% (AllBud 24-25%, single source), CBD "<1%", Tingly/Uplifted/Happy, Depression/Insomnia, "linalool-leaning finish" flavor. HELD: parents (AllBud only: Killer Queen x Mendocino Purps, calls G-13 origin a probable myth), THC 24-25% (AllBud only), breeder. Several unrelated breeders also use the name Kryptonite (Sefirot, Pyramid Seeds).
+- Trash: added (existing s6861; mig batch 101). Leafly + AllBud agree: Purple Trainwreck x Afghani Hash Plant (already set), Indica-dominant (Leafly description, AllBud 70/30), effects Focused plus Energetic (Leafly; AllBud text mentions energy), ailments Inflammation/Pain. Removed unsupported Happy and default CBD "<1%". HELD: THC 17-19% (AllBud only, left in place), flavor (Leafly chemical/diesel/berry vs AllBud berry/citrus/hash/lemon; existing text left), terps (none listed). Trash Panda s6194 is a different strain.
+- Outdoor Shreck: no data. Only Shrek OG / Shrek Daddy / Shrek Candy seedbank pages; "Outdoor" is a growing descriptor.
+- Amst. Acid W: skip (truncated name, "Amst." prefix unexplained).
+- OG Cone Mix: no data. Only "OG Mix" brand pre-roll pages.
+- Sour Afgoo: no data. Searches return only Afgoo (s17) pages.
+- Platinum Afgoo: no data. Same.
+- Lab Skywalker OG: no data. Only Skywalker OG (s1210) pages; "Lab" prefix unexplained, not assumed.
+- Oakland Crippler: no data. Only AllBud "Crippler" (50/50, Chocolate Thai x unknown); not proven the same, no second source.
+- Cookie Cone: no data. Only Cookie Cake / Ice Cream Cone pages.
+- Migration batch 101 (name strain_research_batch101_2026_10_22) tested on a fresh seed.
+
+## S162 (2026-10-27) rows 3753-3763
+- Tahoe OG Kush: added (alias of existing Tahoe OG s1229; mig batch 102). Leafly.ca + Pax: aka "Tahoe OG Kush", effects add Euphoric (Relaxed/Sleepy already set), terps Myrcene dominant (both name myrcene first; Pax likely echoes Leafly, so only the dominant one stored), blanked default CBD "<1%". HELD: parents (Leafly OG Kush x SFV OG Kush vs Pax "OG Kush phenotype"), breeder Ganja Guru (Pax only), lean (Leafly Hybrid, Pax 50/50 leans indica), ailments (Leafly only; existing Insomnia/Pain/Lack of Appetite left).
+- 3x Time Crazy: added (variant of existing 3X Crazy s29; mig batch 102). Leafly + AllBud (as "3 Times Crazy", aka Optimus Prime): type Indica -> Hybrid with Indica-dominant (Leafly Indica, AllBud 70/30 indica-dominant hybrid; precedent), parents OG Kush x Bubba Kush x Granddaddy Purple (both), aka Optimus Prime / 3 Times Crazy (both; Insane OG Leafly only, not added; s4739 Insane Kush already carries Insane OG), effects Relaxed/Sleepy, ailments Insomnia/Pain/Muscle Spasms, flavor grape/spicy. Blanked unsupported terps (Myrcene/Linalool/Pinene sample set), CBD, Happy/Uplifted/Euphoric, Stress/Depression/Lack of Appetite. HELD: THC (Leafly 13%, AllBud 15-22%; existing 14-20% left), terps (Leafly only). AllBud has two pages for this strain with different type labels. "3x Time Crazy" spelling not listed on either; treated as variant of the same name.
+- Midnight Purple: no data. AllBud only (50/50, unknown cross, rumored GDP relation).
+- Eat My Cookie: no data. Only Eat Me Cookies seedbank page.
+- Platinum Master: no data. Only AllBud Platinum Master Kush (Platinum Kush x Master Kush); not proven the same.
+- Fire OG -M: added (label of existing Fire OG s1092; mig batch 102, ailments add Anxiety: Leafly + AllBud). Parents OG Kush x SFV OG Kush and Indica-dominant confirmed by 3 sources. HELD/FLAG: breeder "Dark Heart Nursery" on the entry is unsourced; GreenState says OG Raskal Genetics; Leafly/AllBud list none. "-M" suffix unexplained, not added as alias.
+- Woody OG: added (existing Woody Kush s377; mig batch 102). Leafly (Woody OG aka Woody Kush) + AllBud: type Hybrid -> Indica, parents Master Kush x OG Kush x Hindu Kush, aka Woody OG, THC 20-23% (Leafly 20, AllBud 21-23), effects Sleepy (only shared), ailments Insomnia/Stress/Pain, flavor pine/woody. Blanked unsupported terps (Pinene/Myrcene/Ocimene), CBD, Relaxed/Happy/Euphoric, Depression/Lack of Appetite. HELD: terps (Leafly Myrcene/limonene/caryophyllene, single), Woody Harrelson Kush alias (Leafly only).
+- Hardball: no data. Only a brand product (Lowski Hardball Purps).
+- GDP Buddha: no data. No page found for this name.
+- Blackberry Pie: added as s7453. Leafly + AllBud agree: Hybrid, Blackberry Widow x Crystal Locomotive (both existing library entries s3318/s6930), effects Creative/Hungry/Euphoric, ailments Pain/Cramps/Inflammation, flavor blueberry/berry. HELD: breeder Gage Green Genetics (Leafly only), lean (Leafly Hybrid, AllBud 50/50), THC (Leafly 26%, AllBud 16-17%), terps (Leafly only).
+- Migration batch 102 (name strain_research_batch102_2026_10_22) tested on a fresh seed.
+
+## S163 (2026-10-27) rows 3764-3773
+- Energee: no data. No page found.
+- Amst. Nebula #2: no data. "Amst." prefix unexplained and "#2" not proven the same as Nebula. Side effect: researched Nebula s1158 (Leafly.ca only: Hybrid, Uplifted/Creative/Euphoric, honey/flowery/sweet, Stress/Anxiety/Depression; Paradise Seeds and North Genetics both use the name; no second independent source, so nothing written). Mig batch 103 blanks unsupported sample-style values on s1158: terps Humulene/Pinene/Ocimene, THC 27-30%, CBD "<1%", effects Sleepy/Social/Calm, flavor "Humulene-forward with a pinene undertone."
+- West Side OG: no data. AllBud only ("Westside OG", Indica-dominant 70/30, OG Kush backcross, aka Westside Kush); Leafly "West OG" not proven the same. Not in library.
+- West Side Bubba: no data. Only West Coast Bubba / Bubba Kush pages.
+- Bay Platinum Cookies: added as s7454. Leafly + AllBud (+ SeedFinder listing under Grand Daddy Purp): Hybrid, Sativa-dominant (Leafly Sativa, AllBud 75/25 sativa-dominant hybrid; precedent), parents Bay 11 x Platinum Cookies, breeder Grand Daddy Purp, ailments Depression/Pain, flavor citrus, THC 15-23% (Leafly 20, AllBud 15-23). HELD: effects (no overlap: Leafly Energetic/Talkative/Creative vs AllBud Euphoric/Happy/Hungry/Uplifted), terps (Leafly only: caryophyllene, limonene, humulene), Fatigue (outside vocab), alias Bpc (Leafly only). AllBud also has a separate "Platinum Bay Cookies" page, not merged.
+- Bay 11 Hydro: skip (growing descriptor of Bay 11 s439).
+- Bay 11 Organic: skip (growing descriptor of Bay 11 s439).
+- The Dream: no data. Only Dream Queen / other "Dream" strains; too generic.
+- BMW: no data. Nothing found for the abbreviation.
+- Purple Bubba Kush: added (alias of existing Purple Bubba s353; mig batch 103, 1 correction + type confirm). Leafly + AllBud: Indica, Bubba Kush x Purple Kush, effects add Hungry (Relaxed/Sleepy already set), Stress/Anxiety/Pain, grape flavor all confirmed. HELD: THC (Leafly 18%, AllBud 21-25%), terps (Leafly only: caryophyllene, limonene, pinene).
+- Migration batch 103 (name strain_research_batch103_2026_10_22) tested on a fresh seed.
+
+## S164 (2026-10-28) rows 3774-3783
+- Orange Diesel: added (existing s7170; mig batch 104). Leafly + AllBud agree: Sativa-dominant (was Sativa-leaning), parents Sour Diesel x Agent Orange (already set), THC 14-17% (Leafly 17, AllBud 14-16), effects Focused/Energetic, ailments Stress/Anxiety/Depression, flavor orange/diesel. HELD/FLAG: breeder "TGA Subcool Seeds" unsourced (neither page lists a breeder; Leafly credits TGA only for Agent Orange), terps (Leafly only: myrcene, caryophyllene, pinene), aliases Ods (Leafly) / Sour Orange Diesel (AllBud) single-source.
+- KRP: no data. Only Kripplicious / Blue Kripple / Krishna Kush type pages; abbreviation not resolved.
+- Outdoor OG Kush: skip (growing descriptor of OG Kush s2).
+- Royal Purple Diesel: no data. Only Purple Diesel and Royal Purple pages; not proven the same.
+- OG Skywalker: added (word-order variant of existing Skywalker OG s1210; mig batch 104). Leafly + Cannigma: Hybrid, Indica-dominant, terps Myrcene/Limonene/Caryophyllene (same ranking, Cannigma lab-based), effects Relaxed/Sleepy, ailments Stress/Pain/Insomnia, flavor diesel/spicy, THC 20% (Leafly 20, Cannigma 20.4; Leafly text range 20-30), aka Skywalker OG Kush. Replaced unsupported sample values (THC 27-28%, Linalool/Limonene/Myrcene terps, Focused/Clear-headed/Creative, "Linalool-forward" flavor). CBD "<1%" kept (Cannigma 0.07%). HELD: parents (Skywalker x OG Kush per Cannigma; Leafly lists Sky Mazar x Blueberry plus OG Kush; Cannigma notes a rival OG Kush-phenotype claim), Anxiety ailment (Leafly only), alias Sky OG (Leafly only). FLAG: s228 Skywalker carries alias "Skywalker Kush", and both sources call Skywalker OG "Skywalker OG Kush"; possible overlap between s228 and s1210, not merged.
+- Purple Dope: no data. Nothing found.
+- Cerebral Synergy: no data. Only Synergy / Cerebro Haze pages.
+- Phantom Cookies: added (existing s7204; mig batch 104). Leafly + AllBud: Sativa-dominant (was Sativa-leaning), parents Granddaddy Purple x Cherry Pie, effects Relaxed (only shared), ailments Pain/Depression, flavor sweet/nutty. Removed single-source Euphoric/Creative (AllBud) and Stress (Leafly). HELD/FLAG: breeder Grand Daddy Purp unsourced here (neither page lists one), terps (Leafly only: caryophyllene, limonene, myrcene), THC 20-21% left (Leafly 20, AllBud 15-21).
+- Greenwater OG: no data. Only Green Line OG / Blackwater OG / Greenhouse OG pages.
+- Original OG: no data. AllBud only (sativa-dominant 70/30, unknown cross, aka OG OG); no second source, not proven the same as OG Kush.
+- Migration batch 104 (name strain_research_batch104_2026_10_22) tested on a fresh seed.
+
+## S165 (2026-10-28) rows 3784-3793
+- Skywalker alias fix (user-approved): Leafly lists Skywalker (Blueberry OG/Mazar I Sharif, aka Sky) and Skywalker OG (OG Kush x Sky; aka Skywalker OG Kush, Sky OG) as separate strains; Cannigma calls Skywalker x OG Kush "Skywalker Kush". Kept s228 and s1210 separate; moved alias "Skywalker Kush" from s228 to s1210 (mig batch 105).
+- 813: no data. Only Flight 813 / 813 OG V2 / 813 Sour Diesel pages; bare "813" not resolved.
+- Lost Coast OG: added (existing s7006; mig batch 105). Leafly + AllBud: Indica-dominant (60/40 both; was Indica-leaning), effects Euphoric/Relaxed, ailments Anxiety/Depression, flavor citrus/lemon/pine. Parents Chem 4 / Pakistani Kush / Lemon Thai already consistent with AllBud. HELD/FLAG: THC (Leafly 19%, AllBud 26%), terps (Leafly only: caryophyllene, myrcene, limonene), breeder "Emerald Triangle Seeds" unsourced (neither lists a breeder).
+- B52 OG: no data. Only B-52 / B-52 Bomber pages; "OG" version not proven the same. s216 B-52 still carries sample-style terps/flavor/breeder; not touched.
+- King Louis XIII OG: added (resolves to existing King Louis XIII s131; aka "King Louis OG" already listed; mig batch 105 blanks template terps and "myrcene-leaning finish" flavor). Only Leafly profile found (Indica, OG Kush x LA Confidential, aka Louis XIII Kush, effects Sleepy/Relaxed/Hungry, pine/woody/earthy, myrcene/limonene/caryophyllene, Insomnia/Stress/Pain); brand pages repeat the parentage; no second independent profile, so nothing else written. FLAG: effects/ailments on s131 not verified.
+- Kobe OG: added as s7455. Leafly + AllBud: Hybrid, Indica-dominant, parents Chemdawg x Hindu Kush, THC 22-24%, effects Relaxed/Uplifted/Hungry, ailments Depression/Nausea/Pain/Stress, flavor diesel/spicy. HELD: breeder Packwoods and alias True OG/KOG (Leafly only; AllBud has a separate True OG page), terps (Leafly only), Anxiety (Leafly only).
+- Northern Lights/Sweet…: skip (truncated name).
+- Bubba Pre 98: added (word-order label of existing Pre-98 Bubba Kush s139). Leafly confirms Indica, Sleepy/Relaxed/Hungry, Pain/Stress/Insomnia, coffee/earthy flavor, already on the entry; no change. AllBud profile not fetched.
+- Super GDP: no data. Only GDP pages.
+- 138 OG: no data. Nothing found.
+- Royal Queen: no data. AllBud only (50/50, unknown cross, 21-27% THC); also a seed-company name.
+- Migration batch 105 (name strain_research_batch105_2026_10_22) tested on a fresh seed.
+
+## S166 (2026-10-28) rows 3794-3803, plus B-52 follow-up
+- B-52 s216 follow-up (flag from S165; mig batch 106): Leafly.ca + AllBud (+ Vivosun): indica-dominant 75/25 -> lean Indica-dominant, parents Skunk #1 x Big Bud, effects Relaxed/Euphoric (all three), ailments Stress/Insomnia/Depression (Leafly + AllBud overlap; Lack of Appetite AllBud only, removed), flavor skunky/woody, terps Myrcene dominant only (Leafly myrcene/terpinolene/pinene vs Vivosun myrcene/caryophyllene/limonene), breeder Nirvana Seeds (Leafly + SeedFinder listing; replaced unsourced "Homegrown Fantaseeds"). HELD: THC (Leafly 18%, AllBud/Vivosun 8-15%; existing 17-21% left), Focused (Leafly/Vivosun), alias. Leafly reviews note other cultivars called B-52 (Durban Poison x Blue Dream).
+- Very Berry: added (alias of existing Very Berry Haze s423; AllBud lists "Very Berry" with aka Very Berry Haze and the same Strawberry Cough x Super Silver Haze cross as Leafly; mig batch 106). Type Hybrid -> Sativa (Leafly and AllBud both Sativa), parents set, effects Happy (only shared), ailments Stress (only shared), flavor sweet berry, breeder Apothecary Genetics (Leafly + SeedFinder; replaced "Apothecary Seed Company"), aka Very Berry. Blanked sample terps. HELD: THC 16-21% left (AllBud 18%), Pain/Anxiety/Focused/Energetic single-source, alias Vbh.
+- Fire Og x Afghan Mango: no data. Cross label; only Fire OG and Afghan Mango pages, not proven to be one strain.
+- GreenLeaf Flyyyyaaaa: no data. Dispensary-style label; only Green Leaf Medical and "Fly" pages.
+- JEBD: no data. Nothing found.
+- Jack x G13: no data. Cross label; nothing found for it.
+- University Hills OG: no data. Nothing found.
+- Afgan-gu: no data. Only Afgoo / Afghan pages; unclear name.
+- Purple Catpiss: no data. AllBud only ("Purple Cat Piss", sativa-dominant 70/30, Mendocino Purps x Cat Piss); no second source. Cat Piss s167 still carries sample-style values.
+- WTQ: no data. Nothing found.
+- Herojuana II: no data (the "II" version not proven). Side fix to existing Herijuana s1111 (aka Herojuana; mig batch 106): Leafly + AllBud agree on Petrolia Headstash x Killer New Haven, Indica / indica-dominant hybrid -> lean Indica-dominant, effects Relaxed, ailments Pain/Insomnia/Stress. Blanked unsupported sample values: THC 22-30% (Leafly 22, AllBud 12-16), terps, Uplifted/Talkative/Hungry, flavor, breeder "StructuredHydro". HELD: breeder Woodhorse Seeds (Leafly only), alias Hj, terps (Leafly only).
+- Migration batch 106 (name strain_research_batch106_2026_10_22) tested on a fresh seed.
+
+## S167 (2026-10-28) rows 3804-3813
+- Dragonfly Pie: no data. Only different strains' pages.
+- Purple Dingleberry: no data. Nothing found for it.
+- Purple Urkel: added (spelling variant of existing Purple Urkle s69; aka "Purple Urkel" already listed). Leafly (Indica, Relaxed/Sleepy/Hungry, Pain/Insomnia/Depression) and Cannigma (indica-dominant hybrid, Mendocino Purps) agree with the entry; no change. HELD: terps (Cannigma only), THC (Cannigma avg 20.6%, existing 18-21% left).
+- Hash Cone: no data. Descriptor/product term, no strain profile.
+- Kens Cherry Pie: no data. Only Cherry Pie pages.
+- Kens Dragonfly Cookies: no data. Only Dragonfly/cookie pages.
+- Medusa: added as s7456. Leafly + AllBud: Hybrid, Misty cross, effects Relaxed/Happy, flavor blueberry/sweet, ailments Anxiety/Insomnia/Pain. Lean blank (Leafly just says Hybrid; AllBud 50/50). HELD: THC (Leafly 14%, AllBud 15-20%), terps (Leafly only: myrcene, pinene, caryophyllene), breeder (Leafly Nirvana Seeds, AllBud review Maven Genetics: conflict), Creative (Leafly only), Stress (Leafly only), unverified White Widow/Skunk lineage from a review.
+- Kens Phantom: no data. Only Phantom pages.
+- GDP Dragonfly: no data. Only GDP / Dragonfly pages, not proven one strain.
+- Kens Kush: added (alias of existing Ken's OG s7060; aka "Ken's Kush" already listed). Leafly + AllBud: Granddaddy Purple x OG Kush (already on entry), THC 18-20% (Leafly 19%), effects Aroused/Relaxed, ailments Stress/Pain/Anxiety, berry/grape/skunk flavor already present. Blank-fills only (no migration). HELD: terps (Leafly only), breeder Ken Estes (Leafly only; existing "Grand Daddy Purp" left), Focused (Leafly only), Sour Diesel parent (Leafly only), lean (Leafly Hybrid, AllBud 70/30; existing left).
+- No migration this batch (blank-fills and one new entry only).
+
+## S168 (2026-10-28) rows 3814-3823
+- Kens Grandaddy Purp: added (variant of existing Granddaddy Purple s5; aka "Ken's Granddaddy Purple, Ken's GDP" already listed). Leafly's Ken Estes interview ties the GDP name to Ken Estes; no change. Granddaddy Purple parentage dispute still open.
+- Nicks OG: no data. Nothing found (only Nick the Bruiser and OG Kush pages).
+- Pineapple X-Press: no data. Only Pineapple Express and Pineapple X (Phat Panda) pages; not proven to be a spelling of Pineapple Express s7.
+- Bentley OG: no data. AllBud only (pure indica, "most likely an OG Kush phenotype", THC 22-24%, Relaxing/Sleepy, Anxiety/Pain/Insomnia/Nausea/Stress); Leafly page not reachable and no second source. Held.
+- Soto OG: no data. Nothing found.
+- Cooks OG: no data. Only Cook d / OG Cookies / OG Kush pages.
+- Cooks Bubba: no data. Only Bubba Cookies pages; not proven the same.
+- Cactus Cooler OG: no data. Only Cactus Cooler pages (existing s1668); OG version not proven.
+- Royal OG: no data. AllBud only (indica-dominant 85/15, Afghani x Skunk #1, G13 Labs, aka Royal Kush, THC 19-23%). Leafly Royal Kush (G13 Labs, Skunk #1 x Afghani) does not mention "Royal OG", so alias link rests on AllBud alone. Held; existing Royal Kush s1957 consistent with Leafly on breeder/parents.
+- HeroJewJuana: no data. Only Herojuana/Herijuana pages (existing s1111); spelling not proven.
+- No library or migration changes this batch.
+
+## S169 (2026-10-28) rows 3824-3833
+- Harlequin: added (existing s393; mig batch 107). Leafly + Cannigma: Sativa / sativa-dominant 75/25 -> type Hybrid, lean Sativa-dominant; Colombian Gold/Thai/Swiss/Nepali parents already present; THC 5-9% (Leafly ~5, Cannigma ~9), CBD 6-9% (Leafly 9, Cannigma 6.4); effects Relaxed/Focused (shared); ailments Pain/Anxiety (shared); flavor earthy/woody/herbal/spicy; terps Myrcene dominant only. Replaced sample-style THC 7-15%, CBD 4-10%, terps (Linalool/Humulene), Uplifted/Happy, flavor "myrcene-leaning finish", Stress/Depression/Inflammation. Breeder House of David Collective kept (Cannigma). HELD: Pinene/Caryophyllene ranking, Uplifted (Leafly only), Inflammation/Arthritis (Cannigma only).
+- OG 3 / OG 2 / OG 1: no data. Only generic OG / OG Kush pages (and a Weedmaps "OG 1" listing); no identifiable strain profiles.
+- Junil Daddy Purps: no data. Only Grand Daddy Purps retail pages; name not resolved.
+- 1024: added as s7457. Leafly + AllBud: Sativa / sativa-dominant 70/30 -> Hybrid, Sativa-dominant; breeder Medical Seeds Co. (also SeedFinder); effects Uplifted; flavor tea/tropical/blueberry; ailments Depression. HELD: THC (Leafly 8%, AllBud 20-25%), CBD (AllBud up to 4%), terps (Leafly: terpinolene), alias Ten Twenty Four (Leafly only), Energetic/Focused (Leafly) vs Creative/Euphoric/Giggly (AllBud), Stress (Leafly only).
+- Afrikaner: added as s7458. AllBud + Leafly: pure South African landrace sativa, THC 18-20% (Leafly ~20%), flavor earthy/sweet/spicy. HELD: effects (Leafly lists only Happy; AllBud Energetic/Euphoria/Focus/Uplifting), ailments (AllBud only), breeder Cannabaal (Leafly only).
+- Alpha Cow: added as s7459. Leafly + AllBud: Sativa / sativa-dominant 90/10 -> Hybrid, Sativa-dominant; Alpha Blue x Purple Cow; effects Uplifted/Relaxed; flavor blueberry/earthy; ailments Depression/Anxiety. HELD: THC 20-22% (AllBud only), Giggly/Tingly, Fatigue/Stress/Epilepsy.
+- Uh Oh: no data. Only GM-UhOh (Cannabiotix) pages; not proven the same.
+- CBD Lilly: added as s7460 (aka Lilly CBD). Leafly + AllBud: Congo IBL x Queen Mother (Goji), sativa / sativa-dominant 90/10 -> Hybrid, Sativa-dominant; effects Uplifted; flavor pineapple/tropical; ailments Depression/Inflammation. HELD: THC/CBD values (AllBud 4-6% / 12-15%; Leafly gives only ~3:1 ratio), alias Pina Colada (AllBud only). FLAG: existing Lilly s7098 (Delicatessen, THC 20-21%, aka "Pina Colada") is a different Leafly listing; its "Pina Colada" alias is not supported by Leafly and AllBud ties Pina Colada to CBD Lilly. Not changed.
+- Migration batch 107 (name strain_research_batch107_2026_10_22) tested on a fresh seed.
+
+## S170 (2026-10-28) rows 3834-3843
+- Fighting Buddha: added (existing Fighting Buddah s1426; mig batch 108). Leafly + AllBud: Sativa / sativa-dominant 70/30 -> Hybrid, lean Sativa-dominant; Burmese x Blueberry; effects Creative (only shared); flavor spicy/sweet; breeder Chimera Seeds (Leafly + SeedFinder; replaced unsourced "Chimera & DJ Short"); aka "Fighting Buddha". Blanked sample THC 17-23% (AllBud 15-16%, Leafly none), terps (Humulene/Myrcene/Pinene), Giggly/Clear-headed/Relaxed, "humulene-forward" flavor. HELD: THC 15-16% (AllBud only), ailments (Stress Leafly + review only).
+- Lennon: added as s7461. Leafly + AllBud: Sativa / sativa-dominant 80/20 -> Hybrid, Sativa-dominant; Jack Herer x Pure Haze; breeder Pyramid Seeds (Leafly + SeedFinder); effects Uplifted; ailments Stress/Insomnia/Lack of Appetite. HELD: THC (AllBud header 18-21%, text 22-25%), flavor (no overlap), Auto Lennon is separate.
+- Mekamika Haze: no data. Leafly only (landrace-style Amazon sativa, Energetic/Creative/Uplifted from one report); no second profile (Mekanika Haze by Plantformers is a different spelling/cross).
+- Moondance: added as s7462. Leafly + AllBud: sativa-dominant (70/30); Super Silver Haze x Neville's Haze (+ unknown CBD parent); THC ~4%, CBD ~11%; effects Creative; flavor grape/pepper/mint/pine; ailments Inflammation/Pain. HELD: Energetic/Uplifted (Leafly), Focus/Mellow (AllBud), PMS/Stress.
+- Old Mother Sativa: added as s7463. Leafly + AllBud: pure Sativa (Australia), effects Happy/Giggly, ailments Pain. HELD: THC 15-17% (AllBud only), flavor (no overlap), Fatigue/Depression/Stress (AllBud only), Headaches/Nausea (Leafly only).
+- Q3: added as s7464. Leafly (Sativa) + AllBud (Hybrid 50/50 header; text says sativa-dominant): type Hybrid, lean blank; effects Happy; flavor fruity; ailments Pain/Stress/Depression. HELD: THC 21% (AllBud only), everything else single-source.
+- Rafsel: no data. Nothing found (only San Rafael / Rafael pages).
+- Ridge Berry: added as s7465 (minimal). Leafly (Sativa, sativa-dominant) + AllBud listing (sativa-dominant 70/30): Hybrid, Sativa-dominant; Stress (Leafly + AllBud symptom listing). HELD: parents Chem's Sister x Sour Dubble and breeder Marley Natural (Leafly only), effects, flavor.
+- South Asian Sativa: added as s7466. Leafly + AllBud: Sativa (landrace-type), effects Uplifted/Happy, ailments Depression. HELD: THC 10% (AllBud only), flavor (no overlap; Leafly diesel/mango/berry, AllBud pine/sweet/woody). Separate from South Asian Indica s930.
+- Swiss Sativa: no data. Leafly page is an empty landrace stub (no effects/flavors); nothing else found.
+- Migration batch 108 (name strain_research_batch108_2026_10_22) tested on a fresh seed.

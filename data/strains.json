@@ -56,7 +56,7 @@
       "Focused",
       "Uplifted"
     ],
-    "flavor": "Pungent diesel.",
+    "flavor": "diesel and skunk",
     "icon": "⛽",
     "aka": "Sour D",
     "parents": [
@@ -643,39 +643,20 @@
     "id": "s22",
     "name": "Kali Mist",
     "type": "Hybrid",
-    "lean": "",
+    "lean": "Sativa-dominant",
     "rarity": "rare",
-    "thc": "16–23%",
+    "thc": "15–16%",
     "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Myrcene",
-        "p": 0.4
-      },
-      {
-        "n": "Linalool",
-        "p": 0.27
-      },
-      {
-        "n": "Limonene",
-        "p": 0.16
-      }
-    ],
+    "terps": [],
     "effects": [
-      "Energetic",
       "Creative",
-      "Happy",
       "Focused"
     ],
-    "flavor": "Earthy and sweet on the palate with a myrcene-leaning finish.",
+    "flavor": "herbal",
     "icon": "🌰",
     "breeder": "Serious Seeds",
     "ailments": [
-      "Stress",
-      "Pain",
-      "Depression",
-      "Lack of Appetite",
-      "Muscle Spasms"
+      "Stress"
     ]
   },
   {
@@ -917,40 +898,29 @@
   {
     "id": "s29",
     "name": "3X Crazy",
-    "type": "Indica",
-    "lean": "",
+    "type": "Hybrid",
+    "lean": "Indica-dominant",
     "rarity": "uncommon",
     "thc": "14–20%",
-    "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Myrcene",
-        "p": 0.4
-      },
-      {
-        "n": "Linalool",
-        "p": 0.27
-      },
-      {
-        "n": "Pinene",
-        "p": 0.16
-      }
-    ],
+    "cbd": "",
+    "terps": [],
     "effects": [
       "Relaxed",
-      "Happy",
-      "Uplifted",
-      "Euphoric"
+      "Sleepy"
     ],
-    "flavor": "Earthy and grape on the palate with a myrcene-leaning finish.",
+    "flavor": "grape, spicy",
     "icon": "🌰",
     "ailments": [
-      "Stress",
       "Insomnia",
       "Pain",
-      "Depression",
-      "Lack of Appetite"
-    ]
+      "Muscle Spasms"
+    ],
+    "parents": [
+      "OG Kush",
+      "Bubba Kush",
+      "Granddaddy Purple"
+    ],
+    "aka": "Optimus Prime, 3 Times Crazy"
   },
   {
     "id": "s30",
@@ -1849,37 +1819,21 @@
     "id": "s54",
     "name": "Kryptonite",
     "type": "Hybrid",
-    "lean": "",
+    "lean": "Indica-dominant",
     "rarity": "uncommon",
-    "thc": "12–21%",
-    "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Linalool",
-        "p": 0.4
-      },
-      {
-        "n": "Myrcene",
-        "p": 0.27
-      },
-      {
-        "n": "Pinene",
-        "p": 0.16
-      }
-    ],
+    "thc": "",
+    "cbd": "",
+    "terps": [],
     "effects": [
       "Relaxed",
-      "Happy",
-      "Tingly",
-      "Uplifted"
+      "Sleepy"
     ],
-    "flavor": "Sweet and earthy on the palate with a linalool-leaning finish.",
+    "flavor": "sweet",
     "icon": "🍬",
     "ailments": [
-      "Pain",
       "Stress",
-      "Insomnia",
-      "Depression"
+      "Pain",
+      "Anxiety"
     ]
   },
   {
@@ -4533,27 +4487,14 @@
     "rarity": "legendary",
     "thc": "17–23%",
     "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Myrcene",
-        "p": 0.4
-      },
-      {
-        "n": "Pinene",
-        "p": 0.27
-      },
-      {
-        "n": "Limonene",
-        "p": 0.16
-      }
-    ],
+    "terps": [],
     "effects": [
       "Relaxed",
       "Sleepy",
       "Happy",
       "Euphoric"
     ],
-    "flavor": "Earthy and pine on the palate with a myrcene-leaning finish.",
+    "flavor": "",
     "icon": "🌰",
     "ailments": [
       "Stress",
@@ -6230,10 +6171,9 @@
     "terps": [],
     "effects": [
       "Energetic",
-      "Uplifted",
-      "Happy"
+      "Focused"
     ],
-    "flavor": "Skunk, citrus and mango.",
+    "flavor": "citrus and mango",
     "icon": "🍋",
     "ailments": [
       "Stress",
@@ -7585,7 +7525,7 @@
     "id": "s216",
     "name": "B-52",
     "type": "Hybrid",
-    "lean": "",
+    "lean": "Indica-dominant",
     "rarity": "uncommon",
     "thc": "17–21%",
     "cbd": "<1%",
@@ -7593,30 +7533,23 @@
       {
         "n": "Myrcene",
         "p": 0.4
-      },
-      {
-        "n": "Linalool",
-        "p": 0.27
-      },
-      {
-        "n": "Limonene",
-        "p": 0.16
       }
     ],
     "effects": [
       "Relaxed",
-      "Uplifted",
-      "Focused",
       "Euphoric"
     ],
-    "flavor": "Earthy and sweet on the palate with a myrcene-leaning finish.",
+    "flavor": "skunky and woody",
     "icon": "🌰",
-    "breeder": "Homegrown Fantaseeds",
+    "breeder": "Nirvana Seeds",
     "ailments": [
       "Stress",
       "Insomnia",
-      "Lack of Appetite",
       "Depression"
+    ],
+    "parents": [
+      "Skunk #1",
+      "Big Bud"
     ]
   },
   {
@@ -7959,7 +7892,7 @@
       "Stress",
       "Pain"
     ],
-    "aka": "Skywalker Kush",
+    "aka": "",
     "parents": [
       "Blueberry",
       "Mazar I Sharif"
@@ -8159,29 +8092,31 @@
   {
     "id": "s234",
     "name": "Kosher Kush",
-    "type": "Hybrid",
+    "type": "Indica",
     "lean": "",
     "rarity": "uncommon",
-    "thc": "21–29%",
+    "thc": "18–25%",
     "cbd": "",
     "terps": [],
     "effects": [
       "Relaxed",
+      "Sleepy",
       "Happy",
       "Euphoric",
-      "Sleepy"
+      "Hungry"
     ],
-    "flavor": "Earthy and piney with a lemony Kush character.",
+    "flavor": "earthy, woody and sweet",
     "icon": "🌰",
-    "breeder": "Reserva Privada",
+    "breeder": "DNA Genetics",
     "ailments": [
       "Pain",
       "Stress",
-      "Depression",
-      "Insomnia",
-      "Lack of Appetite"
+      "Insomnia"
     ],
-    "aka": "Kosher OG, Jew Gold, Jew's Gold, Jews Gold, Jew Gold Cut"
+    "aka": "Kosher OG, Jew Gold, Jew's Gold, Jews Gold, Jew Gold Cut",
+    "parents": [
+      "OG Kush"
+    ]
   },
   {
     "id": "s235",
@@ -12446,7 +12381,8 @@
     "terps": [],
     "effects": [
       "Relaxed",
-      "Sleepy"
+      "Sleepy",
+      "Hungry"
     ],
     "flavor": "grape",
     "icon": "🍇",
@@ -13296,40 +13232,28 @@
   {
     "id": "s377",
     "name": "Woody Kush",
-    "type": "Hybrid",
+    "type": "Indica",
     "lean": "",
     "rarity": "uncommon",
-    "thc": "13–17%",
-    "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Pinene",
-        "p": 0.4
-      },
-      {
-        "n": "Myrcene",
-        "p": 0.27
-      },
-      {
-        "n": "Ocimene",
-        "p": 0.16
-      }
-    ],
+    "thc": "20–23%",
+    "cbd": "",
+    "terps": [],
     "effects": [
-      "Relaxed",
-      "Happy",
-      "Euphoric",
       "Sleepy"
     ],
-    "flavor": "Pine and earthy on the palate with a pinene-leaning finish.",
+    "flavor": "pine and woody",
     "icon": "🌲",
     "ailments": [
       "Insomnia",
       "Stress",
-      "Depression",
-      "Pain",
-      "Lack of Appetite"
-    ]
+      "Pain"
+    ],
+    "parents": [
+      "Master Kush",
+      "OG Kush",
+      "Hindu Kush"
+    ],
+    "aka": "Woody OG"
   },
   {
     "id": "s378",
@@ -13853,37 +13777,25 @@
     "id": "s393",
     "name": "Harlequin",
     "type": "Hybrid",
-    "lean": "",
+    "lean": "Sativa-dominant",
     "rarity": "rare",
-    "thc": "7–15%",
-    "cbd": "4–10%",
+    "thc": "5–9%",
+    "cbd": "6–9%",
     "terps": [
       {
         "n": "Myrcene",
         "p": 0.4
-      },
-      {
-        "n": "Linalool",
-        "p": 0.27
-      },
-      {
-        "n": "Humulene",
-        "p": 0.16
       }
     ],
     "effects": [
       "Relaxed",
-      "Focused",
-      "Uplifted",
-      "Happy"
+      "Focused"
     ],
-    "flavor": "Earthy and sweet on the palate with a myrcene-leaning finish.",
+    "flavor": "earthy, woody, herbal and spicy",
     "icon": "🌰",
     "ailments": [
-      "Stress",
       "Pain",
-      "Depression",
-      "Inflammation"
+      "Anxiety"
     ],
     "parents": [
       "Colombian Gold",
@@ -14858,39 +14770,26 @@
   {
     "id": "s423",
     "name": "Very Berry Haze",
-    "type": "Hybrid",
+    "type": "Sativa",
     "lean": "",
     "rarity": "common",
     "thc": "16–21%",
     "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Myrcene",
-        "p": 0.4
-      },
-      {
-        "n": "Linalool",
-        "p": 0.27
-      },
-      {
-        "n": "Limonene",
-        "p": 0.16
-      }
-    ],
+    "terps": [],
     "effects": [
-      "Happy",
-      "Focused",
-      "Uplifted",
-      "Euphoric"
+      "Happy"
     ],
-    "flavor": "Berry and sweet on the palate with a myrcene-leaning finish.",
+    "flavor": "sweet berry",
     "icon": "🫐",
-    "breeder": "Apothecary Seed Company",
+    "breeder": "Apothecary Genetics",
     "ailments": [
-      "Pain",
-      "Inflammation",
-      "Muscle Spasms"
-    ]
+      "Stress"
+    ],
+    "parents": [
+      "Strawberry Cough",
+      "Super Silver Haze"
+    ],
+    "aka": "Very Berry"
   },
   {
     "id": "s424",
@@ -16308,38 +16207,24 @@
   {
     "id": "s463",
     "name": "Laughing Buddha",
-    "type": "Sativa",
-    "lean": "",
+    "type": "Hybrid",
+    "lean": "Sativa-dominant",
     "rarity": "uncommon",
-    "thc": "21–27%",
-    "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Limonene",
-        "p": 0.4
-      },
-      {
-        "n": "Linalool",
-        "p": 0.27
-      },
-      {
-        "n": "Ocimene",
-        "p": 0.16
-      }
-    ],
+    "thc": "18–22%",
+    "cbd": "",
+    "terps": [],
     "effects": [
-      "Happy",
-      "Euphoric",
-      "Uplifted",
-      "Energetic"
+      "Giggly"
     ],
-    "flavor": "Citrus and sweet on the palate with a limonene-leaning finish.",
+    "flavor": "herbal and spicy",
     "icon": "🍋",
     "ailments": [
       "Depression",
-      "Stress",
-      "Pain",
-      "Lack of Appetite"
+      "Stress"
+    ],
+    "parents": [
+      "Thai",
+      "Jamaican"
     ]
   },
   {
@@ -21922,26 +21807,24 @@
   {
     "id": "s620",
     "name": "Mr. Nice",
-    "type": "Indica",
-    "lean": "",
+    "type": "Hybrid",
+    "lean": "Indica-dominant",
     "rarity": "common",
-    "thc": "",
+    "thc": "13–19%",
     "cbd": "",
     "terps": [],
     "effects": [
       "Relaxed",
       "Sleepy"
     ],
-    "flavor": "Earthy, spicy and sweet.",
+    "flavor": "earthy and woody",
     "icon": "🍬",
     "breeder": "Sensi Seeds",
     "ailments": [
       "Stress",
-      "Pain",
-      "Depression",
-      "Insomnia"
+      "Pain"
     ],
-    "aka": "Mr. Nice Guy, Mister Nice Guy, Mister Nice, Mr. Nice G13 x Hash Plant",
+    "aka": "Mr. Nice Guy, Mister Nice Guy, Mister Nice",
     "parents": [
       "G13",
       "Hash Plant"
@@ -37955,7 +37838,8 @@
     ],
     "ailments": [
       "Stress",
-      "Depression"
+      "Depression",
+      "Anxiety"
     ]
   },
   {
@@ -38417,33 +38301,27 @@
     "id": "s1111",
     "name": "Herijuana",
     "type": "Hybrid",
-    "lean": "",
+    "lean": "Indica-dominant",
     "rarity": "legendary",
-    "thc": "22–30%",
+    "thc": "",
     "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Caryophyllene",
-        "p": 0.4
-      },
-      {
-        "n": "Pinene",
-        "p": 0.27
-      },
-      {
-        "n": "Limonene",
-        "p": 0.16
-      }
-    ],
+    "terps": [],
     "effects": [
-      "Uplifted",
-      "Talkative",
-      "Hungry"
+      "Relaxed"
     ],
-    "flavor": "Caryophyllene-forward with a pinene undertone.",
+    "flavor": "",
     "icon": "🌿",
-    "breeder": "StructuredHydro",
-    "aka": "Herojuana"
+    "breeder": "",
+    "aka": "Herojuana",
+    "parents": [
+      "Petrolia Headstash",
+      "Killer New Haven"
+    ],
+    "ailments": [
+      "Pain",
+      "Insomnia",
+      "Stress"
+    ]
   },
   {
     "id": "s1112",
@@ -39222,23 +39100,42 @@
     "id": "s1141",
     "name": "Lemon Diesel",
     "type": "Hybrid",
-    "lean": "",
+    "lean": "Indica-dominant",
     "rarity": "rare",
-    "thc": "",
+    "thc": "15–20%",
     "cbd": "",
-    "terps": [],
-    "effects": [
-      "Energetic",
-      "Happy",
-      "Focused"
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.4
+      },
+      {
+        "n": "Caryophyllene",
+        "p": 0.27
+      },
+      {
+        "n": "Pinene",
+        "p": 0.16
+      }
     ],
-    "flavor": "Intense sour lemon with a diesel finish.",
+    "effects": [
+      "Euphoric",
+      "Focused",
+      "Uplifted",
+      "Relaxed"
+    ],
+    "flavor": "lemon, diesel and citrus",
     "icon": "🌿",
-    "breeder": "Green Lantern Seeds",
+    "breeder": "",
     "aka": "Lemon Sour Diesel",
     "parents": [
       "California Sour",
       "Lost Coast OG"
+    ],
+    "ailments": [
+      "Stress",
+      "Anxiety",
+      "Depression"
     ]
   },
   {
@@ -39643,28 +39540,11 @@
     "type": "Hybrid",
     "lean": "",
     "rarity": "uncommon",
-    "thc": "27–30%",
-    "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Humulene",
-        "p": 0.4
-      },
-      {
-        "n": "Pinene",
-        "p": 0.27
-      },
-      {
-        "n": "Ocimene",
-        "p": 0.16
-      }
-    ],
-    "effects": [
-      "Sleepy",
-      "Social",
-      "Calm"
-    ],
-    "flavor": "Humulene-forward with a pinene undertone.",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
     "icon": "🌿"
   },
   {
@@ -41057,13 +40937,13 @@
     "id": "s1210",
     "name": "Skywalker OG",
     "type": "Hybrid",
-    "lean": "",
+    "lean": "Indica-dominant",
     "rarity": "common",
-    "thc": "27–28%",
+    "thc": "20%",
     "cbd": "<1%",
     "terps": [
       {
-        "n": "Linalool",
+        "n": "Myrcene",
         "p": 0.4
       },
       {
@@ -41071,21 +40951,26 @@
         "p": 0.27
       },
       {
-        "n": "Myrcene",
+        "n": "Caryophyllene",
         "p": 0.16
       }
     ],
     "effects": [
-      "Focused",
-      "Clear-headed",
-      "Creative"
+      "Relaxed",
+      "Sleepy"
     ],
-    "flavor": "Linalool-forward with a limonene undertone.",
+    "flavor": "diesel and spicy",
     "icon": "🌿",
     "parents": [
       "Skywalker",
       "OG Kush"
-    ]
+    ],
+    "ailments": [
+      "Stress",
+      "Pain",
+      "Insomnia"
+    ],
+    "aka": "Skywalker OG Kush, Skywalker Kush"
   },
   {
     "id": "s1211",
@@ -41606,11 +41491,17 @@
     "lean": "",
     "rarity": "uncommon",
     "thc": "20–21%",
-    "cbd": "<1%",
-    "terps": [],
+    "cbd": "",
+    "terps": [
+      {
+        "n": "Myrcene",
+        "p": 0.4
+      }
+    ],
     "effects": [
       "Relaxed",
-      "Sleepy"
+      "Sleepy",
+      "Euphoric"
     ],
     "flavor": "pine and lemon with earthy, woody notes",
     "icon": "🌿",
@@ -41619,7 +41510,8 @@
       "Insomnia",
       "Pain",
       "Lack of Appetite"
-    ]
+    ],
+    "aka": "Tahoe OG Kush"
   },
   {
     "id": "s1230",
@@ -47433,32 +47325,22 @@
     "id": "s1426",
     "name": "Fighting Buddah",
     "type": "Hybrid",
-    "lean": "",
+    "lean": "Sativa-dominant",
     "rarity": "uncommon",
-    "thc": "17–23%",
+    "thc": "",
     "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Humulene",
-        "p": 0.4
-      },
-      {
-        "n": "Myrcene",
-        "p": 0.27
-      },
-      {
-        "n": "Pinene",
-        "p": 0.16
-      }
-    ],
+    "terps": [],
     "effects": [
-      "Giggly",
-      "Clear-headed",
-      "Relaxed"
+      "Creative"
     ],
-    "flavor": "Humulene-forward with a myrcene undertone.",
+    "flavor": "spicy and sweet",
     "icon": "🌿",
-    "breeder": "Chimera & DJ Short"
+    "breeder": "Chimera Seeds",
+    "parents": [
+      "Burmese",
+      "Blueberry"
+    ],
+    "aka": "Fighting Buddha"
   },
   {
     "id": "s1427",
@@ -50264,7 +50146,7 @@
     "lean": "Indica-leaning",
     "rarity": "uncommon",
     "thc": "16–24%",
-    "cbd": "<1%",
+    "cbd": "",
     "terps": [
       {
         "n": "Caryophyllene",
@@ -50281,9 +50163,7 @@
     ],
     "effects": [
       "Relaxed",
-      "Happy",
-      "Euphoric",
-      "Uplifted"
+      "Euphoric"
     ],
     "flavor": "Sweet cherry with an earthy, slightly sour exhale.",
     "icon": "🍒",
@@ -50291,6 +50171,11 @@
     "parents": [
       "Granddaddy Purple",
       "Durban Poison"
+    ],
+    "ailments": [
+      "Stress",
+      "Anxiety",
+      "Pain"
     ]
   },
   {
@@ -177492,15 +177377,14 @@
     "id": "s6861",
     "name": "Trash",
     "type": "Hybrid",
-    "lean": "Indica-leaning",
+    "lean": "Indica-dominant",
     "rarity": "uncommon",
     "thc": "17-19%",
-    "cbd": "<1%",
+    "cbd": "",
     "terps": [],
     "effects": [
       "Energetic",
-      "Focused",
-      "Happy"
+      "Focused"
     ],
     "flavor": "Earthy lemon and hash with mint and a touch of fruit.",
     "icon": "🌿",
@@ -177509,6 +177393,10 @@
     "parents": [
       "Purple Trainwreck",
       "Hash Plant"
+    ],
+    "ailments": [
+      "Inflammation",
+      "Pain"
     ]
   },
   {
@@ -178781,15 +178669,16 @@
     "id": "s6921",
     "name": "Guava",
     "type": "Hybrid",
-    "lean": "Sativa-leaning",
+    "lean": "Sativa-dominant",
     "rarity": "rare",
     "thc": "21–22%",
     "cbd": "",
     "terps": [],
     "effects": [
+      "Uplifted",
       "Focused"
     ],
-    "flavor": "tropical fruit",
+    "flavor": "sweet, fruity and creamy",
     "icon": "🌿",
     "breeder": "Cookie Fam Genetics",
     "parents": [
@@ -180306,13 +180195,16 @@
     "id": "s7006",
     "name": "Lost Coast OG",
     "type": "Hybrid",
-    "lean": "Indica-leaning",
+    "lean": "Indica-dominant",
     "rarity": "rare",
     "thc": "",
     "cbd": "",
     "terps": [],
-    "effects": [],
-    "flavor": "Sour citrus and earthy musk.",
+    "effects": [
+      "Euphoric",
+      "Relaxed"
+    ],
+    "flavor": "citrus, lemon and pine",
     "icon": "🌿",
     "parents": [
       "Chem 4",
@@ -180320,7 +180212,10 @@
       "Lemon Thai"
     ],
     "aka": "Lost Coast, Lost Coast Lemon, Lost Coast Lemons, Lost Coast OG Kush, Thai Coast",
-    "ailments": null,
+    "ailments": [
+      "Anxiety",
+      "Depression"
+    ],
     "breeder": "Emerald Triangle Seeds"
   },
   {
@@ -181283,10 +181178,13 @@
     "type": "Hybrid",
     "lean": "Indica-leaning",
     "rarity": "rare",
-    "thc": "",
+    "thc": "18–20%",
     "cbd": "",
     "terps": [],
-    "effects": [],
+    "effects": [
+      "Aroused",
+      "Relaxed"
+    ],
     "flavor": "Sweet and fruity purple berry with a pungent, skunky, spicy exhale.",
     "icon": "🌿",
     "breeder": "Grand Daddy Purp",
@@ -181295,7 +181193,11 @@
       "OG Kush"
     ],
     "aka": "Ken's Kush, Ken's OG Kush",
-    "ailments": null
+    "ailments": [
+      "Stress",
+      "Pain",
+      "Anxiety"
+    ]
   },
   {
     "id": "s7061",
@@ -182635,11 +182537,15 @@
     "thc": "",
     "cbd": "",
     "terps": [],
-    "effects": [],
+    "effects": [
+      "Uplifted"
+    ],
     "flavor": "Pungent and earthy.",
     "icon": "🌿",
     "aka": "Mendocino Afgoo",
-    "ailments": null
+    "ailments": [
+      "Stress"
+    ]
   },
   {
     "id": "s7134",
@@ -183304,13 +183210,16 @@
     "id": "s7170",
     "name": "Orange Diesel",
     "type": "Hybrid",
-    "lean": "Sativa-leaning",
+    "lean": "Sativa-dominant",
     "rarity": "rare",
-    "thc": "",
+    "thc": "14–17%",
     "cbd": "",
     "terps": [],
-    "effects": [],
-    "flavor": "Sweet citrus with a subtle diesel aftertaste.",
+    "effects": [
+      "Focused",
+      "Energetic"
+    ],
+    "flavor": "orange and diesel",
     "icon": "🌿",
     "breeder": "TGA Subcool Seeds",
     "parents": [
@@ -183318,7 +183227,11 @@
       "Agent Orange"
     ],
     "aka": "Agent D, Agent Diesel",
-    "ailments": null
+    "ailments": [
+      "Stress",
+      "Anxiety",
+      "Depression"
+    ]
   },
   {
     "id": "s7171",
@@ -183956,17 +183869,15 @@
     "id": "s7204",
     "name": "Phantom Cookies",
     "type": "Hybrid",
-    "lean": "Sativa-leaning",
+    "lean": "Sativa-dominant",
     "rarity": "rare",
     "thc": "20–21%",
     "cbd": "",
     "terps": [],
     "effects": [
-      "Relaxed",
-      "Euphoric",
-      "Creative"
+      "Relaxed"
     ],
-    "flavor": "sweet berry and grape with nutty notes",
+    "flavor": "sweet and nutty",
     "icon": "🌿",
     "breeder": "Grand Daddy Purp",
     "parents": [
@@ -183975,7 +183886,6 @@
     ],
     "aka": "Phantom Cookie",
     "ailments": [
-      "Stress",
       "Pain",
       "Depression"
     ]
@@ -184698,7 +184608,7 @@
   {
     "id": "s7244",
     "name": "Pure Kush",
-    "type": "Indica",
+    "type": "Hybrid",
     "lean": "Indica-dominant",
     "rarity": "rare",
     "thc": "",
@@ -189381,5 +189291,384 @@
     "parents": [],
     "aka": null,
     "ailments": []
+  },
+  {
+    "id": "s7451",
+    "name": "Game Changer",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "15–21%",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "grape",
+    "icon": "🌿",
+    "breeder": null,
+    "parents": [
+      "Purple Dragon",
+      "Green Thai"
+    ],
+    "aka": "Game Changers",
+    "ailments": [
+      "Stress",
+      "Anxiety",
+      "Depression"
+    ]
+  },
+  {
+    "id": "s7452",
+    "name": "Purple Mango",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "14–20%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Giggly",
+      "Uplifted"
+    ],
+    "flavor": "mango",
+    "icon": "🌿",
+    "breeder": null,
+    "parents": [],
+    "aka": null,
+    "ailments": [
+      "Pain",
+      "Depression"
+    ]
+  },
+  {
+    "id": "s7453",
+    "name": "Blackberry Pie",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Creative",
+      "Hungry",
+      "Euphoric"
+    ],
+    "flavor": "blueberry and berry",
+    "icon": "🌿",
+    "breeder": null,
+    "parents": [
+      "Blackberry Widow",
+      "Crystal Locomotive"
+    ],
+    "aka": null,
+    "ailments": [
+      "Pain",
+      "Cramps",
+      "Inflammation"
+    ]
+  },
+  {
+    "id": "s7454",
+    "name": "Bay Platinum Cookies",
+    "type": "Hybrid",
+    "lean": "Sativa-dominant",
+    "rarity": "uncommon",
+    "thc": "15–23%",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "citrus",
+    "icon": "🌿",
+    "breeder": "Grand Daddy Purp",
+    "parents": [
+      "Bay 11",
+      "Platinum Cookies"
+    ],
+    "aka": null,
+    "ailments": [
+      "Depression",
+      "Pain"
+    ]
+  },
+  {
+    "id": "s7455",
+    "name": "Kobe OG",
+    "type": "Hybrid",
+    "lean": "Indica-dominant",
+    "rarity": "uncommon",
+    "thc": "22–24%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Uplifted",
+      "Hungry"
+    ],
+    "flavor": "diesel and spicy",
+    "icon": "🌿",
+    "breeder": null,
+    "parents": [
+      "Chemdawg",
+      "Hindu Kush"
+    ],
+    "aka": null,
+    "ailments": [
+      "Depression",
+      "Nausea",
+      "Pain",
+      "Stress"
+    ]
+  },
+  {
+    "id": "s7456",
+    "name": "Medusa",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Happy"
+    ],
+    "flavor": "blueberry and sweet",
+    "icon": "🌿",
+    "breeder": null,
+    "parents": [
+      "Misty"
+    ],
+    "aka": null,
+    "ailments": [
+      "Anxiety",
+      "Insomnia",
+      "Pain"
+    ]
+  },
+  {
+    "id": "s7457",
+    "name": "1024",
+    "type": "Hybrid",
+    "lean": "Sativa-dominant",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted"
+    ],
+    "flavor": "tea, tropical and blueberry",
+    "icon": "🌿",
+    "breeder": "Medical Seeds Co.",
+    "parents": [],
+    "aka": null,
+    "ailments": [
+      "Depression"
+    ]
+  },
+  {
+    "id": "s7458",
+    "name": "Afrikaner",
+    "type": "Sativa",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "18–20%",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "earthy, sweet and spicy",
+    "icon": "🌿",
+    "breeder": null,
+    "parents": [],
+    "aka": null,
+    "ailments": []
+  },
+  {
+    "id": "s7459",
+    "name": "Alpha Cow",
+    "type": "Hybrid",
+    "lean": "Sativa-dominant",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Relaxed"
+    ],
+    "flavor": "blueberry and earthy",
+    "icon": "🌿",
+    "breeder": null,
+    "parents": [
+      "Alpha Blue",
+      "Purple Cow"
+    ],
+    "aka": null,
+    "ailments": [
+      "Depression",
+      "Anxiety"
+    ]
+  },
+  {
+    "id": "s7460",
+    "name": "CBD Lilly",
+    "type": "Hybrid",
+    "lean": "Sativa-dominant",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted"
+    ],
+    "flavor": "pineapple and tropical",
+    "icon": "🌿",
+    "breeder": null,
+    "parents": [
+      "Congo IBL",
+      "Queen Mother Goji"
+    ],
+    "aka": "Lilly CBD",
+    "ailments": [
+      "Depression",
+      "Inflammation"
+    ]
+  },
+  {
+    "id": "s7461",
+    "name": "Lennon",
+    "type": "Hybrid",
+    "lean": "Sativa-dominant",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted"
+    ],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "Pyramid Seeds",
+    "parents": [
+      "Jack Herer",
+      "Pure Haze"
+    ],
+    "aka": null,
+    "ailments": [
+      "Stress",
+      "Insomnia",
+      "Lack of Appetite"
+    ]
+  },
+  {
+    "id": "s7462",
+    "name": "Moondance",
+    "type": "Hybrid",
+    "lean": "Sativa-dominant",
+    "rarity": "uncommon",
+    "thc": "4%",
+    "cbd": "11%",
+    "terps": [],
+    "effects": [
+      "Creative"
+    ],
+    "flavor": "candied grape, pepper, mint and pine",
+    "icon": "🌿",
+    "breeder": null,
+    "parents": [
+      "Super Silver Haze",
+      "Neville's Haze"
+    ],
+    "aka": null,
+    "ailments": [
+      "Inflammation",
+      "Pain"
+    ]
+  },
+  {
+    "id": "s7463",
+    "name": "Old Mother Sativa",
+    "type": "Sativa",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Giggly"
+    ],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": null,
+    "parents": [],
+    "aka": null,
+    "ailments": [
+      "Pain"
+    ]
+  },
+  {
+    "id": "s7464",
+    "name": "Q3",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy"
+    ],
+    "flavor": "fruity",
+    "icon": "🌿",
+    "breeder": null,
+    "parents": [],
+    "aka": null,
+    "ailments": [
+      "Pain",
+      "Stress",
+      "Depression"
+    ]
+  },
+  {
+    "id": "s7465",
+    "name": "Ridge Berry",
+    "type": "Hybrid",
+    "lean": "Sativa-dominant",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": null,
+    "parents": [],
+    "aka": null,
+    "ailments": [
+      "Stress"
+    ]
+  },
+  {
+    "id": "s7466",
+    "name": "South Asian Sativa",
+    "type": "Sativa",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted",
+      "Happy"
+    ],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": null,
+    "parents": [],
+    "aka": null,
+    "ailments": [
+      "Depression"
+    ]
   }
 ]
