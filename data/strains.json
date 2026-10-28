@@ -4482,7 +4482,7 @@
   {
     "id": "s131",
     "name": "King Louis XIII",
-    "type": "Hybrid",
+    "type": "Indica",
     "lean": "",
     "rarity": "legendary",
     "thc": "17–23%",
@@ -4490,18 +4490,14 @@
     "terps": [],
     "effects": [
       "Relaxed",
-      "Sleepy",
-      "Happy",
-      "Euphoric"
+      "Sleepy"
     ],
-    "flavor": "",
+    "flavor": "pine, woody and earthy",
     "icon": "🌰",
     "ailments": [
       "Stress",
       "Insomnia",
-      "Pain",
-      "Depression",
-      "Muscle Spasms"
+      "Pain"
     ],
     "aka": "King Louis, King Louie, King Louis OG, King Louie XIII, Louis XIII",
     "parents": [
@@ -129471,14 +129467,13 @@
   },
   {
     "name": "Kubbie Kush (aka Cubbie Kush)",
-    "type": "Indica",
-    "lean": "Indica-leaning",
+    "type": "Hybrid",
+    "lean": "Indica-dominant",
     "rarity": "uncommon",
     "thc": "18-25%",
     "cbd": "",
     "terps": [],
     "effects": [
-      "Euphoric",
       "Relaxed",
       "Sleepy"
     ],
@@ -129489,7 +129484,11 @@
       "Lemon Alien",
       "Pre-98 Bubba Kush"
     ],
-    "id": "s4853"
+    "id": "s4853",
+    "ailments": [
+      "Anxiety",
+      "Insomnia"
+    ]
   },
   {
     "name": "Kurple (aka Kurple Fantasy)",
@@ -183834,12 +183833,15 @@
     "id": "s7203",
     "name": "Pestilence",
     "type": "Hybrid",
-    "lean": "Indica-leaning",
+    "lean": "Indica-dominant",
     "rarity": "rare",
     "thc": "",
     "cbd": "",
     "terps": [],
-    "effects": [],
+    "effects": [
+      "Relaxed",
+      "Hungry"
+    ],
     "flavor": "Coffee and caramel with pungent earth.",
     "icon": "🌿",
     "parents": [
@@ -189652,6 +189654,152 @@
     "aka": null,
     "ailments": [
       "Depression"
+    ]
+  },
+  {
+    "id": "s7467",
+    "name": "Allen Iverson OG",
+    "type": "Hybrid",
+    "lean": "Indica-dominant",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Euphoric"
+    ],
+    "flavor": "pine",
+    "icon": "🌿",
+    "breeder": null,
+    "parents": [],
+    "aka": null,
+    "ailments": [
+      "Depression"
+    ]
+  },
+  {
+    "id": "s7468",
+    "name": "Dirty Old Bastard",
+    "type": "Hybrid",
+    "lean": "Indica-dominant",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Creative"
+    ],
+    "flavor": "sweet, citrus and pine",
+    "icon": "🌿",
+    "breeder": null,
+    "parents": [
+      "OG Kush",
+      "Blackberry"
+    ],
+    "aka": "Ol' Dirty Bastard",
+    "ailments": [
+      "Pain",
+      "Stress",
+      "Cramps"
+    ]
+  },
+  {
+    "id": "s7469",
+    "name": "Ether",
+    "type": "Hybrid",
+    "lean": "Indica-dominant",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Sleepy"
+    ],
+    "flavor": "diesel",
+    "icon": "🌿",
+    "breeder": null,
+    "parents": [
+      "Alien Dawg"
+    ],
+    "aka": null,
+    "ailments": [
+      "Insomnia",
+      "Anxiety"
+    ]
+  },
+  {
+    "id": "s7470",
+    "name": "G-Force",
+    "type": "Hybrid",
+    "lean": "Indica-dominant",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric"
+    ],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": null,
+    "parents": [
+      "Northern Lights",
+      "Skunk #1",
+      "G13"
+    ],
+    "aka": null,
+    "ailments": []
+  },
+  {
+    "id": "s7471",
+    "name": "Phatt Frutty",
+    "type": "Hybrid",
+    "lean": "Indica-dominant",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Uplifted"
+    ],
+    "flavor": "lemon and lime",
+    "icon": "🌿",
+    "breeder": "Barney's Farm",
+    "parents": [
+      "Afghani",
+      "Mexican"
+    ],
+    "aka": "Phatt Fruity, Phat Frutty",
+    "ailments": [
+      "Depression",
+      "Pain"
+    ]
+  },
+  {
+    "id": "s7472",
+    "name": "Purple Hindu Kush",
+    "type": "Indica",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "20–24%",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Sleepy"
+    ],
+    "flavor": "grape",
+    "icon": "🌿",
+    "breeder": null,
+    "parents": [],
+    "aka": null,
+    "ailments": [
+      "Insomnia",
+      "Stress"
     ]
   }
 ]
