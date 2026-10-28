@@ -336,7 +336,7 @@
     "id": "s12",
     "name": "ACDC",
     "type": "Hybrid",
-    "lean": "High-CBD",
+    "lean": "",
     "rarity": "rare",
     "thc": "",
     "cbd": "",
@@ -358,7 +358,7 @@
     "id": "s13",
     "name": "Durban Poison",
     "type": "Sativa",
-    "lean": "Landrace",
+    "lean": "",
     "rarity": "rare",
     "thc": "",
     "cbd": "",
@@ -380,7 +380,7 @@
     "id": "s14",
     "name": "Hindu Kush",
     "type": "Indica",
-    "lean": "Landrace",
+    "lean": "",
     "rarity": "rare",
     "thc": "",
     "cbd": "",
@@ -406,7 +406,7 @@
     "id": "s15",
     "name": "Acapulco Gold",
     "type": "Sativa",
-    "lean": "Landrace · Legendary",
+    "lean": "",
     "rarity": "legendary",
     "thc": "18–24%",
     "cbd": "<1%",
@@ -442,7 +442,7 @@
     "id": "s16",
     "name": "Malawi Gold",
     "type": "Sativa",
-    "lean": "Landrace · Legendary",
+    "lean": "",
     "rarity": "legendary",
     "thc": "",
     "cbd": "",
@@ -5737,35 +5737,18 @@
     "type": "Hybrid",
     "lean": "",
     "rarity": "common",
-    "thc": "13–20%",
+    "thc": "",
     "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Humulene",
-        "p": 0.4
-      },
-      {
-        "n": "Myrcene",
-        "p": 0.27
-      },
-      {
-        "n": "Pinene",
-        "p": 0.16
-      }
-    ],
-    "effects": [
-      "Happy",
-      "Energetic",
-      "Creative",
-      "Uplifted"
-    ],
-    "flavor": "Ammonia and earthy on the palate with a humulene-leaning finish.",
+    "terps": [],
+    "effects": [],
+    "flavor": "skunky, pine and sweet",
     "icon": "🧪",
     "ailments": [
       "Stress",
+      "Anxiety",
       "Depression",
       "Pain",
-      "Lack of Appetite"
+      "Nausea"
     ]
   },
   {
@@ -6597,7 +6580,7 @@
     "id": "s192",
     "name": "MK Ultra",
     "type": "Indica",
-    "lean": "Indica",
+    "lean": "",
     "rarity": "uncommon",
     "thc": "18–24%",
     "cbd": "<1%",
@@ -37830,7 +37813,7 @@
     ],
     "flavor": "lemon and pine",
     "icon": "🌿",
-    "breeder": "Dark Heart Nursery",
+    "breeder": "",
     "aka": "Fire OG Kush",
     "parents": [
       "OG Kush",
@@ -39082,7 +39065,7 @@
     "id": "s1139",
     "name": "Lamb's Bread",
     "type": "Sativa",
-    "lean": "Sativa",
+    "lean": "",
     "rarity": "common",
     "thc": "",
     "cbd": "",
@@ -69843,7 +69826,7 @@
   {
     "name": "M2",
     "type": "Sativa",
-    "lean": "Sativa",
+    "lean": "",
     "rarity": "rare",
     "thc": "18-25%",
     "cbd": "<1%",
@@ -69904,7 +69887,7 @@
   {
     "name": "Piff",
     "type": "Sativa",
-    "lean": "Sativa",
+    "lean": "",
     "rarity": "uncommon",
     "thc": "18-24%",
     "cbd": "<1%",
@@ -75387,7 +75370,7 @@
   {
     "name": "Captain Jack's (Gulzar Afghanica)",
     "type": "Indica",
-    "lean": "Indica landrace",
+    "lean": "",
     "rarity": "rare",
     "thc": "",
     "cbd": "",
@@ -75912,7 +75895,7 @@
   {
     "name": "Colombian Red",
     "type": "Sativa",
-    "lean": "Sativa landrace",
+    "lean": "",
     "rarity": "rare",
     "thc": "",
     "cbd": "",
@@ -105252,7 +105235,7 @@
   {
     "name": "Copacabana",
     "type": "Sativa",
-    "lean": "Pure Sativa",
+    "lean": "",
     "rarity": "uncommon",
     "thc": "17-19%",
     "cbd": "",
@@ -113231,7 +113214,7 @@
   {
     "name": "Ethiopian",
     "type": "Sativa",
-    "lean": "Pure Sativa",
+    "lean": "",
     "rarity": "rare",
     "thc": "6-12%",
     "cbd": "",
@@ -135679,7 +135662,7 @@
   {
     "name": "Mexican Red Hair",
     "type": "Sativa",
-    "lean": "Sativa",
+    "lean": "",
     "rarity": "rare",
     "thc": "15-20%",
     "cbd": "",
@@ -136169,7 +136152,7 @@
   {
     "name": "Mighty Grape",
     "type": "Indica",
-    "lean": "Indica",
+    "lean": "",
     "rarity": "uncommon",
     "thc": "14-16%",
     "cbd": "",
@@ -138470,7 +138453,7 @@
   {
     "name": "Nigerian",
     "type": "Sativa",
-    "lean": "Sativa (landrace)",
+    "lean": "",
     "rarity": "rare",
     "thc": "12-18%",
     "cbd": "",
@@ -138534,7 +138517,7 @@
   {
     "name": "Night Queen",
     "type": "Indica",
-    "lean": "Indica (landrace)",
+    "lean": "",
     "rarity": "rare",
     "thc": "16-20%",
     "cbd": "",
@@ -139027,7 +139010,7 @@
   {
     "name": "Oaxacan",
     "type": "Sativa",
-    "lean": "Sativa (landrace)",
+    "lean": "",
     "rarity": "rare",
     "thc": "",
     "cbd": "",
@@ -142414,7 +142397,7 @@
   {
     "name": "Petrol Headstash",
     "type": "Indica",
-    "lean": "Pure Indica",
+    "lean": "",
     "rarity": "rare",
     "thc": "18-22%",
     "cbd": "",
@@ -142492,7 +142475,7 @@
   {
     "name": "Peyote Purple",
     "type": "Indica",
-    "lean": "Pure Indica",
+    "lean": "",
     "rarity": "rare",
     "thc": "18-22%",
     "cbd": "",
@@ -144011,7 +143994,7 @@
   {
     "name": "Platinum Buffalo",
     "type": "Indica",
-    "lean": "Pure Indica",
+    "lean": "",
     "rarity": "uncommon",
     "thc": "20-25%",
     "cbd": "",
@@ -166249,7 +166232,7 @@
   {
     "name": "Yuzu Mac",
     "type": "Hybrid",
-    "lean": "Sativa",
+    "lean": "Sativa-leaning",
     "rarity": "rare",
     "thc": "32-34%",
     "cbd": "",
@@ -167685,7 +167668,7 @@
   {
     "name": "Too Much Papaya",
     "type": "Hybrid",
-    "lean": "Indica-heavy",
+    "lean": "Indica-dominant",
     "rarity": "rare",
     "thc": "24%",
     "cbd": "",
@@ -168344,7 +168327,7 @@
   {
     "name": "Pineapple Beignet",
     "type": "Indica",
-    "lean": "Slightly indica-dominant",
+    "lean": "Indica-leaning",
     "rarity": "uncommon",
     "thc": "",
     "cbd": "",
@@ -168499,7 +168482,7 @@
   {
     "name": "Tar",
     "type": "Indica",
-    "lean": "Kush-dominant",
+    "lean": "",
     "rarity": "rare",
     "thc": "",
     "cbd": "",
@@ -168991,7 +168974,7 @@
   {
     "name": "Banana Headband",
     "type": "Hybrid",
-    "lean": "Balanced/Indica-leaning",
+    "lean": "",
     "rarity": "uncommon",
     "thc": "28-30%",
     "cbd": "",
@@ -169680,7 +169663,7 @@
   {
     "name": "Snakes Cake",
     "type": "Sativa",
-    "lean": "Slightly sativa-leaning",
+    "lean": "Sativa-leaning",
     "rarity": "rare",
     "thc": "",
     "cbd": "",
@@ -173166,7 +173149,7 @@
     "id": "s6695",
     "name": "Poutine",
     "type": "Hybrid",
-    "lean": "Balanced hybrid",
+    "lean": "Balanced",
     "rarity": "uncommon",
     "thc": "20-25%",
     "cbd": "<1%",
@@ -173192,7 +173175,7 @@
   {
     "name": "Psycho Dawg",
     "type": "Hybrid",
-    "lean": "Balanced hybrid",
+    "lean": "Balanced",
     "rarity": "rare",
     "thc": "18-28%",
     "cbd": "<1%",
@@ -173246,7 +173229,7 @@
   {
     "name": "Punch Mints",
     "type": "Hybrid",
-    "lean": "Balanced hybrid",
+    "lean": "Balanced",
     "rarity": "uncommon",
     "thc": "14-24%",
     "cbd": "<1%",
@@ -173328,7 +173311,7 @@
     "id": "s6701",
     "name": "Purple Fire",
     "type": "Hybrid",
-    "lean": "Balanced hybrid",
+    "lean": "Balanced",
     "rarity": "uncommon",
     "thc": "19-26%",
     "cbd": "0-2%",
@@ -173381,7 +173364,7 @@
   {
     "name": "Purple Milkshake",
     "type": "Hybrid",
-    "lean": "Balanced hybrid",
+    "lean": "Balanced",
     "rarity": "uncommon",
     "thc": "15-33%",
     "cbd": "<1%",
@@ -173407,7 +173390,7 @@
   {
     "name": "Purple Palm Tree Delight",
     "type": "Hybrid",
-    "lean": "Balanced hybrid",
+    "lean": "Balanced",
     "rarity": "uncommon",
     "thc": "23-33%",
     "cbd": "<1%",
@@ -173487,7 +173470,7 @@
   {
     "name": "Rager 2",
     "type": "Hybrid",
-    "lean": "Balanced hybrid",
+    "lean": "Balanced",
     "rarity": "uncommon",
     "thc": "20-25%",
     "cbd": "<1%",
@@ -173515,7 +173498,7 @@
     "id": "s6708",
     "name": "Royal Runtz",
     "type": "Hybrid",
-    "lean": "Balanced hybrid",
+    "lean": "Balanced",
     "rarity": "uncommon",
     "thc": "25-28%",
     "cbd": "<1%",
@@ -173542,7 +173525,7 @@
     "id": "s6709",
     "name": "Saltwater OG",
     "type": "Hybrid",
-    "lean": "Balanced hybrid",
+    "lean": "Balanced",
     "rarity": "uncommon",
     "thc": "24-26%",
     "cbd": "<1%",
@@ -173622,7 +173605,7 @@
   {
     "name": "Second Breakfast",
     "type": "Hybrid",
-    "lean": "Balanced hybrid",
+    "lean": "Balanced",
     "rarity": "uncommon",
     "thc": "32%",
     "cbd": "<1%",
@@ -173649,7 +173632,7 @@
   {
     "name": "Secret Breakfast",
     "type": "Hybrid",
-    "lean": "Balanced hybrid",
+    "lean": "Balanced",
     "rarity": "uncommon",
     "thc": "25%",
     "cbd": "<1%",
@@ -173677,7 +173660,7 @@
     "id": "s6714",
     "name": "SFV Dog",
     "type": "Hybrid",
-    "lean": "Balanced hybrid",
+    "lean": "Balanced",
     "rarity": "uncommon",
     "thc": "18-25%",
     "cbd": "<1%",
@@ -173704,7 +173687,7 @@
     "id": "s6715",
     "name": "Sheeple",
     "type": "Hybrid",
-    "lean": "Balanced hybrid",
+    "lean": "Balanced",
     "rarity": "uncommon",
     "thc": "20-25%",
     "cbd": "<1%",
@@ -173731,7 +173714,7 @@
     "id": "s6716",
     "name": "Snow Fire OG",
     "type": "Hybrid",
-    "lean": "Balanced hybrid",
+    "lean": "Balanced",
     "rarity": "uncommon",
     "thc": "18-24%",
     "cbd": "<1%",
@@ -183221,7 +183204,7 @@
     ],
     "flavor": "orange and diesel",
     "icon": "🌿",
-    "breeder": "TGA Subcool Seeds",
+    "breeder": "",
     "parents": [
       "Sour Diesel",
       "Agent Orange"
@@ -183879,7 +183862,7 @@
     ],
     "flavor": "sweet and nutty",
     "icon": "🌿",
-    "breeder": "Grand Daddy Purp",
+    "breeder": "",
     "parents": [
       "Cherry Pie",
       "Granddaddy Purple"

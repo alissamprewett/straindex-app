@@ -1852,3 +1852,18 @@ No library changes.
 - South Asian Sativa: added as s7466. Leafly + AllBud: Sativa (landrace-type), effects Uplifted/Happy, ailments Depression. HELD: THC 10% (AllBud only), flavor (no overlap; Leafly diesel/mango/berry, AllBud pine/sweet/woody). Separate from South Asian Indica s930.
 - Swiss Sativa: no data. Leafly page is an empty landrace stub (no effects/flavors); nothing else found.
 - Migration batch 108 (name strain_research_batch108_2026_10_22) tested on a fresh seed.
+
+## Flag pass F1 (2026-10-28), mig batch 109
+- Cat Piss s167: Leafly (Sativa, SSH phenotype, THC 17%) + AllBud (Hybrid 50/50, THC 11%). Wrote flavor skunky/pine/sweet and ailments Stress/Anxiety/Depression/Pain/Nausea (all in both). Blanked sample THC 13-20%, terps (Humulene/Myrcene/Pinene), effects (no overlap: Leafly talkative/energetic/aroused vs AllBud creative/euphoria/happy/relaxing), "humulene-leaning" flavor, Lack of Appetite. HELD: Super Silver Haze parent and terps (Leafly only), THC (17 vs 11).
+- Purple Cat Piss: still held. AllBud only (a Leafly product listing exists, no strain profile).
+- Granddaddy Purple s5: parents dispute documented, no change. Leafly: Skunk #1 x Mendocino Purps (mentions Afghani; notes "some sources claim" Big Bud x Purple Urkle); Cannigma: Big Bud x Purple Urkle. Entry keeps Purple Urkle / Big Bud. Other fields consistent with both.
+- Fire OG s1092: removed unsourced breeder "Dark Heart Nursery". GreenState says OG Raskal Genetics; SeedFinder lists The Cali Connection. Conflict, so blank. OG Kush x SFV OG parents consistent.
+- Orange Diesel s7170: removed unsourced breeder "TGA Subcool Seeds" (Leafly names TGA Seeds only as breeder of parent Agent Orange; AllBud lists none; SeedFinder lists different Orange Diesel crosses by Mephisto and Lady Sativa).
+- Phantom Cookies s7204: removed breeder "Grand Daddy Purp" (SeedFinder only; Leafly/AllBud list none). Re-add if a second source appears. Parents Cherry Pie x GDP confirmed by Leafly + AllBud. FLAG: AllBud's own text says THC "rarely above 12%" vs header 15-21%; existing 20-21% left.
+- Lost Coast OG s7006: breeder Emerald Triangle Seeds KEPT (SeedFinder "Emerald Triangle" listing + GrowDiaries seedbank listing; Leafly/AllBud list none). Note SeedFinder also lists a separate Humboldt Seed Organisation "Lost Coast OG".
+- Ken's OG s7060: breeder "Grand Daddy Purp" KEPT (SeedFinder lists Ken's Kush under Grand Daddy Purp; Leafly credits Ken Estes, the same breeder). SeedFinder gives different parentage (Fire Kush x unknown); Leafly/AllBud GDP x OG Kush; entry unchanged.
+- King Louis XIII s131: still held. Only Leafly (King Louis: Indica, OG Kush x LA Confidential, Sleepy/Relaxed/Hungry, Insomnia/Stress/Pain, pine/woody/earthy, THC 21%) plus retail listings; AllBud page not reachable. Effects/ailments on s131 stay unverified.
+- White Widow s6: lean stays blank. Leafly, Verilife, OCS say ~60/40 sativa (OCS: sativa-dominant); Wikipedia and Vivosun say balanced. Breeder Green House Seeds, parents Brazilian Sativa x South Indian Indica, and THC 18-25% consistent.
+- Purple Fire s6701: invalid lean "Balanced hybrid". Found 41 entries with non-standard lean labels; normalized: "Balanced hybrid" -> Balanced (14), "Slightly sativa-leaning" -> Sativa-leaning, "Slightly indica-dominant" -> Indica-leaning, "Indica-heavy" -> Indica-dominant, Yuzu Mac "Sativa" -> Sativa-leaning, and landrace/pure/type-as-lean labels (Landrace, Pure Indica, Pure Sativa, Indica, Sativa, High-CBD, Kush-dominant, Balanced/Indica-leaning) -> blank. Purple Fire's own data unverified (only JointCommerce found).
+- Herojuana II: not re-searched this pass (still held, "II" not proven).
+- Migration batch 109 (name strain_research_batch109_2026_10_22) tested on a fresh seed.
