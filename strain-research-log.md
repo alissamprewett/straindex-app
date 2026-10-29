@@ -1890,3 +1890,199 @@ No library changes.
 - Phatt Fruity: added as s7471 under the Leafly/AllBud spelling "Phatt Frutty" (aka Phatt Fruity, Phat Frutty). Leafly (Indica) + AllBud (indica-dominant 70/30): Hybrid, Indica-dominant; Afghani x Mexican (AllBud adds North Indian); breeder Barney's Farm (Leafly + SeedFinder); effects Happy/Uplifted; flavor lemon/lime; ailments Depression/Pain. HELD: THC (Leafly 23%, AllBud 12-22%), terps (Leafly: terpinolene), Talkative/Creative/Sociable.
 - Purple Hindu Kush: added as s7472. AllBud (pure indica) + Leafly (Indica): Indica, lean blank; THC 20-24% (Leafly 20%); effects Relaxed/Sleepy; flavor grape; ailments Insomnia/Stress. HELD: parents Hindu Kush x Purple Afghani and aliases (Leafly only), terps (Leafly only).
 - Migration batch 111 (name strain_research_batch111_2026_10_22) tested on a fresh seed.
+
+## S172 (2026-10-28) rows 3854-3863
+- Rigger Kush: added as s7473. AllBud (indica-dominant 70/30) + Leafly (Indica): Hybrid, Indica-dominant; Hindu Kush phenotype (both); effects Relaxed/Sleepy. HELD: THC 15-20% (AllBud only), alias Rgk and Anchorage origin (Leafly only), flavor (grassy/musky vs dank/diesel/herbal, no overlap), ailments (AllBud only).
+- Tonics Web: no data. Leafly only (Charlotte's Web x Chocolate Tonic, THClones, Indica). No second source found. Held.
+- UW: added (existing s7358 UW Purple; mig batch 112). Leafly (UW Purple aka UW, U Dub) + AllBud (UW, U-dub) are the same strain: aliases UW, U-Dub added. Lean Indica-dominant blanked (Leafly Indica vs AllBud 50/50 hybrid); effects trimmed to Relaxed (Sleepy: Leafly only, AllBud says not strongly sleepy); flavor now sweet, berry (grape unsupported). Insomnia/Stress/Pain kept (both sources). HELD: THC conflict (Leafly 14%, AllBud 19-24%, existing 19-21% left), terps (Leafly only).
+- Wembley: added (existing s6868; mig batch 112). Leafly + SeedFinder (Pyramid Seeds): AK-47 x Bubble Gum, breeder Pyramid Seeds, indica confirmed. Unsupported sample-style effects (Relaxed/Happy) and flavor blanked. HELD: THC 16% (SeedFinder, breeder text), Leafly effects Energetic/Creative/Happy and flavors (no second source), alias Wmb.
+- Dirty Cookies: no data. Nothing identifiable.
+- Doctor Cookies: no data. AllBud has "Dr. Cookies" (Forum Cookies x MediHaze, 10% THC/10% CBD) but identity with "Doctor Cookies" is unproven and there is no second source.
+- Electric Mayhem: no data. Seed retailer listing only.
+- My Friend Jack: no data. Nothing found.
+- Sour Cat: no data. Nothing found.
+- Red Lemon: no data. Nothing found (only Super Lemon Red etc.).
+- Migration batch 112 (name strain_research_batch112_2026_10_22) tested on a fresh seed.
+
+## S173 (2026-10-28) rows 3864-3873
+No library changes this batch (strains.json and migrations unchanged; library 7,364, last id s7473).
+- OG Badazz: no data. Only SeedFinder genealogy pages for crosses (Ripper Seeds Animal Cookies x OG Badazz; Philosopher Seeds Zkittlez x Badazz OG) listing OG Badazz as (Original OG x Afghan Kush) x Urkel, breeder unknown. No profile page. Held.
+- Alice (Delicatessen): no data. SeedFinder only (Delicatessen; Queen Mother x Congo; mostly sativa; creative, sweet/citrus; breeder text). Leafly "Alice" is a different strain (Alphakronik Genes, Snowdawg x Gobbstopper), so it does not corroborate. Not merged with s243 Alice in Wonderland. Held.
+- Vanilla Cookies: no data. Only a JointCommerce blog (not independent); Cherry Vanilla Cookies is a different strain.
+- Strawberry Cough x Mendo Breath: no data. Cross of two existing strains (Strawberry Cough s73); no profile found.
+- Trinity x Jack Herer: no data. Cross of existing Trinity s286 and Jack Herer; no profile found.
+- Sour Tangie x Love: no data. Cross including Sour Tangie s434; no profile found.
+- Mango x Grape Ape: no data. Cross including Mango s59 / Grape Ape s175; no profile found.
+- Griselda Blanco: no data. Only results about the person; no strain found.
+- African Gold: no data. SeedFinder only (Aficionado Seed Bank; Malawi Gold x African Buzz; pure sativa; THC 10-20%; breeder text). Held.
+- Apex: no data. Ambiguous: Ethos Apex (existing s2394; Leafly aliases Ethos, Apx, Ethos Weed, not "Apex") vs Apex Kush (303 Seeds). JointCommerce says the name is used by multiple breeders. No alias added.
+
+## S174 (2026-10-28) rows 3874-3883
+- Grape Bubba Stomper V.1: no data. JointCommerce (Riot Seeds) only; AllBud's "Platinum Bubba X Grape Stomper" is a different name. Held.
+- Nic Endo: no data. SeedFinder + JointCommerce (both Riot Seeds breeder text) only. Held.
+- Ultimate Chem 2010: no data. Nothing found.
+- Conspiracy Theory: no data. Three conflicting identities: AllBud (indica-dominant 70/30, Yeti x G-13, THC 33-35%), SeedFinder Terp Fi3nd (706 Skunk F2 x Pineapple Meatball), SeedFinder Riot Seeds (Thai x G13 Haze, sativa). Not proven to be one strain; AllBud alone is a single source. Held. Distinct from Conspiracy Kush s119.
+- Black Strawberries: no data. Nothing found.
+- Blackberry (Nectar Seeds): no data for the Nectar Seeds cut (SeedFinder only: Uplifting/Activating, no parents/type). Side check of existing Blackberry s1041 (breeder Nebu) against Leafly (Hybrid; Black Domina x Raspberry Cough; 17% THC; Sleepy/Relaxed/Aroused; berry/sweet/plum; Myrcene>Caryophyllene>Limonene; Stress/Pain/Anxiety) and AllBud Nebu Blackberry (indica-dominant 80/20; "clone of Blackberry"; THC 11-14%; Relaxing; berry/dank/pine/sweet; chronic pain/spasms/depression/insomnia). Mig batch 113: removed the unsupported default terpene set (Ocimene/Caryophyllene/Terpinolene) and flavor "Ocimene-forward...", effects Happy/Hungry/Uplifted -> Relaxed, flavor -> "berry, sweet", ailments Pain added. Lean left blank (Leafly Hybrid vs AllBud indica-dominant). HELD: THC conflict (existing 16-20%, Leafly 17, AllBud 11-14), parents Black Domina x Raspberry Cough (Leafly only), alias Bbr, terps (Leafly only). FLAG: s7150 "Nebu's Blackberry" (aka Nebu Blackberry, breeder Nebu) looks like a duplicate of s1041; not merged, needs user approval.
+- Valley Rose: no data. SeedFinder (Illuminati Seeds) only.
+- Temple x 13 Roses: no data. Cross of Temple (Kush) and 13 Roses (SeedFinder: unknown/legendary); no profile.
+- Straight Jacket: no data. SeedFinder lists three different breeders (Greenpoint, Heisenbeans, Illuminati) with the same name; no profile, identity unclear.
+- Royal Plaque: no data. Nothing found (Royal Platinum etc. are different).
+- Migration batch 113 (name strain_research_batch113_2026_10_22) tested on a fresh seed.
+
+## F4: Blackberry s1041 vs Nebu's Blackberry s7150 (2026-10-28)
+- Extra research on the flag. "Blackberry" is a shared name: Leafly + SeedFinder (Nirvana Seeds) + Herb.co describe the Nirvana cross Black Domina x Raspberry Cough (THC ~17% to 20%+); AllBud's "Nebu Blackberry" (80/20 indica-dominant, 11-14% THC, "a clone of the Blackberry strain") and GrowDiaries "Blackberry by Nebu" are a separate cut; SeedFinder also lists Riot (S1 of Nectar Seeds Blackberry), Nectar, Fast Buds, Sativa Seedbank and Vancouver Island Blackberries. Decision (user approved recommendation): do NOT merge s7150 into s1041. s1041 fixed (mig batch 114): breeder Nebu -> Nirvana Seeds, parents Black Domina x Raspberry Cough, alias Bbr. s7150 left as the Nebu cut. Standing instruction from user: for future flags, do this extra research and resolve it myself where the evidence allows.
+
+## S175 (2026-10-28) rows 3884-3893
+- Red Tide: no data. SeedFinder + JointCommerce (Illuminati Seeds breeder text) only.
+- Papaya Rose: no data. Nothing found.
+- Matriarch: no data. JointCommerce (Illuminati Seeds) only; Matriarch OG (Mamiko) is a different name.
+- Kamikaze: added (existing s4809 checked, no change). Leafly (Hybrid 60/40; White Widow x Jack Herer; Kamikazi/Kmk/Kmkze) matches stored parents and flavor. HELD: lean Sativa-leaning, pinene, THC 18-22% (Leafly + a retailer review that is not independent), effects (stored Energizing/Creative/Euphoric come from Leafly's description, not its effect tags Happy/Uplifted/Talkative), ailments. The retailer review says several unrelated lines share the name.
+- Legion OG: no data. SeedFinder (Illuminati Seeds) only.
+- Blood Kush: no data. SeedFinder + JointCommerce (Riot Seeds) only; AllBud "The Blood" is different.
+- Irukandji: no data. Only an Inkognyto Genetics forum thread.
+- Arianna Celeste (Tha Purple Floss): no data. Only SeedFinder + JointCommerce listing "Arianny Celeste" (Riot Seeds). Held.
+- Angelfuck (Blue Velvet Cindy): no data. SeedFinder (Riot Seeds) only.
+- Mamba: no data. Only a JointCommerce "Mamba by Unknown or Legendary" page; ambiguous with Black Mamba s218, Mamba 8 s1740, Mamba 24 s5061. No alias added.
+- Migration batch 114 (name strain_research_batch114_2026_10_22) tested on a fresh seed.
+
+## S176 (2026-10-28) rows 3894-3903
+- Pearl Harbor: no data. SeedFinder + JointCommerce (Riot Seeds breeder text) only.
+- Bleeding Geisha: no data. SeedFinder + JointCommerce (Riot Seeds) only.
+- Bright Eyes: no data. SeedFinder + JointCommerce (Riot Seeds) only.
+- Immortal OG: no data. Nothing found (Immortal by Happy Bird is a different name).
+- Colorado Green Bud: no data. SeedFinder (unknown/legendary) only.
+- I.E.D. (Illuminati): no data. SeedFinder (Illuminati Seeds) only.
+- Blue Bubba: no data. AllBud (Hybrid, header 50/50 vs text indica-dominant; Blue God x Bubba Kush; THC 13-16%) and SeedFinder (Hazeman Seeds; Blue God male x Bubba Kush; mostly indica) agree only on breeder-side parentage, so held.
+- Famine: no data. SeedFinder + JointCommerce (Illuminati Seeds) only.
+- Black Russian (Hazeman): added (existing s219; mig batch 115). Hazeman's cut (SeedFinder breeder list: mostly indica, no parents) is not tied to a profile; the standard Black Russian was checked against Leafly + AllBud, which agree: Indica(-dominant), Black Domina x White Russian, THC 16% / 15-16%, effects Relaxed/Sleepy/Euphoric, flavor citrus/berry, ailments Anxiety/Stress/Pain. Leafly + SeedFinder/GrowDiaries listings give breeder Delicious Seeds. s219 had breeder Nebu, parents Nebu's Blackberry x Cherry AK-47, alias "Nebu's Black Russian" and ailments Insomnia/Lack of Appetite/Nausea with no support in any source (extra search found nothing for a Nebu Black Russian); those were corrected/blanked. Type Hybrid + lean Indica-dominant per the Leafly Indica / AllBud indica-dominant precedent. HELD: terps (Leafly only: Myrcene), alias Bru, CBD.
+- Divine Apocalypse: no data. Nothing found.
+- Migration batch 115 (name strain_research_batch115_2026_10_22) tested on a fresh seed.
+
+## S177 (2026-10-28) rows 3905-3914
+No library changes this batch (strains.json and migrations unchanged; last migration 115).
+- Delusional OG: no data. Nothing found.
+- Death Dealer: no data. Nothing found (Death Star etc. are different).
+- Conquest: no data. SeedFinder (Illuminati Seeds) only.
+- Cocoa Puffs: no data. SeedFinder (Hazeman Seeds) only.
+- Chemdawg 104: no data. No page for a "104" cut; Chemdawg exists as s1069 (aliases Chem 91 etc.). Not added as an alias because the cut is unproven.
+- Goya: no data. SeedFinder (Illuminati Seeds) only.
+- 13 Roses: no data. SeedFinder (unknown/legendary) only.
+- X13: no data. SeedFinder + JointCommerce (unknown/legendary) only; not proven to be XJ-13 (s1251, Jack Herer x G13 Haze).
+- Born Killer: added (existing s5245 Natural Born Killer checked, no change). AllBud (alias Born Killer, NBK; True OG x Pestilence; indica-dominant 75/25) + SeedFinder Born Killer by Illuminati Seeds (True OG x Pestilence; mostly indica) agree with the stored aliases, parents and breeder. Leafly's "NBK" page is a different strain (diesel/ammonia/cheese, Creative/Energetic) and was not used. HELD: lean change, THC 15-23% (AllBud only), ailments.
+- Blueberry OG (Illuminati Seed): no data. Only an Illuminati Seeds breeder-list mention; existing Blueberry OG (Yellowhammer) s6843 and Blueberry Kush alias s43 are different cuts. No alias added.
+
+## S178 (2026-10-28) rows 3915-3924
+- Laffy Taffy: added as s7474. Leafly ("Laughy Taffy", alias Laffy Taffy; slightly sativa-dominant 60/40; 24% THC) + AllBud (sativa-dominant 60/40; 21-24%): Hybrid, Sativa-dominant; THC 21-24%; ailments Stress/Depression/Pain (named by both); alias Laughy Taffy. HELD: breeder Illuminati Seeds and parents Banana OG x Pestilence (Leafly only, "unconfirmed"; AllBud says unknown), effects (Leafly uplifted/happy/energetic vs AllBud euphoria/focus/hunger/motivation, no overlap), flavor, terps (Leafly only).
+- Afterlife (Afterlife OG): added (existing s3024 After Life OG; mig batch 116). AllBud (indica-dominant 70/30; Ghostrider OG x Starfighter F2; Exotic Genetix) + SeedFinder (Exotic Genetix; same cross; 70/30) agree with stored parents/breeder (breeder-side). Leafly (Hybrid, indica-dominant, alias After Life) + AllBud: type Indica -> Hybrid, lean Indica-leaning -> Indica-dominant; effects trimmed to Relaxed (Sedated not in vocabulary, Euphoric Leafly only); ailments Anxiety/Insomnia added (both). HELD: THC (AllBud 19-24%; stored 19-25% left), Happy/Giggly. Illuminati Seeds "Afterlife" on SeedFinder is a separate strain, not used.
+- Happy Ending: added (existing s2458 Happy Ending (Grateful Seeds) checked, no change). AllBud (Hybrid 50/50; Sunsetz x Fruit Joy #20; 18-20% THC) matches the stored parents. SeedFinder lists other unrelated Happy Endings (Eazy Daze, Snowhigh, Smiling Tiger). HELD: THC conflict (stored 20-25%, AllBud 18-20%, single source), stored CBD "Low" and flavor left (no second source).
+- 4 Horseman Haze: no data. SeedFinder (Illuminati Seeds) only.
+- Maples: no data. SeedFinder + JointCommerce (Illuminati Seeds) only.
+- Lemon Fuse: no data. SeedFinder (Gage Green Genetics) only.
+- Katscan: no data. Nothing found.
+- Lemon Thai (Fusion Seeds): added (existing s264 Lemon Thai; mig batch 116). SeedFinder: Fusion Seeds' is the F2 of Dutch Flowers' Lemon Thai (so the same lineage); Leafly + SeedFinder agree: Thai sativa x Hawaiian, THC 22%, energetic/activating, lemon; parents Thai Sativa x Hawaiian and THC 22% added; effects trimmed to Energetic; ailments trimmed to Stress/Depression (Pain/Lack of Appetite unsupported). HELD: lean (stored Sativa-leaning left), alias Lth, terps (Leafly: Terpinolene), alias Lemon Thai Kush left in place. SeedFinder also lists a separate San Seeds Lemon Thai.
+- Blue Chocolate (Fusion Seeds): no data. Fusion's cut (SeedFinder: Dabney Blue x Chocolate Rain) is a different strain from Leafly's Blue Chocolate (Blue Dream x Chocolate Kush, Purple Caper); each single-source.
+- Emperors Haze 2010: no data. SeedFinder (Fusion Seeds) only.
+- Migration batch 116 (name strain_research_batch116_2026_10_22) tested on a fresh seed.
+
+## S179 (2026-10-29) rows 3925-3934
+No migration this batch (two new entries only; last migration 116, last id s7476).
+- C5 Haze: no data. Only ACE Seeds crosses (C5 Haze x Panama etc.) and a White Buffalo "C5 3/4 Haze" listing; no profile.
+- Samurai Jack: no data. SeedFinder + JointCommerce (Motherland Genetics) only.
+- Pink Lemon Cookies: no data. Nothing specific (Pink Lemonade/Pink Cookies are different).
+- Wookie Cookies: no data. Leafly only ("Wookie's Cookies", alias Wookie Cookie; Skunkbeard x Dark Helmet; breeder Wookie; 21% THC); JointCommerce lists two unrelated breeders' Wookie Cookie. Held.
+- Star Trek Super Kush: no data. AllBud only.
+- Pink Buffalo Cookies: no data. Only a Leafly product review of a licensed producer's Pink Buffalo; no strain profile.
+- Joker: no data. Ambiguous (JointCommerce, SeedFinder Enlightened Genetics); Sour Joker s660 and the Jokerz family are different.
+- Gluelato: added as s7475. AllBud + Leafly (both Indica-dominant hybrid 70/30; Gorilla Glue #4 x Gelato #45): Hybrid, Indica-dominant; parents Gorilla Glue #4 x Gelato (the phenotype number is disputed: SeedFinder Loud Seeds says Gelato #41, Leafly notes a Canna Organix Candyland OG x Gelato #41 version); THC 22-25%; effects Relaxed/Happy/Euphoric; flavor sweet/floral/kush; ailments Pain/Anxiety/Depression/Insomnia/Stress. HELD: breeder (Leafly: Float vs SeedFinder: Loud Seeds / James Loud Genetics, conflicting), alias Glu, terps (Leafly: Myrcene).
+- Go Time: added as s7476. AllBud (sativa-dominant 70/30) + Leafly (sativa-dominant): Hybrid, Sativa-dominant; Norton x JOG Kush (both); breeder JinxProof Genetics (Leafly + SeedFinder GoTime listing); effect Energetic (Leafly energetic; AllBud "mentally energizing"); flavor lemon/citrus; ailments Depression/Stress. HELD: THC (AllBud 24-25%, Leafly 22% with reports of 25-32%), alias Snack Time/Gtm (Leafly only), terps.
+- Norton: added (existing s7158 checked, no change). AllBud (Hybrid 50/50; Sour Diesel x Cheese; THC 11-18%) + SeedFinder (unknown/legendary; probably Sour Diesel x Exodus Cheese cut) agree with the stored parents. HELD: effects (AllBud only), THC, stored flavor left (partly AllBud-supported).
+
+## S180 (2026-10-29) rows 3935-3944
+- Shangrila (s7284): Leafly (.com/.ca same source) + SeedFinder agree on breeder Jinxproof and parents Fudo Myo-o x 9 Pound Hammer (already stored); THC 17%, terps, lean 60/40 are Leafly-only, held. Unchanged.
+- Fudo Myo-o: AllBud only (50/50, parents unknown); SeedFinder only describes it as parent. Held, no data.
+- Versace Cookies: no source lists this name; Leafly Versace (s2126) has no alias. No data, s2126 unchanged.
+- Dirty White Bud, Purple Fucker, GSC BX1, Sbuds Mackenzie, Citrus Cookies: single-source (forum/SeedFinder/AllBud+retailer mirrors). No data.
+- Ultra Violence: NEW s7477. Leafly + AllBud agree Indica-dominant hybrid, Jillybean x OG Kush Breath x Wet Dream, aliases UV/Ultraviolence, Relaxed, Stress/Depression/Pain. Breeder Cult Classics (SeedFinder only) and THC (18 / 15-23 / 22) held.
+- Blue Wonder s3402: corrected via migration 117: Sativa -> Hybrid Sativa-dominant (Leafly + AllBud 70/30), unsupported terps blanked, effects Energetic, flavor "berry, blueberry", ailments Depression/Muscle Spasms. THC 16-26% left (AllBud 16-18 only), alias "Bwo" held.
+
+## S181 (2026-10-29) rows 3945-3954
+- OG Casey: nothing specific (Casey's Rollex OG / Casey Jones / Casey's Dawg are different strains). No data.
+- Bisquik: SeedFinder (Riot Seeds) + JointCommerce only. No data.
+- Keebler Cookies (s7058): checked. AllBud says Locktite x Platinum Cookies (80/20, 21-23%); SeedFinder (Fancy Weed) says Cookies and Cream F2 phenotype. Parent conflict held; breeder Fancy Weed and alias Keebler stand. Unchanged.
+- Dark Matter: conflicting same-name strains (Leafly/Kingdom Organic = Cherry Thunderfuck x Rusty Haze; SeedFinder/North Genetics = Kobain Kush x Smurf Berry). No data.
+- Peas And Carrots, Silver Strawberry: nothing found. No data.
+- Banana Cream Pie: AllBud only (Forum Cookies x Banana OG, 70/30) plus mirrors. No data.
+- Banana Berry: Leafly only (Banana Punch x Strawberry Banana, Revolutionary Clinics); AllBud's Banana Berry Kush is a different strain. No data.
+- Princess Mist, Gunsmoke: SeedFinder (TreeTown Seeds) + JointCommerce only. No data.
+- No library changes this batch.
+
+## S182 (2026-10-29) rows 3955-3964
+- Nerds: NEW s7478. Leafly + AllBud + SeedFinder agree Hybrid, Grape Ape x Strawberry Cough, alias Nerdz; Leafly + SeedFinder agree breeder Oregon Microgrowers Guild and alias Nerdz OG; Leafly Balanced + AllBud 50/50 -> Balanced. Effects Euphoric/Creative, flavor berry/grape, ailments Anxiety/Stress/Depression (Leafly + AllBud). "Blue Nerds" alias left out (s1915 Blue Nerds is a different Runtz x Zkittlez strain). THC (20/15, 14-17, 25) and terpenes (Leafly only) held.
+- The Ultimate Nerds (s6270): checked. AllBud (Ultimate Purple x Cookies and Cream, 70/30, CBD 12%) conflicts with SeedFinder OMG (Ultimate Purple x Strawberries and Cream); stored parents/breeder stand. Implausible THC "4-23%" and CBD "5-12%" blanked (migration 118).
+- Afghan Princess: AllBud + SeedFinder agree only on breeder-side parentage (Cinderella 99 Princess pheno x Afghani #1; TreeTown). Held, no data.
+- Grendel, OZone, Cheese Plate, Puppy La Pew (seen as Purpy La Pew), Purple Pakiderm, Husky OG: SeedFinder (TreeTown / Oregon Microgrowers Guild) + JointCommerce only. No data.
+- Headband Haze: only retailer/JointCommerce listings; no strain profile. No data.
+
+## S183 (2026-10-29) rows 3965-3974
+- Alien Cookies (Oregon Microgrowers): treated as a label of s1631 Alien Cookies; no OMG-specific listing found. Leafly + AllBud agree Hybrid, Alien Dawg x Girl Scout Cookies (stored). Sample-style values corrected via migration 119: generic terpenes and default CBD "<1%" and unsupported THC 19-24% blanked (Leafly 25%, AllBud ~21%), effects -> Relaxed/Happy (both), flavor -> "vanilla, sweet" (both), ailments Anxiety/Stress (both). Lean blank (AllBud 50/50 vs Leafly Hybrid). Breeder Jaws Gear (Leafly only) already stored, left. Aliases (Leafly "Alien Cookies OG") held.
+- Ultimate Purple (s7357): checked against AllBud, Leafly, SeedFinder; parents/breeder (BC Bud Depot) consistent with SeedFinder + AllBud (breeder-side, already stored). Unchanged.
+- Courage The Cowardly Dog, Lion of Judah, Albino Rhino (AllBud + retailer only): single-source. No data.
+- Blueberry Snow, Blackberry Cheese, Grand Daddy Sherbet, Fast Widow: no matching strain profile found. No data.
+- OT 2: only Otto II (AllBud + JointCommerce), identity unproven. No data.
+
+## S184 (2026-10-29) rows 3975-3984
+- Royal Chemdawg: NEW s7479. Leafly + AllBud agree Chemdawg 91 x Deadhead OG (stored as library names Chemdog 91 / Deadhead OG); Leafly hybrid ("indica at heart") + AllBud 60/40 -> Hybrid, Indica-dominant; flavor diesel/chemical/lemon/lime; ailments Pain (both). Effects (no overlap), THC (17-25 / 19-25 AllBud only), aliases Royal Chemdog/Rcd (Leafly only) held. Not the same as s5694 Royal Chem (Greenpoint, Purple Punch x Stardawg).
+- Super Maximus, Afghan Cookies (only Fire Afghan Cookies, Mamiko), Oregon Yeti (Yeti OG is separate), Lemon Nectar, Purple Nectar, White Nectar, Nectar Berry, Nectar Kush: no matching strain profile found. No data.
+- Pink Frost: AllBud only. No data.
+
+## S185 (2026-10-29) rows 3985-3994
+- Lebanese Red: label of s5657 Red Lebanese. Leafly + AllBud agree 60/40 indica -> Hybrid, Indica-dominant; THC 24-25% (24.5 / 24-25); effects Creative (both); ailments Depression/Stress (both); aka Lebanese Red, Red Leb. Unsupported parent "Lebanese Landrace (Bekaa Valley)" (both sources say parentage unknown), sample-style flavor, and Relaxed/Euphoric effects removed; breeder unknown (migration 120).
+- Grateful Dawg (s7016): checked. SeedFinder (Irie Genetics) lists direct parent Deadhead OG (stored); AllBud says Dawg's Waltz x Gupta Kush (80/20). Parent conflict held, unchanged.
+- Licorice Kush: AllBud only (AK-47 x Hash Plant, 70/30). No data.
+- Hoyo 18, Blue Haze Libano, Queso Viejo, Fresa Maria (SeedFinder Seedbleed + JointCommerce only), Strawberry Hashplant (SeedFinder only): single-source. No data.
+- Paris Valley Kush, Libano Red: no matching strain profile (Paris OG, Libano Rojo / Red Libanon are different entries). No data.
+
+## S186 (2026-10-29) rows 3995-4004
+- AC/DC Maui Bubble Gift: NEW s7480 Maui Bubble Gift (the "AC/DC" prefix appears in neither source). Leafly + AllBud agree: Hybrid, Maui Wowie + Bubble Gum (+ God's Gift in both descriptions), CBD-dominant profile (THC 7 / 9, CBD 8 / 11 -> 7-9% / 8-11%), effect Relaxed. Lean blank (Leafly indica-dominant vs AllBud 50/50), breeder Eco Firma Farms (AllBud only), alias MBG (Leafly only), flavor and ailments (no overlap) held.
+- Unnamed: placeholder, skipped.
+- Shiskaine: AllBud + SeedFinder (Seedbleed) + JointCommerce; AllBud/SeedFinder breeder-side only. No data.
+- Zebra: SeedFinder (Mack's Terps) + JointCommerce only; Zebra Ztripez / Zebra Cake are separate entries. No data.
+- MC9: identity unproven (Mac 9 / MAC 69 are different names). No data.
+- Triple HB Boost, Thai Rock, Boggle Berry White, Dream Fire, Chillup: no matching strain profile found. No data.
+
+## S187 (2026-10-29) rows 4005-4014
+- CBD Yummy: NEW s7481. Leafly + AllBud agree THC 3% / CBD 6%, effects Happy/Relaxed, ailments Depression/Lack of Appetite. Type Hybrid with blank lean (Leafly gives no type; AllBud indica-dominant 70/30 only). Parents (AllBud: Granddaddy Kush x White Dawg; Leafly none; AllBud notes other "Yummy" strains exist), breeder CBD Crew (SeedFinder listing + a Leafly review comment only), flavor (no overlap) held.
+- CBD Pure Hazeling, Z6: AllBud + SeedFinder (CBD Crew) only, breeder-side. No data.
+- CBD Divine: SeedFinder (CBD Crew) only; Divine Intervention / Divine Gelato are separate. No data.
+- CBD Skunk Haze: AllBud + Dutch Passion retailer text; Skunk Haze (s7416) is a separate entry. No data.
+- African 75, CBD Noodle, Canadian Cough, Colorado Cough, Dutch Cough: no matching strain profile (The Cough / Strawberry Cough variants unproven as aliases). No data.
+
+## S188 (2026-10-29) rows 4015-4024
+- Somango Widow: NEW s7482. Leafly + AllBud agree Somango x Early Widow, effect Relaxed, flavor mango/tropical, ailment Anxiety; breeder Advanced Seeds (Leafly + SeedFinder listing). Type Hybrid with blank lean (Leafly "Hybrid", AllBud 70/30 indica-dominant); THC (19 / 17-18), terpenes, alias Early Somango Widow held.
+- Fireball: NEW s7483. Leafly + AllBud agree Fireball OG alias, effects Creative/Happy/Uplifted, flavor earthy/woody/tropical, ailments Inflammation/Muscle Spasms. Type Hybrid with blank lean (Leafly Hybrid vs AllBud 85/15 sativa-dominant); parents (AllBud only: Sativa Spirit x Annunaki), THC held. Acumen Genetics' "Fireball" (JointCommerce) not confirmed as the same strain.
+- SilentBiter, Fubar, FU50, The Angels Share, The Manna Machine (SeedFinder Acumen Genetics + JointCommerce), Fools Gold, 710 Mango (SeedFinder 710 Genetics): single-source. No data.
+- Chem3 x Headband: no matching strain profile (Chemband / Headband are different entries). No data.
+
+## S189 (2026-10-29) rows 4025-4034
+- Solace: AllBud (Sativa-dominant hybrid, Skunk #1 x Haze x unknown) + SeedFinder (710 Genetics, Skunk x Haze x Elite clone, sativa dominant) agree only on breeder-side parentage, which is held. Breeder 710 Genetics single-source. No data.
+- Super Shark: SeedFinder (710 Genetics, White Widow x Skunk #1, indica-dominant) + JointCommerce only (not independent). No data.
+- Thaifun Horizon: AllBud (pure sativa, Thai phenotype) + SeedFinder (ApeOrigin; BlueHemp origin) agree on pure Thai sativa, but breeder conflicts and AllBud mirrors breeder text. Held. No data.
+- Monasteria: SeedFinder (Nectar Seeds) + JointCommerce only. No data.
+- Maroc Inspiration: SeedFinder (Derg Corra Collective) + JointCommerce only; no parentage. No data.
+- LeGrape: no matching strain profile. No data.
+- HiNoon: SeedFinder (BlueHemp Switzerland, (NL#2 x Chronic) x (Swiss Sativa x Lebanese)) single source. No data.
+- E-Rocket: JointCommerce (BlueHemp) only. No data.
+- Arne: SeedFinder (Zenseeds, (B3N7 x Erdpurt) x Royal Dane) + JointCommerce only. No data.
+- B3n7: no standalone profile found (appears only as an Arne parent). No data.
+
+## S190 (2026-10-29) rows 4035-4044
+- ErdPurt (Zenseeds): label of existing s4149 Erdpurt. Leafly + AllBud agree indica-dominant (type Indica -> Hybrid, lean Indica-leaning -> Indica-dominant), effects Creative/Happy/Relaxed (Happy added), Erdbeer x Purpurea Ticinensis parents already stored. THC 4-8% / CBD 6-12% (AllBud only) left as stored; ailments held (Leafly depression from 4 reviews only). Migration 121.
+- Raspberry Kush (existing s71, corrected while checking the Raspberry Kush crosses): Leafly + AllBud agree Indica/indica-dominant (Hybrid, Indica-dominant), effects Relaxed/Euphoric/Sleepy, flavor berry/sweet, ailments Stress/Anxiety/Pain. Unsupported sample values blanked: THC 23-30%, CBD <1%, generic terpenes (Myrcene/Linalool/Humulene), "myrcene-leaning" flavor text, Insomnia/Lack of Appetite/Muscle Spasms. Migration 121.
+- Afghani Erdpurt: SeedFinder (Zenseeds, Afghanistan x ErdPurt) + JointCommerce only. No data.
+- Raspberry Kush x Northern Lights, Raspberry Kush BX1: SeedFinder (Zoolander Seeds) + JointCommerce only. No data.
+- Blueberry x Headband x Sour Lemon Larry, Sour Lemon Larry: SeedFinder only (Lemon Larry x unknown); Larry OG s1549 already carries the Lemon Larry alias. No data.
+- CBD Therapy: AllBud + SeedFinder/GrowDiaries (CBD Crew) agree 50/50, THC ~0.5-1%, CBD 8-10%, but all breeder-side. No independent listing. No data.
+- CBD OG Kush: only JointCommerce; several unrelated CBD OG Kush lines (Scott Family Farms, Medical Seeds, Cali Connection). No data.
+- Desire: no matching strain profile (Burning Desire s3539 / Dark Desire are separate). No data.
+- Guayita (aka Guava Berry Kush): AllBud + SeedFinder (Philosopher Seeds, Guayaba x Juanita la Lagrimosa, THC 18 / CBD 12-14) agree, but both breeder-side. Held. No data.
