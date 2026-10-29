@@ -2086,3 +2086,37 @@ No migration this batch (two new entries only; last migration 116, last id s7476
 - CBD OG Kush: only JointCommerce; several unrelated CBD OG Kush lines (Scott Family Farms, Medical Seeds, Cali Connection). No data.
 - Desire: no matching strain profile (Burning Desire s3539 / Dark Desire are separate). No data.
 - Guayita (aka Guava Berry Kush): AllBud + SeedFinder (Philosopher Seeds, Guayaba x Juanita la Lagrimosa, THC 18 / CBD 12-14) agree, but both breeder-side. Held. No data.
+
+## S191 (2026-10-29) rows 4045-4054
+- Cherry Grapefruit: NEW s7484. Leafly + AllBud agree Hybrid, Sativa-dominant, effects Creative/Focused/Uplifted, ailment Stress; breeder Kera Seeds (Leafly + SeedFinder listing). Parents held: Leafly + AllBud say Cherry Kush x Grapefruit but SeedFinder (Kera) lists Chemdawg x Sour Diesel x OG Kush x White Widow. Flavor (no overlap), THC (AllBud + SeedFinder only), alias Grapefruit Cherry held.
+- Tahoe Alien F2: SeedFinder (Alien Genetics, (Tahoe OG x Alien Kush F1) x same) only. Existing s7408 Tahoe Alien checked while here: Leafly + AllBud agree 60/40 indica-dominant, so lean Indica-leaning -> Indica-dominant (migration 122); breeder, parents, flavor, ailments already consistent. No data for the F2 row.
+- Pepiberry, Chewaka, Chemgos, Clemenvilla (Clemenvilla Kush), Blue Smog (Bluesmog), Moreneta (La Moreneta): SeedFinder (Pepita Seeds) + JointCommerce only. No data.
+- Evil Knievel OG: JointCommerce (Alien Genetics) only. No data.
+- Tahoe Alien Bubblegum: no matching strain profile (Tahoe Alien and Alien Bubblegum are separate). No data.
+
+## S192 (2026-10-29) rows 4055-4064
+- West Coast Willie: NEW s7485. Leafly + AllBud agree parents Willie Nelson x Joseph OG and flavor hash/vanilla/licorice; breeder Gage Green Genetics (Leafly + SeedFinder listing). Type Hybrid with blank lean (Leafly "Hybrid", AllBud 90/10 sativa-dominant); THC (20 / 20-22), effects, terpenes, ailments held.
+- Stratosphere: NEW s7486. AllBud + Leafly agree Alien OG x Daybreaker and flavor diesel/pine/lemon. Type Hybrid with blank lean (AllBud 50/50, Leafly none). Breeder Gage Green Group (Leafly + JointCommerce only) held; THC, effects (Leafly only a single review), ailments held.
+- Señor Jack: NEW s7487. Leafly + AllBud agree Jack Herer x Colombian Gold; breeder Gage Green Genetics (Leafly + SeedFinder listing); alias Senor Jack (spelling). Type Hybrid with blank lean (Leafly "Hybrid", AllBud 95/5 sativa-dominant); THC, effects (Leafly energizing vs AllBud creative/motivating/uplifting), flavor held.
+- Royal Flush (GGG): Leafly + SeedFinder (Gage Green, Chemdawg OG x Joseph OG) but AllBud lists Jack Horror x Eldorado (a different Royal Flush, possibly Nirvana's), so identity is conflicting. No data.
+- Journeyman: AllBud (indica-dominant 85/15, Odyssey x Joseph OG) + SeedFinder (Gage Green) agree only on breeder-side parentage. No data.
+- Pepe Le Chem (SeedFinder, Chemdawg x G13 Skunk), Headway (SeedFinder), L.A. Haze (SeedFinder), Mr. Majestic (SeedFinder + JointCommerce): single-source. No data. Pep-O-Chem is a separate strain.
+- Sid Vicious (Sour Purple Bubblegum): JointCommerce (Riot Seeds) only; no Sour Purple Bubblegum link. No data.
+
+## S193 (2026-10-29) rows 4065-4074
+- Russian Blue (Oceanside Purple Paki): AllBud (indica-dominant 70/30, Crimea Blue x Sandstorm, aka Purple Paki) + SeedFinder (Riot Seeds) agree only on breeder-side parentage. Held. No data.
+- G-Bolt Haze (Emerald Haze): AllBud (Emerald Haze, sativa-dominant 80/20, G13 Haze x G-Bolt, aka G-Bolt Haze) + SeedFinder (Riot Seeds, Motarebel's G-Bolt x Soma's G13 Haze) agree only on breeder-side parentage. Held. No data.
+- Maninblack, Swing Kid, Double Purple OG Kush, Diablo OG Kush Storm, Haarlem (Gage Green): SeedFinder only (Diablo OG Kush Storm / Haarlem also only a SeedFinder page). No data.
+- Sweet Double Affie: JointCommerce (Riot Seeds) only; Affie Taffie s3014 and LA Affie s2718 are different strains. No data.
+- Green Crack S1: JointCommerce only (Riot Seeds and Tinos Genetics listings differ); Green Crack s180 is a separate entry. No data.
+- Hazeified (Space Haze): SeedFinder page unreachable; AllBud Space Haze is not shown to be the same strain. No data.
+
+## S194 (2026-10-29) rows 4075-4084
+- Colombian Gold (GGG): label of existing s223 Colombian Gold. Leafly + AllBud agree sativa with 75/25 sativa split (lean Sativa-leaning -> Sativa-dominant), effects Energetic/Euphoric/Focused/Happy/Uplifted (Creative was Leafly-only), flavor lemon/lime/skunk (was blank), ailments Depression/Stress/Pain/Anxiety (Lack of Appetite / Inflammation were AllBud-only). THC 18-20% stays (Leafly 20, AllBud 19). SeedFinder's Gage Green listing has no parents. Migration 123.
+- Colombian Black (GGG): AllBud (100% pure sativa, "Colombian Black Haze") + SeedFinder (Gage Green, Colombian landrace) agree only on sativa; everything else single-source. No data.
+- Thunderfucking Grinch: AllBud (50/50, Matanuska Thunderfuck x unknown Purple x The Grinch) + SeedFinder (Riot Seeds) agree only on breeder-side parentage. Held. No data.
+- Blue Cookieberry Crunch: AllBud (indica-dominant 90/10) + SeedFinder (Riot Seeds, Riotberry OG x reversed GSC) agree only on breeder-side parentage. Held. No data.
+- The Grinch: SeedFinder (Unknown or Legendary, no data) only. No data.
+- Dumbo (SeedFinder Gage Green + JointCommerce), Mars Barz (SeedFinder Riot + JointCommerce), Diesel Overdose (SeedFinder Riot): single-source. No data.
+- Gorilla Princess: SeedFinder (Equilibrium Genetics, G. Glue #4 x 99/OG) only; Lemon/Orange Gorilla Princess are separate. No data.
+- Legit Blueberry Headband: no matching strain profile; Blueberry Headband s1054 not proven an alias. No data.

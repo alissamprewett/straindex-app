@@ -7727,7 +7727,7 @@
     "id": "s223",
     "name": "Colombian Gold",
     "type": "Hybrid",
-    "lean": "Sativa-leaning",
+    "lean": "Sativa-dominant",
     "rarity": "rare",
     "thc": "18–20%",
     "cbd": "",
@@ -7735,17 +7735,18 @@
     "effects": [
       "Energetic",
       "Euphoric",
-      "Creative"
+      "Focused",
+      "Happy",
+      "Uplifted"
     ],
-    "flavor": "",
+    "flavor": "lemon, lime, skunk",
     "icon": "🌰",
     "breeder": "",
     "ailments": [
       "Depression",
       "Stress",
       "Pain",
-      "Lack of Appetite",
-      "Inflammation"
+      "Anxiety"
     ],
     "aka": "Santa Marta Colombian Gold, Santa Marta"
   },
@@ -188208,7 +188209,7 @@
     "id": "s7408",
     "name": "Tahoe Alien",
     "type": "Hybrid",
-    "lean": "Indica-leaning",
+    "lean": "Indica-dominant",
     "rarity": "uncommon",
     "thc": "20–21%",
     "cbd": "",
@@ -190030,5 +190031,88 @@
       "Inflammation",
       "Muscle Spasms"
     ]
+  },
+  {
+    "id": "s7484",
+    "name": "Cherry Grapefruit",
+    "type": "Hybrid",
+    "lean": "Sativa-dominant",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Creative",
+      "Focused",
+      "Uplifted"
+    ],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "Kera Seeds",
+    "parents": [],
+    "aka": null,
+    "ailments": [
+      "Stress"
+    ]
+  },
+  {
+    "id": "s7485",
+    "name": "West Coast Willie",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "hash, vanilla, licorice",
+    "icon": "🌿",
+    "breeder": "Gage Green Genetics",
+    "parents": [
+      "Willie Nelson",
+      "Joseph OG"
+    ],
+    "aka": null,
+    "ailments": []
+  },
+  {
+    "id": "s7486",
+    "name": "Stratosphere",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "diesel, pine, lemon",
+    "icon": "🌿",
+    "breeder": null,
+    "parents": [
+      "Alien OG",
+      "Daybreaker"
+    ],
+    "aka": null,
+    "ailments": []
+  },
+  {
+    "id": "s7487",
+    "name": "Señor Jack",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "Gage Green Genetics",
+    "parents": [
+      "Jack Herer",
+      "Colombian Gold"
+    ],
+    "aka": "Senor Jack",
+    "ailments": []
   }
 ]
