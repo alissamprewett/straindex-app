@@ -2067,24 +2067,24 @@
     "id": "s62",
     "name": "Platinum Kush",
     "type": "Hybrid",
-    "lean": "",
+    "lean": "Indica-dominant",
     "rarity": "common",
-    "thc": "",
+    "thc": "16-21%",
     "cbd": "",
     "terps": [],
     "effects": [
-      "Relaxed"
+      "Relaxed",
+      "Sleepy",
+      "Hungry"
     ],
-    "flavor": "",
+    "flavor": "sweet, earthy",
     "icon": "🌰",
     "ailments": [
       "Stress",
-      "Insomnia",
-      "Lack of Appetite",
       "Pain",
-      "Depression"
+      "Anxiety"
     ],
-    "breeder": "The Bionosphere",
+    "breeder": "",
     "aka": "Platinum OG"
   },
   {
@@ -51341,38 +51341,27 @@
     "id": "s1562",
     "name": "Animal Mints",
     "type": "Hybrid",
-    "lean": "Indica-leaning",
+    "lean": "",
     "rarity": "rare",
-    "thc": "20–26%",
-    "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Limonene",
-        "p": 0.3
-      },
-      {
-        "n": "Caryophyllene",
-        "p": 0.25
-      },
-      {
-        "n": "Linalool",
-        "p": 0.15
-      }
-    ],
+    "thc": "",
+    "cbd": "",
+    "terps": [],
     "effects": [
       "Relaxed",
-      "Happy",
-      "Euphoric",
-      "Uplifted"
+      "Tingly"
     ],
-    "flavor": "Minty cookie sweetness with a gassy, earthy finish.",
+    "flavor": "mint",
     "icon": "🐾",
     "aka": "Animal Mintz",
     "parents": [
       "Animal Cookies",
       "SinMint Cookies"
     ],
-    "breeder": "Seed Junky Genetics"
+    "breeder": "Seed Junky Genetics",
+    "ailments": [
+      "Stress",
+      "Depression"
+    ]
   },
   {
     "id": "s1563",
@@ -52944,32 +52933,24 @@
     "id": "s1621",
     "name": "Cherry Cheesecake",
     "type": "Hybrid",
-    "lean": "Indica-leaning",
+    "lean": "Indica-dominant",
     "rarity": "uncommon",
-    "thc": "18–23%",
-    "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Myrcene",
-        "p": 0.3
-      },
-      {
-        "n": "Limonene",
-        "p": 0.25
-      },
-      {
-        "n": "Caryophyllene",
-        "p": 0.15
-      }
-    ],
+    "thc": "20-24%",
+    "cbd": "",
+    "terps": [],
     "effects": [
       "Relaxed",
-      "Happy",
-      "Euphoric",
       "Uplifted"
     ],
-    "flavor": "Sweet cherry and creamy cheesecake with an earthy base.",
-    "icon": "🍒"
+    "flavor": "berry",
+    "icon": "🍒",
+    "parents": [
+      "Cherry Pie",
+      "Kimbo Kush"
+    ],
+    "ailments": [
+      "Stress"
+    ]
   },
   {
     "id": "s1622",
