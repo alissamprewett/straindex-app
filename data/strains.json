@@ -95268,18 +95268,17 @@
   },
   {
     "name": "BlueLime Pie (Blue Lime Pie, BL Pie)",
-    "type": "Indica",
-    "lean": "Indica-leaning",
+    "type": "Hybrid",
+    "lean": "",
     "rarity": "uncommon",
-    "thc": "20-30%",
-    "cbd": "1%",
+    "thc": "18-31%",
+    "cbd": "",
     "terps": [],
     "effects": [
       "Euphoric",
-      "Tingly",
-      "Sedative"
+      "Tingly"
     ],
-    "flavor": "Sweet and sour citrus, spicy kush, nutty cookies.",
+    "flavor": "citrus, lime",
     "icon": "🥧",
     "breeder": "Sin City Seeds",
     "parents": [
@@ -130204,8 +130203,8 @@
   },
   {
     "name": "Le Silver Royale (aka Silver Royal)",
-    "type": "Sativa",
-    "lean": "Sativa-leaning",
+    "type": "Hybrid",
+    "lean": "Sativa-dominant",
     "rarity": "rare",
     "thc": "20-21%",
     "cbd": "",
@@ -130216,7 +130215,7 @@
     ],
     "flavor": "Creamy cheese, sweet skunky haze.",
     "icon": "⚪",
-    "breeder": "Kleen Karma Gardens",
+    "breeder": "",
     "parents": [
       "Green Queen",
       "Super Silver Haze"
@@ -144009,18 +144008,16 @@
     "thc": "19-25%",
     "cbd": "",
     "terps": [],
-    "effects": [
-      "Relaxed",
-      "Happy"
-    ],
+    "effects": [],
     "flavor": "Sweet grape, fresh berries, earth.",
     "icon": "🍇",
-    "breeder": "Sin City Seeds",
+    "breeder": "",
     "parents": [
       "Platinum GSC (Girl Scout Cookies)",
       "Blue Power"
     ],
-    "id": "s5478"
+    "id": "s5478",
+    "aka": "Platinum Delights"
   },
   {
     "name": "Platinum Dosi",
@@ -155868,13 +155865,11 @@
     "type": "Hybrid",
     "lean": "",
     "rarity": "uncommon",
-    "thc": "17-33%",
+    "thc": "",
     "cbd": "",
     "terps": [],
     "effects": [
-      "Energizing",
-      "Uplifted",
-      "Creative"
+      "Uplifted"
     ],
     "flavor": "Sweet citrus candy, diesel.",
     "icon": "🍬",
@@ -179047,11 +179042,18 @@
     "thc": "",
     "cbd": "",
     "terps": [],
-    "effects": [],
+    "effects": [
+      "Relaxed",
+      "Sleepy"
+    ],
     "flavor": "",
     "icon": "🌿",
     "aka": "Dogwalker, Dog Walker OG",
-    "ailments": null
+    "ailments": null,
+    "parents": [
+      "Albert Walker OG",
+      "Chemdawg"
+    ]
   },
   {
     "id": "s6949",
@@ -179365,15 +179367,18 @@
     "thc": "",
     "cbd": "",
     "terps": [],
-    "effects": [],
-    "flavor": "",
+    "effects": [
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "berry",
     "icon": "🌿",
     "breeder": "Sherbinskis",
     "parents": [
-      "Sunset Sherbet",
-      "Thin Mint GSC"
+      "Bacio Gelato",
+      "Mochi Gelato"
     ],
-    "aka": "Gello, Gelato #43, Gelato 43",
+    "aka": "",
     "ailments": null
   },
   {
@@ -187240,7 +187245,7 @@
     ],
     "flavor": "coffee with cherry notes",
     "icon": "🌿",
-    "breeder": "",
+    "breeder": "Sin City Seeds",
     "parents": [
       "Chocolope",
       "White Moonshine"
@@ -190262,6 +190267,108 @@
     "parents": [
       "Headband Diesel",
       "Sour Jack"
+    ],
+    "aka": null,
+    "ailments": []
+  },
+  {
+    "id": "s7497",
+    "name": "Purple Kush Starship",
+    "type": "Hybrid",
+    "lean": "Indica-dominant",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "pine",
+    "icon": "🌿",
+    "breeder": null,
+    "parents": [],
+    "aka": "PK Starship",
+    "ailments": []
+  },
+  {
+    "id": "s7498",
+    "name": "Power Purps",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "berry, fruity",
+    "icon": "🌿",
+    "breeder": "Sin City Seeds",
+    "parents": [
+      "Las Vegas Purple Kush",
+      "Blue Power"
+    ],
+    "aka": null,
+    "ailments": []
+  },
+  {
+    "id": "s7499",
+    "name": "Petroleum Nightmare",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Creative",
+      "Uplifted"
+    ],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": null,
+    "parents": [],
+    "aka": null,
+    "ailments": []
+  },
+  {
+    "id": "s7500",
+    "name": "Black Betty",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric",
+      "Uplifted"
+    ],
+    "flavor": "berry",
+    "icon": "🌿",
+    "breeder": null,
+    "parents": [
+      "AK-47",
+      "East Coast Sour Diesel"
+    ],
+    "aka": null,
+    "ailments": []
+  },
+  {
+    "id": "s7501",
+    "name": "Gello",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed"
+    ],
+    "flavor": "berry, citrus",
+    "icon": "🌿",
+    "breeder": null,
+    "parents": [
+      "Flo",
+      "Gelato #45"
     ],
     "aka": null,
     "ailments": []

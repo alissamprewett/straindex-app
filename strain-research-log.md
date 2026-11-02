@@ -2385,3 +2385,45 @@ No migration this batch (two new entries only; last migration 116, last id s7476
 - Happy Nightmare: AllBud only (Indica-dominant 60/40, Happy Kush x White Nightmare, 16-17% THC); no Leafly listing. Held. no data.
 - Pineapple Express X Gorilla Glue #4: unnamed cross of existing strains (s7, s1518). skip.
 - Jack N Cookies, Goji Dream, Candy Lemon OG: no listing under these names (only Jack's Snacks, Goji OG/Goji Dawg, Candied Lemons/Lemon OG Candy — different). no data.
+
+## S224 (sheet rows 4355–4364) — migration 134
+- White Chocolate (Sin City Seeds), existing s7367: Leafly (Sin City Seeds, Chocolope x White Moonshine, sativa-dominant hybrid) + SeedFinder (Sin City Seeds, same cross). Parents already stored; breeder filled "Sin City Seeds". Lean stays blank (Leafly only). Alias "WCH" (Leafly only) not written.
+- Blue Lime Pie, existing s3428: AllBud (Indica-dominant 70/30, Key Lime Pie x Blue Power, THC 18-31%, Body High/Creative/Euphoria/Giggly/Tingly) + Leafly (Hybrid, Key Lime Pie x Blue Power, Sin City Seeds, 18-31%, uplifted/happy/relaxed/euphoric/tingly, citrus/floral/lime) + SeedFinder genealogy. Corrected: type Indica->Hybrid, lean Indica-leaning->blank, THC 20-30%->18-31%, CBD "1%"->blank (Leafly 0%), effects Euphoric/Tingly (dropped Sedative), flavor "citrus, lime". Breeder and parents kept.
+- Purple Kush Starship: AllBud "PK Starship" (Indica-dominant 70/30, Purple Kush x Starship accidental cross) + Leafly "Purple Kush Starship aka PK Starship" (indica-dominant hybrid, no parents). Agreed: Hybrid, Indica-dominant, flavor pine, aka PK Starship. New s7497. Parents held (AllBud only, and "Starship" is not in the library), effects held (no overlap), THC held.
+- Platinum Delights, existing s5478 (Platinum Delight): cannabisdatabase.ca card (Platinum GSC x Blue Power, ~60% sativa, 19-25% THC, grape/berry/earth) matches stored values; Alibi review (dispensary product) is single-product, no genetics. Alias "Platinum Delights" added. Blanked unsupported breeder "Sin City Seeds" and effects Relaxed/Happy. Other stored values left (consistent with the card, single source).
+- Las Vegas Bubba Kush (LVBK): AllBud "Las Vegas Bubba" (Indica-dominant 75/25, Bubba Kush x Blue Power) + SeedFinder LVBK (Sin City Seeds, SinCityBubba x Blue Power, 75% indica, coffee/lemon/berry); AllBud mirrors breeder text, so breeder-side only. Held. no data.
+- Rip Cindy: AllBud only (Sativa-dominant 80/20, Cindy 99 x Jack the Ripper). no data.
+- Power Diesel: SeedFinder (Sin City Seeds) only. no data.
+- SinCity Bubba: appears only as a parent of Las Vegas Bubba Kush; no strain listing. no data.
+- Sour Grape Diesel: no listing (only Sour Grape/Sour Grapes, different strains). no data.
+- Chem 91 X Sour Diesel: unnamed cross of existing strains (Chemdawg s1069, Sour Diesel s3). skip.
+
+## S225 (sheet rows 4365–4374) — migration 135
+- Le Silver Royale, existing s4891: AllBud (Sativa-dominant 60/40, THC 20-21%, Euphoria/Relaxing) + Leafly (Hybrid 60/40 sativa-dominant, alias Silver Royal). Parents conflict (AllBud Green Crack x SSH; Leafly Green Queen x SSH, Green Crack as recessive); stored parents left. Type Sativa->Hybrid, lean Sativa-leaning->Sativa-dominant. Breeder "Kleen Karma Gardens" blanked: Leafly says it is the grower, not the breeder.
+- Starburst OG, existing s5955 (Starburst Kush): AllBud (Hybrid 50/50, Fire OG x Pre-98 Bubba Kush) + Leafly (alias of Bubba x Fire, same parents, Hybrid). Parents and aliases confirmed. THC "17-33%" blanked (AllBud 26-33%, Leafly 11%: conflict). Effects Energizing/Creative dropped, Uplifted kept (AllBud only, already stored). Flavor left (matches AllBud).
+- Power Purps: AllBud (Indica-dominant 75/25, Las Vegas Purple Kush x Blue Power, 16-24% THC) + Leafly (Hybrid, same parents, Sin City Seeds, 24% THC, berry/fruity) + SeedFinder listing (Sin City Seeds). Agreed: Hybrid (lean blank, AllBud X-dominant + Leafly plain Hybrid), parents, breeder Sin City Seeds, flavor "berry, fruity". New s7498. Effects (AllBud only), THC and terpenes held.
+- Guerilla Warfare: no source uses this spelling. Gorilla Warfare conflicts on parents (AllBud GG4 x Dragonfire; Leafly GG4 x OG #18) and type. Not an existing library entry (s1470 Guerrilla is unrelated). no data.
+- True Power OG: AllBud (Sativa-dominant 55/45, True OG x Blue Power) + SeedFinder (Sin City Seeds, same); AllBud mirrors breeder text. Held. no data.
+- Oregon Pineberry: no listing under this name (Pineberry s5437 and Oregon Pineapple are different). no data.
+- HimaLemon, Platinum Bub-Booyah, Booyah: no listing. no data.
+- Platinum Moonshine Haze: no listing (only Moonshine Haze s469 and Platinum Haze, different). no data.
+
+## S226 (sheet rows 4375–4384) — no migration
+- Petroleum Nightmare: AllBud (Indica-dominant 55/45, Petrol OG x White Nightmare, THC 20-29%, effects incl. creative/uplifting) + Leafly (effects Energetic/Creative/Uplifted, flavor diesel, no type or parents) + SeedFinder (Sin City Seeds, Petrol x White Nightmare, 55/45 indica). Agreed: effects Creative, Uplifted (AllBud + Leafly). Type Hybrid (AllBud + SeedFinder; Leafly gives none), lean blank. New s7499. Parents and breeder held (AllBud mirrors SeedFinder breeder text; Leafly lists neither), flavor held (no overlap), THC held.
+- Sour Flame OG: AllBud "Sour Flame" (Sativa-dominant 70/30, Sour Jack x White Fire #3) + SeedFinder SourFlame OG (Sin City Seeds, same cross). AllBud mirrors breeder text and does not use the OG name. Held. no data.
+- White S1: AllBud (Hybrid 50/50, descendant of The White, 20-21% THC) + SeedFinder (OG Raskal Genetics, 50/50). Breeder-side only. no data.
+- Girl Scout GHash, Double White Dawg, Cujo Cookies: SeedFinder (Cabin Fever Seed Breeders) plus jointcommerce blog only. no data.
+- Aliens OM, Jailbait, Gorillien, Indie Kush: no listing under these names (Aliens On Moonshine s962, Indian Kush, God's Jailbait are different). no data.
+
+## S227 (sheet rows 4385–4394) — no migration
+- Dogwalker OG, existing s6948 (empty entry): AllBud (Indica-dominant 80/20, Albert Walker OG x Chemdawg 91, relaxing/sleepy) + Leafly (balanced hybrid, same parents, relaxed/tingly/sleepy, aliases Dogwalker, Dawg Walker OG). Filled parents Albert Walker OG / Chemdawg (base name for the 91 phenotype) and effects Relaxed, Sleepy. Type stays Hybrid, lean blank (AllBud X-dominant + Leafly balanced). Flavor, THC held (no agreement). Existing aliases confirmed.
+- Black Betty: AllBud (Hybrid 50/50, AK-47 x East Coast Sour Diesel, THC 18-26%) + Leafly (Hybrid sativa-dominant, same parents, THC 19%). Agreed: Hybrid, parents, effects Euphoric/Uplifted, flavor "berry". Lean blank (AllBud 50/50 vs Leafly sativa-dominant), THC held, CBD held (AllBud ~4%, Leafly lists CBG only). New s7500. SeedFinder lists unrelated Black Betty entries (The Landrace Team, Old Dutch Genetics); not used.
+- Gello: Leafly "Gello" (Flo x Gelato 45, 24% THC) vs AllBud "Gello Gelato" (Bacio Gelato x Mochi Gelato); existing s6967 Gello Gelato stores Sunset Sherbet x Thin Mint GSC and aka "Gello". Sources conflict; nothing written. Note: the "Gello" alias on s6967 and its stored parents are unverified. no data.
+- Jack Kevorkian: AllBud (Indica-dominant 70/30, relaxing, citrus/hash) vs Leafly "Kevorkian" (alias Jack Kevorkian; Kos Kosher Kush x A-Dub; energetic/creative/sleepy, blueberry/berry/apple). Only "Hybrid" agrees and flavors conflict. no data.
+- Electric Grape Punch: SeedFinder (SnowHigh Seeds) + jointcommerce only. no data.
+- Dog Shit Cherry Pie: AllBud only. no data.
+- Feel Right Kush, Cherry Wave, Treasure, Big Black Cherry: no listing (Cherry Wavez, Treasure Island s7445, Big Black are different). no data.
+
+## S227 flag follow-up — Gello vs Gello Gelato (migration 136)
+- Gello Gelato (s6967, Sherbinskis): SeedFinder (Sherbinskis, Mochi Gelato x Bacio Gelato, #43 pheno), Leafly (Bacio Gelato x Mochi Gelato, Hybrid, Happy/Uplifted/Euphoric, berry/flowery/vanilla, alias "Geg") and AllBud (Bacio Gelato x Mochi Gelato, Calming/Creative/Euphoria/Relaxing/Uplifting, berry/fruity/herbal/sweet) agree. Stored parents Sunset Sherbet x Thin Mint GSC were unsupported and replaced with Bacio Gelato / Mochi Gelato. Effects Euphoric/Uplifted and flavor "berry" filled from the overlap. Stored aliases "Gello, Gelato #43, Gelato 43" removed: "Gello" is also the name of a separate strain (below), and the Gelato #43/43 aliases are supported only by SeedFinder's lineage label.
+- Gello (new s7501): AllBud (Hybrid 50/50, Gelato 45 x Flo, 17-19% THC, aroused/creative/euphoria/relaxing/uplifting, berry/citrus/fruity/herbal/sweet) + Leafly (Hybrid, Flo x Gelato 45, 24% THC, relaxed/sleepy/hungry, flowery/lemon, sweet berry and citrus in description). Agreed: Hybrid, parents Flo / Gelato #45, effect Relaxed, flavor "berry, citrus". THC held (conflict), lean blank. Neither page mentions Gello Gelato; Hytiva repeats the same parents (not independent).
