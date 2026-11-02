@@ -339,19 +339,22 @@
     "lean": "",
     "rarity": "rare",
     "thc": "",
-    "cbd": "",
+    "cbd": "12-13%",
     "terps": [],
     "effects": [
       "Relaxed",
-      "Calm"
+      "Focused"
     ],
-    "flavor": "",
+    "flavor": "woody, pine",
     "icon": "⚕️",
     "breeder": "",
     "aka": "AC/DC",
     "parents": [
       "Cannatonic",
       "Ruderalis"
+    ],
+    "ailments": [
+      "Anxiety"
     ]
   },
   {
@@ -58401,7 +58404,7 @@
       "Runtz"
     ],
     "id": "s1880",
-    "aka": "Caddy Rainbow, Cadillac Rainbows, Cadillac Rainbow #7, Cadillac Rainbowz, Rainbow Cadillac"
+    "aka": "Caddy Rainbow, Cadillac Rainbows, Cadillac Rainbow #7, Cadillac Rainbowz, Rainbow Cadillac, Cadi Rainbows"
   },
   {
     "name": "Honeydew",
@@ -75572,24 +75575,29 @@
   },
   {
     "name": "Cherry Skunk",
-    "type": "Indica",
-    "lean": "Indica-leaning",
+    "type": "Hybrid",
+    "lean": "Indica-dominant",
     "rarity": "uncommon",
-    "thc": "14-24%",
+    "thc": "",
     "cbd": "",
     "terps": [],
     "effects": [
+      "Creative",
       "Euphoric",
-      "Relaxed",
-      "Creative"
+      "Happy"
     ],
-    "flavor": "Sweet cherries and spicy skunk.",
+    "flavor": "skunk, berry, sweet",
     "icon": "🍒",
     "parents": [
       "Skunk Dawg",
       "Poppa Cherry"
     ],
-    "id": "s2553"
+    "id": "s2553",
+    "ailments": [
+      "Pain",
+      "Depression",
+      "Stress"
+    ]
   },
   {
     "name": "Chocolate Cherry OG",
@@ -81324,17 +81332,16 @@
   {
     "name": "Princess Leia",
     "type": "Hybrid",
-    "lean": "Sativa-leaning",
+    "lean": "",
     "rarity": "uncommon",
     "thc": "22-28%",
     "cbd": "",
     "terps": [],
     "effects": [
       "Creative",
-      "Euphoric",
-      "Energetic"
+      "Euphoric"
     ],
-    "flavor": "Sweet and sour pineapple citrus flavor with a tropical overtone.",
+    "flavor": "",
     "icon": "👸",
     "parents": [
       "Cinderella 99",
@@ -130377,14 +130384,13 @@
   },
   {
     "name": "Lem Chem",
-    "type": "Sativa",
-    "lean": "Sativa-leaning",
+    "type": "Hybrid",
+    "lean": "",
     "rarity": "uncommon",
     "thc": "20-24%",
     "cbd": "",
     "terps": [],
     "effects": [
-      "Focused",
       "Uplifted"
     ],
     "flavor": "Sour citrus, chemical diesel.",
@@ -130394,7 +130400,11 @@
       "Larry OG",
       "Chemdog (bx2)"
     ],
-    "id": "s4898"
+    "id": "s4898",
+    "aka": "Lemon Chem",
+    "ailments": [
+      "Depression"
+    ]
   },
   {
     "name": "Lembas Dough",
@@ -145805,7 +145815,7 @@
     "lean": "Indica-leaning",
     "rarity": "rare",
     "thc": "",
-    "cbd": "<2%",
+    "cbd": "",
     "terps": [],
     "effects": [
       "Relaxed",
@@ -158162,17 +158172,11 @@
     "thc": "",
     "cbd": "",
     "terps": [],
-    "effects": [
-      "Cerebral",
-      "Relaxed"
-    ],
-    "flavor": "Fresh cut grass, menthol, sewer gas, sulfur.",
+    "effects": [],
+    "flavor": "",
     "icon": "🐕",
-    "breeder": "Connected Cannabis Co.",
-    "parents": [
-      "Giesel",
-      "White Dawg"
-    ],
+    "breeder": null,
+    "parents": [],
     "id": "s6061"
   },
   {
@@ -176567,31 +176571,30 @@
     "id": "s6833",
     "name": "Black Dog (D.O.G.)",
     "type": "Hybrid",
-    "lean": "Indica-leaning",
+    "lean": "Indica-dominant",
     "rarity": "uncommon",
-    "thc": "18-24%",
-    "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Ocimene",
-        "p": 0.25
-      },
-      {
-        "n": "Caryophyllene",
-        "p": 0.2
-      }
-    ],
+    "thc": "",
+    "cbd": "",
+    "terps": [],
     "effects": [
       "Relaxed",
-      "Sleepy"
+      "Happy",
+      "Euphoric",
+      "Uplifted",
+      "Sleepy",
+      "Tingly"
     ],
-    "flavor": "Woody and earthy with pine, musk, citrus and berries.",
+    "flavor": "berry, earthy",
     "icon": "🐕",
     "breeder": "Humboldt Seed Organization",
     "parents": [
       "Blackberry Kush",
       "Emerald Headband"
-    ]
+    ],
+    "ailments": [
+      "Stress"
+    ],
+    "aka": "Black D.O.G."
   },
   {
     "id": "s6834",
@@ -179344,13 +179347,16 @@
     "id": "s6965",
     "name": "Ecto Cooler",
     "type": "Hybrid",
-    "lean": "",
+    "lean": "Sativa-dominant",
     "rarity": "rare",
     "thc": "",
     "cbd": "",
     "terps": [],
-    "effects": [],
-    "flavor": "",
+    "effects": [
+      "Relaxed",
+      "Uplifted"
+    ],
+    "flavor": "chemical, citrus, orange",
     "icon": "🌿",
     "breeder": "Seeds Of Compassion",
     "parents": [
@@ -190095,5 +190101,173 @@
     ],
     "aka": "Senor Jack",
     "ailments": []
+  },
+  {
+    "id": "s7488",
+    "name": "Dreamcatcher",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Sleepy"
+    ],
+    "flavor": "berry",
+    "icon": "🌿",
+    "breeder": null,
+    "parents": [
+      "Blueberry x Black Domina",
+      "Blue Chronic"
+    ],
+    "aka": "Dream Catcher",
+    "ailments": [
+      "Anxiety",
+      "Stress"
+    ]
+  },
+  {
+    "id": "s7489",
+    "name": "Candy Drop",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "citrus, chemical",
+    "icon": "🌿",
+    "breeder": null,
+    "parents": [],
+    "aka": null,
+    "ailments": []
+  },
+  {
+    "id": "s7490",
+    "name": "Pineapple Cookies",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "pineapple",
+    "icon": "🌿",
+    "breeder": null,
+    "parents": [],
+    "aka": null,
+    "ailments": [
+      "Stress",
+      "Depression",
+      "Pain"
+    ]
+  },
+  {
+    "id": "s7491",
+    "name": "Sugartown Express",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "Gage Green Genetics",
+    "parents": [
+      "Purple Trainwreck",
+      "Joseph OG"
+    ],
+    "aka": null,
+    "ailments": []
+  },
+  {
+    "id": "s7492",
+    "name": "Starlet Kush",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "chemical, diesel",
+    "icon": "🌿",
+    "breeder": "Gage Green Genetics",
+    "parents": [
+      "Pure Kush",
+      "Joseph OG"
+    ],
+    "aka": null,
+    "ailments": []
+  },
+  {
+    "id": "s7493",
+    "name": "Sour Glue",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted"
+    ],
+    "flavor": "diesel, sour, sweet",
+    "icon": "🌿",
+    "breeder": null,
+    "parents": [
+      "Gorilla Glue #4",
+      "Sour Diesel"
+    ],
+    "aka": null,
+    "ailments": []
+  },
+  {
+    "id": "s7494",
+    "name": "Violet Delight",
+    "type": "Hybrid",
+    "lean": "Indica-dominant",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy"
+    ],
+    "flavor": "floral",
+    "icon": "🌿",
+    "breeder": null,
+    "parents": [],
+    "aka": null,
+    "ailments": []
+  },
+  {
+    "id": "s7495",
+    "name": "Zelda",
+    "type": "Hybrid",
+    "lean": "Balanced",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Relaxed",
+      "Creative"
+    ],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": null,
+    "parents": [
+      "Legend OG",
+      "Orange Blossom Trail"
+    ],
+    "aka": "Zelda OG",
+    "ailments": null
   }
 ]

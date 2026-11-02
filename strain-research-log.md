@@ -2127,3 +2127,220 @@ No migration this batch (two new entries only; last migration 116, last id s7476
 - Platinum Kush (existing s62, Green Dino pre-roll photo): Leafly (Indica, OG Kush x Afghani) + AllBud (indica-dominant 90/10, Master Kush x Afghani). Type Hybrid + Indica-dominant, THC 16-21%, effects Relaxed/Sleepy/Hungry, flavor sweet/earthy, ailments Stress/Pain/Anxiety. Parents held (OG Kush vs Master Kush). Unsupported breeder "The Bionosphere" blanked. Migration 124.
 - Berry Sherbert (Green Dino pre-roll, label says Indica): no matching strain profile found. Not added.
 - Tropical Thunder (High 90s jar, label says Hybrid, Tropicana Cookies x Sweet Retreat): only Weedmaps / brand listing; Tropic Thunder (Leafly / AllBud) is a different strain. Held, not added. Tropicana Cookies s1527 and Sweet Retreat s7320 already in the library.
+
+## S196 (2026-11-02) user self-added check-ins (strain-dex.com history)
+- Dreamcatcher (new s7488): Leafly (Hybrid, Blueberry/Black Domina x Blue Chronic; Relaxed/Sleepy/Creative; pear/berry/blueberry; Anxiety/Pain/Stress) + AllBud (indica-dominant 60/40, same parentage; relaxing/sleepy/euphoria; berry; Anxiety/Stress...) agree. Written: Hybrid, parents, effects Relaxed/Sleepy, flavor berry, ailments Anxiety/Stress, alias Dream Catcher. Lean blank (Leafly states none). THC (AllBud only), breeder (unlisted) held. Taylor'd Genetics, 710 Genetics and Acumen Dream Catchers are different strains.
+- Cadi Rainbows: variant of existing s1880 Cadillac Rainbow (Ethos lists "Caddy Rainbows"). Added alias "Cadi Rainbows" (migration 125).
+- Luxx Runtz: only Tiny Fires brand Weedmaps listings (Runtz x Luxuriotti, labeled Indica). Single brand source. No data.
+- Fermented Gold: Jetty Extracts live rosin cartridge (Garlic Juice / Nam Wah / Trop Cookies terp blend); a product, not a strain. No data.
+- Chrome Kush, Vanilla Sky, Sweet lemon gilato: unchanged (earlier findings still hold).
+
+## S197 (2026-11-02) rows 4085-4094
+- Candy Drop (new s7489): Leafly (Hybrid, Gage Green Group, Candy Kush x Chemdog OG male, creative/euphoric/happy, citrus/fuel/chem) + AllBud (indica-dominant 75/25, Underdawg OG Hoop x Chemdawg x OG Kush, 15-23% THC, citrus/chemical) agree only on Hybrid and flavor. Written: Hybrid, flavor "citrus, chemical". Parents conflict (held), breeder single-source (held), lean blank, effects/THC held.
+- Super Hog: AllBud (indica-dominant 80/20, SoCal Master Kush x Original OG x Hawgsbreath) + SeedFinder (Riot Seeds) agree only on breeder-side parentage. Held. No data.
+- Monkey Balls: Leafly only (hybrid, 27% THC, alias Mob); Purple Monkey Balls s359 not proven the same. No data.
+- Glass Slipper: Leafly only (Riot Seeds version not matched to it). No data.
+- Sour Ultimate Indica, Crap the Shitter, Fuckberry, Chemhawk Kush (Chemhawg Kush): SeedFinder (Riot Seeds) + JointCommerce only. No data.
+- Cerberus: only SeedFinder pages for several unrelated breeders (Lupo's, Gage Green, Turpene Time, SnowHigh). No data.
+- Gemma Arterton (Sweet Pink Trainwreck): no strain page found. No data.
+
+## S198 (2026-11-02) rows 4095-4104
+- Pineapple Cookies (new s7490): Leafly (Hybrid, Platinum GSC x Poison OG, Calyx Gardens, 14% THC, aroused/creative/happy, butter/pineapple/earthy, Stress/Depression/Pain) + AllBud (indica-dominant 70/30, Platinum GSC x Pineapple OG Kush, 15-17% THC, pineapple/nutty/sweet/tropical, pain/depression/stress) agree on Hybrid, pineapple flavor and the three ailments. Written: Hybrid, flavor "pineapple", ailments Stress/Depression/Pain. Second parent, THC, breeder (single-source), effects and lean held.
+- Larry OG Pineapple: AllBud (Pineapple Larry OG, sativa-dominant 80/20, Cinderella 99 x SLL OG) + SeedFinder (BSF Seeds) agree only on breeder-side parentage, and the name order is not proven the same. No data.
+- Fugu Kush (Riot Seeds), Fugu Kush: SeedFinder only (Riot Seeds and Hazeman Seeds are separate listings). No data.
+- Cash Croppa, Nagasaki Nightmare: SeedFinder (Riot Seeds) + JointCommerce only. No data.
+- Hula Girl (Treeology Genetics), CBDank (Mephisto Genetics): SeedFinder (+ JointCommerce) only. No data.
+- Cambodian Cane Weed: no strain page found; Cambodian s977, Cambodian Haze s632, Cambodian Thai s3567 exist but are not proven the same. No data.
+- Afghani-Headband: no strain page found. No data.
+
+## S199 (2026-11-02) rows 4105-4114
+- Purple Bomb (Cherry Cola) = existing s5547 Purple Bomb (Relentless Genetics, Purple Diesel x Black Rose): AllBud (indica-dominant 80/20, same parents, 16-25% THC, CBD 0-1%) + SeedFinder (Relentless Genetics) agree only on breeder-side data, and stored breeder/parents already match, so left as is. Blanked the unsourced default CBD "<2%" (migration 126). "Cherry Cola" is not shown to be an alias (SeedFinder never mentions it; s7389 Cherry Cola is separate).
+- Fromage Blue (AllBud indica-dominant 70/30, UK Bluez Cheese x Blue Cheese; SeedFinder Pheno Finder + retailer): breeder-side/AllBud only. No data.
+- Rogue Valley Wreck (AllBud sativa-dominant 70/30, Blueberry x Snow x Trainwreck x Salmon Creek Big Bud; SeedFinder Massive Seeds): AllBud + breeder-side only. No data.
+- Lambsbread Sour Diesel: AllBud lists "Sour Lamb's Bread" (Lamb's Bread x Sour Diesel, sativa-dominant 90/10) only; not proven the same name. No data.
+- Deep Blue (Breeders Boutique): SeedFinder + JointCommerce only. No data.
+- Sugar Mountain, Lemon Vortex, VOG (Volcanic Fog), Spiderman OG, Purple Flo Berry: no strain page found. No data.
+
+## S200 (2026-11-02) rows 4115-4124
+- Cherry Train Wreck, Agent White, Salmon Creek OG, Sol Dog, Sour Deazy, Ogeazy Kush, Mendo Marmalade: no strain page found (results were unrelated strains such as Trainwreck, The White, Salmon River OG, Salmon Creek Big Bud, Marmalade). No data.
+- Jade OG: JointCommerce only (AllBud Jade is a different strain). No data.
+- Natural Mystic (El Clandestino): JointCommerce only. No data.
+- Tootzie Pop: only Tootsz Pop (SeedFinder Savage Seed Collective + JointCommerce), spelling not proven the same. No data.
+
+## S201 (2026-11-02) rows 4125-4134
+- Black Unicorn (Riot Seeds), 26 Cookies, Green Smack, Holy Grail Haze, Ghost Piff: SeedFinder (Riot Seeds) + JointCommerce only (Holy Grail Kush s1862 / Ghost OG s1550 are different strains). No data.
+- Black Grapes: only a SeedFinder "Unknown or Legendary" page; AllBud Dark Grape / Black Gorilla Grape are different strains. No data.
+- Quaze, Tangie Cheese Cake, Headband Cake, Black Cherry Sour Diesel: no strain page found (Qrazy Quake, Tangie Cake / Tang-Cheese, Head Cake, Sour Cherry Diesel are different names, not proven the same). No data.
+
+## S202 (2026-11-02) rows 4135-4144
+- Hazy Kush = existing s7025 (Green Bodhi): SeedFinder confirms the Green Bodhi listing; only SeedFinder, so stored values left unchanged.
+- Bezerker: possibly a spelling of Berserker (AllBud indica-dominant; SeedFinder SnowHigh Seeds), but only breeder-side overlap and spelling not proven. No data.
+- Med Gom 1.0, Sugar Gom, MaxiHaze, HazeGom (GrassOmatic): SeedFinder (+ JointCommerce / retailer) only. No data.
+- Brazilian Sativa: no exact strain page; Brazilian s1328-1331 / AllBud Brazilian are separate. No data.
+- Grape Bubblegum: only brand listings (Vertical Cannabis, Candy Factory) and JointCommerce. No data.
+- Dharma Winter Fire, Snowdawg x GSC: no strain page found (Super Snow Dog s664 / Snowdawg 2 s5852 are separate). No data.
+
+## S203 (2026-11-02) rows 4145-4154
+- Cherry Skunk (existing s2553, Skunk Dawg x Poppa Cherry): Leafly (Hybrid, indica-dominant, same parents, 24% THC) + AllBud (indica-dominant 70/30, same parents, 18% THC). Corrected type Indica -> Hybrid, lean -> Indica-dominant; THC "14-24%" blanked (sources conflict 24 vs 18); effects -> Creative/Euphoric/Happy; flavor -> "skunk, berry, sweet"; ailments Pain/Depression/Stress. Parents already match. Migration 127.
+- ACDC / CB Diesel: ACDC = existing s12 (Leafly + AllBud agree Cannatonic x Ruderalis, already stored). Effects Relaxed/Calm -> Relaxed/Focused (Calm unsupported), flavor "woody, pine", CBD "12-13%", ailments Anxiety (migration 127). THC held (AllBud inconsistent), lean blank. CB Diesel: no strain page found.
+- Blue Amnesia XXL Autoflowering: AllBud (sativa-dominant autoflower, OG Amnesia Auto x Blueberry Auto) + SeedFinder (Dinafem) + JointCommerce only, breeder-side overlap. Not related to s3337 Blue Amnesia. No data.
+- NYC Diesel x Obama Kush: unnamed cross of two existing library strains (s1160, s135), not a strain page. Skip.
+- West Seattle: a dispensary, not a strain. Skip.
+- Purple Frog (only Purple Fog, Pure Sunfarms; different), Blue Asian Diesel, Blue Fantasy, Black Cherry Dream, Georgia Express: no strain page found. No data.
+
+## S204 (2026-11-02) rows 4155-4164
+- Sugartown Express (new s7491): Leafly (Hybrid, Purple Trainwreck x Joseph OG, Gage Green Group) + AllBud (Hybrid 50/50, same parents) agree; breeder confirmed by a SeedFinder Gage Green Genetics listing. Written: Hybrid, parents, breeder Gage Green Genetics. Effects, flavor, THC, relief held (sources do not overlap). Lean blank (only AllBud 50/50).
+- Starlet Kush (new s7492): Leafly (Hybrid, Pure Kush x Joseph OG, Gage Green Group, chem diesel aroma) + AllBud (Hybrid 50/50, same parents, chemical/diesel flavors) agree; SeedFinder Gage Green Genetics listing confirms breeder. Written: Hybrid, parents, breeder, flavor "chemical, diesel". Effects, THC, relief held.
+- Monarch = existing s7141 (Gage Green Genetics, Underdawg OG x Chemdawg Sour Diesel): AllBud (sativa-dominant 80/20, same parents) + SeedFinder breeder-side only; stored values left as is.
+- Amnesia Kush (Dinafem) = existing s3082: only Dinafem pages (SeedFinder, JointCommerce, GrowDiaries); no Leafly/AllBud page. Stored values left. No data.
+- The White Train, Fantasmo Express (Mephisto Genetics), Amnesia XXL Autoflowering (Dinafem): SeedFinder / JointCommerce / AllBud breeder-side only. No data.
+- Salvation, Yerba Buena (Gage Green): AllBud + SeedFinder breeder-side only. No data.
+- Panama Red / Oaxacan: label combining two existing strains (s407, s5275). Skip.
+
+## S205 — Discovered Candidates rows 4165–4174 (no library changes)
+- Prolific Kush: only SeedFinder (GGG; PK Heirloom OG x Joseph) plus jointcommerce mirroring it. Single independent source, held. No data.
+- Buddha Kong: no listing found (only Big Buddha's King Kong, a different name). No data.
+- Great Balls of Fire OG: SeedFinder only (Flip Side; (Dosidos x Pan Dulce) x Bubble Tea), no type given; the "OG" label is unconfirmed. Held. No data.
+- Tour De France: no cannabis listing found. No data.
+- Blast: SeedFinder only (GGG; Atomic NL x Mendo Montage backcrossed to Mendo Montage), jointcommerce mirrors. Held. No data.
+- Atomic Montage: no listing under that name; resembles the Blast cross but identity unproven. No data.
+- Granddaddy Skunk: no listing found (results were Granddaddy Purple). No data.
+- High Flyer: SeedFinder only (GGG; Lemon Thai x Freedom Baby). Held. Not the same as Durban-Thai Highflyer s1406. No data.
+- Giant Steps: SeedFinder only (GGG; Salvador x Mendo Montage). Held. No data.
+- Salvador: SeedFinder only (Trainwreck x Purple Snowman, "Unknown or Legendary"). Held. No data.
+
+## S206 — Discovered Candidates rows 4175–4184 (no library changes)
+- Sour Diesel / Critical Mass: combined label of existing s3 Sour Diesel and s46 Critical Mass. Skip.
+- Cash: no strain page found (Cashus Clay s3610 and Cash Kush are different names). No data.
+- Bubba Kushberry: no listing found (Bubba Berry and Bubba Kush are different strains). No data.
+- Blue Fondue: no listing found (only Chocolate Fondue s431, Fondue by Delta 9 Labs). No data.
+- Rasta Berry: no listing found. No data.
+- Everest Bud: only jointcommerce (GreenLabel Seeds, no parents named). Existing s4160 Everest is also GreenLabel but the link between them is unproven. No data.
+- Super Buckeye: no listing found (Buckeye Purple s871 exists, a different name). No data.
+- Dead North: AllBud (Indica-dominant, ~75/25, Deadhead OG x NL5, THC 22-24%) and SeedFinder (Melvanetics, Deadhead OG x NL5 '89, F1) agree only on breeder-side parentage. Held under the breeder-side rule. No data.
+- Banana Buckeye: SeedFinder only (Melvanetics, Banana OG x Buckeye Purple). Held. No data.
+- Pine Slap: no listing found (results were Pine Sap, Pimp Slap, Slapz). No data.
+
+## S207 — Discovered Candidates rows 4185–4194 (no library changes)
+- Swiss / Pine-Tsu: combined label. Swiss Tsu is already an alias of s492 Swiss Tsunami. Pine-Tsu is not listed anywhere; AllBud's Pineapple Tsu (Sour Tsunami x Pineapple, aka Pineapple-Tsu) is the closest name but the match is unproven. No data.
+- Pine-Tsu: same finding as above. No data.
+- Stumptown Wonder: no listing found (only a Portland dispensary and other "Wonder" strains). No data.
+- Sweetie Pie: no listing under that name (Sweet Pie on AllBud is a different name). No data.
+- Jasper OG: no listing found (Casper OG and Jasper from a Curaleaf product are different). No data.
+- Strawberry Banana Smoothie: no listing found (only Strawberry Banana, a different name). No data.
+- 925: no strain listing found. No data.
+- Romulox: no listing found (Romulan is a different name). No data.
+- White Water: only AllBud's White Water Kush (Afghan Kush x White Widow), which never uses "White Water" alone as an alias. Identity unproven. No data.
+- Pandora: AllBud (indica-dominant hybrid 70/20/10 with ruderalis, parents unknown, THC 15-18%) and SeedFinder (Paradise Seeds autoflower, unknown hybrid x ruderalis, 80/10/10) both list it, but SeedFinder is breeder-side, the breeder is single-source and the splits differ. Held. Distinct from s1173 Pandora's Box. No data.
+
+## S208 — Discovered Candidates rows 4195–4204 (no library changes)
+- Nepalese Hash Plant: AllBud lists "Nepalese Hashplant" (Sativa, THC 14-18%, aka Nepalese HP) with no parents or breeder. Single source, and no second source links it to existing s269 Nepalese. Held. No data.
+- Ape Cheese: no listing found (results were Grape Ape, Ape Shit, Cheese). No data.
+- Dutch Leopard: no listing found. No data.
+- Copenhagen Kush: only jointcommerce (Zenseeds, indica-dominant, parents not named); SeedFinder has only Copenhagen Seed Company variants (Project, S1, Auto). Held. No data.
+- Krome White Triangle: SeedFinder (Zenseeds, mostly indica multihybrid, "Kromes Triangle x NL x Leopard Kush x Pure Kush") plus the jointcommerce mirror. It is not stated to be The White (s1280, aka Triangle). Single source. Held. No data.
+- Leopard Kush: appears only as a parent inside other crosses (NL/Leopard Kush). No standalone listing. No data.
+- Snow Buffalo: no listing found (White Buffalo and Buffalo Snow are different names). No data.
+- Sour Harley: no listing found. No data.
+- The 411: no strain listing found. No data.
+- Strawberry Rhino: no listing found (Blackberry Rhino s111 and White Rhino s214 are different). No data.
+
+## S209 — Discovered Candidates rows 4205–4214
+- Seaweed: only a SeedFinder entry (TeamingWithTerps) and brand/product results. Single source. No data.
+- OhmG: no listing under that name (OMG on AllBud and Bodhi is a different spelling, link unproven). No data.
+- Lemon Chem: name variant of existing s4898 Lem Chem. AllBud (Sativa-dominant hybrid 70/30, Chemdawg x Lemon Larry, THC 23-24%) and Leafly (Hybrid, Chemdawg x Larry OG) agree it is a hybrid with Uplifted, chemical/diesel/lemon flavor and Depression/Fatigue reports; SeedFinder lists the Connoisseur Genetics breeder (consistent with the stored one). Parents conflict (Lemon Larry vs Larry OG), so the stored parents were left. Added alias "Lemon Chem" (growdiaries titles the Lem Chem page "Lemon Chem"). Corrected type Sativa → Hybrid, lean Sativa-leaning → blank (Leafly only says Hybrid), effects Focused/Uplifted → Uplifted (Focused unsupported). Added ailments ["Depression"] (Fatigue is outside the vocab; Anxiety conflicts). Migration 128 (3 corrections).
+- Black Cherry Haze: no listing found (Cherry Haze, Black Haze are different names). No data.
+- Orangutan: existing s5331 is Orangutan Titties; AllBud also lists a separate Orangutang. No source ties "Orangutan" to it. Held. No data.
+- Purple Orangutan: no listing found. No data.
+- Ogre X Bubba: unnamed cross of existing Ogre (s1165) and a Bubba strain. Skip.
+- Sour Glue: new s7493. AllBud (Hybrid 50/50, Gorilla Glue #4 x Sour Diesel) and Leafly (Hybrid, Sour Diesel x GG4) agree on type and parents. Lean blank (only AllBud gives a split). Effects ["Uplifted"] (the one effect both list). Flavor "diesel, sour, sweet". THC left blank (AllBud 34% vs Leafly 20%), CBD blank, no breeder, ailments blank (only AllBud).
+- White Tangie Starburst OG: only a White Tangie blog post and AllBud Starburst OG; no listing for the combined name. No data.
+- Orange Louie OG: SeedFinder only (Riot Seeds, Orange Dream x White Louie). Held. No data.
+
+## S210 — Discovered Candidates rows 4215–4224 (no library changes)
+- The Hunk: only a SeedFinder clone-only entry. Single source. No data.
+- GhostHawg OG Kush: SeedFinder only (Riot Seeds, Hawgsbreath x Ghost OG Kush), type unknown. Held. No data.
+- Hobbit: existing s7029 checked. Leafly (Hybrid, Kannabia Seeds, strawberry candy scent, sweet, aka Ginger Punch) agrees with the stored breeder, flavor and aka. No change needed. Parents (Ginger Ale x ruderalis) are Leafly + SeedFinder breeder-side only, held. Added (checked).
+- Cheese Fondue: SeedFinder lists only "Cheese Fondue Auto" (Canadian Seed Lab); nothing else. No data.
+- Grizzly: SeedFinder lists two unrelated Grizzly entries (Scarecrow Seeds, Canadian Seed Lab); Grizzly Glue s4592 and Grizzly Purple s4593 already exist. No data.
+- White Dawgsbreath: AllBud only (Indica-dominant hybrid 90/10, Hawgsbreath x White Dawg, THC 15-20%). Single source. Held. No data.
+- White Goji OG: SeedFinder only (Riot Seeds). Held. No data.
+- Obamacare: SeedFinder only ("Obama Care", Scapegoat Genetics, Obama Kush x Nom Nom). Held. No data.
+- Churkle: no listing found (Hurkle is a different strain). No data.
+- NIGHTTIME: descriptor, not a strain name (next rows ANYTIME and DAYTIME are the same kind). Skip.
+
+## S211 — Discovered Candidates rows 4225–4234
+- ANYTIME, DAYTIME: descriptors, not strain names. Skip.
+- Cadillac Jack: no listing found (Cadillac Rainbow s1880, Cadillac Cookies and Black Cadillac are different). No data.
+- Peaches Trainwreck: no listing under that name (SeedFinder has Peach Wreck by Hermetic Genetics, a different name). No data.
+- Violet Delight: new s7494. AllBud (Indica-dominant hybrid 70/30, THC 24-27%, parents unconfirmed) and Leafly (Hybrid, described as indica-dominant, THC 20%, Green Crack x Blueberry) agree on type and lean (Hybrid, Indica-dominant), the Happy effect and a floral note. THC conflicts so it is blank. Parents (Leafly only, AllBud says unknown) held. Ailments held (AllBud only). The separate AllBud "Violets Delight" was not merged.
+- U Dream: no listing found. No data.
+- Cobra: SeedFinder lists two different Cobras (Annibale Genetics, Flash Seeds); Cobra Kush s1672 exists but is a different name. No data.
+- Pineapple Buddha: no listing found. No data.
+- Ultra Blue Romulan: AllBud only (Indica-dominant hybrid, MK Ultra x Romulan Blue Kush, aka UB Romulan). Single source. Held. No data.
+- The Lazarus Strain: only a SeedFinder "Lazarus" (Beans2Trees); identity unproven. No data.
+
+## S212 — Discovered Candidates rows 4235–4244
+- Razzberry Kush: no listing under that name (AllBud Razzberry and existing s2415 Razzleberry Kush are different names; link unproven). No data.
+- OGer99: SeedFinder only (Dutchgrown Seeds, Banana OG x Cinderella 99). Held. No data.
+- Mt. Berry Kush: no listing under that name (AllBud Mountain Berry is a different name, unproven). No data.
+- Lobster Kush: no listing found (Blue Lobster s2168 and Purple Lobster are different). No data.
+- K-91: no listing under that name; TK91 (s6176) is a different name and the link is unproven. No data.
+- Jelly Smalls: "smalls" is a flower-grade label on a product, not a strain name. Skip.
+- Princess Leia (Red Bee): existing s2829 Princess Leia checked. Neither AllBud nor Leafly mentions Red Bee. AllBud (Sativa-dominant 80/20, Lemon Alien Dawg x Cindy 99, THC 22-28%) and Leafly (Hybrid, Creative/Energetic/Euphoric, THC 27-29%) agree on Hybrid, Creative and Euphoric, and THC. Corrected: lean Sativa-leaning → blank (Leafly says only Hybrid), effects trimmed to Creative/Euphoric (Energetic is Leafly only), flavor sentence blanked (AllBud pineapple/citrus vs Leafly blue cheese/berry conflict). Parents kept. Migration 129 (3 corrections).
+- Promo Dawg, Santa Dawg: no listing found. No data.
+- Frosty Dawg Snacks: no listing under that name (Leafly Frosty Dawg is a different name). No data.
+
+## S213 — Discovered Candidates rows 4245–4254 (no library changes)
+- Santa Muerte (Illuminati): no Illuminati Seeds listing for Santa Muerte (only Illuminati OG and other Illuminati products). No data.
+- Santa Muerte: two unrelated strains share the name. AllBud lists a Sativa-dominant hybrid (Mexicana x Original Haze, THC 15-18%); SeedFinder lists Omuerta Genetix's indica-dominant Gelato #45 x Serroquel. Identity conflict, one source each. Held. No data.
+- Gum Drops: no listing under that name. Existing s5051 Magic Gum Drops is a different name; link unproven. No data.
+- Celtic Passion: SeedFinder only (Trichome Jungle Seeds). Held. No data.
+- Caribbean Crush: only product listings (Trippy Sips); no strain page. No data.
+- St Lucian: no strain listing found (only articles on cannabis in Saint Lucia). No data.
+- Cheese Smurf: only SeedFinder "Cheesy Smurf" (Trichome Jungle Seeds), a different name. No data.
+- Larry Smurf: SeedFinder only (Trichome Jungle Seeds). Held. No data.
+- Ponyboy: no listing found. No data.
+- Galactic Smurf: SeedFinder (Trichome Jungle Seeds) plus the jointcommerce mirror. Single source. Held. No data.
+
+## S214 (sheet rows 4255–4264)
+- Ecto Cooler (s6965, existing): AllBud (Sativa-dominant 70/30) + Leafly (Hybrid, described sativa-dominant) → lean Sativa-dominant. Effects Relaxed, Uplifted (both agree); flavor chemical, citrus, orange (both). Parents California Orange x Gorilla Biscuit confirmed by both; breeder Seeds Of Compassion (Leafly) left as stored. Ailments/THC held (AllBud only). Blank fills only, no migration. Status: added.
+- Mantis: AllBud + SeedFinder (Trichome Jungle) agree only on breeder-side parentage (Nap x Santa Maria x Haze); held. Distinct from s5100 Maryland Mantis. no data.
+- Sour Mandarina, Mandarina: only Trichome Jungle/SeedFinder + retailer mirror; single-source. no data.
+- Mandarina Kush: only "Mandarin Kush" (different name) found. no data.
+- Afghani 99: retailer text only. no data.
+- Blue Band: SeedFinder (Hazeman) only. no data.
+- Nap: only "Weed Nap" (different name); parent of Mantis, unverified. no data.
+- Kalishapple Kush, Kalishnapple: retailer text only; AllBud "Kali Snapple" (Kali Mist x Snapple) not proven same. no data.
+
+## S215 (sheet rows 4265–4274) — no library changes
+- Dr. Spock, Bomber Man, 100 Watt Kind, Poppa Cherry, Tatooine Dream, Sexy Ape, CannonBall Express: no listing under the name (only Dr. Grinspoon/Dead Ass Spock, B-52 Bomber, $100 OG, Cherry Poppers, Tangerine Dream, Ape Shit, Irish Cannonball etc., all different names). no data.
+- Zelda: Leafly only (Legend OG x Orange Blossom Trail, Swamp Boys Seeds, 19% THC, Relaxed/Happy/Creative); growers-notebook mirrors Leafly. Single-source, held. no data.
+- Kong Stomper: AllBud only (Motivation x White Russian, 60/40 indica-dominant) — same parents as existing s7071 Kong, but Leafly Kong lists no "Stomper" alias; identity unproven, held. no data.
+- Dr. Lemon: only SeedFinder "Dr. Lemons" (Lost River, Super Lemon Haze x Venkman OG), different name, no data fields. no data.
+
+## S215 flag follow-up — Zelda added (s7495)
+- Zelda: Leafly (Hybrid, "balanced", Legend OG x Orange Blossom Trail, effects Relaxed/Happy/Creative) + AllBud "Zelda OG" (Hybrid 50/50, same cross, effects calming/relaxing/creative/giggly). Agreed: type Hybrid, lean Balanced, parents Legend OG + Orange Blossom Trail (both in library), effects Relaxed + Creative. aka "Zelda OG" (AllBud's name for the same cross). Held: breeder Swamp Boys Seeds (Leafly + SeedFinder breeder-side only), THC (19% vs 26% conflict), flavor (diesel/chemical/cheese vs citrus/sour/woody), terpenes, ailments. Status: added.
+- Kong Stomper: still held. Extended search found cannabisreports/cannafo pages (not fetchable, robots/client error) and no source linking it to Kong. no data.
+
+## S216 (sheet rows 4275–4284) — no library changes
+- Golden Spoon, Key Master, Aeon Flux, Zelda Berry, Powwow, PolywOG, Oaxacan PolywOG, Oaxacan Goldspear: no listing under these names (only Golden Spruce/Goldenmoon, Master Kush, Zelda/Zelda Haze, POG, Oaxacan landrace/Oaxacan Gold etc., all different names). no data.
+- Stantz Kush: only Stantz OG (Lost River Seeds; SeedFinder + jointcommerce), different name. no data.
+- Dino: only a retailer-blog (jointcommerce) page; Dino Crack/Dino Duck/Dino Meat are different strains. no data.
+
+## S217 (sheet rows 4285–4294) — migration 130
+- Black D.O.G. → existing s6833 "Black Dog (D.O.G.)": AllBud (Indica-dominant hybrid 85/15, Blackberry Kush x Emerald Headband), Leafly (Indica; reviewer effects/flavors), SeedFinder (Humboldt, same cross). Corrected: lean Indica-leaning→Indica-dominant; blanked unsupported THC 18-24% (AllBud 16-24%), CBD "<1%" (AllBud 3%), terpenes Ocimene/Caryophyllene (no source); effects → Relaxed, Happy, Euphoric, Uplifted, Sleepy, Tingly (AllBud+Leafly); flavor → "berry, earthy" (AllBud, SeedFinder, Leafly); ailments Stress (AllBud+Leafly); aka "Black D.O.G." added. Breeder/parents kept. Status: added.
+- Garlic Dream, Sour Lime Pie, Girl Scout Glue, Oregon Danish, NL X Cannatonic, Kartoon, Teen Spirit: no listing under the name (only Garlic Cookies etc., Sour Lime, Guy's Girl Scout Cookie Glue/jointcommerce blog, Oregon Purple Danish, Cannatonic, Cartoons & Cereal, other Spirit strains). no data.
+- Bollywood: SeedFinder (Cannabella Genetics) + OCS retailer (Lowbanks Runtz x Lemon Cherry Gelato) only; not independent, held. no data.
+- White Apollo 710: SeedFinder (Riot Seeds) only. no data.
+
+## S218 (sheet rows 4295–4304) — migration 131
+- Superdog → existing s6061 "Super Dog (aka Superdog)": conflict found between two different products — Connected Cannabis Co. "Super Dog" (a cut of Chem D, brand text) vs Riot Seeds "Superdog" (Giesel x White Dawg, SeedFinder, breeder-side). Stored entry mixed them. Blanked breeder (Connected Cannabis Co.), parents (Giesel, White Dawg), and single-source brand-text effects (Cerebral, Relaxed) and flavor. Type Sativa / lean Sativa-leaning kept (both sources sativa-dominant). Status: added.
+- Duende: AllBud (Hybrid 50/50, Grateful Breath x Grape Puff) + SeedFinder (Gage Green; same cross) agree only on breeder-side parentage; AllBud-only split/effects. Held. no data.
+- All Blues: SeedFinder (Gage Green, Blueberry x Joseph) only, growers-notebook mirror. no data.
+- White Trainwreck: no listing; AllBud "White Wreck" (Trainwreck x White Widow) is a different name, link unproven. no data.
+- White Louie: SeedFinder (Riot) + jointcommerce only; AllBud "White Louis" differs. no data.
+- White Sour Pineapples, White Metal: SeedFinder (Riot) + jointcommerce only. no data.
+- Bourbon Cookies: SeedFinder (Exclusive Seeds) + jointcommerce only. no data.
+- Sweaty Yeti: jointcommerce only (Cabin Fever); Yeti OG is a different strain. no data.
+- Pink Louie 13th OG: no listing (only King Louis XIII OG variants, existing s131). no data.
