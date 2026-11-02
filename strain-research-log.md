@@ -2335,7 +2335,7 @@ No migration this batch (two new entries only; last migration 116, last id s7476
 - White Apollo 710: SeedFinder (Riot Seeds) only. no data.
 
 ## S218 (sheet rows 4295–4304) — migration 131
-- Superdog → existing s6061 "Super Dog (aka Superdog)": conflict found between two different products — Connected Cannabis Co. "Super Dog" (a cut of Chem D, brand text) vs Riot Seeds "Superdog" (Giesel x White Dawg, SeedFinder, breeder-side). Stored entry mixed them. Blanked breeder (Connected Cannabis Co.), parents (Giesel, White Dawg), and single-source brand-text effects (Cerebral, Relaxed) and flavor. Type Sativa / lean Sativa-leaning kept (both sources sativa-dominant). Status: added.
+- Superdog → existing s6061 "Super Dog (aka Superdog)": two products share the name — Riot Seeds "Superdog"/SoCal Super Skunk (Giesel x White Dawg; SeedFinder, cannabisreports and growingweed listings, Weedmaps description) vs Connected Cannabis Co. "Super Dog" (own Chem D cut, brand text only, no reviews). Riot Seeds' is the documented breeder release and judged the legit one (Weedmaps' parents field/description also follow it). Kept parents Giesel x White Dawg; breeder Connected Cannabis Co. → Riot Seeds; aka SoCal Super Skunk added; blanked single-source brand-text effects (Cerebral, Relaxed) and flavor. Type Sativa / lean Sativa-leaning kept. Status: added. (Weedmaps effects Giggly/Happy and flavor diesel/lemon single-source, held.)
 - Duende: AllBud (Hybrid 50/50, Grateful Breath x Grape Puff) + SeedFinder (Gage Green; same cross) agree only on breeder-side parentage; AllBud-only split/effects. Held. no data.
 - All Blues: SeedFinder (Gage Green, Blueberry x Joseph) only, growers-notebook mirror. no data.
 - White Trainwreck: no listing; AllBud "White Wreck" (Trainwreck x White Widow) is a different name, link unproven. no data.
@@ -2344,3 +2344,44 @@ No migration this batch (two new entries only; last migration 116, last id s7476
 - Bourbon Cookies: SeedFinder (Exclusive Seeds) + jointcommerce only. no data.
 - Sweaty Yeti: jointcommerce only (Cabin Fever); Yeti OG is a different strain. no data.
 - Pink Louie 13th OG: no listing (only King Louis XIII OG variants, existing s131). no data.
+
+## S219 (sheet rows 4305–4314) — no library changes
+- Foo Fighter: AllBud (Indica-dominant hybrid 60/40, Forum Cut GSC x (Grape Stomper x Aloha White Widow)) + SeedFinder (Gage Green, same cross) agree only on breeder-side parentage; AllBud mirrors breeder text, other fields AllBud-only. Held. no data.
+- Gawd Dawg: AllBud (Hybrid 50/50) + SeedFinder (Gage Green; Forum Cookies x a (Mendocino Purple x Daybreaker) x Daybreaker male) — same breeder-side-only situation; held. no data.
+- Sharon Stone Chem King: not a strain — it is Gage Green's male used as the pollen parent of Gawd Dawg (SeedFinder). No standalone listing. no data.
+- Rhapsody In Blue, Mystic (Gage Green Group), Caregiver, California Dreaming (Gage Green Group; SeedFinder spells it "Carlifornia Dreaming"), Blue Dynamic, Precious Child: SeedFinder (Gage Green Genetics) + jointcommerce/growers-notebook mirrors only; single-source, held. no data.
+- Blue Dynamite OG: no listing; Blue Dynamite (existing s78, Next Generation Seeds) and AllBud Dynamite OG are different names, link unproven. no data.
+
+## S220 (sheet rows 4315–4324) — no library changes
+- Le Montage: AllBud (Indica-dominant hybrid 75/25, Lemon Diesel x Mendo Montage, aka The Montage) + SeedFinder (Gage Green, same cross) agree only on breeder-side parentage; effects/flavor/THC AllBud-only. Parent Mendo Montage is existing s2760. Held. no data.
+- Euphoric, Crimson Crush, Ad Hoc, Raspberry Montage, Impressions: SeedFinder (Gage Green Genetics) + jointcommerce/mirror pages only; single-source, held. (Euphoric not to be confused with Euphoria; Raspberry Montage with plain Raspberry.) no data.
+- Dream Catcher (Gage Green Group): no Gage Green listing found; existing s7488 Dreamcatcher is a different cross (Blueberry x Black Domina), link unproven. no data.
+- Archangel, The Alchemist: SeedFinder (Love Genetics) + jointcommerce only; single-source. no data.
+- Elysian Fields: only a brand/product line (Flow Kana, Elysium Fields) and SeedFinder (Hash Hands / Love Genetics) listings; no consistent strain. no data.
+
+## S221 (sheet rows 4325–4334) — migration 132
+- Cherry Puff #10 → existing s3708 Cherry Puff (phenotype number dropped; base name). AllBud (Indica-dominant hybrid 70/30, Cherry Pie x Joseph OG), Leafly (Hybrid, Gage Green Group, same cross), SeedFinder (Gage Green, same cross). Corrected: type Indica→Hybrid, lean Indica-leaning→blank (AllBud dominant + Leafly plain Hybrid); blanked unsupported THC 18-27% (AllBud 20-27 vs Leafly 16) and made-up terpene percentages (Myrcene/Pinene/Caryophyllene); effects → Uplifted (only agreed effect); flavor → "berry, sweet" (agreed). Breeder/parents kept. Ailments held (no agreement). Status: added.
+- Elegy For JoJo, Dreamtime (Gage Green Group), Communitas, Critical Cookies, We Not Me: SeedFinder (Gage Green / Scapegoat Genetics) + jointcommerce only; single-source, held. no data.
+- Hazy Vixen: no listing (only Vixen, existing s6533, a different strain). no data.
+- Big Blue Bang: no listing (only Big Bang/Big Blue, different names). no data.
+- G.A.W.: no listing under this name. no data.
+- Chemdog Haze: only a retail pre-roll product; no strain listing. no data.
+
+## S222 (sheet rows 4335–4344) — no library changes
+- Crazy Cookies: AllBud (Indica-dominant hybrid 70/30, OG Kush x GSC, 24% THC) + SeedFinder (Zambeza, same cross) agree only on breeder-side parentage; effects/flavor/THC AllBud-only. Held. no data.
+- Gluekies: appears as "Glukies" — AllBud (Sativa-dominant hybrid 60/40, GSC x Gorilla Glue #4) + SeedFinder (Black Farm Genetix, GSC x Gorilla Glue S1) agree only on breeder-side parentage; breeder not on AllBud. Spelling variant of Glukies, not in library; held. no data.
+- Mainline OG: SeedFinder (Scapegoat Genetics) + jointcommerce only; single-source. no data.
+- Purple Skywalker OG: no listing under this name; AllBud "Purple Skywalker" (Sour Skywalker x Skywalker) matches existing s5599 Purple Skywalker, but no source ties the "OG" label to it. no data.
+- Fire OG x In The Pines: unnamed cross of existing strains (Fire OG; In The Pines s97). skip.
+- Shark Wreck, Sweet Grapes, Jack Of All Trades, Juice Factory OG, Banana Parls: no listing under these names (only Shipwreck, Sweet Grape (Deep Ellum), Jack of Spades, Juice/Juicy Fruit, Bananas — different names). no data.
+
+## S223 (sheet rows 4345–4354) — migration 133
+- Sin City Diesel: AllBud (Sativa-dominant hybrid 70/30, Headband Diesel x Sour Jack, 20-25% THC) + Leafly (Hybrid ~50/50, Headband Diesel x Sour Jack, ~20% THC). Parents agree (AllBud + Leafly). New entry s7496: Hybrid, lean blank (AllBud X-dominant + Leafly plain Hybrid), effects Euphoric (only overlap), parents Headband Diesel / Sour Jack. Breeder held (SeedFinder/jointcommerce say Sin City Seeds; not on AllBud/Leafly), THC held (ranges only overlap loosely), flavor held (no overlap).
+- Galactic Jack (existing s637): Leafly (Sativa-dominant hybrid, Jack Herer x Space Queen, 18% THC, flavor grapefruit/honey/citrus, effects Focused/Energetic/Aroused) + SeedFinder TGA/SubCool's The Dank (Jack Herer x Space Queen, 80/20 sativa, citrus/grapefruit, energetic uplifting). Agreed: parents Jack Herer / Space Queen, flavor "citrus, grapefruit", effects Energetic. Blanked unsupported sample values: THC 17–26%, CBD <1%, generic terpenes with made-up percentages, generic flavor sentence, unsupported ailments (Depression/Stress/Pain), effects Focused/Happy/Uplifted (single-source or none). Breeder TGA Seeds kept (Leafly's Heroes of the Farm is a lone outlier). Lean left blank (SeedFinder split is breeder-side only).
+- Galactic Jack (Sin City Seeds), sheet row 4351: a different strain from s637 (SeedFinder: AlienDog V2 x Sour Jack, 70% sativa); SeedFinder + jointcommerce only. no data.
+- QuadJacks (Sin City Seeds): SeedFinder (Chem #4 x Sour Jack, 80% sativa) + jointcommerce only. no data.
+- Versailles OG: SeedFinder (Aficionado; Louis XIII OG x Skywalker OG) only. no data.
+- Alien Dog V2: appears only as a parent in SeedFinder breeder listings (Riot, Sin City Seeds); no strain listing. no data.
+- Happy Nightmare: AllBud only (Indica-dominant 60/40, Happy Kush x White Nightmare, 16-17% THC); no Leafly listing. Held. no data.
+- Pineapple Express X Gorilla Glue #4: unnamed cross of existing strains (s7, s1518). skip.
+- Jack N Cookies, Goji Dream, Candy Lemon OG: no listing under these names (only Jack's Snacks, Goji OG/Goji Dawg, Candied Lemons/Lemon OG Candy — different). no data.
