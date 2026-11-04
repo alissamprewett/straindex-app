@@ -126,15 +126,15 @@
     "type": "Hybrid",
     "lean": "",
     "rarity": "common",
-    "thc": "18–25%",
+    "thc": "",
     "cbd": "",
     "terps": [],
     "effects": [
       "Euphoric",
-      "Energetic",
+      "Uplifted",
       "Creative"
     ],
-    "flavor": "Woodsy and earthy with a peppery bite.",
+    "flavor": "woody",
     "icon": "❄️",
     "breeder": "Green House Seed Co.",
     "aka": "Arnhem's Wonder, White Widow OG, Ingemar White Widow, Ingemar's White Widow",
@@ -144,8 +144,7 @@
     ],
     "ailments": [
       "Pain",
-      "Stress",
-      "Anxiety"
+      "Stress"
     ]
   },
   {
@@ -5679,9 +5678,11 @@
     "lean": "",
     "rarity": "common",
     "thc": "",
-    "cbd": "<1%",
+    "cbd": "",
     "terps": [],
-    "effects": [],
+    "effects": [
+      "Happy"
+    ],
     "flavor": "skunky, pine and sweet",
     "icon": "🧪",
     "ailments": [
@@ -10980,40 +10981,29 @@
   {
     "id": "s317",
     "name": "Death Bubba",
-    "type": "Indica",
-    "lean": "",
+    "type": "Hybrid",
+    "lean": "Indica-dominant",
     "rarity": "legendary",
-    "thc": "12–18%",
-    "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Linalool",
-        "p": 0.4
-      },
-      {
-        "n": "Myrcene",
-        "p": 0.27
-      },
-      {
-        "n": "Terpinolene",
-        "p": 0.16
-      }
-    ],
+    "thc": "",
+    "cbd": "",
+    "terps": [],
     "effects": [
       "Relaxed",
       "Sleepy",
-      "Happy",
-      "Euphoric"
+      "Hungry"
     ],
-    "flavor": "Sweet and earthy on the palate with a linalool-leaning finish.",
+    "flavor": "",
     "icon": "🍬",
     "ailments": [
-      "Insomnia",
       "Pain",
-      "Stress",
-      "Lack of Appetite",
-      "Depression"
-    ]
+      "Insomnia",
+      "Stress"
+    ],
+    "parents": [
+      "Death Star",
+      "Bubba Kush"
+    ],
+    "aka": "Dead Bubba"
   },
   {
     "id": "s318",
@@ -13220,20 +13210,23 @@
   {
     "id": "s380",
     "name": "XXX OG",
-    "type": "Indica",
-    "lean": "",
+    "type": "Hybrid",
+    "lean": "Indica-dominant",
     "rarity": "common",
-    "thc": "12–21%",
-    "cbd": "<1%",
+    "thc": "",
+    "cbd": "",
     "terps": [],
     "effects": [
       "Sleepy",
       "Relaxed",
       "Euphoric"
     ],
-    "flavor": "pine and woody with lemon notes",
+    "flavor": "pine, woody",
     "icon": "🌰",
-    "ailments": [],
+    "ailments": [
+      "Stress",
+      "Pain"
+    ],
     "parents": [
       "OG Kush",
       "XXX"
@@ -14486,39 +14479,24 @@
   {
     "id": "s418",
     "name": "Romulan",
-    "type": "Hybrid",
-    "lean": "Indica-leaning",
+    "type": "Indica",
+    "lean": "",
     "rarity": "common",
-    "thc": "18–24%",
+    "thc": "",
     "cbd": "",
-    "terps": [
-      {
-        "n": "Myrcene",
-        "p": 0.4
-      },
-      {
-        "n": "Linalool",
-        "p": 0.27
-      },
-      {
-        "n": "Humulene",
-        "p": 0.16
-      }
-    ],
+    "terps": [],
     "effects": [
       "Relaxed",
       "Sleepy",
-      "Euphoric",
-      "Happy"
+      "Hungry"
     ],
-    "flavor": "Earthy and sweet on the palate with a myrcene-leaning finish.",
+    "flavor": "pine, woody",
     "icon": "🌰",
-    "breeder": "Federation Seed Company",
+    "breeder": "",
     "ailments": [
       "Stress",
       "Pain",
-      "Insomnia",
-      "Muscle Spasms"
+      "Insomnia"
     ],
     "parents": [
       "North American Indica",
@@ -32377,8 +32355,8 @@
   {
     "id": "s917",
     "name": "Grandpa's Breath",
-    "type": "Indica",
-    "lean": "Indica-leaning",
+    "type": "Hybrid",
+    "lean": "Indica-dominant",
     "rarity": "uncommon",
     "thc": "",
     "cbd": "",
@@ -32388,16 +32366,16 @@
       "Relaxed",
       "Euphoric"
     ],
-    "flavor": "Earthy and diesel with lavender and grape.",
+    "flavor": "diesel",
     "icon": "🌰",
     "ailments": [
-      "Insomnia",
+      "Anxiety",
       "Stress"
     ],
     "breeder": "Dungeons Vault Genetics",
     "parents": [
-      "OG Kush Breath",
-      "Tahoe OG x Granddaddy Purple"
+      "OG Kush",
+      "Granddaddy Purple"
     ]
   },
   {
@@ -36471,32 +36449,30 @@
     "id": "s1047",
     "name": "Blue Goo",
     "type": "Hybrid",
-    "lean": "",
+    "lean": "Sativa-dominant",
     "rarity": "common",
-    "thc": "15–23%",
-    "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Limonene",
-        "p": 0.4
-      },
-      {
-        "n": "Humulene",
-        "p": 0.27
-      },
-      {
-        "n": "Linalool",
-        "p": 0.16
-      }
-    ],
+    "thc": "",
+    "cbd": "",
+    "terps": [],
     "effects": [
-      "Giggly",
-      "Social",
-      "Energetic"
+      "Happy",
+      "Creative",
+      "Euphoric",
+      "Relaxed"
     ],
-    "flavor": "Limonene-forward with a humulene undertone.",
+    "flavor": "berry, blueberry, tea",
     "icon": "🌿",
-    "breeder": "Bluegrass Seeds"
+    "breeder": "",
+    "parents": [
+      "Blue Dream",
+      "Afgoo"
+    ],
+    "ailments": [
+      "Stress",
+      "Anxiety",
+      "Depression"
+    ],
+    "aka": "Bloo Goo, Bgo"
   },
   {
     "id": "s1048",
@@ -38320,30 +38296,21 @@
     "type": "Hybrid",
     "lean": "",
     "rarity": "common",
-    "thc": "17–24%",
-    "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Terpinolene",
-        "p": 0.4
-      },
-      {
-        "n": "Myrcene",
-        "p": 0.27
-      },
-      {
-        "n": "Linalool",
-        "p": 0.16
-      }
-    ],
+    "thc": "",
+    "cbd": "",
+    "terps": [],
     "effects": [
-      "Talkative",
       "Euphoric",
-      "Creative"
+      "Happy",
+      "Uplifted"
     ],
-    "flavor": "Terpinolene-forward with a myrcene undertone.",
+    "flavor": "",
     "icon": "🌿",
-    "breeder": "Nirvana"
+    "breeder": "Nirvana",
+    "ailments": [
+      "Depression",
+      "Pain"
+    ]
   },
   {
     "id": "s1118",
@@ -38940,24 +38907,11 @@
     "id": "s1141",
     "name": "Lemon Diesel",
     "type": "Hybrid",
-    "lean": "Indica-dominant",
+    "lean": "",
     "rarity": "rare",
-    "thc": "15–20%",
+    "thc": "",
     "cbd": "",
-    "terps": [
-      {
-        "n": "Myrcene",
-        "p": 0.4
-      },
-      {
-        "n": "Caryophyllene",
-        "p": 0.27
-      },
-      {
-        "n": "Pinene",
-        "p": 0.16
-      }
-    ],
+    "terps": [],
     "effects": [
       "Euphoric",
       "Focused",
@@ -41083,28 +41037,15 @@
     "type": "Hybrid",
     "lean": "",
     "rarity": "uncommon",
-    "thc": "16–22%",
-    "cbd": "<1%",
-    "terps": [
-      {
-        "n": "Humulene",
-        "p": 0.4
-      },
-      {
-        "n": "Linalool",
-        "p": 0.27
-      },
-      {
-        "n": "Caryophyllene",
-        "p": 0.16
-      }
-    ],
+    "thc": "",
+    "cbd": "",
+    "terps": [],
     "effects": [
       "Euphoric",
       "Clear-headed",
       "Uplifted"
     ],
-    "flavor": "Humulene-forward with a linalool undertone.",
+    "flavor": "",
     "icon": "🌿",
     "breeder": "",
     "parents": [
@@ -49958,29 +49899,16 @@
     "id": "s1519",
     "name": "Cherry Pie",
     "type": "Hybrid",
-    "lean": "Indica-leaning",
+    "lean": "",
     "rarity": "uncommon",
-    "thc": "16–24%",
+    "thc": "",
     "cbd": "",
-    "terps": [
-      {
-        "n": "Caryophyllene",
-        "p": 0.3
-      },
-      {
-        "n": "Limonene",
-        "p": 0.25
-      },
-      {
-        "n": "Myrcene",
-        "p": 0.2
-      }
-    ],
+    "terps": [],
     "effects": [
       "Relaxed",
       "Euphoric"
     ],
-    "flavor": "Sweet cherry with an earthy, slightly sour exhale.",
+    "flavor": "cherry, berry, sweet",
     "icon": "🍒",
     "breeder": "",
     "parents": [
@@ -49989,8 +49917,7 @@
     ],
     "ailments": [
       "Stress",
-      "Anxiety",
-      "Pain"
+      "Anxiety"
     ]
   },
   {
@@ -61500,34 +61427,28 @@
   {
     "name": "Purple Alien OG",
     "type": "Hybrid",
-    "lean": "Indica-leaning",
+    "lean": "",
     "rarity": "uncommon",
-    "thc": "12-14%",
+    "thc": "",
     "cbd": "",
-    "terps": [
-      {
-        "n": "Myrcene",
-        "p": 0.3
-      },
-      {
-        "n": "Limonene",
-        "p": 0.2
-      }
-    ],
+    "terps": [],
     "effects": [
       "Relaxed",
-      "Happy",
-      "Euphoric",
-      "Focused"
+      "Sleepy",
+      "Euphoric"
     ],
-    "flavor": "Earthy pine and citrus with sweet grape.",
+    "flavor": "grape, pine",
     "icon": "🌿",
     "parents": [
       "Alien Kush",
       "Tahoe OG"
     ],
     "aka": "Purple Alien, Alien Purple OG",
-    "id": "s2029"
+    "id": "s2029",
+    "ailments": [
+      "Pain",
+      "Insomnia"
+    ]
   },
   {
     "name": "Tire Fire",
@@ -70343,22 +70264,25 @@
     "type": "Hybrid",
     "lean": "",
     "rarity": "uncommon",
-    "thc": "18-25%",
-    "cbd": "<1%",
+    "thc": "",
+    "cbd": "",
     "terps": [],
     "effects": [
-      "Relaxed",
-      "Focused",
-      "Social"
+      "Happy"
     ],
-    "flavor": "Sour and fruity with earthy floral notes and fresh berries.",
+    "flavor": "berry",
     "icon": "🌿",
     "parents": [
       "Blackberry Kush",
       "Cherry Pie"
     ],
     "id": "s2324",
-    "breeder": "Green Mountain Collective"
+    "breeder": "Green Mountain Collective",
+    "ailments": [
+      "Stress",
+      "Pain",
+      "Depression"
+    ]
   },
   {
     "name": "Wookie",
@@ -78417,23 +78341,27 @@
   },
   {
     "name": "Jack Berry",
-    "type": "Indica",
-    "lean": "Indica-leaning",
+    "type": "Hybrid",
+    "lean": "",
     "rarity": "uncommon",
     "thc": "",
     "cbd": "",
     "terps": [],
     "effects": [
-      "Happy"
+      "Creative",
+      "Uplifted"
     ],
-    "flavor": "Mouthwatering blueberry berry flavor into each toke, with a light and flowery woody exhale.",
+    "flavor": "blueberry, berry, sweet",
     "icon": "🫐",
     "aka": "Jackberry",
     "parents": [
       "Blueberry",
       "Jack Herer"
     ],
-    "id": "s2698"
+    "id": "s2698",
+    "ailments": [
+      "Depression"
+    ]
   },
   {
     "name": "Jack Rabbit (Moonbow x Dolato)",
@@ -79535,26 +79463,28 @@
   },
   {
     "name": "Mango Skunk",
-    "type": "Indica",
-    "lean": "Indica-leaning",
+    "type": "Hybrid",
+    "lean": "",
     "rarity": "uncommon",
-    "thc": "15-19%",
+    "thc": "",
     "cbd": "",
     "terps": [],
     "effects": [
-      "Uplifted",
-      "Happy",
-      "Euphoric"
+      "Creative"
     ],
-    "flavor": "Sweet and fruity tropical mango flavor accented by touches of savory skunk and flowery earth.",
+    "flavor": "",
     "icon": "🥭",
-    "aka": "Skunk-Mango",
+    "aka": "Skunk-Mango, Skunk Mango",
     "breeder": "Nirvana",
     "parents": [
       "Mango",
       "Venus Flytrap (Skunk Special x Jock Horror)"
     ],
-    "id": "s2751"
+    "id": "s2751",
+    "ailments": [
+      "Depression",
+      "Insomnia"
+    ]
   },
   {
     "name": "Maraschino Cherry",
@@ -88943,23 +88873,14 @@
   },
   {
     "name": "Banana Mints",
-    "type": "Indica",
-    "lean": "Indica-leaning",
+    "type": "Hybrid",
+    "lean": "",
     "rarity": "uncommon",
-    "thc": "up to 30%",
+    "thc": "",
     "cbd": "",
-    "terps": [
-      {
-        "n": "Myrcene",
-        "p": 0.3
-      }
-    ],
-    "effects": [
-      "Happy",
-      "Creative",
-      "Relaxed"
-    ],
-    "flavor": "Ripe bananas with earth, gas, and vanilla.",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
     "icon": "🌿",
     "breeder": "Alchemy Genetics",
     "parents": [
@@ -173057,20 +172978,11 @@
     "type": "Hybrid",
     "lean": "Balanced",
     "rarity": "uncommon",
-    "thc": "19-26%",
-    "cbd": "0-2%",
-    "terps": [
-      {
-        "n": "Myrcene",
-        "p": 0.2
-      }
-    ],
-    "effects": [
-      "Uplifted",
-      "Happy",
-      "Energetic"
-    ],
-    "flavor": "Sweet fruity grape with spicy black licorice and earthy flowers.",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
     "icon": "leaf",
     "breeder": null,
     "parents": [
@@ -183620,7 +183532,7 @@
     "type": "Hybrid",
     "lean": "Sativa-dominant",
     "rarity": "rare",
-    "thc": "20–21%",
+    "thc": "",
     "cbd": "",
     "terps": [],
     "effects": [
@@ -183628,7 +183540,7 @@
     ],
     "flavor": "sweet and nutty",
     "icon": "🌿",
-    "breeder": "",
+    "breeder": "Grand Daddy Purp",
     "parents": [
       "Cherry Pie",
       "Granddaddy Purple"
@@ -187448,7 +187360,10 @@
     "thc": "",
     "cbd": "",
     "terps": [],
-    "effects": [],
+    "effects": [
+      "Calm",
+      "Uplifted"
+    ],
     "flavor": "citrus and berry",
     "icon": "🌿",
     "breeder": "",
@@ -187457,7 +187372,10 @@
       "Gelato"
     ],
     "aka": "",
-    "ailments": []
+    "ailments": [
+      "Stress",
+      "Anxiety"
+    ]
   },
   {
     "id": "s7386",
@@ -190289,7 +190207,7 @@
     "icon": "🌿",
     "breeder": null,
     "parents": [],
-    "aka": "Palpatine OG, Palpatine Kush",
+    "aka": "Palpatine OG, Palpatine Kush, OG Palpatine",
     "ailments": []
   },
   {
@@ -190662,5 +190580,266 @@
     "parents": [],
     "aka": "JerryBerry",
     "ailments": []
+  },
+  {
+    "id": "s7523",
+    "name": "Blueberry Malawi",
+    "type": "Hybrid",
+    "lean": "Indica-dominant",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "Equilibrium Genetics",
+    "parents": [
+      "Blueberry",
+      "Malawi"
+    ],
+    "aka": null,
+    "ailments": []
+  },
+  {
+    "id": "s7524",
+    "name": "Bubba Fresh",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted"
+    ],
+    "flavor": "fruity",
+    "icon": "🌿",
+    "breeder": "NorStar Genetics",
+    "parents": [
+      "Banana OG",
+      "Pre-98 Bubba Kush"
+    ],
+    "aka": null,
+    "ailments": [
+      "Depression"
+    ]
+  },
+  {
+    "id": "s7525",
+    "name": "Moon Pie",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted"
+    ],
+    "flavor": "berry, sweet",
+    "icon": "🌿",
+    "breeder": null,
+    "parents": [],
+    "aka": null,
+    "ailments": [
+      "Depression"
+    ]
+  },
+  {
+    "id": "s7526",
+    "name": "Omega",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [],
+    "flavor": "menthol",
+    "icon": "🌿",
+    "breeder": null,
+    "parents": [
+      "White Widow",
+      "Afghani",
+      "NYC Diesel",
+      "Permafrost"
+    ],
+    "aka": null,
+    "ailments": [
+      "Depression",
+      "Stress",
+      "Pain"
+    ]
+  },
+  {
+    "id": "s7527",
+    "name": "Stargazer",
+    "type": "Hybrid",
+    "lean": "Indica-dominant",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted"
+    ],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": "Delta 9 Labs",
+    "parents": [
+      "AK-47",
+      "Sensi Star",
+      "Warlock"
+    ],
+    "aka": null,
+    "ailments": [
+      "Stress",
+      "Depression"
+    ]
+  },
+  {
+    "id": "s7528",
+    "name": "Montana Silvertip",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy"
+    ],
+    "flavor": "pine",
+    "icon": "🌿",
+    "breeder": null,
+    "parents": [
+      "Granddaddy Purple",
+      "Super Silver Haze"
+    ],
+    "aka": "Silvertip, Silver Tip",
+    "ailments": [
+      "Stress",
+      "Pain",
+      "Depression"
+    ]
+  },
+  {
+    "id": "s7529",
+    "name": "Moonwalker Kush",
+    "type": "Hybrid",
+    "lean": "Indica-dominant",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Euphoric"
+    ],
+    "flavor": "",
+    "icon": "🌿",
+    "breeder": null,
+    "parents": [
+      "Triple OG",
+      "Tahoe Alien"
+    ],
+    "aka": "Moonwalker, Moonwalker OG, Moon Walker OG, Mnk",
+    "ailments": []
+  },
+  {
+    "id": "s7530",
+    "name": "Banana Animal Mints",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Creative",
+      "Happy"
+    ],
+    "flavor": "banana, mint",
+    "icon": "🌿",
+    "breeder": null,
+    "parents": [
+      "Animal Mints",
+      "Banana Cream Cake"
+    ],
+    "aka": "BAM",
+    "ailments": []
+  },
+  {
+    "id": "s7531",
+    "name": "Aurora Haze",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Focused"
+    ],
+    "flavor": "lemon, lime",
+    "icon": "🌿",
+    "breeder": null,
+    "parents": [],
+    "aka": null,
+    "ailments": [
+      "Depression",
+      "Inflammation"
+    ]
+  },
+  {
+    "id": "s7532",
+    "name": "Champagne Diesel",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Uplifted"
+    ],
+    "flavor": "sweet",
+    "icon": "🌿",
+    "breeder": null,
+    "parents": [
+      "Sour Diesel",
+      "Champagne Kush"
+    ],
+    "aka": null,
+    "ailments": [
+      "Stress",
+      "Anxiety",
+      "Inflammation"
+    ]
+  },
+  {
+    "id": "s7533",
+    "name": "Alion",
+    "type": "Hybrid",
+    "lean": "",
+    "rarity": "uncommon",
+    "thc": "",
+    "cbd": "",
+    "terps": [],
+    "effects": [
+      "Happy",
+      "Uplifted"
+    ],
+    "flavor": "blueberry, sweet",
+    "icon": "🌿",
+    "breeder": null,
+    "parents": [
+      "Blue Dream",
+      "Alien Kush"
+    ],
+    "aka": null,
+    "ailments": [
+      "Depression"
+    ]
   }
 ]
