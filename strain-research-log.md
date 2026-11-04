@@ -2830,3 +2830,16 @@ Each checked against Leafly + AllBud (Cherry Pie: Leafly + Strainpedia, no AllBu
 - Raw Glue, Raw Cookies: AllBud/SeedFinder Raw Genetics (breeder-side) only; no Leafly. Held. no data.
 - Grandpas Breath F2: F2 seed version of Grandpa's Breath (s917); not independently listed. no data. Existing s917 checked (AllBud + Leafly): Hybrid, Indica-dominant (Leafly Indica + AllBud Indica-dominant hybrid); parents corrected to OG Kush x Granddaddy Purple (both sources; stored "OG Kush Breath"/"Tahoe OG x GDP" unsupported); flavor "diesel", ailments Anxiety/Stress. Effects confirmed. Migration 162.
 - Alion: added s7533 (AllBud + Leafly): Hybrid, lean blank (AllBud 50/50); Blue Dream x Alien Kush; effects Happy/Uplifted, flavor "blueberry, sweet", ailments Depression. THC blank (19–23 vs 14). Breeder (Pacific NW Roots) held.
+
+## S285 (rows 4925–4934)
+- Madhatter s5047 corrected (AllBud + Leafly): Hybrid (AllBud Indica-dominant + Leafly plain Hybrid, lean blank); effects Giggly/Uplifted (shared); flavor "diesel" (shared); THC 21-24% blanked (AllBud only). Breeder Alphakronik Genes and parents 707 Headband x Gobstopper confirmed (Leafly + SeedFinder; AllBud + Leafly). Migration 163.
+- Queen of Hearts s5617 (Alphakronik): Leafly says Hybrid, Chemdog D x Gobbstopper, effects Energetic/Creative/Uplifted, flavors orange/pine/earthy. AllBud's "Queen of Hearts" is a different strain (Killer Queen x Deadhead OG). Stored Indica/Indica-leaning and flavor sentence are unsupported but no second source for the Alphakronik strain; held, unchanged.
+- Alice: Leafly.ca Alice = Alphakronik (Snowdawg x Gobbstopper); AllBud "Alice" = Queen Mother x Congo (an Alice in Wonderland-type listing). Conflicting; held.
+- The Bern / Warhammer: AllBud only (Bern = Warhammer x Gobstopper; Warhammer = Warlock x Super Skunk); no Leafly; held. Dream Cookie s6960 / Dream Cookie Glue F2 / Dream Cookie F2: SeedFinder (Mad Scientist Genetics) and AllBud (different parents) only; held.
+- Ice Cream Cake F2: seed version not independently listed (base s1524 exists). Orange Euphoria, Stupor Glue: no listing.
+
+## S286 (rows 4935–4944)
+- Tesla s6124 (Alphakronik) corrected (AllBud + Leafly): Hybrid (AllBud Sativa-dominant + Leafly Hybrid, lean blank); parents Harle-Tsu x Gobstopper, breeder Alphakronik, THC 1-3% confirmed; effects Uplifted/Focused; flavor grape/strawberry/pepper; ailments Stress/Depression added; CBD 11-18% blanked (AllBud only, Leafly gives no figure). Migration 164. Tesla Tower s788 is a different strain, untouched.
+- White Rabbit: AllBud = Pre-98 Bubba Kush x Gobbstopper (no breeder); Leafly = Raro Genetics (no parents); SeedFinder lists Hi-Elevation, Botafarm and Raro versions. Identity unproven; held.
+- Mojo s6485: AllBud = Agent Orange x (Purple Tahoe Alien x Starfighter F2); Leafly's Mojo gives no parents and describes different flavors, identity unproven; existing entry held unchanged. "(Revolutionary)" is a label.
+- Mango Candy Kush, Lavoo (Aficionado SeedFinder only), Creeper (Aficionado SeedFinder/JointCommerce), 303 Stooges (Dark Horse SeedFinder/JointCommerce), Clown Shoes OG (same), Albino Leprechaun (JointCommerce), Blue Chem #4 (SeedFinder Cabin Fever only): no independent listings; held.
