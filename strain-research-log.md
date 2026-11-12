@@ -3147,3 +3147,98 @@ Names logged as self-added (brand noted by the member in parentheses): Mango She
 - Purple Voodoo Monster → no data (Purple Voodoo is a different listing; no "Monster" listing).
 - Bubble Chung (AllBud Connie Chung × Sour Bubble, Indica 90%, aka Buchu; SeedFinder/JointCommerce Lala Seeds breeder-side) → held. Casey Quantum (AllBud only: Casey Jones × Quantum Kush; both parents exist in library) → held.
 - Sour Bubble DMT (Sour Bubble s563 exists), Tahoe Blue Kush (SeedFinder Master Thai only), Ambrosia Papaya, Skunk Afgoo (no listing), Santa Cruz Blue (Weedmaps brand product of a Blue Dream cut) → no data. Chem 91 x Lemon Skunk → skip (unnamed cross).
+
+## S330 (sheet rows 5345–5354)
+- Supermax OG → added s7571 (Leafly + AllBud): parent OG Kush (both; AllBud also lists Superman OG, Leafly doesn't, so not written), Hybrid / Indica-dominant (Leafly indica-side effects + AllBud 70% indica), Euphoric/Relaxed, "pine", Pain/Stress/Insomnia. THC blank (25% vs 23%). Aliases differ between sources (Leafly: Supermax OG Kush/Supermax Kush/Smx; AllBud: Super Max/Super Max OG), not written; AllBud has a duplicate "Super Max OG" page with the same data.
+- Pilot Talk OG, Tango (Tango Kush and Mango Tango s2000 are different), Mango Chem → no listing. Rainbow Jack → only a Leafly brand product (COTC Gardens) → no data.
+- Sour Diesel x OG, PB&J x Blueberry Yum Yum, StarDawg OG x Tahoe OG, Tangie x GSC, Purple Kush x Banana Kush → skip (unnamed crosses).
+- No migration this batch.
+
+## S331 (sheet rows 5355–5364)
+- No library changes. Cherry Gasm → held: AllBud Cherrygasm (Cherry Pie OG × Space Queen, Sativa 70%) + SeedFinder (Subcool's The Dank, same parentage) are breeder-side only; Leafly has only a TGA Subcool seed product page.
+- Louis Vuitton OG (AllBud "Louie Vuitton", OG Kush phenotype, 50/50, single source), Wizard of OZ (AllBud only: Witches Brew × Original Zombie Kush #1, CBD-heavy), Spacedude (AllBud only, Space Queen phenotype, page internally inconsistent) → single-source, held.
+- Alien Train Wreck, Gelato #46, Gelato #48 (library has Gelato 41/47 as numbered aliases; no independent listings for 46/48), Chocolate Banana Kush (Chocolate Banana s6613 exists), Deep Diesel, Tangerine Birthday Cookies (Tangerine Cookies is different) → no listing / no data.
+- No migration, no strains.json change (library 7,462).
+
+## S332 (sheet rows 5365–5374)
+- SpaceGlue → added s7572 "Space Glue" (aka SpaceGlue) (Leafly + AllBud, Weedmaps description agrees): Gorilla Glue #4 × Space Queen (Weedmaps' parent field lists Greasy Runtz/Falcon 9, ignored as conflicting with its own description); Hybrid, Balanced (both 50/50); Happy/Uplifted; Anxiety/Depression/Stress. Flavor blank (no agreement), THC blank (22.5% vs 22–23%), no breeder (Leafly "unknown").
+- Lost In Space (SeedFinder Reacher Genetics / Unknown or Legendary + JointCommerce only), SpaceAged OG F2, Spaceaged OG cut (no listing; SpaceAged Genetics cuts), Muttniks Montage (Mendo Montage/Le Montage are different), Loud Passenger, Amtrac, Hear Me Now, Breathless OG, Sour Dutch → no listing / no data.
+- No migration.
+
+## S333 (sheet rows 5375–5384)
+- Washington Apple → added s7573 (Leafly + AllBud): Pez × Ortega, Indica; Euphoric/Sleepy; Anxiety/Depression/Stress. Lean, flavor, THC blank (no agreement). Breeder blank: RedEyed Genetics only from SeedFinder + a dispensary blog ("believed").
+- Lake of Fire s7433 → flavor corrected to "diesel, pine" (Leafly + AllBud agree; chocolate came from breeder text/AllBud only). Migration 189. Parents GG4 × Kobain Kush confirmed by Leafly + AllBud; effects Euphoric/Happy confirmed.
+- Outlaw Orange s7185 → unchanged. AllBud: California Orange × Mt. Rainier (70/30 sativa); SeedFinder (RedEyed): AE77 Cali-O × Mt. Rainier; breeder-side only, first parent differs → held.
+- Medicated OG (AllBud + SeedFinder: Harlequin × Double Barrel OG, breeder-side only), Shishkabarrel OG, Purple Rhodi, Lithium OG, L.O.B. OG, Nirvana (RedEyed) → SeedFinder/JointCommerce only (AllBud "Lithium OG Kush", Leafly "Nirvana", "Blob OG" are different/unconfirmed) → no data.
+- Northern Lights #5 BX1 → version of Northern Lights #5 s60; not independently listed → no data.
+
+## S334 (sheet rows 5385–5394)
+- Huckleberry Hound → added s7574 (Leafly + AllBud): Blueberry × Chemdawg (Leafly "alleged roots"); Hybrid; Euphoric; flavor blueberry, berry; Pain/Lack of Appetite/Migraines (headaches). Lean blank (Leafly none), THC blank (16% vs 12–19%), no breeder listed.
+- Galadriel, Kourtney Luv, Elite Treat (SeedFinder RedEyed + JointCommerce only), Grapist F2 (F2 of The Grapist; AllBud "Grapist" breeder unconfirmed), Purple Berry BX (BX of Purple Berry s140; SeedFinder CannaVenture + JointCommerce only), Caveman OG (AllBud "Caveman Kush" only), Blue Foo Dog, Reptilian Elite, Comatose Pineapple Kush (Comatose OG s2116 is different/unproven) → no data.
+- No migration.
+
+## S335 (sheet rows 5395–5404)
+- Ebola #7 (THCbola) → added s7575 (Leafly + AllBud): SFV OG × Girl Scout Cookies; Hybrid (AllBud 75/25 indica only → lean blank); Creative; flavor diesel, pine; Pain/Depression; alias THCbola. THC blank (30% vs 24–28%); breeder HendRx Farms Leafly-only → held.
+- Heatseeker → added s7576 (Leafly + AllBud): Chem De La Chem × Spiked Mai Tai; Hybrid; Focused/Uplifted. Lean/flavor/ailments/THC blank (no agreement).
+- OZ Kush s7186 (Leafly + AllBud, parents OG Eddy Lepp × Zkittlez confirmed) → corrected: thc "15–24%" → blank (24% vs 15–21%), effects → Relaxed, flavor → "woody", ailments → Pain (migration 190). Breeder Dying Breed Seeds (SeedFinder) vs Leafly 3rd Gen Family Farms/Terp Hogz — unresolved, left. Row "O.Z. Kush" itself not proven the same strain (Bulldog Seeds also sells "O.Z. Kush"), so no alias added.
+- Beast Mode OG (Leafly only; AllBud "Beast Mode" is a different page), Sour Skywalker OG (AllBud only), Forum Prince, Prince Maharaj, Coconut Kush → no data.
+- Run The Jewels (brand collab strain "Ooh La La"), Sour Diesel x NYC Diesel (unnamed cross of existing strains) → skip.
+
+## S336 (sheet rows 5405–5414)
+- Chewbacca → added s7577 (Leafly + AllBud "Chewbacca OG"): The Force × unknown (only The Force written); Hybrid, Indica-dominant (70/30 on both); THC 20% (both); alias Chewbacca OG; Pain/Stress. Effects and flavor blank (no overlap); breeder unknown on both.
+- Brainfreeze → no data: Leafly "Brain Freeze" (RS11 × Terpy Slurpy per a reviewer) and AllBud "Brain Freeze" (LUI × C99) look like different strains.
+- Afghan Mango (AllBud only), Hyper Blue (AllBud "Private Reserve Hyper Blue" only, unproven same), Pre 98 Cookies, Baylien, Blue Chip Cookies, Cherry Darling, Lone Starr (no listing found) → no data.
+- Blue Dream x Romulan → skip (unnamed cross of existing strains).
+- No migration.
+
+## S337 (sheet rows 5415–5424)
+- No library changes.
+- Mango Punch (AllBud only: Mango × unidentified hybrid, 70/30 indica), Diamond Cutter OG (AllBud "Diamond Cutter" only, sativa-dominant, no parents; no alias to "OG" listed), Tyrone Special (SeedFinder Mephisto Genetics only; page parentage inconsistent: Greencrack Auto × Sour Crack vs Sour Crack × (Green Crack × Ruderalis); parent of s6864 Tyrone Stomper but no second listing), Sweet Collision (SeedFinder Jaws Gear + JointCommerce only), A3 (SeedFinder Unknown or Legendary only), Fruit Kush, Juicy 99, Vanilla Diesel → no data.
+- Cherry AK x Tangie (unnamed cross of Cherry AK-47 s1072 and Tangie s88), OG / Mr. Nice (combined label) → skip.
+
+## S338 (sheet rows 5425–5434)
+- Bubba OG s164 (row "OG Bubba"; Leafly + AllBud) → corrected via migration 191: thc "17–22%" → blank (17% vs 22–25%), cbd "<1%" → blank, invented terpenes removed, effects → Relaxed/Sleepy/Hungry, flavor → "earthy, sweet", ailments → Stress/Pain, unsourced breeder Dr. Greenthumb Seeds removed (only JointCommerce). Parents not written (Leafly Ghost OG × Pre-98 Bubba Kush vs AllBud "unclear"). Alias "OG Bubba" is Leafly-only, not added. Type left Hybrid (Leafly Indica vs AllBud indica-dominant).
+- Clockwork Orange s3780 (Leafly + AllBud, Riot Seeds per Leafly + SeedFinder) → parents G13 × Black Widow and breeder confirmed; corrected thc "17-22%" → blank (AllBud 13–21), effects → Uplifted, flavor sentence removed; ailments Depression/Migraines added.
+- Chemdogging s6926 → lean "Sativa-leaning" blanked (AllBud 40/40/20 ruderalis; no second source). Sour Hound s7297 → existing; AllBud confirms parents Sour Crack × Chemdogging (AllBud only, nothing else to add).
+- Sugar Magnolia (SeedFinder KingJay/Mother Chucker's only), Sour Bubbly (Mephisto; AllBud/Leafly "Sour Bubble" is different), Hubbabubbasmelloscope (AllBud Bubble Gum × White Widow + SeedFinder, breeder-side only), Smart Alex (SeedFinder Riot only), ShishKaCrack F1 (version), Shish99 (AllBud Shiskaberry × Cinderella 99 + SeedFinder, breeder-side only) → no data.
+
+## S339 (sheet rows 5435–5444)
+- No library changes; no migration.
+- Purple Fuck V2 / V1 (SeedFinder Riot Seeds "Purple Fuck V2"/"Purple Fucker" only; version rows), Purple Bubba Crack (SeedFinder Riot only; AllBud/Leafly "Purple Bubba" is different, s353), Platinum Banana Crack (SeedFinder Riot only; AllBud "Banana Crack"/"Platinum Banana OG" different), Mack Da Knife OGK (SeedFinder Bean Boyz + JointCommerce only; AllBud "OGK" different), Lemon Malawi Wreck F1 (SeedFinder GreenMan Organic Seeds only; version row), Mr. Burns (JointCommerce Mother Chucker's only), Lemon Mango OG / Mango Lemon OG (JointCommerce Unknown or Legendary only; AllBud/Leafly "Lemon OG"/"Mango OG" differ), Longboard (no listing) → no data.
+
+## S340 (sheet rows 5445–5454)
+- No library changes; no migration.
+- Cherry Malawi (SeedFinder Kingdom Organic Seeds only; AllBud "Cherry Chunky Malawi" is a different name, unproven), Killer Crack (SeedFinder/JointCommerce Riot Seeds only), Hot Box (JointCommerce Mother Chucker's only), Deep Wreck F1 (JointCommerce GreenMan version row), Dead Dawg Queen (SeedFinder Bean Boyz only), De Grape Trainwreck #5 (SeedFinder/JointCommerce Bean Boyz only), Craze (SeedFinder TreeTown + JointCommerce only), Grape Stompin Crack, Dark Night (Leafly "Dark Knight" is different), Crack Wreck → no data.
+
+## S341 (sheet rows 5455–5464)
+- Skins Skunk → added s7579 (Indica-dominant; Afgoo × Michigan Skunk per AllBud + Leafly; breeder Loud Seeds per Leafly + SeedFinder; effects/flavor/ailments only where both agree; THC range blank).
+- 8 Mile → no data (Loud Seeds listing only SeedFinder + JointCommerce).
+- Michigan Skunk → no data (Skunk #1 × Hindu Kush AllBud only).
+- Elusive OG → no data (only Weedmaps brand product).
+- Hashwrecker → no data (only AllBud "Hash Wreck", name not matching).
+- Purple Cream OG → no data (identity vs Purple Cream unproven); existing s415 Purple Cream cleaned (migration 192): unsupported THC/CBD/terps/flavor blanked, effects → Hungry, ailments → Stress/Anxiety.
+- Strawberry Milkshake (GREENLIFE) → added: s7310 checked vs AllBud + Leafly; lean Balanced → blank (only AllBud), ailments Depression/Stress added.
+- Strawberry Soda → no data (AllBud only; Chem Soda × Double Strawberry Diesel).
+- The Ooze → added s7578 (Indica-dominant; Green Crack × White Fire Alien OG; Creative/Focused; apple; Anxiety).
+- Slimer OG → added: s7288 lean → Indica-dominant, THC range blanked (AllBud only).
+
+## S342 (sheet rows 5465–5474)
+- Cookie Jar → added (existing s6906 checked vs AllBud + Leafly: parents Platinum GSC × (White) Fire Alien OG agree; breeder (SeedFinder only) and flavor blanked; effects Euphoric/Relaxed, ailments Anxiety/Depression/Migraines filled; THC conflict left blank).
+- Strawberry Durban → added as label of s906 Strawberry Durban Diesel (aka added; Sativa-dominant per AllBud + Leafly; breeder Loud Seeds kept per Leafly + SeedFinder; unsupported THC/CBD/terps blanked; effects Creative/Uplifted; flavor strawberry, diesel). Parents held: Leafly adds Original Loud.
+- Loud Lemonade → added s7580 (Lemon Skunk × 7/8 Sour per AllBud + Leafly + SeedFinder; Loud Seeds; Tingly/Uplifted; lemon, citrus; Pain).
+- Blueberry Pakistani, B130, Seraphina, The Ranger, Strawberry Smoothie → no data (nothing found).
+- Banangie → no data (AllBud Banana Kush × Tangie vs SeedFinder Banana OG × Tangie conflict; single listing). s5876 "Sour Banangie (aka Banana Tangie)" has unsupported parents, left, flagged.
+- Velvet Kush (Royal Kush) → skip (combined label; Velvet Cookies s6733 aka Velvet Kush, Royal Kush s1957 are separate).
+
+## S342 flag follow-up (s5876 Sour Banangie)
+- Sources: AllBud lists Banangie (Banana Kush × Tangie, aka Sour Banangie) and Banana Tangie (Banana Kush × Tangie, alias Banangie), both AllBud so not independent; SeedFinder Banana OG × Tangie (breeder-side); Weedmaps parents unknown. Nothing supports "Tangie Banana" or Sour Diesel as parents.
+- Migration 194 blanks s5876 parents, THC, effects, flavor, lean (unsupported). Type (Sativa) left; sources say hybrid.
+
+## S343 (sheet rows 5475–5484)
+- White Bubba → added (existing s6870 checked vs Leafly + AllBud; unsupported THC/CBD/breeder/flavor blanked; effects Relaxed/Euphoric; ailments Pain/Depression/Insomnia/Nausea).
+- Mango Sapphire → added s7581 (Humboldt Seed Organization per Leafly + SeedFinder; Bubba's Gift, OG Kush, Afghan Kush; Indica-dominant; mango, tropical; Relaxed).
+- 707 Truthband → added (existing s2985 Emerald Mountain version checked vs Leafly + AllBud, True OG × True OG; unsupported breeder/THC/CBD/lean blanked, effects Focused, flavor lemon, ailment Depression). s2922 and s2984 (HSO, SeedFinder only) untouched.
+- Shaman OG → no data (SeedFinder Shaman Genetics only). Existing s604 Shaman cleaned vs Leafly + AllBud: Purple #1 × Skunk, Sativa-dominant, Dutch Passion confirmed; THC/CBD/terps blanked; effects Focused; flavor pine; ailments Stress/Anxiety/Depression.
+- Glue Walker, Maui Walker, Blueberry Ape, Cherry Northern Lights → no data (nothing independent found).
+- Tangie x Jack → no data (AllBud "Tangie Jack" only).
+- Lemon Juice Express → no data (AllBud "Lemon Juice" alias, HSO listing only elsewhere).
