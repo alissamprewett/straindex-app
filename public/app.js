@@ -431,6 +431,7 @@ async function likeGrowTip(id, btn) {
         <div class="info">
           <div class="nm">${effectIcon}${escHtml(s.name)} <span title="${escHtml(badge.label)}">${badge.icon}</span></div>
           <div class="sub">${escHtml(s.type)} · ${rarityLabel(s.rarity)} · THC ${escHtml(s.thc)}</div>
+          ${s.aka ? `<div class="sub">aka ${escHtml(String(s.aka).split(',').map(t => t.trim()).filter(Boolean).slice(0, 3).join(', '))}</div>` : ''}
         </div>
         <span class="rarity-tag rarity-${s.rarity}">${rarityLabel(s.rarity)}</span>
       </a>`;
@@ -560,6 +561,10 @@ if ('serviceWorker' in navigator) {
   // Same tag the server renders on every self-added check-in.
   const BADGE = '<span class="unverified-badge" title="Typed in by a member. This strain isn\'t in the StrainDex library yet, so nothing about it has been verified.">⚠ Self-added · Not verified</span>';
   function normName(str) { return String(str || '').toLowerCase().replace(/[^a-z0-9]+/g, ''); }
+  // Looser key (z~s, plurals, -ert/-et), same idea as the server's search.
+  function fuzzyName(str) {
+    return String(str || '').toLowerCase().split(/[^a-z0-9]+/).filter(Boolean).map(w => w.replace(/z/g, 's').replace(/ert$/, 'et').replace(/s+$/, '')).join('');
+  }
 
   function escHtml(str) {
     return String(str ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -611,13 +616,13 @@ if ('serviceWorker' in navigator) {
       // "Garlic Budder" doesn't look like a wrong result.
       const aliasNote = s => {
         const aka = String(s.aka || '').split(',').map(t => t.trim()).filter(Boolean);
-        if (!aka.length || normName(s.name).includes(normName(q))) return '';
-        const hit = aka.find(t => normName(t).includes(normName(q)));
+        if (!aka.length || normName(s.name).includes(normName(q)) || fuzzyName(s.name).includes(fuzzyName(q))) return '';
+        const hit = aka.find(t => normName(t).includes(normName(q)) || fuzzyName(t).includes(fuzzyName(q)));
         return hit ? ` <span class="empty-note" style="padding:0;">(also known as ${escHtml(hit)})</span>` : '';
       };
       // Offer the free-text option unless what they typed is already an
       // exact library name (then there's nothing to add).
-      const exactMatch = data.results.some(s => normName(s.name) === normName(q));
+      const exactMatch = data.results.some(s => normName(s.name) === normName(q) || fuzzyName(s.name) === fuzzyName(q) || String(s.aka || '').split(',').some(t => fuzzyName(t) === fuzzyName(q)));
       const customRow = (!exactMatch && q.length >= 2)
         ? `<div class="search-result-row custom-strain-row" data-custom="1">＋ Not in the library? Log “${escHtml(q)}” as a self-added strain ${BADGE}</div>`
         : '';

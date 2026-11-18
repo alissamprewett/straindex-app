@@ -1291,6 +1291,7 @@ function pageStrains(req, res, query) {
         <div class="info">
           <div class="nm">${esc(s.name)} <span title="${esc(VERIFICATION_BADGE[strainVerificationTier(s)].label)}">${VERIFICATION_BADGE[strainVerificationTier(s)].icon}</span> ${renderAwardBadges(s, { compact: true })}</div>
           <div class="sub">${esc(s.type)} · ${rarityLabel(s.rarity)} · THC ${esc(s.thc)}</div>
+          ${s.aka ? `<div class="sub">aka ${esc(String(s.aka).split(',').map(t => t.trim()).filter(Boolean).slice(0, 3).join(', '))}</div>` : ''}
         </div>
         <span class="rarity-tag rarity-${s.rarity}">${rarityLabel(s.rarity)}</span>
       </a>`).join('') || `<div class="empty-note">No strains match your filters. <a href="/strains/suggest${q ? `?name=${encodeURIComponent(q)}` : ''}">Can't find it? Suggest it →</a></div>`}</div>
@@ -1509,6 +1510,7 @@ function pageStrainDetail(req, res, id) {
         ${strainPhotoTag(s, 'lg')}
         <div>
           <h1 style="margin:0;font-size:19px;">${esc(s.name)}</h1>
+          ${s.aka ? `<div class="empty-note" style="padding:0;">Also known as: ${esc(String(s.aka).split(',').map(t => t.trim()).filter(Boolean).join(', '))}</div>` : ''}
           <div class="empty-note" style="padding:0;"><a href="/strains?type=${encodeURIComponent(s.type)}" style="color:inherit;">${esc(s.type)}</a>${s.lean ? ' · ' + esc(s.lean) : ''} · <a href="/strains?rarity=${encodeURIComponent(s.rarity)}" style="text-decoration:none;"><span class="rarity-tag rarity-${s.rarity}">${rarityLabel(s.rarity)}</span></a></div>
           <div style="margin-top:2px;" title="${esc(VERIFICATION_BADGE[strainVerificationTier(s)].note)}"><a href="/lab-result-guide" class="empty-note" style="padding:0;text-decoration:none;color:inherit;">${VERIFICATION_BADGE[strainVerificationTier(s)].icon} ${VERIFICATION_BADGE[strainVerificationTier(s)].label}</a></div>
           ${ratingStats.count ? `<div style="margin-top:2px;">${starString(Math.round(ratingStats.avg))} <span class="empty-note" style="padding:0;">${ratingStats.avg}★ from ${ratingStats.count} check-in${ratingStats.count === 1 ? '' : 's'}</span></div>` : `<div class="empty-note" style="padding:2px 0 0;">No community ratings yet — be the first to check in.</div>`}
