@@ -3242,3 +3242,44 @@ Names logged as self-added (brand noted by the member in parentheses): Mango She
 - Glue Walker, Maui Walker, Blueberry Ape, Cherry Northern Lights → no data (nothing independent found).
 - Tangie x Jack → no data (AllBud "Tangie Jack" only).
 - Lemon Juice Express → no data (AllBud "Lemon Juice" alias, HSO listing only elsewhere).
+
+## S344 (sheet rows 5485–5494)
+- Raspberry Diesel → added s7582 (Sour Diesel × Sweet Cherry Afghan per Leafly + AllBud; Humboldt Seed Organization per Leafly + SeedFinder; Creative; berry, diesel; Depression/Stress; THC conflict blank).
+- Pure Gooey → added (existing s7242 checked vs AllBud + SeedFinder: Gooey × Skunk #1; lean Sativa-dominant; single-source breeder and generic flavor blanked).
+- Goomendaze → no data (SeedFinder: unknown Haze cross, not Gooey Mendo Haze). Existing s4474 Gooey Mendo Haze (Old Mendo Haze × Pure Gooey per Leafly + AllBud) cleaned: THC blanked, effects Creative/Relaxed, flavor sweet.
+- Lemendhaze, Berry Mania x Dark Cross, SicBerry, Berry Mania, Sic Sister → no data (Gooey Breeder Seeds listings on SeedFinder/JointCommerce only).
+- Cherry Afghan → no data (AllBud Cherry Afghani = Black Cherry Soda × Afgoo; identity vs Sweet Cherry Afghan unproven).
+- Midnight Fire → no data (JointCommerce NorStar listing only).
+
+## S345 (sheet rows 5495–5504)
+- Glueberry → added (existing s6975 checked vs Leafly + AllBud: Blueberry/Gorilla Glue/OG Kush; lean Balanced; effects Relaxed/Euphoric; flavor blueberry; ailments Depression/Stress; breeder Dutch Passion blanked, no strain listing names one).
+- Iron Mike (Mike Tyson OG) → no data (AllBud only).
+- Funky Dwarf, Chemage, Kryptonite OG, Kush O Nesia, Bubba Brother → no data (Karma Genetics listings on SeedFinder/JointCommerce only; AllBud Chem Cage / Kryptonite OG #7 are different or single-source).
+- Psychopatch → no data (Gooey Breeder Seeds JointCommerce only).
+- Hawaiian Juicy Fruit Cookies, Happy Chem → no data (nothing found).
+
+## S346 (sheet rows 5505–5514)
+- Biker le blanc → added s7583 "Biker Le'Blanc" (Sativa-dominant; The White × Hell's OG per Leafly + AllBud; Uplifted; sage; Cramps; THC conflict blank; Karma Genetics breeder SeedFinder-only so blank).
+- Happy Kush, Anonymous, SSSDH x Jack, Super Silver Sour Diesel Haze (Connoisseur), Ghostrider V2.0, Purple Rain x Biker Kush V1.0, LA Affair x Biker Kush V1.0, Happy Brother BX1, Happy Brother BX2 → no data (Karma/Connoisseur breeder-side listings only; AllBud Happy Kush = Happy Brother × SFV OG single-source; BX/V versions not independently listed).
+- Cleaned existing s6824 Biker Kush vs Leafly + AllBud (Hell's OG × Lucifer OG; Karma Genetics kept): THC/CBD/terps blanked, effects Relaxed, flavor lemon, ailments Insomnia/Stress. Cleaned s7021 Happy Brother (AllBud only): breeder, generic flavor, lean blanked.
+
+## S347 (sheet rows 5515–5524)
+- Black Licorice → added (existing s3301 Meraki Gardens variant checked vs Leafly + AllBud: Black Cherry Soda × Black Maduro, 80/20 → Indica-dominant; THC/terps/breeder/generic flavor blanked; flavor berry, flowery; ailments Stress/Depression/Insomnia/Pain/Lack of Appetite).
+- Happy Brother → no data (already cleaned S346; AllBud only).
+- Cheesy Rider, Old Scratch, Long Island Old School (L.I.O.S.), White Biker → no data (Karma Genetics SeedFinder listings only or nothing found).
+- Old Grandpa Scratch (Old Scratch × White OG), White Snake (Headbanger × White OG V2.0), White Sage (White OG × S.A.G.E.), White Beezle Bubba (Bubba Kush × Biker Kush × White OG) → no data (AllBud + Karma breeder-side only).
+
+## S348 (sheet rows 5525–5534)
+- No library changes (library 7,474; migrations unchanged at 199).
+- Beezle Bubba V2.0, AG13 Haze x Biker LTD, Cinderella 99 BX-1, Dominator x Biker, Biker Kush V2.0, White OG V2.0: no data (breeder-side Karma/Mosca listings or version rows; White OG V2.0 only AllBud + JointCommerce).
+- Polar Bear: no data (AllBud says 3 Bears OG × Iced N Baked; SeedFinder Karma says Bear OG × White OG V2.0; conflicting, and a separate Mephisto Polar Bear OG exists).
+- AG13 Haze: no data (AllBud only; no independent second listing).
+- Bubba Skunk: no data (only Bubba x Skunk found, Leafly, a different name; no confirmed alias).
+- C99 x Biker: skip (unnamed cross of existing Cinderella 99 and Biker Kush).
+
+## S349 (sheet rows 5535–5544)
+- Added Doctor Kush s7584 (aka Dr. Kush; Leafly + AllBud: Indica, Happy/Euphoric, Depression), Cookie Crumble s7585 (aka Cookie Crumbles; Leafly + AllBud: Girl Scout Cookies × Cherry Pie, Indica-dominant 60/40, Relaxed, Stress/Migraines), Cherry Lopez s7586 (Medical Jane + WWeek: breeder Kyle Kushman, flavor earthy/fruity; parents conflict (Strawberry Cough × Adonai Kush vs Jurassic Haze backcross) so blank; THC 30.6 vs 21 conflict so blank).
+- Existing Sourlope s661 cleaned (migration 200): unsupported breeder (DNA Genetics), THC, CBD, terpenes, effects, flavor, ailments blanked or replaced with what Leafly + AllBud agree on (Creative/Focused, mint/pineapple, Stress/Depression); parent Cannalope Haze added (NYC Diesel vs Sour Diesel disagree, so only the shared parent). Type left Hybrid (both sources say sativa).
+- Sour Lopez: no data (no source lists it as an alias of Sourlope).
+- D Kush, Holy Diver, Holy Chocolate Thai: no data (breeder-side Karma/SnowHigh/Agrarian listings only). Alpha Who, Love: no data (nothing found).
+- Blackanese (Mad Hatter): skip (combined label; Madhatter s5047 exists).
